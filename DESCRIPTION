@@ -1,0 +1,11 @@
+Package: matrixdist
+Type: Package
+Title: Statistics for Matrix Distributions
+Version: 1.0
+Date: 2020-04-30
+Author: Martin Bladt
+Maintainer: Martin Bladt <martinbladt@gmail.com>
+Description: This package is concerned with the estimation and simulation of matrix distributions.
+License: GPL (>= 2)
+Imports: Rcpp (>= 1.0.3)
+LinkingTo: Rcpp
