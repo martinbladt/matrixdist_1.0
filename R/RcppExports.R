@@ -68,6 +68,57 @@ rphasetype <- function(n, pi, T, t) {
     .Call(`_matrixdist_rphasetype`, n, pi, T, t)
 }
 
+matrix_product <- function(a, b) {
+    .Call(`_matrixdist_matrix_product`, a, b)
+}
+
+#' Computes C =  A + B 
+matrix_sum <- function(A, B) {
+    .Call(`_matrixdist_matrix_sum`, A, B)
+}
+
+#' Returns the  L-oo norm of a matrix
+#' 
+#' The matrix L-oo norm is defined as:
+#' L-oo A =  max ( 1 <= I <= M ) sum ( 1 <= J <= N ) abs ( A(I,J) ).
+LInf_norm <- function(A) {
+    .Call(`_matrixdist_LInf_norm`, A)
+}
+
+#' Solves a system with multiple right hand sides
+#' 
+#' AX=B which can be decompose as LUX=B and finds X
+#' When B is the identity matrix the solution is the inverse of A
+solve_linear_system <- function(A, B) {
+    .Call(`_matrixdist_solve_linear_system`, A, B)
+}
+
+matrix_inverse <- function(A) {
+    .Call(`_matrixdist_matrix_inverse`, A)
+}
+
+#' MATLAB's built-in matrix exponential algorithm
+matrix_exponential <- function(A) {
+    .Call(`_matrixdist_matrix_exponential`, A)
+}
+
+matrixMax <- function(A) {
+    .Call(`_matrixdist_matrixMax`, A)
+}
+
+matrixMaxDiagonal <- function(A) {
+    .Call(`_matrixdist_matrixMaxDiagonal`, A)
+}
+
+#' Computes A^n
+matrix_power <- function(n, A) {
+    .Call(`_matrixdist_matrix_power`, n, A)
+}
+
+phdensity <- function(x, pi, T) {
+    .Call(`_matrixdist_phdensity`, x, pi, T)
+}
+
 rcpp_hello_world <- function() {
     .Call(`_matrixdist_rcpp_hello_world`)
 }
