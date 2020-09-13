@@ -3,7 +3,9 @@ using namespace Rcpp;
 
 // The main objective is to implement a matrix exponential method and other functions for matrix that we need afterwards
 
-
+//' Product of two matrices
+//' 
+//' Computes C = A * B
 // [[Rcpp::export]]
 NumericMatrix matrix_product(NumericMatrix a, NumericMatrix b) {
   
@@ -34,7 +36,11 @@ NumericMatrix matrix_product(NumericMatrix a, NumericMatrix b) {
   return (c);
 }
 
+//' Add matrices
+//' 
 //' Computes C =  A + B 
+//' @param A A matrix
+//' @param B A matrix
 // [[Rcpp::export]]
 NumericMatrix matrix_sum(const NumericMatrix & A, const NumericMatrix & B) {
   long rows = A.nrow();
@@ -49,10 +55,11 @@ NumericMatrix matrix_sum(const NumericMatrix & A, const NumericMatrix & B) {
   return (C);
 }
 
-//' Returns the  L-oo norm of a matrix
+//' L-oo norm of a matrix
 //' 
-//' The matrix L-oo norm is defined as:
+//' Computes the L-oo norm of a matrix \code{A}, which is defined as:
 //' L-oo A =  max ( 1 <= I <= M ) sum ( 1 <= J <= N ) abs ( A(I,J) ).
+//' @param A A matrix
 // [[Rcpp::export]]
 double LInf_norm(const NumericMatrix & A) {
   double value{0.0};
@@ -150,14 +157,16 @@ NumericMatrix solve_linear_system(NumericMatrix A, const NumericMatrix & B ) {
   return X;
 }
 
-
+//' Inverse of a matrix
 // [[Rcpp::export]]
 NumericMatrix matrix_inverse(const NumericMatrix & A) {
   return solve_linear_system(A, NumericMatrix::diag(A.nrow(), 1.0));
 }
 
 
-//' MATLAB's built-in matrix exponential algorithm
+//' Matrix exponential algorithm
+//' 
+//' MATLAB's built-in algorithm - Pade approximation
 // [[Rcpp::export]]
 NumericMatrix matrix_exponential(const NumericMatrix & A ) {
   
@@ -216,9 +225,9 @@ NumericMatrix matrix_exponential(const NumericMatrix & A ) {
 }
 
 
+//' Maximum entry in a matrix
 // [[Rcpp::export]]
 double matrixMax(const NumericMatrix & A) {
-  // Returns the maximum value in a matrix
   double maximum{A(0,0)};
   for (int i{0}; i < A.nrow(); ++i) {
     for (int j{0}; j < A.ncol(); ++j) {
@@ -230,9 +239,9 @@ double matrixMax(const NumericMatrix & A) {
   return maximum;
 }
 
+//' Maximum entry in the diagonal of a matrix
 // [[Rcpp::export]]
 double matrixMaxDiagonal(const NumericMatrix & A) {
-  // Returns the maximum value in the diagonal of a matrix
   double maximum{A(0,0)};
   for (int i{0}; i < A.nrow(); ++i) {
     if (A(i,i) > maximum) {
@@ -260,7 +269,19 @@ NumericMatrix matrix_power(int n, const NumericMatrix & A) {
   return newMatrix;
 }
 
-
+//' Phase-type density
+//' 
+//' Computes the density of phase-type distribution with parameters \code{pi and} \code{T} at \code{x}
+//' @param x non-negative value
+//' @param pi Initial probabilities
+//' @param T sub-intensity matrix
+//' @return The density at \code{x}
+//' @examples
+//' alpha <- c(0.5, 0.3, 0.2)
+//' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
+//' t <- -T%*%rep(1, length(T[,1]))
+//' n <- 10
+//' phdensity(0.5, alpha, T, t) 
 // [[Rcpp::export]]
 NumericVector phdensity(NumericVector x, NumericVector pi, NumericMatrix T) {
   

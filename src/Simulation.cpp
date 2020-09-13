@@ -124,6 +124,7 @@ long newState(long previousState, NumericMatrix cumulatedEmbeddedMC, double u) {
 //' Random phase-type
 //' 
 //' Generates a sample of size \code{n} from a phase-type distribution with parameters \code{pi and} \code{T}
+//' @parm n Sample size
 //' @param pi Initial probabilities
 //' @param T sub-intensity matrix
 //' @return The simulated sample
