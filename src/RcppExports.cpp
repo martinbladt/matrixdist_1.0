@@ -5,6 +5,79 @@
 
 using namespace Rcpp;
 
+// embeddedMC
+NumericMatrix embeddedMC(NumericMatrix T, NumericVector t);
+RcppExport SEXP _matrixdist_embeddedMC(SEXP TSEXP, SEXP tSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type T(TSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type t(tSEXP);
+    rcpp_result_gen = Rcpp::wrap(embeddedMC(T, t));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cumulateMatrix
+NumericMatrix cumulateMatrix(NumericMatrix A);
+RcppExport SEXP _matrixdist_cumulateMatrix(SEXP ASEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type A(ASEXP);
+    rcpp_result_gen = Rcpp::wrap(cumulateMatrix(A));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cumulateVector
+NumericVector cumulateVector(NumericVector A);
+RcppExport SEXP _matrixdist_cumulateVector(SEXP ASEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type A(ASEXP);
+    rcpp_result_gen = Rcpp::wrap(cumulateVector(A));
+    return rcpp_result_gen;
+END_RCPP
+}
+// initialState
+long initialState(NumericVector cumulatedPi, double u);
+RcppExport SEXP _matrixdist_initialState(SEXP cumulatedPiSEXP, SEXP uSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type cumulatedPi(cumulatedPiSEXP);
+    Rcpp::traits::input_parameter< double >::type u(uSEXP);
+    rcpp_result_gen = Rcpp::wrap(initialState(cumulatedPi, u));
+    return rcpp_result_gen;
+END_RCPP
+}
+// newState
+long newState(long previousState, NumericMatrix cumulatedEmbeddedMC, double u);
+RcppExport SEXP _matrixdist_newState(SEXP previousStateSEXP, SEXP cumulatedEmbeddedMCSEXP, SEXP uSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< long >::type previousState(previousStateSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type cumulatedEmbeddedMC(cumulatedEmbeddedMCSEXP);
+    Rcpp::traits::input_parameter< double >::type u(uSEXP);
+    rcpp_result_gen = Rcpp::wrap(newState(previousState, cumulatedEmbeddedMC, u));
+    return rcpp_result_gen;
+END_RCPP
+}
+// rphasetype
+NumericVector rphasetype(int n, NumericVector pi, NumericMatrix T, NumericVector t);
+RcppExport SEXP _matrixdist_rphasetype(SEXP nSEXP, SEXP piSEXP, SEXP TSEXP, SEXP tSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type pi(piSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type T(TSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type t(tSEXP);
+    rcpp_result_gen = Rcpp::wrap(rphasetype(n, pi, T, t));
+    return rcpp_result_gen;
+END_RCPP
+}
 // rcpp_hello_world
 List rcpp_hello_world();
 RcppExport SEXP _matrixdist_rcpp_hello_world() {
@@ -17,6 +90,12 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_matrixdist_embeddedMC", (DL_FUNC) &_matrixdist_embeddedMC, 2},
+    {"_matrixdist_cumulateMatrix", (DL_FUNC) &_matrixdist_cumulateMatrix, 1},
+    {"_matrixdist_cumulateVector", (DL_FUNC) &_matrixdist_cumulateVector, 1},
+    {"_matrixdist_initialState", (DL_FUNC) &_matrixdist_initialState, 2},
+    {"_matrixdist_newState", (DL_FUNC) &_matrixdist_newState, 3},
+    {"_matrixdist_rphasetype", (DL_FUNC) &_matrixdist_rphasetype, 4},
     {"_matrixdist_rcpp_hello_world", (DL_FUNC) &_matrixdist_rcpp_hello_world, 0},
     {NULL, NULL, 0}
 };
