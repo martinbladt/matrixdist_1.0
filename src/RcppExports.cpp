@@ -260,6 +260,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// random_structure
+NumericVector random_structure(int p, String structure);
+RcppExport SEXP _matrixdist_random_structure(SEXP pSEXP, SEXP structureSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type p(pSEXP);
+    Rcpp::traits::input_parameter< String >::type structure(structureSEXP);
+    rcpp_result_gen = Rcpp::wrap(random_structure(p, structure));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_default_step_length", (DL_FUNC) &_matrixdist_default_step_length, 1},
@@ -283,6 +295,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_matrix_power", (DL_FUNC) &_matrixdist_matrix_power, 2},
     {"_matrixdist_phdensity", (DL_FUNC) &_matrixdist_phdensity, 3},
     {"_matrixdist_rcpp_hello_world", (DL_FUNC) &_matrixdist_rcpp_hello_world, 0},
+    {"_matrixdist_random_structure", (DL_FUNC) &_matrixdist_random_structure, 2},
     {NULL, NULL, 0}
 };
 

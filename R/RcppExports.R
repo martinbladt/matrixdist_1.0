@@ -176,3 +176,7 @@ rcpp_hello_world <- function() {
     .Call(`_matrixdist_rcpp_hello_world`)
 }
 
+random_structure <- function(p, structure = "General") {
+    .Call(`_matrixdist_random_structure`, p, structure)
+}
+
