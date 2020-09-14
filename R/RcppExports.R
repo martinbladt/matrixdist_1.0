@@ -98,8 +98,8 @@ LInf_norm <- function(A) {
 #' 
 #' AX=B which can be decompose as LUX=B and finds X
 #' When B is the identity matrix the solution is the inverse of A
-solve_linear_system <- function(A, B) {
-    .Call(`_matrixdist_solve_linear_system`, A, B)
+solve_linear_system <- function(A1, B) {
+    .Call(`_matrixdist_solve_linear_system`, A1, B)
 }
 
 #' Inverse of a matrix

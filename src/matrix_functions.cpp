@@ -79,7 +79,7 @@ double LInf_norm(const NumericMatrix & A) {
 //' AX=B which can be decompose as LUX=B and finds X
 //' When B is the identity matrix the solution is the inverse of A
 // [[Rcpp::export]]
-NumericMatrix solve_linear_system(NumericMatrix A, const NumericMatrix & B ) {
+NumericMatrix solve_linear_system(NumericMatrix A1, const NumericMatrix & B) {
   long i{};
   long ipiv{};
   long j{};
@@ -87,7 +87,8 @@ NumericMatrix solve_linear_system(NumericMatrix A, const NumericMatrix & B ) {
   double piv{};
   double t{};
   
-  NumericMatrix X = B;
+  NumericMatrix A = clone(A1);
+  NumericMatrix X = clone(B);
   
   for (jcol = 1; jcol <= A.nrow(); ++jcol) {
     //  Find the maximum element in column I.
@@ -101,9 +102,9 @@ NumericMatrix solve_linear_system(NumericMatrix A, const NumericMatrix & B ) {
     }
     
     if (piv == 0.0) {
-      std::cerr << "\n";
-      std::cerr << "R8MAT_FSS_NEW - Fatal error!\n";
-      std::cerr << "  Zero pivot on step " << jcol << "\n";
+      Rcerr << "\n";
+      Rcerr << "R8MAT_FSS_NEW - Fatal error!\n";
+      Rcerr << "  Zero pivot on step " << jcol << "\n";
       exit (1);
     }
     
@@ -124,7 +125,7 @@ NumericMatrix solve_linear_system(NumericMatrix A, const NumericMatrix & B ) {
     //  Scale the pivot row.
     t = A(jcol - 1,jcol - 1);
     A(jcol - 1,jcol - 1) = 1.0;
-    for (j = jcol+1; j <= A.nrow(); ++j) {
+    for (j = jcol + 1; j <= A.nrow(); ++j) {
       A(jcol - 1,j - 1) /= t;
     }
     for (j = 0; j < B.ncol(); ++j) {
@@ -153,7 +154,6 @@ NumericMatrix solve_linear_system(NumericMatrix A, const NumericMatrix & B ) {
       }
     }
   }
-  
   return X;
 }
 
@@ -168,7 +168,7 @@ NumericMatrix matrix_inverse(NumericMatrix A) {
 //' 
 //' MATLAB's built-in algorithm - Pade approximation
 // [[Rcpp::export]]
-NumericMatrix matrix_exponential(const NumericMatrix & A ) {
+NumericMatrix matrix_exponential(const NumericMatrix & A) {
   
   const int q{6};
   
@@ -184,8 +184,8 @@ NumericMatrix matrix_exponential(const NumericMatrix & A ) {
   double t{1.0 / pow(2.0, s)};
   
   
-  NumericMatrix a2 = A * t;
-  NumericMatrix x = a2;
+  NumericMatrix a2 = clone(A * t);
+  NumericMatrix x = clone(a2);
   
   
   double c{0.5};
@@ -263,7 +263,7 @@ NumericMatrix matrix_power(int n, const NumericMatrix & A) {
   NumericMatrix previousMatrix(matrix_product(A, A));
   NumericMatrix newMatrix(matrix_product(A, previousMatrix));
   for (int i{4}; i <= n; ++i) {
-    previousMatrix = newMatrix;
+    previousMatrix = clone(newMatrix);
     newMatrix = matrix_product(A, previousMatrix);
   }
   return newMatrix;

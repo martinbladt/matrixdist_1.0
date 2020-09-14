@@ -114,14 +114,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // solve_linear_system
-NumericMatrix solve_linear_system(NumericMatrix A, const NumericMatrix& B);
-RcppExport SEXP _matrixdist_solve_linear_system(SEXP ASEXP, SEXP BSEXP) {
+NumericMatrix solve_linear_system(NumericMatrix A1, const NumericMatrix& B);
+RcppExport SEXP _matrixdist_solve_linear_system(SEXP A1SEXP, SEXP BSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericMatrix >::type A(ASEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type A1(A1SEXP);
     Rcpp::traits::input_parameter< const NumericMatrix& >::type B(BSEXP);
-    rcpp_result_gen = Rcpp::wrap(solve_linear_system(A, B));
+    rcpp_result_gen = Rcpp::wrap(solve_linear_system(A1, B));
     return rcpp_result_gen;
 END_RCPP
 }

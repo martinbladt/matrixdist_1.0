@@ -4,7 +4,7 @@
 \alias{solve_linear_system}
 \title{Solves a system with multiple right hand sides}
 \usage{
-solve_linear_system(A, B)
+solve_linear_system(A1, B)
 }
 \description{
 AX=B which can be decompose as LUX=B and finds X
