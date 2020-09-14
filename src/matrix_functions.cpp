@@ -1,3 +1,4 @@
+#include "matrix_functions.h"
 #include <Rcpp.h>
 using namespace Rcpp;
 

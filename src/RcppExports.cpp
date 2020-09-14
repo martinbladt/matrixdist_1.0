@@ -5,6 +5,49 @@
 
 using namespace Rcpp;
 
+// default_step_length
+double default_step_length(const NumericMatrix& T);
+RcppExport SEXP _matrixdist_default_step_length(SEXP TSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const NumericMatrix& >::type T(TSEXP);
+    rcpp_result_gen = Rcpp::wrap(default_step_length(T));
+    return rcpp_result_gen;
+END_RCPP
+}
+// runge_kutta
+void runge_kutta(NumericMatrix& avector, NumericMatrix& bvector, NumericMatrix& cmatrix, double dt, double h, const NumericMatrix& T, const NumericMatrix& t);
+RcppExport SEXP _matrixdist_runge_kutta(SEXP avectorSEXP, SEXP bvectorSEXP, SEXP cmatrixSEXP, SEXP dtSEXP, SEXP hSEXP, SEXP TSEXP, SEXP tSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix& >::type avector(avectorSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix& >::type bvector(bvectorSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix& >::type cmatrix(cmatrixSEXP);
+    Rcpp::traits::input_parameter< double >::type dt(dtSEXP);
+    Rcpp::traits::input_parameter< double >::type h(hSEXP);
+    Rcpp::traits::input_parameter< const NumericMatrix& >::type T(TSEXP);
+    Rcpp::traits::input_parameter< const NumericMatrix& >::type t(tSEXP);
+    runge_kutta(avector, bvector, cmatrix, dt, h, T, t);
+    return R_NilValue;
+END_RCPP
+}
+// EMstep_RK
+void EMstep_RK(double h, NumericMatrix& pi, NumericMatrix& T, const NumericVector& obs, const NumericVector& weight, const NumericVector& rcens, const NumericVector& rcweight);
+RcppExport SEXP _matrixdist_EMstep_RK(SEXP hSEXP, SEXP piSEXP, SEXP TSEXP, SEXP obsSEXP, SEXP weightSEXP, SEXP rcensSEXP, SEXP rcweightSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type h(hSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix& >::type pi(piSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix& >::type T(TSEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type obs(obsSEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type weight(weightSEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type rcens(rcensSEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type rcweight(rcweightSEXP);
+    EMstep_RK(h, pi, T, obs, weight, rcens, rcweight);
+    return R_NilValue;
+END_RCPP
+}
 // embeddedMC
 NumericMatrix embeddedMC(NumericMatrix T, NumericVector t);
 RcppExport SEXP _matrixdist_embeddedMC(SEXP TSEXP, SEXP tSEXP) {
@@ -206,6 +249,9 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_matrixdist_default_step_length", (DL_FUNC) &_matrixdist_default_step_length, 1},
+    {"_matrixdist_runge_kutta", (DL_FUNC) &_matrixdist_runge_kutta, 7},
+    {"_matrixdist_EMstep_RK", (DL_FUNC) &_matrixdist_EMstep_RK, 7},
     {"_matrixdist_embeddedMC", (DL_FUNC) &_matrixdist_embeddedMC, 2},
     {"_matrixdist_cumulateMatrix", (DL_FUNC) &_matrixdist_cumulateMatrix, 1},
     {"_matrixdist_cumulateVector", (DL_FUNC) &_matrixdist_cumulateVector, 1},

@@ -1,0 +1,256 @@
+#include <Rcpp.h>
+using namespace Rcpp;
+#include "matrix_functions.h"
+
+
+//' Default size of the steps in the RK
+// [[Rcpp::export]]
+double default_step_length(const NumericMatrix & T) {
+  double h{-0.1 / T(0,0)};
+  
+  for (int i{1}; i < T.nrow(); ++i) {
+    if (h > -0.1 / T(i,i)) {
+      h = -0.1 / T(i,i);
+    }
+  }
+  return h;
+}
+
+
+//' Runge Kutta for the calculation of the a,b and c vectors in a EM step
+//' 
+//' I may need to change the type of avector and bvector, depending on how I call them in the EM step
+// [[Rcpp::export]]
+void runge_kutta(NumericMatrix & avector, NumericMatrix & bvector, NumericMatrix & cmatrix, double dt, double h, const NumericMatrix & T, const NumericMatrix & t) {
+  int p{T.nrow()};
+  int j{};
+  int m{};
+  double eps{};
+  double sum{};
+  
+  int i{};
+  i = dt / h;
+  
+  double h2{};
+  h2 = dt / (i + 1);
+  
+  NumericMatrix ka(4,p);
+  NumericMatrix kb(4,p);
+  NumericMatrix kc1(p,p);
+  NumericMatrix kc2(p,p);
+  NumericMatrix kc3(p,p);
+  NumericMatrix kc4(p,p);
+  
+  for (eps = 0; eps <= dt - h2 / 2; eps += h2) {
+    for (i = 0; i < p; ++i) {
+      sum = 0;
+      for (j = 0; j < p; ++j) {
+        sum += T(j,i) * avector(0,j);
+      }
+      ka(0,i) = h2 * sum;
+    }
+    for (i = 0; i < p; ++i) {
+      sum = 0;
+      for (j = 0; j < p; ++j) {
+        sum += T(j,i) * (avector(0,j) + ka(0,j) / 2);
+      }
+      ka(1,i) = h2 * sum;
+    }
+    for (i = 0; i < p; ++i) {
+      sum = 0;
+      for (j = 0; j < p; ++j) {
+        sum += T(j,i) * (avector(0,j) + ka(1,j) / 2);
+      }
+      ka(2,i) = h2 * sum;
+    }
+    for (i=0; i < p; ++i) {
+      sum = 0;
+      for (j = 0; j < p; ++j)
+      {
+        sum += T(j,i) * (avector(0,j) + ka(2,j));
+      }
+      ka(3,i) = h2 * sum;
+    }
+    
+    
+    for (i = 0; i < p; ++i) {
+      sum = 0;
+      for (j = 0; j < p; ++j) {
+        sum += T(i,j) * bvector(j,0);
+      }
+      kb(0,i) = h2 * sum;
+    }
+    for (i = 0; i < p; ++i) {
+      sum = 0;
+      for (j = 0; j < p; ++j) {
+        sum += T(i,j) * (bvector(j,0) + kb(0,j) / 2);
+      }
+      kb(1,i) = h2 * sum;
+    }
+    for (i = 0; i < p; ++i) {
+      sum = 0;
+      for (j = 0; j < p; ++j) {
+        sum += T(i,j) * (bvector(j,0) + kb(1,j) / 2);
+      }
+      kb(2,i) = h2 * sum;
+    }
+    for (i = 0; i < p; ++i) {
+      sum = 0;
+      for (j = 0; j < p; ++j) {
+        sum += T(i,j) * (bvector(j,0) + kb(2,j));
+      }
+      kb(3,i) = h2 * sum;
+    }
+    
+    for (m = 0; m < p; ++m) {
+      for (i = 0; i < p; ++i) {
+        sum = t(m,0) * avector(0,i);
+        for (j = 0; j < p; ++j) {
+          sum += T(m,j) * cmatrix(j,i);
+        }
+        kc1(m,i) = h2 * sum;
+      }
+    }
+    for (m = 0; m < p; ++m) {
+      for (i = 0; i < p; ++i) {
+        sum = t(m,0) * (avector(0,i) + ka(0,i) / 2);
+        for (j = 0; j < p; ++j) {
+          sum += T(m,j) * (cmatrix(j,i) + kc1(j,i) / 2);
+        }
+        kc2(m,i) = h2 * sum;
+      }
+    }
+    for (m = 0; m < p; ++m) {
+      for (i = 0; i < p; ++i) {
+        sum = t(m,0) * (avector(0,i) + ka(1,i) / 2);
+        for (j = 0; j < p; ++j) {
+          sum += T(m,j) * (cmatrix(j,i) + kc2(j,i) / 2);
+        }
+        kc3(m,i) = h2 * sum;
+      }
+    }
+    for (m = 0; m < p; ++m) {
+      for (i = 0; i < p; ++i) {
+        sum = t(m,0) * (avector(0,i) + ka(2,i));
+        for (j = 0; j < p; ++j) {
+          sum += T(m,j) * (cmatrix(j,i) + kc3(j,i));
+        }
+        kc4(m,i) = h2 * sum;
+      }
+    }
+    
+    for (i = 0; i < p; ++i) {
+      avector(0,i) += (ka(0,i) + 2 * ka(1,i) + 2 * ka(2,i) + ka(3,i)) / 6;
+      bvector(i,0) += (kb(0,i) + 2 * kb(1,i) + 2 * kb(2,i) + kb(3,i)) / 6;
+      for (j = 0; j < p; ++j) {
+        cmatrix(i,j) +=(kc1(i,j) + 2 * kc2(i,j) + 2 * kc3(i,j) + kc4(i,j)) / 6;
+      }
+    }
+  }
+}
+
+
+
+//' EM using Runge Kutta
+//' 
+//' Warning - I am assuming that pi is a matrix I would need to make sure that this is the case in the iteration or change how I iterate with it
+// [[Rcpp::export]]
+void EMstep_RK(double h, NumericMatrix & pi, NumericMatrix & T, const NumericVector & obs, const NumericVector & weight, const NumericVector & rcens, const NumericVector & rcweight) {
+  long p{T.nrow()};
+  
+  NumericVector m_e(p, 1);
+  NumericMatrix e(p, 1, m_e.begin());
+  
+  NumericMatrix t = matrix_product(T * (-1), e);
+  
+  NumericMatrix Bmean(p,1);
+  NumericMatrix Zmean(p,1);
+  NumericMatrix Nmean(p,p + 1);
+  
+  NumericMatrix avector(1,p); 
+  NumericMatrix bvector(p,1);
+  NumericMatrix cmatrix(p,p);
+  
+  // initial conditions
+  avector = clone(pi);
+  bvector = clone(t);
+  
+  double dt{0.0};
+  if (obs.size()>0) {
+    dt = obs[0];
+  }
+  
+  double SumOfWeights{0.0};
+  double density{0.0};
+  
+  // E step
+  //  Uncensored data
+  for (int k{0}; k < obs.size(); ++k) {
+    
+    SumOfWeights += weight[k];
+    
+    runge_kutta(avector, bvector, cmatrix, dt, h, T, t);
+    density = matrix_product(pi, bvector)(0,0);
+    
+    // E-step
+    for (int i{0}; i < p; ++i) {
+      Bmean(i,0) += pi(0,i) * bvector(i,0) * weight[k] / density;
+      Nmean(i,p) += avector(0,i) * t(i,0) * weight[k] / density;
+      Zmean(i,0) += cmatrix(i,i) * weight[k] / density;
+      for (int j{0}; j < p; ++j) {
+        Nmean(i,j) += T(i,j) * cmatrix(j,i) * weight[k] / density;
+      }
+    }
+    
+    dt = obs[k + 1] - obs[k];
+  }
+  
+  //  Right-Censored Data
+  double SumOfCensored{0.0};
+  if (rcens.size() > 0) {
+    dt = rcens[0];
+    cmatrix = clone(cmatrix * 0);
+    avector = clone(pi);
+    bvector = clone(e);
+  }
+  for (int k{0}; k < rcens.size(); ++k) {
+    
+    SumOfCensored += rcweight[k];
+    
+    runge_kutta(avector, bvector, cmatrix, dt, h, T, e);
+    density = matrix_product(pi, bvector)(0,0);
+    
+    //E-step
+    for (int i{0}; i < p; ++i) {
+      Bmean(i,0) += pi(0,i) * bvector(i,0) * rcweight[k] / density;
+      Zmean(i,0) += cmatrix(i,i) * rcweight[k] / density;
+      for (int j{0}; j < p; ++j) {
+        Nmean(i,j) += T(i,j) * cmatrix(j,i) * rcweight[k] / density;
+      }
+    }
+    
+    dt = rcens[k + 1] - rcens[k];
+  }
+  
+  // M step
+  for (int i{0}; i < p; ++i) {
+    pi(0,i) = Bmean(i,0) / (SumOfWeights + SumOfCensored);
+    if (pi(0,i) < 0) {
+      pi(0,i) = 0;
+    }
+    t(i,0) = Nmean(i,p) / Zmean(i,0);
+    if (t(i,0) < 0) {
+      t(i,0) = 0;
+    }
+    T(i,i) = -t(i,0);
+    for (int j{0}; j < p; ++j) {
+      if (i != j) {
+        T(i,j) = Nmean(i,j) / Zmean(i,0);
+        if (T(i,j) < 0) {
+          T(i,j) = 0;
+        }
+        T(i,i) -= T(i,j);
+      }
+    }
+  }
+}
