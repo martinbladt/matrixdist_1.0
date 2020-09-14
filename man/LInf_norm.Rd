@@ -2,11 +2,14 @@
 % Please edit documentation in R/RcppExports.R
 \name{LInf_norm}
 \alias{LInf_norm}
-\title{Returns the  L-oo norm of a matrix}
+\title{L-oo norm of a matrix}
 \usage{
 LInf_norm(A)
 }
+\arguments{
+\item{A}{A matrix}
+}
 \description{
-The matrix L-oo norm is defined as:
+Computes the L-oo norm of a matrix \code{A}, which is defined as:
 L-oo A =  max ( 1 <= I <= M ) sum ( 1 <= J <= N ) abs ( A(I,J) ).
 }

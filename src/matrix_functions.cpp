@@ -159,7 +159,7 @@ NumericMatrix solve_linear_system(NumericMatrix A, const NumericMatrix & B ) {
 
 //' Inverse of a matrix
 // [[Rcpp::export]]
-NumericMatrix matrix_inverse(const NumericMatrix & A) {
+NumericMatrix matrix_inverse(NumericMatrix A) {
   return solve_linear_system(A, NumericMatrix::diag(A.nrow(), 1.0));
 }
 

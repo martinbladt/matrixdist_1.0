@@ -2,9 +2,14 @@
 % Please edit documentation in R/RcppExports.R
 \name{matrix_sum}
 \alias{matrix_sum}
-\title{Computes C =  A + B}
+\title{Add matrices}
 \usage{
 matrix_sum(A, B)
+}
+\arguments{
+\item{A}{A matrix}
+
+\item{B}{A matrix}
 }
 \description{
 Computes C =  A + B

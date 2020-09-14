@@ -55,6 +55,7 @@ newState <- function(previousState, cumulatedEmbeddedMC, u) {
 #' Random phase-type
 #' 
 #' Generates a sample of size \code{n} from a phase-type distribution with parameters \code{pi and} \code{T}
+#' @parm n Sample size
 #' @param pi Initial probabilities
 #' @param T sub-intensity matrix
 #' @return The simulated sample
@@ -68,19 +69,27 @@ rphasetype <- function(n, pi, T, t) {
     .Call(`_matrixdist_rphasetype`, n, pi, T, t)
 }
 
+#' Product of two matrices
+#' 
+#' Computes C = A * B
 matrix_product <- function(a, b) {
     .Call(`_matrixdist_matrix_product`, a, b)
 }
 
+#' Add matrices
+#' 
 #' Computes C =  A + B 
+#' @param A A matrix
+#' @param B A matrix
 matrix_sum <- function(A, B) {
     .Call(`_matrixdist_matrix_sum`, A, B)
 }
 
-#' Returns the  L-oo norm of a matrix
+#' L-oo norm of a matrix
 #' 
-#' The matrix L-oo norm is defined as:
+#' Computes the L-oo norm of a matrix \code{A}, which is defined as:
 #' L-oo A =  max ( 1 <= I <= M ) sum ( 1 <= J <= N ) abs ( A(I,J) ).
+#' @param A A matrix
 LInf_norm <- function(A) {
     .Call(`_matrixdist_LInf_norm`, A)
 }
@@ -93,19 +102,24 @@ solve_linear_system <- function(A, B) {
     .Call(`_matrixdist_solve_linear_system`, A, B)
 }
 
+#' Inverse of a matrix
 matrix_inverse <- function(A) {
     .Call(`_matrixdist_matrix_inverse`, A)
 }
 
-#' MATLAB's built-in matrix exponential algorithm
+#' Matrix exponential algorithm
+#' 
+#' MATLAB's built-in algorithm - Pade approximation
 matrix_exponential <- function(A) {
     .Call(`_matrixdist_matrix_exponential`, A)
 }
 
+#' Maximum entry in a matrix
 matrixMax <- function(A) {
     .Call(`_matrixdist_matrixMax`, A)
 }
 
+#' Maximum entry in the diagonal of a matrix
 matrixMaxDiagonal <- function(A) {
     .Call(`_matrixdist_matrixMaxDiagonal`, A)
 }
@@ -115,6 +129,19 @@ matrix_power <- function(n, A) {
     .Call(`_matrixdist_matrix_power`, n, A)
 }
 
+#' Phase-type density
+#' 
+#' Computes the density of phase-type distribution with parameters \code{pi and} \code{T} at \code{x}
+#' @param x non-negative value
+#' @param pi Initial probabilities
+#' @param T sub-intensity matrix
+#' @return The density at \code{x}
+#' @examples
+#' alpha <- c(0.5, 0.3, 0.2)
+#' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
+#' t <- -T%*%rep(1, length(T[,1]))
+#' n <- 10
+#' phdensity(0.5, alpha, T, t) 
 phdensity <- function(x, pi, T) {
     .Call(`_matrixdist_phdensity`, x, pi, T)
 }

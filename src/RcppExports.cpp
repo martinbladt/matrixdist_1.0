@@ -126,12 +126,12 @@ BEGIN_RCPP
 END_RCPP
 }
 // matrix_inverse
-NumericMatrix matrix_inverse(const NumericMatrix& A);
+NumericMatrix matrix_inverse(NumericMatrix A);
 RcppExport SEXP _matrixdist_matrix_inverse(SEXP ASEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const NumericMatrix& >::type A(ASEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type A(ASEXP);
     rcpp_result_gen = Rcpp::wrap(matrix_inverse(A));
     return rcpp_result_gen;
 END_RCPP

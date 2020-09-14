@@ -2,10 +2,10 @@
 % Please edit documentation in R/RcppExports.R
 \name{matrix_exponential}
 \alias{matrix_exponential}
-\title{MATLAB's built-in matrix exponential algorithm}
+\title{Matrix exponential algorithm}
 \usage{
 matrix_exponential(A)
 }
 \description{
-MATLAB's built-in matrix exponential algorithm
+MATLAB's built-in algorithm - Pade approximation
 }
