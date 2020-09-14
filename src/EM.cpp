@@ -254,3 +254,105 @@ void EMstep_RK(double h, NumericMatrix & pi, NumericMatrix & T, const NumericVec
     }
   }
 }
+
+
+//' Runge Kutta for the calculation of the a vectors in a EM step - Can be used for the loglikelihood
+//' 
+//' I may need to change the type of avector
+// [[Rcpp::export]]
+void a_rungekutta(NumericMatrix & avector, double dt, double h, const NumericMatrix & T) {
+  long p{T.nrow()};
+  int j{};
+  double eps{};
+  double sum{};
+  
+  int i{};
+  i = dt / h;
+  
+  double h2{};
+  h2 = dt / (i + 1);
+  
+  NumericMatrix ka(4,p);
+  
+  for (eps = 0; eps <= dt - h2 / 2; eps += h2) {
+    for (i = 0; i < p; ++i) {
+      sum = 0;
+      for (j = 0; j < p; ++j) {
+        sum += T(j,i) * avector(0,j);
+      }
+      ka(0,i) = h2 * sum;
+    }
+    for (i = 0; i < p; ++i) {
+      sum = 0;
+      for (j = 0; j < p; ++j) {
+        sum += T(j,i) * (avector(0,j) + ka(0,j) / 2);
+      }
+      ka(1,i) = h2 * sum;
+    }
+    for (i = 0; i < p; ++i) {
+      sum = 0;
+      for (j = 0; j < p; ++j) {
+        sum += T(j,i) * (avector(0,j) + ka(1,j) / 2);
+      }
+      ka(2,i) = h2 * sum;
+    }
+    for (i = 0; i < p; ++i) {
+      sum = 0;
+      for (j = 0; j < p; ++j) {
+        sum += T(j,i) * (avector(0,j) + ka(2,j));
+      }
+      ka(3,i) = h2 * sum;
+    }
+    
+    for (i = 0; i < p; ++i) {
+      avector(0,i) += (ka(0,i) + 2 * ka(1,i) + 2 * ka(2,i) + ka(3,i)) / 6;
+    }
+  }
+}
+
+
+// Loglikelihood using RK
+double logLikelihoodPH_RK(double h, NumericMatrix & pi, NumericMatrix & T, const NumericVector & obs, const NumericVector & weight, const NumericVector & rcens, const NumericVector & rcweight) {
+  long p{T.nrow()};
+  NumericMatrix avector(1,p);
+  
+  NumericVector m_e(p, 1);
+  NumericMatrix e(p, 1, m_e.begin());
+  
+  NumericMatrix t = matrix_product(T * (-1), e);
+  
+  // Uncensored data
+  //   initial condition
+  avector = clone(pi);
+  
+  double dt{0.0};
+  
+  double density{0.0};
+  
+  double logLh{0.0};
+  
+  // Non censored data
+  if (obs.size() > 0) {
+    dt = obs[0];
+  }
+  for (int k{0}; k < obs.size(); ++k) {
+    a_rungekutta(avector, dt, h, T);
+    density = matrix_product(avector, t)(0,0);
+    logLh += weight[k] * log(density);
+    dt = obs[k + 1] - obs[k];
+  }
+  //Right censored data
+  if (rcens.size() > 0) {
+    dt = rcens[0];
+    avector = clone(pi);
+  }
+  for (int k{0}; k < rcens.size(); ++k) {
+    a_rungekutta(avector, dt, h, T);
+    density = matrix_product(avector, e)(0,0);
+    logLh += rcweight[k] * log(density);
+    dt = rcens[k + 1] - rcens[k];
+  }
+  
+  return logLh;
+}
+

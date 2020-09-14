@@ -7,5 +7,5 @@
 EMstep_RK(h, pi, T, obs, weight, rcens, rcweight)
 }
 \description{
-Warning - I am assuming that pi is a matrix I would need to make sure that this is the case in the iteration
+Warning - I am assuming that pi is a matrix I would need to make sure that this is the case in the iteration or change how I iterate with it
 }

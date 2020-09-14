@@ -48,6 +48,19 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// a_rungekutta
+void a_rungekutta(NumericMatrix& avector, double dt, double h, const NumericMatrix& T);
+RcppExport SEXP _matrixdist_a_rungekutta(SEXP avectorSEXP, SEXP dtSEXP, SEXP hSEXP, SEXP TSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix& >::type avector(avectorSEXP);
+    Rcpp::traits::input_parameter< double >::type dt(dtSEXP);
+    Rcpp::traits::input_parameter< double >::type h(hSEXP);
+    Rcpp::traits::input_parameter< const NumericMatrix& >::type T(TSEXP);
+    a_rungekutta(avector, dt, h, T);
+    return R_NilValue;
+END_RCPP
+}
 // embeddedMC
 NumericMatrix embeddedMC(NumericMatrix T, NumericVector t);
 RcppExport SEXP _matrixdist_embeddedMC(SEXP TSEXP, SEXP tSEXP) {
@@ -252,6 +265,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_default_step_length", (DL_FUNC) &_matrixdist_default_step_length, 1},
     {"_matrixdist_runge_kutta", (DL_FUNC) &_matrixdist_runge_kutta, 7},
     {"_matrixdist_EMstep_RK", (DL_FUNC) &_matrixdist_EMstep_RK, 7},
+    {"_matrixdist_a_rungekutta", (DL_FUNC) &_matrixdist_a_rungekutta, 4},
     {"_matrixdist_embeddedMC", (DL_FUNC) &_matrixdist_embeddedMC, 2},
     {"_matrixdist_cumulateMatrix", (DL_FUNC) &_matrixdist_cumulateMatrix, 1},
     {"_matrixdist_cumulateVector", (DL_FUNC) &_matrixdist_cumulateVector, 1},
