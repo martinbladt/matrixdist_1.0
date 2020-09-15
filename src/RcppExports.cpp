@@ -33,12 +33,12 @@ BEGIN_RCPP
 END_RCPP
 }
 // EMstep_RK
-void EMstep_RK(double h, NumericMatrix& pi, NumericMatrix& T, const NumericVector& obs, const NumericVector& weight, const NumericVector& rcens, const NumericVector& rcweight);
+void EMstep_RK(double h, NumericVector& pi, NumericMatrix& T, const NumericVector& obs, const NumericVector& weight, const NumericVector& rcens, const NumericVector& rcweight);
 RcppExport SEXP _matrixdist_EMstep_RK(SEXP hSEXP, SEXP piSEXP, SEXP TSEXP, SEXP obsSEXP, SEXP weightSEXP, SEXP rcensSEXP, SEXP rcweightSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< double >::type h(hSEXP);
-    Rcpp::traits::input_parameter< NumericMatrix& >::type pi(piSEXP);
+    Rcpp::traits::input_parameter< NumericVector& >::type pi(piSEXP);
     Rcpp::traits::input_parameter< NumericMatrix& >::type T(TSEXP);
     Rcpp::traits::input_parameter< const NumericVector& >::type obs(obsSEXP);
     Rcpp::traits::input_parameter< const NumericVector& >::type weight(weightSEXP);
@@ -59,6 +59,23 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const NumericMatrix& >::type T(TSEXP);
     a_rungekutta(avector, dt, h, T);
     return R_NilValue;
+END_RCPP
+}
+// logLikelihoodPH_RK
+double logLikelihoodPH_RK(double h, NumericVector& pi, NumericMatrix& T, const NumericVector& obs, const NumericVector& weight, const NumericVector& rcens, const NumericVector& rcweight);
+RcppExport SEXP _matrixdist_logLikelihoodPH_RK(SEXP hSEXP, SEXP piSEXP, SEXP TSEXP, SEXP obsSEXP, SEXP weightSEXP, SEXP rcensSEXP, SEXP rcweightSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type h(hSEXP);
+    Rcpp::traits::input_parameter< NumericVector& >::type pi(piSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix& >::type T(TSEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type obs(obsSEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type weight(weightSEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type rcens(rcensSEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type rcweight(rcweightSEXP);
+    rcpp_result_gen = Rcpp::wrap(logLikelihoodPH_RK(h, pi, T, obs, weight, rcens, rcweight));
+    return rcpp_result_gen;
 END_RCPP
 }
 // embeddedMC
@@ -279,6 +296,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_runge_kutta", (DL_FUNC) &_matrixdist_runge_kutta, 7},
     {"_matrixdist_EMstep_RK", (DL_FUNC) &_matrixdist_EMstep_RK, 7},
     {"_matrixdist_a_rungekutta", (DL_FUNC) &_matrixdist_a_rungekutta, 4},
+    {"_matrixdist_logLikelihoodPH_RK", (DL_FUNC) &_matrixdist_logLikelihoodPH_RK, 7},
     {"_matrixdist_embeddedMC", (DL_FUNC) &_matrixdist_embeddedMC, 2},
     {"_matrixdist_cumulateMatrix", (DL_FUNC) &_matrixdist_cumulateMatrix, 1},
     {"_matrixdist_cumulateVector", (DL_FUNC) &_matrixdist_cumulateVector, 1},

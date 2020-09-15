@@ -13,9 +13,9 @@ runge_kutta <- function(avector, bvector, cmatrix, dt, h, T, t) {
     invisible(.Call(`_matrixdist_runge_kutta`, avector, bvector, cmatrix, dt, h, T, t))
 }
 
-#' EM using Runge Kutta
+#' EM step using Runge Kutta
 #' 
-#' Warning - I am assuming that pi is a matrix I would need to make sure that this is the case in the iteration or change how I iterate with it
+#' Computes one step of the EM algorithm by using a Runge-Kutta method of 4th order
 EMstep_RK <- function(h, pi, T, obs, weight, rcens, rcweight) {
     invisible(.Call(`_matrixdist_EMstep_RK`, h, pi, T, obs, weight, rcens, rcweight))
 }
@@ -25,6 +25,11 @@ EMstep_RK <- function(h, pi, T, obs, weight, rcens, rcweight) {
 #' I may need to change the type of avector
 a_rungekutta <- function(avector, dt, h, T) {
     invisible(.Call(`_matrixdist_a_rungekutta`, avector, dt, h, T))
+}
+
+#' Loglikelihood using RK
+logLikelihoodPH_RK <- function(h, pi, T, obs, weight, rcens, rcweight) {
+    .Call(`_matrixdist_logLikelihoodPH_RK`, h, pi, T, obs, weight, rcens, rcweight)
 }
 
 #' Embeded Markov chain of a sub-intensity matrix

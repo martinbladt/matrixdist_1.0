@@ -151,12 +151,14 @@ void runge_kutta(NumericMatrix & avector, NumericMatrix & bvector, NumericMatrix
 
 
 
-//' EM using Runge Kutta
+//' EM step using Runge Kutta
 //' 
-//' Warning - I am assuming that pi is a matrix I would need to make sure that this is the case in the iteration or change how I iterate with it
+//' Computes one step of the EM algorithm by using a Runge-Kutta method of 4th order
 // [[Rcpp::export]]
-void EMstep_RK(double h, NumericMatrix & pi, NumericMatrix & T, const NumericVector & obs, const NumericVector & weight, const NumericVector & rcens, const NumericVector & rcweight) {
+void EMstep_RK(double h, NumericVector & pi, NumericMatrix & T, const NumericVector & obs, const NumericVector & weight, const NumericVector & rcens, const NumericVector & rcweight) {
   long p{T.nrow()};
+  
+  NumericMatrix m_pi(1, p, pi.begin()); //Matrix version of pi for computations
   
   NumericVector m_e(p, 1);
   NumericMatrix e(p, 1, m_e.begin());
@@ -172,7 +174,7 @@ void EMstep_RK(double h, NumericMatrix & pi, NumericMatrix & T, const NumericVec
   NumericMatrix cmatrix(p,p);
   
   // initial conditions
-  avector = clone(pi);
+  avector = clone(m_pi);
   bvector = clone(t);
   
   double dt{0.0};
@@ -190,11 +192,11 @@ void EMstep_RK(double h, NumericMatrix & pi, NumericMatrix & T, const NumericVec
     SumOfWeights += weight[k];
     
     runge_kutta(avector, bvector, cmatrix, dt, h, T, t);
-    density = matrix_product(pi, bvector)(0,0);
+    density = matrix_product(m_pi, bvector)(0,0);
     
     // E-step
     for (int i{0}; i < p; ++i) {
-      Bmean(i,0) += pi(0,i) * bvector(i,0) * weight[k] / density;
+      Bmean(i,0) += pi[i] * bvector(i,0) * weight[k] / density;
       Nmean(i,p) += avector(0,i) * t(i,0) * weight[k] / density;
       Zmean(i,0) += cmatrix(i,i) * weight[k] / density;
       for (int j{0}; j < p; ++j) {
@@ -210,7 +212,7 @@ void EMstep_RK(double h, NumericMatrix & pi, NumericMatrix & T, const NumericVec
   if (rcens.size() > 0) {
     dt = rcens[0];
     cmatrix = clone(cmatrix * 0);
-    avector = clone(pi);
+    avector = clone(m_pi);
     bvector = clone(e);
   }
   for (int k{0}; k < rcens.size(); ++k) {
@@ -218,11 +220,11 @@ void EMstep_RK(double h, NumericMatrix & pi, NumericMatrix & T, const NumericVec
     SumOfCensored += rcweight[k];
     
     runge_kutta(avector, bvector, cmatrix, dt, h, T, e);
-    density = matrix_product(pi, bvector)(0,0);
+    density = matrix_product(m_pi, bvector)(0,0);
     
     //E-step
     for (int i{0}; i < p; ++i) {
-      Bmean(i,0) += pi(0,i) * bvector(i,0) * rcweight[k] / density;
+      Bmean(i,0) += pi[i] * bvector(i,0) * rcweight[k] / density;
       Zmean(i,0) += cmatrix(i,i) * rcweight[k] / density;
       for (int j{0}; j < p; ++j) {
         Nmean(i,j) += T(i,j) * cmatrix(j,i) * rcweight[k] / density;
@@ -234,9 +236,9 @@ void EMstep_RK(double h, NumericMatrix & pi, NumericMatrix & T, const NumericVec
   
   // M step
   for (int i{0}; i < p; ++i) {
-    pi(0,i) = Bmean(i,0) / (SumOfWeights + SumOfCensored);
-    if (pi(0,i) < 0) {
-      pi(0,i) = 0;
+    pi[i] = Bmean(i,0) / (SumOfWeights + SumOfCensored);
+    if (pi[i] < 0) {
+      pi[i] = 0;
     }
     t(i,0) = Nmean(i,p) / Zmean(i,0);
     if (t(i,0) < 0) {
@@ -311,9 +313,12 @@ void a_rungekutta(NumericMatrix & avector, double dt, double h, const NumericMat
 }
 
 
-// Loglikelihood using RK
-double logLikelihoodPH_RK(double h, NumericMatrix & pi, NumericMatrix & T, const NumericVector & obs, const NumericVector & weight, const NumericVector & rcens, const NumericVector & rcweight) {
+//' Loglikelihood using RK
+// [[Rcpp::export]]
+double logLikelihoodPH_RK(double h, NumericVector & pi, NumericMatrix & T, const NumericVector & obs, const NumericVector & weight, const NumericVector & rcens, const NumericVector & rcweight) {
   long p{T.nrow()};
+  NumericMatrix m_pi(1,p, pi.begin());
+  
   NumericMatrix avector(1,p);
   
   NumericVector m_e(p, 1);
@@ -323,7 +328,7 @@ double logLikelihoodPH_RK(double h, NumericMatrix & pi, NumericMatrix & T, const
   
   // Uncensored data
   //   initial condition
-  avector = clone(pi);
+  avector = clone(m_pi);
   
   double dt{0.0};
   
@@ -344,7 +349,7 @@ double logLikelihoodPH_RK(double h, NumericMatrix & pi, NumericMatrix & T, const
   //Right censored data
   if (rcens.size() > 0) {
     dt = rcens[0];
-    avector = clone(pi);
+    avector = clone(m_pi);
   }
   for (int k{0}; k < rcens.size(); ++k) {
     a_rungekutta(avector, dt, h, T);
