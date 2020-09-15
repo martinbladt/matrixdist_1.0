@@ -1,6 +1,6 @@
 #' New Generic for Simulating Matrix Distributions
 #'
-#' Methods are available for objects of class \linkS4class{ph}, \linkS4class{fph}
+#' Methods are available for objects of class \linkS4class{ph}
 #'
 #' @param x an object of the model class.
 #' @param ...
@@ -9,13 +9,28 @@
 #' @export
 #'
 #'
-setGeneric("sim", function(x, ...) {
-  standardGeneric("sim")
+setGeneric("r", function(x, ...) {
+  standardGeneric("r")
+})
+
+#' New Generic for the Density of Matrix Distributions
+#'
+#' Methods are available for objects of class \linkS4class{ph}
+#'
+#' @param x an object of the model class.
+#' @param ...
+#'
+#' @return Density from the matrix distribution.
+#' @export
+#'
+#'
+setGeneric("d", function(x, ...) {
+  standardGeneric("d")
 })
 
 #' New Generic for Estimating Matrix Distributions
 #'
-#' Methods are available for objects of class \linkS4class{ph}, \linkS4class{fph}
+#' Methods are available for objects of class \linkS4class{ph}
 #'
 #' @param x an object of the model class.
 #' @param y a vector of data.
@@ -31,7 +46,7 @@ setGeneric("fit", function(x, y, ...) {
 
 #' New Generic for doing a likelihood ratio test between two Matrix Distribution models
 #'
-#' Methods are available for objects of class \linkS4class{ph}, \linkS4class{fph}
+#' Methods are available for objects of class \linkS4class{ph}
 #'
 #' @param x,y objects of the model class.
 #' @param ...
