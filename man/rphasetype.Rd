@@ -4,7 +4,7 @@
 \alias{rphasetype}
 \title{Random phase-type}
 \usage{
-rphasetype(n, pi, T, t)
+rphasetype(n, pi, T)
 }
 \arguments{
 \item{pi}{Initial probabilities}
@@ -20,7 +20,6 @@ Generates a sample of size \code{n} from a phase-type distribution with paramete
 \examples{
 alpha <- c(0.5, 0.3, 0.2)
 T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
-t <- -T\%*\%rep(1, length(T[,1]))
 n <- 10
-rphasetype(n, alpha, T, t) 
+rphasetype(n, alpha, T) 
 }

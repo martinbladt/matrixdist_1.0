@@ -40,8 +40,8 @@ logLikelihoodPH_RK <- function(h, pi, T, obs, weight, rcens, rcweight) {
 #' @examples
 #' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
 #' embeddedMC(T)
-embeddedMC <- function(T, t) {
-    .Call(`_matrixdist_embeddedMC`, T, t)
+embeddedMC <- function(T) {
+    .Call(`_matrixdist_embeddedMC`, T)
 }
 
 #' Cumulate matrix
@@ -93,11 +93,10 @@ newState <- function(previousState, cumulatedEmbeddedMC, u) {
 #' @examples
 #' alpha <- c(0.5, 0.3, 0.2)
 #' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
-#' t <- -T%*%rep(1, length(T[,1]))
 #' n <- 10
-#' rphasetype(n, alpha, T, t) 
-rphasetype <- function(n, pi, T, t) {
-    .Call(`_matrixdist_rphasetype`, n, pi, T, t)
+#' rphasetype(n, alpha, T) 
+rphasetype <- function(n, pi, T) {
+    .Call(`_matrixdist_rphasetype`, n, pi, T)
 }
 
 #' Product of two matrices

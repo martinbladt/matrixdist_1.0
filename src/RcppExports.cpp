@@ -79,14 +79,13 @@ BEGIN_RCPP
 END_RCPP
 }
 // embeddedMC
-NumericMatrix embeddedMC(NumericMatrix T, NumericVector t);
-RcppExport SEXP _matrixdist_embeddedMC(SEXP TSEXP, SEXP tSEXP) {
+NumericMatrix embeddedMC(NumericMatrix T);
+RcppExport SEXP _matrixdist_embeddedMC(SEXP TSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericMatrix >::type T(TSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type t(tSEXP);
-    rcpp_result_gen = Rcpp::wrap(embeddedMC(T, t));
+    rcpp_result_gen = Rcpp::wrap(embeddedMC(T));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -138,16 +137,15 @@ BEGIN_RCPP
 END_RCPP
 }
 // rphasetype
-NumericVector rphasetype(int n, NumericVector pi, NumericMatrix T, NumericVector t);
-RcppExport SEXP _matrixdist_rphasetype(SEXP nSEXP, SEXP piSEXP, SEXP TSEXP, SEXP tSEXP) {
+NumericVector rphasetype(int n, NumericVector pi, NumericMatrix T);
+RcppExport SEXP _matrixdist_rphasetype(SEXP nSEXP, SEXP piSEXP, SEXP TSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< int >::type n(nSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type pi(piSEXP);
     Rcpp::traits::input_parameter< NumericMatrix >::type T(TSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type t(tSEXP);
-    rcpp_result_gen = Rcpp::wrap(rphasetype(n, pi, T, t));
+    rcpp_result_gen = Rcpp::wrap(rphasetype(n, pi, T));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -297,12 +295,12 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_EMstep_RK", (DL_FUNC) &_matrixdist_EMstep_RK, 7},
     {"_matrixdist_a_rungekutta", (DL_FUNC) &_matrixdist_a_rungekutta, 4},
     {"_matrixdist_logLikelihoodPH_RK", (DL_FUNC) &_matrixdist_logLikelihoodPH_RK, 7},
-    {"_matrixdist_embeddedMC", (DL_FUNC) &_matrixdist_embeddedMC, 2},
+    {"_matrixdist_embeddedMC", (DL_FUNC) &_matrixdist_embeddedMC, 1},
     {"_matrixdist_cumulateMatrix", (DL_FUNC) &_matrixdist_cumulateMatrix, 1},
     {"_matrixdist_cumulateVector", (DL_FUNC) &_matrixdist_cumulateVector, 1},
     {"_matrixdist_initialState", (DL_FUNC) &_matrixdist_initialState, 2},
     {"_matrixdist_newState", (DL_FUNC) &_matrixdist_newState, 3},
-    {"_matrixdist_rphasetype", (DL_FUNC) &_matrixdist_rphasetype, 4},
+    {"_matrixdist_rphasetype", (DL_FUNC) &_matrixdist_rphasetype, 3},
     {"_matrixdist_matrix_product", (DL_FUNC) &_matrixdist_matrix_product, 2},
     {"_matrixdist_matrix_sum", (DL_FUNC) &_matrixdist_matrix_sum, 2},
     {"_matrixdist_LInf_norm", (DL_FUNC) &_matrixdist_LInf_norm, 1},

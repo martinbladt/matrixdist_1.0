@@ -4,7 +4,7 @@
 \alias{embeddedMC}
 \title{Embeded Markov chain of a sub-intensity matrix}
 \usage{
-embeddedMC(T, t)
+embeddedMC(T)
 }
 \arguments{
 \item{T}{A sub-intensity matrix}

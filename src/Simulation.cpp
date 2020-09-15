@@ -1,5 +1,7 @@
 #include <Rcpp.h>
 using namespace Rcpp;
+#include "matrix_functions.h"
+
 
 //' Embeded Markov chain of a sub-intensity matrix
 //' 
@@ -10,9 +12,13 @@ using namespace Rcpp;
 //' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
 //' embeddedMC(T)
 // [[Rcpp::export]]
-NumericMatrix embeddedMC(NumericMatrix T, NumericVector t) {
-  int p = t.size();
+NumericMatrix embeddedMC(NumericMatrix T) {
+  long p{T.nrow()};
   NumericMatrix Q(p + 1, p + 1);
+  
+  NumericVector ee(p, 1);
+  NumericMatrix m_e(p, 1, ee.begin());
+  NumericMatrix t = matrix_product(T * (-1), m_e);
   
   for (int i = 0; i < p; ++i) {
     for (int j = 0; j < p + 1; ++j) {
@@ -20,7 +26,7 @@ NumericMatrix embeddedMC(NumericMatrix T, NumericVector t) {
         Q(i,j) = -1.0 * T(i,j) / T(i,i);
       }
       else if(j == p) {
-        Q(i,j) = -1.0 * t[i] / T(i,i);
+        Q(i,j) = -1.0 * t(i,0) / T(i,i);
       }
     }
   }
@@ -131,15 +137,14 @@ long newState(long previousState, NumericMatrix cumulatedEmbeddedMC, double u) {
 //' @examples
 //' alpha <- c(0.5, 0.3, 0.2)
 //' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
-//' t <- -T%*%rep(1, length(T[,1]))
 //' n <- 10
-//' rphasetype(n, alpha, T, t) 
+//' rphasetype(n, alpha, T) 
 // [[Rcpp::export]]
-NumericVector rphasetype(int n, NumericVector pi, NumericMatrix T, NumericVector t) {
+NumericVector rphasetype(int n, NumericVector pi, NumericMatrix T) {
   
   NumericVector sample(n);
   
-  NumericMatrix cumulatedEmbeddedMC = cumulateMatrix(embeddedMC(T, t));
+  NumericMatrix cumulatedEmbeddedMC = cumulateMatrix(embeddedMC(T));
   NumericVector cumulatedPi = cumulateVector(pi);
   
   int p = pi.size();
