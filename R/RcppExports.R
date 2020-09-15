@@ -176,7 +176,17 @@ rcpp_hello_world <- function() {
     .Call(`_matrixdist_rcpp_hello_world`)
 }
 
-random_structure <- function(p, structure = "General") {
-    .Call(`_matrixdist_random_structure`, p, structure)
+#' Random structure of a phase-type
+#' 
+#' Generates random parameters \code{pi} and \code{T} of a phase-type distribution of dimension \code{p} with chosen structure
+#' @param p Dimension of the phase-type
+#' @param structure Type of structure: "General", "Hyperexponential", "GErlang", "Coxian" or "GCoxian"
+#' @param scale_factor A factor that multiplies the sub-intensity matrix
+#' @return Random parameters \code{pi} and \code{T} of a phase-type
+#' @examples
+#' random_structure(3) 
+#' random_structure(5, "Hyperexponential") 
+random_structure <- function(p, structure = "General", scale_factor = 1) {
+    .Call(`_matrixdist_random_structure`, p, structure, scale_factor)
 }
 

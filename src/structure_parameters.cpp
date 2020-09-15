@@ -1,10 +1,19 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 
-// Posible structures: General, Hyperexponential, GErlang, Coxian, GCoxian
-
+//' Random structure of a phase-type
+//' 
+//' Generates random parameters \code{pi} and \code{T} of a phase-type distribution of dimension \code{p} with chosen structure
+//' @param p Dimension of the phase-type
+//' @param structure Type of structure: "General", "Hyperexponential", "GErlang", "Coxian" or "GCoxian"
+//' @param scale_factor A factor that multiplies the sub-intensity matrix
+//' @return Random parameters \code{pi} and \code{T} of a phase-type
+//' @examples
+//' random_structure(3) 
+//' random_structure(5, "Hyperexponential") 
 // [[Rcpp::export]]
-NumericVector random_structure(int p, String structure = "General") {
+List random_structure(int p, String structure = "General", double scale_factor = 1) {
+  // Structure of pi and T
   NumericVector pi_legal(p);
   NumericMatrix T_legal(p, p);
   
@@ -49,7 +58,45 @@ NumericVector random_structure(int p, String structure = "General") {
   else{
     Rcerr << "Non-existent structure\n";
   }
-  return pi_legal;
+  
+  
+  // Random initialization
+  NumericVector pi_rnd(p);
+  NumericMatrix T_rnd(p, p);
+  
+  double sum{0.0};
+  
+  for (int i{0}; i < p; ++i) {
+    if (pi_legal[i] == 1) {
+      pi_rnd[i] = runif(1)[0];
+      sum += pi_rnd[i];
+    }
+  }
+  
+  for (int i{0}; i < p; ++i) {
+    pi_rnd[i] = pi_rnd[i] / sum;
+  }
+  
+  for (int i{0}; i < p; ++i) {
+    for (int j{0}; j < p; ++j) {
+      if ((i != j) && (T_legal(i,j) == 1)) {
+        T_rnd(i,j) = runif(1)[0];
+        T_rnd(i,i) -= T_rnd(i,j);
+      }
+    }
+  }
+  
+  // exit rate
+  for (int i{0}; i < p; ++i) {
+    if (T_legal(i,i) == 1) {
+      T_rnd(i,i) -= runif(1)[0];
+    }
+  }
+  T_rnd = T_rnd * scale_factor;
+  
+  List L = List::create(Named("pi") = pi_rnd , _["T"] = T_rnd);
+  
+  return L;
 }
 
 

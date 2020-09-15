@@ -15,5 +15,5 @@ LRT(x, y, ...)
 a likelihood ratio test result.
 }
 \description{
-Methods are available for objects of class \linkS4class{ph}, \linkS4class{fph}
+Methods are available for objects of class \linkS4class{ph}
 }
