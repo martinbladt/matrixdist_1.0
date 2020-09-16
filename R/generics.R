@@ -28,6 +28,36 @@ setGeneric("d", function(x, ...) {
   standardGeneric("d")
 })
 
+#' New Generic for the Distribution of Matrix Distributions
+#'
+#' Methods are available for objects of class \linkS4class{ph}
+#'
+#' @param x an object of the model class.
+#' @param ...
+#'
+#' @return CDF from the matrix distribution.
+#' @export
+#'
+#'
+setGeneric("p", function(x, ...) {
+  standardGeneric("p")
+})
+
+#' New Generic for the Quantile of Matrix Distributions
+#'
+#' Methods are available for objects of class \linkS4class{ph}
+#'
+#' @param x an object of the model class.
+#' @param ...
+#'
+#' @return Quantile from the matrix distribution.
+#' @export
+#'
+#'
+setGeneric("q", function(x, ...) {
+  standardGeneric("q")
+})
+
 #' New Generic for Estimating Matrix Distributions
 #'
 #' Methods are available for objects of class \linkS4class{ph}
@@ -42,6 +72,21 @@ setGeneric("d", function(x, ...) {
 #'
 setGeneric("fit", function(x, y, ...) {
   standardGeneric("fit")
+})
+
+#' New Generic for Plotting Matrix Distributions
+#'
+#' Methods are available for objects of class \linkS4class{ph}
+#'
+#' @param x an object of the model class.
+#' @param y a vector of data.
+#' @param ...
+#'
+#' @export
+#'
+#'
+setGeneric("m_plot", function(x, ...) {
+  standardGeneric("m_plot")
 })
 
 #' New Generic for doing a likelihood ratio test between two Matrix Distribution models

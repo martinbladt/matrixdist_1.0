@@ -11,35 +11,42 @@
 setClass("ph",
          slots = list(
            name = "character",
-           pars = "list",
-           fit = "list"
+           pars = "list"
          ),
          prototype = list(
            name = NA_character_,
-           pars = list(),
-           fit = list()
+           pars = list()
          )
 )
 
 #' Constructor Function for phase type distributions
 #'
-#' @param pi a probability vector.
-#' @param T an intensity matrix.
+#' @param alpha a probability vector.
+#' @param S an intensity matrix.
 #'
 #' @return An object of class \linkS4class{ph}.
 #' @export
 #'
 #' @examples
-ph <- function(pi = c(1), T = as.matrix(- 1)) {
-  if(dim(T)[1] != dim(T)[2]){stop("matrix T should be square")}
-  if(length(pi) != dim(T)[1]){stop("incompatible dimensions")}
+ph <- function(alpha = NA, S = NA, structure = NA, order = 3) {
+  if(any(is.na(alpha)) & any(is.na(S)) & is.na(structure)){
+    stop("input a vector and matrix, or a structure")
+  }
+  if(!is.na(structure)){
+    rs <- random_structure(order, structure = structure)
+    alpha <- rs[[1]]
+    S <- rs[[2]]
+    name <- structure
+  } else{
+    if(dim(S)[1] != dim(S)[2]){stop("matrix T should be square")}
+    if(length(alpha) != dim(S)[1]){stop("incompatible dimensions")}
+    name <- "Custom"
+  }
   new("ph",
-      name = paste("ph(", length(pi), ")", sep = ""),
-      pars = list(pi = pi, T = T),
-      fit = list()
+      name = paste(name, " ph(", length(alpha), ")", sep = ""),
+      pars = list(alpha = alpha, S = S)
   )
 }
-
 
 #' Show Method for phase type distributions
 #'
@@ -70,8 +77,8 @@ setMethod("show", "ph", function(object) {
 #' @examples
 #'
 setMethod("r", c(x = "ph"), function(x, n = 1000) {
-  t <- - rowSums(x@pars$T)
-  U <- rphasetype(n, x@pars$pi, x@pars$T, t)
+  t <- - rowSums(x@pars$S)
+  U <- rphasetype(n, x@pars$alpha, x@pars$S)
   return(U)
 })
 
@@ -86,7 +93,22 @@ setMethod("r", c(x = "ph"), function(x, n = 1000) {
 #' @examples
 #'
 setMethod("d", c(x = "ph"), function(x, y = seq(0, 5, length.out = 100)) {
-  dens <- phdensity(y, x@pars$pi, x@pars$T)
+  dens <- phdensity(y, x@pars$alpha, x@pars$S)
+  return(cbind(y = y, dens = dens))
+})
+
+#' Distribution Method for phase type distributions
+#'
+#' @param x an object of class \linkS4class{ph}.
+#' @param y locations
+#'
+#' @return Density evaluated at locations
+#' @export
+#'
+#' @examples
+#'
+setMethod("p", c(x = "ph"), function(x, q = seq(0, 5, length.out = 100)) {
+  dens <- phdensity(y, x@pars$alpha, x@pars$S)
   return(cbind(y = y, dens = dens))
 })
 
@@ -102,8 +124,43 @@ setMethod("d", c(x = "ph"), function(x, y = seq(0, 5, length.out = 100)) {
 #'
 setMethod(
   "fit", c(x = "ph", y = "ANY"),
-  function(x, y) {
-    x@fit <- rcpp_hello_world()
+  function(x, 
+           y,
+           xweight = numeric(0), 
+           rcen = numeric(0), 
+           rcenweight = numeric(0),
+           stepsEM = 1000) 
+    {
+    y <- sort(as.numeric(y))
+    un_obs <- unique(y)
+    if(min(y) <= 0){stop("data should be positive")}
+    if(length(xweight) == 0){xweight <- rep(1, length(y))}
+    observations <- cbind(y, xweight)
+    mat <- data.frame(observations)
+    names(mat) <- c('obs', 'weight')
+    cum_weight <- NULL
+    for(i in un_obs){
+      cum_weight <- c(cum_weight, sum(mat$weight[which(mat$obs==i)]))
+    }
+    ph_par <- x@pars
+    pi_fit <- ph_par$alpha
+    T_fit <- ph_par$S
+    
+    RKstep <- default_step_length(T_fit)
+    logLikelihoodPH_RK(RKstep, pi_fit, T_fit, un_obs, cum_weight, rcen, rcenweight)
+    for (k in 1:stepsEM) {
+      RKstep <- default_step_length(T_fit)
+      EMstep_RK(RKstep, pi_fit, T_fit, un_obs, cum_weight, rcen, rcenweight)
+      if (k %% 100 == 0) {
+        cat("\r", "iteration:", k,
+            ", logLik:", logLikelihoodPH_RK(RKstep, pi_fit, T_fit, un_obs, cum_weight, rcen, rcenweight),
+            sep = " "
+        )
+      }
+    }
+    cat("\n",sep = "")
+    x@pars$alpha <- pi_fit
+    x@pars$S <- T_fit
     return(x)
   }
 )
@@ -117,4 +174,29 @@ setMethod(
 #'
 setMethod("coef", c(object = "ph"), function(object) {
   object@pars
+})
+
+#' Plot Method for phase type distributions
+#'
+#' @param x an object of class \linkS4class{ph}.
+#' @param y a dataset
+#'
+#' @export
+#'
+#' @examples
+#'
+setMethod("m_plot", c(x = "ph"), function(x, y = NA) {
+  if(all(is.na(y))){
+    sq <- seq(1e-20, 5, length.out = 1000)
+    phd <- phdensity(sq, x@pars$alpha, x@pars$S)
+    plot(sq, phd, type = "l", xlab = "y", ylab = "density")
+  }
+  if(!all(is.na(y))){
+    sq <- seq(1e-20, max(y), length.out = 1000)
+    phd <- phdensity(sq, x@pars$alpha, x@pars$S)
+    mx_h <- max(hist(y, breaks = 100, plot = FALSE)$density)
+    mx_d <- max(phd)
+    hist(y, breaks = 100, freq = FALSE, ylim = c(0, max(mx_h, mx_d)))
+    lines(sq, phd, col = "red")
+  }
 })
