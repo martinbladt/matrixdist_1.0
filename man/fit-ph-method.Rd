@@ -4,7 +4,14 @@
 \alias{fit,ph-method}
 \title{Fit Method for ph Class}
 \usage{
-\S4method{fit}{ph}(x, y)
+\S4method{fit}{ph}(
+  x,
+  y,
+  xweight = numeric(0),
+  rcen = numeric(0),
+  rcenweight = numeric(0),
+  stepsEM = 1000
+)
 }
 \arguments{
 \item{x}{an object of class \linkS4class{ph}.}

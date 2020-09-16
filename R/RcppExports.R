@@ -159,6 +159,14 @@ matrix_power <- function(n, A) {
     .Call(`_matrixdist_matrix_power`, n, A)
 }
 
+clone_vector <- function(v) {
+    .Call(`_matrixdist_clone_vector`, v)
+}
+
+clone_matrix <- function(m) {
+    .Call(`_matrixdist_clone_matrix`, m)
+}
+
 #' Phase-type density
 #' 
 #' Computes the density of phase-type distribution with parameters \code{pi and} \code{T} at \code{x}

@@ -4,12 +4,12 @@
 \alias{ph}
 \title{Constructor Function for phase type distributions}
 \usage{
-ph(pi = c(1), T = as.matrix(-1))
+ph(alpha = NA, S = NA, structure = NA, order = 3)
 }
 \arguments{
-\item{pi}{a probability vector.}
+\item{alpha}{a probability vector.}
 
-\item{T}{an intensity matrix.}
+\item{S}{an intensity matrix.}
 }
 \value{
 An object of class \linkS4class{ph}.

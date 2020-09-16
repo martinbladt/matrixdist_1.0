@@ -252,6 +252,28 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// clone_vector
+NumericVector clone_vector(NumericVector v);
+RcppExport SEXP _matrixdist_clone_vector(SEXP vSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type v(vSEXP);
+    rcpp_result_gen = Rcpp::wrap(clone_vector(v));
+    return rcpp_result_gen;
+END_RCPP
+}
+// clone_matrix
+NumericMatrix clone_matrix(NumericMatrix m);
+RcppExport SEXP _matrixdist_clone_matrix(SEXP mSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type m(mSEXP);
+    rcpp_result_gen = Rcpp::wrap(clone_matrix(m));
+    return rcpp_result_gen;
+END_RCPP
+}
 // phdensity
 NumericVector phdensity(NumericVector x, NumericVector pi, NumericMatrix T);
 RcppExport SEXP _matrixdist_phdensity(SEXP xSEXP, SEXP piSEXP, SEXP TSEXP) {
@@ -310,6 +332,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_matrixMax", (DL_FUNC) &_matrixdist_matrixMax, 1},
     {"_matrixdist_matrixMaxDiagonal", (DL_FUNC) &_matrixdist_matrixMaxDiagonal, 1},
     {"_matrixdist_matrix_power", (DL_FUNC) &_matrixdist_matrix_power, 2},
+    {"_matrixdist_clone_vector", (DL_FUNC) &_matrixdist_clone_vector, 1},
+    {"_matrixdist_clone_matrix", (DL_FUNC) &_matrixdist_clone_matrix, 1},
     {"_matrixdist_phdensity", (DL_FUNC) &_matrixdist_phdensity, 3},
     {"_matrixdist_rcpp_hello_world", (DL_FUNC) &_matrixdist_rcpp_hello_world, 0},
     {"_matrixdist_random_structure", (DL_FUNC) &_matrixdist_random_structure, 3},

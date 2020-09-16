@@ -270,6 +270,18 @@ NumericMatrix matrix_power(int n, const NumericMatrix & A) {
   return newMatrix;
 }
 
+
+// [[Rcpp::export]]
+NumericVector clone_vector(NumericVector v) {
+  NumericVector new_v = clone(v);
+}
+
+// [[Rcpp::export]]
+NumericMatrix clone_matrix(NumericMatrix m) {
+  NumericMatrix new_m = clone(m);
+}
+
+
 //' Phase-type density
 //' 
 //' Computes the density of phase-type distribution with parameters \code{pi and} \code{T} at \code{x}
