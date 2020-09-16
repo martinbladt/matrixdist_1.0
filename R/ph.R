@@ -22,7 +22,7 @@ setClass("ph",
 #' Constructor Function for phase type distributions
 #'
 #' @param alpha a probability vector.
-#' @param S an intensity matrix.
+#' @param S a sub-intensity matrix.
 #'
 #' @return An object of class \linkS4class{ph}.
 #' @export
@@ -130,7 +130,7 @@ setMethod(
            rcen = numeric(0), 
            rcenweight = numeric(0),
            stepsEM = 1000) 
-    {
+  {
     y <- sort(as.numeric(y))
     un_obs <- unique(y)
     if(min(y) <= 0){stop("data should be positive")}
@@ -143,8 +143,9 @@ setMethod(
       cum_weight <- c(cum_weight, sum(mat$weight[which(mat$obs==i)]))
     }
     ph_par <- x@pars
-    pi_fit <- ph_par$alpha
-    T_fit <- ph_par$S
+    pi_fit <- clone_vector(ph_par$alpha)
+    T_fit <- clone_matrix(ph_par$S)
+    z <- ph(pi_fit, T_fit)
     
     RKstep <- default_step_length(T_fit)
     logLikelihoodPH_RK(RKstep, pi_fit, T_fit, un_obs, cum_weight, rcen, rcenweight)
@@ -156,6 +157,9 @@ setMethod(
             ", logLik:", logLikelihoodPH_RK(RKstep, pi_fit, T_fit, un_obs, cum_weight, rcen, rcenweight),
             sep = " "
         )
+        z@pars$alpha <- pi_fit
+        z@pars$S <- T_fit
+        m_plot(z, y)
       }
     }
     cat("\n",sep = "")
