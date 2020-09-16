@@ -274,11 +274,13 @@ NumericMatrix matrix_power(int n, const NumericMatrix & A) {
 // [[Rcpp::export]]
 NumericVector clone_vector(NumericVector v) {
   NumericVector new_v = clone(v);
+  return new_v;
 }
 
 // [[Rcpp::export]]
 NumericMatrix clone_matrix(NumericMatrix m) {
   NumericMatrix new_m = clone(m);
+  return new_m;
 }
 
 
