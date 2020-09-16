@@ -108,5 +108,33 @@ NumericVector phmoment(IntegerVector k, NumericVector pi, NumericMatrix T) {
  return moments;
 }
 
-
+//' Laplace transform of a phase-type
+//' 
+//' Computes the Laplace transform at \code{s} of a phase-type distribution with parameters \code{pi} and \code{T}
+//' @param s real value
+//' @param pi Initial probabilities
+//' @param T sub-intensity matrix
+//' @return Laplace transform
+//' @examples
+//' alpha <- c(0.5, 0.3, 0.2)
+//' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
+//' phLaplace(0.5, alpha, T) 
+//' phLaplace(2.5, alpha, T) 
+// [[Rcpp::export]]
+NumericVector phLaplace(NumericVector s, NumericVector pi, NumericMatrix T) {
+  
+  NumericVector Laplace(s.size());
+  
+  NumericMatrix m_pi(1, pi.size(), pi.begin());
+  NumericVector e(pi.size(), 1);
+  NumericMatrix m_e(pi.size(), 1, e.begin());
+  NumericMatrix m_t = matrix_product(T * (-1), m_e);
+  
+  NumericMatrix identity_matrix = NumericMatrix::diag(T.nrow(), 1.0);
+  
+  for (int i = 0; i < s.size(); ++i){
+    Laplace[i] = matrix_product(m_pi, matrix_product(matrix_inverse(matrix_sum(identity_matrix * s[i], T * (-1.0))), m_t))(0,0);
+  }
+  return Laplace;
+}
 
