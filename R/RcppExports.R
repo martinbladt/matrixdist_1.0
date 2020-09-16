@@ -190,6 +190,22 @@ phcdf <- function(x, pi, T, lower_tail = TRUE) {
     .Call(`_matrixdist_phcdf`, x, pi, T, lower_tail)
 }
 
+#' k moment of a phase-type
+#' 
+#' Computes the k moment of phase-type distribution with parameters \code{pi} and \code{T}
+#' @param k Integer value
+#' @param pi Initial probabilities
+#' @param T sub-intensity matrix
+#' @return The k moment
+#' @examples
+#' alpha <- c(0.5, 0.3, 0.2)
+#' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
+#' phmoment(2, alpha, T) 
+#' phmoment(4, alpha, T) 
+phmoment <- function(k, pi, T) {
+    .Call(`_matrixdist_phmoment`, k, pi, T)
+}
+
 #' Product of two matrices
 #' 
 #' Computes C = A * B
@@ -256,6 +272,11 @@ clone_vector <- function(v) {
 
 clone_matrix <- function(m) {
     .Call(`_matrixdist_clone_matrix`, m)
+}
+
+#' Creates the matrix  (A1, B1 ; 0, A2)
+matrix_VanLoan <- function(A1, A2, B1) {
+    .Call(`_matrixdist_matrix_VanLoan`, A1, A2, B1)
 }
 
 rcpp_hello_world <- function() {

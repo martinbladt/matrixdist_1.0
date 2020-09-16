@@ -74,3 +74,39 @@ NumericVector phcdf(NumericVector x, NumericVector pi, NumericMatrix T, bool low
   }
 }
 
+
+//' k moment of a phase-type
+//' 
+//' Computes the k moment of phase-type distribution with parameters \code{pi} and \code{T}
+//' @param k Integer value
+//' @param pi Initial probabilities
+//' @param T sub-intensity matrix
+//' @return The k moment
+//' @examples
+//' alpha <- c(0.5, 0.3, 0.2)
+//' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
+//' phmoment(2, alpha, T) 
+//' phmoment(4, alpha, T) 
+// [[Rcpp::export]]
+NumericVector phmoment(IntegerVector k, NumericVector pi, NumericMatrix T) {
+  
+  NumericVector moments(k.size());
+  
+  NumericVector fact_k = factorial(k);
+  
+  NumericMatrix m_pi(1, pi.size(), pi.begin());
+  NumericVector e(pi.size(), 1);
+  NumericMatrix m_e(pi.size(), 1, e.begin());
+  
+  for (int i = 0; i < k.size(); ++i){
+    NumericMatrix U(matrix_inverse(T * (-1.0)));
+    
+    U = matrix_power(k[i], U);
+    
+    moments[i] = fact_k[i] * matrix_product(m_pi, matrix_product(U, m_e))(0,0);
+  }
+ return moments;
+}
+
+
+

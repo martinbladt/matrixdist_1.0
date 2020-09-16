@@ -221,6 +221,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// phmoment
+NumericVector phmoment(IntegerVector k, NumericVector pi, NumericMatrix T);
+RcppExport SEXP _matrixdist_phmoment(SEXP kSEXP, SEXP piSEXP, SEXP TSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< IntegerVector >::type k(kSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type pi(piSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type T(TSEXP);
+    rcpp_result_gen = Rcpp::wrap(phmoment(k, pi, T));
+    return rcpp_result_gen;
+END_RCPP
+}
 // matrix_product
 NumericMatrix matrix_product(NumericMatrix a, NumericMatrix b);
 RcppExport SEXP _matrixdist_matrix_product(SEXP aSEXP, SEXP bSEXP) {
@@ -346,6 +359,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// matrix_VanLoan
+NumericMatrix matrix_VanLoan(const NumericMatrix& A1, const NumericMatrix& A2, const NumericMatrix& B1);
+RcppExport SEXP _matrixdist_matrix_VanLoan(SEXP A1SEXP, SEXP A2SEXP, SEXP B1SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const NumericMatrix& >::type A1(A1SEXP);
+    Rcpp::traits::input_parameter< const NumericMatrix& >::type A2(A2SEXP);
+    Rcpp::traits::input_parameter< const NumericMatrix& >::type B1(B1SEXP);
+    rcpp_result_gen = Rcpp::wrap(matrix_VanLoan(A1, A2, B1));
+    return rcpp_result_gen;
+END_RCPP
+}
 // rcpp_hello_world
 List rcpp_hello_world();
 RcppExport SEXP _matrixdist_rcpp_hello_world() {
@@ -387,6 +413,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_rmph", (DL_FUNC) &_matrixdist_rmph, 4},
     {"_matrixdist_phdensity", (DL_FUNC) &_matrixdist_phdensity, 3},
     {"_matrixdist_phcdf", (DL_FUNC) &_matrixdist_phcdf, 4},
+    {"_matrixdist_phmoment", (DL_FUNC) &_matrixdist_phmoment, 3},
     {"_matrixdist_matrix_product", (DL_FUNC) &_matrixdist_matrix_product, 2},
     {"_matrixdist_matrix_sum", (DL_FUNC) &_matrixdist_matrix_sum, 2},
     {"_matrixdist_LInf_norm", (DL_FUNC) &_matrixdist_LInf_norm, 1},
@@ -398,6 +425,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_matrix_power", (DL_FUNC) &_matrixdist_matrix_power, 2},
     {"_matrixdist_clone_vector", (DL_FUNC) &_matrixdist_clone_vector, 1},
     {"_matrixdist_clone_matrix", (DL_FUNC) &_matrixdist_clone_matrix, 1},
+    {"_matrixdist_matrix_VanLoan", (DL_FUNC) &_matrixdist_matrix_VanLoan, 3},
     {"_matrixdist_rcpp_hello_world", (DL_FUNC) &_matrixdist_rcpp_hello_world, 0},
     {"_matrixdist_random_structure", (DL_FUNC) &_matrixdist_random_structure, 3},
     {NULL, NULL, 0}
