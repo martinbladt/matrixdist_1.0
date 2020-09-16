@@ -283,38 +283,3 @@ NumericMatrix clone_matrix(NumericMatrix m) {
   return new_m;
 }
 
-
-//' Phase-type density
-//' 
-//' Computes the density of phase-type distribution with parameters \code{pi and} \code{T} at \code{x}
-//' @param x non-negative value
-//' @param pi Initial probabilities
-//' @param T sub-intensity matrix
-//' @return The density at \code{x}
-//' @examples
-//' alpha <- c(0.5, 0.3, 0.2)
-//' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
-//' t <- -T%*%rep(1, length(T[,1]))
-//' n <- 10
-//' phdensity(0.5, alpha, T, t) 
-// [[Rcpp::export]]
-NumericVector phdensity(NumericVector x, NumericVector pi, NumericMatrix T) {
-  
-  NumericVector density(x.size());
-  
-  NumericMatrix m_pi(1, pi.size(), pi.begin());
-  NumericVector e(pi.size(), 1);
-  NumericMatrix m_e(pi.size(), 1, e.begin());
-  NumericMatrix m_t = matrix_product(T * (-1), m_e);
-  
-  for (int k = 0; k < x.size(); ++k){
-    if (x[k] == 0) {
-      density[k] = (1.0 - matrix_product(m_pi, m_e)(0,0));
-    }
-    else {
-      density[k] = (matrix_product(m_pi, matrix_product(matrix_exponential(T * x[k]), m_t))(0,0));
-    }
-  }
-  return density;
-}
-

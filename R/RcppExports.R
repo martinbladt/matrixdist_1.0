@@ -85,7 +85,7 @@ newState <- function(previousState, cumulatedEmbeddedMC, u) {
 
 #' Random phase-type
 #' 
-#' Generates a sample of size \code{n} from a phase-type distribution with parameters \code{pi and} \code{T}
+#' Generates a sample of size \code{n} from a phase-type distribution with parameters \code{pi} and \code{T}
 #' @parm n Sample size
 #' @param pi Initial probabilities
 #' @param T sub-intensity matrix
@@ -97,6 +97,97 @@ newState <- function(previousState, cumulatedEmbeddedMC, u) {
 #' rphasetype(n, alpha, T) 
 rphasetype <- function(n, pi, T) {
     .Call(`_matrixdist_rphasetype`, n, pi, T)
+}
+
+#' Random inhomogeneous phase-type
+#' 
+#' Generates a sample of size \code{n} from an inhomogeneous phase-type distribution with parameters \code{pi}, \code{T} and \code{beta}
+#' @parm n Sample size
+#' @parm dist_type Type of IPH: "Pareto", "Weibull", "Gompertz"
+#' @param pi Initial probabilities
+#' @param T sub-intensity matrix
+#' @param beta Parameter of the transformation
+#' @return The simulated sample
+#' @examples
+#' alpha <- c(0.5, 0.3, 0.2)
+#' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
+#' beta <- 0.5
+#' n <- 10
+#' riph(n, "Pareto", alpha, T, beta) 
+riph <- function(n, dist_type, pi, T, beta) {
+    .Call(`_matrixdist_riph`, n, dist_type, pi, T, beta)
+}
+
+#' Random matrix GEVD
+#' 
+#' Generates a sample of size \code{n} from an inhomogeneous phase-type distribution with parameters \code{pi}, \code{T} and \code{beta}
+#' @parm n Sample size
+#' @parm dist_type Type of IPH: "Pareto", "Weibull", "Gompertz"
+#' @param pi Initial probabilities
+#' @param T sub-intensity matrix
+#' @param mu Location parameter
+#' @param sigma Scale parameter
+#' @param xi Shape parameter: Default 0 which corresponds to the Gumbel case
+#' @return The simulated sample
+#' @examples
+#' alpha <- c(0.5, 0.3, 0.2)
+#' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
+#' mu <- 3
+#' sigma <- 2
+#' xi <- 0.5
+#' n <- 10
+#' rmatrixGEVD(n, alpha, T, mu, sigma, xi) 
+#' rmatrixGEVD(n, alpha, T, mu, sigma) 
+rmatrixGEVD <- function(n, pi, T, mu, sigma, xi = 0) {
+    .Call(`_matrixdist_rmatrixGEVD`, n, pi, T, mu, sigma, xi)
+}
+
+#' Random MPH*
+#' 
+#' Generates a sample of size \code{n} from a MPH* distribution with parameters \code{pi}, \code{T} and \code{R}
+#' @parm n Sample size
+#' @param pi Initial probabilities
+#' @param T sub-intensity matrix
+#' @return The simulated sample
+#' @examples
+#' alpha <- c(0.5, 0.3, 0.2)
+#' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
+#' R <- matrix(c(c(1,0,0.8),c(0,1,0.2)), nrow = 3, ncol = 2)
+#' n <- 10
+#' rmph(n, alpha, T, R) 
+rmph <- function(n, pi, T, R) {
+    .Call(`_matrixdist_rmph`, n, pi, T, R)
+}
+
+#' Phase-type density
+#' 
+#' Computes the density of phase-type distribution with parameters \code{pi} and \code{T} at \code{x}
+#' @param x non-negative value
+#' @param pi Initial probabilities
+#' @param T sub-intensity matrix
+#' @return The density at \code{x}
+#' @examples
+#' alpha <- c(0.5, 0.3, 0.2)
+#' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
+#' phdensity(0.5, alpha, T) 
+phdensity <- function(x, pi, T) {
+    .Call(`_matrixdist_phdensity`, x, pi, T)
+}
+
+#' Phase-type cdf or tail
+#' 
+#' Computes the cdf of phase-type distribution with parameters \code{pi} and \code{T} at \code{x}
+#' @param x non-negative value
+#' @param pi Initial probabilities
+#' @param T sub-intensity matrix
+#' @return The cdf (tail) at \code{x}
+#' @examples
+#' alpha <- c(0.5, 0.3, 0.2)
+#' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
+#' phcdf(0.5, alpha, T) 
+#' phcdf(0.5, alpha, T, FALSE) 
+phcdf <- function(x, pi, T, lower_tail = TRUE) {
+    .Call(`_matrixdist_phcdf`, x, pi, T, lower_tail)
 }
 
 #' Product of two matrices
@@ -165,23 +256,6 @@ clone_vector <- function(v) {
 
 clone_matrix <- function(m) {
     .Call(`_matrixdist_clone_matrix`, m)
-}
-
-#' Phase-type density
-#' 
-#' Computes the density of phase-type distribution with parameters \code{pi and} \code{T} at \code{x}
-#' @param x non-negative value
-#' @param pi Initial probabilities
-#' @param T sub-intensity matrix
-#' @return The density at \code{x}
-#' @examples
-#' alpha <- c(0.5, 0.3, 0.2)
-#' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
-#' t <- -T%*%rep(1, length(T[,1]))
-#' n <- 10
-#' phdensity(0.5, alpha, T, t) 
-phdensity <- function(x, pi, T) {
-    .Call(`_matrixdist_phdensity`, x, pi, T)
 }
 
 rcpp_hello_world <- function() {

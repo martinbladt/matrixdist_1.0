@@ -129,7 +129,7 @@ long newState(long previousState, NumericMatrix cumulatedEmbeddedMC, double u) {
 
 //' Random phase-type
 //' 
-//' Generates a sample of size \code{n} from a phase-type distribution with parameters \code{pi and} \code{T}
+//' Generates a sample of size \code{n} from a phase-type distribution with parameters \code{pi} and \code{T}
 //' @parm n Sample size
 //' @param pi Initial probabilities
 //' @param T sub-intensity matrix
@@ -160,3 +160,142 @@ NumericVector rphasetype(int n, NumericVector pi, NumericMatrix T) {
   }
   return (sample);
 }
+
+
+
+//' Random inhomogeneous phase-type
+//' 
+//' Generates a sample of size \code{n} from an inhomogeneous phase-type distribution with parameters \code{pi}, \code{T} and \code{beta}
+//' @parm n Sample size
+//' @parm dist_type Type of IPH: "Pareto", "Weibull", "Gompertz"
+//' @param pi Initial probabilities
+//' @param T sub-intensity matrix
+//' @param beta Parameter of the transformation
+//' @return The simulated sample
+//' @examples
+//' alpha <- c(0.5, 0.3, 0.2)
+//' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
+//' beta <- 0.5
+//' n <- 10
+//' riph(n, "Pareto", alpha, T, beta) 
+// [[Rcpp::export]]
+NumericVector riph(int n, String dist_type, NumericVector pi, NumericMatrix T, double beta) {
+  
+  NumericVector sample(n);
+  
+  NumericMatrix cumulatedEmbeddedMC = cumulateMatrix(embeddedMC(T));
+  NumericVector cumulatedPi = cumulateVector(pi);
+  
+  int p = pi.size();
+  long state = 0;
+  for (int i = 0; i < n; ++i) {
+    double time = 0.0;
+    state = initialState(cumulatedPi, runif(1)[0]);
+    while (state != p) {
+      time += log(1.0 - runif(1)[0]) / T(state,state);
+      state = newState(state, cumulatedEmbeddedMC, runif(1)[0]);
+    }
+    if (dist_type == "Pareto") {
+      time = beta * (exp(time) - 1);
+    }
+    else if (dist_type == "Weibull") {
+      time = pow(time, 1.0 / beta);
+    }
+    else if (dist_type == "Gompertz") {
+      time = log(beta * time + 1) / beta;
+    }
+    sample[i] = time;
+  }
+  return (sample);
+}
+
+
+//' Random matrix GEVD
+//' 
+//' Generates a sample of size \code{n} from an inhomogeneous phase-type distribution with parameters \code{pi}, \code{T} and \code{beta}
+//' @parm n Sample size
+//' @parm dist_type Type of IPH: "Pareto", "Weibull", "Gompertz"
+//' @param pi Initial probabilities
+//' @param T sub-intensity matrix
+//' @param mu Location parameter
+//' @param sigma Scale parameter
+//' @param xi Shape parameter: Default 0 which corresponds to the Gumbel case
+//' @return The simulated sample
+//' @examples
+//' alpha <- c(0.5, 0.3, 0.2)
+//' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
+//' mu <- 3
+//' sigma <- 2
+//' xi <- 0.5
+//' n <- 10
+//' rmatrixGEVD(n, alpha, T, mu, sigma, xi) 
+//' rmatrixGEVD(n, alpha, T, mu, sigma) 
+// [[Rcpp::export]]
+NumericVector rmatrixGEVD(int n, NumericVector pi, NumericMatrix T, double mu, double sigma, double xi = 0) {
+  
+  NumericVector sample(n);
+  
+  NumericMatrix cumulatedEmbeddedMC = cumulateMatrix(embeddedMC(T));
+  NumericVector cumulatedPi = cumulateVector(pi);
+  
+  int p = pi.size();
+  long state = 0;
+  for (int i = 0; i < n; ++i) {
+    double time = 0.0;
+    state = initialState(cumulatedPi, runif(1)[0]);
+    while (state != p) {
+      time += log(1.0 - runif(1)[0]) / T(state,state);
+      state = newState(state, cumulatedEmbeddedMC, runif(1)[0]);
+    }
+    if (xi == 0) {
+      time = mu - sigma * log(time);
+    }
+    else {
+      time = mu + sigma  * (pow(time, - xi) - 1) / xi;
+    }
+    sample[i] = time;
+  }
+  return (sample);
+}
+
+
+
+//' Random MPH*
+//' 
+//' Generates a sample of size \code{n} from a MPH* distribution with parameters \code{pi}, \code{T} and \code{R}
+//' @parm n Sample size
+//' @param pi Initial probabilities
+//' @param T sub-intensity matrix
+//' @return The simulated sample
+//' @examples
+//' alpha <- c(0.5, 0.3, 0.2)
+//' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
+//' R <- matrix(c(c(1,0,0.8),c(0,1,0.2)), nrow = 3, ncol = 2)
+//' n <- 10
+//' rmph(n, alpha, T, R) 
+// [[Rcpp::export]]
+NumericMatrix rmph(int n, NumericVector pi, NumericMatrix T, NumericMatrix R) {
+  long dim{R.ncol()};
+  
+  NumericMatrix sample(n, dim);
+  
+  NumericMatrix cumulatedEmbeddedMC = cumulateMatrix(embeddedMC(T));
+  NumericVector cumulatedPi = cumulateVector(pi);
+  
+  int p = pi.size();
+  long state = 0;
+  for (int i = 0; i < n; ++i) {
+    double time = 0.0;
+    state = initialState(cumulatedPi, runif(1)[0]);
+    while (state != p) {
+      time = log(1.0 - runif(1)[0]) / T(state,state);
+      for (int j{0}; j < dim; ++j) {
+        sample(i,j) += R(state, j) * time;
+      }
+      state = newState(state, cumulatedEmbeddedMC, runif(1)[0]);
+    }
+  }
+  return (sample);
+}
+
+

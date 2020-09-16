@@ -149,6 +149,78 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// riph
+NumericVector riph(int n, String dist_type, NumericVector pi, NumericMatrix T, double beta);
+RcppExport SEXP _matrixdist_riph(SEXP nSEXP, SEXP dist_typeSEXP, SEXP piSEXP, SEXP TSEXP, SEXP betaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< String >::type dist_type(dist_typeSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type pi(piSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type T(TSEXP);
+    Rcpp::traits::input_parameter< double >::type beta(betaSEXP);
+    rcpp_result_gen = Rcpp::wrap(riph(n, dist_type, pi, T, beta));
+    return rcpp_result_gen;
+END_RCPP
+}
+// rmatrixGEVD
+NumericVector rmatrixGEVD(int n, NumericVector pi, NumericMatrix T, double mu, double sigma, double xi);
+RcppExport SEXP _matrixdist_rmatrixGEVD(SEXP nSEXP, SEXP piSEXP, SEXP TSEXP, SEXP muSEXP, SEXP sigmaSEXP, SEXP xiSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type pi(piSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type T(TSEXP);
+    Rcpp::traits::input_parameter< double >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< double >::type sigma(sigmaSEXP);
+    Rcpp::traits::input_parameter< double >::type xi(xiSEXP);
+    rcpp_result_gen = Rcpp::wrap(rmatrixGEVD(n, pi, T, mu, sigma, xi));
+    return rcpp_result_gen;
+END_RCPP
+}
+// rmph
+NumericMatrix rmph(int n, NumericVector pi, NumericMatrix T, NumericMatrix R);
+RcppExport SEXP _matrixdist_rmph(SEXP nSEXP, SEXP piSEXP, SEXP TSEXP, SEXP RSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type pi(piSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type T(TSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type R(RSEXP);
+    rcpp_result_gen = Rcpp::wrap(rmph(n, pi, T, R));
+    return rcpp_result_gen;
+END_RCPP
+}
+// phdensity
+NumericVector phdensity(NumericVector x, NumericVector pi, NumericMatrix T);
+RcppExport SEXP _matrixdist_phdensity(SEXP xSEXP, SEXP piSEXP, SEXP TSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type pi(piSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type T(TSEXP);
+    rcpp_result_gen = Rcpp::wrap(phdensity(x, pi, T));
+    return rcpp_result_gen;
+END_RCPP
+}
+// phcdf
+NumericVector phcdf(NumericVector x, NumericVector pi, NumericMatrix T, bool lower_tail);
+RcppExport SEXP _matrixdist_phcdf(SEXP xSEXP, SEXP piSEXP, SEXP TSEXP, SEXP lower_tailSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type pi(piSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type T(TSEXP);
+    Rcpp::traits::input_parameter< bool >::type lower_tail(lower_tailSEXP);
+    rcpp_result_gen = Rcpp::wrap(phcdf(x, pi, T, lower_tail));
+    return rcpp_result_gen;
+END_RCPP
+}
 // matrix_product
 NumericMatrix matrix_product(NumericMatrix a, NumericMatrix b);
 RcppExport SEXP _matrixdist_matrix_product(SEXP aSEXP, SEXP bSEXP) {
@@ -274,19 +346,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// phdensity
-NumericVector phdensity(NumericVector x, NumericVector pi, NumericMatrix T);
-RcppExport SEXP _matrixdist_phdensity(SEXP xSEXP, SEXP piSEXP, SEXP TSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type pi(piSEXP);
-    Rcpp::traits::input_parameter< NumericMatrix >::type T(TSEXP);
-    rcpp_result_gen = Rcpp::wrap(phdensity(x, pi, T));
-    return rcpp_result_gen;
-END_RCPP
-}
 // rcpp_hello_world
 List rcpp_hello_world();
 RcppExport SEXP _matrixdist_rcpp_hello_world() {
@@ -323,6 +382,11 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_initialState", (DL_FUNC) &_matrixdist_initialState, 2},
     {"_matrixdist_newState", (DL_FUNC) &_matrixdist_newState, 3},
     {"_matrixdist_rphasetype", (DL_FUNC) &_matrixdist_rphasetype, 3},
+    {"_matrixdist_riph", (DL_FUNC) &_matrixdist_riph, 5},
+    {"_matrixdist_rmatrixGEVD", (DL_FUNC) &_matrixdist_rmatrixGEVD, 6},
+    {"_matrixdist_rmph", (DL_FUNC) &_matrixdist_rmph, 4},
+    {"_matrixdist_phdensity", (DL_FUNC) &_matrixdist_phdensity, 3},
+    {"_matrixdist_phcdf", (DL_FUNC) &_matrixdist_phcdf, 4},
     {"_matrixdist_matrix_product", (DL_FUNC) &_matrixdist_matrix_product, 2},
     {"_matrixdist_matrix_sum", (DL_FUNC) &_matrixdist_matrix_sum, 2},
     {"_matrixdist_LInf_norm", (DL_FUNC) &_matrixdist_LInf_norm, 1},
@@ -334,7 +398,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_matrix_power", (DL_FUNC) &_matrixdist_matrix_power, 2},
     {"_matrixdist_clone_vector", (DL_FUNC) &_matrixdist_clone_vector, 1},
     {"_matrixdist_clone_matrix", (DL_FUNC) &_matrixdist_clone_matrix, 1},
-    {"_matrixdist_phdensity", (DL_FUNC) &_matrixdist_phdensity, 3},
     {"_matrixdist_rcpp_hello_world", (DL_FUNC) &_matrixdist_rcpp_hello_world, 0},
     {"_matrixdist_random_structure", (DL_FUNC) &_matrixdist_random_structure, 3},
     {NULL, NULL, 0}
