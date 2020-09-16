@@ -283,3 +283,31 @@ NumericMatrix clone_matrix(NumericMatrix m) {
   return new_m;
 }
 
+
+//' Creates the matrix  (A1, B1 ; 0, A2)
+// [[Rcpp::export]]
+NumericMatrix matrix_VanLoan(const NumericMatrix & A1, const NumericMatrix & A2, const NumericMatrix & B1) {
+  long p1{A1.nrow()};
+  long p2{A2.nrow()};
+  long p{p1 + p2};
+  
+  NumericMatrix auxiliarMatrix(p, p);
+  
+  for (int i{0}; i < p; ++i) {
+    for (int j{0}; j < p; ++j) {
+      if ( i < p1 && j < p1) {
+        auxiliarMatrix(i,j) = A1(i,j);
+      }
+      else if (i >= p1 && j < p1) {
+        auxiliarMatrix(i,j) = 0;
+      }
+      else if (i < p1 && j >= p1) {
+        auxiliarMatrix(i,j) = B1(i,j - p1);
+      }
+      else {
+        auxiliarMatrix(i,j) = A2(i - p1,j - p1);
+      }
+    }
+  }
+  return auxiliarMatrix;
+}
