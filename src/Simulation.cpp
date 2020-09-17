@@ -260,6 +260,46 @@ NumericVector rmatrixGEVD(int n, NumericVector pi, NumericMatrix T, double mu, d
 
 
 
+//' Random inhomogeneous phase-type
+//' 
+//' Generates a sample of size \code{n} from an inhomogeneous phase-type distribution with parameters \code{pi}, \code{T} and \code{beta}
+//' @parm n Sample size
+//' @parm dist_type Type of IPH: "Pareto", "Weibull", "Gompertz"
+//' @param pi Initial probabilities
+//' @param T sub-intensity matrix
+//' @param beta Parameter of the transformation
+//' @return The simulated sample
+//' @examples
+//' alpha <- c(0.5, 0.3, 0.2)
+//' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
+//' g <- function(x, beta) { x^(1/beta) }
+//' beta <- 0.5
+//' n <- 10
+//' riphfn(n, "Pareto", alpha, T, g, beta) 
+// [[Rcpp::export]]
+NumericVector riphfn(int n, String dist_type, NumericVector pi, NumericMatrix T, Function g ,NumericVector beta) {
+  
+  NumericVector sample(n);
+  
+  NumericMatrix cumulatedEmbeddedMC = cumulateMatrix(embeddedMC(T));
+  NumericVector cumulatedPi = cumulateVector(pi);
+  
+  int p = pi.size();
+  long state = 0;
+  for (int i = 0; i < n; ++i) {
+    double time = 0.0;
+    state = initialState(cumulatedPi, runif(1)[0]);
+    while (state != p) {
+      time += log(1.0 - runif(1)[0]) / T(state,state);
+      state = newState(state, cumulatedEmbeddedMC, runif(1)[0]);
+    }
+    NumericVector g_val = g(time, beta);
+    sample[i] = g_val[0];
+  }
+  return (sample);
+}
+
+
 //' Random MPH*
 //' 
 //' Generates a sample of size \code{n} from a MPH* distribution with parameters \code{pi}, \code{T} and \code{R}

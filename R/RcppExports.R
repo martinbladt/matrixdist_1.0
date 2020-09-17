@@ -142,6 +142,26 @@ rmatrixGEVD <- function(n, pi, T, mu, sigma, xi = 0) {
     .Call(`_matrixdist_rmatrixGEVD`, n, pi, T, mu, sigma, xi)
 }
 
+#' Random inhomogeneous phase-type
+#' 
+#' Generates a sample of size \code{n} from an inhomogeneous phase-type distribution with parameters \code{pi}, \code{T} and \code{beta}
+#' @parm n Sample size
+#' @parm dist_type Type of IPH: "Pareto", "Weibull", "Gompertz"
+#' @param pi Initial probabilities
+#' @param T sub-intensity matrix
+#' @param beta Parameter of the transformation
+#' @return The simulated sample
+#' @examples
+#' alpha <- c(0.5, 0.3, 0.2)
+#' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
+#' g <- function(x, beta) { x^(1/beta) }
+#' beta <- 0.5
+#' n <- 10
+#' riphfn(n, "Pareto", alpha, T, g, beta) 
+riphfn <- function(n, dist_type, pi, T, g, beta) {
+    .Call(`_matrixdist_riphfn`, n, dist_type, pi, T, g, beta)
+}
+
 #' Random MPH*
 #' 
 #' Generates a sample of size \code{n} from a MPH* distribution with parameters \code{pi}, \code{T} and \code{R}
@@ -257,7 +277,6 @@ mweibullcdf <- function(x, pi, T, beta, lower_tail = TRUE) {
     .Call(`_matrixdist_mweibullcdf`, x, pi, T, beta, lower_tail)
 }
 
-<<<<<<< HEAD
 RunFunction <- function(a, func) {
     .Call(`_matrixdist_RunFunction`, a, func)
 }
@@ -308,8 +327,6 @@ iphcdf <- function(x, pi, T, g, g_inv, beta, lower_tail = TRUE) {
     .Call(`_matrixdist_iphcdf`, x, pi, T, g, g_inv, beta, lower_tail)
 }
 
-=======
->>>>>>> 3bbb60d2eca51951e082cd37205d1048fbee954c
 #' Product of two matrices
 #' 
 #' Computes C = A * B

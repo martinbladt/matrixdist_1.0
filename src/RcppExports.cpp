@@ -180,6 +180,22 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// riphfn
+NumericVector riphfn(int n, String dist_type, NumericVector pi, NumericMatrix T, Function g, NumericVector beta);
+RcppExport SEXP _matrixdist_riphfn(SEXP nSEXP, SEXP dist_typeSEXP, SEXP piSEXP, SEXP TSEXP, SEXP gSEXP, SEXP betaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< String >::type dist_type(dist_typeSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type pi(piSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type T(TSEXP);
+    Rcpp::traits::input_parameter< Function >::type g(gSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type beta(betaSEXP);
+    rcpp_result_gen = Rcpp::wrap(riphfn(n, dist_type, pi, T, g, beta));
+    return rcpp_result_gen;
+END_RCPP
+}
 // rmph
 NumericMatrix rmph(int n, NumericVector pi, NumericMatrix T, NumericMatrix R);
 RcppExport SEXP _matrixdist_rmph(SEXP nSEXP, SEXP piSEXP, SEXP TSEXP, SEXP RSEXP) {
@@ -276,7 +292,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-<<<<<<< HEAD
 // RunFunction
 NumericVector RunFunction(NumericVector a, Function func);
 RcppExport SEXP _matrixdist_RunFunction(SEXP aSEXP, SEXP funcSEXP) {
@@ -323,8 +338,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-=======
->>>>>>> 3bbb60d2eca51951e082cd37205d1048fbee954c
 // matrix_product
 NumericMatrix matrix_product(NumericMatrix a, NumericMatrix b);
 RcppExport SEXP _matrixdist_matrix_product(SEXP aSEXP, SEXP bSEXP) {
@@ -535,6 +548,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_rphasetype", (DL_FUNC) &_matrixdist_rphasetype, 3},
     {"_matrixdist_riph", (DL_FUNC) &_matrixdist_riph, 5},
     {"_matrixdist_rmatrixGEVD", (DL_FUNC) &_matrixdist_rmatrixGEVD, 6},
+    {"_matrixdist_riphfn", (DL_FUNC) &_matrixdist_riphfn, 6},
     {"_matrixdist_rmph", (DL_FUNC) &_matrixdist_rmph, 4},
     {"_matrixdist_phdensity", (DL_FUNC) &_matrixdist_phdensity, 3},
     {"_matrixdist_phcdf", (DL_FUNC) &_matrixdist_phcdf, 4},
@@ -542,12 +556,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_phLaplace", (DL_FUNC) &_matrixdist_phLaplace, 3},
     {"_matrixdist_mweibullden", (DL_FUNC) &_matrixdist_mweibullden, 4},
     {"_matrixdist_mweibullcdf", (DL_FUNC) &_matrixdist_mweibullcdf, 5},
-<<<<<<< HEAD
     {"_matrixdist_RunFunction", (DL_FUNC) &_matrixdist_RunFunction, 2},
     {"_matrixdist_iphdensity", (DL_FUNC) &_matrixdist_iphdensity, 7},
     {"_matrixdist_iphcdf", (DL_FUNC) &_matrixdist_iphcdf, 7},
-=======
->>>>>>> 3bbb60d2eca51951e082cd37205d1048fbee954c
     {"_matrixdist_matrix_product", (DL_FUNC) &_matrixdist_matrix_product, 2},
     {"_matrixdist_matrix_sum", (DL_FUNC) &_matrixdist_matrix_sum, 2},
     {"_matrixdist_LInf_norm", (DL_FUNC) &_matrixdist_LInf_norm, 1},
