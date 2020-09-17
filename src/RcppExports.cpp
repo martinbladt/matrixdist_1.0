@@ -385,6 +385,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// diagonal_vector
+NumericMatrix diagonal_vector(const NumericVector& vec);
+RcppExport SEXP _matrixdist_diagonal_vector(SEXP vecSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const NumericVector& >::type vec(vecSEXP);
+    rcpp_result_gen = Rcpp::wrap(diagonal_vector(vec));
+    return rcpp_result_gen;
+END_RCPP
+}
 // rcpp_hello_world
 List rcpp_hello_world();
 RcppExport SEXP _matrixdist_rcpp_hello_world() {
@@ -406,6 +417,29 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type scale_factor(scale_factorSEXP);
     rcpp_result_gen = Rcpp::wrap(random_structure(p, structure, scale_factor));
     return rcpp_result_gen;
+END_RCPP
+}
+// random_reward
+NumericMatrix random_reward(int p, int dim);
+RcppExport SEXP _matrixdist_random_reward(SEXP pSEXP, SEXP dimSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type p(pSEXP);
+    Rcpp::traits::input_parameter< int >::type dim(dimSEXP);
+    rcpp_result_gen = Rcpp::wrap(random_reward(p, dim));
+    return rcpp_result_gen;
+END_RCPP
+}
+// norm_mph
+void norm_mph(NumericMatrix T, NumericMatrix R);
+RcppExport SEXP _matrixdist_norm_mph(SEXP TSEXP, SEXP RSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type T(TSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type R(RSEXP);
+    norm_mph(T, R);
+    return R_NilValue;
 END_RCPP
 }
 
@@ -440,8 +474,11 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_clone_vector", (DL_FUNC) &_matrixdist_clone_vector, 1},
     {"_matrixdist_clone_matrix", (DL_FUNC) &_matrixdist_clone_matrix, 1},
     {"_matrixdist_matrix_VanLoan", (DL_FUNC) &_matrixdist_matrix_VanLoan, 3},
+    {"_matrixdist_diagonal_vector", (DL_FUNC) &_matrixdist_diagonal_vector, 1},
     {"_matrixdist_rcpp_hello_world", (DL_FUNC) &_matrixdist_rcpp_hello_world, 0},
     {"_matrixdist_random_structure", (DL_FUNC) &_matrixdist_random_structure, 3},
+    {"_matrixdist_random_reward", (DL_FUNC) &_matrixdist_random_reward, 2},
+    {"_matrixdist_norm_mph", (DL_FUNC) &_matrixdist_norm_mph, 2},
     {NULL, NULL, 0}
 };
 

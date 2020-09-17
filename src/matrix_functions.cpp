@@ -311,3 +311,14 @@ NumericMatrix matrix_VanLoan(const NumericMatrix & A1, const NumericMatrix & A2,
   }
   return auxiliarMatrix;
 }
+
+//' Creates a matrix with the given vector in the diagonal
+// [[Rcpp::export]]
+NumericMatrix diagonal_vector(const NumericVector & vec) {
+  NumericMatrix diagonalMatrix(vec.size(),vec.size());
+  for (int i{0}; i < vec.size(); ++i) {
+    diagonalMatrix(i,i) = vec[i];
+  }
+  return diagonalMatrix;
+}
+

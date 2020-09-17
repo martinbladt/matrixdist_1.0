@@ -295,6 +295,11 @@ matrix_VanLoan <- function(A1, A2, B1) {
     .Call(`_matrixdist_matrix_VanLoan`, A1, A2, B1)
 }
 
+#' Creates a matrix with the given vector in the diagonal
+diagonal_vector <- function(vec) {
+    .Call(`_matrixdist_diagonal_vector`, vec)
+}
+
 rcpp_hello_world <- function() {
     .Call(`_matrixdist_rcpp_hello_world`)
 }
@@ -311,5 +316,19 @@ rcpp_hello_world <- function() {
 #' random_structure(5, "Hyperexponential") 
 random_structure <- function(p, structure = "General", scale_factor = 1) {
     .Call(`_matrixdist_random_structure`, p, structure, scale_factor)
+}
+
+#' Random reward matrix
+#' 
+#' The rows of the matrix sum to 1
+random_reward <- function(p, dim) {
+    .Call(`_matrixdist_random_reward`, p, dim)
+}
+
+#' Changes the values of T and R to make the MPH* having rewards that sum to 1
+#' 
+#' Better clone T and R?
+norm_mph <- function(T, R) {
+    invisible(.Call(`_matrixdist_norm_mph`, T, R))
 }
 
