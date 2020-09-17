@@ -257,6 +257,7 @@ mweibullcdf <- function(x, pi, T, beta, lower_tail = TRUE) {
     .Call(`_matrixdist_mweibullcdf`, x, pi, T, beta, lower_tail)
 }
 
+<<<<<<< HEAD
 RunFunction <- function(a, func) {
     .Call(`_matrixdist_RunFunction`, a, func)
 }
@@ -307,6 +308,8 @@ iphcdf <- function(x, pi, T, g, g_inv, beta, lower_tail = TRUE) {
     .Call(`_matrixdist_iphcdf`, x, pi, T, g, g_inv, beta, lower_tail)
 }
 
+=======
+>>>>>>> 3bbb60d2eca51951e082cd37205d1048fbee954c
 #' Product of two matrices
 #' 
 #' Computes C = A * B

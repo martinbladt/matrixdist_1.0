@@ -276,6 +276,7 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+<<<<<<< HEAD
 // RunFunction
 NumericVector RunFunction(NumericVector a, Function func);
 RcppExport SEXP _matrixdist_RunFunction(SEXP aSEXP, SEXP funcSEXP) {
@@ -322,6 +323,8 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+=======
+>>>>>>> 3bbb60d2eca51951e082cd37205d1048fbee954c
 // matrix_product
 NumericMatrix matrix_product(NumericMatrix a, NumericMatrix b);
 RcppExport SEXP _matrixdist_matrix_product(SEXP aSEXP, SEXP bSEXP) {
@@ -539,9 +542,12 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_phLaplace", (DL_FUNC) &_matrixdist_phLaplace, 3},
     {"_matrixdist_mweibullden", (DL_FUNC) &_matrixdist_mweibullden, 4},
     {"_matrixdist_mweibullcdf", (DL_FUNC) &_matrixdist_mweibullcdf, 5},
+<<<<<<< HEAD
     {"_matrixdist_RunFunction", (DL_FUNC) &_matrixdist_RunFunction, 2},
     {"_matrixdist_iphdensity", (DL_FUNC) &_matrixdist_iphdensity, 7},
     {"_matrixdist_iphcdf", (DL_FUNC) &_matrixdist_iphcdf, 7},
+=======
+>>>>>>> 3bbb60d2eca51951e082cd37205d1048fbee954c
     {"_matrixdist_matrix_product", (DL_FUNC) &_matrixdist_matrix_product, 2},
     {"_matrixdist_matrix_sum", (DL_FUNC) &_matrixdist_matrix_sum, 2},
     {"_matrixdist_LInf_norm", (DL_FUNC) &_matrixdist_LInf_norm, 1},
