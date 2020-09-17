@@ -32,3 +32,17 @@ data <- r(iA)
 plot(data)
 
 evmix::hillplot(data)
+
+# MPH*
+
+alpha <- c(0.5, 0.3, 0.2)
+S <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
+R <- matrix(cbind(c(1,0,0.8),c(0,1,0.2)), nrow = 3, ncol = 2)
+
+A <- ph(alpha, S)
+A
+
+B <- mph(A, R)
+B
+
+r(B, n = 10)

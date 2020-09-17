@@ -9,15 +9,15 @@
 #' @export
 #'
 setClass("iph",
-         contains = c("ph"),
-         slots = list(
-           ph = "ph",
-           gfun = "list"
-         ),
-         prototype = list(
-           ph = new("ph"),
-           gfun = list()
-         )
+  contains = c("ph"),
+  slots = list(
+    ph = "ph",
+    gfun = "list"
+  ),
+  prototype = list(
+    ph = new("ph"),
+    gfun = list()
+  )
 )
 
 #' Constructor Function for inhomogeneous phase type distributions
@@ -34,26 +34,32 @@ setClass("iph",
 #'
 #' @examples
 iph <- function(ph = NULL, gfun = NULL, gfun_pars = NULL, alpha = NULL, S = NULL, structure = NULL, dimension = 3) {
-  if(all(is.null(c(gfun, gfun_pars)))){stop("input inhomogeneity function and parameters")}
-  if(is.null(A)){ph <- ph(alpha = alpha, S = S, structure = structure, dimension = dimension)}
-  if(!gfun %in% c("Pareto", "Weibull", "Gompertz", "GEVD")){stop("invalid gfun")}
-  if(gfun %in% c("Pareto", "Weibull", "Gompertz")){
-    if(length(gfun_pars) != 1 | sum(gfun_pars <= 0) > 0){
-      stop("gfun parameter should be positive and of length one")
-    }else{
-        names(gfun_pars) <- "beta"
-      }
+  if (all(is.null(c(gfun, gfun_pars)))) {
+    stop("input inhomogeneity function and parameters")
   }
-  if(gfun %in% c("GEVD")){
-    if(length(gfun_pars) != 3 | (gfun_pars[2] > 0) == FALSE ){
+  if (is.null(ph)) {
+    ph <- ph(alpha = alpha, S = S, structure = structure, dimension = dimension)
+  }
+  if (!gfun %in% c("Pareto", "Weibull", "Gompertz", "GEVD")) {
+    stop("invalid gfun")
+  }
+  if (gfun %in% c("Pareto", "Weibull", "Gompertz")) {
+    if (length(gfun_pars) != 1 | sum(gfun_pars <= 0) > 0) {
+      stop("gfun parameter should be positive and of length one")
+    } else {
+      names(gfun_pars) <- "beta"
+    }
+  }
+  if (gfun %in% c("GEVD")) {
+    if (length(gfun_pars) != 3 | (gfun_pars[2] > 0) == FALSE) {
       stop("gfun parameter should be length three: mu, sigma, xi, and sigma > 0")
-    }else{
+    } else {
       names(gfun_pars) <- c("mu", "sigma", "xi")
-      }
+    }
   }
   new("iph",
-      ph = ph,
-      gfun = list(name = gfun, pars = gfun_pars)
+    ph = ph,
+    gfun = list(name = gfun, pars = gfun_pars)
   )
 }
 
@@ -71,7 +77,7 @@ setMethod("show", "iph", function(object) {
     cat("parameters: ", "\n", sep = "")
     print(object@ph@pars)
     cat("g-function name: ", object@gfun$name, "\n", sep = "")
-    cat("parameters: ","\n", sep = "")
+    cat("parameters: ", "\n", sep = "")
     print(object@gfun$pars)
   } else {
     return()
@@ -91,10 +97,10 @@ setMethod("show", "iph", function(object) {
 setMethod("r", c(x = "iph"), function(x, n = 1000) {
   name <- x@gfun$name
   pars <- x@gfun$pars
-  if(name %in% c("Pareto", "Weibull", "Gompertz")){
+  if (name %in% c("Pareto", "Weibull", "Gompertz")) {
     U <- riph(n, name, x@ph@pars$alpha, x@ph@pars$S, pars)
-  } 
-  if(name %in% c("GEVD")){
+  }
+  if (name %in% c("GEVD")) {
     U <- rmatrixGEVD(n, x@ph@pars$alpha, x@ph@pars$S, pars[1], pars[2], pars[3])
   }
   return(U)

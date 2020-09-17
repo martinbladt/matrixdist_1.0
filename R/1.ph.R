@@ -9,14 +9,14 @@
 #' @export
 #'
 setClass("ph",
-         slots = list(
-           name = "character",
-           pars = "list"
-         ),
-         prototype = list(
-           name = NA_character_,
-           pars = list()
-         )
+  slots = list(
+    name = "character",
+    pars = "list"
+  ),
+  prototype = list(
+    name = NA_character_,
+    pars = list()
+  )
 )
 
 #' Constructor Function for phase type distributions
@@ -31,22 +31,26 @@ setClass("ph",
 #'
 #' @examples
 ph <- function(alpha = NULL, S = NULL, structure = NULL, dimension = 3) {
-  if(any(is.null(alpha)) & any(is.null(S)) & is.null(structure)){
+  if (any(is.null(alpha)) & any(is.null(S)) & is.null(structure)) {
     stop("input a vector and matrix, or a structure")
   }
-  if(!is.null(structure)){
+  if (!is.null(structure)) {
     rs <- random_structure(dimension, structure = structure)
     alpha <- rs[[1]]
     S <- rs[[2]]
     name <- structure
-  } else{
-    if(dim(S)[1] != dim(S)[2]){stop("matrix T should be square")}
-    if(length(alpha) != dim(S)[1]){stop("incompatible dimensions")}
+  } else {
+    if (dim(S)[1] != dim(S)[2]) {
+      stop("matrix T should be square")
+    }
+    if (length(alpha) != dim(S)[1]) {
+      stop("incompatible dimensions")
+    }
     name <- "Custom"
   }
   new("ph",
-      name = paste(name, " ph(", length(alpha), ")", sep = ""),
-      pars = list(alpha = alpha, S = S)
+    name = paste(name, " ph(", length(alpha), ")", sep = ""),
+    pars = list(alpha = alpha, S = S)
   )
 }
 
@@ -125,29 +129,32 @@ setMethod("p", c(x = "ph"), function(x, q = seq(0, 5, length.out = 100)) {
 #'
 setMethod(
   "fit", c(x = "ph", y = "ANY"),
-  function(x, 
+  function(x,
            y,
-           xweight = numeric(0), 
-           rcen = numeric(0), 
+           xweight = numeric(0),
+           rcen = numeric(0),
            rcenweight = numeric(0),
-           stepsEM = 1000) 
-  {
+           stepsEM = 1000) {
     y <- sort(as.numeric(y))
     un_obs <- unique(y)
-    if(min(y) <= 0){stop("data should be positive")}
-    if(length(xweight) == 0){xweight <- rep(1, length(y))}
+    if (min(y) <= 0) {
+      stop("data should be positive")
+    }
+    if (length(xweight) == 0) {
+      xweight <- rep(1, length(y))
+    }
     observations <- cbind(y, xweight)
     mat <- data.frame(observations)
-    names(mat) <- c('obs', 'weight')
+    names(mat) <- c("obs", "weight")
     cum_weight <- NULL
-    for(i in un_obs){
-      cum_weight <- c(cum_weight, sum(mat$weight[which(mat$obs==i)]))
+    for (i in un_obs) {
+      cum_weight <- c(cum_weight, sum(mat$weight[which(mat$obs == i)]))
     }
     ph_par <- x@pars
     pi_fit <- clone_vector(ph_par$alpha)
     T_fit <- clone_matrix(ph_par$S)
     z <- ph(pi_fit, T_fit)
-    
+
     RKstep <- default_step_length(T_fit)
     logLikelihoodPH_RK(RKstep, pi_fit, T_fit, un_obs, cum_weight, rcen, rcenweight)
     for (k in 1:stepsEM) {
@@ -155,15 +162,15 @@ setMethod(
       EMstep_RK(RKstep, pi_fit, T_fit, un_obs, cum_weight, rcen, rcenweight)
       if (k %% 100 == 0) {
         cat("\r", "iteration:", k,
-            ", logLik:", logLikelihoodPH_RK(RKstep, pi_fit, T_fit, un_obs, cum_weight, rcen, rcenweight),
-            sep = " "
+          ", logLik:", logLikelihoodPH_RK(RKstep, pi_fit, T_fit, un_obs, cum_weight, rcen, rcenweight),
+          sep = " "
         )
         z@pars$alpha <- pi_fit
         z@pars$S <- T_fit
         m_plot(z, y)
       }
     }
-    cat("\n",sep = "")
+    cat("\n", sep = "")
     x@pars$alpha <- pi_fit
     x@pars$S <- T_fit
     return(x)
@@ -191,12 +198,12 @@ setMethod("coef", c(object = "ph"), function(object) {
 #' @examples
 #'
 setMethod("m_plot", c(x = "ph"), function(x, y = NULL) {
-  if(all(is.null(y))){
+  if (all(is.null(y))) {
     sq <- seq(1e-20, 5, length.out = 1000)
     phd <- phdensity(sq, x@pars$alpha, x@pars$S)
     plot(sq, phd, type = "l", xlab = "y", ylab = "density")
   }
-  if(!all(is.null(y))){
+  if (!all(is.null(y))) {
     sq <- seq(1e-20, max(y), length.out = 1000)
     phd <- phdensity(sq, x@pars$alpha, x@pars$S)
     mx_h <- max(hist(y, breaks = 100, plot = FALSE)$density)
