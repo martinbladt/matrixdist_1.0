@@ -190,10 +190,11 @@ setMethod(
         trans_obs <- inv_g(un_obs, par_g)
         RKstep <- default_step_length(T_fit)
         EMstep_RK(RKstep, pi_fit, T_fit, trans_obs, cum_weight, rcen, rcenweight)
-        par_g <- suppressWarnings(optim(par = par_g, fn = mLL, alpha = pi_fit, S = T_fit, y = y)$par)
+        opt <- suppressWarnings(optim(par = par_g, fn = mLL, alpha = pi_fit, S = T_fit, y = y))
+        par_g <- opt$par
         if (k %% 10 == 0) {
           cat("\r", "iteration:", k,
-              ", logLik:", -mLL(par_g, alpha = pi_fit, S = T_fit, y = y),
+              ", logLik:", - opt$value,
               sep = " ")
         }
       }
