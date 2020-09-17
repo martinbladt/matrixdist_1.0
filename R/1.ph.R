@@ -23,17 +23,19 @@ setClass("ph",
 #'
 #' @param alpha a probability vector.
 #' @param S a sub-intensity matrix.
+#' @param structure a valid ph structure
+#' @param dimension the dimension of the ph structure (if provided)
 #'
 #' @return An object of class \linkS4class{ph}.
 #' @export
 #'
 #' @examples
-ph <- function(alpha = NA, S = NA, structure = NA, order = 3) {
-  if(any(is.na(alpha)) & any(is.na(S)) & is.na(structure)){
+ph <- function(alpha = NULL, S = NULL, structure = NULL, dimension = 3) {
+  if(any(is.null(alpha)) & any(is.null(S)) & is.null(structure)){
     stop("input a vector and matrix, or a structure")
   }
-  if(!is.na(structure)){
-    rs <- random_structure(order, structure = structure)
+  if(!is.null(structure)){
+    rs <- random_structure(dimension, structure = structure)
     alpha <- rs[[1]]
     S <- rs[[2]]
     name <- structure
@@ -77,7 +79,6 @@ setMethod("show", "ph", function(object) {
 #' @examples
 #'
 setMethod("r", c(x = "ph"), function(x, n = 1000) {
-  t <- - rowSums(x@pars$S)
   U <- rphasetype(n, x@pars$alpha, x@pars$S)
   return(U)
 })
@@ -189,13 +190,13 @@ setMethod("coef", c(object = "ph"), function(object) {
 #'
 #' @examples
 #'
-setMethod("m_plot", c(x = "ph"), function(x, y = NA) {
-  if(all(is.na(y))){
+setMethod("m_plot", c(x = "ph"), function(x, y = NULL) {
+  if(all(is.null(y))){
     sq <- seq(1e-20, 5, length.out = 1000)
     phd <- phdensity(sq, x@pars$alpha, x@pars$S)
     plot(sq, phd, type = "l", xlab = "y", ylab = "density")
   }
-  if(!all(is.na(y))){
+  if(!all(is.null(y))){
     sq <- seq(1e-20, max(y), length.out = 1000)
     phd <- phdensity(sq, x@pars$alpha, x@pars$S)
     mx_h <- max(hist(y, breaks = 100, plot = FALSE)$density)

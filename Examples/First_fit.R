@@ -13,19 +13,22 @@ data <- r(A)
 m_plot(A, data)
 m_plot(A)
 
-A_copy <- A
-
 B <- fit(A, data)
 
 B
 m_plot(B, data)
-m_plot(B) # very good
+m_plot(B)
 
+# Inhomogenous
 
-A #but this changed too..
-A_copy # and even this, that didn't enter the function. the rcpp code seems to create pointers that spread!
+A <- ph(structure = "General")
 
+iA <- iph(A, gfun = "Pareto", gfun_pars = 4)
 
+iA
 
+data <- r(iA)
 
+plot(data)
 
+evmix::hillplot(data)
