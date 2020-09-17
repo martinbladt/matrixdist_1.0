@@ -9,14 +9,14 @@
 #' @export
 #'
 setClass("ph",
-  slots = list(
-    name = "character",
-    pars = "list"
-  ),
-  prototype = list(
-    name = NA_character_,
-    pars = list()
-  )
+         slots = list(
+           name = "character",
+           pars = "list"
+         ),
+         prototype = list(
+           name = NA_character_,
+           pars = list()
+         )
 )
 
 #' Constructor Function for phase type distributions
@@ -49,8 +49,8 @@ ph <- function(alpha = NULL, S = NULL, structure = NULL, dimension = 3) {
     name <- "Custom"
   }
   new("ph",
-    name = paste(name, " ph(", length(alpha), ")", sep = ""),
-    pars = list(alpha = alpha, S = S)
+      name = paste(name, " ph(", length(alpha), ")", sep = ""),
+      pars = list(alpha = alpha, S = S)
   )
 }
 
@@ -107,14 +107,16 @@ setMethod("d", c(x = "ph"), function(x, y = seq(0, 5, length.out = 100)) {
 #' @param x an object of class \linkS4class{ph}.
 #' @param y locations
 #'
-#' @return Density evaluated at locations
+#' @return CDF evaluated at locations
 #' @export
 #'
 #' @examples
 #'
-setMethod("p", c(x = "ph"), function(x, q = seq(0, 5, length.out = 100)) {
-  dens <- phdensity(y, x@pars$alpha, x@pars$S)
-  return(cbind(y = y, dens = dens))
+setMethod("p", c(x = "ph"), function(x, 
+                                     q = seq(0, 5, length.out = 100),
+                                     lower.tail = TRUE) {
+  cdf <- phcdf(q, x@pars$alpha, x@pars$S, lower.tail)
+  return(cbind(q = q, cdf = cdf))
 })
 
 #' Fit Method for ph Class
@@ -135,6 +137,21 @@ setMethod(
            rcen = numeric(0),
            rcenweight = numeric(0),
            stepsEM = 1000) {
+    is_iph <- is(x, "iph")
+    if(is_iph){
+      name <- x@gfun$name
+      par_g <- x@gfun$pars
+      x <- x@ph
+      if(name == "Weibull"){
+        inv_g <- function(t, beta) t^{beta}
+        mLL <- function(beta, alpha, S, y) {
+          if(beta < 0) return(NA)
+          return(- sum(log(mweibullden(y, alpha, S, beta))))
+        } # beta in these two functions should always be a vector
+      }else{
+        stop("fit for this gfun is not yet implemented")
+      }
+    }
     y <- sort(as.numeric(y))
     un_obs <- unique(y)
     if (min(y) <= 0) {
@@ -153,26 +170,38 @@ setMethod(
     ph_par <- x@pars
     pi_fit <- clone_vector(ph_par$alpha)
     T_fit <- clone_matrix(ph_par$S)
-    z <- ph(pi_fit, T_fit)
-
-    RKstep <- default_step_length(T_fit)
-    logLikelihoodPH_RK(RKstep, pi_fit, T_fit, un_obs, cum_weight, rcen, rcenweight)
-    for (k in 1:stepsEM) {
-      RKstep <- default_step_length(T_fit)
-      EMstep_RK(RKstep, pi_fit, T_fit, un_obs, cum_weight, rcen, rcenweight)
-      if (k %% 100 == 0) {
-        cat("\r", "iteration:", k,
-          ", logLik:", logLikelihoodPH_RK(RKstep, pi_fit, T_fit, un_obs, cum_weight, rcen, rcenweight),
-          sep = " "
-        )
-        z@pars$alpha <- pi_fit
-        z@pars$S <- T_fit
-        m_plot(z, y)
+    
+    if(!is_iph){
+      for (k in 1:stepsEM) {
+        RKstep <- default_step_length(T_fit)
+        EMstep_RK(RKstep, pi_fit, T_fit, un_obs, cum_weight, rcen, rcenweight)
+        if (k %% 100 == 0) {
+          cat("\r", "iteration:", k,
+              ", logLik:", logLikelihoodPH_RK(RKstep, pi_fit, T_fit, un_obs, cum_weight, rcen, rcenweight),
+              sep = " ")
+        }
       }
+      cat("\n", sep = "")
+      x@pars$alpha <- pi_fit
+      x@pars$S <- T_fit
     }
-    cat("\n", sep = "")
-    x@pars$alpha <- pi_fit
-    x@pars$S <- T_fit
+    if(is_iph){
+      for (k in 1:stepsEM) {
+        trans_obs <- inv_g(un_obs, par_g)
+        RKstep <- default_step_length(T_fit)
+        EMstep_RK(RKstep, pi_fit, T_fit, trans_obs, cum_weight, rcen, rcenweight)
+        par_g <- suppressWarnings(optim(par = par_g, fn = mLL, alpha = pi_fit, S = T_fit, y = y)$par)
+        if (k %% 10 == 0) {
+          cat("\r", "iteration:", k,
+              ", logLik:", -mLL(par_g, alpha = pi_fit, S = T_fit, y = y),
+              sep = " ")
+        }
+      }
+      cat("\n", sep = "")
+      x@pars$alpha <- pi_fit
+      x@pars$S <- T_fit
+      x <- iph(x, gfun = name, gfun_pars = par_g)
+    }
     return(x)
   }
 )

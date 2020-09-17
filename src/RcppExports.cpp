@@ -247,6 +247,35 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// mweibullden
+NumericVector mweibullden(NumericVector x, NumericVector pi, NumericMatrix T, double beta);
+RcppExport SEXP _matrixdist_mweibullden(SEXP xSEXP, SEXP piSEXP, SEXP TSEXP, SEXP betaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type pi(piSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type T(TSEXP);
+    Rcpp::traits::input_parameter< double >::type beta(betaSEXP);
+    rcpp_result_gen = Rcpp::wrap(mweibullden(x, pi, T, beta));
+    return rcpp_result_gen;
+END_RCPP
+}
+// mweibullcdf
+NumericVector mweibullcdf(NumericVector x, NumericVector pi, NumericMatrix T, double beta, bool lower_tail);
+RcppExport SEXP _matrixdist_mweibullcdf(SEXP xSEXP, SEXP piSEXP, SEXP TSEXP, SEXP betaSEXP, SEXP lower_tailSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type pi(piSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type T(TSEXP);
+    Rcpp::traits::input_parameter< double >::type beta(betaSEXP);
+    Rcpp::traits::input_parameter< bool >::type lower_tail(lower_tailSEXP);
+    rcpp_result_gen = Rcpp::wrap(mweibullcdf(x, pi, T, beta, lower_tail));
+    return rcpp_result_gen;
+END_RCPP
+}
 // matrix_product
 NumericMatrix matrix_product(NumericMatrix a, NumericMatrix b);
 RcppExport SEXP _matrixdist_matrix_product(SEXP aSEXP, SEXP bSEXP) {
@@ -462,6 +491,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_phcdf", (DL_FUNC) &_matrixdist_phcdf, 4},
     {"_matrixdist_phmoment", (DL_FUNC) &_matrixdist_phmoment, 3},
     {"_matrixdist_phLaplace", (DL_FUNC) &_matrixdist_phLaplace, 3},
+    {"_matrixdist_mweibullden", (DL_FUNC) &_matrixdist_mweibullden, 4},
+    {"_matrixdist_mweibullcdf", (DL_FUNC) &_matrixdist_mweibullcdf, 5},
     {"_matrixdist_matrix_product", (DL_FUNC) &_matrixdist_matrix_product, 2},
     {"_matrixdist_matrix_sum", (DL_FUNC) &_matrixdist_matrix_sum, 2},
     {"_matrixdist_LInf_norm", (DL_FUNC) &_matrixdist_LInf_norm, 1},

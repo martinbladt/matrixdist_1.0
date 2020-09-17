@@ -222,6 +222,41 @@ phLaplace <- function(s, pi, T) {
     .Call(`_matrixdist_phLaplace`, s, pi, T)
 }
 
+#' Matrix Weibull density
+#' 
+#' Computes the density of a matrix Weibull distribution with parameters \code{pi}, \code{T} and \code{beta} at \code{x}
+#' @param x non-negative value
+#' @param pi Initial probabilities
+#' @param T sub-intensity matrix
+#' @param beta shape parameter
+#' @return The density at \code{x}
+#' @examples
+#' alpha <- c(0.5, 0.3, 0.2)
+#' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
+#' beta <- 0.5
+#' mweibullden(0.5, alpha, T, beta) 
+mweibullden <- function(x, pi, T, beta) {
+    .Call(`_matrixdist_mweibullden`, x, pi, T, beta)
+}
+
+#' Matrix Weibull cdf
+#' 
+#' Computes the cdf (tail) of a matrix Weibull distribution with parameters \code{pi}, \code{T} and \code{beta} at \code{x}
+#' @param x non-negative value
+#' @param pi Initial probabilities
+#' @param T sub-intensity matrix
+#' @param beta shape parameter
+#' @return The cdf (tail) at \code{x}
+#' @examples
+#' alpha <- c(0.5, 0.3, 0.2)
+#' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
+#' beta <- 0.5
+#' mweibullcdf(0.5, alpha, T, beta) 
+#' mweibullcdf(0.5, alpha, T, beta, FALSE) 
+mweibullcdf <- function(x, pi, T, beta, lower_tail = TRUE) {
+    .Call(`_matrixdist_mweibullcdf`, x, pi, T, beta, lower_tail)
+}
+
 #' Product of two matrices
 #' 
 #' Computes C = A * B

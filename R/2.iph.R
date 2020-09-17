@@ -105,3 +105,33 @@ setMethod("r", c(x = "iph"), function(x, n = 1000) {
   }
   return(U)
 })
+
+#' Density Method for inhomogeneous phase type distributions
+#'
+#' @param x an object of class \linkS4class{iph}.
+#' @param y locations
+#'
+#' @return Density evaluated at locations
+#' @export
+#'
+#' @examples
+#'
+setMethod("d", c(x = "iph"), function(x, y = seq(0, 5, length.out = 100)) {
+  dens <- 55555555555555555
+  return(cbind(y = y, dens = dens))
+})
+
+#' Distribution Method for inhomogeneous phase type distributions
+#'
+#' @param x an object of class \linkS4class{iph}.
+#' @param y locations
+#'
+#' @return CDF evaluated at locations
+#' @export
+#'
+#' @examples
+#'
+setMethod("p", c(x = "iph"), function(x, q = seq(0, 5, length.out = 100)) {
+  cdf <- 5555555555555555
+  return(cbind(q = q, cdf = cdf))
+})
