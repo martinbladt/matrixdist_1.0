@@ -234,6 +234,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// phLaplace
+NumericVector phLaplace(NumericVector s, NumericVector pi, NumericMatrix T);
+RcppExport SEXP _matrixdist_phLaplace(SEXP sSEXP, SEXP piSEXP, SEXP TSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type s(sSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type pi(piSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type T(TSEXP);
+    rcpp_result_gen = Rcpp::wrap(phLaplace(s, pi, T));
+    return rcpp_result_gen;
+END_RCPP
+}
 // matrix_product
 NumericMatrix matrix_product(NumericMatrix a, NumericMatrix b);
 RcppExport SEXP _matrixdist_matrix_product(SEXP aSEXP, SEXP bSEXP) {
@@ -414,6 +427,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_phdensity", (DL_FUNC) &_matrixdist_phdensity, 3},
     {"_matrixdist_phcdf", (DL_FUNC) &_matrixdist_phcdf, 4},
     {"_matrixdist_phmoment", (DL_FUNC) &_matrixdist_phmoment, 3},
+    {"_matrixdist_phLaplace", (DL_FUNC) &_matrixdist_phLaplace, 3},
     {"_matrixdist_matrix_product", (DL_FUNC) &_matrixdist_matrix_product, 2},
     {"_matrixdist_matrix_sum", (DL_FUNC) &_matrixdist_matrix_sum, 2},
     {"_matrixdist_LInf_norm", (DL_FUNC) &_matrixdist_LInf_norm, 1},

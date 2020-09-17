@@ -9,7 +9,7 @@ ph(alpha = NA, S = NA, structure = NA, order = 3)
 \arguments{
 \item{alpha}{a probability vector.}
 
-\item{S}{an intensity matrix.}
+\item{S}{a sub-intensity matrix.}
 }
 \value{
 An object of class \linkS4class{ph}.

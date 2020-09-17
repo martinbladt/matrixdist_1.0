@@ -206,6 +206,22 @@ phmoment <- function(k, pi, T) {
     .Call(`_matrixdist_phmoment`, k, pi, T)
 }
 
+#' Laplace transform of a phase-type
+#' 
+#' Computes the Laplace transform at \code{s} of a phase-type distribution with parameters \code{pi} and \code{T}
+#' @param s real value
+#' @param pi Initial probabilities
+#' @param T sub-intensity matrix
+#' @return Laplace transform
+#' @examples
+#' alpha <- c(0.5, 0.3, 0.2)
+#' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
+#' phLaplace(0.5, alpha, T) 
+#' phLaplace(2.5, alpha, T) 
+phLaplace <- function(s, pi, T) {
+    .Call(`_matrixdist_phLaplace`, s, pi, T)
+}
+
 #' Product of two matrices
 #' 
 #' Computes C = A * B
