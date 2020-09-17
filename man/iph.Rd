@@ -4,8 +4,20 @@
 \alias{iph}
 \title{Constructor Function for inhomogeneous phase type distributions}
 \usage{
+<<<<<<< HEAD
 iph(ph = NULL, gfun = NULL, gfun_pars = NULL, alpha = NULL,
   S = NULL, structure = NULL, dimension = 3)
+=======
+iph(
+  ph = NULL,
+  gfun = NULL,
+  gfun_pars = NULL,
+  alpha = NULL,
+  S = NULL,
+  structure = NULL,
+  dimension = 3
+)
+>>>>>>> bfd4a4437aecc2d9b403fc560a9345bfda8bd07c
 }
 \arguments{
 \item{alpha}{a probability vector.}

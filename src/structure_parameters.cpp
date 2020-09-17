@@ -1,5 +1,6 @@
 #include <Rcpp.h>
 using namespace Rcpp;
+#include "matrix_functions.h"
 
 //' Random structure of a phase-type
 //' 
@@ -99,5 +100,44 @@ List random_structure(int p, String structure = "General", double scale_factor =
   return L;
 }
 
+//' Random reward matrix
+//' 
+//' The rows of the matrix sum to 1
+// [[Rcpp::export]]
+NumericMatrix random_reward(int p, int dim) {
+  NumericMatrix R(p,dim);
+  
+  for (int i{0}; i < p; ++i) {
+    double sum = 0;
+    for (int j{0}; j < dim; ++j) {
+        R(i,j) = runif(1)[0];
+        sum += R(i,j);
+    }
+    for (int j{0}; j < dim; ++j) {
+      R(i,j) = R(i,j) / sum;
+    }
+  }
+  return R;
+}
 
+
+//' Changes the values of T and R to make the MPH* having rewards that sum to 1
+//' 
+//' Better clone T and R?
+// [[Rcpp::export]]
+void norm_mph(NumericMatrix T, NumericMatrix R){
+  NumericVector sumrow(T.nrow());
+  for (int i{0}; i < R.nrow(); ++i) {
+    for (int j{0}; j < R.ncol(); ++j) {
+      sumrow[i] = sumrow[i] + R(i,j);
+    }
+  }
+  sumrow = 1.0 / sumrow;
+  
+  NumericMatrix diagMat(diagonal_vector(sumrow));
+  
+  T = matrix_product(diagMat, T);
+  R = matrix_product(diagMat, R);
+  
+}
 

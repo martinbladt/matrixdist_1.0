@@ -10,3 +10,5 @@ NumericMatrix matrix_inverse(NumericMatrix A);
 NumericMatrix matrix_exponential(const NumericMatrix & A);
 
 NumericMatrix matrix_power(int n, const NumericMatrix & A);
+
+NumericMatrix diagonal_vector(const NumericVector & vec);

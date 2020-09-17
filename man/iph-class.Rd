@@ -4,6 +4,12 @@
 \name{iph-class}
 \alias{iph-class}
 \title{Inhomogeneous Phase Type distributions}
+<<<<<<< HEAD
+=======
+\value{
+
+}
+>>>>>>> bfd4a4437aecc2d9b403fc560a9345bfda8bd07c
 \description{
 Class of objects for inhomogeneous phase type distributions
 }
