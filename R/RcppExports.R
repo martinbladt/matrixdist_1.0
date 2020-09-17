@@ -222,6 +222,91 @@ phLaplace <- function(s, pi, T) {
     .Call(`_matrixdist_phLaplace`, s, pi, T)
 }
 
+#' Matrix Weibull density
+#' 
+#' Computes the density of a matrix Weibull distribution with parameters \code{pi}, \code{T} and \code{beta} at \code{x}
+#' @param x non-negative value
+#' @param pi Initial probabilities
+#' @param T sub-intensity matrix
+#' @param beta shape parameter
+#' @return The density at \code{x}
+#' @examples
+#' alpha <- c(0.5, 0.3, 0.2)
+#' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
+#' beta <- 0.5
+#' mweibullden(0.5, alpha, T, beta) 
+mweibullden <- function(x, pi, T, beta) {
+    .Call(`_matrixdist_mweibullden`, x, pi, T, beta)
+}
+
+#' Matrix Weibull cdf
+#' 
+#' Computes the cdf (tail) of a matrix Weibull distribution with parameters \code{pi}, \code{T} and \code{beta} at \code{x}
+#' @param x non-negative value
+#' @param pi Initial probabilities
+#' @param T sub-intensity matrix
+#' @param beta shape parameter
+#' @return The cdf (tail) at \code{x}
+#' @examples
+#' alpha <- c(0.5, 0.3, 0.2)
+#' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
+#' beta <- 0.5
+#' mweibullcdf(0.5, alpha, T, beta) 
+#' mweibullcdf(0.5, alpha, T, beta, FALSE) 
+mweibullcdf <- function(x, pi, T, beta, lower_tail = TRUE) {
+    .Call(`_matrixdist_mweibullcdf`, x, pi, T, beta, lower_tail)
+}
+
+RunFunction <- function(a, func) {
+    .Call(`_matrixdist_RunFunction`, a, func)
+}
+
+#' IPH density
+#' 
+#' Computes the density of an IPH distribution with parameters \code{pi}, \code{T} and \code{beta} at \code{x}
+#' @param x non-negative value
+#' @param pi Initial probabilities
+#' @param T sub-intensity matrix
+#' @param g Tranformation 
+#' @param g_inv Inverse of the transformation
+#' @param lambda Derivative of the inverse
+#' @param beta parameter of the transformation
+#' @return The density at \code{x}
+#' @examples
+#' g <- function(x, beta) { x^(1/beta) }
+#' g_inv <- function(x, beta) { x^beta}
+#' lambda <- function(x, beta) {beta * x^(beta - 1)}
+#' alpha <- c(0.5, 0.3, 0.2)
+#' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
+#' beta <- 0.5
+#' iphdensity(0.5, alpha, T, g, g_inv, lambda, beta) 
+iphdensity <- function(x, pi, T, g, g_inv, lambda, beta) {
+    .Call(`_matrixdist_iphdensity`, x, pi, T, g, g_inv, lambda, beta)
+}
+
+#' IPH cdf (tail)
+#' 
+#' Computes the cdf(tail) of an IPH distribution with parameters \code{pi}, \code{T} and \code{beta} at \code{x}
+#' @param x non-negative value
+#' @param pi Initial probabilities
+#' @param T sub-intensity matrix
+#' @param g Tranformation 
+#' @param g_inv Inverse of the transformation
+#' @param lambda Derivative of the inverse
+#' @param beta parameter of the transformation
+#' @return The cdf (tail) at \code{x}
+#' @examples
+#' g <- function(x, beta) { x^(1/beta) }
+#' g_inv <- function(x, beta) { x^beta}
+#' alpha <- c(0.5, 0.3, 0.2)
+#' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
+#' beta <- 0.5
+#' iphcdf(0.5, alpha, T, g, g_inv, beta)
+#' iphcdf(0.5, alpha, T, g, g_inv, beta, FALSE) 
+iphcdf <- function(x, pi, T, g, g_inv, beta, lower_tail = TRUE) {
+    .Call(`_matrixdist_iphcdf`, x, pi, T, g, g_inv, beta, lower_tail)
+}
+
 #' Product of two matrices
 #' 
 #' Computes C = A * B
