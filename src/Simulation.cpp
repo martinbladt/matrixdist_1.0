@@ -264,7 +264,6 @@ NumericVector rmatrixGEVD(int n, NumericVector pi, NumericMatrix T, double mu, d
 //' 
 //' Generates a sample of size \code{n} from an inhomogeneous phase-type distribution with parameters \code{pi}, \code{T} and \code{beta}
 //' @parm n Sample size
-//' @parm dist_type Type of IPH: "Pareto", "Weibull", "Gompertz"
 //' @param pi Initial probabilities
 //' @param T sub-intensity matrix
 //' @param beta Parameter of the transformation
@@ -275,9 +274,9 @@ NumericVector rmatrixGEVD(int n, NumericVector pi, NumericMatrix T, double mu, d
 //' g <- function(x, beta) { x^(1/beta) }
 //' beta <- 0.5
 //' n <- 10
-//' riphfn(n, "Pareto", alpha, T, g, beta) 
+//' riphfn(n, alpha, T, g, beta) 
 // [[Rcpp::export]]
-NumericVector riphfn(int n, String dist_type, NumericVector pi, NumericMatrix T, Function g ,NumericVector beta) {
+NumericVector riphfn(int n, NumericVector pi, NumericMatrix T, Function g ,NumericVector beta) {
   
   NumericVector sample(n);
   
