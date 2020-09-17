@@ -4,6 +4,9 @@
 \name{mph-class}
 \alias{mph-class}
 \title{Multivariate Phase Type distributions}
+\value{
+
+}
 \description{
 Class of objects for multivariate phase type distributions
 }

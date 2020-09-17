@@ -4,8 +4,14 @@
 \alias{mph}
 \title{Constructor Function for multivariate phase type distributions}
 \usage{
-mph(ph = NULL, R = NULL, alpha = NULL, S = NULL,
-  structure = NULL, dimension = 3)
+mph(
+  ph = NULL,
+  R = NULL,
+  alpha = NULL,
+  S = NULL,
+  structure = NULL,
+  dimension = 3
+)
 }
 \arguments{
 \item{R}{a compatible (non-negative) reward matrix}
