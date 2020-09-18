@@ -139,6 +139,106 @@ NumericVector phLaplace(NumericVector s, NumericVector pi, NumericMatrix T) {
 }
 
 
+
+
+//' IPH density
+//' 
+//' Computes the density of an IPH distribution with parameters \code{pi}, \code{T} and \code{beta} at \code{x}
+//' @param x non-negative value
+//' @param pi Initial probabilities
+//' @param T sub-intensity matrix
+//' @param g Tranformation 
+//' @param g_inv Inverse of the transformation
+//' @param lambda Derivative of the inverse
+//' @param beta parameter of the transformation
+//' @return The density at \code{x}
+//' @examples
+//' g <- function(x, beta) { x^(1/beta) }
+//' g_inv <- function(x, beta) { x^beta}
+//' lambda <- function(x, beta) {beta * x^(beta - 1)}
+//' alpha <- c(0.5, 0.3, 0.2)
+//' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
+//' beta <- 0.5
+//' iphdensity(0.5, alpha, T, g, g_inv, lambda, beta) 
+// [[Rcpp::export]]
+NumericVector iphdensity(NumericVector x, NumericVector pi, NumericMatrix T, Function g, Function g_inv, Function lambda, NumericVector beta) {
+  
+  NumericVector density(x.size());
+  
+  NumericMatrix m_pi(1, pi.size(), pi.begin());
+  NumericVector e(pi.size(), 1);
+  NumericMatrix m_e(pi.size(), 1, e.begin());
+  NumericMatrix m_t = matrix_product(T * (-1), m_e);
+  
+  NumericVector g_val = g(0, beta);
+  NumericVector g_inv_val;
+  NumericVector lambda_val;
+  
+  for (int k = 0; k < x.size(); ++k){
+    g_inv_val = g_inv(x[k], beta);
+    lambda_val = lambda(x[k], beta);
+    if (x[k] == g_val[0]) {
+      density[k] = (1.0 - matrix_product(m_pi, m_e)(0,0));
+    }
+    else {
+      density[k] = (matrix_product(m_pi, matrix_product(matrix_exponential(T * g_inv_val[0]), m_t))(0,0)) * lambda_val[0];
+    }
+  }
+  return density;
+}
+
+
+
+//' IPH cdf (tail)
+//' 
+//' Computes the cdf(tail) of an IPH distribution with parameters \code{pi}, \code{T} and \code{beta} at \code{x}
+//' @param x non-negative value
+//' @param pi Initial probabilities
+//' @param T sub-intensity matrix
+//' @param g Tranformation 
+//' @param g_inv Inverse of the transformation
+//' @param lambda Derivative of the inverse
+//' @param beta parameter of the transformation
+//' @return The cdf (tail) at \code{x}
+//' @examples
+//' g <- function(x, beta) { x^(1/beta) }
+//' g_inv <- function(x, beta) { x^beta}
+//' alpha <- c(0.5, 0.3, 0.2)
+//' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
+//' beta <- 0.5
+//' iphcdf(0.5, alpha, T, g, g_inv, beta)
+//' iphcdf(0.5, alpha, T, g, g_inv, beta, FALSE) 
+// [[Rcpp::export]]
+NumericVector iphcdf(NumericVector x, NumericVector pi, NumericMatrix T, Function g, Function g_inv, NumericVector beta, bool lower_tail = true) {
+  
+  NumericVector cdf(x.size());
+  
+  NumericMatrix m_pi(1, pi.size(), pi.begin());
+  NumericVector e(pi.size(), 1);
+  NumericMatrix m_e(pi.size(), 1, e.begin());
+  
+  NumericVector g_val = g(0, beta);
+  NumericVector g_inv_val;
+  
+  for (int k = 0; k < x.size(); ++k){
+    g_inv_val = g_inv(x[k], beta);
+    if (x[k] == g_val[0]) {
+      cdf[k] = (1.0 - matrix_product(m_pi, m_e)(0,0));
+    }
+    else {
+      cdf[k] = (1.0 - matrix_product(m_pi, matrix_product(matrix_exponential(T * g_inv_val[0]), m_e))(0,0));
+    }
+  }
+  if (lower_tail == true) {
+    return cdf;
+  }
+  else {
+    return (1 - cdf);
+  }
+}
+
+
+
 //' Matrix Weibull density
 //' 
 //' Computes the density of a matrix Weibull distribution with parameters \code{pi}, \code{T} and \code{beta} at \code{x}
@@ -222,27 +322,23 @@ NumericVector RunFunction(NumericVector a, Function func)
 }
 
 
-//' IPH density
+
+
+//' Matrix Pareto density
 //' 
-//' Computes the density of an IPH distribution with parameters \code{pi}, \code{T} and \code{beta} at \code{x}
+//' Computes the density of a matrix Pareto distribution with parameters \code{pi}, \code{T} and \code{beta} at \code{x}
 //' @param x non-negative value
 //' @param pi Initial probabilities
 //' @param T sub-intensity matrix
-//' @param g Tranformation 
-//' @param g_inv Inverse of the transformation
-//' @param lambda Derivative of the inverse
-//' @param beta parameter of the transformation
+//' @param beta scale parameter
 //' @return The density at \code{x}
 //' @examples
-//' g <- function(x, beta) { x^(1/beta) }
-//' g_inv <- function(x, beta) { x^beta}
-//' lambda <- function(x, beta) {beta * x^(beta - 1)}
 //' alpha <- c(0.5, 0.3, 0.2)
 //' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
 //' beta <- 0.5
-//' iphdensity(0.5, alpha, T, g, g_inv, lambda, beta) 
+//' mparetoden(0.5, alpha, T, beta) 
 // [[Rcpp::export]]
-NumericVector iphdensity(NumericVector x, NumericVector pi, NumericMatrix T, Function g, Function g_inv, Function lambda, NumericVector beta) {
+NumericVector mparetoden(NumericVector x, NumericVector pi, NumericMatrix T, double beta) {
   
   NumericVector density(x.size());
   
@@ -251,18 +347,12 @@ NumericVector iphdensity(NumericVector x, NumericVector pi, NumericMatrix T, Fun
   NumericMatrix m_e(pi.size(), 1, e.begin());
   NumericMatrix m_t = matrix_product(T * (-1), m_e);
   
-  NumericVector g_val = g(0, beta);
-  NumericVector g_inv_val;
-  NumericVector lambda_val;
-  
   for (int k = 0; k < x.size(); ++k){
-    g_inv_val = g_inv(x[k], beta);
-    lambda_val = lambda(x[k], beta);
-    if (x[k] == g_val[0]) {
+    if (x[k] == 0) {
       density[k] = (1.0 - matrix_product(m_pi, m_e)(0,0));
     }
     else {
-      density[k] = (matrix_product(m_pi, matrix_product(matrix_exponential(T * g_inv_val[0]), m_t))(0,0)) * lambda_val[0];
+      density[k] = (matrix_product(m_pi, matrix_product(matrix_exponential(T * log(x[k] / beta + 1)), m_t))(0,0)) / (x[k] + beta);
     }
   }
   return density;
@@ -270,28 +360,22 @@ NumericVector iphdensity(NumericVector x, NumericVector pi, NumericMatrix T, Fun
 
 
 
-
-//' IPH cdf (tail)
+//' Matrix Pareto cdf
 //' 
-//' Computes the cdf(tail) of an IPH distribution with parameters \code{pi}, \code{T} and \code{beta} at \code{x}
+//' Computes the cdf (tail) of a matrix Pareto distribution with parameters \code{pi}, \code{T} and \code{beta} at \code{x}
 //' @param x non-negative value
 //' @param pi Initial probabilities
 //' @param T sub-intensity matrix
-//' @param g Tranformation 
-//' @param g_inv Inverse of the transformation
-//' @param lambda Derivative of the inverse
-//' @param beta parameter of the transformation
+//' @param beta shape parameter
 //' @return The cdf (tail) at \code{x}
 //' @examples
-//' g <- function(x, beta) { x^(1/beta) }
-//' g_inv <- function(x, beta) { x^beta}
 //' alpha <- c(0.5, 0.3, 0.2)
 //' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
 //' beta <- 0.5
-//' iphcdf(0.5, alpha, T, g, g_inv, beta)
-//' iphcdf(0.5, alpha, T, g, g_inv, beta, FALSE) 
+//' mparetocdf(0.5, alpha, T, beta) 
+//' mparetocdf(0.5, alpha, T, beta, FALSE) 
 // [[Rcpp::export]]
-NumericVector iphcdf(NumericVector x, NumericVector pi, NumericMatrix T, Function g, Function g_inv, NumericVector beta, bool lower_tail = true) {
+NumericVector mparetocdf(NumericVector x, NumericVector pi, NumericMatrix T, double beta, bool lower_tail = true) {
   
   NumericVector cdf(x.size());
   
@@ -299,16 +383,12 @@ NumericVector iphcdf(NumericVector x, NumericVector pi, NumericMatrix T, Functio
   NumericVector e(pi.size(), 1);
   NumericMatrix m_e(pi.size(), 1, e.begin());
   
-  NumericVector g_val = g(0, beta);
-  NumericVector g_inv_val;
-  
   for (int k = 0; k < x.size(); ++k){
-    g_inv_val = g_inv(x[k], beta);
-    if (x[k] == g_val[0]) {
+    if (x[k] == 0) {
       cdf[k] = (1.0 - matrix_product(m_pi, m_e)(0,0));
     }
     else {
-      cdf[k] = (1.0 - matrix_product(m_pi, matrix_product(matrix_exponential(T * g_inv_val[0]), m_e))(0,0));
+      cdf[k] = (1.0 - matrix_product(m_pi, matrix_product(matrix_exponential(T * log(x[k] / beta + 1)), m_e))(0,0));
     }
   }
   if (lower_tail == true) {
@@ -318,7 +398,6 @@ NumericVector iphcdf(NumericVector x, NumericVector pi, NumericMatrix T, Functio
     return (1 - cdf);
   }
 }
-
 
 
 
