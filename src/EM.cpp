@@ -612,7 +612,7 @@ double logLikelihoodMGEV_RK(double h, NumericVector & pi, NumericMatrix & T, Num
     for (int k{1}; k <= N; ++k) {
       a_rungekutta(avector, dt, h, T);
       density = matrix_product(avector, t)(0,0);
-      logLh += weight[k] * (log(density) - log(beta[1]) - (obs[N - k] - beta[0]) / beta[1]);
+      logLh += weight[N - k] * (log(density) - log(beta[1]) - (obs[N - k] - beta[0]) / beta[1]);
       dt = exp(-(obs[N - k - 1] - beta[0]) / beta[1]) - exp(-(obs[N - k] - beta[0]) / beta[1]);
     }
     //Right censored data
@@ -621,10 +621,10 @@ double logLikelihoodMGEV_RK(double h, NumericVector & pi, NumericMatrix & T, Num
       dt = exp(-(rcens[N - 1] - beta[0]) / beta[1]);
       avector = clone(m_pi);
     }
-    for (int k{0}; k < rcens.size(); ++k) {
+    for (int k{1}; k <= N; ++k) {
       a_rungekutta(avector, dt, h, T);
       density = matrix_product(avector, e)(0,0);
-      logLh += rcweight[k] * log(density);
+      logLh += rcweight[N - k] * log(density);
       dt = exp(-(rcens[N - k - 1] - beta[0]) / beta[1]) - exp(-(rcens[N - k] - beta[0]) / beta[1]);
     }
   }
@@ -636,7 +636,7 @@ double logLikelihoodMGEV_RK(double h, NumericVector & pi, NumericMatrix & T, Num
     for (int k{1}; k <= N; ++k) {
       a_rungekutta(avector, dt, h, T);
       density = matrix_product(avector, t)(0,0);
-      logLh += weight[k] * (log(density) - log(beta[1]) - (1 + 1 / beta[2]) * log(1 + (beta[2] / beta[1]) * (obs[N - k] - beta[0])));
+      logLh += weight[N - k] * (log(density) - log(beta[1]) - (1 + 1 / beta[2]) * log(1 + (beta[2] / beta[1]) * (obs[N - k] - beta[0])));
       dt = pow(1 + (beta[2] / beta[1]) * (obs[N - k - 1] - beta[0]) , - 1 / beta[2]) - pow(1 + (beta[2] / beta[1]) * (obs[N - k] - beta[0]) , - 1 / beta[2]);
     }
     //Right censored data
@@ -645,10 +645,10 @@ double logLikelihoodMGEV_RK(double h, NumericVector & pi, NumericMatrix & T, Num
       dt = pow(1 + (beta[2] / beta[1]) * (rcens[N - 1] - beta[0]) , - 1 / beta[2]);
       avector = clone(m_pi);
     }
-    for (int k{0}; k < rcens.size(); ++k) {
+    for (int k{1}; k <= N; ++k) {
       a_rungekutta(avector, dt, h, T);
       density = matrix_product(avector, e)(0,0);
-      logLh += rcweight[k] * log(density);
+      logLh += rcweight[N - k] * log(density);
       dt = pow(1 + (beta[2] / beta[1]) * (rcens[N - k - 1] - beta[0]) , - 1 / beta[2]) - pow(1 + (beta[2] / beta[1]) * (rcens[N - k] - beta[0]) , - 1 / beta[2]);
     }
   }

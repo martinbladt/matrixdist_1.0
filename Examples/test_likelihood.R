@@ -55,3 +55,18 @@ bench::mark(
   logLikelihoodMWeib_RK(RKstep, alpha, T, beta, sort_obs, cum_weight, right_cen, right_cen_weight) 
 )[1:6]
 
+
+logLikelihoodMPar_RK(RKstep, alpha, T, beta, sort_obs, cum_weight, right_cen, right_cen_weight) 
+sum(log(mparetoden(x, alpha, T, beta)))
+
+betavec <- c(1, 2, 0)
+logLikelihoodMGEV_RK(RKstep, alpha, T, betavec, sort_obs, cum_weight, right_cen, right_cen_weight) 
+sum(log(mGEVden(x, alpha, T, 1, 2, 0)))
+
+
+x2 <- riph(n, "Gompertz", alpha, T, beta) 
+sort_obs2 <- sort(unique(x2))
+logLikelihoodMGomp_RK(RKstep, alpha, T, beta, sort_obs2, cum_weight, right_cen, right_cen_weight) 
+sum(log(mgompertzden(x2, alpha, T, beta)))
+
+
