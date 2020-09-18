@@ -141,3 +141,74 @@ void norm_mph(NumericMatrix T, NumericMatrix R){
   
 }
 
+//' Random parameters of a bivariate phase-type
+// [[Rcpp::export]]
+List random_phase_BivPH(int p1, int p2, double scale_factor = 1) {
+  
+  NumericVector alpha(p1);
+  NumericMatrix T11(p1, p1);
+  NumericMatrix T12(p1, p2);
+  NumericMatrix T22(p2, p2);
+  
+  double sum{0.0};
+  
+  for (int i{0}; i < p1; ++i) {
+    alpha[i] = runif(1)[0];
+    sum += alpha[i];
+  }
+  alpha = alpha / sum;
+  
+  for (int i{0}; i < p1; ++i) {
+    for (int j{0}; j < p1; ++j) {
+      if ((i != j)) {
+        T11(i,j) = runif(1)[0];
+        T11(i,i) -= T11(i,j);
+      }
+    }
+    for (int j{0}; j < p2; ++j) {
+      T12(i,j) = runif(1)[0];
+      T11(i,i) -= T12(i,j);
+    }
+  }
+  
+  for (int i{0}; i < p2; ++i) {
+    for (int j{0}; j < p2; ++j)
+      if ((i != j)) {
+        T22(i,j) = runif(1)[0];
+        T22(i,i) -= T22(i,j);
+      }
+  }
+  
+  for (int i{0}; i < p2; ++i) {
+    T22(i,i) -= runif(1)[0];
+  }
+  
+  T11 = T11 * scale_factor;
+  T12 = T12 * scale_factor;
+  T22 = T22 * scale_factor;
+  
+  NumericMatrix T(p1 +p2, p1 + p2);
+  NumericMatrix R(p1 + p2, 2);
+  
+  for (int i{0}; i < p1; ++i) {
+    for (int j{0}; j < p1; ++j) {
+      T(i,j) = T11(i,j);
+    }
+    for (int j{0}; j < p2; ++j) {
+      T(i,j + p1) = T12(i,j);
+    }
+    R(i,0) = 1;
+  }
+  for (int i{0}; i < p2; ++i) {
+    for (int j{0}; j < p2; ++j) {
+      T(i + p1,j + p1) = T22(i,j);
+    }
+    R(i + p1,1) = 1;
+  }
+  
+  
+  List L = List::create(Named("alpha") = alpha, _["T11"] = T11, _["T12"] = T12, _["T22"] = T22, _["T"] = T, _["R"] = R);
+  
+  return L;
+}
+

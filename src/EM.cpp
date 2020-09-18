@@ -579,7 +579,7 @@ double logLikelihoodMGomp_RK(double h, NumericVector & pi, NumericMatrix & T, do
 
 
 //' Loglikelihood of matrix GEV using RK
-//' I am assuming that the sample is given in a decreasing order
+//' I am assuming that the sample is given in an increasing order
 // [[Rcpp::export]]
 double logLikelihoodMGEV_RK(double h, NumericVector & pi, NumericMatrix & T, NumericVector beta, const NumericVector & obs, const NumericVector & weight, const NumericVector & rcens, const NumericVector & rcweight) {
   long p{T.nrow()};

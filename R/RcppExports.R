@@ -56,7 +56,7 @@ logLikelihoodMGomp_RK <- function(h, pi, T, beta, obs, weight, rcens, rcweight) 
 }
 
 #' Loglikelihood of matrix GEV using RK
-#' I am assuming that the sample is given in a decreasing order
+#' I am assuming that the sample is given in an increasing order
 logLikelihoodMGEV_RK <- function(h, pi, T, beta, obs, weight, rcens, rcweight) {
     .Call(`_matrixdist_logLikelihoodMGEV_RK`, h, pi, T, beta, obs, weight, rcens, rcweight)
 }
@@ -573,5 +573,10 @@ random_reward <- function(p, dim) {
 #' Better clone T and R?
 norm_mph <- function(T, R) {
     invisible(.Call(`_matrixdist_norm_mph`, T, R))
+}
+
+#' Random parameters of a bivariate phase-type
+random_phase_BivPH <- function(p1, p2, scale_factor = 1) {
+    .Call(`_matrixdist_random_phase_BivPH`, p1, p2, scale_factor)
 }
 

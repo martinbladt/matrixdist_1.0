@@ -716,6 +716,19 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// random_phase_BivPH
+List random_phase_BivPH(int p1, int p2, double scale_factor);
+RcppExport SEXP _matrixdist_random_phase_BivPH(SEXP p1SEXP, SEXP p2SEXP, SEXP scale_factorSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type p1(p1SEXP);
+    Rcpp::traits::input_parameter< int >::type p2(p2SEXP);
+    Rcpp::traits::input_parameter< double >::type scale_factor(scale_factorSEXP);
+    rcpp_result_gen = Rcpp::wrap(random_phase_BivPH(p1, p2, scale_factor));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_default_step_length", (DL_FUNC) &_matrixdist_default_step_length, 1},
@@ -770,6 +783,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_random_structure", (DL_FUNC) &_matrixdist_random_structure, 3},
     {"_matrixdist_random_reward", (DL_FUNC) &_matrixdist_random_reward, 2},
     {"_matrixdist_norm_mph", (DL_FUNC) &_matrixdist_norm_mph, 2},
+    {"_matrixdist_random_phase_BivPH", (DL_FUNC) &_matrixdist_random_phase_BivPH, 3},
     {NULL, NULL, 0}
 };
 
