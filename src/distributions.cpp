@@ -476,3 +476,83 @@ NumericVector mgompertzcdf(NumericVector x, NumericVector pi, NumericMatrix T, d
 }
 
 
+
+//' Matrix GEV density
+//' 
+//' Computes the density of a matrix GEV distribution with parameters \code{pi}, \code{T} and \code{beta} at \code{x}
+//' Dont allow for atoms in zero
+//' @param x non-negative value
+//' @param pi Initial probabilities
+//' @param T sub-intensity matrix
+//' @param beta  parameter
+//' @return The density at \code{x}
+//' @examples
+//' alpha <- c(0.5, 0.3, 0.2)
+//' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
+//' mu <- 1
+//' sigma <- 2
+//' xi <- 0.5
+//' mGEVden(0.5, alpha, T, mu, sigma, xi) 
+// [[Rcpp::export]]
+NumericVector mGEVden(NumericVector x, NumericVector pi, NumericMatrix T, double mu, double sigma, double xi) {
+  
+  NumericVector density(x.size());
+  
+  NumericMatrix m_pi(1, pi.size(), pi.begin());
+  NumericVector e(pi.size(), 1);
+  NumericMatrix m_e(pi.size(), 1, e.begin());
+  NumericMatrix m_t = matrix_product(T * (-1), m_e);
+  
+  for (int k = 0; k < x.size(); ++k){
+    if (xi == 0) {
+      density[k] = (matrix_product(m_pi, matrix_product(matrix_exponential(T * exp(-(x[k] - mu) / sigma) ), m_t))(0,0)) * exp(-(x[k] - mu) / sigma) / sigma;
+    }
+    else {
+      density[k] = (matrix_product(m_pi, matrix_product(matrix_exponential(T * pow(1 + (xi / sigma) * (x[k] - mu), -1 / xi) ), m_t))(0,0)) * pow(1 + (xi / sigma) * (x[k] - mu), -(1 + xi) / xi) / sigma;
+    }
+  }
+  return density;
+}
+
+
+
+//' Matrix GEV cdf
+//' 
+//' Computes the cdf (tail) of a matrix GEV distribution with parameters \code{pi}, \code{T} and \code{beta} at \code{x}
+//' @param x non-negative value
+//' @param pi Initial probabilities
+//' @param T sub-intensity matrix
+//' @param beta shape parameter
+//' @return The cdf (tail) at \code{x}
+//' @examples
+//' alpha <- c(0.5, 0.3, 0.2)
+//' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
+//' mu <- 1
+//' sigma <- 2
+//' xi <- 0.5
+//' mGEVcdf(0.5, alpha, T, mu, sigma, xi) 
+//' mGEVcdf(0.5, alpha, T, mu, sigma, xi, FALSE) 
+// [[Rcpp::export]]
+NumericVector mGEVcdf(NumericVector x, NumericVector pi, NumericMatrix T, double mu, double sigma, double xi, bool lower_tail = true) {
+  
+  NumericVector cdf(x.size());
+  
+  NumericMatrix m_pi(1, pi.size(), pi.begin());
+  NumericVector e(pi.size(), 1);
+  NumericMatrix m_e(pi.size(), 1, e.begin());
+  
+  for (int k = 0; k < x.size(); ++k){
+    if (xi == 0) {
+      cdf[k] = matrix_product(m_pi, matrix_product(matrix_exponential(T * exp(-(x[k] - mu) / sigma)), m_e))(0,0);
+    }
+    else {
+      cdf[k] = matrix_product(m_pi, matrix_product(matrix_exponential(T * pow(1 + (xi / sigma) * (x[k] - mu), -1 / xi) ), m_e))(0,0);
+    }
+  }
+  if (lower_tail == true) {
+    return cdf;
+  }
+  else {
+    return (1 - cdf);
+  }
+}
