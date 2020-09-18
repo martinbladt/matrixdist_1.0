@@ -521,6 +521,36 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// bivphden
+NumericVector bivphden(NumericMatrix x, NumericVector alpha, NumericMatrix T11, NumericMatrix T12, NumericMatrix T22);
+RcppExport SEXP _matrixdist_bivphden(SEXP xSEXP, SEXP alphaSEXP, SEXP T11SEXP, SEXP T12SEXP, SEXP T22SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type T11(T11SEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type T12(T12SEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type T22(T22SEXP);
+    rcpp_result_gen = Rcpp::wrap(bivphden(x, alpha, T11, T12, T22));
+    return rcpp_result_gen;
+END_RCPP
+}
+// bivphtail
+NumericVector bivphtail(NumericMatrix x, NumericVector alpha, NumericMatrix T11, NumericMatrix T12, NumericMatrix T22);
+RcppExport SEXP _matrixdist_bivphtail(SEXP xSEXP, SEXP alphaSEXP, SEXP T11SEXP, SEXP T12SEXP, SEXP T22SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type T11(T11SEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type T12(T12SEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type T22(T22SEXP);
+    rcpp_result_gen = Rcpp::wrap(bivphtail(x, alpha, T11, T12, T22));
+    return rcpp_result_gen;
+END_RCPP
+}
 // matrix_product
 NumericMatrix matrix_product(NumericMatrix a, NumericMatrix b);
 RcppExport SEXP _matrixdist_matrix_product(SEXP aSEXP, SEXP bSEXP) {
@@ -716,6 +746,19 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// merge_matrices
+NumericMatrix merge_matrices(NumericMatrix T11, NumericMatrix T12, NumericMatrix T22);
+RcppExport SEXP _matrixdist_merge_matrices(SEXP T11SEXP, SEXP T12SEXP, SEXP T22SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type T11(T11SEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type T12(T12SEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type T22(T22SEXP);
+    rcpp_result_gen = Rcpp::wrap(merge_matrices(T11, T12, T22));
+    return rcpp_result_gen;
+END_RCPP
+}
 // random_phase_BivPH
 List random_phase_BivPH(int p1, int p2, double scale_factor);
 RcppExport SEXP _matrixdist_random_phase_BivPH(SEXP p1SEXP, SEXP p2SEXP, SEXP scale_factorSEXP) {
@@ -766,6 +809,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_mgompertzcdf", (DL_FUNC) &_matrixdist_mgompertzcdf, 5},
     {"_matrixdist_mGEVden", (DL_FUNC) &_matrixdist_mGEVden, 6},
     {"_matrixdist_mGEVcdf", (DL_FUNC) &_matrixdist_mGEVcdf, 7},
+    {"_matrixdist_bivphden", (DL_FUNC) &_matrixdist_bivphden, 5},
+    {"_matrixdist_bivphtail", (DL_FUNC) &_matrixdist_bivphtail, 5},
     {"_matrixdist_matrix_product", (DL_FUNC) &_matrixdist_matrix_product, 2},
     {"_matrixdist_matrix_sum", (DL_FUNC) &_matrixdist_matrix_sum, 2},
     {"_matrixdist_LInf_norm", (DL_FUNC) &_matrixdist_LInf_norm, 1},
@@ -783,6 +828,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_random_structure", (DL_FUNC) &_matrixdist_random_structure, 3},
     {"_matrixdist_random_reward", (DL_FUNC) &_matrixdist_random_reward, 2},
     {"_matrixdist_norm_mph", (DL_FUNC) &_matrixdist_norm_mph, 2},
+    {"_matrixdist_merge_matrices", (DL_FUNC) &_matrixdist_merge_matrices, 3},
     {"_matrixdist_random_phase_BivPH", (DL_FUNC) &_matrixdist_random_phase_BivPH, 3},
     {NULL, NULL, 0}
 };

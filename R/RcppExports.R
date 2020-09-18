@@ -465,6 +465,36 @@ mGEVcdf <- function(x, pi, T, mu, sigma, xi, lower_tail = TRUE) {
     .Call(`_matrixdist_mGEVcdf`, x, pi, T, mu, sigma, xi, lower_tail)
 }
 
+#' Bivariate phase-type joint density
+#' 
+#' @examples
+#' alpha <- c(0.15, 0.85)
+#' T11 <- matrix(c(c(-2,9),c(0,-11)), nrow = 2, ncol = 2)
+#' T12 <- matrix(c(c(2,0),c(0,2)), nrow = 2, ncol = 2)
+#' T22 <- matrix(c(c(-1,0),c(0.5,-5)), nrow = 2, ncol = 2)
+#' x1 <- matrix(c(0.5,2), ncol=2) 
+#' x2 <- matrix(c(c(0.5,1), c(2, 1.5)), ncol=2) 
+#' bivphden(x1, alpha, T11, T12, T22) 
+#' bivphden(x2, alpha, T11, T12, T22) 
+bivphden <- function(x, alpha, T11, T12, T22) {
+    .Call(`_matrixdist_bivphden`, x, alpha, T11, T12, T22)
+}
+
+#' Bivariate phase-type joint tail
+#' 
+#' @examples
+#' alpha <- c(0.15, 0.85)
+#' T11 <- matrix(c(c(-2,9),c(0,-11)), nrow = 2, ncol = 2)
+#' T12 <- matrix(c(c(2,0),c(0,2)), nrow = 2, ncol = 2)
+#' T22 <- matrix(c(c(-1,0),c(0.5,-5)), nrow = 2, ncol = 2)
+#' x1 <- matrix(c(0.5,1), ncol=2) 
+#' x2 <- matrix(c(c(0.5,1), c(2, 1.5)), ncol=2) 
+#' bivphtail(x1, alpha, T11, T12, T22) 
+#' bivphtail(x2, alpha, T11, T12, T22) 
+bivphtail <- function(x, alpha, T11, T12, T22) {
+    .Call(`_matrixdist_bivphtail`, x, alpha, T11, T12, T22)
+}
+
 #' Product of two matrices
 #' 
 #' Computes C = A * B
@@ -573,6 +603,12 @@ random_reward <- function(p, dim) {
 #' Better clone T and R?
 norm_mph <- function(T, R) {
     invisible(.Call(`_matrixdist_norm_mph`, T, R))
+}
+
+#' Merges the matrices T11, T12 and T22 of a bivariate matrix
+#' 
+merge_matrices <- function(T11, T12, T22) {
+    .Call(`_matrixdist_merge_matrices`, T11, T12, T22)
 }
 
 #' Random parameters of a bivariate phase-type

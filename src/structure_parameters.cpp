@@ -141,6 +141,34 @@ void norm_mph(NumericMatrix T, NumericMatrix R){
   
 }
 
+
+
+//' Merges the matrices T11, T12 and T22 of a bivariate matrix
+//' 
+// [[Rcpp::export]]
+NumericMatrix merge_matrices(NumericMatrix T11, NumericMatrix T12, NumericMatrix T22) {
+  long p1{T11.nrow()};
+  long p2{T22.nrow()};
+  NumericMatrix T(p1 +p2, p1 + p2);
+
+  for (int i{0}; i < p1; ++i) {
+    for (int j{0}; j < p1; ++j) {
+      T(i,j) = T11(i,j);
+    }
+    for (int j{0}; j < p2; ++j) {
+      T(i,j + p1) = T12(i,j);
+    }
+  }
+  for (int i{0}; i < p2; ++i) {
+    for (int j{0}; j < p2; ++j) {
+      T(i + p1,j + p1) = T22(i,j);
+    }
+  }
+  
+  return T;
+}
+
+
 //' Random parameters of a bivariate phase-type
 // [[Rcpp::export]]
 List random_phase_BivPH(int p1, int p2, double scale_factor = 1) {
@@ -149,6 +177,8 @@ List random_phase_BivPH(int p1, int p2, double scale_factor = 1) {
   NumericMatrix T11(p1, p1);
   NumericMatrix T12(p1, p2);
   NumericMatrix T22(p2, p2);
+  
+  NumericMatrix R(p1 + p2, 2);
   
   double sum{0.0};
   
@@ -169,14 +199,17 @@ List random_phase_BivPH(int p1, int p2, double scale_factor = 1) {
       T12(i,j) = runif(1)[0];
       T11(i,i) -= T12(i,j);
     }
+    R(i,0) = 1;
   }
   
   for (int i{0}; i < p2; ++i) {
-    for (int j{0}; j < p2; ++j)
+    for (int j{0}; j < p2; ++j) {
       if ((i != j)) {
         T22(i,j) = runif(1)[0];
         T22(i,i) -= T22(i,j);
       }
+    }
+    R(i + p1,1) = 1;
   }
   
   for (int i{0}; i < p2; ++i) {
@@ -187,25 +220,7 @@ List random_phase_BivPH(int p1, int p2, double scale_factor = 1) {
   T12 = T12 * scale_factor;
   T22 = T22 * scale_factor;
   
-  NumericMatrix T(p1 +p2, p1 + p2);
-  NumericMatrix R(p1 + p2, 2);
-  
-  for (int i{0}; i < p1; ++i) {
-    for (int j{0}; j < p1; ++j) {
-      T(i,j) = T11(i,j);
-    }
-    for (int j{0}; j < p2; ++j) {
-      T(i,j + p1) = T12(i,j);
-    }
-    R(i,0) = 1;
-  }
-  for (int i{0}; i < p2; ++i) {
-    for (int j{0}; j < p2; ++j) {
-      T(i + p1,j + p1) = T22(i,j);
-    }
-    R(i + p1,1) = 1;
-  }
-  
+  NumericMatrix T(merge_matrices(T11, T12, T22));
   
   List L = List::create(Named("alpha") = alpha, _["T11"] = T11, _["T12"] = T12, _["T22"] = T22, _["T"] = T, _["R"] = R);
   

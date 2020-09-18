@@ -556,3 +556,69 @@ NumericVector mGEVcdf(NumericVector x, NumericVector pi, NumericMatrix T, double
     return (1 - cdf);
   }
 }
+
+
+//' Bivariate phase-type joint density
+//' 
+//' @examples
+//' alpha <- c(0.15, 0.85)
+//' T11 <- matrix(c(c(-2,9),c(0,-11)), nrow = 2, ncol = 2)
+//' T12 <- matrix(c(c(2,0),c(0,2)), nrow = 2, ncol = 2)
+//' T22 <- matrix(c(c(-1,0),c(0.5,-5)), nrow = 2, ncol = 2)
+//' x1 <- matrix(c(0.5,2), ncol=2) 
+//' x2 <- matrix(c(c(0.5,1), c(2, 1.5)), ncol=2) 
+//' bivphden(x1, alpha, T11, T12, T22) 
+//' bivphden(x2, alpha, T11, T12, T22) 
+// [[Rcpp::export]]
+NumericVector bivphden(NumericMatrix x, NumericVector alpha, NumericMatrix T11, NumericMatrix T12, NumericMatrix T22) {
+  
+  long N{x.nrow()};
+  long p2{T22.nrow()};
+  
+  NumericVector density(N);
+  
+  NumericMatrix m_alpha(1, alpha.size(), alpha.begin());
+  NumericVector e(p2, 1);
+  NumericMatrix m_e(p2, 1, e.begin());
+  NumericMatrix m_t = matrix_product(T22 * (-1), m_e);
+  
+  for (int k = 0; k < N; ++k){
+   density[k] = matrix_product(m_alpha, matrix_product(matrix_exponential(T11 * x(k,0)), matrix_product(T12, matrix_product(matrix_exponential(T22 * x(k,1)), m_t))))(0,0);
+  }
+  
+  return density;
+}
+
+
+//' Bivariate phase-type joint tail
+//' 
+//' @examples
+//' alpha <- c(0.15, 0.85)
+//' T11 <- matrix(c(c(-2,9),c(0,-11)), nrow = 2, ncol = 2)
+//' T12 <- matrix(c(c(2,0),c(0,2)), nrow = 2, ncol = 2)
+//' T22 <- matrix(c(c(-1,0),c(0.5,-5)), nrow = 2, ncol = 2)
+//' x1 <- matrix(c(0.5,1), ncol=2) 
+//' x2 <- matrix(c(c(0.5,1), c(2, 1.5)), ncol=2) 
+//' bivphtail(x1, alpha, T11, T12, T22) 
+//' bivphtail(x2, alpha, T11, T12, T22) 
+// [[Rcpp::export]]
+NumericVector bivphtail(NumericMatrix x, NumericVector alpha, NumericMatrix T11, NumericMatrix T12, NumericMatrix T22) {
+  
+  long N{x.nrow()};
+  long p2{T22.nrow()};
+  
+  NumericVector tail(N);
+  
+  NumericMatrix m_alpha(1, alpha.size(), alpha.begin());
+  NumericVector e(p2, 1);
+  NumericMatrix m_e(p2, 1, e.begin());
+  NumericMatrix m_t = matrix_product(T22 * (-1), m_e);
+  
+  for (int k = 0; k < N; ++k){
+    tail[k] = matrix_product(m_alpha, matrix_product(matrix_inverse(T11 * (-1.0)), matrix_product(matrix_exponential(T11 * x(k,0)), matrix_product(T12, matrix_product( matrix_exponential(T22 * x(k,1)), m_e)))))(0,0);
+  }
+  
+  return tail;
+}
+
+
