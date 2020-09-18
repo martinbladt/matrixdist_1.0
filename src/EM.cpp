@@ -361,3 +361,118 @@ double logLikelihoodPH_RK(double h, NumericVector & pi, NumericMatrix & T, const
   return logLh;
 }
 
+
+
+//' Loglikelihood IPH using RK and g as an input
+//' One needs to be careful with the GEV since it is decreasing
+//' It is slower than using the density directly - Perhaps is the iteration with R 
+// [[Rcpp::export]]
+double logLikelihoodIPH_RK(double h, NumericVector & pi, NumericMatrix & T, Function g, Function g_inv, Function lambda, NumericVector beta, const NumericVector & obs, const NumericVector & weight, const NumericVector & rcens, const NumericVector & rcweight) {
+  long p{T.nrow()};
+  NumericMatrix m_pi(1,p, pi.begin());
+  
+  NumericMatrix avector(1,p);
+  
+  NumericVector m_e(p, 1);
+  NumericMatrix e(p, 1, m_e.begin());
+  
+  NumericMatrix t = matrix_product(T * (-1), e);
+  
+  NumericVector g_inv_val;
+  NumericVector g_inv_val2;
+  NumericVector lambda_val;
+  
+  // Uncensored data
+  //   initial condition
+  avector = clone(m_pi);
+  
+  double dt{0.0};
+  
+  double density{0.0};
+  
+  double logLh{0.0};
+  
+  // Non censored data
+  if (obs.size() > 0) {
+    g_inv_val = g_inv(obs[0], beta);
+    dt = g_inv_val[0];
+  }
+  for (int k{0}; k < obs.size(); ++k) {
+    a_rungekutta(avector, dt, h, T);
+    density = matrix_product(avector, t)(0,0);
+    lambda_val = lambda(obs[k], beta);
+    logLh += weight[k] * (log(density) + log(lambda_val[0]));
+    g_inv_val = g_inv(obs[k], beta);
+    g_inv_val2 = g_inv(obs[k + 1], beta);
+    dt = g_inv_val2[0] - g_inv_val[0];
+  }
+  //Right censored data
+  if (rcens.size() > 0) {
+    g_inv_val = g_inv(rcens[0], beta);
+    dt = g_inv_val[0];
+    avector = clone(m_pi);
+  }
+  for (int k{0}; k < rcens.size(); ++k) {
+    a_rungekutta(avector, dt, h, T);
+    density = matrix_product(avector, e)(0,0);
+    logLh += rcweight[k] * log(density);
+    g_inv_val = g_inv(rcens[k], beta);
+    g_inv_val2 = g_inv(rcens[k + 1], beta);
+    dt = g_inv_val2[0] - g_inv_val[0];
+  }
+  
+  return logLh;
+}
+
+
+
+//' Loglikelihood of matrix Weibull using RK
+//' This is the fastest option
+// [[Rcpp::export]]
+double logLikelihoodMWeib_RK(double h, NumericVector & pi, NumericMatrix & T, double beta, const NumericVector & obs, const NumericVector & weight, const NumericVector & rcens, const NumericVector & rcweight) {
+  long p{T.nrow()};
+  NumericMatrix m_pi(1,p, pi.begin());
+  
+  NumericMatrix avector(1,p);
+  
+  NumericVector m_e(p, 1);
+  NumericMatrix e(p, 1, m_e.begin());
+  
+  NumericMatrix t = matrix_product(T * (-1), e);
+  
+  // Uncensored data
+  //   initial condition
+  avector = clone(m_pi);
+  
+  double dt{0.0};
+  
+  double density{0.0};
+  
+  double logLh{0.0};
+  
+  // Non censored data
+  if (obs.size() > 0) {
+    dt = pow(obs[0], beta);
+  }
+  for (int k{0}; k < obs.size(); ++k) {
+    a_rungekutta(avector, dt, h, T);
+    density = matrix_product(avector, t)(0,0);
+    logLh += weight[k] * (log(density) + log(beta) + (beta -1) * log(obs[k]));
+    dt = pow(obs[k + 1], beta) - pow(obs[k], beta);
+  }
+  //Right censored data
+  if (rcens.size() > 0) {
+    dt = pow(rcens[0], beta);
+    avector = clone(m_pi);
+  }
+  for (int k{0}; k < rcens.size(); ++k) {
+    a_rungekutta(avector, dt, h, T);
+    density = matrix_product(avector, e)(0,0);
+    logLh += rcweight[k] * log(density);
+    dt = pow(rcens[k + 1], beta) - pow(rcens[k], beta);
+  }
+  
+  return logLh;
+}
+
+

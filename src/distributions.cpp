@@ -141,7 +141,7 @@ NumericVector phLaplace(NumericVector s, NumericVector pi, NumericMatrix T) {
 
 
 
-//' IPH density
+//' IPH density - Slower
 //' 
 //' Computes the density of an IPH distribution with parameters \code{pi}, \code{T} and \code{beta} at \code{x}
 //' @param x non-negative value

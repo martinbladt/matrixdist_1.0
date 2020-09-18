@@ -32,6 +32,18 @@ logLikelihoodPH_RK <- function(h, pi, T, obs, weight, rcens, rcweight) {
     .Call(`_matrixdist_logLikelihoodPH_RK`, h, pi, T, obs, weight, rcens, rcweight)
 }
 
+#' Loglikelihood IPH using RK and g as an input
+#' One needs to be careful with the GEV since it is decreasing
+#' It is slower than using the density directly - Perhaps is the iteration with R 
+logLikelihoodIPH_RK <- function(h, pi, T, g, g_inv, lambda, beta, obs, weight, rcens, rcweight) {
+    .Call(`_matrixdist_logLikelihoodIPH_RK`, h, pi, T, g, g_inv, lambda, beta, obs, weight, rcens, rcweight)
+}
+
+#' Loglikelihood using RK
+logLikelihoodMWeib_RK <- function(h, pi, T, beta, obs, weight, rcens, rcweight) {
+    .Call(`_matrixdist_logLikelihoodMWeib_RK`, h, pi, T, beta, obs, weight, rcens, rcweight)
+}
+
 #' Embeded Markov chain of a sub-intensity matrix
 #' 
 #' Returns the transition probabilities of the embeded Markov chain determined the sub-intensity matrix 
@@ -146,7 +158,6 @@ rmatrixGEVD <- function(n, pi, T, mu, sigma, xi = 0) {
 #' 
 #' Generates a sample of size \code{n} from an inhomogeneous phase-type distribution with parameters \code{pi}, \code{T} and \code{beta}
 #' @parm n Sample size
-#' @parm dist_type Type of IPH: "Pareto", "Weibull", "Gompertz"
 #' @param pi Initial probabilities
 #' @param T sub-intensity matrix
 #' @param beta Parameter of the transformation
@@ -157,9 +168,9 @@ rmatrixGEVD <- function(n, pi, T, mu, sigma, xi = 0) {
 #' g <- function(x, beta) { x^(1/beta) }
 #' beta <- 0.5
 #' n <- 10
-#' riphfn(n, "Pareto", alpha, T, g, beta) 
-riphfn <- function(n, dist_type, pi, T, g, beta) {
-    .Call(`_matrixdist_riphfn`, n, dist_type, pi, T, g, beta)
+#' riphfn(n, alpha, T, g, beta) 
+riphfn <- function(n, pi, T, g, beta) {
+    .Call(`_matrixdist_riphfn`, n, pi, T, g, beta)
 }
 
 #' Random MPH*
@@ -242,46 +253,7 @@ phLaplace <- function(s, pi, T) {
     .Call(`_matrixdist_phLaplace`, s, pi, T)
 }
 
-#' Matrix Weibull density
-#' 
-#' Computes the density of a matrix Weibull distribution with parameters \code{pi}, \code{T} and \code{beta} at \code{x}
-#' @param x non-negative value
-#' @param pi Initial probabilities
-#' @param T sub-intensity matrix
-#' @param beta shape parameter
-#' @return The density at \code{x}
-#' @examples
-#' alpha <- c(0.5, 0.3, 0.2)
-#' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
-#' beta <- 0.5
-#' mweibullden(0.5, alpha, T, beta) 
-mweibullden <- function(x, pi, T, beta) {
-    .Call(`_matrixdist_mweibullden`, x, pi, T, beta)
-}
-
-#' Matrix Weibull cdf
-#' 
-#' Computes the cdf (tail) of a matrix Weibull distribution with parameters \code{pi}, \code{T} and \code{beta} at \code{x}
-#' @param x non-negative value
-#' @param pi Initial probabilities
-#' @param T sub-intensity matrix
-#' @param beta shape parameter
-#' @return The cdf (tail) at \code{x}
-#' @examples
-#' alpha <- c(0.5, 0.3, 0.2)
-#' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
-#' beta <- 0.5
-#' mweibullcdf(0.5, alpha, T, beta) 
-#' mweibullcdf(0.5, alpha, T, beta, FALSE) 
-mweibullcdf <- function(x, pi, T, beta, lower_tail = TRUE) {
-    .Call(`_matrixdist_mweibullcdf`, x, pi, T, beta, lower_tail)
-}
-
-RunFunction <- function(a, func) {
-    .Call(`_matrixdist_RunFunction`, a, func)
-}
-
-#' IPH density
+#' IPH density - Slower
 #' 
 #' Computes the density of an IPH distribution with parameters \code{pi}, \code{T} and \code{beta} at \code{x}
 #' @param x non-negative value
@@ -325,6 +297,80 @@ iphdensity <- function(x, pi, T, g, g_inv, lambda, beta) {
 #' iphcdf(0.5, alpha, T, g, g_inv, beta, FALSE) 
 iphcdf <- function(x, pi, T, g, g_inv, beta, lower_tail = TRUE) {
     .Call(`_matrixdist_iphcdf`, x, pi, T, g, g_inv, beta, lower_tail)
+}
+
+#' Matrix Weibull density
+#' 
+#' Computes the density of a matrix Weibull distribution with parameters \code{pi}, \code{T} and \code{beta} at \code{x}
+#' @param x non-negative value
+#' @param pi Initial probabilities
+#' @param T sub-intensity matrix
+#' @param beta shape parameter
+#' @return The density at \code{x}
+#' @examples
+#' alpha <- c(0.5, 0.3, 0.2)
+#' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
+#' beta <- 0.5
+#' mweibullden(0.5, alpha, T, beta) 
+mweibullden <- function(x, pi, T, beta) {
+    .Call(`_matrixdist_mweibullden`, x, pi, T, beta)
+}
+
+#' Matrix Weibull cdf
+#' 
+#' Computes the cdf (tail) of a matrix Weibull distribution with parameters \code{pi}, \code{T} and \code{beta} at \code{x}
+#' @param x non-negative value
+#' @param pi Initial probabilities
+#' @param T sub-intensity matrix
+#' @param beta shape parameter
+#' @return The cdf (tail) at \code{x}
+#' @examples
+#' alpha <- c(0.5, 0.3, 0.2)
+#' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
+#' beta <- 0.5
+#' mweibullcdf(0.5, alpha, T, beta) 
+#' mweibullcdf(0.5, alpha, T, beta, FALSE) 
+mweibullcdf <- function(x, pi, T, beta, lower_tail = TRUE) {
+    .Call(`_matrixdist_mweibullcdf`, x, pi, T, beta, lower_tail)
+}
+
+RunFunction <- function(a, func) {
+    .Call(`_matrixdist_RunFunction`, a, func)
+}
+
+#' Matrix Pareto density
+#' 
+#' Computes the density of a matrix Pareto distribution with parameters \code{pi}, \code{T} and \code{beta} at \code{x}
+#' @param x non-negative value
+#' @param pi Initial probabilities
+#' @param T sub-intensity matrix
+#' @param beta scale parameter
+#' @return The density at \code{x}
+#' @examples
+#' alpha <- c(0.5, 0.3, 0.2)
+#' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
+#' beta <- 0.5
+#' mparetoden(0.5, alpha, T, beta) 
+mparetoden <- function(x, pi, T, beta) {
+    .Call(`_matrixdist_mparetoden`, x, pi, T, beta)
+}
+
+#' Matrix Pareto cdf
+#' 
+#' Computes the cdf (tail) of a matrix Pareto distribution with parameters \code{pi}, \code{T} and \code{beta} at \code{x}
+#' @param x non-negative value
+#' @param pi Initial probabilities
+#' @param T sub-intensity matrix
+#' @param beta shape parameter
+#' @return The cdf (tail) at \code{x}
+#' @examples
+#' alpha <- c(0.5, 0.3, 0.2)
+#' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
+#' beta <- 0.5
+#' mparetocdf(0.5, alpha, T, beta) 
+#' mparetocdf(0.5, alpha, T, beta, FALSE) 
+mparetocdf <- function(x, pi, T, beta, lower_tail = TRUE) {
+    .Call(`_matrixdist_mparetocdf`, x, pi, T, beta, lower_tail)
 }
 
 #' Product of two matrices
