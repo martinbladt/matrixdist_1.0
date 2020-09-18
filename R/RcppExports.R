@@ -39,7 +39,8 @@ logLikelihoodIPH_RK <- function(h, pi, T, g, g_inv, lambda, beta, obs, weight, r
     .Call(`_matrixdist_logLikelihoodIPH_RK`, h, pi, T, g, g_inv, lambda, beta, obs, weight, rcens, rcweight)
 }
 
-#' Loglikelihood using RK
+#' Loglikelihood of matrix Weibull using RK
+#' This is the fastest option
 logLikelihoodMWeib_RK <- function(h, pi, T, beta, obs, weight, rcens, rcweight) {
     .Call(`_matrixdist_logLikelihoodMWeib_RK`, h, pi, T, beta, obs, weight, rcens, rcweight)
 }
@@ -371,6 +372,41 @@ mparetoden <- function(x, pi, T, beta) {
 #' mparetocdf(0.5, alpha, T, beta, FALSE) 
 mparetocdf <- function(x, pi, T, beta, lower_tail = TRUE) {
     .Call(`_matrixdist_mparetocdf`, x, pi, T, beta, lower_tail)
+}
+
+#' Matrix Gompertz density
+#' 
+#' Computes the density of a matrix Gompertz distribution with parameters \code{pi}, \code{T} and \code{beta} at \code{x}
+#' @param x non-negative value
+#' @param pi Initial probabilities
+#' @param T sub-intensity matrix
+#' @param beta  parameter
+#' @return The density at \code{x}
+#' @examples
+#' alpha <- c(0.5, 0.3, 0.2)
+#' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
+#' beta <- 0.5
+#' mgompertzden(0.5, alpha, T, beta) 
+mgompertzden <- function(x, pi, T, beta) {
+    .Call(`_matrixdist_mgompertzden`, x, pi, T, beta)
+}
+
+#' Matrix Gompertz cdf
+#' 
+#' Computes the cdf (tail) of a matrix Gompertz distribution with parameters \code{pi}, \code{T} and \code{beta} at \code{x}
+#' @param x non-negative value
+#' @param pi Initial probabilities
+#' @param T sub-intensity matrix
+#' @param beta shape parameter
+#' @return The cdf (tail) at \code{x}
+#' @examples
+#' alpha <- c(0.5, 0.3, 0.2)
+#' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
+#' beta <- 0.5
+#' mgompertzcdf(0.5, alpha, T, beta) 
+#' mgompertzcdf(0.5, alpha, T, beta, FALSE) 
+mgompertzcdf <- function(x, pi, T, beta, lower_tail = TRUE) {
+    .Call(`_matrixdist_mgompertzcdf`, x, pi, T, beta, lower_tail)
 }
 
 #' Product of two matrices
