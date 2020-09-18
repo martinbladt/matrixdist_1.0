@@ -45,6 +45,22 @@ logLikelihoodMWeib_RK <- function(h, pi, T, beta, obs, weight, rcens, rcweight) 
     .Call(`_matrixdist_logLikelihoodMWeib_RK`, h, pi, T, beta, obs, weight, rcens, rcweight)
 }
 
+#' Loglikelihood of matrix Pareto using RK
+logLikelihoodMPar_RK <- function(h, pi, T, beta, obs, weight, rcens, rcweight) {
+    .Call(`_matrixdist_logLikelihoodMPar_RK`, h, pi, T, beta, obs, weight, rcens, rcweight)
+}
+
+#' Loglikelihood of matrix Gompertz using RK
+logLikelihoodMGomp_RK <- function(h, pi, T, beta, obs, weight, rcens, rcweight) {
+    .Call(`_matrixdist_logLikelihoodMGomp_RK`, h, pi, T, beta, obs, weight, rcens, rcweight)
+}
+
+#' Loglikelihood of matrix GEV using RK
+#' I am assuming that the sample is given in a decreasing order
+logLikelihoodMGEV_RK <- function(h, pi, T, beta, obs, weight, rcens, rcweight) {
+    .Call(`_matrixdist_logLikelihoodMGEV_RK`, h, pi, T, beta, obs, weight, rcens, rcweight)
+}
+
 #' Embeded Markov chain of a sub-intensity matrix
 #' 
 #' Returns the transition probabilities of the embeded Markov chain determined the sub-intensity matrix 
@@ -407,6 +423,46 @@ mgompertzden <- function(x, pi, T, beta) {
 #' mgompertzcdf(0.5, alpha, T, beta, FALSE) 
 mgompertzcdf <- function(x, pi, T, beta, lower_tail = TRUE) {
     .Call(`_matrixdist_mgompertzcdf`, x, pi, T, beta, lower_tail)
+}
+
+#' Matrix GEV density
+#' 
+#' Computes the density of a matrix GEV distribution with parameters \code{pi}, \code{T} and \code{beta} at \code{x}
+#' Dont allow for atoms in zero
+#' @param x non-negative value
+#' @param pi Initial probabilities
+#' @param T sub-intensity matrix
+#' @param beta  parameter
+#' @return The density at \code{x}
+#' @examples
+#' alpha <- c(0.5, 0.3, 0.2)
+#' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
+#' mu <- 1
+#' sigma <- 2
+#' xi <- 0.5
+#' mGEVden(0.5, alpha, T, mu, sigma, xi) 
+mGEVden <- function(x, pi, T, mu, sigma, xi) {
+    .Call(`_matrixdist_mGEVden`, x, pi, T, mu, sigma, xi)
+}
+
+#' Matrix GEV cdf
+#' 
+#' Computes the cdf (tail) of a matrix GEV distribution with parameters \code{pi}, \code{T} and \code{beta} at \code{x}
+#' @param x non-negative value
+#' @param pi Initial probabilities
+#' @param T sub-intensity matrix
+#' @param beta shape parameter
+#' @return The cdf (tail) at \code{x}
+#' @examples
+#' alpha <- c(0.5, 0.3, 0.2)
+#' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
+#' mu <- 1
+#' sigma <- 2
+#' xi <- 0.5
+#' mGEVcdf(0.5, alpha, T, mu, sigma, xi) 
+#' mGEVcdf(0.5, alpha, T, mu, sigma, xi, FALSE) 
+mGEVcdf <- function(x, pi, T, mu, sigma, xi, lower_tail = TRUE) {
+    .Call(`_matrixdist_mGEVcdf`, x, pi, T, mu, sigma, xi, lower_tail)
 }
 
 #' Product of two matrices
