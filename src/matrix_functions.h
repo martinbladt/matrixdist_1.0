@@ -12,3 +12,5 @@ NumericMatrix matrix_exponential(const NumericMatrix & A);
 NumericMatrix matrix_power(int n, const NumericMatrix & A);
 
 NumericMatrix diagonal_vector(const NumericVector & vec);
+
+NumericMatrix matrix_VanLoan(const NumericMatrix & A1, const NumericMatrix & A2, const NumericMatrix & B1);
