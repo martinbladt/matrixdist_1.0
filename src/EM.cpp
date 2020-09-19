@@ -656,5 +656,28 @@ double logLikelihoodMGEV_RK(double h, NumericVector & pi, NumericMatrix & T, Num
 }
 
 
+//' Applies the inverse of the GEV but giving back the vector in reverse order
+// [[Rcpp::export]]
+List reversTransformData(const NumericVector & observations, const NumericVector & weights, const NumericVector & beta) {
+  long N{observations.size()};
+  NumericVector TransformObs(N);
+  NumericVector TransWeights(N);
+  if (beta[2] == 0) { // Gumbel
+    for (int i{0}; i < N; ++i) {
+      TransformObs[i] = exp( -(observations[N - i - 1] - beta[0]) / beta[1]) ;
+      TransWeights[i] = weights[N - i - 1];
+    }
+  }
+  else { // GEVD
+    for (int i{0}; i < N; ++i) {
+      TransformObs[i] = pow( 1 + beta[2] * (observations[N - i - 1] - beta[0]) / beta[1] , -1 / beta[2]);
+      TransWeights[i] = weights[N - i - 1];
+    }
+  }
+  
+  List L = List::create(Named("obs") = TransformObs, _["weight"] = TransWeights);
+  
+  return L;
+}
 
 
