@@ -39,6 +39,51 @@ iB <- fit(iA, data, stepsEM = 100)
 
 iB
 
+iC <- iph(A, gfun = "Pareto", gfun_pars = 2)
+
+iC
+
+data <- r(iC)
+
+plot(data)
+
+evmix::hillplot(data)
+
+iD <- fit(iC, data, stepsEM = 300)
+
+iD
+
+iE <- iph(A, gfun = "Gompertz", gfun_pars = 2)
+
+iE
+
+data <- r(iE)
+
+plot(data)
+
+evmix::hillplot(data)
+
+iF <- fit(iE, data, stepsEM = 300)
+
+iF
+
+#iG <- iph(A, gfun = "GEVD", gfun_pars = c(1, 1, 2)) #this crashes R
+
+iG
+
+data <- r(iG)
+
+plot(data)
+
+evmix::hillplot(data)
+
+x <- iG;y <- data
+iH <- fit(iG, data, stepsEM = 300)
+
+iH
+
+## clone par_g??
+
 # MPH*
 
 alpha <- c(0.5, 0.3, 0.2)

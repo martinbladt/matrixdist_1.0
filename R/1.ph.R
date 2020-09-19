@@ -144,10 +144,35 @@ setMethod(
       x <- x@ph
       if(name == "Weibull"){
         inv_g <- function(t, beta) t^{beta}
-        mLL <- function(beta, alpha, S, y) {
+        mLL <- function(h, alpha, S, beta, obs, weight, rcens, rcweight) {
           if(beta < 0) return(NA)
-          return(- sum(log(mweibullden(y, alpha, S, beta))))
-        } # beta in these two functions should always be a vector
+          return(- logLikelihoodMWeib_RK(h, alpha, S, beta, obs, weight, rcens, rcweight))
+        }
+      }
+      else if(name == "Pareto"){
+        inv_g <- function(t, beta) log(t/beta + 1)
+        mLL <- function(h, alpha, S, beta, obs, weight, rcens, rcweight) {
+          if(beta < 0) return(NA)
+          return(- logLikelihoodMPar_RK(h, alpha, S, beta, obs, weight, rcens, rcweight))
+        }
+      }
+      else if(name == "Gompertz"){
+        inv_g <- function(t, beta) (exp(t * beta) - 1) / beta
+        mLL <- function(h, alpha, S, beta, obs, weight, rcens, rcweight) {
+          if(beta < 0) return(NA)
+          return(- logLikelihoodMGomp_RK(h, alpha, S, beta, obs, weight, rcens, rcweight))
+        }
+      }
+      else if(name == "GEVD"){
+        inv_g <- function(t, beta){
+          mu <- beta[1]; sigma <- beta[2]; xi <- beta[3]
+          if(xi == 0) return(exp(-(t - mu) / sigma))
+          else return((1 + (xi / sigma) * (t - mu))^{-1 / xi})
+        }
+        mLL <- function(h, alpha, S, beta, obs, weight, rcens, rcweight) {
+          if(beta[2] < 0) return(NA)
+          return(- logLikelihoodMGEV_RK(h, alpha, S, beta, obs, weight, rcens, rcweight))
+        }
       }else{
         stop("fit for this gfun is not yet implemented")
       }
@@ -190,7 +215,7 @@ setMethod(
         trans_obs <- inv_g(un_obs, par_g)
         RKstep <- default_step_length(T_fit)
         EMstep_RK(RKstep, pi_fit, T_fit, trans_obs, cum_weight, rcen, rcenweight)
-        opt <- suppressWarnings(optim(par = par_g, fn = mLL, alpha = pi_fit, S = T_fit, y = y))
+        opt <- suppressWarnings(optim(par = par_g, fn = mLL, h = RKstep, alpha = pi_fit, S = T_fit, obs = un_obs, weight = cum_weight, rcens = rcen, rcweight = rcenweight))
         par_g <- opt$par
         if (k %% 10 == 0) {
           cat("\r", "iteration:", k,
