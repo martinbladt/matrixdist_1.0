@@ -80,12 +80,10 @@ plot(data)
 
 evmix::hillplot(data)
 
-x <- iG;y <- data
 iH <- fit(iG, data, stepsEM = 300)
 
 iH
 
-## clone par_g??
 
 # MPH*
 
