@@ -681,3 +681,143 @@ List reversTransformData(const NumericVector & observations, const NumericVector
 }
 
 
+
+
+//'  EM for a Bivariate PH fit
+//'  
+// [[Rcpp::export]]
+void EMstep_bivph(const NumericMatrix & observations, const NumericVector & weights, NumericVector & alpha, NumericMatrix & T11, NumericMatrix & T12, NumericMatrix & T22) {
+  long p1{T11.nrow()};
+  long p2{T22.nrow()};
+  long p{p1 + p2};
+  
+  double density{0};
+  double aux;
+  
+  NumericMatrix m_alpha(1,p, alpha.begin());
+  
+  NumericMatrix Bmean(p1,1);
+  NumericMatrix Zmean(p,1);
+  NumericMatrix Nmean(p,p + 1);
+  
+  NumericMatrix bmatrix1(p1,p1);
+  NumericMatrix bmatrix2(p2,p2);
+  NumericMatrix cmatrix1(p1,p1);
+  NumericMatrix cmatrix2(p2,p2);
+  NumericMatrix aux_exp1(p1,p1);
+  NumericMatrix aux_exp2(p2,p2);
+  
+  NumericMatrix J1(2 * p1,2 * p1);
+  NumericMatrix J2(2 * p2,2 * p2);
+  
+  
+  NumericVector m_e(p2, 1);
+  NumericMatrix e(p2, 1, m_e.begin());
+  
+  NumericMatrix exitvec = matrix_product(T22 * (-1), e);
+  
+  NumericMatrix auxMatrix1(p1,1);
+  NumericMatrix auxMatrix2(p2,p1);
+  NumericMatrix auxMatrix3(1,p2);
+  
+  double sumOfWeights{0.0};
+  //E step
+  for (int k{0}; k < observations.nrow(); ++k) {
+    
+    sumOfWeights += weights[k];
+    
+    aux_exp2 = matrix_exponential(T22 * observations(k,1));
+    bmatrix1 = matrix_product(T12, matrix_product(aux_exp2, matrix_product(exitvec, m_alpha)));
+    
+    J1 = matrix_exponential(matrix_VanLoan(T11, T11, bmatrix1) * observations(k,0)); 
+    
+    for (int i{0}; i < p1; ++i) {
+      for (int j{0}; j < p1; ++j) {
+        aux_exp1(i,j) = J1(i,j);
+        cmatrix1(i,j) = J1(i,j + p1);
+      }
+    }
+    
+    bmatrix2 = matrix_product(exitvec, matrix_product(m_alpha, matrix_product(aux_exp1, T12)));
+    
+    J2 = matrix_exponential(matrix_VanLoan(T22, T22, bmatrix2) * observations(k,1)); 
+    
+    for (int i{0}; i < p2; ++i) {
+      for (int j{0}; j < p2; ++j) {
+        cmatrix2(i,j) = J2(i,j + p2);
+      }
+    }
+    density = matrix_product(m_alpha, matrix_product(aux_exp1, matrix_product(T12, matrix_product(aux_exp2, exitvec))))(0,0);
+    
+    
+    //E-step
+    auxMatrix1 = matrix_product(aux_exp1, matrix_product(T12, matrix_product(aux_exp2, exitvec)));
+    auxMatrix2 =  matrix_product(aux_exp2, matrix_product(exitvec, matrix_product(m_alpha, aux_exp1)));
+    for (int i{0}; i < p1; ++i) {
+      aux = auxMatrix1(i,0);
+      Bmean(i,0) += m_alpha(0,i) * aux * weights[k] / density;
+      Zmean(i,0) += cmatrix1(i,i) * weights[k] / density;
+      for (int j{0}; j < p1; ++j) {
+        Nmean(i,j) += T11(i,j) * cmatrix1(j,i) * weights[k] / density;
+      }
+      for (int j{0}; j < p2; ++j) {
+        aux = auxMatrix2(j,i);
+        Nmean(i,j + p1) += T12(i,j) * aux * weights[k] / density;
+      }
+    }
+    
+    auxMatrix3 = matrix_product(m_alpha, matrix_product(aux_exp1, matrix_product(T12, aux_exp2)));
+    for (int i{0}; i < p2; ++i) {
+      Zmean(i + p1,0) += cmatrix2(i,i) * weights[k] / density;
+      aux = auxMatrix3(0,i);
+      Nmean(i + p1,p) += aux * exitvec(i,0) * weights[k] / density;
+      for (int j{0}; j < p2; ++j){
+        Nmean(i + p1,j + p1) += T22(i,j) * cmatrix2(j,i) * weights[k] / density;
+      }
+    }
+  }
+  
+  // M step
+  for (int i{0}; i < p1; ++i) {
+    alpha[i] = Bmean(i,0) / sumOfWeights;
+    if (alpha[i] < 0) {
+      alpha[i] = 0;
+    }
+    T11(i,i) = 0;
+    for (int j{0}; j < p1; ++j) {
+      if (i != j) {
+        T11(i,j) = Nmean(i,j) / Zmean(i,0);
+        if (T11(i,j) < 0) {
+          T11(i,j) = 0;
+        }
+        T11(i,i) -= T11(i,j);
+      }
+    }
+    for (int j{0}; j < p2; ++j) {
+      T12(i,j) = Nmean(i,j + p1) / Zmean(i,0);
+      if (T12(i,j) < 0){
+        T12(i,j) = 0;
+      }
+      T11(i,i) -= T12(i,j);
+    }
+  }
+  for (int i{0}; i < p2; ++i) {
+    exitvec(i,0) = Nmean(i + p1,p) / Zmean(i + p1,0);
+    if (exitvec(i,0) < 0) {
+      exitvec(i,0) = 0;
+    }
+    T22(i,i) = -exitvec(i,0);
+    for (int j{0}; j < p2; ++j) {
+      if (i != j) {
+        T22(i,j) = Nmean(i + p1,j + p1) / Zmean(i + p1,0);
+        if (T22(i,j) < 0){
+          T22(i,j) = 0;
+        }
+        T22(i,i) -= T22(i,j);
+      }
+    }
+  }
+  
+}
+
+

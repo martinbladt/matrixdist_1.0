@@ -66,6 +66,12 @@ reversTransformData <- function(observations, weights, beta) {
     .Call(`_matrixdist_reversTransformData`, observations, weights, beta)
 }
 
+#'  EM for a Bivariate PH fit
+#'  
+EMstep_bivph <- function(observations, weights, alpha, T11, T12, T22) {
+    invisible(.Call(`_matrixdist_EMstep_bivph`, observations, weights, alpha, T11, T12, T22))
+}
+
 #' Embeded Markov chain of a sub-intensity matrix
 #' 
 #' Returns the transition probabilities of the embeded Markov chain determined the sub-intensity matrix 

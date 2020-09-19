@@ -184,6 +184,21 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// EMstep_bivph
+void EMstep_bivph(const NumericMatrix& observations, const NumericVector& weights, NumericVector& alpha, NumericMatrix& T11, NumericMatrix& T12, NumericMatrix& T22);
+RcppExport SEXP _matrixdist_EMstep_bivph(SEXP observationsSEXP, SEXP weightsSEXP, SEXP alphaSEXP, SEXP T11SEXP, SEXP T12SEXP, SEXP T22SEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const NumericMatrix& >::type observations(observationsSEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type weights(weightsSEXP);
+    Rcpp::traits::input_parameter< NumericVector& >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix& >::type T11(T11SEXP);
+    Rcpp::traits::input_parameter< NumericMatrix& >::type T12(T12SEXP);
+    Rcpp::traits::input_parameter< NumericMatrix& >::type T22(T22SEXP);
+    EMstep_bivph(observations, weights, alpha, T11, T12, T22);
+    return R_NilValue;
+END_RCPP
+}
 // embeddedMC
 NumericMatrix embeddedMC(NumericMatrix T);
 RcppExport SEXP _matrixdist_embeddedMC(SEXP TSEXP) {
@@ -798,6 +813,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_logLikelihoodMGomp_RK", (DL_FUNC) &_matrixdist_logLikelihoodMGomp_RK, 8},
     {"_matrixdist_logLikelihoodMGEV_RK", (DL_FUNC) &_matrixdist_logLikelihoodMGEV_RK, 8},
     {"_matrixdist_reversTransformData", (DL_FUNC) &_matrixdist_reversTransformData, 3},
+    {"_matrixdist_EMstep_bivph", (DL_FUNC) &_matrixdist_EMstep_bivph, 6},
     {"_matrixdist_embeddedMC", (DL_FUNC) &_matrixdist_embeddedMC, 1},
     {"_matrixdist_cumulateMatrix", (DL_FUNC) &_matrixdist_cumulateMatrix, 1},
     {"_matrixdist_cumulateVector", (DL_FUNC) &_matrixdist_cumulateVector, 1},
