@@ -61,6 +61,11 @@ logLikelihoodMGEV_RK <- function(h, pi, T, beta, obs, weight, rcens, rcweight) {
     .Call(`_matrixdist_logLikelihoodMGEV_RK`, h, pi, T, beta, obs, weight, rcens, rcweight)
 }
 
+#' Applies the inverse of the GEV but giving back the vector in reverse order
+reversTransformData <- function(observations, weights, beta) {
+    .Call(`_matrixdist_reversTransformData`, observations, weights, beta)
+}
+
 #' Embeded Markov chain of a sub-intensity matrix
 #' 
 #' Returns the transition probabilities of the embeded Markov chain determined the sub-intensity matrix 

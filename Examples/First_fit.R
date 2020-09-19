@@ -35,7 +35,7 @@ plot(data)
 
 evmix::hillplot(data)
 
-iB <- fit(iA, data, stepsEM = 100)
+iB <- fit(iA, data, stepsEM = 400)
 
 iB
 
@@ -67,7 +67,7 @@ iF <- fit(iE, data, stepsEM = 300)
 
 iF
 
-#iG <- iph(A, gfun = "GEVD", gfun_pars = c(1, 1, 2)) #this crashes R
+iG <- iph(A, gfun = "GEVD", gfun_pars = c(1, 1, 2)) #this crashes R
 
 iG
 

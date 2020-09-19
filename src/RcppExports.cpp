@@ -171,6 +171,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// reversTransformData
+List reversTransformData(const NumericVector& observations, const NumericVector& weights, const NumericVector& beta);
+RcppExport SEXP _matrixdist_reversTransformData(SEXP observationsSEXP, SEXP weightsSEXP, SEXP betaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const NumericVector& >::type observations(observationsSEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type weights(weightsSEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type beta(betaSEXP);
+    rcpp_result_gen = Rcpp::wrap(reversTransformData(observations, weights, beta));
+    return rcpp_result_gen;
+END_RCPP
+}
 // embeddedMC
 NumericMatrix embeddedMC(NumericMatrix T);
 RcppExport SEXP _matrixdist_embeddedMC(SEXP TSEXP) {
@@ -784,6 +797,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_logLikelihoodMPar_RK", (DL_FUNC) &_matrixdist_logLikelihoodMPar_RK, 8},
     {"_matrixdist_logLikelihoodMGomp_RK", (DL_FUNC) &_matrixdist_logLikelihoodMGomp_RK, 8},
     {"_matrixdist_logLikelihoodMGEV_RK", (DL_FUNC) &_matrixdist_logLikelihoodMGEV_RK, 8},
+    {"_matrixdist_reversTransformData", (DL_FUNC) &_matrixdist_reversTransformData, 3},
     {"_matrixdist_embeddedMC", (DL_FUNC) &_matrixdist_embeddedMC, 1},
     {"_matrixdist_cumulateMatrix", (DL_FUNC) &_matrixdist_cumulateMatrix, 1},
     {"_matrixdist_cumulateVector", (DL_FUNC) &_matrixdist_cumulateVector, 1},
