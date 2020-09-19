@@ -253,7 +253,7 @@ NumericVector iphcdf(NumericVector x, NumericVector pi, NumericMatrix T, Functio
 //' beta <- 0.5
 //' mweibullden(0.5, alpha, T, beta) 
 // [[Rcpp::export]]
-NumericVector mweibullden(NumericVector x, NumericVector pi, NumericMatrix T, double beta) {
+NumericVector mWeibullden(NumericVector x, NumericVector pi, NumericMatrix T, double beta) {
   
   NumericVector density(x.size());
   
@@ -290,7 +290,7 @@ NumericVector mweibullden(NumericVector x, NumericVector pi, NumericMatrix T, do
 //' mweibullcdf(0.5, alpha, T, beta) 
 //' mweibullcdf(0.5, alpha, T, beta, FALSE) 
 // [[Rcpp::export]]
-NumericVector mweibullcdf(NumericVector x, NumericVector pi, NumericMatrix T, double beta, bool lower_tail = true) {
+NumericVector mWeibullcdf(NumericVector x, NumericVector pi, NumericMatrix T, double beta, bool lower_tail = true) {
   
   NumericVector cdf(x.size());
   
@@ -337,7 +337,7 @@ NumericVector RunFunction(NumericVector a, Function func)
 //' beta <- 0.5
 //' mparetoden(0.5, alpha, T, beta) 
 // [[Rcpp::export]]
-NumericVector mparetoden(NumericVector x, NumericVector pi, NumericMatrix T, double beta) {
+NumericVector mParetoden(NumericVector x, NumericVector pi, NumericMatrix T, double beta) {
   
   NumericVector density(x.size());
   
@@ -374,7 +374,7 @@ NumericVector mparetoden(NumericVector x, NumericVector pi, NumericMatrix T, dou
 //' mparetocdf(0.5, alpha, T, beta) 
 //' mparetocdf(0.5, alpha, T, beta, FALSE) 
 // [[Rcpp::export]]
-NumericVector mparetocdf(NumericVector x, NumericVector pi, NumericMatrix T, double beta, bool lower_tail = true) {
+NumericVector mParetocdf(NumericVector x, NumericVector pi, NumericMatrix T, double beta, bool lower_tail = true) {
   
   NumericVector cdf(x.size());
   
@@ -414,7 +414,7 @@ NumericVector mparetocdf(NumericVector x, NumericVector pi, NumericMatrix T, dou
 //' beta <- 0.5
 //' mgompertzden(0.5, alpha, T, beta) 
 // [[Rcpp::export]]
-NumericVector mgompertzden(NumericVector x, NumericVector pi, NumericMatrix T, double beta) {
+NumericVector mGompertzden(NumericVector x, NumericVector pi, NumericMatrix T, double beta) {
   
   NumericVector density(x.size());
   
@@ -451,7 +451,7 @@ NumericVector mgompertzden(NumericVector x, NumericVector pi, NumericMatrix T, d
 //' mgompertzcdf(0.5, alpha, T, beta) 
 //' mgompertzcdf(0.5, alpha, T, beta, FALSE) 
 // [[Rcpp::export]]
-NumericVector mgompertzcdf(NumericVector x, NumericVector pi, NumericMatrix T, double beta, bool lower_tail = true) {
+NumericVector mGompertzcdf(NumericVector x, NumericVector pi, NumericMatrix T, double beta, bool lower_tail = true) {
   
   NumericVector cdf(x.size());
   
@@ -494,7 +494,7 @@ NumericVector mgompertzcdf(NumericVector x, NumericVector pi, NumericMatrix T, d
 //' xi <- 0.5
 //' mGEVden(0.5, alpha, T, mu, sigma, xi) 
 // [[Rcpp::export]]
-NumericVector mGEVden(NumericVector x, NumericVector pi, NumericMatrix T, double mu, double sigma, double xi) {
+NumericVector mGEVDden(NumericVector x, NumericVector pi, NumericMatrix T, double mu, double sigma, double xi) {
   
   NumericVector density(x.size());
   
@@ -533,7 +533,7 @@ NumericVector mGEVden(NumericVector x, NumericVector pi, NumericMatrix T, double
 //' mGEVcdf(0.5, alpha, T, mu, sigma, xi) 
 //' mGEVcdf(0.5, alpha, T, mu, sigma, xi, FALSE) 
 // [[Rcpp::export]]
-NumericVector mGEVcdf(NumericVector x, NumericVector pi, NumericMatrix T, double mu, double sigma, double xi, bool lower_tail = true) {
+NumericVector mGEVDcdf(NumericVector x, NumericVector pi, NumericMatrix T, double mu, double sigma, double xi, bool lower_tail = true) {
   
   NumericVector cdf(x.size());
   

@@ -117,7 +117,8 @@ setMethod("r", c(x = "iph"), function(x, n = 1000) {
 #' @examples
 #'
 setMethod("d", c(x = "iph"), function(x, y = seq(0, 5, length.out = 100)) {
-  dens <- 55555555555555555
+  fn <- eval(parse(text = paste("m", x@gfun$name, "den", sep = "")))
+  dens <- fn(y, x@ph@pars$alpha, x@ph@pars$S, x@gfun$pars)
   return(cbind(y = y, dens = dens))
 })
 
@@ -131,7 +132,10 @@ setMethod("d", c(x = "iph"), function(x, y = seq(0, 5, length.out = 100)) {
 #'
 #' @examples
 #'
-setMethod("p", c(x = "iph"), function(x, q = seq(0, 5, length.out = 100)) {
-  cdf <- 5555555555555555
+setMethod("p", c(x = "iph"), function(x, 
+                                      q = seq(0, 5, length.out = 100),
+                                      lower.tail = TRUE) {
+  fn <- eval(parse(text = paste("m", x@gfun$name, "cdf", sep = "")))
+  cdf <- fn(q, x@ph@pars$alpha, x@ph@pars$S, x@gfun$pars, lower.tail)
   return(cbind(q = q, cdf = cdf))
 })

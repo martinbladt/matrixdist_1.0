@@ -340,8 +340,8 @@ iphcdf <- function(x, pi, T, g, g_inv, beta, lower_tail = TRUE) {
 #' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
 #' beta <- 0.5
 #' mweibullden(0.5, alpha, T, beta) 
-mweibullden <- function(x, pi, T, beta) {
-    .Call(`_matrixdist_mweibullden`, x, pi, T, beta)
+mWeibullden <- function(x, pi, T, beta) {
+    .Call(`_matrixdist_mWeibullden`, x, pi, T, beta)
 }
 
 #' Matrix Weibull cdf
@@ -358,8 +358,8 @@ mweibullden <- function(x, pi, T, beta) {
 #' beta <- 0.5
 #' mweibullcdf(0.5, alpha, T, beta) 
 #' mweibullcdf(0.5, alpha, T, beta, FALSE) 
-mweibullcdf <- function(x, pi, T, beta, lower_tail = TRUE) {
-    .Call(`_matrixdist_mweibullcdf`, x, pi, T, beta, lower_tail)
+mWeibullcdf <- function(x, pi, T, beta, lower_tail = TRUE) {
+    .Call(`_matrixdist_mWeibullcdf`, x, pi, T, beta, lower_tail)
 }
 
 RunFunction <- function(a, func) {
@@ -379,8 +379,8 @@ RunFunction <- function(a, func) {
 #' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
 #' beta <- 0.5
 #' mparetoden(0.5, alpha, T, beta) 
-mparetoden <- function(x, pi, T, beta) {
-    .Call(`_matrixdist_mparetoden`, x, pi, T, beta)
+mParetoden <- function(x, pi, T, beta) {
+    .Call(`_matrixdist_mParetoden`, x, pi, T, beta)
 }
 
 #' Matrix Pareto cdf
@@ -397,8 +397,8 @@ mparetoden <- function(x, pi, T, beta) {
 #' beta <- 0.5
 #' mparetocdf(0.5, alpha, T, beta) 
 #' mparetocdf(0.5, alpha, T, beta, FALSE) 
-mparetocdf <- function(x, pi, T, beta, lower_tail = TRUE) {
-    .Call(`_matrixdist_mparetocdf`, x, pi, T, beta, lower_tail)
+mParetocdf <- function(x, pi, T, beta, lower_tail = TRUE) {
+    .Call(`_matrixdist_mParetocdf`, x, pi, T, beta, lower_tail)
 }
 
 #' Matrix Gompertz density
@@ -414,8 +414,8 @@ mparetocdf <- function(x, pi, T, beta, lower_tail = TRUE) {
 #' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
 #' beta <- 0.5
 #' mgompertzden(0.5, alpha, T, beta) 
-mgompertzden <- function(x, pi, T, beta) {
-    .Call(`_matrixdist_mgompertzden`, x, pi, T, beta)
+mGompertzden <- function(x, pi, T, beta) {
+    .Call(`_matrixdist_mGompertzden`, x, pi, T, beta)
 }
 
 #' Matrix Gompertz cdf
@@ -432,8 +432,8 @@ mgompertzden <- function(x, pi, T, beta) {
 #' beta <- 0.5
 #' mgompertzcdf(0.5, alpha, T, beta) 
 #' mgompertzcdf(0.5, alpha, T, beta, FALSE) 
-mgompertzcdf <- function(x, pi, T, beta, lower_tail = TRUE) {
-    .Call(`_matrixdist_mgompertzcdf`, x, pi, T, beta, lower_tail)
+mGompertzcdf <- function(x, pi, T, beta, lower_tail = TRUE) {
+    .Call(`_matrixdist_mGompertzcdf`, x, pi, T, beta, lower_tail)
 }
 
 #' Matrix GEV density
@@ -452,8 +452,8 @@ mgompertzcdf <- function(x, pi, T, beta, lower_tail = TRUE) {
 #' sigma <- 2
 #' xi <- 0.5
 #' mGEVden(0.5, alpha, T, mu, sigma, xi) 
-mGEVden <- function(x, pi, T, mu, sigma, xi) {
-    .Call(`_matrixdist_mGEVden`, x, pi, T, mu, sigma, xi)
+mGEVDden <- function(x, pi, T, mu, sigma, xi) {
+    .Call(`_matrixdist_mGEVDden`, x, pi, T, mu, sigma, xi)
 }
 
 #' Matrix GEV cdf
@@ -472,8 +472,8 @@ mGEVden <- function(x, pi, T, mu, sigma, xi) {
 #' xi <- 0.5
 #' mGEVcdf(0.5, alpha, T, mu, sigma, xi) 
 #' mGEVcdf(0.5, alpha, T, mu, sigma, xi, FALSE) 
-mGEVcdf <- function(x, pi, T, mu, sigma, xi, lower_tail = TRUE) {
-    .Call(`_matrixdist_mGEVcdf`, x, pi, T, mu, sigma, xi, lower_tail)
+mGEVDcdf <- function(x, pi, T, mu, sigma, xi, lower_tail = TRUE) {
+    .Call(`_matrixdist_mGEVDcdf`, x, pi, T, mu, sigma, xi, lower_tail)
 }
 
 #' Bivariate phase-type joint density

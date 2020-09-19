@@ -39,6 +39,9 @@ iB <- fit(iA, data, stepsEM = 400)
 
 iB
 
+d(iB, y = c(1, 2, 3))
+p(iB, q = c(1, 2, 3))
+
 iC <- iph(A, gfun = "Pareto", gfun_pars = 2)
 
 iC
