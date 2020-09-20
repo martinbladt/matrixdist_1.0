@@ -526,6 +526,70 @@ bivphtail <- function(x, alpha, T11, T12, T22) {
     .Call(`_matrixdist_bivphtail`, x, alpha, T11, T12, T22)
 }
 
+#' Bivariate matrix Weibull joint density
+#' 
+#' @examples
+#' alpha <- c(0.15, 0.85)
+#' T11 <- matrix(c(c(-2,9),c(0,-11)), nrow = 2, ncol = 2)
+#' T12 <- matrix(c(c(2,0),c(0,2)), nrow = 2, ncol = 2)
+#' T22 <- matrix(c(c(-1,0),c(0.5,-5)), nrow = 2, ncol = 2)
+#' beta <- c(0.5, 0.7)
+#' x1 <- matrix(c(0.5,2), ncol=2) 
+#' x2 <- matrix(c(c(0.5,1), c(2, 1.5)), ncol=2) 
+#' bivmWeibden(x1, alpha, T11, T12, T22, beta) 
+#' bivmWeibden(x2, alpha, T11, T12, T22, beta) 
+bivmWeibden <- function(x, alpha, T11, T12, T22, beta) {
+    .Call(`_matrixdist_bivmWeibden`, x, alpha, T11, T12, T22, beta)
+}
+
+#' Bivariate matrix Weibull joint tail
+#' 
+#' @examples
+#' alpha <- c(0.15, 0.85)
+#' T11 <- matrix(c(c(-2,9),c(0,-11)), nrow = 2, ncol = 2)
+#' T12 <- matrix(c(c(2,0),c(0,2)), nrow = 2, ncol = 2)
+#' T22 <- matrix(c(c(-1,0),c(0.5,-5)), nrow = 2, ncol = 2)
+#' beta <- c(0.5, 0.7)
+#' x1 <- matrix(c(0.5,1), ncol=2) 
+#' x2 <- matrix(c(c(0.5,1), c(2, 1.5)), ncol=2) 
+#' bimWeibtail(x1, alpha, T11, T12, T22, beta) 
+#' bimWeibtail(x2, alpha, T11, T12, T22, beta) 
+bimWeibtail <- function(x, alpha, T11, T12, T22, beta) {
+    .Call(`_matrixdist_bimWeibtail`, x, alpha, T11, T12, T22, beta)
+}
+
+#' Bivariate matrix Pareto joint density
+#' 
+#' @examples
+#' alpha <- c(0.15, 0.85)
+#' T11 <- matrix(c(c(-2,9),c(0,-11)), nrow = 2, ncol = 2)
+#' T12 <- matrix(c(c(2,0),c(0,2)), nrow = 2, ncol = 2)
+#' T22 <- matrix(c(c(-1,0),c(0.5,-5)), nrow = 2, ncol = 2)
+#' beta <- c(2, 4)
+#' x1 <- matrix(c(0.5,2), ncol=2) 
+#' x2 <- matrix(c(c(0.5,1), c(2, 1.5)), ncol=2) 
+#' bivmParden(x1, alpha, T11, T12, T22, beta) 
+#' bivmParden(x2, alpha, T11, T12, T22, beta) 
+bivmParden <- function(x, alpha, T11, T12, T22, beta) {
+    .Call(`_matrixdist_bivmParden`, x, alpha, T11, T12, T22, beta)
+}
+
+#' Bivariate matrix Weibull joint tail
+#' 
+#' @examples
+#' alpha <- c(0.15, 0.85)
+#' T11 <- matrix(c(c(-2,9),c(0,-11)), nrow = 2, ncol = 2)
+#' T12 <- matrix(c(c(2,0),c(0,2)), nrow = 2, ncol = 2)
+#' T22 <- matrix(c(c(-1,0),c(0.5,-5)), nrow = 2, ncol = 2)
+#' beta <- c(2, 4)
+#' x1 <- matrix(c(0.5,1), ncol=2) 
+#' x2 <- matrix(c(c(0.5,1), c(2, 1.5)), ncol=2) 
+#' bimPartail(x1, alpha, T11, T12, T22, beta) 
+#' bimPartail(x2, alpha, T11, T12, T22, beta) 
+bimPartail <- function(x, alpha, T11, T12, T22, beta) {
+    .Call(`_matrixdist_bimPartail`, x, alpha, T11, T12, T22, beta)
+}
+
 #' Pi and T of a linear combination of a MPH*
 #' 
 #' @examples

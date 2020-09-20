@@ -622,6 +622,140 @@ NumericVector bivphtail(NumericMatrix x, NumericVector alpha, NumericMatrix T11,
 }
 
 
+
+//' Bivariate matrix Weibull joint density
+//' 
+//' @examples
+//' alpha <- c(0.15, 0.85)
+//' T11 <- matrix(c(c(-2,9),c(0,-11)), nrow = 2, ncol = 2)
+//' T12 <- matrix(c(c(2,0),c(0,2)), nrow = 2, ncol = 2)
+//' T22 <- matrix(c(c(-1,0),c(0.5,-5)), nrow = 2, ncol = 2)
+//' beta <- c(0.5, 0.7)
+//' x1 <- matrix(c(0.5,2), ncol=2) 
+//' x2 <- matrix(c(c(0.5,1), c(2, 1.5)), ncol=2) 
+//' bivmWeibden(x1, alpha, T11, T12, T22, beta) 
+//' bivmWeibden(x2, alpha, T11, T12, T22, beta) 
+// [[Rcpp::export]]
+NumericVector bivmWeibden(NumericMatrix x, NumericVector alpha, NumericMatrix T11, NumericMatrix T12, NumericMatrix T22, NumericVector beta) {
+  
+  long N{x.nrow()};
+  long p2{T22.nrow()};
+  
+  NumericVector density(N);
+  
+  NumericMatrix m_alpha(1, alpha.size(), alpha.begin());
+  NumericVector e(p2, 1);
+  NumericMatrix m_e(p2, 1, e.begin());
+  NumericMatrix m_t = matrix_product(T22 * (-1), m_e);
+  
+  for (int k = 0; k < N; ++k){
+    density[k] = matrix_product(m_alpha, matrix_product(matrix_exponential(T11 * pow(x(k,0), beta[0])), matrix_product(T12, matrix_product(matrix_exponential(T22 * pow(x(k,1), beta[1])), m_t))))(0,0) * beta[0] *  beta[1] * pow(x(k,0), beta[0] - 1) * pow(x(k,1), beta[1] - 1);
+  }
+  
+  return density;
+}
+
+
+//' Bivariate matrix Weibull joint tail
+//' 
+//' @examples
+//' alpha <- c(0.15, 0.85)
+//' T11 <- matrix(c(c(-2,9),c(0,-11)), nrow = 2, ncol = 2)
+//' T12 <- matrix(c(c(2,0),c(0,2)), nrow = 2, ncol = 2)
+//' T22 <- matrix(c(c(-1,0),c(0.5,-5)), nrow = 2, ncol = 2)
+//' beta <- c(0.5, 0.7)
+//' x1 <- matrix(c(0.5,1), ncol=2) 
+//' x2 <- matrix(c(c(0.5,1), c(2, 1.5)), ncol=2) 
+//' bimWeibtail(x1, alpha, T11, T12, T22, beta) 
+//' bimWeibtail(x2, alpha, T11, T12, T22, beta) 
+// [[Rcpp::export]]
+NumericVector bimWeibtail(NumericMatrix x, NumericVector alpha, NumericMatrix T11, NumericMatrix T12, NumericMatrix T22, NumericVector beta) {
+  
+  long N{x.nrow()};
+  long p2{T22.nrow()};
+  
+  NumericVector tail(N);
+  
+  NumericMatrix m_alpha(1, alpha.size(), alpha.begin());
+  NumericVector e(p2, 1);
+  NumericMatrix m_e(p2, 1, e.begin());
+  NumericMatrix m_t = matrix_product(T22 * (-1), m_e);
+  
+  for (int k = 0; k < N; ++k){
+    tail[k] = matrix_product(m_alpha, matrix_product(matrix_inverse(T11 * (-1.0)), matrix_product(matrix_exponential(T11 * pow(x(k,0), beta[0])), matrix_product(T12, matrix_product( matrix_exponential(T22 * pow(x(k,1), beta[1])), m_e)))))(0,0);
+  }
+  
+  return tail;
+}
+
+
+//' Bivariate matrix Pareto joint density
+//' 
+//' @examples
+//' alpha <- c(0.15, 0.85)
+//' T11 <- matrix(c(c(-2,9),c(0,-11)), nrow = 2, ncol = 2)
+//' T12 <- matrix(c(c(2,0),c(0,2)), nrow = 2, ncol = 2)
+//' T22 <- matrix(c(c(-1,0),c(0.5,-5)), nrow = 2, ncol = 2)
+//' beta <- c(2, 4)
+//' x1 <- matrix(c(0.5,2), ncol=2) 
+//' x2 <- matrix(c(c(0.5,1), c(2, 1.5)), ncol=2) 
+//' bivmParden(x1, alpha, T11, T12, T22, beta) 
+//' bivmParden(x2, alpha, T11, T12, T22, beta) 
+// [[Rcpp::export]]
+NumericVector bivmParden(NumericMatrix x, NumericVector alpha, NumericMatrix T11, NumericMatrix T12, NumericMatrix T22, NumericVector beta) {
+  
+  long N{x.nrow()};
+  long p2{T22.nrow()};
+  
+  NumericVector density(N);
+  
+  NumericMatrix m_alpha(1, alpha.size(), alpha.begin());
+  NumericVector e(p2, 1);
+  NumericMatrix m_e(p2, 1, e.begin());
+  NumericMatrix m_t = matrix_product(T22 * (-1), m_e);
+  
+  for (int k = 0; k < N; ++k){
+    density[k] = matrix_product(m_alpha, matrix_product(matrix_exponential(T11 * log(x(k,0) / beta[0] + 1)), matrix_product(T12, matrix_product(matrix_exponential(T22 * log(x(k,1) / beta[1] + 1)), m_t))))(0,0) / ((x(k,0) + beta[0]) * (x(k,1) + beta[1]));
+  }
+  
+  return density;
+}
+
+
+
+//' Bivariate matrix Weibull joint tail
+//' 
+//' @examples
+//' alpha <- c(0.15, 0.85)
+//' T11 <- matrix(c(c(-2,9),c(0,-11)), nrow = 2, ncol = 2)
+//' T12 <- matrix(c(c(2,0),c(0,2)), nrow = 2, ncol = 2)
+//' T22 <- matrix(c(c(-1,0),c(0.5,-5)), nrow = 2, ncol = 2)
+//' beta <- c(2, 4)
+//' x1 <- matrix(c(0.5,1), ncol=2) 
+//' x2 <- matrix(c(c(0.5,1), c(2, 1.5)), ncol=2) 
+//' bimPartail(x1, alpha, T11, T12, T22, beta) 
+//' bimPartail(x2, alpha, T11, T12, T22, beta) 
+// [[Rcpp::export]]
+NumericVector bimPartail(NumericMatrix x, NumericVector alpha, NumericMatrix T11, NumericMatrix T12, NumericMatrix T22, NumericVector beta) {
+  
+  long N{x.nrow()};
+  long p2{T22.nrow()};
+  
+  NumericVector tail(N);
+  
+  NumericMatrix m_alpha(1, alpha.size(), alpha.begin());
+  NumericVector e(p2, 1);
+  NumericMatrix m_e(p2, 1, e.begin());
+  NumericMatrix m_t = matrix_product(T22 * (-1), m_e);
+  
+  for (int k = 0; k < N; ++k){
+    tail[k] = matrix_product(m_alpha, matrix_product(matrix_inverse(T11 * (-1.0)), matrix_product(matrix_exponential(T11 * log(x(k,0) / beta[0] + 1)), matrix_product(T12, matrix_product( matrix_exponential(T22 * log(x(k,1) / beta[1] + 1)), m_e)))))(0,0);
+  }
+  
+  return tail;
+}
+
+
 //' Pi and T of a linear combination of a MPH*
 //' 
 //' @examples

@@ -595,6 +595,70 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// bivmWeibden
+NumericVector bivmWeibden(NumericMatrix x, NumericVector alpha, NumericMatrix T11, NumericMatrix T12, NumericMatrix T22, NumericVector beta);
+RcppExport SEXP _matrixdist_bivmWeibden(SEXP xSEXP, SEXP alphaSEXP, SEXP T11SEXP, SEXP T12SEXP, SEXP T22SEXP, SEXP betaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type T11(T11SEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type T12(T12SEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type T22(T22SEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type beta(betaSEXP);
+    rcpp_result_gen = Rcpp::wrap(bivmWeibden(x, alpha, T11, T12, T22, beta));
+    return rcpp_result_gen;
+END_RCPP
+}
+// bimWeibtail
+NumericVector bimWeibtail(NumericMatrix x, NumericVector alpha, NumericMatrix T11, NumericMatrix T12, NumericMatrix T22, NumericVector beta);
+RcppExport SEXP _matrixdist_bimWeibtail(SEXP xSEXP, SEXP alphaSEXP, SEXP T11SEXP, SEXP T12SEXP, SEXP T22SEXP, SEXP betaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type T11(T11SEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type T12(T12SEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type T22(T22SEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type beta(betaSEXP);
+    rcpp_result_gen = Rcpp::wrap(bimWeibtail(x, alpha, T11, T12, T22, beta));
+    return rcpp_result_gen;
+END_RCPP
+}
+// bivmParden
+NumericVector bivmParden(NumericMatrix x, NumericVector alpha, NumericMatrix T11, NumericMatrix T12, NumericMatrix T22, NumericVector beta);
+RcppExport SEXP _matrixdist_bivmParden(SEXP xSEXP, SEXP alphaSEXP, SEXP T11SEXP, SEXP T12SEXP, SEXP T22SEXP, SEXP betaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type T11(T11SEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type T12(T12SEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type T22(T22SEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type beta(betaSEXP);
+    rcpp_result_gen = Rcpp::wrap(bivmParden(x, alpha, T11, T12, T22, beta));
+    return rcpp_result_gen;
+END_RCPP
+}
+// bimPartail
+NumericVector bimPartail(NumericMatrix x, NumericVector alpha, NumericMatrix T11, NumericMatrix T12, NumericMatrix T22, NumericVector beta);
+RcppExport SEXP _matrixdist_bimPartail(SEXP xSEXP, SEXP alphaSEXP, SEXP T11SEXP, SEXP T12SEXP, SEXP T22SEXP, SEXP betaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type T11(T11SEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type T12(T12SEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type T22(T22SEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type beta(betaSEXP);
+    rcpp_result_gen = Rcpp::wrap(bimPartail(x, alpha, T11, T12, T22, beta));
+    return rcpp_result_gen;
+END_RCPP
+}
 // linear_combination
 List linear_combination(NumericVector w, NumericVector pi, NumericMatrix T, NumericMatrix R);
 RcppExport SEXP _matrixdist_linear_combination(SEXP wSEXP, SEXP piSEXP, SEXP TSEXP, SEXP RSEXP) {
@@ -886,6 +950,10 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_mGEVDcdf", (DL_FUNC) &_matrixdist_mGEVDcdf, 7},
     {"_matrixdist_bivphden", (DL_FUNC) &_matrixdist_bivphden, 5},
     {"_matrixdist_bivphtail", (DL_FUNC) &_matrixdist_bivphtail, 5},
+    {"_matrixdist_bivmWeibden", (DL_FUNC) &_matrixdist_bivmWeibden, 6},
+    {"_matrixdist_bimWeibtail", (DL_FUNC) &_matrixdist_bimWeibtail, 6},
+    {"_matrixdist_bivmParden", (DL_FUNC) &_matrixdist_bivmParden, 6},
+    {"_matrixdist_bimPartail", (DL_FUNC) &_matrixdist_bimPartail, 6},
     {"_matrixdist_linear_combination", (DL_FUNC) &_matrixdist_linear_combination, 4},
     {"_matrixdist_jointMGF", (DL_FUNC) &_matrixdist_jointMGF, 4},
     {"_matrixdist_matrix_product", (DL_FUNC) &_matrixdist_matrix_product, 2},
