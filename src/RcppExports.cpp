@@ -593,6 +593,20 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// jointMGF
+double jointMGF(const NumericVector& w, NumericVector pi, NumericMatrix T, NumericMatrix R);
+RcppExport SEXP _matrixdist_jointMGF(SEXP wSEXP, SEXP piSEXP, SEXP TSEXP, SEXP RSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const NumericVector& >::type w(wSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type pi(piSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type T(TSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type R(RSEXP);
+    rcpp_result_gen = Rcpp::wrap(jointMGF(w, pi, T, R));
+    return rcpp_result_gen;
+END_RCPP
+}
 // matrix_product
 NumericMatrix matrix_product(NumericMatrix a, NumericMatrix b);
 RcppExport SEXP _matrixdist_matrix_product(SEXP aSEXP, SEXP bSEXP) {
@@ -856,6 +870,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_bivphden", (DL_FUNC) &_matrixdist_bivphden, 5},
     {"_matrixdist_bivphtail", (DL_FUNC) &_matrixdist_bivphtail, 5},
     {"_matrixdist_linear_combination", (DL_FUNC) &_matrixdist_linear_combination, 4},
+    {"_matrixdist_jointMGF", (DL_FUNC) &_matrixdist_jointMGF, 4},
     {"_matrixdist_matrix_product", (DL_FUNC) &_matrixdist_matrix_product, 2},
     {"_matrixdist_matrix_sum", (DL_FUNC) &_matrixdist_matrix_sum, 2},
     {"_matrixdist_LInf_norm", (DL_FUNC) &_matrixdist_LInf_norm, 1},

@@ -735,4 +735,26 @@ List linear_combination(NumericVector w, NumericVector pi, NumericMatrix T, Nume
   return L;
 }
 
+//' Joint MGF of a MPH
+// [[Rcpp::export]]
+double jointMGF(const NumericVector & w, NumericVector pi, NumericMatrix T, NumericMatrix R) {
+  long p{T.nrow()};
+  
+  NumericMatrix m_pi(1, pi.size(), pi.begin());
+  NumericVector e(p, 1);
+  NumericMatrix m_e(p, 1, e.begin());
+  NumericMatrix m_t = matrix_product(T * (-1), m_e);
+  
+  NumericMatrix m_w(w.size(), 1, w.begin());
+  
+  NumericMatrix Rw(matrix_product(R, m_w));
+  
+  NumericMatrix diagonal(p,p);
+  
+  for (int i{0}; i < p; ++i) {
+    diagonal(i,i) = -Rw(i,0);
+  }
+  return matrix_product(m_pi, matrix_product(matrix_inverse(matrix_sum(diagonal, T * (-1.0))), m_t))(0,0);
+}
+
 

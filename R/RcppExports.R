@@ -526,6 +526,11 @@ linear_combination <- function(w, pi, T, R) {
     .Call(`_matrixdist_linear_combination`, w, pi, T, R)
 }
 
+#' Joint MGF of a MPH
+jointMGF <- function(w, pi, T, R) {
+    .Call(`_matrixdist_jointMGF`, w, pi, T, R)
+}
+
 #' Product of two matrices
 #' 
 #' Computes C = A * B
