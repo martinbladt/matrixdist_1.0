@@ -1000,7 +1000,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_bimWeibulltail", (DL_FUNC) &_matrixdist_bimWeibulltail, 6},
     {"_matrixdist_bivmParetoden", (DL_FUNC) &_matrixdist_bivmParetoden, 6},
     {"_matrixdist_bimParetotail", (DL_FUNC) &_matrixdist_bimParetotail, 6},
-    {"_matrixdist_linear_combination", (DL_FUNC) &_matrixdist_linear_combination, 4},
     {"_matrixdist_jointMGF", (DL_FUNC) &_matrixdist_jointMGF, 4},
     {"_matrixdist_matrix_product", (DL_FUNC) &_matrixdist_matrix_product, 2},
     {"_matrixdist_matrix_sum", (DL_FUNC) &_matrixdist_matrix_sum, 2},
