@@ -218,6 +218,26 @@ rmph <- function(n, pi, T, R) {
     .Call(`_matrixdist_rmph`, n, pi, T, R)
 }
 
+#' Random Inhomogeneous MPH*
+#' 
+#' Generates a sample of size \code{n} from an Inhomogeneous MPH* distribution with parameters \code{pi}, \code{T} and \code{R}
+#' @param n Sample size
+#' @param dist_type Type of distribution: "Weibull" "Pareto"
+#' @param pi Initial probabilities
+#' @param T sub-intensity matrix
+#' @param beta parameters of the transformations
+#' @return The simulated sample
+#' @examples
+#' alpha <- c(0.5, 0.3, 0.2)
+#' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
+#' R <- matrix(c(c(1,0,0.8),c(0,1,0.2)), nrow = 3, ncol = 2)
+#' beta <- c(0.4, 0.7)
+#' n <- 10
+#' rimph(n, "Weibull", alpha, T, R, beta) 
+rimph <- function(n, dist_type, pi, T, R, beta) {
+    .Call(`_matrixdist_rimph`, n, dist_type, pi, T, R, beta)
+}
+
 #' Phase-type density
 #' 
 #' Computes the density of phase-type distribution with parameters \code{pi} and \code{T} at \code{x}

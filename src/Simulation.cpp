@@ -338,3 +338,57 @@ NumericMatrix rmph(int n, NumericVector pi, NumericMatrix T, NumericMatrix R) {
 }
 
 
+
+//' Random Inhomogeneous MPH*
+//' 
+//' Generates a sample of size \code{n} from an Inhomogeneous MPH* distribution with parameters \code{pi}, \code{T} and \code{R}
+//' @param n Sample size
+//' @param dist_type Type of distribution: "Weibull" "Pareto"
+//' @param pi Initial probabilities
+//' @param T sub-intensity matrix
+//' @param beta parameters of the transformations
+//' @return The simulated sample
+//' @examples
+//' alpha <- c(0.5, 0.3, 0.2)
+//' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
+//' R <- matrix(c(c(1,0,0.8),c(0,1,0.2)), nrow = 3, ncol = 2)
+//' beta <- c(0.4, 0.7)
+//' n <- 10
+//' rimph(n, "Weibull", alpha, T, R, beta) 
+// [[Rcpp::export]]
+NumericMatrix rimph(int n, String dist_type, NumericVector pi, NumericMatrix T, NumericMatrix R, NumericVector beta) {
+  long dim{R.ncol()};
+  
+  NumericMatrix sample(n, dim);
+  
+  NumericMatrix cumulatedEmbeddedMC = cumulateMatrix(embeddedMC(T));
+  NumericVector cumulatedPi = cumulateVector(pi);
+  
+  int p = pi.size();
+  long state = 0;
+  for (int i = 0; i < n; ++i) {
+    double time = 0.0;
+    state = initialState(cumulatedPi, runif(1)[0]);
+    while (state != p) {
+      time = log(1.0 - runif(1)[0]) / T(state,state);
+      for (int j{0}; j < dim; ++j) {
+        sample(i,j) += R(state, j) * time;
+      }
+      state = newState(state, cumulatedEmbeddedMC, runif(1)[0]);
+    }
+    for (int j{0}; j < dim; ++j) {
+      if (dist_type == "Pareto") {
+        sample(i,j) = beta[j] * (exp(sample(i,j)) - 1);
+      }
+      else if (dist_type == "Weibull") {
+        sample(i,j) = pow(sample(i,j), 1.0 / beta[j]);
+      }
+      else if (dist_type == "Gompertz") {
+        sample(i,j) = log(beta[j] * sample(i,j) + 1) / beta[j];
+      }
+    }
+  }
+  return (sample);
+}
+
+
