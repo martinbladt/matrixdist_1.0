@@ -72,6 +72,33 @@ EMstep_bivph <- function(observations, weights, alpha, T11, T12, T22) {
     invisible(.Call(`_matrixdist_EMstep_bivph`, observations, weights, alpha, T11, T12, T22))
 }
 
+#' EM using Matlab algorithm for matrix exponential
+#' 
+#' This one is slower but dont requires to order the sample
+EMstep <- function(pi, T, obs, weight, rcens, rcweight) {
+    invisible(.Call(`_matrixdist_EMstep`, pi, T, obs, weight, rcens, rcweight))
+}
+
+#' Pi and T of a linear combination of a MPH*
+#' 
+#' @examples
+#' pi <- c(0.15, 0.85, 0 ,0)
+#' T11 <- matrix(c(c(-2,9),c(0,-11)), nrow = 2, ncol = 2)
+#' T12 <- matrix(c(c(2,0),c(0,2)), nrow = 2, ncol = 2)
+#' T22 <- matrix(c(c(-1,0),c(0.5,-5)), nrow = 2, ncol = 2)
+#' T <- merge_matrices(T11, T12, T22)
+#' R <- matrix(c(c(1,1,0,0), c(0,0,1,1)), ncol=2)
+#' w1 <- c(1,0)
+#' linear_combination(w1, pi, T, R)
+#' w2 <- c(0,1)
+#' linear_combination(w2, pi, T, R)
+#' matrix(c(0.15, 0.85), ncol=2)%*%matrix_inverse(T11 * (-1))%*%T12
+#' w3 <- c(1,1)
+#' linear_combination(w3, pi, T, R)
+linear_combination <- function(w, pi, T, R) {
+    .Call(`_matrixdist_linear_combination`, w, pi, T, R)
+}
+
 #' Embeded Markov chain of a sub-intensity matrix
 #' 
 #' Returns the transition probabilities of the embeded Markov chain determined the sub-intensity matrix 
@@ -588,26 +615,6 @@ bivmParden <- function(x, alpha, T11, T12, T22, beta) {
 #' bimPartail(x2, alpha, T11, T12, T22, beta) 
 bimPartail <- function(x, alpha, T11, T12, T22, beta) {
     .Call(`_matrixdist_bimPartail`, x, alpha, T11, T12, T22, beta)
-}
-
-#' Pi and T of a linear combination of a MPH*
-#' 
-#' @examples
-#' pi <- c(0.15, 0.85, 0 ,0)
-#' T11 <- matrix(c(c(-2,9),c(0,-11)), nrow = 2, ncol = 2)
-#' T12 <- matrix(c(c(2,0),c(0,2)), nrow = 2, ncol = 2)
-#' T22 <- matrix(c(c(-1,0),c(0.5,-5)), nrow = 2, ncol = 2)
-#' T <- merge_matrices(T11, T12, T22)
-#' R <- matrix(c(c(1,1,0,0), c(0,0,1,1)), ncol=2)
-#' w1 <- c(1,0)
-#' linear_combination(w1, pi, T, R)
-#' w2 <- c(0,1)
-#' linear_combination(w2, pi, T, R)
-#' matrix(c(0.15, 0.85), ncol=2)%*%matrix_inverse(T11 * (-1))%*%T12
-#' w3 <- c(1,1)
-#' linear_combination(w3, pi, T, R)
-linear_combination <- function(w, pi, T, R) {
-    .Call(`_matrixdist_linear_combination`, w, pi, T, R)
 }
 
 #' Joint MGF of a MPH

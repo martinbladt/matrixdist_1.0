@@ -199,6 +199,35 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// EMstep
+void EMstep(NumericVector& pi, NumericMatrix& T, const NumericVector& obs, const NumericVector& weight, const NumericVector& rcens, const NumericVector& rcweight);
+RcppExport SEXP _matrixdist_EMstep(SEXP piSEXP, SEXP TSEXP, SEXP obsSEXP, SEXP weightSEXP, SEXP rcensSEXP, SEXP rcweightSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector& >::type pi(piSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix& >::type T(TSEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type obs(obsSEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type weight(weightSEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type rcens(rcensSEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type rcweight(rcweightSEXP);
+    EMstep(pi, T, obs, weight, rcens, rcweight);
+    return R_NilValue;
+END_RCPP
+}
+// linear_combination
+List linear_combination(NumericVector w, NumericVector pi, NumericMatrix T, NumericMatrix R);
+RcppExport SEXP _matrixdist_linear_combination(SEXP wSEXP, SEXP piSEXP, SEXP TSEXP, SEXP RSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type w(wSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type pi(piSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type T(TSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type R(RSEXP);
+    rcpp_result_gen = Rcpp::wrap(linear_combination(w, pi, T, R));
+    return rcpp_result_gen;
+END_RCPP
+}
 // embeddedMC
 NumericMatrix embeddedMC(NumericMatrix T);
 RcppExport SEXP _matrixdist_embeddedMC(SEXP TSEXP) {
@@ -659,20 +688,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// linear_combination
-List linear_combination(NumericVector w, NumericVector pi, NumericMatrix T, NumericMatrix R);
-RcppExport SEXP _matrixdist_linear_combination(SEXP wSEXP, SEXP piSEXP, SEXP TSEXP, SEXP RSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type w(wSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type pi(piSEXP);
-    Rcpp::traits::input_parameter< NumericMatrix >::type T(TSEXP);
-    Rcpp::traits::input_parameter< NumericMatrix >::type R(RSEXP);
-    rcpp_result_gen = Rcpp::wrap(linear_combination(w, pi, T, R));
-    return rcpp_result_gen;
-END_RCPP
-}
 // jointMGF
 double jointMGF(const NumericVector& w, NumericVector pi, NumericMatrix T, NumericMatrix R);
 RcppExport SEXP _matrixdist_jointMGF(SEXP wSEXP, SEXP piSEXP, SEXP TSEXP, SEXP RSEXP) {
@@ -922,6 +937,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_logLikelihoodMGEV_RK", (DL_FUNC) &_matrixdist_logLikelihoodMGEV_RK, 8},
     {"_matrixdist_reversTransformData", (DL_FUNC) &_matrixdist_reversTransformData, 3},
     {"_matrixdist_EMstep_bivph", (DL_FUNC) &_matrixdist_EMstep_bivph, 6},
+    {"_matrixdist_EMstep", (DL_FUNC) &_matrixdist_EMstep, 6},
+    {"_matrixdist_linear_combination", (DL_FUNC) &_matrixdist_linear_combination, 4},
     {"_matrixdist_embeddedMC", (DL_FUNC) &_matrixdist_embeddedMC, 1},
     {"_matrixdist_cumulateMatrix", (DL_FUNC) &_matrixdist_cumulateMatrix, 1},
     {"_matrixdist_cumulateVector", (DL_FUNC) &_matrixdist_cumulateVector, 1},
@@ -954,7 +971,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_bimWeibtail", (DL_FUNC) &_matrixdist_bimWeibtail, 6},
     {"_matrixdist_bivmParden", (DL_FUNC) &_matrixdist_bivmParden, 6},
     {"_matrixdist_bimPartail", (DL_FUNC) &_matrixdist_bimPartail, 6},
-    {"_matrixdist_linear_combination", (DL_FUNC) &_matrixdist_linear_combination, 4},
     {"_matrixdist_jointMGF", (DL_FUNC) &_matrixdist_jointMGF, 4},
     {"_matrixdist_matrix_product", (DL_FUNC) &_matrixdist_matrix_product, 2},
     {"_matrixdist_matrix_sum", (DL_FUNC) &_matrixdist_matrix_sum, 2},
