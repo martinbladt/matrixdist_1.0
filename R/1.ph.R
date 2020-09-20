@@ -82,7 +82,7 @@ setMethod("show", "ph", function(object) {
 #'
 #' @examples
 #'
-setMethod("r", c(x = "ph"), function(x, n = 1000) {
+setMethod("sim", c(x = "ph"), function(x, n = 1000) {
   U <- rphasetype(n, x@pars$alpha, x@pars$S)
   return(U)
 })
@@ -97,26 +97,51 @@ setMethod("r", c(x = "ph"), function(x, n = 1000) {
 #'
 #' @examples
 #'
-setMethod("d", c(x = "ph"), function(x, y = seq(0, 5, length.out = 100)) {
-  dens <- phdensity(y, x@pars$alpha, x@pars$S)
-  return(cbind(y = y, dens = dens))
+setMethod("dens", c(x = "ph"), function(x, y = seq(0, quan(x, .95)$quantile, length.out = 10)) {
+  y_inf <- (y == Inf)
+  dens <- y
+  dens[!y_inf] <- phdensity(y, x@pars$alpha, x@pars$S)
+  dens[y_inf] <- 0
+  return(list(y = y, dens = dens))
 })
 
 #' Distribution Method for phase type distributions
 #'
 #' @param x an object of class \linkS4class{ph}.
-#' @param y locations
+#' @param q locations
 #'
 #' @return CDF evaluated at locations
 #' @export
 #'
 #' @examples
 #'
-setMethod("p", c(x = "ph"), function(x, 
-                                     q = seq(0, 5, length.out = 100),
+setMethod("cdf", c(x = "ph"), function(x, 
+                                     q = seq(0, quan(x, .95)$quantile, length.out = 10),
                                      lower.tail = TRUE) {
-  cdf <- phcdf(q, x@pars$alpha, x@pars$S, lower.tail)
-  return(cbind(q = q, cdf = cdf))
+  q_inf <- (q == Inf)
+  cdf <- q
+  cdf[!q_inf] <- phcdf(q[!q_inf], x@pars$alpha, x@pars$S, lower.tail)
+  cdf[q_inf] <- as.numeric(1 * lower.tail)
+  return(list(q = q, cdf = cdf))
+})
+
+#' Quantile Method for phase type distributions
+#'
+#' @param x an object of class \linkS4class{ph}.
+#' @param p probabilities
+#'
+#' @return quantiles
+#' @export
+#'
+#' @examples
+#'
+setMethod("quan", c(x = "ph"), function(x, 
+                                     p = seq(0, 1, length.out = 10)) {
+  quan <- numeric(length(p))
+  for(i in seq_along(p)){
+    quan[i] <- uniroot(f = function(q) p[i] - cdf(x, 1/(1 - q) - 1)$cdf, interval = c(0, 1))$root
+  }
+  return(list(p = p, quantile = 1/(1 - quan) - 1))
 })
 
 #' Fit Method for ph Class

@@ -94,7 +94,7 @@ setMethod("show", "iph", function(object) {
 #'
 #' @examples
 #'
-setMethod("r", c(x = "iph"), function(x, n = 1000) {
+setMethod("sim", c(x = "iph"), function(x, n = 1000) {
   name <- x@gfun$name
   pars <- x@gfun$pars
   if (name %in% c("Pareto", "Weibull", "Gompertz")) {
@@ -116,10 +116,13 @@ setMethod("r", c(x = "iph"), function(x, n = 1000) {
 #'
 #' @examples
 #'
-setMethod("d", c(x = "iph"), function(x, y = seq(0, 5, length.out = 100)) {
+setMethod("dens", c(x = "iph"), function(x, y = seq(0, quan(x, .95)$quantile, length.out = 10)) {
   fn <- eval(parse(text = paste("m", x@gfun$name, "den", sep = "")))
-  dens <- fn(y, x@ph@pars$alpha, x@ph@pars$S, x@gfun$pars)
-  return(cbind(y = y, dens = dens))
+  y_inf <- (y == Inf)
+  dens <- y
+  dens[!y_inf] <- fn(y, x@ph@pars$alpha, x@ph@pars$S, x@gfun$pars)
+  dens[y_inf] <- 0
+  return(list(y = y, dens = dens))
 })
 
 #' Distribution Method for inhomogeneous phase type distributions
@@ -132,10 +135,13 @@ setMethod("d", c(x = "iph"), function(x, y = seq(0, 5, length.out = 100)) {
 #'
 #' @examples
 #'
-setMethod("p", c(x = "iph"), function(x, 
-                                      q = seq(0, 5, length.out = 100),
+setMethod("cdf", c(x = "iph"), function(x, 
+                                      q = seq(0, quan(x, .95)$quantile, length.out = 10),
                                       lower.tail = TRUE) {
   fn <- eval(parse(text = paste("m", x@gfun$name, "cdf", sep = "")))
-  cdf <- fn(q, x@ph@pars$alpha, x@ph@pars$S, x@gfun$pars, lower.tail)
-  return(cbind(q = q, cdf = cdf))
+  q_inf <- (q == Inf)
+  cdf <- q
+  cdf[!q_inf] <- fn(q, x@ph@pars$alpha, x@ph@pars$S, x@gfun$pars, lower.tail)
+  cdf[q_inf] <- as.numeric(1 * lower.tail)
+  return(list(q = q, cdf = cdf))
 })

@@ -9,8 +9,8 @@
 #' @export
 #'
 #'
-setGeneric("r", function(x, ...) {
-  standardGeneric("r")
+setGeneric("sim", function(x, ...) {
+  standardGeneric("sim")
 })
 
 #' New Generic for the Density of Matrix Distributions
@@ -24,8 +24,8 @@ setGeneric("r", function(x, ...) {
 #' @export
 #'
 #'
-setGeneric("d", function(x, ...) {
-  standardGeneric("d")
+setGeneric("dens", function(x, ...) {
+  standardGeneric("dens")
 })
 
 #' New Generic for the Distribution of Matrix Distributions
@@ -39,8 +39,8 @@ setGeneric("d", function(x, ...) {
 #' @export
 #'
 #'
-setGeneric("p", function(x, ...) {
-  standardGeneric("p")
+setGeneric("cdf", function(x, ...) {
+  standardGeneric("cdf")
 })
 
 #' New Generic for the Quantile of Matrix Distributions
@@ -54,8 +54,8 @@ setGeneric("p", function(x, ...) {
 #' @export
 #'
 #'
-setGeneric("q", function(x, ...) {
-  standardGeneric("q")
+setGeneric("quan", function(x, ...) {
+  standardGeneric("quan")
 })
 
 #' New Generic for Estimating Matrix Distributions

@@ -76,7 +76,7 @@ setMethod("show", "mph", function(object) {
 #'
 #' @examples
 #'
-setMethod("r", c(x = "mph"), function(x, n = 1000) {
+setMethod("sim", c(x = "mph"), function(x, n = 1000) {
   U <- rmph(n, x@ph@pars$alpha, x@ph@pars$S, x@rew$R)
   return(U)
 })

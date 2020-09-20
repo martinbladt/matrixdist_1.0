@@ -4,13 +4,13 @@ alpha <- c(0.5, 0.3, 0.2)
 S <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
 
 A <- ph(alpha, S)
-d(A, y = c(1, 2, 3))
-p(A, q = c(1, 2, 3))
-
+dens(A)
+cdf(A)
+quan(A)
 
 A
 
-data <- r(A)
+data <- sim(A)
 
 m_plot(A, data)
 m_plot(A)
@@ -29,7 +29,7 @@ iA <- iph(A, gfun = "Weibull", gfun_pars = 2)
 
 iA
 
-data <- r(iA)
+data <- sim(iA)
 
 plot(data)
 
@@ -39,8 +39,11 @@ iB <- fit(iA, data, stepsEM = 400)
 
 iB
 
-d(iB, y = c(1, 2, 3))
-p(iB, q = c(1, 2, 3))
+dens(iB)
+cdf(iB)
+quan(iB)
+
+#####
 
 iC <- iph(A, gfun = "Pareto", gfun_pars = 2)
 
