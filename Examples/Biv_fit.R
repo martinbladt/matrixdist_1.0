@@ -11,6 +11,21 @@ set.seed(1)
 x <- rmph(n, pi, T, R) 
 
 
+object <- bph(alpha, T11, T12, T22)
+dens(object, x)
+
+data <- sim(object)
+
+F1 <- fit(object, data, stepsEM = 200)
+
+obj2 <- ibph(object, gfun = "Pareto", gfun_pars = c(2, 1))
+data <- sim(obj2)
+
+F2 <- fit(obj2, data, stepsEM = 100)
+
+x <- obj2
+y <- data
+
 xweight <- rep(1, length(x[,1]))
 
 
@@ -28,7 +43,7 @@ alpha_fit <- clone_vector(mph_par$alpha)
 T11_fit <- clone_matrix(mph_par$T11)
 T12_fit <- clone_matrix(mph_par$T12)
 T22_fit <- clone_matrix(mph_par$T22)
-
+ 
 
 logLikelihood(x, alpha_fit, T11_fit, T12_fit, T22_fit)
 
@@ -62,11 +77,16 @@ n <- 100
 set.seed(1)
 x <- rimph(n, "Weibull", pi, T, R, beta) 
 
+object <- bph(alpha, T11, T12, T22)
+obj2 <- ibph(object, gfun = "Weibull", gfun_pars = beta)
+data <- x
+F2 <- fit(obj2, data, stepsEM = 100)
+
 xweight <- rep(1, length(x[,1]))
 
 
 logLikelihoodIPH <- function(x, alpha, T11, T12, T22, beta) {
-  return(sum(log(bivmWeibden(x,alpha,T11,T12,T22, beta))))
+  return(sum(log(bivmWeibullden(x,alpha,T11,T12,T22, beta))))
 }
 
 

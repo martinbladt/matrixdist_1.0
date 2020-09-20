@@ -11,12 +11,7 @@
 setClass("mph",
   contains = c("ph"),
   slots = list(
-    ph = "ph",
     rew = "list"
-  ),
-  prototype = list(
-    name = NA_character_,
-    pars = list()
   )
 )
 
@@ -32,15 +27,19 @@ setClass("mph",
 #' @export
 #'
 #' @examples
-mph <- function(ph = NULL, R = NULL, alpha = NULL, S = NULL, structure = NULL, dimension = 3) {
+mph <- function(ph = NULL, R = NULL, alpha = NULL, S = NULL, structure = NULL, p = 3, dimension = 3, variables = 2) {
   if (is.null(ph)) {
     ph <- ph(alpha = alpha, S = S, structure = structure, dimension = dimension)
   }
-  if (dim(R)[1] != dim(ph@pars$S)[1]) {
-    stop("matrix R has wrong dimension: number of rows does not match ph dimension")
+  if(all(is.null(R))){R <- random_reward(dim(ph@pars$S)[1], variables)
+  }else{
+    if (dim(R)[1] != dim(ph@pars$S)[1]) {
+      stop("matrix R has wrong dimension: number of rows does not match ph dimension")
+  }
   }
   new("mph",
-    ph = ph,
+    name = paste("mph based on a ", ph@name, sep = ""),
+    pars = ph@pars,
     rew = list(R = R)
   )
 }
@@ -54,16 +53,12 @@ mph <- function(ph = NULL, R = NULL, alpha = NULL, S = NULL, structure = NULL, d
 #'
 setMethod("show", "mph", function(object) {
   cat("object class: ", is(object)[[1]], "\n", sep = "")
-  if (length(object@name) > 0) {
-    cat("phase-type name: ", object@ph@name, "\n", sep = "")
-    cat("parameters: ", "\n", sep = "")
-    print(object@ph@pars)
-    cat("number of variables: ", dim(object@rew$R)[2], "\n", sep = "")
-    cat("reward matrix: ", "\n", sep = "")
-    print(object@rew$R)
-  } else {
-    return()
-  }
+  cat("name: ", object@name, "\n", sep = "")
+  cat("parameters: ", "\n", sep = "")
+  print(object@pars)
+  cat("number of variables: ", dim(object@rew$R)[2], "\n", sep = "")
+  cat("reward matrix: ", "\n", sep = "")
+  print(object@rew$R)
 })
 
 #' Simulation Method for multivariate phase type distributions
@@ -77,6 +72,6 @@ setMethod("show", "mph", function(object) {
 #' @examples
 #'
 setMethod("sim", c(x = "mph"), function(x, n = 1000) {
-  U <- rmph(n, x@ph@pars$alpha, x@ph@pars$S, x@rew$R)
+  U <- rmph(n, x@pars$alpha, x@pars$S, x@rew$R)
   return(U)
 })

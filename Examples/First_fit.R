@@ -98,6 +98,8 @@ A <- ph(alpha, S)
 A
 
 B <- mph(A, R)
+
+
 B
 
-r(B, n = 10)
+sim(B, n = 10)

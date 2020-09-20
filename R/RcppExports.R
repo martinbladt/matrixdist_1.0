@@ -538,8 +538,8 @@ bivphtail <- function(x, alpha, T11, T12, T22) {
 #' x2 <- matrix(c(c(0.5,1), c(2, 1.5)), ncol=2) 
 #' bivmWeibden(x1, alpha, T11, T12, T22, beta) 
 #' bivmWeibden(x2, alpha, T11, T12, T22, beta) 
-bivmWeibden <- function(x, alpha, T11, T12, T22, beta) {
-    .Call(`_matrixdist_bivmWeibden`, x, alpha, T11, T12, T22, beta)
+bivmWeibullden <- function(x, alpha, T11, T12, T22, beta) {
+    .Call(`_matrixdist_bivmWeibullden`, x, alpha, T11, T12, T22, beta)
 }
 
 #' Bivariate matrix Weibull joint tail
@@ -554,8 +554,8 @@ bivmWeibden <- function(x, alpha, T11, T12, T22, beta) {
 #' x2 <- matrix(c(c(0.5,1), c(2, 1.5)), ncol=2) 
 #' bimWeibtail(x1, alpha, T11, T12, T22, beta) 
 #' bimWeibtail(x2, alpha, T11, T12, T22, beta) 
-bimWeibtail <- function(x, alpha, T11, T12, T22, beta) {
-    .Call(`_matrixdist_bimWeibtail`, x, alpha, T11, T12, T22, beta)
+bimWeibulltail <- function(x, alpha, T11, T12, T22, beta) {
+    .Call(`_matrixdist_bimWeibulltail`, x, alpha, T11, T12, T22, beta)
 }
 
 #' Bivariate matrix Pareto joint density
@@ -570,8 +570,8 @@ bimWeibtail <- function(x, alpha, T11, T12, T22, beta) {
 #' x2 <- matrix(c(c(0.5,1), c(2, 1.5)), ncol=2) 
 #' bivmParden(x1, alpha, T11, T12, T22, beta) 
 #' bivmParden(x2, alpha, T11, T12, T22, beta) 
-bivmParden <- function(x, alpha, T11, T12, T22, beta) {
-    .Call(`_matrixdist_bivmParden`, x, alpha, T11, T12, T22, beta)
+bivmParetoden <- function(x, alpha, T11, T12, T22, beta) {
+    .Call(`_matrixdist_bivmParetoden`, x, alpha, T11, T12, T22, beta)
 }
 
 #' Bivariate matrix Weibull joint tail
@@ -586,8 +586,8 @@ bivmParden <- function(x, alpha, T11, T12, T22, beta) {
 #' x2 <- matrix(c(c(0.5,1), c(2, 1.5)), ncol=2) 
 #' bimPartail(x1, alpha, T11, T12, T22, beta) 
 #' bimPartail(x2, alpha, T11, T12, T22, beta) 
-bimPartail <- function(x, alpha, T11, T12, T22, beta) {
-    .Call(`_matrixdist_bimPartail`, x, alpha, T11, T12, T22, beta)
+bimParetotail <- function(x, alpha, T11, T12, T22, beta) {
+    .Call(`_matrixdist_bimParetotail`, x, alpha, T11, T12, T22, beta)
 }
 
 #' Pi and T of a linear combination of a MPH*

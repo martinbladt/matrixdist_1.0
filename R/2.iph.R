@@ -11,12 +11,7 @@
 setClass("iph",
   contains = c("ph"),
   slots = list(
-    ph = "ph",
     gfun = "list"
-  ),
-  prototype = list(
-    ph = new("ph"),
-    gfun = list()
   )
 )
 
@@ -58,7 +53,8 @@ iph <- function(ph = NULL, gfun = NULL, gfun_pars = NULL, alpha = NULL, S = NULL
     }
   }
   new("iph",
-    ph = ph,
+    name = paste("inhomogeneous ", ph@name, sep = ""),
+    pars = ph@pars,
     gfun = list(name = gfun, pars = gfun_pars)
   )
 }
@@ -72,16 +68,12 @@ iph <- function(ph = NULL, gfun = NULL, gfun_pars = NULL, alpha = NULL, S = NULL
 #'
 setMethod("show", "iph", function(object) {
   cat("object class: ", is(object)[[1]], "\n", sep = "")
-  if (length(object@name) > 0) {
-    cat("phase-type name: ", object@ph@name, "\n", sep = "")
-    cat("parameters: ", "\n", sep = "")
-    print(object@ph@pars)
-    cat("g-function name: ", object@gfun$name, "\n", sep = "")
-    cat("parameters: ", "\n", sep = "")
-    print(object@gfun$pars)
-  } else {
-    return()
-  }
+  cat("name: ", object@name, "\n", sep = "")
+  cat("parameters: ", "\n", sep = "")
+  print(object@pars)
+  cat("g-function name: ", object@gfun$name, "\n", sep = "")
+  cat("parameters: ", "\n", sep = "")
+  print(object@gfun$pars)
 })
 
 #' Simulation Method for inhomogeneous phase type distributions
@@ -98,10 +90,10 @@ setMethod("sim", c(x = "iph"), function(x, n = 1000) {
   name <- x@gfun$name
   pars <- x@gfun$pars
   if (name %in% c("Pareto", "Weibull", "Gompertz")) {
-    U <- riph(n, name, x@ph@pars$alpha, x@ph@pars$S, pars)
+    U <- riph(n, name, x@pars$alpha, x@pars$S, pars)
   }
   if (name %in% c("GEVD")) {
-    U <- rmatrixGEVD(n, x@ph@pars$alpha, x@ph@pars$S, pars[1], pars[2], pars[3])
+    U <- rmatrixGEVD(n, x@pars$alpha, x@pars$S, pars[1], pars[2], pars[3])
   }
   return(U)
 })
@@ -120,7 +112,7 @@ setMethod("dens", c(x = "iph"), function(x, y = seq(0, quan(x, .95)$quantile, le
   fn <- eval(parse(text = paste("m", x@gfun$name, "den", sep = "")))
   y_inf <- (y == Inf)
   dens <- y
-  dens[!y_inf] <- fn(y, x@ph@pars$alpha, x@ph@pars$S, x@gfun$pars)
+  dens[!y_inf] <- fn(y, x@pars$alpha, x@pars$S, x@gfun$pars)
   dens[y_inf] <- 0
   return(list(y = y, dens = dens))
 })
@@ -141,7 +133,7 @@ setMethod("cdf", c(x = "iph"), function(x,
   fn <- eval(parse(text = paste("m", x@gfun$name, "cdf", sep = "")))
   q_inf <- (q == Inf)
   cdf <- q
-  cdf[!q_inf] <- fn(q, x@ph@pars$alpha, x@ph@pars$S, x@gfun$pars, lower.tail)
+  cdf[!q_inf] <- fn(q, x@pars$alpha, x@pars$S, x@gfun$pars, lower.tail)
   cdf[q_inf] <- as.numeric(1 * lower.tail)
   return(list(q = q, cdf = cdf))
 })

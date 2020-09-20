@@ -46,7 +46,7 @@ ph <- function(alpha = NULL, S = NULL, structure = NULL, dimension = 3) {
     if (length(alpha) != dim(S)[1]) {
       stop("incompatible dimensions")
     }
-    name <- "Custom"
+    name <- "custom"
   }
   new("ph",
       name = paste(name, " ph(", length(alpha), ")", sep = ""),
@@ -63,13 +63,9 @@ ph <- function(alpha = NULL, S = NULL, structure = NULL, dimension = 3) {
 #'
 setMethod("show", "ph", function(object) {
   cat("object class: ", is(object)[[1]], "\n", sep = "")
-  if (length(object@name) > 0) {
-    cat("phase-type name: ", object@name, "\n", sep = "")
-    cat("parameters: ", "\n", sep = "")
-    print(object@pars)
-  } else {
-    return()
-  }
+  cat("name: ", object@name, "\n", sep = "")
+  cat("parameters: ", "\n", sep = "")
+  print(object@pars)
 })
 
 #' Simulation Method for phase type distributions
@@ -166,7 +162,6 @@ setMethod(
     if(is_iph){
       name <- x@gfun$name
       par_g <- x@gfun$pars
-      x <- x@ph
       specs <- g_specs(name) 
       inv_g <- specs$inv_g 
       mLL <- specs$mLL

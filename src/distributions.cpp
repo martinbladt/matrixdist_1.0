@@ -636,7 +636,7 @@ NumericVector bivphtail(NumericMatrix x, NumericVector alpha, NumericMatrix T11,
 //' bivmWeibden(x1, alpha, T11, T12, T22, beta) 
 //' bivmWeibden(x2, alpha, T11, T12, T22, beta) 
 // [[Rcpp::export]]
-NumericVector bivmWeibden(NumericMatrix x, NumericVector alpha, NumericMatrix T11, NumericMatrix T12, NumericMatrix T22, NumericVector beta) {
+NumericVector bivmWeibullden(NumericMatrix x, NumericVector alpha, NumericMatrix T11, NumericMatrix T12, NumericMatrix T22, NumericVector beta) {
   
   long N{x.nrow()};
   long p2{T22.nrow()};
@@ -669,7 +669,7 @@ NumericVector bivmWeibden(NumericMatrix x, NumericVector alpha, NumericMatrix T1
 //' bimWeibtail(x1, alpha, T11, T12, T22, beta) 
 //' bimWeibtail(x2, alpha, T11, T12, T22, beta) 
 // [[Rcpp::export]]
-NumericVector bimWeibtail(NumericMatrix x, NumericVector alpha, NumericMatrix T11, NumericMatrix T12, NumericMatrix T22, NumericVector beta) {
+NumericVector bimWeibulltail(NumericMatrix x, NumericVector alpha, NumericMatrix T11, NumericMatrix T12, NumericMatrix T22, NumericVector beta) {
   
   long N{x.nrow()};
   long p2{T22.nrow()};
@@ -702,7 +702,7 @@ NumericVector bimWeibtail(NumericMatrix x, NumericVector alpha, NumericMatrix T1
 //' bivmParden(x1, alpha, T11, T12, T22, beta) 
 //' bivmParden(x2, alpha, T11, T12, T22, beta) 
 // [[Rcpp::export]]
-NumericVector bivmParden(NumericMatrix x, NumericVector alpha, NumericMatrix T11, NumericMatrix T12, NumericMatrix T22, NumericVector beta) {
+NumericVector bivmParetoden(NumericMatrix x, NumericVector alpha, NumericMatrix T11, NumericMatrix T12, NumericMatrix T22, NumericVector beta) {
   
   long N{x.nrow()};
   long p2{T22.nrow()};
@@ -736,7 +736,7 @@ NumericVector bivmParden(NumericMatrix x, NumericVector alpha, NumericMatrix T11
 //' bimPartail(x1, alpha, T11, T12, T22, beta) 
 //' bimPartail(x2, alpha, T11, T12, T22, beta) 
 // [[Rcpp::export]]
-NumericVector bimPartail(NumericMatrix x, NumericVector alpha, NumericMatrix T11, NumericMatrix T12, NumericMatrix T22, NumericVector beta) {
+NumericVector bimParetotail(NumericMatrix x, NumericVector alpha, NumericMatrix T11, NumericMatrix T12, NumericMatrix T22, NumericVector beta) {
   
   long N{x.nrow()};
   long p2{T22.nrow()};
