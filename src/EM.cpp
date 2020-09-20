@@ -694,7 +694,7 @@ void EMstep_bivph(const NumericMatrix & observations, const NumericVector & weig
   double density{0};
   double aux;
   
-  NumericMatrix m_alpha(1,p, alpha.begin());
+  NumericMatrix m_alpha(1,p1, alpha.begin());
   
   NumericMatrix Bmean(p1,1);
   NumericMatrix Zmean(p,1);

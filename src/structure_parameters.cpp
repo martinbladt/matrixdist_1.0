@@ -222,7 +222,12 @@ List random_phase_BivPH(int p1, int p2, double scale_factor = 1) {
   
   NumericMatrix T(merge_matrices(T11, T12, T22));
   
-  List L = List::create(Named("alpha") = alpha, _["T11"] = T11, _["T12"] = T12, _["T22"] = T22, _["T"] = T, _["R"] = R);
+  NumericVector pi(p1 + p2);
+  for (int i{0}; i < p1; ++i) {
+    pi[i] = alpha[i];
+  }
+  
+  List L = List::create(Named("alpha") = alpha, _["T11"] = T11, _["T12"] = T12, _["T22"] = T22, _["pi"] = pi, _["T"] = T, _["R"] = R);
   
   return L;
 }
