@@ -1049,7 +1049,8 @@ List linear_combination(NumericVector w, NumericVector pi, NumericMatrix T, Nume
 }
 
 
-
+//' Second EM in the algorithm of bruer
+// [[Rcpp::export]]
 void secondEMstep(const NumericMatrix & observations, const NumericVector & weight, const NumericMatrix & censored, const NumericVector & rcweight, NumericVector & pi, NumericMatrix & T, NumericMatrix & R) {
   double lowerbound{1.0E-15}; //Makes a reward zero if it is below of this value - Otherwise it will never be zero
   long p{T.nrow()};
@@ -1156,3 +1157,13 @@ void secondEMstep(const NumericMatrix & observations, const NumericVector & weig
   }
 }
 
+//' Sum data for input in Breur
+// [[Rcpp::export]]
+NumericVector sum_data(NumericMatrix x) {
+  NumericVector sum_x(x.nrow());
+  for (int i{0}; i < x.nrow(); ++i) {
+    for (int j{0}; j < x.ncol(); ++j)
+      sum_x[i] += x(i,j);
+  }
+  return sum_x;
+}

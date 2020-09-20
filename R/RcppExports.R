@@ -99,6 +99,16 @@ linear_combination <- function(w, pi, T, R) {
     .Call(`_matrixdist_linear_combination`, w, pi, T, R)
 }
 
+#' Second EM in the algorithm of bruer
+secondEMstep <- function(observations, weight, censored, rcweight, pi, T, R) {
+    invisible(.Call(`_matrixdist_secondEMstep`, observations, weight, censored, rcweight, pi, T, R))
+}
+
+#' Sum data for input in Breur
+sum_data <- function(x) {
+    .Call(`_matrixdist_sum_data`, x)
+}
+
 #' Embeded Markov chain of a sub-intensity matrix
 #' 
 #' Returns the transition probabilities of the embeded Markov chain determined the sub-intensity matrix 

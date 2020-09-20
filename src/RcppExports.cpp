@@ -228,6 +228,33 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// secondEMstep
+void secondEMstep(const NumericMatrix& observations, const NumericVector& weight, const NumericMatrix& censored, const NumericVector& rcweight, NumericVector& pi, NumericMatrix& T, NumericMatrix& R);
+RcppExport SEXP _matrixdist_secondEMstep(SEXP observationsSEXP, SEXP weightSEXP, SEXP censoredSEXP, SEXP rcweightSEXP, SEXP piSEXP, SEXP TSEXP, SEXP RSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const NumericMatrix& >::type observations(observationsSEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type weight(weightSEXP);
+    Rcpp::traits::input_parameter< const NumericMatrix& >::type censored(censoredSEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type rcweight(rcweightSEXP);
+    Rcpp::traits::input_parameter< NumericVector& >::type pi(piSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix& >::type T(TSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix& >::type R(RSEXP);
+    secondEMstep(observations, weight, censored, rcweight, pi, T, R);
+    return R_NilValue;
+END_RCPP
+}
+// sum_data
+NumericVector sum_data(NumericMatrix x);
+RcppExport SEXP _matrixdist_sum_data(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(sum_data(x));
+    return rcpp_result_gen;
+END_RCPP
+}
 // embeddedMC
 NumericMatrix embeddedMC(NumericMatrix T);
 RcppExport SEXP _matrixdist_embeddedMC(SEXP TSEXP) {
@@ -939,6 +966,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_EMstep_bivph", (DL_FUNC) &_matrixdist_EMstep_bivph, 6},
     {"_matrixdist_EMstep", (DL_FUNC) &_matrixdist_EMstep, 6},
     {"_matrixdist_linear_combination", (DL_FUNC) &_matrixdist_linear_combination, 4},
+    {"_matrixdist_secondEMstep", (DL_FUNC) &_matrixdist_secondEMstep, 7},
+    {"_matrixdist_sum_data", (DL_FUNC) &_matrixdist_sum_data, 1},
     {"_matrixdist_embeddedMC", (DL_FUNC) &_matrixdist_embeddedMC, 1},
     {"_matrixdist_cumulateMatrix", (DL_FUNC) &_matrixdist_cumulateMatrix, 1},
     {"_matrixdist_cumulateVector", (DL_FUNC) &_matrixdist_cumulateVector, 1},
