@@ -821,3 +821,349 @@ void EMstep_bivph(const NumericMatrix & observations, const NumericVector & weig
 }
 
 
+
+//' EM using Matlab algorithm for matrix exponential
+//' 
+//' This one is slower but dont requires to order the sample
+// [[Rcpp::export]]
+void EMstep(NumericVector & pi, NumericMatrix & T, const NumericVector & obs, const NumericVector & weight, const NumericVector & rcens, const NumericVector & rcweight) {
+  long p{T.nrow()};
+  
+  NumericMatrix m_pi(1, p, pi.begin()); //Matrix version of pi for computations
+  
+  NumericVector m_e(p, 1);
+  NumericMatrix e(p, 1, m_e.begin());
+  
+  NumericMatrix t = matrix_product(T * (-1), e);
+  
+  NumericMatrix Bmean(p,1);
+  NumericMatrix Zmean(p,1);
+  NumericMatrix Nmean(p,p + 1);
+  
+  NumericMatrix avector(1,p);
+  NumericMatrix bvector(p,1);
+  NumericMatrix cmatrix(p,p);
+  NumericMatrix aux_exp(p,p);
+  
+  NumericMatrix J(2 * p,2 * p);
+  NumericMatrix tProductPi(p,p);
+  tProductPi = matrix_product(t, m_pi);
+  
+  double SumOfWeights{0.0};
+  double density{0.0};
+  
+  //E-step
+  //  Unccensored data
+  for (int k{0}; k < obs.size(); ++k) {
+    SumOfWeights += weight[k];
+    
+    J = matrix_exponential(matrix_VanLoan(T, T, tProductPi) * obs[k]);
+    
+    for (int i{0}; i < p; ++i) {
+      for (int j{0}; j < p; ++j) {
+        aux_exp(i,j) = J(i,j);
+        cmatrix(i,j) = J(i,j + p);
+      }
+    }
+    
+    avector = matrix_product(m_pi, aux_exp);
+    bvector = matrix_product(aux_exp, t);
+    density = matrix_product(m_pi, bvector)(0,0);
+    
+    //E-step
+    for (int i{0}; i < p; ++i) {
+      Bmean(i,0) += m_pi(0,i) * bvector(i,0) * weight[k] / density;
+      Nmean(i,p) += avector(0,i) * t(i,0) * weight[k] / density;
+      Zmean(i,0) += cmatrix(i,i) * weight[k] / density;
+      for (int j{0}; j < p; ++j) {
+        Nmean(i,j) += T(i,j) * cmatrix(j,i) * weight[k] / density;
+      }
+    }
+  }
+  //  Right-Censored Data
+  double SumOfCensored{0.0};
+  if (rcens.size() > 0) {
+    tProductPi = matrix_product(e, m_pi);
+  }
+  for (int k{0}; k < rcens.size(); ++k) {
+    SumOfCensored += rcweight[k];
+    
+    J = matrix_exponential(matrix_VanLoan(T, T, tProductPi) * rcens[k]);
+    
+    for (int i{0}; i < p; ++i) {
+      for (int j{0}; j < p; ++j) {
+        aux_exp(i,j) = J(i,j);
+        cmatrix(i,j) = J(i,j + p);
+      }
+    }
+    
+    bvector = matrix_product(aux_exp, e);
+    density = matrix_product(m_pi, bvector)(0,0);
+    
+    //E-step
+    for (int i{0}; i < p; ++i) {
+      Bmean(i,0) += m_pi(0,i) * bvector(i,0) * rcweight[k] / density;
+      Zmean(i,0) += cmatrix(i,i) * rcweight[k] / density;
+      for (int j{0}; j < p; ++j) {
+        Nmean(i,j) += T(i,j) * cmatrix(j,i) * rcweight[k] / density;
+      }
+    }
+  }
+  
+  // M step
+  for (int i{0}; i < p; ++i) {
+    pi[i] = Bmean(i,0) / (SumOfWeights + SumOfCensored);
+    if (pi[i] < 0) {
+      pi[i] = 0;
+    }
+    t(i,0) = Nmean(i,p) / Zmean(i,0);
+    if (t(i,0) < 0) {
+      t(i,0) = 0;
+    }
+    T(i,i) = -t(i,0);
+    for (int j{0}; j < p; ++j) {
+      if (i != j) {
+        T(i,j) = Nmean(i,j) / Zmean(i,0);
+        if (T(i,j) < 0) {
+          T(i,j) = 0;
+        }
+        T(i,i) -= T(i,j);
+      }
+    }
+  }
+}
+
+
+
+//' Pi and T of a linear combination of a MPH*
+//' 
+//' @examples
+//' pi <- c(0.15, 0.85, 0 ,0)
+//' T11 <- matrix(c(c(-2,9),c(0,-11)), nrow = 2, ncol = 2)
+//' T12 <- matrix(c(c(2,0),c(0,2)), nrow = 2, ncol = 2)
+//' T22 <- matrix(c(c(-1,0),c(0.5,-5)), nrow = 2, ncol = 2)
+//' T <- merge_matrices(T11, T12, T22)
+//' R <- matrix(c(c(1,1,0,0), c(0,0,1,1)), ncol=2)
+//' w1 <- c(1,0)
+//' linear_combination(w1, pi, T, R)
+//' w2 <- c(0,1)
+//' linear_combination(w2, pi, T, R)
+//' matrix(c(0.15, 0.85), ncol=2)%*%matrix_inverse(T11 * (-1))%*%T12
+//' w3 <- c(1,1)
+//' linear_combination(w3, pi, T, R)
+// [[Rcpp::export]]
+List linear_combination(NumericVector w, NumericVector pi, NumericMatrix T, NumericMatrix R) {
+  long p{T.nrow()};
+  
+  NumericVector newStates;
+  
+  int NumZeros{0};
+  IntegerVector deleteRows; //states to be deleted
+  IntegerVector keepRows; //states to keep
+  
+  NumericMatrix m_w(w.size(), 1, w.begin());
+  
+  NumericMatrix Rw(matrix_product(R, m_w)); 
+  
+  NumericMatrix m_pi(1, pi.size(), pi.begin());
+  
+  for (int j{0}; j < p; ++j) {
+    if (Rw(j,0) == 0) {
+      deleteRows.push_back(j);
+      ++NumZeros;
+    }
+    else {
+      keepRows.push_back(j);
+    }
+  }
+  
+  newStates = keepRows;
+  NumericVector pi_w(p - NumZeros);
+  NumericMatrix T_w(p - NumZeros, p - NumZeros);
+  
+  if (NumZeros == 0) {
+    NumericMatrix diagonal(p,p);
+    
+    for (int i{0}; i < p; ++i) {
+      diagonal(i,i) = 1.0 / Rw(i,0);
+    }
+    diagonal = matrix_product(diagonal, T);
+    
+    pi_w = pi;
+    T_w = diagonal;
+    
+  }
+  else {
+    long n1{deleteRows.size()};
+    long n2{keepRows.size()};
+    
+    NumericMatrix Spp(n2,n2);
+    NumericMatrix Sp0(n2,n1);
+    NumericMatrix S0p(n1,n2);
+    NumericMatrix S00(n1,n1);
+    
+    NumericMatrix Taux(n2,n2);
+    NumericMatrix diagonal(n2,n2);
+    
+    NumericMatrix pi0(1,n1);
+    NumericMatrix pip(1,n2);
+    
+    NumericMatrix piaux(1,n2);
+    
+    for (int i{0}; i < n2; i++) {
+      for (int j = 0; j < n2; j++) {
+        Spp(i,j) = T(keepRows[i],keepRows[j]);
+      }
+      for (int j{0}; j < n1; j++) {
+        Sp0(i,j) = T(keepRows[i],deleteRows[j]);
+      }
+      pip(0,i) = m_pi(0,keepRows[i]);
+    }
+    for (int i{0}; i < n1; i++) {
+      for (int j{0}; j < n2; j++) {
+        S0p(i,j) = T(deleteRows[i],keepRows[j]);
+      }
+      for (int j{0}; j < n1; j++){
+        S00(i,j) = T(deleteRows[i],deleteRows[j]);
+      }
+      pi0(0,i) = m_pi(0,deleteRows[i]);
+    }
+    
+    piaux = matrix_sum(pip, matrix_product(pi0, matrix_product(matrix_inverse(S00 * (-1.0)), S0p)));
+    
+    Taux = matrix_sum(Spp, matrix_product(Sp0, matrix_product(matrix_inverse(S00 * (-1.0)), S0p)));
+    
+    for (int i{0}; i < n2; ++i) {
+      diagonal(i,i) = 1.0 / Rw(keepRows[i],0);
+      pi_w[i] = piaux(0, i);
+    }
+    diagonal = matrix_product(diagonal, Taux);
+    
+    T_w = diagonal;
+    
+  }
+  
+  List L = List::create(Named("piw") = pi_w, _["Tw"] = T_w, _["new_states"] = keepRows);
+  
+  return L;
+}
+
+
+//' Second EM in the algorithm of bruer
+// [[Rcpp::export]]
+void secondEMstep(const NumericMatrix & observations, const NumericVector & weight, const NumericMatrix & censored, const NumericVector & rcweight, NumericVector & pi, NumericMatrix & T, NumericMatrix & R) {
+  double lowerbound{1.0E-15}; //Makes a reward zero if it is below of this value - Otherwise it will never be zero
+  long p{T.nrow()};
+  long dim{R.ncol()};
+  
+  NumericMatrix Zmean(p,dim);
+  NumericMatrix Zsum(p,1);
+  
+  NumericVector w(dim);
+  
+  //E-step
+  for (int j{0}; j < dim; ++j) {
+    
+    w = w *0;
+    w[j] = 1;
+    
+    List PHmarginal(linear_combination(w, pi, T, R));
+    
+    NumericVector m_piw = PHmarginal["piw"];
+    
+    NumericMatrix piw(1,m_piw.size(), m_piw.begin());
+    
+    NumericMatrix Tw = PHmarginal["Tw"];
+    
+    IntegerVector newStates = PHmarginal["new_states"];
+    
+    long pmarginal{Tw.nrow()};
+    
+    NumericVector m_e(pmarginal, 1);
+    NumericMatrix e(pmarginal, 1, m_e.begin());
+    
+    NumericMatrix tw = matrix_product(Tw * (-1), e);
+    
+    NumericMatrix bvector(pmarginal, 1);
+    NumericMatrix cmatrix(pmarginal, pmarginal);
+    NumericMatrix aux_exp(pmarginal, pmarginal);
+    
+    NumericMatrix J(2 * pmarginal, 2 * pmarginal);
+    NumericMatrix tProductPi(pmarginal, pmarginal);
+    tProductPi = matrix_product(tw, piw);
+    
+    double density{0.0};
+    
+    //  Unccensored data
+    for (int k{0}; k < observations.nrow(); ++k) {
+      J = matrix_exponential(matrix_VanLoan(Tw, Tw, tProductPi) * observations(k, j));
+      
+      for (int i{0}; i < pmarginal; ++i) {
+        for (int j{0}; j < pmarginal; ++j) {
+          aux_exp(i,j) = J(i,j);
+          cmatrix(i,j) = J(i,j + pmarginal);
+        }
+      }
+      
+      bvector = matrix_product(aux_exp, tw);
+      density = matrix_product(piw, bvector)(0,0);
+      
+      //E-step
+      for (int i{0}; i < pmarginal; ++i) {
+        Zmean(newStates[i],j) += cmatrix(i,i) * weight[k] / density;
+      }
+    }
+    
+    
+    //  Right-Censored Data
+    if (censored.ncol() > 0) {
+      tProductPi = matrix_product(e, piw);
+    }
+    for (int k{0}; k < censored.ncol(); ++k) {
+      
+      J = matrix_exponential(matrix_VanLoan(T, T, tProductPi) * censored(k,j));
+      
+      for (int i{0}; i < pmarginal; ++i) {
+        for (int j{0}; j < pmarginal; ++j) {
+          aux_exp(i,j) = J(i,j);
+          cmatrix(i,j) = J(i,j + pmarginal);
+        }
+      }
+      
+      bvector = matrix_product(aux_exp, e);
+      density = matrix_product(piw, bvector)(0, 0);
+      
+      //E-step
+      for (int i{0}; i < pmarginal; ++i) {
+        Zmean(newStates[i],j) += cmatrix(i,i) * rcweight[k] / density;
+      }
+    }
+  }
+  
+  //M-step
+  for (int i{0}; i < p; ++i) {
+    for (int j{0}; j < dim; ++j) {
+      Zsum(i,0) += Zmean(i,j);
+    }
+  }
+  
+  for (int j{0}; j < dim; ++j) {
+    for (int i{0}; i < p; ++i){
+      R(i,j) = Zmean(i,j) / Zsum(i,0);
+      if (R(i,j) < lowerbound) {
+        R(i,j) = 0;
+      }
+    }
+  }
+}
+
+//' Sum data for input in Breur
+// [[Rcpp::export]]
+NumericVector sum_data(NumericMatrix x) {
+  NumericVector sum_x(x.nrow());
+  for (int i{0}; i < x.nrow(); ++i) {
+    for (int j{0}; j < x.ncol(); ++j)
+      sum_x[i] += x(i,j);
+  }
+  return sum_x;
+}
