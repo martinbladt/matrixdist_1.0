@@ -258,6 +258,13 @@ g_specs <- function(name){
       return(- logLikelihoodMPar_RK(h, alpha, S, beta, obs, weight, rcens, rcweight))
     }
   }
+  else if(name == "LogLogistic"){
+    inv_g <- function(t, w, beta) return(list(obs = log((t/beta[1])^{beta[2]} + 1), weight = w))
+    mLL <- function(h, alpha, S, beta, obs, weight, rcens, rcweight) {
+      if(beta[1] < 0 | beta[2] < 0) return(NA)
+      return(- logLikelihoodMLogLogistic_RK(h, alpha, S, beta, obs, weight, rcens, rcweight))
+    }
+  }
   else if(name == "Gompertz"){
     inv_g <- function(t, w, beta) return(list(obs = (exp(t * beta) - 1) / beta, weight = w))
     mLL <- function(h, alpha, S, beta, obs, weight, rcens, rcweight) {

@@ -50,15 +50,34 @@ iC <- iph(A, gfun = "Pareto", gfun_pars = 2)
 
 iC
 
-data <- r(iC)
+data <- sim(iC)
 
 plot(data)
 
 evmix::hillplot(data)
 
-iD <- fit(iC, data, stepsEM = 300)
+iD <- fit(iC, data, stepsEM = 100)
 
 iD
+
+#####
+
+iC <- iph(A, gfun = "LogLogistic", gfun_pars = c(2, 3))
+
+iC
+
+data <- sim(iC)
+
+plot(data)
+
+evmix::hillplot(data)
+
+iD <- fit(iC, data, stepsEM = 400)
+
+iD
+
+####
+
 
 iE <- iph(A, gfun = "Gompertz", gfun_pars = 2)
 

@@ -35,7 +35,7 @@ iph <- function(ph = NULL, gfun = NULL, gfun_pars = NULL, alpha = NULL, S = NULL
   if (is.null(ph)) {
     ph <- ph(alpha = alpha, S = S, structure = structure, dimension = dimension)
   }
-  if (!gfun %in% c("Pareto", "Weibull", "Gompertz", "GEVD")) {
+  if (!gfun %in% c("Pareto", "Weibull", "LogLogistic", "Gompertz", "GEVD")) {
     stop("invalid gfun")
   }
   if (gfun %in% c("Pareto", "Weibull", "Gompertz")) {
@@ -47,9 +47,16 @@ iph <- function(ph = NULL, gfun = NULL, gfun_pars = NULL, alpha = NULL, S = NULL
   }
   if (gfun %in% c("GEVD")) {
     if (length(gfun_pars) != 3 | (gfun_pars[2] > 0) == FALSE) {
-      stop("gfun parameter should be length three: mu, sigma, xi, and sigma > 0")
+      stop("gfun parameter should be of length three: mu, sigma, xi, and sigma > 0")
     } else {
       names(gfun_pars) <- c("mu", "sigma", "xi")
+    }
+  }
+  if (gfun %in% c("LogLogistic")) {
+    if (length(gfun_pars) != 2 | (gfun_pars[1] <= 0) | (gfun_pars[2] <= 0)) {
+      stop("gfun parameter should be positive and of length two: alpha, theta > 0")
+    } else {
+      names(gfun_pars) <- c("alpha", "theta")
     }
   }
   new("iph",
@@ -89,7 +96,7 @@ setMethod("show", "iph", function(object) {
 setMethod("sim", c(x = "iph"), function(x, n = 1000) {
   name <- x@gfun$name
   pars <- x@gfun$pars
-  if (name %in% c("Pareto", "Weibull", "Gompertz")) {
+  if (name %in% c("Pareto", "Weibull", "LogLogistic","Gompertz")) {
     U <- riph(n, name, x@pars$alpha, x@pars$S, pars)
   }
   if (name %in% c("GEVD")) {

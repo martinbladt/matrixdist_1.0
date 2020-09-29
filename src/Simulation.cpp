@@ -179,7 +179,7 @@ NumericVector rphasetype(int n, NumericVector pi, NumericMatrix T) {
 //' n <- 10
 //' riph(n, "Pareto", alpha, T, beta) 
 // [[Rcpp::export]]
-NumericVector riph(int n, String dist_type, NumericVector pi, NumericMatrix T, double beta) {
+NumericVector riph(int n, String dist_type, NumericVector pi, NumericMatrix T, NumericVector beta) {
   
   NumericVector sample(n);
   
@@ -196,13 +196,16 @@ NumericVector riph(int n, String dist_type, NumericVector pi, NumericMatrix T, d
       state = newState(state, cumulatedEmbeddedMC, runif(1)[0]);
     }
     if (dist_type == "Pareto") {
-      time = beta * (exp(time) - 1);
+      time = beta[0] * (exp(time) - 1);
     }
     else if (dist_type == "Weibull") {
-      time = pow(time, 1.0 / beta);
+      time = pow(time, 1.0 / beta[0]);
+    }
+    else if (dist_type == "LogLogistic") {
+      time = beta[0] * pow(exp(time) - 1, 1 / beta[1]);
     }
     else if (dist_type == "Gompertz") {
-      time = log(beta * time + 1) / beta;
+      time = log(beta[0] * time + 1) / beta[0];
     }
     sample[i] = time;
   }

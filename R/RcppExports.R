@@ -50,6 +50,11 @@ logLikelihoodMPar_RK <- function(h, pi, T, beta, obs, weight, rcens, rcweight) {
     .Call(`_matrixdist_logLikelihoodMPar_RK`, h, pi, T, beta, obs, weight, rcens, rcweight)
 }
 
+#' Loglikelihood of matrix Log-Logistic using RK
+logLikelihoodMLogLogistic_RK <- function(h, pi, T, beta, obs, weight, rcens, rcweight) {
+    .Call(`_matrixdist_logLikelihoodMLogLogistic_RK`, h, pi, T, beta, obs, weight, rcens, rcweight)
+}
+
 #' Loglikelihood of matrix Gompertz using RK
 logLikelihoodMGomp_RK <- function(h, pi, T, beta, obs, weight, rcens, rcweight) {
     .Call(`_matrixdist_logLikelihoodMGomp_RK`, h, pi, T, beta, obs, weight, rcens, rcweight)
@@ -456,6 +461,41 @@ mParetoden <- function(x, pi, T, beta) {
 #' mparetocdf(0.5, alpha, T, beta, FALSE) 
 mParetocdf <- function(x, pi, T, beta, lower_tail = TRUE) {
     .Call(`_matrixdist_mParetocdf`, x, pi, T, beta, lower_tail)
+}
+
+#' Matrix Log-Logistic density
+#' 
+#' Computes the density of a matrix Log-Logistic distribution with parameters \code{pi}, \code{T} and \code{beta} at \code{x}
+#' @param x non-negative value
+#' @param pi Initial probabilities
+#' @param T sub-intensity matrix
+#' @param beta scale parameter
+#' @return The density at \code{x}
+#' @examples
+#' alpha <- c(0.5, 0.3, 0.2)
+#' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
+#' beta <- 0.5
+#' mparetoden(0.5, alpha, T, beta) 
+mLogLogisticden <- function(x, pi, T, beta) {
+    .Call(`_matrixdist_mLogLogisticden`, x, pi, T, beta)
+}
+
+#' Matrix Log-Logistic cdf
+#' 
+#' Computes the cdf (tail) of a matrix Log-Logistic distribution with parameters \code{pi}, \code{T} and \code{beta} at \code{x}
+#' @param x non-negative value
+#' @param pi Initial probabilities
+#' @param T sub-intensity matrix
+#' @param beta shape parameter
+#' @return The cdf (tail) at \code{x}
+#' @examples
+#' alpha <- c(0.5, 0.3, 0.2)
+#' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
+#' beta <- 0.5
+#' mparetocdf(0.5, alpha, T, beta) 
+#' mparetocdf(0.5, alpha, T, beta, FALSE) 
+mLogLogisticcdf <- function(x, pi, T, beta, lower_tail = TRUE) {
+    .Call(`_matrixdist_mLogLogisticcdf`, x, pi, T, beta, lower_tail)
 }
 
 #' Matrix Gompertz density

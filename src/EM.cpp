@@ -526,6 +526,53 @@ double logLikelihoodMPar_RK(double h, NumericVector & pi, NumericMatrix & T, dou
 }
 
 
+//' Loglikelihood of matrix Log-Logistic using RK
+// [[Rcpp::export]]
+double logLikelihoodMLogLogistic_RK(double h, NumericVector & pi, NumericMatrix & T, NumericVector beta, const NumericVector & obs, const NumericVector & weight, const NumericVector & rcens, const NumericVector & rcweight) {
+  long p{T.nrow()};
+  NumericMatrix m_pi(1,p, pi.begin());
+  
+  NumericMatrix avector(1,p);
+  
+  NumericVector m_e(p, 1);
+  NumericMatrix e(p, 1, m_e.begin());
+  
+  NumericMatrix t = matrix_product(T * (-1), e);
+  
+  // Uncensored data
+  //   initial condition
+  avector = clone(m_pi);
+  
+  double dt{0.0};
+  
+  double density{0.0};
+  
+  double logLh{0.0};
+  
+  // Non censored data
+  if (obs.size() > 0) {
+    dt = log(pow(obs[0] / beta[0], beta[1]) + 1);
+  }
+  for (int k{0}; k < obs.size(); ++k) {
+    a_rungekutta(avector, dt, h, T);
+    density = matrix_product(avector, t)(0,0);
+    logLh += weight[k] * (log(density) + log(beta[1]) - log(beta[0]) + (beta[1] - 1) * (log(obs[k]) - log(beta[0])) - log(pow(obs[k] / beta[0], beta[1]) + 1));
+    dt = log(pow(obs[k + 1] / beta[0], beta[1]) + 1) - log(pow(obs[k] / beta[0], beta[1]) + 1);
+  }
+  //Right censored data
+  if (rcens.size() > 0) {
+    dt = log(pow(rcens[0] / beta[0], beta[1]) + 1);
+    avector = clone(m_pi);
+  }
+  for (int k{0}; k < rcens.size(); ++k) {
+    a_rungekutta(avector, dt, h, T);
+    density = matrix_product(avector, e)(0,0);
+    logLh += rcweight[k] * log(density);
+    dt = log(pow(rcens[k + 1] / beta[0], beta[1]) + 1) - log(pow(rcens[k] / beta[0], beta[1]) + 1);
+  }
+  
+  return logLh;
+}
 
 //' Loglikelihood of matrix Gompertz using RK
 // [[Rcpp::export]]

@@ -399,6 +399,80 @@ NumericVector mParetocdf(NumericVector x, NumericVector pi, NumericMatrix T, dou
 }
 
 
+//' Matrix Log-Logistic density
+//' 
+//' Computes the density of a matrix Log-Logistic distribution with parameters \code{pi}, \code{T} and \code{beta} at \code{x}
+//' @param x non-negative value
+//' @param pi Initial probabilities
+//' @param T sub-intensity matrix
+//' @param beta scale parameter
+//' @return The density at \code{x}
+//' @examples
+//' alpha <- c(0.5, 0.3, 0.2)
+//' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
+//' beta <- 0.5
+//' mparetoden(0.5, alpha, T, beta) 
+// [[Rcpp::export]]
+NumericVector mLogLogisticden(NumericVector x, NumericVector pi, NumericMatrix T, NumericVector beta) {
+  
+  NumericVector density(x.size());
+  
+  NumericMatrix m_pi(1, pi.size(), pi.begin());
+  NumericVector e(pi.size(), 1);
+  NumericMatrix m_e(pi.size(), 1, e.begin());
+  NumericMatrix m_t = matrix_product(T * (-1), m_e);
+  
+  for (int k = 0; k < x.size(); ++k){
+    if (x[k] == 0) {
+      density[k] = (1.0 - matrix_product(m_pi, m_e)(0,0));
+    }
+    else {
+      density[k] = (matrix_product(m_pi, matrix_product(matrix_exponential(T * log(pow(x[k] / beta[0], beta[1]) + 1)), m_t))(0,0)) * (pow(x[k] / beta[0], beta[1] - 1) * beta[1] / beta[0]) / (pow(x[k] / beta[0], beta[1]) + 1);
+    }
+  }
+  return density;
+}
+
+
+//' Matrix Log-Logistic cdf
+//' 
+//' Computes the cdf (tail) of a matrix Log-Logistic distribution with parameters \code{pi}, \code{T} and \code{beta} at \code{x}
+//' @param x non-negative value
+//' @param pi Initial probabilities
+//' @param T sub-intensity matrix
+//' @param beta shape parameter
+//' @return The cdf (tail) at \code{x}
+//' @examples
+//' alpha <- c(0.5, 0.3, 0.2)
+//' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
+//' beta <- 0.5
+//' mparetocdf(0.5, alpha, T, beta) 
+//' mparetocdf(0.5, alpha, T, beta, FALSE) 
+// [[Rcpp::export]]
+NumericVector mLogLogisticcdf(NumericVector x, NumericVector pi, NumericMatrix T, NumericVector beta, bool lower_tail = true) {
+  
+  NumericVector cdf(x.size());
+  
+  NumericMatrix m_pi(1, pi.size(), pi.begin());
+  NumericVector e(pi.size(), 1);
+  NumericMatrix m_e(pi.size(), 1, e.begin());
+  
+  for (int k = 0; k < x.size(); ++k){
+    if (x[k] == 0) {
+      cdf[k] = (1.0 - matrix_product(m_pi, m_e)(0,0));
+    }
+    else {
+      cdf[k] = (1.0 - matrix_product(m_pi, matrix_product(matrix_exponential(T * log(pow(x[k] / beta[0], beta[1]) + 1)), m_e))(0,0));
+    }
+  }
+  if (lower_tail == true) {
+    return cdf;
+  }
+  else {
+    return (1 - cdf);
+  }
+}
+
 
 //' Matrix Gompertz density
 //' 
