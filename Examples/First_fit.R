@@ -7,6 +7,7 @@ A <- ph(alpha, S)
 dens(A)
 cdf(A)
 quan(A)
+haz(A)
 
 A
 

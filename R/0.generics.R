@@ -28,6 +28,21 @@ setGeneric("dens", function(x, ...) {
   standardGeneric("dens")
 })
 
+#' New Generic for the Hazard rate of Matrix Distributions
+#'
+#' Methods are available for objects of class \linkS4class{ph}
+#'
+#' @param x an object of the model class.
+#' @param ...
+#'
+#' @return Hazard rate from the matrix distribution.
+#' @export
+#'
+#'
+setGeneric("haz", function(x, ...) {
+  standardGeneric("haz")
+})
+
 #' New Generic for the Distribution of Matrix Distributions
 #'
 #' Methods are available for objects of class \linkS4class{ph}

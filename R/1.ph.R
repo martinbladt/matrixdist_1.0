@@ -121,6 +121,22 @@ setMethod("cdf", c(x = "ph"), function(x,
   return(list(q = q, cdf = cdf))
 })
 
+#' Hazard rate Method for phase type distributions
+#'
+#' @param x an object of class \linkS4class{ph}.
+#' @param y locations
+#'
+#' @return Hazard rate evaluated at locations
+#' @export
+#'
+#' @examples
+#'
+setMethod("haz", c(x = "ph"), function(x, y = seq(0, quan(x, .95)$quantile, length.out = 10)) {
+  d <- dens(x, y)$dens
+  s <- cdf(x, y, lower.tail = FALSE)$cdf
+  return(list(y = y, haz = d/s))
+})
+
 #' Quantile Method for phase type distributions
 #'
 #' @param x an object of class \linkS4class{ph}.
