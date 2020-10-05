@@ -1249,7 +1249,7 @@ double logLikelihoodPH_RKs(double h, NumericVector & pi, NumericMatrix & T, cons
     dt = scale1[0] * obs[0];
   }
   for (int k{0}; k < obs.size(); ++k) {
-    a_rungekutta(avector, dt, scale1[k] * h, T);
+    a_rungekutta(avector, dt, h, T);
     density = matrix_product(avector, t)(0,0);
     logLh += weight[k] * (log(density) + log(scale1[k]));
     dt = scale1[k + 1] * (obs[k + 1] - obs[k]);
@@ -1260,7 +1260,7 @@ double logLikelihoodPH_RKs(double h, NumericVector & pi, NumericMatrix & T, cons
     avector = clone(m_pi);
   }
   for (int k{0}; k < rcens.size(); ++k) {
-    a_rungekutta(avector, dt, scale2[k] * h, T);
+    a_rungekutta(avector, dt, h, T);
     density = matrix_product(avector, e)(0,0);
     logLh += rcweight[k] * log(density);
     dt = scale2[k + 1] * (rcens[k + 1] - rcens[k]);

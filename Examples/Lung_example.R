@@ -28,11 +28,14 @@ lines(pp$q, pp$cdf, col = "red")
 ################ now covariates
 X <- rev(lung[order(lung$status), c(4, 5)])
 
-B <- reg(x = A, y = y/100, rcen = rcen/100, X = X/100, stepsEM = 1000)
-
+B <- reg(x = A, y = y/100, rcen = rcen/100, X = X/100, stepsEM = 500)
 m_plot(B, y/100)
 
-B #degenerated to zero! likelihood increased and then decreased :(
+
+B #density degenerating to infinity! likelihood increased and then decreased :(
+
+m_plot(B, sim(B)) # the estimated object is much larger in magnitude
+
 
 
 head(lung)
