@@ -119,6 +119,11 @@ logLikelihoodPH_RKs <- function(h, pi, T, obs, weight, rcens, rcweight, scale1, 
     .Call(`_matrixdist_logLikelihoodPH_RKs`, h, pi, T, obs, weight, rcens, rcweight, scale1, scale2)
 }
 
+#' Loglikelihood using RK, with scale
+logLikelihoodPH_RKs2 <- function(h, pi, T, obs, weight, rcens, rcweight, scale1, scale2) {
+    .Call(`_matrixdist_logLikelihoodPH_RKs2`, h, pi, T, obs, weight, rcens, rcweight, scale1, scale2)
+}
+
 #' Loglikelihood of matrix Weibull using RK
 #' This is the fastest option
 logLikelihoodMWeib_RKs <- function(h, pi, T, beta, obs, weight, rcens, rcweight, scale1, scale2) {

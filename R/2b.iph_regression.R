@@ -93,7 +93,8 @@ reg_g_specs <- function(name){
       ex <- exp(X%*%theta)
       scale1 <- ex[1:length(obs)]
       scale2 <- tail(ex, length(rcens))
-      return(- logLikelihoodPH_RKs(h, alpha, S, obs, weight, rcens, rcweight, scale1, scale2))
+      return(- logLikelihoodPH_RKs2(h, alpha, S, obs, weight, rcens, rcweight, scale1, scale2))
+      #return(- logLikelihoodPH_RKs(h, alpha, S, obs, weight, rcens, rcweight, scale1, scale2))
     }
   }
   else if(name == "Weibull"){

@@ -1269,6 +1269,56 @@ double logLikelihoodPH_RKs(double h, NumericVector & pi, NumericMatrix & T, cons
   return logLh;
 }
 
+
+
+//' Loglikelihood using RK, with scale
+// [[Rcpp::export]]
+double logLikelihoodPH_RKs2(double h, NumericVector & pi, NumericMatrix & T, const NumericVector & obs, const NumericVector & weight, const NumericVector & rcens, const NumericVector & rcweight, const NumericVector & scale1, const NumericVector & scale2) {
+  long p{T.nrow()};
+  NumericMatrix m_pi(1,p, pi.begin());
+  
+  NumericMatrix avector(1,p);
+  
+  NumericVector m_e(p, 1);
+  NumericMatrix e(p, 1, m_e.begin());
+  
+  NumericMatrix t = matrix_product(T * (-1), e);
+  
+  // Uncensored data
+  //   initial condition
+  avector = clone(m_pi);
+  
+  double dt{0.0};
+  
+  double density{0.0};
+  
+  double logLh{0.0};
+  
+  // Non censored data
+  if (obs.size() > 0) {
+    dt = scale1[0] * obs[0];
+  }
+  for (int k{0}; k < obs.size(); ++k) {
+    density = matrix_product(m_pi, matrix_product(matrix_exponential(T * scale1[k] * obs[k]), t))(0,0);
+    logLh += weight[k] * (log(density) + log(scale1[k]));
+    //dt = scale1[k + 1] * (obs[k + 1] - obs[k]);
+  }
+  //Right censored data
+  if (rcens.size() > 0) {
+    dt = scale2[0] * rcens[0];
+    avector = clone(m_pi);
+  }
+  for (int k{0}; k < rcens.size(); ++k) {
+    //a_rungekutta(avector, dt, h, T);
+    density = matrix_product(m_pi, matrix_product(matrix_exponential(T * scale1[k] * rcens[k]), e))(0,0);
+    logLh += rcweight[k] * log(density);
+    //dt = scale2[k + 1] * (rcens[k + 1] - rcens[k]);
+  }
+  
+  return logLh;
+}
+
+
 //' Loglikelihood of matrix Weibull using RK
 //' This is the fastest option
 // [[Rcpp::export]]
