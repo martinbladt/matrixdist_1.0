@@ -273,6 +273,125 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// logLikelihoodPH_RKs
+double logLikelihoodPH_RKs(double h, NumericVector& pi, NumericMatrix& T, const NumericVector& obs, const NumericVector& weight, const NumericVector& rcens, const NumericVector& rcweight, const NumericVector& scale1, const NumericVector& scale2);
+RcppExport SEXP _matrixdist_logLikelihoodPH_RKs(SEXP hSEXP, SEXP piSEXP, SEXP TSEXP, SEXP obsSEXP, SEXP weightSEXP, SEXP rcensSEXP, SEXP rcweightSEXP, SEXP scale1SEXP, SEXP scale2SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type h(hSEXP);
+    Rcpp::traits::input_parameter< NumericVector& >::type pi(piSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix& >::type T(TSEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type obs(obsSEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type weight(weightSEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type rcens(rcensSEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type rcweight(rcweightSEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type scale1(scale1SEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type scale2(scale2SEXP);
+    rcpp_result_gen = Rcpp::wrap(logLikelihoodPH_RKs(h, pi, T, obs, weight, rcens, rcweight, scale1, scale2));
+    return rcpp_result_gen;
+END_RCPP
+}
+// logLikelihoodMWeib_RKs
+double logLikelihoodMWeib_RKs(double h, NumericVector& pi, NumericMatrix& T, double beta, const NumericVector& obs, const NumericVector& weight, const NumericVector& rcens, const NumericVector& rcweight, const NumericVector& scale1, const NumericVector& scale2);
+RcppExport SEXP _matrixdist_logLikelihoodMWeib_RKs(SEXP hSEXP, SEXP piSEXP, SEXP TSEXP, SEXP betaSEXP, SEXP obsSEXP, SEXP weightSEXP, SEXP rcensSEXP, SEXP rcweightSEXP, SEXP scale1SEXP, SEXP scale2SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type h(hSEXP);
+    Rcpp::traits::input_parameter< NumericVector& >::type pi(piSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix& >::type T(TSEXP);
+    Rcpp::traits::input_parameter< double >::type beta(betaSEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type obs(obsSEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type weight(weightSEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type rcens(rcensSEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type rcweight(rcweightSEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type scale1(scale1SEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type scale2(scale2SEXP);
+    rcpp_result_gen = Rcpp::wrap(logLikelihoodMWeib_RKs(h, pi, T, beta, obs, weight, rcens, rcweight, scale1, scale2));
+    return rcpp_result_gen;
+END_RCPP
+}
+// logLikelihoodMPar_RKs
+double logLikelihoodMPar_RKs(double h, NumericVector& pi, NumericMatrix& T, double beta, const NumericVector& obs, const NumericVector& weight, const NumericVector& rcens, const NumericVector& rcweight, const NumericVector& scale1, const NumericVector& scale2);
+RcppExport SEXP _matrixdist_logLikelihoodMPar_RKs(SEXP hSEXP, SEXP piSEXP, SEXP TSEXP, SEXP betaSEXP, SEXP obsSEXP, SEXP weightSEXP, SEXP rcensSEXP, SEXP rcweightSEXP, SEXP scale1SEXP, SEXP scale2SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type h(hSEXP);
+    Rcpp::traits::input_parameter< NumericVector& >::type pi(piSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix& >::type T(TSEXP);
+    Rcpp::traits::input_parameter< double >::type beta(betaSEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type obs(obsSEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type weight(weightSEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type rcens(rcensSEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type rcweight(rcweightSEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type scale1(scale1SEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type scale2(scale2SEXP);
+    rcpp_result_gen = Rcpp::wrap(logLikelihoodMPar_RKs(h, pi, T, beta, obs, weight, rcens, rcweight, scale1, scale2));
+    return rcpp_result_gen;
+END_RCPP
+}
+// logLikelihoodMLogLogistic_RKs
+double logLikelihoodMLogLogistic_RKs(double h, NumericVector& pi, NumericMatrix& T, NumericVector beta, const NumericVector& obs, const NumericVector& weight, const NumericVector& rcens, const NumericVector& rcweight, const NumericVector& scale1, const NumericVector& scale2);
+RcppExport SEXP _matrixdist_logLikelihoodMLogLogistic_RKs(SEXP hSEXP, SEXP piSEXP, SEXP TSEXP, SEXP betaSEXP, SEXP obsSEXP, SEXP weightSEXP, SEXP rcensSEXP, SEXP rcweightSEXP, SEXP scale1SEXP, SEXP scale2SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type h(hSEXP);
+    Rcpp::traits::input_parameter< NumericVector& >::type pi(piSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix& >::type T(TSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type beta(betaSEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type obs(obsSEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type weight(weightSEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type rcens(rcensSEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type rcweight(rcweightSEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type scale1(scale1SEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type scale2(scale2SEXP);
+    rcpp_result_gen = Rcpp::wrap(logLikelihoodMLogLogistic_RKs(h, pi, T, beta, obs, weight, rcens, rcweight, scale1, scale2));
+    return rcpp_result_gen;
+END_RCPP
+}
+// logLikelihoodMGomp_RKs
+double logLikelihoodMGomp_RKs(double h, NumericVector& pi, NumericMatrix& T, double beta, const NumericVector& obs, const NumericVector& weight, const NumericVector& rcens, const NumericVector& rcweight, const NumericVector& scale1, const NumericVector& scale2);
+RcppExport SEXP _matrixdist_logLikelihoodMGomp_RKs(SEXP hSEXP, SEXP piSEXP, SEXP TSEXP, SEXP betaSEXP, SEXP obsSEXP, SEXP weightSEXP, SEXP rcensSEXP, SEXP rcweightSEXP, SEXP scale1SEXP, SEXP scale2SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type h(hSEXP);
+    Rcpp::traits::input_parameter< NumericVector& >::type pi(piSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix& >::type T(TSEXP);
+    Rcpp::traits::input_parameter< double >::type beta(betaSEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type obs(obsSEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type weight(weightSEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type rcens(rcensSEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type rcweight(rcweightSEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type scale1(scale1SEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type scale2(scale2SEXP);
+    rcpp_result_gen = Rcpp::wrap(logLikelihoodMGomp_RKs(h, pi, T, beta, obs, weight, rcens, rcweight, scale1, scale2));
+    return rcpp_result_gen;
+END_RCPP
+}
+// logLikelihoodMGEV_RKs
+double logLikelihoodMGEV_RKs(double h, NumericVector& pi, NumericMatrix& T, NumericVector beta, const NumericVector& obs, const NumericVector& weight, const NumericVector& rcens, const NumericVector& rcweight, const NumericVector& scale1, const NumericVector& scale2);
+RcppExport SEXP _matrixdist_logLikelihoodMGEV_RKs(SEXP hSEXP, SEXP piSEXP, SEXP TSEXP, SEXP betaSEXP, SEXP obsSEXP, SEXP weightSEXP, SEXP rcensSEXP, SEXP rcweightSEXP, SEXP scale1SEXP, SEXP scale2SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type h(hSEXP);
+    Rcpp::traits::input_parameter< NumericVector& >::type pi(piSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix& >::type T(TSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type beta(betaSEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type obs(obsSEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type weight(weightSEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type rcens(rcensSEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type rcweight(rcweightSEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type scale1(scale1SEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type scale2(scale2SEXP);
+    rcpp_result_gen = Rcpp::wrap(logLikelihoodMGEV_RKs(h, pi, T, beta, obs, weight, rcens, rcweight, scale1, scale2));
+    return rcpp_result_gen;
+END_RCPP
+}
 // embeddedMC
 NumericMatrix embeddedMC(NumericMatrix T);
 RcppExport SEXP _matrixdist_embeddedMC(SEXP TSEXP) {
@@ -1016,6 +1135,12 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_linear_combination", (DL_FUNC) &_matrixdist_linear_combination, 4},
     {"_matrixdist_secondEMstep", (DL_FUNC) &_matrixdist_secondEMstep, 7},
     {"_matrixdist_sum_data", (DL_FUNC) &_matrixdist_sum_data, 1},
+    {"_matrixdist_logLikelihoodPH_RKs", (DL_FUNC) &_matrixdist_logLikelihoodPH_RKs, 9},
+    {"_matrixdist_logLikelihoodMWeib_RKs", (DL_FUNC) &_matrixdist_logLikelihoodMWeib_RKs, 10},
+    {"_matrixdist_logLikelihoodMPar_RKs", (DL_FUNC) &_matrixdist_logLikelihoodMPar_RKs, 10},
+    {"_matrixdist_logLikelihoodMLogLogistic_RKs", (DL_FUNC) &_matrixdist_logLikelihoodMLogLogistic_RKs, 10},
+    {"_matrixdist_logLikelihoodMGomp_RKs", (DL_FUNC) &_matrixdist_logLikelihoodMGomp_RKs, 10},
+    {"_matrixdist_logLikelihoodMGEV_RKs", (DL_FUNC) &_matrixdist_logLikelihoodMGEV_RKs, 10},
     {"_matrixdist_embeddedMC", (DL_FUNC) &_matrixdist_embeddedMC, 1},
     {"_matrixdist_cumulateMatrix", (DL_FUNC) &_matrixdist_cumulateMatrix, 1},
     {"_matrixdist_cumulateVector", (DL_FUNC) &_matrixdist_cumulateVector, 1},
