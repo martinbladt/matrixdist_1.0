@@ -26,19 +26,23 @@ lines(pp$q, pp$cdf, col = "red")
 
 
 ################ now covariates
-X <- rev(lung[order(lung$status), c(4, 5)])
+X <- rev(lung[order(lung$status), c(4, 5)])/100 #clean this up
+X <- t(t(X)-colMeans(X)) #clean this up
 
-B <- reg(x = A, y = y/100, rcen = rcen/100, X = X/100, stepsEM = 500)
-m_plot(B, y/100)
+set.seed(10)
+A <- ph(structure = "Coxian", dimension = 2)
+
+B <- reg(x = A, y = y, rcen = rcen, X = X, stepsEM = 1000)
+m_plot(B, y)
+
+iA <- iph(A, gfun = "Pareto", gfun_pars = 1) 
+
+iB <- reg(x = iA, y = y, rcen = rcen, X = X, stepsEM = 1000) #no jala!
+m_plot(B, y)
 
 
-B #density degenerating to infinity! likelihood increased and then decreased :(
 
-m_plot(B, sim(B)) # the estimated object is much larger in magnitude
-
-
-
-head(lung)
+# make regression objects and methods
 
 
 

@@ -93,10 +93,20 @@ reg_g_specs <- function(name){
       ex <- exp(X%*%theta)
       scale1 <- ex[1:length(obs)]
       scale2 <- tail(ex, length(rcens))
-      return(- logLikelihoodPH_RKs2(h, alpha, S, obs, weight, rcens, rcweight, scale1, scale2))
-      #return(- logLikelihoodPH_RKs(h, alpha, S, obs, weight, rcens, rcweight, scale1, scale2))
+      o1 <- order(scale1 * obs)
+      o2 <- order(scale2 * rcens)
+      return(- logLikelihoodPH_RKs(h, alpha, S, obs[o1], weight[o1], rcens[o2], rcweight[o2], scale1[o1], scale2[o2]))
     }
   }
+  # if(name == "Homogeneous"){
+  #   inv_g <- function(t, w, beta) return(list(obs = t, weight = w)) 
+  #   mLL <- function(h, alpha, S, theta, obs, weight, rcens, rcweight, X) {
+  #     ex <- exp(X%*%theta)
+  #     scale1 <- ex[1:length(obs)]
+  #     scale2 <- tail(ex, length(rcens))
+  #     return(- logLikelihoodPH_RKs2(h, alpha, S, obs, weight, rcens, rcweight, scale1, scale2))
+  #   }
+  # }
   else if(name == "Weibull"){
     inv_g <- function(t, w, beta) return(list(obs = t^{beta}, weight = w)) 
     mLL <- function(h, alpha, S, theta, obs, weight, rcens, rcweight, X) {
@@ -105,7 +115,9 @@ reg_g_specs <- function(name){
       ex <- exp(X%*%B)
       scale1 <- ex[1:length(obs)]
       scale2 <- tail(ex, length(rcens))
-      return(- logLikelihoodMWeib_RKs(h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2))
+      o1 <- order(scale1 * obs)
+      o2 <- order(scale2 * rcens)
+      return(- logLikelihoodMWeib_RKs(h, alpha, S, beta, obs[o1], weight[o1], rcens[o2], rcweight[o2], scale1[o1], scale2[o2]))
     }
   }
   else if(name == "Pareto"){
@@ -116,7 +128,9 @@ reg_g_specs <- function(name){
       ex <- exp(X%*%B)
       scale1 <- ex[1:length(obs)]
       scale2 <- tail(ex, length(rcens))
-      return(- logLikelihoodMPar_RKs(h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2))
+      o1 <- order(scale1 * obs)
+      o2 <- order(scale2 * rcens)
+      return(- logLikelihoodMPar_RKs(h, alpha, S, beta, obs[o1], weight[o1], rcens[o2], rcweight[o2], scale1[o1], scale2[o2]))
     }
   }
   else if(name == "LogLogistic"){
@@ -127,7 +141,9 @@ reg_g_specs <- function(name){
       ex <- exp(X%*%B)
       scale1 <- ex[1:length(obs)]
       scale2 <- tail(ex, length(rcens))
-      return(- logLikelihoodMLogLogistic_RKs(h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2))
+      o1 <- order(scale1 * obs)
+      o2 <- order(scale2 * rcens)
+      return(- logLikelihoodMLogLogistic_RKs(h, alpha, S, beta, obs[o1], weight[o1], rcens[o2], rcweight[o2], scale1[o1], scale2[o2]))
     }
   }
   else if(name == "Gompertz"){
@@ -138,18 +154,22 @@ reg_g_specs <- function(name){
       ex <- exp(X%*%B)
       scale1 <- ex[1:length(obs)]
       scale2 <- tail(ex, length(rcens))
-      return(- logLikelihoodMGomp_RKs(h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2))
+      o1 <- order(scale1 * obs)
+      o2 <- order(scale2 * rcens)
+      return(- logLikelihoodMGomp_RKs(h, alpha, S, beta, obs[o1], weight[o1], rcens[o2], rcweight[o2], scale1[o1], scale2[o2]))
     }
   }
   else if(name == "GEVD"){
     inv_g <- reversTransformData
-    mLL <- function(h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2) {
+    mLL <- function(h, alpha, S, theta, obs, weight, rcens, rcweight, X) {
       beta <- theta[1:3]; B <- theta[4:length(theta)]
       if(beta[2] < 0) return(NA)
       ex <- exp(X%*%B)
       scale1 <- ex[1:length(obs)]
       scale2 <- tail(ex, length(rcens))
-      return(- logLikelihoodMGEV_RKs(h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2))
+      o1 <- order(scale1 * obs)
+      o2 <- order(scale2 * rcens)
+      return(- logLikelihoodMGEV_RKs(h, alpha, S, beta, obs[o1], weight[o1], rcens[o2], rcweight[o2], scale1[o1], scale2[o2]))
     }
   }else{
     stop("fit for this gfun is not yet implemented")
