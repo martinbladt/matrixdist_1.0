@@ -35,14 +35,16 @@ A <- ph(structure = "Coxian", dimension = 2)
 B <- reg(x = A, y = y, rcen = rcen, X = X, stepsEM = 1000)
 m_plot(B, y)
 
+iA <- iph(A, gfun = "Weibull", gfun_pars = 1) 
+
+iB <- reg(x = iA, y = y/100, rcen = rcen/100, X = X, stepsEM = 100)
+
 iA <- iph(A, gfun = "Pareto", gfun_pars = 1) 
 
-iB <- reg(x = iA, y = y, rcen = rcen, X = X, stepsEM = 1000) #no jala!
-m_plot(B, y)
+iB <- reg(x = iA, y = y/100, rcen = rcen/100, X = X, stepsEM = 100)
 
 
-
-# make regression objects and methods
+# make regression objects and methods, optimize code everywhere, polish presentation and defaults to fit
 
 
 

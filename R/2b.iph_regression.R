@@ -115,8 +115,8 @@ reg_g_specs <- function(name){
       ex <- exp(X%*%B)
       scale1 <- ex[1:length(obs)]
       scale2 <- tail(ex, length(rcens))
-      o1 <- order(scale1 * obs)
-      o2 <- order(scale2 * rcens)
+      o1 <- order(scale1 * inv_g(obs, weight, beta)$obs)
+      o2 <- order(scale2 * inv_g(rcens, rcweight, beta)$obs)
       return(- logLikelihoodMWeib_RKs(h, alpha, S, beta, obs[o1], weight[o1], rcens[o2], rcweight[o2], scale1[o1], scale2[o2]))
     }
   }
@@ -128,8 +128,8 @@ reg_g_specs <- function(name){
       ex <- exp(X%*%B)
       scale1 <- ex[1:length(obs)]
       scale2 <- tail(ex, length(rcens))
-      o1 <- order(scale1 * obs)
-      o2 <- order(scale2 * rcens)
+      o1 <- order(scale1 * inv_g(obs, weight, beta)$obs)
+      o2 <- order(scale2 * inv_g(rcens, rcweight, beta)$obs)
       return(- logLikelihoodMPar_RKs(h, alpha, S, beta, obs[o1], weight[o1], rcens[o2], rcweight[o2], scale1[o1], scale2[o2]))
     }
   }
@@ -141,8 +141,8 @@ reg_g_specs <- function(name){
       ex <- exp(X%*%B)
       scale1 <- ex[1:length(obs)]
       scale2 <- tail(ex, length(rcens))
-      o1 <- order(scale1 * obs)
-      o2 <- order(scale2 * rcens)
+      o1 <- order(scale1 * inv_g(obs, weight, beta)$obs)
+      o2 <- order(scale2 * inv_g(rcens, rcweight, beta)$obs)
       return(- logLikelihoodMLogLogistic_RKs(h, alpha, S, beta, obs[o1], weight[o1], rcens[o2], rcweight[o2], scale1[o1], scale2[o2]))
     }
   }
@@ -154,8 +154,8 @@ reg_g_specs <- function(name){
       ex <- exp(X%*%B)
       scale1 <- ex[1:length(obs)]
       scale2 <- tail(ex, length(rcens))
-      o1 <- order(scale1 * obs)
-      o2 <- order(scale2 * rcens)
+      o1 <- order(scale1 * inv_g(obs, weight, beta)$obs)
+      o2 <- order(scale2 * inv_g(rcens, rcweight, beta)$obs)
       return(- logLikelihoodMGomp_RKs(h, alpha, S, beta, obs[o1], weight[o1], rcens[o2], rcweight[o2], scale1[o1], scale2[o2]))
     }
   }
@@ -167,8 +167,8 @@ reg_g_specs <- function(name){
       ex <- exp(X%*%B)
       scale1 <- ex[1:length(obs)]
       scale2 <- tail(ex, length(rcens))
-      o1 <- order(scale1 * obs)
-      o2 <- order(scale2 * rcens)
+      o1 <- order(scale1 * inv_g(obs, weight, beta)$obs)
+      o2 <- order(scale2 * inv_g(rcens, rcweight, beta)$obs)
       return(- logLikelihoodMGEV_RKs(h, alpha, S, beta, obs[o1], weight[o1], rcens[o2], rcweight[o2], scale1[o1], scale2[o2]))
     }
   }else{
