@@ -68,6 +68,7 @@ setMethod(
                                     rcens = rcen, 
                                     rcweight = rcenweight,
                                     X = X))
+      
       par_g <- head(opt$par, ng)
       B_fit <- tail(opt$par, p)
       if (k %% 10 == 0) {
@@ -135,7 +136,7 @@ reg_g_specs <- function(name){
   }
   else if(name == "LogLogistic"){
     inv_g <- function(t, w, beta) return(list(obs = log((t/beta[1])^{beta[2]} + 1), weight = w))
-    mLL <- function(h, alpha, S, beta, obs, weight, rcens, rcweight, X) {
+    mLL <- function(h, alpha, S, theta, obs, weight, rcens, rcweight, X) {
       beta <- theta[1:2]; B <- theta[3:length(theta)]
       if(beta[1] < 0 | beta[2] < 0) return(NA)
       ex <- exp(X%*%B)
@@ -159,19 +160,20 @@ reg_g_specs <- function(name){
       return(- logLikelihoodMGomp_RKs(h, alpha, S, beta, obs[o1], weight[o1], rcens[o2], rcweight[o2], scale1[o1], scale2[o2]))
     }
   }
-  else if(name == "GEVD"){
-    inv_g <- reversTransformData
-    mLL <- function(h, alpha, S, theta, obs, weight, rcens, rcweight, X) {
-      beta <- theta[1:3]; B <- theta[4:length(theta)]
-      if(beta[2] < 0) return(NA)
-      ex <- exp(X%*%B)
-      scale1 <- ex[1:length(obs)]
-      scale2 <- tail(ex, length(rcens))
-      o1 <- order(scale1 * inv_g(obs, weight, beta)$obs)
-      o2 <- order(scale2 * inv_g(rcens, rcweight, beta)$obs)
-      return(- logLikelihoodMGEV_RKs(h, alpha, S, beta, obs[o1], weight[o1], rcens[o2], rcweight[o2], scale1[o1], scale2[o2]))
-    }
-  }else{
+  # else if(name == "GEVD"){
+  #   inv_g <- reversTransformData
+  #   mLL <- function(h, alpha, S, theta, obs, weight, rcens, rcweight, X) {
+  #     beta <- theta[1:3]; B <- theta[4:length(theta)]
+  #     if(beta[2] < 0) return(NA)
+  #     ex <- exp(X%*%B)
+  #     scale1 <- ex[1:length(obs)]
+  #     scale2 <- tail(ex, length(rcens))
+  #     o1 <- order(scale1 * inv_g(obs, weight, beta)$obs)
+  #     o2 <- order(scale2 * inv_g(rcens, rcweight, beta)$obs)
+  #     return(- logLikelihoodMGEV_RKs(h, alpha, S, beta, obs[o1], weight[o1], rcens[o2], rcweight[o2], scale1[o1], scale2[o2]))
+  #   }
+  # }
+  else{
     stop("fit for this gfun is not yet implemented")
   }
   return(list(inv_g = inv_g, mLL = mLL))
