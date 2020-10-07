@@ -44,7 +44,6 @@ setMethod(
     pi_fit <- clone_vector(ph_par$alpha)
     T_fit <- clone_matrix(ph_par$S)
     B_fit <- rep(0, p)
-
     for (k in 1:stepsEM) {
       prop <- exp(X%*%B_fit)
       

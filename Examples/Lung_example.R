@@ -55,22 +55,7 @@ iA <- iph(A, gfun = "LogLogistic", gfun_pars = c(1, 1))
 
 iB <- reg(x = iA, y = y, rcen = rcen, X = X, stepsEM = 1000)
 
-iA <- iph(A, gfun = "GEVD", gfun_pars = c(0, 1, 2)) 
-
-iB <- reg(x = iA, y = y, rcen = rcen, X = X, stepsEM = 1000)
-
 
 # make regression objects and methods, optimize code everywhere, polish presentation and defaults to fit
-
-
-
-
-
-
-
-
-
-
-
 
 
