@@ -151,6 +151,38 @@ logLikelihoodMGEV_RKs <- function(h, pi, T, beta, obs, weight, rcens, rcweight, 
     .Call(`_matrixdist_logLikelihoodMGEV_RKs`, h, pi, T, beta, obs, weight, rcens, rcweight, scale1, scale2)
 }
 
+#' Loglikelihood using RK, with scale
+logLikelihoodPH_RKs1 <- function(h, pi, T, obs, weight, rcens, rcweight, scale1, scale2) {
+    .Call(`_matrixdist_logLikelihoodPH_RKs1`, h, pi, T, obs, weight, rcens, rcweight, scale1, scale2)
+}
+
+#' Loglikelihood of matrix Weibull using RK
+#' This is the fastest option
+logLikelihoodMWeib_RKs1 <- function(h, pi, T, beta, obs, weight, rcens, rcweight, scale1, scale2) {
+    .Call(`_matrixdist_logLikelihoodMWeib_RKs1`, h, pi, T, beta, obs, weight, rcens, rcweight, scale1, scale2)
+}
+
+#' Loglikelihood of matrix Pareto using RK
+logLikelihoodMPar_RKs1 <- function(h, pi, T, beta, obs, weight, rcens, rcweight, scale1, scale2) {
+    .Call(`_matrixdist_logLikelihoodMPar_RKs1`, h, pi, T, beta, obs, weight, rcens, rcweight, scale1, scale2)
+}
+
+#' Loglikelihood of matrix Log-Logistic using RK
+logLikelihoodMLogLogistic_RKs1 <- function(h, pi, T, beta, obs, weight, rcens, rcweight, scale1, scale2) {
+    .Call(`_matrixdist_logLikelihoodMLogLogistic_RKs1`, h, pi, T, beta, obs, weight, rcens, rcweight, scale1, scale2)
+}
+
+#' Loglikelihood of matrix Gompertz using RK
+logLikelihoodMGomp_RKs1 <- function(h, pi, T, beta, obs, weight, rcens, rcweight, scale1, scale2) {
+    .Call(`_matrixdist_logLikelihoodMGomp_RKs1`, h, pi, T, beta, obs, weight, rcens, rcweight, scale1, scale2)
+}
+
+#' Loglikelihood of matrix GEV using RK
+#' I am assuming that the sample is given in an increasing order
+logLikelihoodMGEV_RKs1 <- function(h, pi, T, beta, obs, weight, rcens, rcweight, scale1, scale2) {
+    .Call(`_matrixdist_logLikelihoodMGEV_RKs1`, h, pi, T, beta, obs, weight, rcens, rcweight, scale1, scale2)
+}
+
 #' Embeded Markov chain of a sub-intensity matrix
 #' 
 #' Returns the transition probabilities of the embeded Markov chain determined the sub-intensity matrix 

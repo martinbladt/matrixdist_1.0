@@ -36,25 +36,29 @@ lines(pp$q, pp$cdf, col = "red")
 set.seed(1)
 A <- ph(structure = "Coxian", dimension = 2)
 
-B <- reg(x = A, y = y, rcen = rcen, X = X, stepsEM = 1000)
-m_plot(B, y)
+B <- reg(x = A, y = y, rcen = rcen, X = X)
+C <- aft(x = A, y = y, rcen = rcen, X = X) #gives the same, as it should
 
 iA <- iph(A, gfun = "Weibull", gfun_pars = 1) 
 
-iB <- reg(x = iA, y = y, rcen = rcen, X = X, stepsEM = 2000) #sube y baja!?
+iB <- reg(x = iA, y = y, rcen = rcen, X = X)
+iC <- aft(x = iA, y = y, rcen = rcen, X = X) #gives the same, as it should
 
 iA <- iph(A, gfun = "Pareto", gfun_pars = 1) 
 
-iB <- reg(x = iA, y = y, rcen = rcen, X = X, stepsEM = 1000)
+iB <- reg(x = iA, y = y, rcen = rcen, X = X)
+iC <- aft(x = iA, y = y, rcen = rcen, X = X)
 
 iA <- iph(A, gfun = "Gompertz", gfun_pars = 1) 
 
-iB <- reg(x = iA, y = y, rcen = rcen, X = X, stepsEM = 1000)
+iB <- reg(x = iA, y = y, rcen = rcen, X = X)
+iC <- aft(x = iA, y = y, rcen = rcen, X = X)
+
 
 iA <- iph(A, gfun = "LogLogistic", gfun_pars = c(1, 1)) 
 
-iB <- reg(x = iA, y = y, rcen = rcen, X = X, stepsEM = 1000)
-
+iB <- reg(x = iA, y = y, rcen = rcen, X = X)
+iB <- aft(x = iA, y = y, rcen = rcen, X = X)
 
 # make regression objects and methods, optimize code everywhere, polish presentation and defaults to fit
 

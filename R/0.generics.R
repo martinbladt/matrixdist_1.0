@@ -105,6 +105,22 @@ setGeneric("reg", function(x, y, ...) {
   standardGeneric("reg")
 })
 
+#' New Generic for AFT regression with Matrix Distributions
+#'
+#' Methods are available for objects of class \linkS4class{ph}
+#'
+#' @param x an object of the model class.
+#' @param y a vector of data.
+#' @param ...
+#'
+#' @return An object of the fitted model class.
+#' @export
+#'
+#'
+setGeneric("aft", function(x, y, ...) {
+  standardGeneric("aft")
+})
+
 
 #' New Generic for Plotting Matrix Distributions
 #'
