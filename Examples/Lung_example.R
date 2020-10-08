@@ -34,15 +34,20 @@ lines(pp$q, pp$cdf, col = "red")
 
 
 set.seed(1)
-A <- ph(structure = "Coxian", dimension = 2)
+A <- ph(structure = "Coxian", dimension = 1)
 
 B <- reg(x = A, y = y, rcen = rcen, X = X)
 C <- aft(x = A, y = y, rcen = rcen, X = X) #gives the same, as it should
+
+logLik(survival::survreg(survival::Surv(time,status) ~  age + sex,dist="exponential", data = lung))
 
 iA <- iph(A, gfun = "Weibull", gfun_pars = 1) 
 
 iB <- reg(x = iA, y = y, rcen = rcen, X = X)
 iC <- aft(x = iA, y = y, rcen = rcen, X = X) #gives the same, as it should
+
+logLik(survival::survreg(survival::Surv(time,status) ~  age + sex,dist="weibull", data = lung))
+
 
 iA <- iph(A, gfun = "Pareto", gfun_pars = 1) 
 

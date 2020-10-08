@@ -32,13 +32,14 @@ setMethod(
       inv_g <- specs$inv_g 
       mLL <- specs$mLL
     }
-    A <- data_aggregation(y, weight); y <- A$un_obs; weight <- A$weights
-    B <- data_aggregation(rcen, rcenweight); rcen <- B$un_obs; rcenweight <- B$weights
     
     p <- dim(X)[2]
     n1 <- length(y)
     n2 <- length(rcen)
     ng <- length(par_g)
+    
+    if(length(weight) == 0) weight <- rep(1, n1)
+    if(length(rcenweight) == 0) rcenweight <- rep(1, n2)
 
     ph_par <- x@pars
     pi_fit <- clone_vector(ph_par$alpha)
@@ -48,15 +49,13 @@ setMethod(
       prop <- exp(X%*%B_fit)
       
       trans <- inv_g(y, weight, par_g); trans$obs <- prop[1:n1] * trans$obs
-      o1 <- order(trans$obs)
-      trans <- lapply(trans, function(x) x[o1])
-      
       trans_cens <- inv_g(rcen, rcenweight, par_g); trans_cens$obs <- prop[(n1 + 1):(n1 + n2)] * trans_cens$obs
-      o2 <- order(trans_cens$obs)
-      trans_cens <- lapply(trans_cens, function(x) x[o2])
+      
+      A <- data_aggregation(trans$obs, trans$weight)
+      B <- data_aggregation(trans_cens$obs, trans_cens$weight)
       
       RKstep <- default_step_length(T_fit)
-      EMstep_RK(RKstep, pi_fit, T_fit, trans$obs, trans$weight, trans_cens$obs, trans_cens$weight)
+      EMstep_RK(RKstep, pi_fit, T_fit, A$un_obs, A$weights, B$un_obs, B$weights)
       theta <- c(par_g, B_fit)
       opt <- suppressWarnings(optim(par = theta, fn = mLL, 
                                     h = RKstep, 
