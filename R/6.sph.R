@@ -18,27 +18,25 @@ setClass("sph",
 
 #' Constructor Function for Survival phase type objects
 #'
-#' @param ph An object of class \linkS4class{ph}
-#' @param iph An object of class \linkS4class{iph}
+#' @param x An object of class \linkS4class{ph}
 #'
 #' @return An object of class \linkS4class{sph}.
 #' @export
 #'
 #' @examples
-sph <- function(ph = NULL, iph = NULL, coefs = list(B = numeric(0), C = numeric(0)), type = "reg") {
-  if(!type %in% c("reg", "reg2", "acf")) stop("type must be one of : reg, reg2, acf")
-  if (is.null(iph)) {
-    if (is.null(ph)) {
-      iph <- ph(structure = "General")
-    }else{iph <- ph}
+sph <- function(x = NULL, coefs = list(B = numeric(0), C = numeric(0)), type = "reg") {
+  if(!type %in% c("reg", "reg2", "aft")) stop("type must be one of : reg, reg2, aft")
+  if (!is(x, "iph")) {
+    if (!is(x, "ph")) {
+      ph <- ph(structure = "General")
+    }
     gfun <- list(name = "Indentity", pars = numeric(0))
   }else{
-    gfun <- iph@gfun
+    gfun <- x@gfun
   }
-  iph@pars
   new("sph",
-      name = paste("survival", type, iph@name, sep = " "),
-      pars = iph@pars,
+      name = paste("survival", type, x@name, sep = " "),
+      pars = x@pars,
       gfun = gfun,
       coefs = coefs,
       type = type
@@ -62,5 +60,18 @@ setMethod("show", "sph", function(object) {
   print(object@gfun$pars)
   cat("coefficients: ", "\n", sep = "")
   print(object@coefs)
+})
+
+#' Coef Method for sph Class
+#'
+#' @param object an object of class \linkS4class{sph}.
+#'
+#' @return parameters of ph model
+#' @export
+#'
+setMethod("coef", c(object = "sph"), function(object) {
+  L <- append(object@pars, unname(object@gfun$pars))
+  names(L)[3] <- names(object@gfun$pars)
+  append(L, object@coefs)
 })
 

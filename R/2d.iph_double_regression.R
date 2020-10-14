@@ -86,11 +86,11 @@ setMethod(
     cat("\n", sep = "")
     x@pars$alpha <- pi_fit
     x@pars$S <- T_fit
-    x <- iph(x, gfun = name, gfun_pars = exp(C_intercept))
-    cat("\n", "regression parameters:", "\n", sep = " ")
-    print(B_fit)
-    print(c(C_intercept, C_fit))
-    return(x)
+    x@gfun$pars <- exp(C_intercept)
+    s <- sph(x, type = "reg2")
+    s@coefs$B <- B_fit
+    s@coefs$C <- C_fit
+    return(s)
   }
 )
 

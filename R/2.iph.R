@@ -144,3 +144,18 @@ setMethod("cdf", c(x = "iph"), function(x,
   cdf[q_inf] <- as.numeric(1 * lower.tail)
   return(list(q = q, cdf = cdf))
 })
+
+
+#' Coef Method for iph Class
+#'
+#' @param object an object of class \linkS4class{iph}.
+#'
+#' @return parameters of ph model
+#' @export
+#'
+setMethod("coef", c(object = "iph"), function(object) {
+  L <- append(object@pars, unname(object@gfun$pars))
+  names(L)[3] <- names(object@gfun$pars)
+  L
+})
+

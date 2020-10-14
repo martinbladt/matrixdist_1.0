@@ -40,8 +40,12 @@ A <- ph(structure = "Coxian", dimension = 3)
 
 iA <- iph(A, gfun = "Weibull", gfun_pars = 1) 
 iB <- reg(x = iA, y = y, rcen = rcen, X = X, stepsEM = 500)
-
+iC <- aft(x = iA, y = y, rcen = rcen, X = X, stepsEM = 500)
 iD <- reg2(x = iA, y = y, rcen = rcen, X = X, stepsEM = 500)
+
+coef(iB)
+coef(iC)
+coef(iD)
 
 #logLik(survival::survreg(survival::Surv(time,status) ~  age + sex,dist="weibull", data = lung))
 

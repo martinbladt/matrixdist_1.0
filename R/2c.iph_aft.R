@@ -80,11 +80,11 @@ setMethod(
     cat("\n", sep = "")
     x@pars$alpha <- pi_fit
     x@pars$S <- T_fit
-    if(is_iph) x <- iph(x, gfun = name, gfun_pars = par_g)
-    cat("\n", "regression parameters:", "\n", sep = " ")
-    print(B_fit)
-    return(x)
-  }
+    s <- sph(x, type = "aft")
+    s@gfun$pars <- par_g
+    s@coefs$B <- B_fit
+    return(s)
+    }
 )
 
 aft_g_specs <- function(name){
