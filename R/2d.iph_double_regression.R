@@ -16,10 +16,13 @@ setMethod(
            rcen = numeric(0),
            rcenweight = numeric(0),
            X = numeric(0),
+           Z = numeric(0),
            stepsEM = 1000,
            B0 = numeric(0),
            C0 = numeric(0)) {
     X <- as.matrix(X)
+    Z <- as.matrix(X)
+    if(any(dim(Z) == 0)) Z <- X
     if(any(dim(X) == 0)) stop("input covariate matrix X, or use fit method instead")
     name <- x@gfun$name
     par_g <- x@gfun$pars
@@ -27,11 +30,11 @@ setMethod(
     inv_g <- specs$inv_g 
     mLL <- specs$mLL
     
-    p <- dim(X)[2]
+    p1 <- dim(X)[2]
+    p2 <- dim(Z)[2]
     n1 <- length(y)
     n2 <- length(rcen)
-    ng <- length(par_g)
-    
+
     if(length(weight) == 0) weight <- rep(1, n1)
     if(length(rcenweight) == 0) rcenweight <- rep(1, n2)
     
@@ -39,15 +42,15 @@ setMethod(
     pi_fit <- clone_vector(ph_par$alpha)
     T_fit <- clone_matrix(ph_par$S)
     
-    if(length(B0) == 0){B_fit <- rep(0, p)
+    if(length(B0) == 0){B_fit <- rep(0, p1)
     }else{B_fit <- B0}
-    if(length(C0) == 0){C_fit <- rep(0, p)
+    if(length(C0) == 0){C_fit <- rep(0, p2)
     }else{C_fit <- C0}
     C_intercept <- log(par_g)
     
     for (k in 1:stepsEM) {
       prop <- exp(X%*%B_fit)
-      par_g <- exp(C_intercept + X%*%C_fit) 
+      par_g <- exp(C_intercept + Z%*%C_fit) 
       
       trans <- inv_g(y, weight, par_g[1:n1]); trans$obs <- prop[1:n1] * trans$obs
       trans_cens <- inv_g(rcen, rcenweight, par_g[(n1 + 1):(n1 + n2)]); trans_cens$obs <- prop[(n1 + 1):(n1 + n2)] * trans_cens$obs
@@ -67,10 +70,13 @@ setMethod(
                                     rcens = rcen, 
                                     rcweight = rcenweight,
                                     X = X,
+                                    Z = Z,
+                                    p1 = p1,
+                                    p2 = p2,
                                     method = "Nelder-Mead"))
-      B_fit <- head(opt$par, p)
-      C_intercept <- opt$par[p + 1]
-      C_fit <- tail(opt$par, p)
+      B_fit <- head(opt$par, p1)
+      C_intercept <- opt$par[p1 + 1]
+      C_fit <- tail(opt$par, p2)
       if (k %% 10 == 0) {
         cat("\r", "iteration:", k,
             ", logLik:", - opt$value,
@@ -91,10 +97,10 @@ setMethod(
 reg2_g_specs <- function(name){
    if(name == "Weibull"){
     inv_g <- function(t, w, beta) return(list(obs = t^{beta}, weight = w)) 
-    mLL <- function(h, alpha, S, theta, obs, weight, rcens, rcweight, X) {
-      B <- theta[1:(length(theta)/2 - 1/2)]
-      C <- tail(theta, length(theta)/2 + 1/2)
-      beta <- exp(C[1] + X%*%C[-1])
+    mLL <- function(h, alpha, S, theta, obs, weight, rcens, rcweight, X, Z, p1, p2) {
+      B <- theta[1:p1]
+      C <- tail(theta, p2 + 1)
+      beta <- exp(C[1] + Z%*%C[-1])
       ex <- exp(X%*%B)
       scale1 <- ex[1:length(obs)]; beta1 <- beta[1:length(obs)]
       scale2 <- tail(ex, length(rcens)); beta2 <- tail(beta, length(rcens))
@@ -105,56 +111,32 @@ reg2_g_specs <- function(name){
   }
   else if(name == "Pareto"){
     inv_g <- function(t, w, beta) return(list(obs = log(t/beta + 1), weight = w))
-    mLL <- function(h, alpha, S, theta, obs, weight, rcens, rcweight, X) {
-      beta <- theta[1]; B <- theta[2:length(theta)]
-      if(beta < 0) return(NA)
+    mLL <- function(h, alpha, S, theta, obs, weight, rcens, rcweight, X, Z, p1, p2) {
+      B <- theta[1:p1]
+      C <- tail(theta, p2 + 1)
+      beta <- exp(C[1] + Z%*%C[-1])
       ex <- exp(X%*%B)
-      scale1 <- ex[1:length(obs)]
-      scale2 <- tail(ex, length(rcens))
-      o1 <- order(scale1 * inv_g(obs, weight, beta)$obs)
-      o2 <- order(scale2 * inv_g(rcens, rcweight, beta)$obs)
-      return(- logLikelihoodMPar_RKs(h, alpha, S, beta, obs[o1], weight[o1], rcens[o2], rcweight[o2], scale1[o1], scale2[o2]))
-    }
-  }
-  else if(name == "LogLogistic"){
-    inv_g <- function(t, w, beta) return(list(obs = log((t/beta[1])^{beta[2]} + 1), weight = w))
-    mLL <- function(h, alpha, S, theta, obs, weight, rcens, rcweight, X) {
-      beta <- theta[1:2]; B <- theta[3:length(theta)]
-      if(beta[1] < 0 | beta[2] < 0) return(NA)
-      ex <- exp(X%*%B)
-      scale1 <- ex[1:length(obs)]
-      scale2 <- tail(ex, length(rcens))
-      o1 <- order(scale1 * inv_g(obs, weight, beta)$obs)
-      o2 <- order(scale2 * inv_g(rcens, rcweight, beta)$obs)
-      return(- logLikelihoodMLogLogistic_RKs(h, alpha, S, beta, obs[o1], weight[o1], rcens[o2], rcweight[o2], scale1[o1], scale2[o2]))
+      scale1 <- ex[1:length(obs)]; beta1 <- beta[1:length(obs)]
+      scale2 <- tail(ex, length(rcens)); beta2 <- tail(beta, length(rcens))
+      o1 <- order(scale1 * inv_g(obs, weight, beta1)$obs)
+      o2 <- order(scale2 * inv_g(rcens, rcweight, beta2)$obs)
+      return(- logLikelihoodMPar_RKs_double(h, alpha, S, beta1[o1], beta2[o2], obs[o1], weight[o1], rcens[o2], rcweight[o2], scale1[o1], scale2[o2]))
     }
   }
   else if(name == "Gompertz"){
     inv_g <- function(t, w, beta) return(list(obs = (exp(t * beta) - 1) / beta, weight = w))
-    mLL <- function(h, alpha, S, theta, obs, weight, rcens, rcweight, X) {
-      beta <- theta[1]; B <- theta[2:length(theta)]
-      if(beta < 0) return(NA)
+    mLL <- function(h, alpha, S, theta, obs, weight, rcens, rcweight, X, Z, p1, p2) {
+      B <- theta[1:p1]
+      C <- tail(theta, p2 + 1)
+      beta <- exp(C[1] + Z%*%C[-1])
       ex <- exp(X%*%B)
-      scale1 <- ex[1:length(obs)]
-      scale2 <- tail(ex, length(rcens))
-      o1 <- order(scale1 * inv_g(obs, weight, beta)$obs)
-      o2 <- order(scale2 * inv_g(rcens, rcweight, beta)$obs)
-      return(- logLikelihoodMGomp_RKs(h, alpha, S, beta, obs[o1], weight[o1], rcens[o2], rcweight[o2], scale1[o1], scale2[o2]))
+      scale1 <- ex[1:length(obs)]; beta1 <- beta[1:length(obs)]
+      scale2 <- tail(ex, length(rcens)); beta2 <- tail(beta, length(rcens))
+      o1 <- order(scale1 * inv_g(obs, weight, beta1)$obs)
+      o2 <- order(scale2 * inv_g(rcens, rcweight, beta2)$obs)
+      return(- logLikelihoodMGomp_RKs_double(h, alpha, S, beta1[o1], beta2[o2], obs[o1], weight[o1], rcens[o2], rcweight[o2], scale1[o1], scale2[o2]))
     }
   }
-  # else if(name == "GEVD"){
-  #   inv_g <- reversTransformData
-  #   mLL <- function(h, alpha, S, theta, obs, weight, rcens, rcweight, X) {
-  #     beta <- theta[1:3]; B <- theta[4:length(theta)]
-  #     if(beta[2] < 0) return(NA)
-  #     ex <- exp(X%*%B)
-  #     scale1 <- ex[1:length(obs)]
-  #     scale2 <- tail(ex, length(rcens))
-  #     o1 <- order(scale1 * inv_g(obs, weight, beta)$obs)
-  #     o2 <- order(scale2 * inv_g(rcens, rcweight, beta)$obs)
-  #     return(- logLikelihoodMGEV_RKs(h, alpha, S, beta, obs[o1], weight[o1], rcens[o2], rcweight[o2], scale1[o1], scale2[o2]))
-  #   }
-  # }
   else{
     stop("fit for this gfun is not yet implemented")
   }

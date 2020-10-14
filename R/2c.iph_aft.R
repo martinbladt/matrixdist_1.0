@@ -16,6 +16,7 @@ setMethod(
            rcen = numeric(0),
            rcenweight = numeric(0),
            X = numeric(0),
+           B0 = numeric(0),
            stepsEM = 1000) {
     X <- as.matrix(X)
     if(any(dim(X) == 0)) stop("input covariate matrix X, or use fit method instead")
@@ -44,7 +45,8 @@ setMethod(
     ph_par <- x@pars
     pi_fit <- clone_vector(ph_par$alpha)
     T_fit <- clone_matrix(ph_par$S)
-    B_fit <- rep(0, p)
+    if(length(B0) == 0){B_fit <- rep(0, p)
+    }else{B_fit <- B0}
     for (k in 1:stepsEM) {
       prop <- exp(-X%*%B_fit)
       
