@@ -189,6 +189,16 @@ logLikelihoodMWeib_RKs_double <- function(h, pi, T, beta1, beta2, obs, weight, r
     .Call(`_matrixdist_logLikelihoodMWeib_RKs_double`, h, pi, T, beta1, beta2, obs, weight, rcens, rcweight, scale1, scale2)
 }
 
+#' Loglikelihood of matrix Pareto using RK
+logLikelihoodMPar_RKs_double <- function(h, pi, T, beta1, beta2, obs, weight, rcens, rcweight, scale1, scale2) {
+    .Call(`_matrixdist_logLikelihoodMPar_RKs_double`, h, pi, T, beta1, beta2, obs, weight, rcens, rcweight, scale1, scale2)
+}
+
+#' Loglikelihood of matrix Gompertz using RK
+logLikelihoodMGomp_RKs_double <- function(h, pi, T, beta1, beta2, obs, weight, rcens, rcweight, scale1, scale2) {
+    .Call(`_matrixdist_logLikelihoodMGomp_RKs_double`, h, pi, T, beta1, beta2, obs, weight, rcens, rcweight, scale1, scale2)
+}
+
 #' Embeded Markov chain of a sub-intensity matrix
 #' 
 #' Returns the transition probabilities of the embeded Markov chain determined the sub-intensity matrix 

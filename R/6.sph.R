@@ -11,8 +11,8 @@
 setClass("sph",
          contains = c("iph"),
          slots = list(
-           gfun = "list",
-           coefs = "list"
+           coefs = "list",
+           type = "character"
          )
 )
 
@@ -25,7 +25,8 @@ setClass("sph",
 #' @export
 #'
 #' @examples
-sph <- function(ph = NULL, iph = NULL, coefs = list(B = NULL, C = NULL)) {
+sph <- function(ph = NULL, iph = NULL, coefs = list(B = numeric(0), C = numeric(0)), type = "reg") {
+  if(!type %in% c("reg", "reg2", "acf")) stop("type must be one of : reg, reg2, acf")
   if (is.null(iph)) {
     if (is.null(ph)) {
       iph <- ph(structure = "General")
@@ -36,9 +37,30 @@ sph <- function(ph = NULL, iph = NULL, coefs = list(B = NULL, C = NULL)) {
   }
   iph@pars
   new("sph",
-      name = paste("survival ", iph@name, sep = ""),
+      name = paste("survival", type, iph@name, sep = " "),
       pars = iph@pars,
       gfun = gfun,
-      coefs = coefs
+      coefs = coefs,
+      type = type
   )
 }
+
+#' Show Method for survival phase type objects
+#'
+#' @param x an object of class \linkS4class{sph}.
+#' @export
+#'
+#' @examples
+#'
+setMethod("show", "sph", function(object) {
+  cat("object class: ", is(object)[[1]], "\n", sep = "")
+  cat("name: ", object@name, "\n", sep = "")
+  cat("parameters: ", "\n", sep = "")
+  print(object@pars)
+  cat("g-function name: ", object@gfun$name, "\n", sep = "")
+  cat("parameters: ", "\n", sep = "")
+  print(object@gfun$pars)
+  cat("coefficients: ", "\n", sep = "")
+  print(object@coefs)
+})
+

@@ -28,10 +28,7 @@ sq <- seq(0,1, by = .05)
 pp <- cdf(B, sq, lower.tail = FALSE)
 lines(pp$q, pp$cdf, col = "red")
 
-
-
 ################ now covariates
-
 
 set.seed(1)
 A <- ph(structure = "Coxian", dimension = 3)
