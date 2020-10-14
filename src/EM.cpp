@@ -1927,3 +1927,58 @@ double logLikelihoodMGEV_RKs1(double h, NumericVector & pi, NumericMatrix & T, N
   }
   return logLh;
 }
+
+
+////////////////////////////////////////////
+// SOME SCALED VERSIONS (for double regression):
+////////////////////////////////////////////
+
+
+//' Loglikelihood of matrix Weibull using RK
+//' This is the fastest option
+// [[Rcpp::export]]
+double logLikelihoodMWeib_RKs_double(double h, NumericVector & pi, NumericMatrix & T, const NumericVector & beta1, const NumericVector & beta2, const NumericVector & obs, const NumericVector & weight, const NumericVector & rcens, const NumericVector & rcweight, const NumericVector & scale1, const NumericVector & scale2) {
+  long p{T.nrow()};
+  NumericMatrix m_pi(1,p, pi.begin());
+  
+  NumericMatrix avector(1,p);
+  
+  NumericVector m_e(p, 1);
+  NumericMatrix e(p, 1, m_e.begin());
+  
+  NumericMatrix t = matrix_product(T * (-1), e);
+  
+  // Uncensored data
+  //   initial condition
+  avector = clone(m_pi);
+  
+  double dt{0.0};
+  
+  double density{0.0};
+  
+  double logLh{0.0};
+  
+  // Non censored data
+  if (obs.size() > 0) {
+    dt = scale1[0] * pow(obs[0], beta1[0]);
+  }
+  for (int k{0}; k < obs.size(); ++k) {
+    if(dt > 0) a_rungekutta(avector, dt, h, T);
+    density = matrix_product(avector, t)(0,0);
+    logLh += weight[k] * (log(density) + log(scale1[k]) + log(beta1[k]) + (beta1[k] -1) * log(obs[k]));
+    if (k < obs.size() - 1){dt = scale1[k + 1] * pow(obs[k + 1], beta1[k + 1]) - scale1[k] * pow(obs[k], beta1[k]);}
+  }
+  //Right censored data
+  if (rcens.size() > 0) {
+    dt = scale2[0] * pow(rcens[0], beta2[0]);
+    avector = clone(m_pi);
+  }
+  for (int k{0}; k < rcens.size(); ++k) {
+    if(dt > 0) a_rungekutta(avector, dt, h, T);
+    density = matrix_product(avector, e)(0,0);
+    logLh += rcweight[k] * log(density);
+    if (k < rcens.size() - 1){dt = scale2[k + 1] * pow(rcens[k + 1], beta2[k + 1]) - scale2[k] * pow(rcens[k], beta2[k]);}
+  }
+  
+  return logLh;
+}

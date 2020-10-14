@@ -183,6 +183,12 @@ logLikelihoodMGEV_RKs1 <- function(h, pi, T, beta, obs, weight, rcens, rcweight,
     .Call(`_matrixdist_logLikelihoodMGEV_RKs1`, h, pi, T, beta, obs, weight, rcens, rcweight, scale1, scale2)
 }
 
+#' Loglikelihood of matrix Weibull using RK
+#' This is the fastest option
+logLikelihoodMWeib_RKs_double <- function(h, pi, T, beta1, beta2, obs, weight, rcens, rcweight, scale1, scale2) {
+    .Call(`_matrixdist_logLikelihoodMWeib_RKs_double`, h, pi, T, beta1, beta2, obs, weight, rcens, rcweight, scale1, scale2)
+}
+
 #' Embeded Markov chain of a sub-intensity matrix
 #' 
 #' Returns the transition probabilities of the embeded Markov chain determined the sub-intensity matrix 
