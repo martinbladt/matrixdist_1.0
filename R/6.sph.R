@@ -9,9 +9,10 @@
 #' @export
 #'
 setClass("sph",
-         contains = c("ph", "iph"),
+         contains = c("iph"),
          slots = list(
-           gfun = "list"
+           gfun = "list",
+           coefs = "list"
          )
 )
 
