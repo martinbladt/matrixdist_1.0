@@ -305,7 +305,7 @@ setMethod("coef", c(object = "ph"), function(object) {
 #'
 #' @examples
 #'
-setMethod("m_plot", c(x = "ph"), function(x, y = NULL) {
+setMethod("plot", c(x = "ph"), function(x, y = NULL) {
   if (all(is.null(y))) {
     sq <- seq(1e-20, quan(x, 0.99)$quan, length.out = 1000)
     phd <- phdensity(sq, x@pars$alpha, x@pars$S)

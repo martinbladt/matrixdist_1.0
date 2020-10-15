@@ -11,7 +11,8 @@
 setClass("iph",
   contains = c("ph"),
   slots = list(
-    gfun = "list"
+    gfun = "list",
+    scale = "numeric"
   )
 )
 
@@ -62,7 +63,8 @@ iph <- function(ph = NULL, gfun = NULL, gfun_pars = NULL, alpha = NULL, S = NULL
   new("iph",
     name = paste("inhomogeneous ", ph@name, sep = ""),
     pars = ph@pars,
-    gfun = list(name = gfun, pars = gfun_pars)
+    gfun = list(name = gfun, pars = gfun_pars),
+    scale = 1
   )
 }
 
@@ -81,6 +83,8 @@ setMethod("show", "iph", function(object) {
   cat("g-function name: ", object@gfun$name, "\n", sep = "")
   cat("parameters: ", "\n", sep = "")
   print(object@gfun$pars)
+  cat("scale: ", "\n", sep = "")
+  print(object@scale)
 })
 
 #' Simulation Method for inhomogeneous phase type distributions
@@ -96,11 +100,12 @@ setMethod("show", "iph", function(object) {
 setMethod("sim", c(x = "iph"), function(x, n = 1000) {
   name <- x@gfun$name
   pars <- x@gfun$pars
+  scale <- x@scale
   if (name %in% c("Pareto", "Weibull", "LogLogistic","Gompertz")) {
-    U <- riph(n, name, x@pars$alpha, x@pars$S, pars)
+    U <- scale * riph(n, name, x@pars$alpha, x@pars$S, pars)
   }
   if (name %in% c("GEVD")) {
-    U <- rmatrixGEVD(n, x@pars$alpha, x@pars$S, pars[1], pars[2], pars[3])
+    U <- scale * rmatrixGEVD(n, x@pars$alpha, x@pars$S, pars[1], pars[2], pars[3])
   }
   return(U)
 })
@@ -117,9 +122,10 @@ setMethod("sim", c(x = "iph"), function(x, n = 1000) {
 #'
 setMethod("dens", c(x = "iph"), function(x, y = seq(0, quan(x, .95)$quantile, length.out = 10)) {
   fn <- eval(parse(text = paste("m", x@gfun$name, "den", sep = "")))
+  scale <- x@scale
   y_inf <- (y == Inf)
   dens <- y
-  dens[!y_inf] <- fn(y, x@pars$alpha, x@pars$S, x@gfun$pars)
+  dens[!y_inf] <- fn(y/scale, x@pars$alpha, x@pars$S, x@gfun$pars)/scale
   dens[y_inf] <- 0
   return(list(y = y, dens = dens))
 })
@@ -138,9 +144,10 @@ setMethod("cdf", c(x = "iph"), function(x,
                                       q = seq(0, quan(x, .95)$quantile, length.out = 10),
                                       lower.tail = TRUE) {
   fn <- eval(parse(text = paste("m", x@gfun$name, "cdf", sep = "")))
+  scale <- x@scale
   q_inf <- (q == Inf)
   cdf <- q
-  cdf[!q_inf] <- fn(q, x@pars$alpha, x@pars$S, x@gfun$pars, lower.tail)
+  cdf[!q_inf] <- fn(q/scale, x@pars$alpha, x@pars$S, x@gfun$pars, lower.tail)
   cdf[q_inf] <- as.numeric(1 * lower.tail)
   return(list(q = q, cdf = cdf))
 })

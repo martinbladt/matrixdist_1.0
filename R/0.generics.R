@@ -149,8 +149,8 @@ setGeneric("aft", function(x, y, ...) {
 #' @export
 #'
 #'
-setGeneric("m_plot", function(x, ...) {
-  standardGeneric("m_plot")
+setGeneric("plot", function(x, ...) {
+  standardGeneric("plot")
 })
 
 #' New Generic for doing a likelihood ratio test between two Matrix Distribution models
@@ -166,4 +166,19 @@ setGeneric("m_plot", function(x, ...) {
 #'
 setGeneric("LRT", function(x, y, ...) {
   standardGeneric("LRT")
+})
+
+#' New Generic for Evaluating Survival Matrix Distributions
+#'
+#' Methods are available for objects of class \linkS4class{sph}
+#'
+#' @param x an object of the model class.
+#' @param y a vector of data.
+#' @param ...
+#'
+#' @export
+#'
+#'
+setGeneric("eval", function(x, ...) {
+  standardGeneric("eval")
 })

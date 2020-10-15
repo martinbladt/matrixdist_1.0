@@ -10,7 +10,9 @@ mph(
   alpha = NULL,
   S = NULL,
   structure = NULL,
-  dimension = 3
+  p = 3,
+  dimension = 3,
+  variables = 2
 )
 }
 \arguments{

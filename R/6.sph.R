@@ -39,7 +39,8 @@ sph <- function(x = NULL, coefs = list(B = numeric(0), C = numeric(0)), type = "
       pars = x@pars,
       gfun = gfun,
       coefs = coefs,
-      type = type
+      type = type,
+      scale = 1
   )
 }
 
@@ -66,7 +67,7 @@ setMethod("show", "sph", function(object) {
 #'
 #' @param object an object of class \linkS4class{sph}.
 #'
-#' @return parameters of ph model
+#' @return parameters of sph model
 #' @export
 #'
 setMethod("coef", c(object = "sph"), function(object) {
@@ -75,3 +76,36 @@ setMethod("coef", c(object = "sph"), function(object) {
   append(L, object@coefs)
 })
 
+#' Evaluation Method for sph Class
+#'
+#' @param object an object of class \linkS4class{sph}.
+#'
+#' @return a ph model
+#' @export
+#'
+setMethod("eval", c(x = "sph"), function(x, subject) {
+  if(x@type == "aft"){
+    z <- iph(gfun = x@gfun$name,
+             gfun_pars = x@gfun$pars,
+             alpha = x@pars$alpha,
+             S = x@pars$S,
+             scale = exp(subject%*%x@coefs$B)
+             )
+  }
+  else if(x@type == "reg"){
+    z <- iph(gfun = x@gfun$name,
+             gfun_pars = x@gfun$pars,
+             alpha = x@pars$alpha,
+             S = exp(subject%*%x@coefs$B) * x@pars$S,
+             )
+  }
+  else if(x@type == "reg2"){
+    z <- iph(gfun = x@gfun$name,
+             gfun_pars = x@gfun$pars * exp(subject%*%x@coefs$C),
+             alpha = x@pars$alpha,
+             S = exp(subject%*%x@coefs$B) * x@pars$S,
+    )
+  }
+  return(z)
+})
+  
