@@ -309,7 +309,7 @@ setMethod("plot", c(x = "ph"), function(x, y = NULL) {
   if (all(is.null(y))) {
     sq <- seq(1e-20, quan(x, 0.99)$quan, length.out = 1000)
     phd <- phdensity(sq, x@pars$alpha, x@pars$S)
-    plot(sq, phd, type = "l", xlab = "y", ylab = "density")
+    base::plot(sq, phd, type = "l", xlab = "y", ylab = "density")
   }
   if (!all(is.null(y))) {
     sq <- seq(1e-20, max(y), length.out = 1000)

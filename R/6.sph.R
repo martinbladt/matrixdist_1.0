@@ -89,21 +89,21 @@ setMethod("eval", c(x = "sph"), function(x, subject) {
              gfun_pars = x@gfun$pars,
              alpha = x@pars$alpha,
              S = x@pars$S,
-             scale = exp(subject%*%x@coefs$B)
+             scale = as.numeric(exp(subject%*%x@coefs$B))
              )
   }
   else if(x@type == "reg"){
     z <- iph(gfun = x@gfun$name,
              gfun_pars = x@gfun$pars,
              alpha = x@pars$alpha,
-             S = exp(subject%*%x@coefs$B) * x@pars$S,
+             S = as.numeric(exp(subject%*%x@coefs$B)) * x@pars$S,
              )
   }
   else if(x@type == "reg2"){
     z <- iph(gfun = x@gfun$name,
-             gfun_pars = x@gfun$pars * exp(subject%*%x@coefs$C),
+             gfun_pars = x@gfun$pars * as.numeric(exp(subject%*%x@coefs$C)),
              alpha = x@pars$alpha,
-             S = exp(subject%*%x@coefs$B) * x@pars$S,
+             S = as.numeric(exp(subject%*%x@coefs$B)) * x@pars$S,
     )
   }
   return(z)

@@ -121,7 +121,7 @@ setMethod("sim", c(x = "iph"), function(x, n = 1000) {
 #' @examples
 #'
 setMethod("dens", c(x = "iph"), function(x, y = seq(0, quan(x, .95)$quantile, length.out = 10)) {
-  fn <- eval(parse(text = paste("m", x@gfun$name, "den", sep = "")))
+  fn <- base::eval(parse(text = paste("m", x@gfun$name, "den", sep = "")))
   scale <- x@scale
   y_inf <- (y == Inf)
   dens <- y
@@ -143,7 +143,7 @@ setMethod("dens", c(x = "iph"), function(x, y = seq(0, quan(x, .95)$quantile, le
 setMethod("cdf", c(x = "iph"), function(x, 
                                       q = seq(0, quan(x, .95)$quantile, length.out = 10),
                                       lower.tail = TRUE) {
-  fn <- eval(parse(text = paste("m", x@gfun$name, "cdf", sep = "")))
+  fn <- base::eval(parse(text = paste("m", x@gfun$name, "cdf", sep = "")))
   scale <- x@scale
   q_inf <- (q == Inf)
   cdf <- q

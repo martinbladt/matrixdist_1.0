@@ -21,7 +21,7 @@ A <- ph(structure = "Coxian", dimension = 4)
 
 B <- fit(A, y = y, rcen = rcen, stepsEM = 2000)
 
-plot(survival::survfit(survival::Surv(time, status) ~ 1, data = lung), 
+base::plot(survival::survfit(survival::Surv(time, status) ~ 1, data = lung), 
      xlab = "Days", 
      ylab = "Overall survival probability")
 sq <- seq(0,1, by = .05)
@@ -50,21 +50,23 @@ coef(iD)
 #logLik(survival::survreg(survival::Surv(time,status) ~  age + sex,dist="weibull", data = lung))
 
 #### A PLOT
-x0 <- c(0)
+x0 <- c(1)
 lung_sub <- subset(lung, sex == x0)
 
-iBplot <- iB; iBplot@pars$S <- iBplot@pars$S * exp(sum(c(-0.5621967 )*x0))
-iDplot <- iD; iDplot@pars$S <- iDplot@pars$S * exp(sum(c(-0.2304824)*x0)) 
-iDplot@gfun$pars <- exp(0.1336482 + sum(c(0.2357306)*x0))
+iBplot <- eval(iB, subject = x0)
+iCplot <- eval(iD, subject = x0)
+iDplot <- eval(iD, subject = x0)
+
 
 obj <- survival::survfit(survival::Surv(time,status) ~  1, data = lung_sub)
 
-plot(log(obj$time),obj$surv,
+base::plot(log(obj$time),obj$surv,
      xlab = "Days", 
      ylab = "Cumulative Hazard",
      ylim = c(0,1))
 sq <- seq(0,max(obj$time), by = .001)
 lines(log(sq), (cdf(iBplot, sq, lower.tail = FALSE)$cdf), col = "red")
+lines(log(sq), (cdf(iBplot, sq, lower.tail = FALSE)$cdf), col = "orange")
 lines(log(sq), (cdf(iDplot, sq, lower.tail = FALSE)$cdf), col = "blue")
 ####
 

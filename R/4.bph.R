@@ -121,7 +121,7 @@ setMethod(
       par_g <- x@gfun$pars
       specs <- g_specs(name) 
       inv_g <- specs$inv_g 
-      fn <- eval(parse(text = paste("bivm", name, "den", sep = "")))
+      fn <- base::eval(parse(text = paste("bivm", name, "den", sep = "")))
       mLL <- function(y, alpha, T11, T12, T22, beta) - sum(log(fn(y, alpha, T11, T12, T22, beta)))
     }
     if(length(weight) == 0) weight <- rep(1, dim(y)[1])

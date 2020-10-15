@@ -104,7 +104,7 @@ setMethod("sim", c(x = "ibph"), function(x, n = 1000) {
 #' @examples
 #'
 setMethod("dens", c(x = "ibph"), function(x, y = matrix(c(1, 2, 1, 2), 2, 2)) {
-  fn <- eval(parse(text = paste("bivm", x@gfun$name, "den", sep = "")))
+  fn <- base::eval(parse(text = paste("bivm", x@gfun$name, "den", sep = "")))
   dens <- fn(y, x@blocks$alpha0, x@blocks$T11, x@blocks$T12, x@blocks$T22, x@gfun$pars)
   return(list(y = y, dens = dens))
 })
