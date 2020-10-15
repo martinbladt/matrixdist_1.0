@@ -36,7 +36,7 @@ iph <- function(ph = NULL, gfun = NULL, gfun_pars = NULL, alpha = NULL, S = NULL
   if (is.null(ph)) {
     ph <- ph(alpha = alpha, S = S, structure = structure, dimension = dimension)
   }
-  if (!gfun %in% c("Pareto", "Weibull", "LogLogistic", "Gompertz", "GEVD")) {
+  if (!gfun %in% c("Pareto", "Weibull", "LogLogistic", "Gompertz", "GEVD", "Identity")) {
     stop("invalid gfun")
   }
   if (gfun %in% c("Pareto", "Weibull", "Gompertz")) {

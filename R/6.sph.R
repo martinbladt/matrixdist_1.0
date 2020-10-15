@@ -30,7 +30,7 @@ sph <- function(x = NULL, coefs = list(B = numeric(0), C = numeric(0)), type = "
     if (!is(x, "ph")) {
       ph <- ph(structure = "General")
     }
-    gfun <- list(name = "Indentity", pars = numeric(0))
+    gfun <- list(name = "Identity", pars = numeric(0))
   }else{
     gfun <- x@gfun
   }
@@ -84,27 +84,40 @@ setMethod("coef", c(object = "sph"), function(object) {
 #' @export
 #'
 setMethod("eval", c(x = "sph"), function(x, subject) {
-  if(x@type == "aft"){
-    z <- iph(gfun = x@gfun$name,
-             gfun_pars = x@gfun$pars,
-             alpha = x@pars$alpha,
-             S = x@pars$S,
-             scale = as.numeric(exp(subject%*%x@coefs$B))
-             )
-  }
-  else if(x@type == "reg"){
-    z <- iph(gfun = x@gfun$name,
-             gfun_pars = x@gfun$pars,
-             alpha = x@pars$alpha,
-             S = as.numeric(exp(subject%*%x@coefs$B)) * x@pars$S,
-             )
-  }
-  else if(x@type == "reg2"){
-    z <- iph(gfun = x@gfun$name,
-             gfun_pars = x@gfun$pars * as.numeric(exp(subject%*%x@coefs$C)),
-             alpha = x@pars$alpha,
-             S = as.numeric(exp(subject%*%x@coefs$B)) * x@pars$S,
-    )
+  if(x@gfun$name == "Identity"){
+    if(x@type == "aft"){
+      z <- ph(alpha = x@pars$alpha,
+              S = x@pars$S/as.numeric(exp(subject%*%x@coefs$B))
+              )
+    }
+    else if(x@type == "reg"){
+      z <- ph(alpha = x@pars$alpha,
+              S = as.numeric(exp(subject%*%x@coefs$B)) * x@pars$S
+      )
+    }
+  }else{
+    if(x@type == "aft"){
+      z <- iph(gfun = x@gfun$name,
+               gfun_pars = x@gfun$pars,
+               alpha = x@pars$alpha,
+               S = x@pars$S,
+               scale = as.numeric(exp(subject%*%x@coefs$B))
+      )
+    }
+    else if(x@type == "reg"){
+      z <- iph(gfun = x@gfun$name,
+               gfun_pars = x@gfun$pars,
+               alpha = x@pars$alpha,
+               S = as.numeric(exp(subject%*%x@coefs$B)) * x@pars$S,
+      )
+    }
+    else if(x@type == "reg2"){
+      z <- iph(gfun = x@gfun$name,
+               gfun_pars = x@gfun$pars * as.numeric(exp(subject%*%x@coefs$C)),
+               alpha = x@pars$alpha,
+               S = as.numeric(exp(subject%*%x@coefs$B)) * x@pars$S,
+      )
+    }
   }
   return(z)
 })
