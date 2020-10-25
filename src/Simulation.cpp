@@ -201,6 +201,9 @@ NumericVector riph(int n, String dist_type, NumericVector pi, NumericMatrix T, N
     else if (dist_type == "Weibull") {
       time = pow(time, 1.0 / beta[0]);
     }
+    else if (dist_type == "LogNormal") {
+      time =  exp(pow(time, 1.0 / beta[0])) - 1;
+    }
     else if (dist_type == "LogLogistic") {
       time = beta[0] * pow(exp(time) - 1, 1 / beta[1]);
     }

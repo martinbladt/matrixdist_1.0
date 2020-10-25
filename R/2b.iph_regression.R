@@ -125,6 +125,19 @@ reg_g_specs <- function(name){
       return(- logLikelihoodMPar_RKs(h, alpha, S, beta, obs[o1], weight[o1], rcens[o2], rcweight[o2], scale1[o1], scale2[o2]))
     }
   }
+  else if(name == "LogNormal"){
+    inv_g <- function(t, w, beta) return(list(obs = log(t + 1)^{beta}, weight = w)) 
+    mLL <- function(h, alpha, S, theta, obs, weight, rcens, rcweight, X) {
+      beta <- theta[1]; B <- theta[2:length(theta)]
+      if(beta < 0) return(NA)
+      ex <- exp(X%*%B)
+      scale1 <- ex[1:length(obs)]
+      scale2 <- tail(ex, length(rcens))
+      o1 <- order(scale1 * inv_g(obs, weight, beta)$obs)
+      o2 <- order(scale2 * inv_g(rcens, rcweight, beta)$obs)
+      return(- logLikelihoodMLogNormal_RKs(h, alpha, S, beta, obs[o1], weight[o1], rcens[o2], rcweight[o2], scale1[o1], scale2[o2]))
+    }
+  }
   else if(name == "LogLogistic"){
     inv_g <- function(t, w, beta) return(list(obs = log((t/beta[1])^{beta[2]} + 1), weight = w))
     mLL <- function(h, alpha, S, theta, obs, weight, rcens, rcweight, X) {

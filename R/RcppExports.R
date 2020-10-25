@@ -135,6 +135,12 @@ logLikelihoodMPar_RKs <- function(h, pi, T, beta, obs, weight, rcens, rcweight, 
     .Call(`_matrixdist_logLikelihoodMPar_RKs`, h, pi, T, beta, obs, weight, rcens, rcweight, scale1, scale2)
 }
 
+#' Loglikelihood of matrix LogNormal using RK
+#' This is the fastest option
+logLikelihoodMLogNormal_RKs <- function(h, pi, T, beta, obs, weight, rcens, rcweight, scale1, scale2) {
+    .Call(`_matrixdist_logLikelihoodMLogNormal_RKs`, h, pi, T, beta, obs, weight, rcens, rcweight, scale1, scale2)
+}
+
 #' Loglikelihood of matrix Log-Logistic using RK
 logLikelihoodMLogLogistic_RKs <- function(h, pi, T, beta, obs, weight, rcens, rcweight, scale1, scale2) {
     .Call(`_matrixdist_logLikelihoodMLogLogistic_RKs`, h, pi, T, beta, obs, weight, rcens, rcweight, scale1, scale2)
@@ -167,6 +173,12 @@ logLikelihoodMPar_RKs1 <- function(h, pi, T, beta, obs, weight, rcens, rcweight,
     .Call(`_matrixdist_logLikelihoodMPar_RKs1`, h, pi, T, beta, obs, weight, rcens, rcweight, scale1, scale2)
 }
 
+#' Loglikelihood of matrix LogNormal using RK
+#' This is the fastest option
+logLikelihoodMLogNormal_RKs1 <- function(h, pi, T, beta, obs, weight, rcens, rcweight, scale1, scale2) {
+    .Call(`_matrixdist_logLikelihoodMLogNormal_RKs1`, h, pi, T, beta, obs, weight, rcens, rcweight, scale1, scale2)
+}
+
 #' Loglikelihood of matrix Log-Logistic using RK
 logLikelihoodMLogLogistic_RKs1 <- function(h, pi, T, beta, obs, weight, rcens, rcweight, scale1, scale2) {
     .Call(`_matrixdist_logLikelihoodMLogLogistic_RKs1`, h, pi, T, beta, obs, weight, rcens, rcweight, scale1, scale2)
@@ -192,6 +204,12 @@ logLikelihoodMWeib_RKs_double <- function(h, pi, T, beta1, beta2, obs, weight, r
 #' Loglikelihood of matrix Pareto using RK
 logLikelihoodMPar_RKs_double <- function(h, pi, T, beta1, beta2, obs, weight, rcens, rcweight, scale1, scale2) {
     .Call(`_matrixdist_logLikelihoodMPar_RKs_double`, h, pi, T, beta1, beta2, obs, weight, rcens, rcweight, scale1, scale2)
+}
+
+#' Loglikelihood of matrix LogNormal using RK
+#' This is the fastest option
+logLikelihoodMLogNormal_RKs_double <- function(h, pi, T, beta1, beta2, obs, weight, rcens, rcweight, scale1, scale2) {
+    .Call(`_matrixdist_logLikelihoodMLogNormal_RKs_double`, h, pi, T, beta1, beta2, obs, weight, rcens, rcweight, scale1, scale2)
 }
 
 #' Loglikelihood of matrix Gompertz using RK
@@ -546,6 +564,41 @@ mParetoden <- function(x, pi, T, beta) {
 #' mparetocdf(0.5, alpha, T, beta, FALSE) 
 mParetocdf <- function(x, pi, T, beta, lower_tail = TRUE) {
     .Call(`_matrixdist_mParetocdf`, x, pi, T, beta, lower_tail)
+}
+
+#' Matrix LogNormal density
+#' 
+#' Computes the density of a matrix LogNormal distribution with parameters \code{pi}, \code{T} and \code{beta} at \code{x}
+#' @param x non-negative value
+#' @param pi Initial probabilities
+#' @param T sub-intensity matrix
+#' @param beta shape parameter
+#' @return The density at \code{x}
+#' @examples
+#' alpha <- c(0.5, 0.3, 0.2)
+#' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
+#' beta <- 0.5
+#' mweibullden(0.5, alpha, T, beta) 
+mLogNormalden <- function(x, pi, T, beta) {
+    .Call(`_matrixdist_mLogNormalden`, x, pi, T, beta)
+}
+
+#' Matrix LogNormal cdf
+#' 
+#' Computes the cdf (tail) of a matrix LogNormal distribution with parameters \code{pi}, \code{T} and \code{beta} at \code{x}
+#' @param x non-negative value
+#' @param pi Initial probabilities
+#' @param T sub-intensity matrix
+#' @param beta shape parameter
+#' @return The cdf (tail) at \code{x}
+#' @examples
+#' alpha <- c(0.5, 0.3, 0.2)
+#' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
+#' beta <- 0.5
+#' mweibullcdf(0.5, alpha, T, beta) 
+#' mweibullcdf(0.5, alpha, T, beta, FALSE) 
+mLogNormalcdf <- function(x, pi, T, beta, lower_tail = TRUE) {
+    .Call(`_matrixdist_mLogNormalcdf`, x, pi, T, beta, lower_tail)
 }
 
 #' Matrix Log-Logistic density

@@ -1422,6 +1422,55 @@ double logLikelihoodMPar_RKs(double h, NumericVector & pi, NumericMatrix & T, do
   return logLh;
 }
 
+//' Loglikelihood of matrix LogNormal using RK
+//' This is the fastest option
+// [[Rcpp::export]]
+double logLikelihoodMLogNormal_RKs(double h, NumericVector & pi, NumericMatrix & T, double beta, const NumericVector & obs, const NumericVector & weight, const NumericVector & rcens, const NumericVector & rcweight, const NumericVector & scale1, const NumericVector & scale2) {
+  long p{T.nrow()};
+  NumericMatrix m_pi(1,p, pi.begin());
+  
+  NumericMatrix avector(1,p);
+  
+  NumericVector m_e(p, 1);
+  NumericMatrix e(p, 1, m_e.begin());
+  
+  NumericMatrix t = matrix_product(T * (-1), e);
+  
+  // Uncensored data
+  //   initial condition
+  avector = clone(m_pi);
+  
+  double dt{0.0};
+  
+  double density{0.0};
+  
+  double logLh{0.0};
+  
+  // Non censored data
+  if (obs.size() > 0) {
+    dt = scale1[0] * pow(log(obs[0] + 1), beta);
+  }
+  for (int k{0}; k < obs.size(); ++k) {
+    if(dt > 0) a_rungekutta(avector, dt, h, T);
+    density = matrix_product(avector, t)(0,0);
+    logLh += weight[k] * (log(density) + log(scale1[k]) + log(beta) + (beta -1) * log(log(obs[k] + 1)) - log(obs[k] + 1));
+    if (k < obs.size() - 1){dt = scale1[k + 1] * pow(log(obs[k + 1] + 1), beta) - scale1[k] * pow(log(obs[k] + 1), beta);}
+  }
+  //Right censored data
+  if (rcens.size() > 0) {
+    dt = scale2[0] * pow(log(rcens[0] + 1), beta);
+    avector = clone(m_pi);
+  }
+  for (int k{0}; k < rcens.size(); ++k) {
+    if(dt > 0) a_rungekutta(avector, dt, h, T);
+    density = matrix_product(avector, e)(0,0);
+    logLh += rcweight[k] * log(density);
+    if (k < rcens.size() - 1){dt = scale2[k + 1] * pow(log(rcens[k + 1] + 1), beta) - scale2[k] * pow(log(rcens[k] + 1), beta);}
+  }
+  
+  return logLh;
+}
+
 
 //' Loglikelihood of matrix Log-Logistic using RK
 // [[Rcpp::export]]
@@ -1752,6 +1801,56 @@ double logLikelihoodMPar_RKs1(double h, NumericVector & pi, NumericMatrix & T, d
 }
 
 
+//' Loglikelihood of matrix LogNormal using RK
+//' This is the fastest option
+// [[Rcpp::export]]
+double logLikelihoodMLogNormal_RKs1(double h, NumericVector & pi, NumericMatrix & T, double beta, const NumericVector & obs, const NumericVector & weight, const NumericVector & rcens, const NumericVector & rcweight, const NumericVector & scale1, const NumericVector & scale2) {
+  long p{T.nrow()};
+  NumericMatrix m_pi(1,p, pi.begin());
+  
+  NumericMatrix avector(1,p);
+  
+  NumericVector m_e(p, 1);
+  NumericMatrix e(p, 1, m_e.begin());
+  
+  NumericMatrix t = matrix_product(T * (-1), e);
+  
+  // Uncensored data
+  //   initial condition
+  avector = clone(m_pi);
+  
+  double dt{0.0};
+  
+  double density{0.0};
+  
+  double logLh{0.0};
+  
+  // Non censored data
+  if (obs.size() > 0) {
+    dt = pow(log(scale1[0] * obs[0] + 1), beta);
+  }
+  for (int k{0}; k < obs.size(); ++k) {
+    if(dt > 0) a_rungekutta(avector, dt, h, T);
+    density = matrix_product(avector, t)(0,0);
+    logLh += weight[k] * (log(density) + log(scale1[k]) + log(beta) + (beta -1) * log(log(scale1[k] * obs[k] + 1)) - log(scale1[k] * obs[k] + 1));
+    if (k < obs.size() - 1){dt = pow(log(scale1[k + 1] * obs[k + 1] + 1), beta) - pow(log(scale1[k] * obs[k] + 1), beta);}
+  }
+  //Right censored data
+  if (rcens.size() > 0) {
+    dt = pow(log(scale2[0] * rcens[0] + 1), beta);
+    avector = clone(m_pi);
+  }
+  for (int k{0}; k < rcens.size(); ++k) {
+    if(dt > 0) a_rungekutta(avector, dt, h, T);
+    density = matrix_product(avector, e)(0,0);
+    logLh += rcweight[k] * log(density);
+    if (k < rcens.size() - 1){dt = pow(log(scale2[k + 1] * rcens[k + 1] + 1), beta) - pow(log(scale2[k] * rcens[k] + 1), beta);}
+  }
+  
+  return logLh;
+}
+
+
 //' Loglikelihood of matrix Log-Logistic using RK
 // [[Rcpp::export]]
 double logLikelihoodMLogLogistic_RKs1(double h, NumericVector & pi, NumericMatrix & T, NumericVector beta, const NumericVector & obs, const NumericVector & weight, const NumericVector & rcens, const NumericVector & rcweight, const NumericVector & scale1, const NumericVector & scale2) {
@@ -2024,6 +2123,55 @@ double logLikelihoodMPar_RKs_double(double h, NumericVector & pi, NumericMatrix 
     density = matrix_product(avector, e)(0,0);
     logLh += rcweight[k] * log(density);
     if (k < rcens.size() - 1){dt = scale2[k + 1] * log(rcens[k + 1] / beta2[k + 1] + 1) - scale2[k] * log(rcens[k] / beta2[k] + 1);}
+  }
+  
+  return logLh;
+}
+
+//' Loglikelihood of matrix LogNormal using RK
+//' This is the fastest option
+// [[Rcpp::export]]
+double logLikelihoodMLogNormal_RKs_double(double h, NumericVector & pi, NumericMatrix & T, const NumericVector & beta1, const NumericVector & beta2, const NumericVector & obs, const NumericVector & weight, const NumericVector & rcens, const NumericVector & rcweight, const NumericVector & scale1, const NumericVector & scale2) {
+  long p{T.nrow()};
+  NumericMatrix m_pi(1,p, pi.begin());
+  
+  NumericMatrix avector(1,p);
+  
+  NumericVector m_e(p, 1);
+  NumericMatrix e(p, 1, m_e.begin());
+  
+  NumericMatrix t = matrix_product(T * (-1), e);
+  
+  // Uncensored data
+  //   initial condition
+  avector = clone(m_pi);
+  
+  double dt{0.0};
+  
+  double density{0.0};
+  
+  double logLh{0.0};
+  
+  // Non censored data
+  if (obs.size() > 0) {
+    dt = scale1[0] * pow(log(obs[0] + 1), beta1[0]);
+  }
+  for (int k{0}; k < obs.size(); ++k) {
+    if(dt > 0) a_rungekutta(avector, dt, h, T);
+    density = matrix_product(avector, t)(0,0);
+    logLh += weight[k] * (log(density) + log(scale1[k]) + log(beta1[k]) + (beta1[k] - 1) * log(log(obs[k] + 1)));
+    if (k < obs.size() - 1){dt = scale1[k + 1] * pow(log(obs[k + 1] + 1), beta1[k + 1]) - scale1[k] * pow(log(obs[k] + 1), beta1[k]);}
+  }
+  //Right censored data
+  if (rcens.size() > 0) {
+    dt = scale2[0] * pow(log(rcens[0] + 1), beta2[0]);
+    avector = clone(m_pi);
+  }
+  for (int k{0}; k < rcens.size(); ++k) {
+    if(dt > 0) a_rungekutta(avector, dt, h, T);
+    density = matrix_product(avector, e)(0,0);
+    logLh += rcweight[k] * log(density);
+    if (k < rcens.size() - 1){dt = scale2[k + 1] * pow(log(rcens[k + 1] + 1), beta2[k + 1]) - scale2[k] * pow(log(rcens[k] + 1), beta2[k]);}
   }
   
   return logLh;

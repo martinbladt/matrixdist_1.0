@@ -36,10 +36,10 @@ iph <- function(ph = NULL, gfun = NULL, gfun_pars = NULL, alpha = NULL, S = NULL
   if (is.null(ph)) {
     ph <- ph(alpha = alpha, S = S, structure = structure, dimension = dimension)
   }
-  if (!gfun %in% c("Pareto", "Weibull", "LogLogistic", "Gompertz", "GEVD", "Identity")) {
+  if (!gfun %in% c("Pareto", "Weibull", "LogNormal", "LogLogistic", "Gompertz", "GEVD", "Identity")) {
     stop("invalid gfun")
   }
-  if (gfun %in% c("Pareto", "Weibull", "Gompertz")) {
+  if (gfun %in% c("Pareto", "Weibull", "LogNormal","Gompertz")) {
     if (length(gfun_pars) != 1 | sum(gfun_pars <= 0) > 0) {
       stop("gfun parameter should be positive and of length one")
     } else {
@@ -101,7 +101,7 @@ setMethod("sim", c(x = "iph"), function(x, n = 1000) {
   name <- x@gfun$name
   pars <- x@gfun$pars
   scale <- x@scale
-  if (name %in% c("Pareto", "Weibull", "LogLogistic","Gompertz")) {
+  if (name %in% c("Pareto", "Weibull", "LogNormal", "LogLogistic", "Gompertz")) {
     U <- scale * riph(n, name, x@pars$alpha, x@pars$S, pars)
   }
   if (name %in% c("GEVD")) {
