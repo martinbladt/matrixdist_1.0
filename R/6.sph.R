@@ -40,7 +40,8 @@ sph <- function(x = NULL, coefs = list(B = numeric(0), C = numeric(0)), type = "
       gfun = gfun,
       coefs = coefs,
       type = type,
-      scale = 1
+      scale = 1,
+      fit = x@fit
   )
 }
 

@@ -11,11 +11,13 @@
 setClass("ph",
          slots = list(
            name = "character",
-           pars = "list"
+           pars = "list",
+           fit = "list"
          ),
          prototype = list(
            name = NA_character_,
-           pars = list()
+           pars = list(),
+           fit = list()
          )
 )
 
@@ -209,7 +211,23 @@ setMethod(
         trans_cens <- inv_g(rcen, rcenweight, par_g)
         RKstep <- default_step_length(T_fit)
         EMstep_RK(RKstep, pi_fit, T_fit, trans$obs, trans$weight, trans_cens$obs, trans_cens$weight)
-        opt <- suppressWarnings(optim(par = par_g, fn = mLL, h = RKstep, alpha = pi_fit, S = T_fit, obs = y, weight = weight, rcens = rcen, rcweight = rcenweight))
+        opt <- suppressWarnings(
+          optim(par = par_g,
+                fn = mLL,
+                h = RKstep,
+                alpha = pi_fit,
+                S = T_fit, 
+                obs = y, 
+                weight = weight, 
+                rcens = rcen, 
+                rcweight = rcenweight,
+                hessian = (k == stepsEM),
+                method = ifelse(k == stepsEM, "CG", "Nelder-Mead"),
+                control = list(
+                  maxit = ifelse(k == stepsEM, 10000, 1000),
+                  reltol = ifelse(k == stepsEM, 1e-10, 1e-8))
+          )
+          )
         par_g <- opt$par
         if (k %% 10 == 0) {
           cat("\r", "iteration:", k,
@@ -220,6 +238,7 @@ setMethod(
       cat("\n", sep = "")
       x@pars$alpha <- pi_fit
       x@pars$S <- T_fit
+      x@fit <- list(cov = safe_cov(opt$hessian))
       x <- iph(x, gfun = name, gfun_pars = par_g)
     }
     return(x)
@@ -282,6 +301,21 @@ g_specs <- function(name){
     stop("fit for this gfun is not yet implemented")
   }
   return(list(inv_g = inv_g, mLL = mLL))
+}
+
+#' Calculate Covariance Matrix Safely
+#'
+#' @param hess a Hessian matrix from a model fit.
+#'
+#' @return Fisher information (estimated covariance matrix)
+#' @export
+#'
+safe_cov <- function(hess) {
+  hessinverse <- tryCatch(solve(hess), error = function(e) {
+    warning("Hessian can't be inverted")
+    return(matrix(NA, nrow = nrow(hess), ncol = ncol(hess)))
+  })
+  hessinverse
 }
 
 

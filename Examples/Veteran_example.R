@@ -1,3 +1,6 @@
+library(matrixdist)
+library(survival)
+
 dim(veteran)
 
 vfit <- coxph(Surv(time, status) ~ trt + prior + karno, veteran)
@@ -23,8 +26,6 @@ rcen <- dat$time[dat$status == 0]
 
 X <- dat[order(dat$status, decreasing = TRUE), c(1,5,8)]
 
-library(matrixdist)
-
 set.seed(1)
 
 A <- ph(structure = "Coxian", dimension = 2)
@@ -43,12 +44,13 @@ A <- ph(structure = "Coxian", dimension = 1)
 iA <- iph(A, gfun = "Weibull", gfun_pars = 1) 
 iB <- reg(x = iA, y = y, rcen = rcen, X = X, stepsEM = 500)
 #iC <- aft(x = iA, y = y, rcen = rcen, X = X, stepsEM = 500)
-
+iB@fit
 
 set.seed(1)
 A <- ph(structure = "Coxian", dimension = 2)
 iA <- iph(A, gfun = "Weibull", gfun_pars = 1) 
 iC <- reg(x = iA, y = y, rcen = rcen, X = X, stepsEM = 500)
+iC@fit
 
 #iD <- reg2(x = iA, y = y, rcen = rcen, X = X, stepsEM = 500)
 
@@ -65,7 +67,7 @@ x0 <- c(1, 7, 0)
 dat_sub <- subset(dat, trt == x0[1] & karno == x0[2] & prior == x0[3])
 
 iBplot <- eval(iB, subject = x0)
-iCplot <- eval(iD, subject = x0)
+iCplot <- eval(iC, subject = x0)
 #iDplot <- eval(iD, subject = x0)
 
 

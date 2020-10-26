@@ -67,8 +67,15 @@ setMethod(
                                     weight = weight, 
                                     rcens = rcen, 
                                     rcweight = rcenweight,
-                                    X = X))
-      
+                                    X = X,
+                                    hessian = (k == stepsEM),
+                                    method = ifelse(k == stepsEM, "CG", "Nelder-Mead"),
+                                    control = list(
+                                      maxit = ifelse(k == stepsEM, 10000, 1000),
+                                      reltol = ifelse(k == stepsEM, 1e-10, 1e-8)
+                                      )
+                                    )
+                              )
       par_g <- head(opt$par, ng)
       B_fit <- tail(opt$par, p)
       if (k %% 10 == 0) {
@@ -80,6 +87,7 @@ setMethod(
     cat("\n", sep = "")
     x@pars$alpha <- pi_fit
     x@pars$S <- T_fit
+    x@fit <- list(cov = safe_cov(opt$hessian))
     s <- sph(x, type = "aft")
     s@gfun$pars <- par_g
     s@coefs$B <- B_fit

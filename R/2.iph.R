@@ -64,7 +64,8 @@ iph <- function(ph = NULL, gfun = NULL, gfun_pars = NULL, alpha = NULL, S = NULL
     name = paste("inhomogeneous ", ph@name, sep = ""),
     pars = ph@pars,
     gfun = list(name = gfun, pars = gfun_pars),
-    scale = 1
+    scale = 1,
+    fit = ph@fit
   )
 }
 
