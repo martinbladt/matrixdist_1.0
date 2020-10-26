@@ -64,7 +64,7 @@ lines(log(sq), (matrixdist::cdf(iDplot, sq, lower.tail = FALSE)$cdf), col = "blu
 sq <- seq(0.01, 10, by = 0.01)
 ratio <- haz(iA1, sq)$haz/haz(iA2, sq)$haz
 
-base::plot(sq, ratio, type = "line", lty = 1, lwd = 2)
+base::plot(sq, ratio, type = "l", lty = 1, lwd = 2)
 lines(sq, haz(eval(iB, subject = 1), sq)$haz/haz(eval(iB, subject = 0), sq)$haz, lty = 2, col = "red")
 lines(sq, haz(eval(iC, subject = 1), sq)$haz/haz(eval(iC, subject = 0), sq)$haz, lty = 3, col = "orange")
 lines(sq, haz(eval(iD, subject = 1), sq)$haz/haz(eval(iD, subject = 0), sq)$haz, lty = 4, col = "blue")
