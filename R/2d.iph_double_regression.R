@@ -73,7 +73,13 @@ setMethod(
                                     Z = Z,
                                     p1 = p1,
                                     p2 = p2,
-                                    method = "Nelder-Mead"))
+                                    hessian = (k == stepsEM),
+                                    method = ifelse(k == stepsEM, "CG", "Nelder-Mead"),
+                                    control = list(
+                                      maxit = ifelse(k == stepsEM, 10000, 1000),
+                                      reltol = ifelse(k == stepsEM, 1e-10, 1e-8)
+                                    )
+                                    ))
       B_fit <- head(opt$par, p1)
       C_intercept <- opt$par[p1 + 1]
       C_fit <- tail(opt$par, p2)
@@ -87,6 +93,7 @@ setMethod(
     x@pars$alpha <- pi_fit
     x@pars$S <- T_fit
     x@gfun$pars <- exp(C_intercept)
+    x@fit <- list(cov = safe_cov(opt$hessian))
     s <- sph(x, type = "reg2")
     s@coefs$B <- B_fit
     s@coefs$C <- C_fit
