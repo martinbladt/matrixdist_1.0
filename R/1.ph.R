@@ -277,6 +277,13 @@ g_specs <- function(name){
       return(- logLikelihoodMPar_RK(h, alpha, S, beta, obs, weight, rcens, rcweight))
     }
   }
+  else if(name == "LogNormal"){
+    inv_g <- function(t, w, beta) return(list(obs = log(t/beta + 1), weight = w))
+    mLL <- function(h, alpha, S, beta, obs, weight, rcens, rcweight) {
+      if(beta < 0) return(NA)
+      return(- logLikelihoodMLogNormal_RK(h, alpha, S, beta, obs, weight, rcens, rcweight))
+    }
+  }
   else if(name == "LogLogistic"){
     inv_g <- function(t, w, beta) return(list(obs = log((t/beta[1])^{beta[2]} + 1), weight = w))
     mLL <- function(h, alpha, S, beta, obs, weight, rcens, rcweight) {

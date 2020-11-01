@@ -28,7 +28,7 @@ X <- dat[order(dat$status, decreasing = TRUE), c(1,5,8)]
 
 set.seed(1)
 
-A <- ph(structure = "Coxian", dimension = 2)
+A <- iph(ph(structure = "Coxian", dimension = 2), gfun = "LogNormal", gfun_par = 2)
 
 B <- fit(A, y = y, rcen = rcen, stepsEM = 2000)
 

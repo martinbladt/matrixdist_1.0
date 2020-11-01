@@ -530,6 +530,53 @@ double logLikelihoodMPar_RK(double h, NumericVector & pi, NumericMatrix & T, dou
   return logLh;
 }
 
+//' Loglikelihood of matrix LogNormal using RK
+// [[Rcpp::export]]
+double logLikelihoodMLogNormal_RK(double h, NumericVector & pi, NumericMatrix & T, double beta, const NumericVector & obs, const NumericVector & weight, const NumericVector & rcens, const NumericVector & rcweight) {
+  long p{T.nrow()};
+  NumericMatrix m_pi(1,p, pi.begin());
+  
+  NumericMatrix avector(1,p);
+  
+  NumericVector m_e(p, 1);
+  NumericMatrix e(p, 1, m_e.begin());
+  
+  NumericMatrix t = matrix_product(T * (-1), e);
+  
+  // Uncensored data
+  //   initial condition
+  avector = clone(m_pi);
+  
+  double dt{0.0};
+  
+  double density{0.0};
+  
+  double logLh{0.0};
+
+  // Non censored data
+  if (obs.size() > 0) {
+    dt = pow(log(obs[0] + 1), beta);
+  }
+  for (int k{0}; k < obs.size(); ++k) {
+    a_rungekutta(avector, dt, h, T);
+    density = matrix_product(avector, t)(0,0);
+    logLh += weight[k] * (log(density) + log(beta) + (beta -1) * log(log(obs[k] + 1)) - log(obs[k] + 1));
+    if (k < obs.size() - 1) {dt = pow(log(obs[k + 1] + 1), beta) - pow(log(obs[k] + 1), beta);}
+  }
+  //Right censored data
+  if (rcens.size() > 0) {
+    dt = pow(log(rcens[0] + 1), beta);
+    avector = clone(m_pi);
+  }
+  for (int k{0}; k < rcens.size(); ++k) {
+    a_rungekutta(avector, dt, h, T);
+    density = matrix_product(avector, e)(0,0);
+    logLh += rcweight[k] * log(density);
+    if (k < rcens.size() - 1) {dt = pow(log(rcens[k + 1] + 1), beta) - pow(log(rcens[k] + 1), beta);}
+  }
+  
+  return logLh;
+}
 
 //' Loglikelihood of matrix Log-Logistic using RK
 // [[Rcpp::export]]
@@ -1102,7 +1149,7 @@ List linear_combination(NumericVector w, NumericVector pi, NumericMatrix T, Nume
 }
 
 
-//' Second EM in the algorithm of bruer
+//' Second EM in the algorithm of Breuer
 // [[Rcpp::export]]
 void secondEMstep(const NumericMatrix & observations, const NumericVector & weight, const NumericMatrix & censored, const NumericVector & rcweight, NumericVector & pi, NumericMatrix & T, NumericMatrix & R) {
   double lowerbound{1.0E-15}; //Makes a reward zero if it is below of this value - Otherwise it will never be zero

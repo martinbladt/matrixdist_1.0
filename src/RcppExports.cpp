@@ -135,6 +135,24 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// logLikelihoodMLogNormal_RK
+double logLikelihoodMLogNormal_RK(double h, NumericVector& pi, NumericMatrix& T, double beta, const NumericVector& obs, const NumericVector& weight, const NumericVector& rcens, const NumericVector& rcweight);
+RcppExport SEXP _matrixdist_logLikelihoodMLogNormal_RK(SEXP hSEXP, SEXP piSEXP, SEXP TSEXP, SEXP betaSEXP, SEXP obsSEXP, SEXP weightSEXP, SEXP rcensSEXP, SEXP rcweightSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type h(hSEXP);
+    Rcpp::traits::input_parameter< NumericVector& >::type pi(piSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix& >::type T(TSEXP);
+    Rcpp::traits::input_parameter< double >::type beta(betaSEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type obs(obsSEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type weight(weightSEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type rcens(rcensSEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type rcweight(rcweightSEXP);
+    rcpp_result_gen = Rcpp::wrap(logLikelihoodMLogNormal_RK(h, pi, T, beta, obs, weight, rcens, rcweight));
+    return rcpp_result_gen;
+END_RCPP
+}
 // logLikelihoodMLogLogistic_RK
 double logLikelihoodMLogLogistic_RK(double h, NumericVector& pi, NumericMatrix& T, NumericVector beta, const NumericVector& obs, const NumericVector& weight, const NumericVector& rcens, const NumericVector& rcweight);
 RcppExport SEXP _matrixdist_logLikelihoodMLogLogistic_RK(SEXP hSEXP, SEXP piSEXP, SEXP TSEXP, SEXP betaSEXP, SEXP obsSEXP, SEXP weightSEXP, SEXP rcensSEXP, SEXP rcweightSEXP) {
@@ -1417,6 +1435,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_logLikelihoodIPH_RK", (DL_FUNC) &_matrixdist_logLikelihoodIPH_RK, 11},
     {"_matrixdist_logLikelihoodMWeib_RK", (DL_FUNC) &_matrixdist_logLikelihoodMWeib_RK, 8},
     {"_matrixdist_logLikelihoodMPar_RK", (DL_FUNC) &_matrixdist_logLikelihoodMPar_RK, 8},
+    {"_matrixdist_logLikelihoodMLogNormal_RK", (DL_FUNC) &_matrixdist_logLikelihoodMLogNormal_RK, 8},
     {"_matrixdist_logLikelihoodMLogLogistic_RK", (DL_FUNC) &_matrixdist_logLikelihoodMLogLogistic_RK, 8},
     {"_matrixdist_logLikelihoodMGomp_RK", (DL_FUNC) &_matrixdist_logLikelihoodMGomp_RK, 8},
     {"_matrixdist_logLikelihoodMGEV_RK", (DL_FUNC) &_matrixdist_logLikelihoodMGEV_RK, 8},

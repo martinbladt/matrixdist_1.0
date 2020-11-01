@@ -50,6 +50,11 @@ logLikelihoodMPar_RK <- function(h, pi, T, beta, obs, weight, rcens, rcweight) {
     .Call(`_matrixdist_logLikelihoodMPar_RK`, h, pi, T, beta, obs, weight, rcens, rcweight)
 }
 
+#' Loglikelihood of matrix LogNormal using RK
+logLikelihoodMLogNormal_RK <- function(h, pi, T, beta, obs, weight, rcens, rcweight) {
+    .Call(`_matrixdist_logLikelihoodMLogNormal_RK`, h, pi, T, beta, obs, weight, rcens, rcweight)
+}
+
 #' Loglikelihood of matrix Log-Logistic using RK
 logLikelihoodMLogLogistic_RK <- function(h, pi, T, beta, obs, weight, rcens, rcweight) {
     .Call(`_matrixdist_logLikelihoodMLogLogistic_RK`, h, pi, T, beta, obs, weight, rcens, rcweight)
@@ -104,7 +109,7 @@ linear_combination <- function(w, pi, T, R) {
     .Call(`_matrixdist_linear_combination`, w, pi, T, R)
 }
 
-#' Second EM in the algorithm of bruer
+#' Second EM in the algorithm of Breuer
 secondEMstep <- function(observations, weight, censored, rcweight, pi, T, R) {
     invisible(.Call(`_matrixdist_secondEMstep`, observations, weight, censored, rcweight, pi, T, R))
 }
