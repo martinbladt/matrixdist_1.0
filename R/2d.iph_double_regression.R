@@ -76,8 +76,8 @@ setMethod(
                                     hessian = (k == stepsEM),
                                     method = ifelse(k == stepsEM, "Nelder-Mead", "Nelder-Mead"),
                                     control = list(
-                                      maxit = ifelse(k == stepsEM, 100, 1000),
-                                      reltol = ifelse(k == stepsEM, 1e-8, 1e-8)
+                                      maxit = ifelse(k == stepsEM, 1000, 50),
+                                      reltol = ifelse(k == stepsEM, 1e-8, 1e-6)
                                     )
                                     ))
       B_fit <- head(opt$par, p1)
