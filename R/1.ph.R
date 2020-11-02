@@ -222,10 +222,10 @@ setMethod(
                 rcens = rcen, 
                 rcweight = rcenweight,
                 hessian = (k == stepsEM),
-                method = ifelse(k == stepsEM, "CG", "Nelder-Mead"),
+                method = ifelse(k == stepsEM, "Nelder-Mead", "Nelder-Mead"),
                 control = list(
-                  maxit = ifelse(k == stepsEM, 10000, 1000),
-                  reltol = ifelse(k == stepsEM, 1e-10, 1e-8))
+                  maxit = ifelse(k == stepsEM, 100, 1000),
+                  reltol = ifelse(k == stepsEM, 1e-8, 1e-8))
           )
           )
         par_g <- opt$par
@@ -238,7 +238,8 @@ setMethod(
       cat("\n", sep = "")
       x@pars$alpha <- pi_fit
       x@pars$S <- T_fit
-      x@fit <- list(cov = safe_cov(opt$hessian))
+      x@fit <- list(cov = safe_cov(opt$hessian),
+                    loglik = - opt$value)
       x <- iph(x, gfun = name, gfun_pars = par_g)
     }
     return(x)

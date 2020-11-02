@@ -73,7 +73,7 @@ setMethod("show", "sph", function(object) {
 #'
 setMethod("coef", c(object = "sph"), function(object) {
   L <- append(object@pars, unname(object@gfun$pars))
-  names(L)[3] <- names(object@gfun$pars)
+  names(L)[3:(2 + length(object@gfun$pars))] <- names(object@gfun$pars)
   append(L, object@coefs)
 })
 

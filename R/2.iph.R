@@ -29,7 +29,7 @@ setClass("iph",
 #' @export
 #'
 #' @examples
-iph <- function(ph = NULL, gfun = NULL, gfun_pars = NULL, alpha = NULL, S = NULL, structure = NULL, dimension = 3) {
+iph <- function(ph = NULL, gfun = NULL, gfun_pars = NULL, alpha = NULL, S = NULL, structure = NULL, dimension = 3, scale = 1) {
   if (all(is.null(c(gfun, gfun_pars)))) {
     stop("input inhomogeneity function and parameters")
   }
@@ -64,7 +64,7 @@ iph <- function(ph = NULL, gfun = NULL, gfun_pars = NULL, alpha = NULL, S = NULL
     name = paste("inhomogeneous ", ph@name, sep = ""),
     pars = ph@pars,
     gfun = list(name = gfun, pars = gfun_pars),
-    scale = 1,
+    scale = scale,
     fit = ph@fit
   )
 }

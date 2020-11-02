@@ -74,10 +74,10 @@ setMethod(
                                     p1 = p1,
                                     p2 = p2,
                                     hessian = (k == stepsEM),
-                                    method = ifelse(k == stepsEM, "CG", "Nelder-Mead"),
+                                    method = ifelse(k == stepsEM, "Nelder-Mead", "Nelder-Mead"),
                                     control = list(
-                                      maxit = ifelse(k == stepsEM, 10000, 1000),
-                                      reltol = ifelse(k == stepsEM, 1e-10, 1e-8)
+                                      maxit = ifelse(k == stepsEM, 100, 1000),
+                                      reltol = ifelse(k == stepsEM, 1e-8, 1e-8)
                                     )
                                     ))
       B_fit <- head(opt$par, p1)
@@ -93,7 +93,8 @@ setMethod(
     x@pars$alpha <- pi_fit
     x@pars$S <- T_fit
     x@gfun$pars <- exp(C_intercept)
-    x@fit <- list(cov = safe_cov(opt$hessian))
+    x@fit <- list(cov = safe_cov(opt$hessian),
+                  loglik = - opt$value)
     s <- sph(x, type = "reg2")
     s@coefs$B <- B_fit
     s@coefs$C <- C_fit
@@ -142,6 +143,20 @@ reg2_g_specs <- function(name){
       o1 <- order(scale1 * inv_g(obs, weight, beta1)$obs)
       o2 <- order(scale2 * inv_g(rcens, rcweight, beta2)$obs)
       return(- logLikelihoodMGomp_RKs_double(h, alpha, S, beta1[o1], beta2[o2], obs[o1], weight[o1], rcens[o2], rcweight[o2], scale1[o1], scale2[o2]))
+    }
+  }
+  else if(name == "LogNormal"){
+    inv_g <- function(t, w, beta) return(list(obs = log(t + 1)^{beta}, weight = w)) 
+    mLL <- function(h, alpha, S, theta, obs, weight, rcens, rcweight, X, Z, p1, p2) {
+      B <- theta[1:p1]
+      C <- tail(theta, p2 + 1)
+      beta <- exp(C[1] + Z%*%C[-1])
+      ex <- exp(X%*%B)
+      scale1 <- ex[1:length(obs)]; beta1 <- beta[1:length(obs)]
+      scale2 <- tail(ex, length(rcens)); beta2 <- tail(beta, length(rcens))
+      o1 <- order(scale1 * inv_g(obs, weight, beta1)$obs)
+      o2 <- order(scale2 * inv_g(rcens, rcweight, beta2)$obs)
+      return(- logLikelihoodMLogNormal_RKs_double(h, alpha, S, beta1[o1], beta2[o2], obs[o1], weight[o1], rcens[o2], rcweight[o2], scale1[o1], scale2[o2]))
     }
   }
   else{

@@ -2206,7 +2206,7 @@ double logLikelihoodMLogNormal_RKs_double(double h, NumericVector & pi, NumericM
   for (int k{0}; k < obs.size(); ++k) {
     if(dt > 0) a_rungekutta(avector, dt, h, T);
     density = matrix_product(avector, t)(0,0);
-    logLh += weight[k] * (log(density) + log(scale1[k]) + log(beta1[k]) + (beta1[k] - 1) * log(log(obs[k] + 1)));
+    logLh += weight[k] * (log(density) + log(scale1[k]) + log(beta1[k]) + (beta1[k] - 1) * log(log(obs[k] + 1)) - log(obs[k] + 1));
     if (k < obs.size() - 1){dt = scale1[k + 1] * pow(log(obs[k + 1] + 1), beta1[k + 1]) - scale1[k] * pow(log(obs[k] + 1), beta1[k]);}
   }
   //Right censored data
