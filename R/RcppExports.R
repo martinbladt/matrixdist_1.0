@@ -528,7 +528,7 @@ mWeibullden <- function(x, pi, T, beta) {
 #' beta <- 0.5
 #' mweibullcdf(0.5, alpha, T, beta) 
 #' mweibullcdf(0.5, alpha, T, beta, FALSE) 
-mWeibullcdf <- function(x, pi, T, beta, lower_tail = TRUE) {
+mWeibullcdf <- function(x, pi, T, beta, lower_tail) {
     .Call(`_matrixdist_mWeibullcdf`, x, pi, T, beta, lower_tail)
 }
 

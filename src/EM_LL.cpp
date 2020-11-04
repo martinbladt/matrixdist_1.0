@@ -1,6 +1,7 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 #include "matrix_functions.h"
+#include "distributions.h"
 
 
 //' Default size of the steps in the RK
@@ -2271,3 +2272,34 @@ double logLikelihoodMGomp_RKs_double(double h, NumericVector & pi, NumericMatrix
   
   return logLh;
 }
+
+
+
+double derivativeMatrixWeibull(const NumericVector & obs, const NumericVector & weight, const NumericVector & rcens, const NumericVector & rcweight, NumericVector & pi, NumericMatrix & T,  double beta) {
+  long p{T.nrow()};
+  NumericMatrix m_pi(1,p, pi.begin());
+  
+  NumericVector m_e(p, 1);
+  NumericMatrix e(p, 1, m_e.begin());
+  
+  NumericMatrix t = matrix_product(T * (-1), e);
+  
+  NumericVector aux_vet(1);
+  
+  double logLh{0.0};
+  for (int k{0}; k < obs.size(); ++k) {
+    aux_vet[0] = pow(obs[k], beta);
+    logLh +=  weight[k] * ( (matrix_product(m_pi, matrix_product(matrix_exponential(T * pow(obs[k], beta)), matrix_product(T, t)))(0,0) * log(obs[k]) * pow(obs[k], beta) ) / mWeibullden(aux_vet, pi, T, beta)[0] + 1 / beta + log(obs[k]) );
+  }
+  return logLh;
+  
+  for (int k{0}; k < rcens.size(); ++k) {
+    aux_vet[0] = pow(rcens[k], beta);
+    logLh +=  rcweight[k] * ( (matrix_product(m_pi, matrix_product(matrix_exponential(T * pow(obs[k], beta)), matrix_product(T, e)))(0,0) * log(obs[k]) * pow(obs[k], beta) ) / mWeibullcdf(aux_vet, pi, T, beta, false)[0] );
+  }
+  return logLh;
+  
+}
+
+
+

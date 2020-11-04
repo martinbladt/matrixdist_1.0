@@ -1,6 +1,7 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 #include "matrix_functions.h"
+#include "distributions.h"
 
 // Distributions
 
@@ -290,7 +291,7 @@ NumericVector mWeibullden(NumericVector x, NumericVector pi, NumericMatrix T, do
 //' mweibullcdf(0.5, alpha, T, beta) 
 //' mweibullcdf(0.5, alpha, T, beta, FALSE) 
 // [[Rcpp::export]]
-NumericVector mWeibullcdf(NumericVector x, NumericVector pi, NumericMatrix T, double beta, bool lower_tail = true) {
+NumericVector mWeibullcdf(NumericVector x, NumericVector pi, NumericMatrix T, double beta, bool lower_tail) {
   
   NumericVector cdf(x.size());
   
