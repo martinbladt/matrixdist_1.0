@@ -1353,6 +1353,44 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// sumPH
+List sumPH(NumericVector pi1, NumericMatrix T1, NumericVector pi2, NumericMatrix T2);
+RcppExport SEXP _matrixdist_sumPH(SEXP pi1SEXP, SEXP T1SEXP, SEXP pi2SEXP, SEXP T2SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type pi1(pi1SEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type T1(T1SEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type pi2(pi2SEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type T2(T2SEXP);
+    rcpp_result_gen = Rcpp::wrap(sumPH(pi1, T1, pi2, T2));
+    return rcpp_result_gen;
+END_RCPP
+}
+// Kroneckerproduct
+NumericMatrix Kroneckerproduct(NumericMatrix a, NumericMatrix b);
+RcppExport SEXP _matrixdist_Kroneckerproduct(SEXP aSEXP, SEXP bSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type a(aSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type b(bSEXP);
+    rcpp_result_gen = Rcpp::wrap(Kroneckerproduct(a, b));
+    return rcpp_result_gen;
+END_RCPP
+}
+// Kroneckersum
+NumericMatrix Kroneckersum(NumericMatrix a, NumericMatrix b);
+RcppExport SEXP _matrixdist_Kroneckersum(SEXP aSEXP, SEXP bSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type a(aSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type b(bSEXP);
+    rcpp_result_gen = Rcpp::wrap(Kroneckersum(a, b));
+    return rcpp_result_gen;
+END_RCPP
+}
 // rcpp_hello_world
 List rcpp_hello_world();
 RcppExport SEXP _matrixdist_rcpp_hello_world() {
@@ -1514,6 +1552,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_clone_matrix", (DL_FUNC) &_matrixdist_clone_matrix, 1},
     {"_matrixdist_matrix_VanLoan", (DL_FUNC) &_matrixdist_matrix_VanLoan, 3},
     {"_matrixdist_diagonal_vector", (DL_FUNC) &_matrixdist_diagonal_vector, 1},
+    {"_matrixdist_sumPH", (DL_FUNC) &_matrixdist_sumPH, 4},
+    {"_matrixdist_Kroneckerproduct", (DL_FUNC) &_matrixdist_Kroneckerproduct, 2},
+    {"_matrixdist_Kroneckersum", (DL_FUNC) &_matrixdist_Kroneckersum, 2},
     {"_matrixdist_rcpp_hello_world", (DL_FUNC) &_matrixdist_rcpp_hello_world, 0},
     {"_matrixdist_random_structure", (DL_FUNC) &_matrixdist_random_structure, 3},
     {"_matrixdist_random_reward", (DL_FUNC) &_matrixdist_random_reward, 2},

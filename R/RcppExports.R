@@ -893,6 +893,18 @@ diagonal_vector <- function(vec) {
     .Call(`_matrixdist_diagonal_vector`, vec)
 }
 
+sumPH <- function(pi1, T1, pi2, T2) {
+    .Call(`_matrixdist_sumPH`, pi1, T1, pi2, T2)
+}
+
+Kroneckerproduct <- function(a, b) {
+    .Call(`_matrixdist_Kroneckerproduct`, a, b)
+}
+
+Kroneckersum <- function(a, b) {
+    .Call(`_matrixdist_Kroneckersum`, a, b)
+}
+
 rcpp_hello_world <- function() {
     .Call(`_matrixdist_rcpp_hello_world`)
 }
