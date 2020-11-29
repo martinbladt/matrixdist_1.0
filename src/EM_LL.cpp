@@ -2303,3 +2303,101 @@ double derivativeMatrixWeibull(const NumericVector & obs, const NumericVector & 
 
 
 
+
+
+
+//' EM step using Runge Kutta for mPH - Test
+//' 
+//' Computes one step of the EM algorithm by using a Runge-Kutta method of 4th order
+// [[Rcpp::export]]
+NumericVector EMstep_mPH_RK(double h, NumericVector & pi, NumericMatrix & T, const NumericVector & obs, const NumericVector & weight, const NumericVector & density ,const NumericVector & valmix, const NumericVector & probmix) {
+  long p{T.nrow()};
+  
+  NumericMatrix m_pi(1, p, pi.begin()); //Matrix version of pi for computations
+  
+  NumericVector m_e(p, 1);
+  NumericMatrix e(p, 1, m_e.begin());
+  
+  NumericMatrix t = matrix_product(T * (-1), e);
+  
+  NumericMatrix Bmean(p,1);
+  NumericMatrix Zmean(p,1);
+  NumericMatrix Nmean(p,p + 1);
+  
+  NumericVector Lvect(valmix.size());
+  
+  NumericMatrix avector(1,p); 
+  NumericMatrix bvector(p,1);
+  NumericMatrix cmatrix(p,p);
+  
+  double SumOfWeights{0.0};
+  double densityph{0.0};
+  
+  
+  for (int l{0}; l < valmix.size(); ++l) {
+    NumericMatrix T_aux = T * (valmix[l]);
+    NumericMatrix t = matrix_product(T_aux * (-1), e);
+    
+    // initial conditions
+    avector = clone(m_pi);
+    bvector = clone(t);
+    
+    double dt{0.0};
+    if (obs.size()>0) {
+      dt = obs[0];
+    }
+    
+    // E step
+    //  Uncensored data
+    for (int k{0}; k < obs.size(); ++k) {
+      
+      if(l==0){SumOfWeights += weight[k];} 
+      
+      runge_kutta(avector, bvector, cmatrix, dt, h, T_aux, t);
+      densityph = matrix_product(m_pi, bvector)(0,0);
+      // This is not the value of the density that I need to devide. However, this is the value that I need for the Lvect
+      // I need a separate function to compute the density in each value of the distribution
+      // I could put it as an input of the EM and compute accordingly outside, to make it more flexible
+      Lvect[l] += probmix[l] * densityph * weight[k] / density[k];
+      
+      // E-step
+      for (int i{0}; i < p; ++i) {
+        Bmean(i,0) += probmix[l] * pi[i] * bvector(i,0) * weight[k] / density[k];
+        Nmean(i,p) += probmix[l] * valmix[l] * avector(0,i) * t(i,0) * weight[k] / density[k];
+        Zmean(i,0) += probmix[l] * valmix[l] * cmatrix(i,i) * weight[k] / density[k];
+        for (int j{0}; j < p; ++j) {
+          Nmean(i,j) += probmix[l] * valmix[l] * T(i,j) * cmatrix(j,i) * weight[k] / density[k];
+        }
+      }
+      if (k < obs.size() - 1) {
+        dt = obs[k + 1] - obs[k];
+      }
+    }
+  } 
+  
+  // M step
+  for (int i{0}; i < p; ++i) {
+    pi[i] = Bmean(i,0) / (SumOfWeights);
+    if (pi[i] < 0) {
+      pi[i] = 0;
+    }
+    t(i,0) = Nmean(i,p) / Zmean(i,0);
+    if (t(i,0) < 0) {
+      t(i,0) = 0;
+    }
+    T(i,i) = -t(i,0);
+    for (int j{0}; j < p; ++j) {
+      if (i != j) {
+        T(i,j) = Nmean(i,j) / Zmean(i,0);
+        if (T(i,j) < 0) {
+          T(i,j) = 0;
+        }
+        T(i,i) -= T(i,j);
+      }
+    }
+  }
+  // I need to return the Lvect and use optim outside to find theta
+  return Lvect;
+}
+
+
