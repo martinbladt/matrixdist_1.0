@@ -18,5 +18,6 @@ Density evaluated at locations
 Density Method for phase type distributions
 }
 \examples{
-
+obj <- ph(structure = "General")
+dens(obj, c(1, 2, 3))
 }

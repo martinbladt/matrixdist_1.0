@@ -10,13 +10,24 @@
   weight = numeric(0),
   rcen = numeric(0),
   rcenweight = numeric(0),
-  stepsEM = 1000
+  stepsEM = 1000,
+  every = 100
 )
 }
 \arguments{
 \item{x}{an object of class \linkS4class{ph}.}
 
 \item{y}{vector or data.}
+
+\item{weight}{vector of weights.}
+
+\item{rcen}{vector of right-censored observations}
+
+\item{rcenweight}{vector of weights for right-censored observations.}
+
+\item{stepsEM}{number of EM steps to be performed.}
+
+\item{every}{number of iterations between likelihood display updates.}
 }
 \value{
 An object of class \linkS4class{ph}.
@@ -25,5 +36,7 @@ An object of class \linkS4class{ph}.
 Fit Method for ph Class
 }
 \examples{
-
+obj <- ph(structure = "General")
+data <- sim(obj)
+fit(obj, data)
 }

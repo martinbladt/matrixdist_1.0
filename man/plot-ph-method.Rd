@@ -9,7 +9,7 @@
 \arguments{
 \item{x}{an object of class \linkS4class{ph}.}
 
-\item{y}{a dataset}
+\item{y}{a dataset (optional)}
 }
 \description{
 Plot Method for phase type distributions

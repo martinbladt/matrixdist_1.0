@@ -22,8 +22,8 @@ setClass("iph",
 #' @param S a sub-intensity matrix.
 #' @param structure a valid ph structure
 #' @param dimension the dimension of the ph structure (if provided)
-#' @param fun inhomogeneity transform
-#' @param funpars the parameters of the inhomogeneity function
+#' @param gfun inhomogeneity transform
+#' @param gfunpars the parameters of the inhomogeneity function
 #'
 #' @return An object of class \linkS4class{iph}.
 #' @export
@@ -39,7 +39,8 @@ iph <- function(ph = NULL, gfun = NULL, gfun_pars = NULL, alpha = NULL, S = NULL
   if (!gfun %in% c("Pareto", "Weibull", "LogNormal", "LogLogistic", "Gompertz", "GEVD", "Identity")) {
     stop("invalid gfun")
   }
-  if (gfun %in% c("Pareto", "Weibull", "LogNormal","Gompertz")) {
+  if (gfun %in% c("Pareto", "Weibull", "LogNormal", "Gompertz")) {
+    if(is.null(gfun_pars))gfun_pars <- 1
     if (length(gfun_pars) != 1 | sum(gfun_pars <= 0) > 0) {
       stop("gfun parameter should be positive and of length one")
     } else {
@@ -47,6 +48,7 @@ iph <- function(ph = NULL, gfun = NULL, gfun_pars = NULL, alpha = NULL, S = NULL
     }
   }
   if (gfun %in% c("GEVD")) {
+    if(is.null(gfun_pars))gfun_pars <- c(0, 1, 1)
     if (length(gfun_pars) != 3 | (gfun_pars[2] > 0) == FALSE) {
       stop("gfun parameter should be of length three: mu, sigma, xi, and sigma > 0")
     } else {
@@ -54,16 +56,35 @@ iph <- function(ph = NULL, gfun = NULL, gfun_pars = NULL, alpha = NULL, S = NULL
     }
   }
   if (gfun %in% c("LogLogistic")) {
+    if(is.null(gfun_pars))gfun_pars <- c(1, 1)
     if (length(gfun_pars) != 2 | (gfun_pars[1] <= 0) | (gfun_pars[2] <= 0)) {
       stop("gfun parameter should be positive and of length two: alpha, theta > 0")
     } else {
       names(gfun_pars) <- c("alpha", "theta")
     }
   }
+  if (gfun == "Weibull") {
+    ginv <- function(beta, t) t^{beta}
+  }
+  else if (gfun == "Pareto") {
+    ginv <- function(beta, t) log(t / beta + 1)
+  }
+  else if (gfun == "LogNormal") {
+    ginv <- function(beta, t) log(t + 1)^{beta}
+  }
+  else if (gfun == "LogLogistic") {
+    ginv <- function(beta, t) log((t / beta[1])^{beta[2]} + 1)
+  }
+  else if (gfun == "Gompertz") {
+    ginv <- function(beta, t) (exp(t * beta) - 1) / beta
+  }
+  else if (gfun == "GEVD") {
+    ginv <- function(beta, t, w) reversTransformData(t, w, beta)
+  }
   new("iph",
     name = paste("inhomogeneous ", ph@name, sep = ""),
     pars = ph@pars,
-    gfun = list(name = gfun, pars = gfun_pars),
+    gfun = list(name = gfun, pars = gfun_pars, inverse = ginv),
     scale = scale,
     fit = ph@fit
   )
@@ -84,8 +105,8 @@ setMethod("show", "iph", function(object) {
   cat("g-function name: ", object@gfun$name, "\n", sep = "")
   cat("parameters: ", "\n", sep = "")
   print(object@gfun$pars)
-  cat("scale: ", "\n", sep = "")
-  print(object@scale)
+  #cat("scale: ", "\n", sep = "")
+  #print(object@scale)
 })
 
 #' Simulation Method for inhomogeneous phase type distributions
@@ -126,7 +147,7 @@ setMethod("dens", c(x = "iph"), function(x, y = seq(0, quan(x, .95)$quantile, le
   scale <- x@scale
   y_inf <- (y == Inf)
   dens <- y
-  dens[!y_inf] <- fn(y/scale, x@pars$alpha, x@pars$S, x@gfun$pars)/scale
+  dens[!y_inf] <- fn(y / scale, x@pars$alpha, x@pars$S, x@gfun$pars) / scale
   dens[y_inf] <- 0
   return(list(y = y, dens = dens))
 })
@@ -141,14 +162,14 @@ setMethod("dens", c(x = "iph"), function(x, y = seq(0, quan(x, .95)$quantile, le
 #'
 #' @examples
 #'
-setMethod("cdf", c(x = "iph"), function(x, 
-                                      q = seq(0, quan(x, .95)$quantile, length.out = 10),
-                                      lower.tail = TRUE) {
+setMethod("cdf", c(x = "iph"), function(x,
+                                        q = seq(0, quan(x, .95)$quantile, length.out = 10),
+                                        lower.tail = TRUE) {
   fn <- base::eval(parse(text = paste("m", x@gfun$name, "cdf", sep = "")))
   scale <- x@scale
   q_inf <- (q == Inf)
   cdf <- q
-  cdf[!q_inf] <- fn(q/scale, x@pars$alpha, x@pars$S, x@gfun$pars, lower.tail)
+  cdf[!q_inf] <- fn(q / scale, x@pars$alpha, x@pars$S, x@gfun$pars, lower.tail)
   cdf[q_inf] <- as.numeric(1 * lower.tail)
   return(list(q = q, cdf = cdf))
 })
@@ -166,4 +187,3 @@ setMethod("coef", c(object = "iph"), function(object) {
   names(L)[3] <- names(object@gfun$pars)
   L
 })
-

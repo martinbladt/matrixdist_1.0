@@ -7,7 +7,8 @@ Author: Martin Bladt
 Maintainer: Martin Bladt <martinbladt@gmail.com>
 Description: This package is concerned with the estimation and simulation of matrix distributions.
 License: GPL (>= 2)
-Imports: Rcpp (>= 1.0.3)
+Imports: 
+    Rcpp
 LinkingTo: Rcpp
 SystemRequirements: C++11
 RoxygenNote: 7.1.1

@@ -4,7 +4,7 @@
 \alias{mWeibullcdf}
 \title{Matrix Weibull cdf}
 \usage{
-mWeibullcdf(x, pi, T, beta, lower_tail = TRUE)
+mWeibullcdf(x, pi, T, beta, lower_tail)
 }
 \arguments{
 \item{x}{non-negative value}

@@ -89,55 +89,6 @@ setGeneric("fit", function(x, y, ...) {
   standardGeneric("fit")
 })
 
-#' New Generic for Regression with Matrix Distributions
-#'
-#' Methods are available for objects of class \linkS4class{ph}
-#'
-#' @param x an object of the model class.
-#' @param y a vector of data.
-#' @param ...
-#'
-#' @return An object of the fitted model class.
-#' @export
-#'
-#'
-setGeneric("reg", function(x, y, ...) {
-  standardGeneric("reg")
-})
-
-#' New Generic for Double Regression with Matrix Distributions
-#'
-#' Methods are available for objects of class \linkS4class{iph}
-#'
-#' @param x an object of the model class.
-#' @param y a vector of data.
-#' @param ...
-#'
-#' @return An object of the fitted model class.
-#' @export
-#'
-#'
-setGeneric("reg2", function(x, y, ...) {
-  standardGeneric("reg2")
-})
-
-#' New Generic for AFT regression with Matrix Distributions
-#'
-#' Methods are available for objects of class \linkS4class{ph}
-#'
-#' @param x an object of the model class.
-#' @param y a vector of data.
-#' @param ...
-#'
-#' @return An object of the fitted model class.
-#' @export
-#'
-#'
-setGeneric("aft", function(x, y, ...) {
-  standardGeneric("aft")
-})
-
-
 #' New Generic for Plotting Matrix Distributions
 #'
 #' Methods are available for objects of class \linkS4class{ph}
@@ -151,34 +102,4 @@ setGeneric("aft", function(x, y, ...) {
 #'
 setGeneric("plot", function(x, ...) {
   standardGeneric("plot")
-})
-
-#' New Generic for doing a likelihood ratio test between two Matrix Distribution models
-#'
-#' Methods are available for objects of class \linkS4class{ph}
-#'
-#' @param x,y objects of the model class.
-#' @param ...
-#'
-#' @return a likelihood ratio test result.
-#' @export
-#'
-#'
-setGeneric("LRT", function(x, y, ...) {
-  standardGeneric("LRT")
-})
-
-#' New Generic for Evaluating Survival Matrix Distributions
-#'
-#' Methods are available for objects of class \linkS4class{sph}
-#'
-#' @param x an object of the model class.
-#' @param y a vector of data.
-#' @param ...
-#'
-#' @export
-#'
-#'
-setGeneric("eval", function(x, ...) {
-  standardGeneric("eval")
 })

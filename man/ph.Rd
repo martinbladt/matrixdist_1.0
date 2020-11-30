@@ -13,11 +13,14 @@ ph(alpha = NULL, S = NULL, structure = NULL, dimension = 3)
 
 \item{structure}{a valid ph structure}
 
-\item{dimension}{the dimension of the ph structure (if provided)}
+\item{dimension}{the dimension of the ph structure (if structure is provided)}
 }
 \value{
 An object of class \linkS4class{ph}.
 }
 \description{
 Constructor Function for phase type distributions
+}
+\examples{
+ph(structure = "GCoxian", dim = 5)
 }

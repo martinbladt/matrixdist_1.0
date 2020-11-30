@@ -12,6 +12,3 @@
 \description{
 Show Method for phase type distributions
 }
-\examples{
-
-}

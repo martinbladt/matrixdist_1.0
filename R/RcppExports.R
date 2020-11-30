@@ -32,22 +32,15 @@ logLikelihoodPH_RK <- function(h, pi, T, obs, weight, rcens, rcweight) {
     .Call(`_matrixdist_logLikelihoodPH_RK`, h, pi, T, obs, weight, rcens, rcweight)
 }
 
-#' Loglikelihood IPH using RK and g as an input
-#' One needs to be careful with the GEV since it is decreasing
-#' It is slower than using the density directly - Perhaps is the iteration with R 
-logLikelihoodIPH_RK <- function(h, pi, T, g, g_inv, lambda, beta, obs, weight, rcens, rcweight) {
-    .Call(`_matrixdist_logLikelihoodIPH_RK`, h, pi, T, g, g_inv, lambda, beta, obs, weight, rcens, rcweight)
-}
-
 #' Loglikelihood of matrix Weibull using RK
 #' This is the fastest option
-logLikelihoodMWeib_RK <- function(h, pi, T, beta, obs, weight, rcens, rcweight) {
-    .Call(`_matrixdist_logLikelihoodMWeib_RK`, h, pi, T, beta, obs, weight, rcens, rcweight)
+logLikelihoodMWeibull_RK <- function(h, pi, T, beta, obs, weight, rcens, rcweight) {
+    .Call(`_matrixdist_logLikelihoodMWeibull_RK`, h, pi, T, beta, obs, weight, rcens, rcweight)
 }
 
 #' Loglikelihood of matrix Pareto using RK
-logLikelihoodMPar_RK <- function(h, pi, T, beta, obs, weight, rcens, rcweight) {
-    .Call(`_matrixdist_logLikelihoodMPar_RK`, h, pi, T, beta, obs, weight, rcens, rcweight)
+logLikelihoodMPareto_RK <- function(h, pi, T, beta, obs, weight, rcens, rcweight) {
+    .Call(`_matrixdist_logLikelihoodMPareto_RK`, h, pi, T, beta, obs, weight, rcens, rcweight)
 }
 
 #' Loglikelihood of matrix LogNormal using RK
@@ -61,14 +54,14 @@ logLikelihoodMLogLogistic_RK <- function(h, pi, T, beta, obs, weight, rcens, rcw
 }
 
 #' Loglikelihood of matrix Gompertz using RK
-logLikelihoodMGomp_RK <- function(h, pi, T, beta, obs, weight, rcens, rcweight) {
-    .Call(`_matrixdist_logLikelihoodMGomp_RK`, h, pi, T, beta, obs, weight, rcens, rcweight)
+logLikelihoodMGompertz_RK <- function(h, pi, T, beta, obs, weight, rcens, rcweight) {
+    .Call(`_matrixdist_logLikelihoodMGompertz_RK`, h, pi, T, beta, obs, weight, rcens, rcweight)
 }
 
 #' Loglikelihood of matrix GEV using RK
 #' I am assuming that the sample is given in an increasing order
-logLikelihoodMGEV_RK <- function(h, pi, T, beta, obs, weight, rcens, rcweight) {
-    .Call(`_matrixdist_logLikelihoodMGEV_RK`, h, pi, T, beta, obs, weight, rcens, rcweight)
+logLikelihoodMGEVD_RK <- function(h, pi, T, beta, obs, weight, rcens, rcweight) {
+    .Call(`_matrixdist_logLikelihoodMGEVD_RK`, h, pi, T, beta, obs, weight, rcens, rcweight)
 }
 
 #' Applies the inverse of the GEV but giving back the vector in reverse order
@@ -76,150 +69,9 @@ reversTransformData <- function(observations, weights, beta) {
     .Call(`_matrixdist_reversTransformData`, observations, weights, beta)
 }
 
-#'  EM for a Bivariate PH fit
-#'  
-EMstep_bivph <- function(observations, weights, alpha, T11, T12, T22) {
-    invisible(.Call(`_matrixdist_EMstep_bivph`, observations, weights, alpha, T11, T12, T22))
-}
-
-#' EM using Matlab algorithm for matrix exponential
-#' 
-#' This one is slower but dont requires to order the sample
-EMstep <- function(pi, T, obs, weight, rcens, rcweight) {
-    invisible(.Call(`_matrixdist_EMstep`, pi, T, obs, weight, rcens, rcweight))
-}
-
-#' Pi and T of a linear combination of a MPH*
-#' 
-#' @examples
-#' pi <- c(0.15, 0.85, 0 ,0)
-#' T11 <- matrix(c(c(-2,9),c(0,-11)), nrow = 2, ncol = 2)
-#' T12 <- matrix(c(c(2,0),c(0,2)), nrow = 2, ncol = 2)
-#' T22 <- matrix(c(c(-1,0),c(0.5,-5)), nrow = 2, ncol = 2)
-#' T <- merge_matrices(T11, T12, T22)
-#' R <- matrix(c(c(1,1,0,0), c(0,0,1,1)), ncol=2)
-#' w1 <- c(1,0)
-#' linear_combination(w1, pi, T, R)
-#' w2 <- c(0,1)
-#' linear_combination(w2, pi, T, R)
-#' matrix(c(0.15, 0.85), ncol=2)%*%matrix_inverse(T11 * (-1))%*%T12
-#' w3 <- c(1,1)
-#' linear_combination(w3, pi, T, R)
-linear_combination <- function(w, pi, T, R) {
-    .Call(`_matrixdist_linear_combination`, w, pi, T, R)
-}
-
-#' Second EM in the algorithm of Breuer
-secondEMstep <- function(observations, weight, censored, rcweight, pi, T, R) {
-    invisible(.Call(`_matrixdist_secondEMstep`, observations, weight, censored, rcweight, pi, T, R))
-}
-
-#' Sum data for input in Breur
-sum_data <- function(x) {
-    .Call(`_matrixdist_sum_data`, x)
-}
-
-#' Loglikelihood using RK, with scale
-logLikelihoodPH_RKs <- function(h, pi, T, obs, weight, rcens, rcweight, scale1, scale2) {
-    .Call(`_matrixdist_logLikelihoodPH_RKs`, h, pi, T, obs, weight, rcens, rcweight, scale1, scale2)
-}
-
-#' Loglikelihood using RK, with scale
-logLikelihoodPH_RKs2 <- function(h, pi, T, obs, weight, rcens, rcweight, scale1, scale2) {
-    .Call(`_matrixdist_logLikelihoodPH_RKs2`, h, pi, T, obs, weight, rcens, rcweight, scale1, scale2)
-}
-
-#' Loglikelihood of matrix Weibull using RK
-#' This is the fastest option
-logLikelihoodMWeib_RKs <- function(h, pi, T, beta, obs, weight, rcens, rcweight, scale1, scale2) {
-    .Call(`_matrixdist_logLikelihoodMWeib_RKs`, h, pi, T, beta, obs, weight, rcens, rcweight, scale1, scale2)
-}
-
-#' Loglikelihood of matrix Pareto using RK
-logLikelihoodMPar_RKs <- function(h, pi, T, beta, obs, weight, rcens, rcweight, scale1, scale2) {
-    .Call(`_matrixdist_logLikelihoodMPar_RKs`, h, pi, T, beta, obs, weight, rcens, rcweight, scale1, scale2)
-}
-
-#' Loglikelihood of matrix LogNormal using RK
-#' This is the fastest option
-logLikelihoodMLogNormal_RKs <- function(h, pi, T, beta, obs, weight, rcens, rcweight, scale1, scale2) {
-    .Call(`_matrixdist_logLikelihoodMLogNormal_RKs`, h, pi, T, beta, obs, weight, rcens, rcweight, scale1, scale2)
-}
-
-#' Loglikelihood of matrix Log-Logistic using RK
-logLikelihoodMLogLogistic_RKs <- function(h, pi, T, beta, obs, weight, rcens, rcweight, scale1, scale2) {
-    .Call(`_matrixdist_logLikelihoodMLogLogistic_RKs`, h, pi, T, beta, obs, weight, rcens, rcweight, scale1, scale2)
-}
-
-#' Loglikelihood of matrix Gompertz using RK
-logLikelihoodMGomp_RKs <- function(h, pi, T, beta, obs, weight, rcens, rcweight, scale1, scale2) {
-    .Call(`_matrixdist_logLikelihoodMGomp_RKs`, h, pi, T, beta, obs, weight, rcens, rcweight, scale1, scale2)
-}
-
-#' Loglikelihood of matrix GEV using RK
-#' I am assuming that the sample is given in an increasing order
-logLikelihoodMGEV_RKs <- function(h, pi, T, beta, obs, weight, rcens, rcweight, scale1, scale2) {
-    .Call(`_matrixdist_logLikelihoodMGEV_RKs`, h, pi, T, beta, obs, weight, rcens, rcweight, scale1, scale2)
-}
-
-#' Loglikelihood using RK, with scale
-logLikelihoodPH_RKs1 <- function(h, pi, T, obs, weight, rcens, rcweight, scale1, scale2) {
-    .Call(`_matrixdist_logLikelihoodPH_RKs1`, h, pi, T, obs, weight, rcens, rcweight, scale1, scale2)
-}
-
-#' Loglikelihood of matrix Weibull using RK
-#' This is the fastest option
-logLikelihoodMWeib_RKs1 <- function(h, pi, T, beta, obs, weight, rcens, rcweight, scale1, scale2) {
-    .Call(`_matrixdist_logLikelihoodMWeib_RKs1`, h, pi, T, beta, obs, weight, rcens, rcweight, scale1, scale2)
-}
-
-#' Loglikelihood of matrix Pareto using RK
-logLikelihoodMPar_RKs1 <- function(h, pi, T, beta, obs, weight, rcens, rcweight, scale1, scale2) {
-    .Call(`_matrixdist_logLikelihoodMPar_RKs1`, h, pi, T, beta, obs, weight, rcens, rcweight, scale1, scale2)
-}
-
-#' Loglikelihood of matrix LogNormal using RK
-#' This is the fastest option
-logLikelihoodMLogNormal_RKs1 <- function(h, pi, T, beta, obs, weight, rcens, rcweight, scale1, scale2) {
-    .Call(`_matrixdist_logLikelihoodMLogNormal_RKs1`, h, pi, T, beta, obs, weight, rcens, rcweight, scale1, scale2)
-}
-
-#' Loglikelihood of matrix Log-Logistic using RK
-logLikelihoodMLogLogistic_RKs1 <- function(h, pi, T, beta, obs, weight, rcens, rcweight, scale1, scale2) {
-    .Call(`_matrixdist_logLikelihoodMLogLogistic_RKs1`, h, pi, T, beta, obs, weight, rcens, rcweight, scale1, scale2)
-}
-
-#' Loglikelihood of matrix Gompertz using RK
-logLikelihoodMGomp_RKs1 <- function(h, pi, T, beta, obs, weight, rcens, rcweight, scale1, scale2) {
-    .Call(`_matrixdist_logLikelihoodMGomp_RKs1`, h, pi, T, beta, obs, weight, rcens, rcweight, scale1, scale2)
-}
-
-#' Loglikelihood of matrix GEV using RK
-#' I am assuming that the sample is given in an increasing order
-logLikelihoodMGEV_RKs1 <- function(h, pi, T, beta, obs, weight, rcens, rcweight, scale1, scale2) {
-    .Call(`_matrixdist_logLikelihoodMGEV_RKs1`, h, pi, T, beta, obs, weight, rcens, rcweight, scale1, scale2)
-}
-
-#' Loglikelihood of matrix Weibull using RK
-#' This is the fastest option
-logLikelihoodMWeib_RKs_double <- function(h, pi, T, beta1, beta2, obs, weight, rcens, rcweight, scale1, scale2) {
-    .Call(`_matrixdist_logLikelihoodMWeib_RKs_double`, h, pi, T, beta1, beta2, obs, weight, rcens, rcweight, scale1, scale2)
-}
-
-#' Loglikelihood of matrix Pareto using RK
-logLikelihoodMPar_RKs_double <- function(h, pi, T, beta1, beta2, obs, weight, rcens, rcweight, scale1, scale2) {
-    .Call(`_matrixdist_logLikelihoodMPar_RKs_double`, h, pi, T, beta1, beta2, obs, weight, rcens, rcweight, scale1, scale2)
-}
-
-#' Loglikelihood of matrix LogNormal using RK
-#' This is the fastest option
-logLikelihoodMLogNormal_RKs_double <- function(h, pi, T, beta1, beta2, obs, weight, rcens, rcweight, scale1, scale2) {
-    .Call(`_matrixdist_logLikelihoodMLogNormal_RKs_double`, h, pi, T, beta1, beta2, obs, weight, rcens, rcweight, scale1, scale2)
-}
-
-#' Loglikelihood of matrix Gompertz using RK
-logLikelihoodMGomp_RKs_double <- function(h, pi, T, beta1, beta2, obs, weight, rcens, rcweight, scale1, scale2) {
-    .Call(`_matrixdist_logLikelihoodMGomp_RKs_double`, h, pi, T, beta1, beta2, obs, weight, rcens, rcweight, scale1, scale2)
+#' Derivative of matrix Weibull
+derivativeMatrixWeibull <- function(h, obs, weight, rcens, rcweight, pi, T, beta) {
+    .Call(`_matrixdist_derivativeMatrixWeibull`, h, obs, weight, rcens, rcweight, pi, T, beta)
 }
 
 #' Embeded Markov chain of a sub-intensity matrix
@@ -332,62 +184,6 @@ rmatrixGEVD <- function(n, pi, T, mu, sigma, xi = 0) {
     .Call(`_matrixdist_rmatrixGEVD`, n, pi, T, mu, sigma, xi)
 }
 
-#' Random inhomogeneous phase-type
-#' 
-#' Generates a sample of size \code{n} from an inhomogeneous phase-type distribution with parameters \code{pi}, \code{T} and \code{beta}
-#' @parm n Sample size
-#' @param pi Initial probabilities
-#' @param T sub-intensity matrix
-#' @param beta Parameter of the transformation
-#' @return The simulated sample
-#' @examples
-#' alpha <- c(0.5, 0.3, 0.2)
-#' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
-#' g <- function(x, beta) { x^(1/beta) }
-#' beta <- 0.5
-#' n <- 10
-#' riphfn(n, alpha, T, g, beta) 
-riphfn <- function(n, pi, T, g, beta) {
-    .Call(`_matrixdist_riphfn`, n, pi, T, g, beta)
-}
-
-#' Random MPH*
-#' 
-#' Generates a sample of size \code{n} from a MPH* distribution with parameters \code{pi}, \code{T} and \code{R}
-#' @parm n Sample size
-#' @param pi Initial probabilities
-#' @param T sub-intensity matrix
-#' @return The simulated sample
-#' @examples
-#' alpha <- c(0.5, 0.3, 0.2)
-#' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
-#' R <- matrix(c(c(1,0,0.8),c(0,1,0.2)), nrow = 3, ncol = 2)
-#' n <- 10
-#' rmph(n, alpha, T, R) 
-rmph <- function(n, pi, T, R) {
-    .Call(`_matrixdist_rmph`, n, pi, T, R)
-}
-
-#' Random Inhomogeneous MPH*
-#' 
-#' Generates a sample of size \code{n} from an Inhomogeneous MPH* distribution with parameters \code{pi}, \code{T} and \code{R}
-#' @param n Sample size
-#' @param dist_type Type of distribution: "Weibull" "Pareto"
-#' @param pi Initial probabilities
-#' @param T sub-intensity matrix
-#' @param beta parameters of the transformations
-#' @return The simulated sample
-#' @examples
-#' alpha <- c(0.5, 0.3, 0.2)
-#' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
-#' R <- matrix(c(c(1,0,0.8),c(0,1,0.2)), nrow = 3, ncol = 2)
-#' beta <- c(0.4, 0.7)
-#' n <- 10
-#' rimph(n, "Weibull", alpha, T, R, beta) 
-rimph <- function(n, dist_type, pi, T, R, beta) {
-    .Call(`_matrixdist_rimph`, n, dist_type, pi, T, R, beta)
-}
-
 #' Phase-type density
 #' 
 #' Computes the density of phase-type distribution with parameters \code{pi} and \code{T} at \code{x}
@@ -449,52 +245,6 @@ phmoment <- function(k, pi, T) {
 #' phLaplace(2.5, alpha, T) 
 phLaplace <- function(s, pi, T) {
     .Call(`_matrixdist_phLaplace`, s, pi, T)
-}
-
-#' IPH density - Slower
-#' 
-#' Computes the density of an IPH distribution with parameters \code{pi}, \code{T} and \code{beta} at \code{x}
-#' @param x non-negative value
-#' @param pi Initial probabilities
-#' @param T sub-intensity matrix
-#' @param g Tranformation 
-#' @param g_inv Inverse of the transformation
-#' @param lambda Derivative of the inverse
-#' @param beta parameter of the transformation
-#' @return The density at \code{x}
-#' @examples
-#' g <- function(x, beta) { x^(1/beta) }
-#' g_inv <- function(x, beta) { x^beta}
-#' lambda <- function(x, beta) {beta * x^(beta - 1)}
-#' alpha <- c(0.5, 0.3, 0.2)
-#' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
-#' beta <- 0.5
-#' iphdensity(0.5, alpha, T, g, g_inv, lambda, beta) 
-iphdensity <- function(x, pi, T, g, g_inv, lambda, beta) {
-    .Call(`_matrixdist_iphdensity`, x, pi, T, g, g_inv, lambda, beta)
-}
-
-#' IPH cdf (tail)
-#' 
-#' Computes the cdf(tail) of an IPH distribution with parameters \code{pi}, \code{T} and \code{beta} at \code{x}
-#' @param x non-negative value
-#' @param pi Initial probabilities
-#' @param T sub-intensity matrix
-#' @param g Tranformation 
-#' @param g_inv Inverse of the transformation
-#' @param lambda Derivative of the inverse
-#' @param beta parameter of the transformation
-#' @return The cdf (tail) at \code{x}
-#' @examples
-#' g <- function(x, beta) { x^(1/beta) }
-#' g_inv <- function(x, beta) { x^beta}
-#' alpha <- c(0.5, 0.3, 0.2)
-#' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
-#' beta <- 0.5
-#' iphcdf(0.5, alpha, T, g, g_inv, beta)
-#' iphcdf(0.5, alpha, T, g, g_inv, beta, FALSE) 
-iphcdf <- function(x, pi, T, g, g_inv, beta, lower_tail = TRUE) {
-    .Call(`_matrixdist_iphcdf`, x, pi, T, g, g_inv, beta, lower_tail)
 }
 
 #' Matrix Weibull density
@@ -716,105 +466,6 @@ mGEVDcdf <- function(x, pi, T, mu, sigma, xi, lower_tail = TRUE) {
     .Call(`_matrixdist_mGEVDcdf`, x, pi, T, mu, sigma, xi, lower_tail)
 }
 
-#' Bivariate phase-type joint density
-#' 
-#' @examples
-#' alpha <- c(0.15, 0.85)
-#' T11 <- matrix(c(c(-2,9),c(0,-11)), nrow = 2, ncol = 2)
-#' T12 <- matrix(c(c(2,0),c(0,2)), nrow = 2, ncol = 2)
-#' T22 <- matrix(c(c(-1,0),c(0.5,-5)), nrow = 2, ncol = 2)
-#' x1 <- matrix(c(0.5,2), ncol=2) 
-#' x2 <- matrix(c(c(0.5,1), c(2, 1.5)), ncol=2) 
-#' bivphden(x1, alpha, T11, T12, T22) 
-#' bivphden(x2, alpha, T11, T12, T22) 
-bivphden <- function(x, alpha, T11, T12, T22) {
-    .Call(`_matrixdist_bivphden`, x, alpha, T11, T12, T22)
-}
-
-#' Bivariate phase-type joint tail
-#' 
-#' @examples
-#' alpha <- c(0.15, 0.85)
-#' T11 <- matrix(c(c(-2,9),c(0,-11)), nrow = 2, ncol = 2)
-#' T12 <- matrix(c(c(2,0),c(0,2)), nrow = 2, ncol = 2)
-#' T22 <- matrix(c(c(-1,0),c(0.5,-5)), nrow = 2, ncol = 2)
-#' x1 <- matrix(c(0.5,1), ncol=2) 
-#' x2 <- matrix(c(c(0.5,1), c(2, 1.5)), ncol=2) 
-#' bivphtail(x1, alpha, T11, T12, T22) 
-#' bivphtail(x2, alpha, T11, T12, T22) 
-bivphtail <- function(x, alpha, T11, T12, T22) {
-    .Call(`_matrixdist_bivphtail`, x, alpha, T11, T12, T22)
-}
-
-#' Bivariate matrix Weibull joint density
-#' 
-#' @examples
-#' alpha <- c(0.15, 0.85)
-#' T11 <- matrix(c(c(-2,9),c(0,-11)), nrow = 2, ncol = 2)
-#' T12 <- matrix(c(c(2,0),c(0,2)), nrow = 2, ncol = 2)
-#' T22 <- matrix(c(c(-1,0),c(0.5,-5)), nrow = 2, ncol = 2)
-#' beta <- c(0.5, 0.7)
-#' x1 <- matrix(c(0.5,2), ncol=2) 
-#' x2 <- matrix(c(c(0.5,1), c(2, 1.5)), ncol=2) 
-#' bivmWeibden(x1, alpha, T11, T12, T22, beta) 
-#' bivmWeibden(x2, alpha, T11, T12, T22, beta) 
-bivmWeibullden <- function(x, alpha, T11, T12, T22, beta) {
-    .Call(`_matrixdist_bivmWeibullden`, x, alpha, T11, T12, T22, beta)
-}
-
-#' Bivariate matrix Weibull joint tail
-#' 
-#' @examples
-#' alpha <- c(0.15, 0.85)
-#' T11 <- matrix(c(c(-2,9),c(0,-11)), nrow = 2, ncol = 2)
-#' T12 <- matrix(c(c(2,0),c(0,2)), nrow = 2, ncol = 2)
-#' T22 <- matrix(c(c(-1,0),c(0.5,-5)), nrow = 2, ncol = 2)
-#' beta <- c(0.5, 0.7)
-#' x1 <- matrix(c(0.5,1), ncol=2) 
-#' x2 <- matrix(c(c(0.5,1), c(2, 1.5)), ncol=2) 
-#' bimWeibtail(x1, alpha, T11, T12, T22, beta) 
-#' bimWeibtail(x2, alpha, T11, T12, T22, beta) 
-bimWeibulltail <- function(x, alpha, T11, T12, T22, beta) {
-    .Call(`_matrixdist_bimWeibulltail`, x, alpha, T11, T12, T22, beta)
-}
-
-#' Bivariate matrix Pareto joint density
-#' 
-#' @examples
-#' alpha <- c(0.15, 0.85)
-#' T11 <- matrix(c(c(-2,9),c(0,-11)), nrow = 2, ncol = 2)
-#' T12 <- matrix(c(c(2,0),c(0,2)), nrow = 2, ncol = 2)
-#' T22 <- matrix(c(c(-1,0),c(0.5,-5)), nrow = 2, ncol = 2)
-#' beta <- c(2, 4)
-#' x1 <- matrix(c(0.5,2), ncol=2) 
-#' x2 <- matrix(c(c(0.5,1), c(2, 1.5)), ncol=2) 
-#' bivmParden(x1, alpha, T11, T12, T22, beta) 
-#' bivmParden(x2, alpha, T11, T12, T22, beta) 
-bivmParetoden <- function(x, alpha, T11, T12, T22, beta) {
-    .Call(`_matrixdist_bivmParetoden`, x, alpha, T11, T12, T22, beta)
-}
-
-#' Bivariate matrix Weibull joint tail
-#' 
-#' @examples
-#' alpha <- c(0.15, 0.85)
-#' T11 <- matrix(c(c(-2,9),c(0,-11)), nrow = 2, ncol = 2)
-#' T12 <- matrix(c(c(2,0),c(0,2)), nrow = 2, ncol = 2)
-#' T22 <- matrix(c(c(-1,0),c(0.5,-5)), nrow = 2, ncol = 2)
-#' beta <- c(2, 4)
-#' x1 <- matrix(c(0.5,1), ncol=2) 
-#' x2 <- matrix(c(c(0.5,1), c(2, 1.5)), ncol=2) 
-#' bimPartail(x1, alpha, T11, T12, T22, beta) 
-#' bimPartail(x2, alpha, T11, T12, T22, beta) 
-bimParetotail <- function(x, alpha, T11, T12, T22, beta) {
-    .Call(`_matrixdist_bimParetotail`, x, alpha, T11, T12, T22, beta)
-}
-
-#' Joint MGF of a MPH
-jointMGF <- function(w, pi, T, R) {
-    .Call(`_matrixdist_jointMGF`, w, pi, T, R)
-}
-
 #' Product of two matrices
 #' 
 #' Computes C = A * B
@@ -905,10 +556,6 @@ Kroneckersum <- function(a, b) {
     .Call(`_matrixdist_Kroneckersum`, a, b)
 }
 
-rcpp_hello_world <- function() {
-    .Call(`_matrixdist_rcpp_hello_world`)
-}
-
 #' Random structure of a phase-type
 #' 
 #' Generates random parameters \code{pi} and \code{T} of a phase-type distribution of dimension \code{p} with chosen structure
@@ -921,30 +568,5 @@ rcpp_hello_world <- function() {
 #' random_structure(5, "Hyperexponential") 
 random_structure <- function(p, structure = "General", scale_factor = 1) {
     .Call(`_matrixdist_random_structure`, p, structure, scale_factor)
-}
-
-#' Random reward matrix
-#' 
-#' The rows of the matrix sum to 1
-random_reward <- function(p, dim) {
-    .Call(`_matrixdist_random_reward`, p, dim)
-}
-
-#' Changes the values of T and R to make the MPH* having rewards that sum to 1
-#' 
-#' Better clone T and R?
-norm_mph <- function(T, R) {
-    invisible(.Call(`_matrixdist_norm_mph`, T, R))
-}
-
-#' Merges the matrices T11, T12 and T22 of a bivariate matrix
-#' 
-merge_matrices <- function(T11, T12, T22) {
-    .Call(`_matrixdist_merge_matrices`, T11, T12, T22)
-}
-
-#' Random parameters of a bivariate phase-type
-random_phase_BivPH <- function(p1, p2, scale_factor = 1) {
-    .Call(`_matrixdist_random_phase_BivPH`, p1, p2, scale_factor)
 }
 

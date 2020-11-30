@@ -11,10 +11,13 @@ iph(
   alpha = NULL,
   S = NULL,
   structure = NULL,
-  dimension = 3
+  dimension = 3,
+  scale = 1
 )
 }
 \arguments{
+\item{gfun}{inhomogeneity transform}
+
 \item{alpha}{a probability vector.}
 
 \item{S}{a sub-intensity matrix.}
@@ -23,9 +26,7 @@ iph(
 
 \item{dimension}{the dimension of the ph structure (if provided)}
 
-\item{fun}{inhomogeneity transform}
-
-\item{funpars}{the parameters of the inhomogeneity function}
+\item{gfunpars}{the parameters of the inhomogeneity function}
 }
 \value{
 An object of class \linkS4class{iph}.
