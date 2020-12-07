@@ -725,30 +725,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// Kroneckerproduct
-NumericMatrix Kroneckerproduct(NumericMatrix a, NumericMatrix b);
-RcppExport SEXP _matrixdist_Kroneckerproduct(SEXP aSEXP, SEXP bSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericMatrix >::type a(aSEXP);
-    Rcpp::traits::input_parameter< NumericMatrix >::type b(bSEXP);
-    rcpp_result_gen = Rcpp::wrap(Kroneckerproduct(a, b));
-    return rcpp_result_gen;
-END_RCPP
-}
-// Kroneckersum
-NumericMatrix Kroneckersum(NumericMatrix a, NumericMatrix b);
-RcppExport SEXP _matrixdist_Kroneckersum(SEXP aSEXP, SEXP bSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericMatrix >::type a(aSEXP);
-    Rcpp::traits::input_parameter< NumericMatrix >::type b(bSEXP);
-    rcpp_result_gen = Rcpp::wrap(Kroneckersum(a, b));
-    return rcpp_result_gen;
-END_RCPP
-}
 // random_structure
 List random_structure(int p, String structure, double scale_factor);
 RcppExport SEXP _matrixdist_random_structure(SEXP pSEXP, SEXP structureSEXP, SEXP scale_factorSEXP) {
@@ -816,8 +792,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_matrix_VanLoan", (DL_FUNC) &_matrixdist_matrix_VanLoan, 3},
     {"_matrixdist_diagonal_vector", (DL_FUNC) &_matrixdist_diagonal_vector, 1},
     {"_matrixdist_sumPH", (DL_FUNC) &_matrixdist_sumPH, 4},
-    {"_matrixdist_Kroneckerproduct", (DL_FUNC) &_matrixdist_Kroneckerproduct, 2},
-    {"_matrixdist_Kroneckersum", (DL_FUNC) &_matrixdist_Kroneckersum, 2},
     {"_matrixdist_random_structure", (DL_FUNC) &_matrixdist_random_structure, 3},
     {NULL, NULL, 0}
 };

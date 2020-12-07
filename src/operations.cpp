@@ -46,27 +46,3 @@ List sumPH(NumericVector pi1, NumericMatrix T1, NumericVector pi2, NumericMatrix
   
   return L;
 }
-
-
-// [[Rcpp::export]]
-NumericMatrix Kroneckerproduct(NumericMatrix a, NumericMatrix b) 
-{ 
-  int arows{a.nrow()};
-  int acolumns{a.nrow()};
-  int brows{b.nrow()};
-  int bcolumns{b.ncol()};
-  NumericMatrix c(arows * brows, acolumns * bcolumns);
-  for (size_t i = 0; i < arows; ++i)
-    for (size_t j = 0; j < acolumns; ++j)
-      for (size_t k = 0; k < brows; ++k)
-        for (size_t l = 0; l < bcolumns; ++l)
-          c(i*brows + k, j*bcolumns + l) = a(i, j) * b(k, l);
-  return c;
-} 
-
-
-// [[Rcpp::export]]
-NumericMatrix Kroneckersum(NumericMatrix a, NumericMatrix b) 
-{ 
-  return matrix_sum(Kroneckerproduct(a, NumericMatrix::diag(b.nrow(), 1.0)), Kroneckerproduct(NumericMatrix::diag(a.nrow(), 1.0), b));
-}

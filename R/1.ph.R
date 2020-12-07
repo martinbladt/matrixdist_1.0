@@ -71,6 +71,43 @@ setMethod("+", signature(e1 = "ph", e2 = "ph"),
           }
           )
 
+kronecker_sum <- function(A, B){
+  n <- nrow(A); m <- nrow(B)
+  kronecker(A, diag(m)) + kronecker(diag(n), B)
+}
+
+#' Minimum Method for phase type distributions
+#'
+#' @param x1 an object of class \linkS4class{ph}.
+#' @param x2 an object of class \linkS4class{ph}.
+#' @export
+#'
+setMethod("minimum", signature(x1 = "ph", x2 = "ph"), 
+          function (x1, x2){
+            alpha <- kronecker(x1@pars$alpha, x2@pars$alpha)
+            S <- kronecker_sum(x1@pars$S, x2@pars$S)
+            return(ph(alpha = alpha, S = S))
+          }
+)
+
+#' Maximum Method for phase type distributions
+#'
+#' @param x1 an object of class \linkS4class{ph}.
+#' @param x2 an object of class \linkS4class{ph}.
+#' @export
+#'
+setMethod("maximum", signature(x1 = "ph", x2 = "ph"), 
+          function (x1, x2){
+            n1 <- length(x1@pars$alpha)
+            n2 <- length(x2@pars$alpha)
+            alpha <- c(kronecker(x1@pars$alpha, x2@pars$alpha), rep(0, n1 + n2))
+            S1 <- rbind(kronecker_sum(x1@pars$S, x2@pars$S), matrix(0, n1 + n2, n1 * n2))
+            S2 <- rbind(kronecker(diag(n1), -rowSums(x2@pars$S)), x1@pars$S, matrix(0, n2, n1))
+            S3 <- rbind(kronecker(-rowSums(x1@pars$S), diag(n2)), matrix(0, n1, n2), x2@pars$S)
+            return(ph(alpha = alpha, S = cbind(S1, S2, S3)))
+          }
+)
+
 #' Show Method for phase type distributions
 #'
 #' @param x an object of class \linkS4class{ph}.
@@ -312,7 +349,6 @@ safe_cov <- function(hess) {
   hessinverse
 }
 
-
 #' Coef Method for ph Class
 #'
 #' @param object an object of class \linkS4class{ph}.
@@ -325,29 +361,4 @@ safe_cov <- function(hess) {
 #' coef(obj)
 setMethod("coef", c(object = "ph"), function(object) {
   object@pars
-})
-
-#' Plot Method for phase type distributions
-#'
-#' @param x an object of class \linkS4class{ph}.
-#' @param y a dataset (optional)
-#'
-#' @export
-#'
-#' @examples
-#'
-setMethod("plot", c(x = "ph"), function(x, y = NULL) {
-  if (all(is.null(y))) {
-    sq <- seq(1e-20, quan(x, 0.99)$quan, length.out = 1000)
-    phd <- phdensity(sq, x@pars$alpha, x@pars$S)
-    base::plot(sq, phd, type = "l", xlab = "y", ylab = "density")
-  }
-  if (!all(is.null(y))) {
-    sq <- seq(1e-20, max(y), length.out = 1000)
-    phd <- phdensity(sq, x@pars$alpha, x@pars$S)
-    mx_h <- max(hist(y, breaks = 100, plot = FALSE)$density)
-    mx_d <- max(phd)
-    hist(y, breaks = 100, freq = FALSE, ylim = c(0, max(mx_h, mx_d)))
-    lines(sq, phd, col = "red")
-  }
 })

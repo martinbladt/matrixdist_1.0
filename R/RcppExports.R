@@ -548,14 +548,6 @@ sumPH <- function(pi1, T1, pi2, T2) {
     .Call(`_matrixdist_sumPH`, pi1, T1, pi2, T2)
 }
 
-Kroneckerproduct <- function(a, b) {
-    .Call(`_matrixdist_Kroneckerproduct`, a, b)
-}
-
-Kroneckersum <- function(a, b) {
-    .Call(`_matrixdist_Kroneckersum`, a, b)
-}
-
 #' Random structure of a phase-type
 #' 
 #' Generates random parameters \code{pi} and \code{T} of a phase-type distribution of dimension \code{p} with chosen structure

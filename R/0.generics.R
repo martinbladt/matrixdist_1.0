@@ -13,6 +13,36 @@ setGeneric("sim", function(x, ...) {
   standardGeneric("sim")
 })
 
+#' New Generic for Minimum of two Matrix Distributions
+#'
+#' Methods are available for objects of class \linkS4class{ph}
+#'
+#' @param x an object of the model class.
+#' @param ...
+#'
+#' @return A realization from the matrix distribution.
+#' @export
+#'
+#'
+setGeneric("minimum", function(x1, x2, ...) {
+  standardGeneric("minimum")
+})
+
+#' New Generic for Maximum of two Matrix Distributions
+#'
+#' Methods are available for objects of class \linkS4class{ph}
+#'
+#' @param x an object of the model class.
+#' @param ...
+#'
+#' @return A realization from the matrix distribution.
+#' @export
+#'
+#'
+setGeneric("maximum", function(x1, x2, ...) {
+  standardGeneric("maximum")
+})
+
 #' New Generic for the Density of Matrix Distributions
 #'
 #' Methods are available for objects of class \linkS4class{ph}
@@ -87,19 +117,4 @@ setGeneric("quan", function(x, ...) {
 #'
 setGeneric("fit", function(x, y, ...) {
   standardGeneric("fit")
-})
-
-#' New Generic for Plotting Matrix Distributions
-#'
-#' Methods are available for objects of class \linkS4class{ph}
-#'
-#' @param x an object of the model class.
-#' @param y a vector of data.
-#' @param ...
-#'
-#' @export
-#'
-#'
-setGeneric("plot", function(x, ...) {
-  standardGeneric("plot")
 })
