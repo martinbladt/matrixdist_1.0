@@ -237,6 +237,9 @@ setMethod("quan", c(x = "ph"), function(x,
 #' @param rcen vector of right-censored observations
 #' @param rcenweight vector of weights for right-censored observations.
 #' @param stepsEM number of EM steps to be performed.
+#' @param rkstep Runge-Kutta step size (optional)
+#' @param maxit maximum number of iterations when optimizing g function.
+#' @param reltol relative tolerance when optimizing g function.
 #' @param every number of iterations between likelihood display updates.
 #' 
 #' @return An object of class \linkS4class{ph}.
@@ -254,6 +257,9 @@ setMethod(
            rcen = numeric(0),
            rcenweight = numeric(0),
            stepsEM = 1000,
+           rkstep = NA,
+           maxit = 100,
+           reltol = 1e-8,
            every = 100) {
     is_iph <- is(x, "iph")
     if (is_iph) {
@@ -274,9 +280,9 @@ setMethod(
 
     if (!is_iph) {
       for (k in 1:stepsEM) {
-        RKstep <- default_step_length(T_fit)
+        if(!is.na(rkstep)) RKstep <- rkstep else  RKstep <- default_step_length(T_fit)
         EMstep_RK(RKstep, pi_fit, T_fit, y, weight, rcen, rcenweight)
-        if (k %% 100 == 0) {
+        if (k %% every == 0) {
           cat("\r", "iteration:", k,
             ", logLik:", logLikelihoodPH_RK(RKstep, pi_fit, T_fit, y, weight, rcen, rcenweight),
             sep = " "
@@ -294,7 +300,7 @@ setMethod(
         if(x@gfun$name != "GEVD") {trans <- inv_g(par_g, y); trans_cens <- inv_g(par_g, rcen)
         }else{ t <- inv_g(par_g, y, weight); tc <- inv_g(par_g, rcen, rcenweight) 
         trans <- t$obs; trans_weight <- t$weight; trans_cens <- tc$obs; trans_rcenweight <- tc$weight}
-        RKstep <- default_step_length(T_fit)
+        if(!is.na(rkstep)) RKstep <- rkstep else  RKstep <- default_step_length(T_fit)
         EMstep_RK(RKstep, pi_fit, T_fit, trans, trans_weight, trans_cens, trans_rcenweight)
         opt <- suppressWarnings(
           optim(
@@ -309,8 +315,8 @@ setMethod(
             rcweight = rcenweight,
             hessian = (k == stepsEM),
             control = list(
-              maxit = ifelse(k == stepsEM, 1000, 10),
-              reltol = ifelse(k == stepsEM, 1e-8, 1e-6)
+              maxit = maxit,
+              reltol = reltol
             )
           )
         )
