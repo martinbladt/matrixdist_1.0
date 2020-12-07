@@ -58,6 +58,19 @@ ph <- function(alpha = NULL, S = NULL, structure = NULL, dimension = 3) {
   )
 }
 
+#' Sum Method for phase type distributions
+#'
+#' @param e1 an object of class \linkS4class{ph}.
+#' @param e2 an object of class \linkS4class{ph}.
+#' @export
+#'
+setMethod("+", signature(e1 = "ph", e2 = "ph"), 
+          function (e1, e2){
+            L <- sumPH(e1@pars$alpha, e1@pars$S, e2@pars$alpha, e2@pars$S)
+            return(ph(alpha = L$pi, S = L$T))
+          }
+          )
+
 #' Show Method for phase type distributions
 #'
 #' @param x an object of class \linkS4class{ph}.
