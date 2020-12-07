@@ -13,6 +13,22 @@ setGeneric("sim", function(x, ...) {
   standardGeneric("sim")
 })
 
+#' New Generic for Moment of Matrix Distributions
+#'
+#' Methods are available for objects of class \linkS4class{ph}
+#'
+#' @param x an object of the model class.
+#' @param ...
+#'
+#' @return A realization from the matrix distribution.
+#' @export
+#'
+#'
+setGeneric("moment", function(x, ...) {
+  standardGeneric("moment")
+})
+
+
 #' New Generic for Minimum of two Matrix Distributions
 #'
 #' Methods are available for objects of class \linkS4class{ph}

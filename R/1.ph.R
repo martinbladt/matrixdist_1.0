@@ -66,6 +66,7 @@ ph <- function(alpha = NULL, S = NULL, structure = NULL, dimension = 3) {
 #'
 setMethod("+", signature(e1 = "ph", e2 = "ph"), 
           function (e1, e2){
+            if(is(e1, "iph") | is(e2, "iph")) stop("objects to be added should be ph")
             L <- sumPH(e1@pars$alpha, e1@pars$S, e2@pars$alpha, e2@pars$S)
             return(ph(alpha = L$pi, S = L$T))
           }
@@ -107,6 +108,21 @@ setMethod("maximum", signature(x1 = "ph", x2 = "ph"),
             return(ph(alpha = alpha, S = cbind(S1, S2, S3)))
           }
 )
+
+#' Moment Method for phase type distributions
+#'
+#' @param x an object of class \linkS4class{ph}.
+#' @param k a positive integer.
+#' @export
+#'
+setMethod("moment", signature(x = "ph"), 
+          function (x, k = 1){
+            if(k%%1 != 0 | k <= 0) return("k should be a positive integer")
+            if(is(x, "iph")) warning("moment of undelying ph structure is provided for iph objects")
+            return(phmoment(k, x@pars$alpha, x@pars$S))
+          }
+)
+
 
 #' Show Method for phase type distributions
 #'

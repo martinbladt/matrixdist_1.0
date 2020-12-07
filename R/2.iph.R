@@ -90,6 +90,36 @@ iph <- function(ph = NULL, gfun = NULL, gfun_pars = NULL, alpha = NULL, S = NULL
   )
 }
 
+#' Minimum Method for inhomogeneous phase type distributions
+#'
+#' @param x1 an object of class \linkS4class{iph}.
+#' @param x2 an object of class \linkS4class{iph}.
+#' @export
+#'
+setMethod("minimum", signature(x1 = "iph", x2 = "iph"), 
+          function (x1, x2){
+            if(x1@gfun$name != x2@gfun$name | !all(x1@gfun$pars == x2@gfun$pars)) stop("g functions (or parameters) are different")
+            ph1 <- ph(alpha = x1@pars$alpha, S = x1@pars$S)
+            ph2 <- ph(alpha = x2@pars$alpha, S = x2@pars$S)
+            return(iph(ph = minimum(ph1, ph2), gfun = x1@gfun$name, gfun_pars = x1@gfun$pars))
+          }
+)
+
+#' Maximum Method for inhomogeneous phase type distributions
+#'
+#' @param x1 an object of class \linkS4class{iph}.
+#' @param x2 an object of class \linkS4class{iph}.
+#' @export
+#'
+setMethod("maximum", signature(x1 = "iph", x2 = "iph"), 
+          function (x1, x2){
+            if(x1@gfun$name != x2@gfun$name | !all(x1@gfun$pars == x2@gfun$pars)) stop("g functions (or parameters) are different")
+            ph1 <- ph(alpha = x1@pars$alpha, S = x1@pars$S)
+            ph2 <- ph(alpha = x2@pars$alpha, S = x2@pars$S)
+            return(iph(ph = maximum(ph1, ph2), gfun = x1@gfun$name, gfun_pars = x1@gfun$pars))
+          }
+)
+
 #' Show Method for inhomogeneous phase type distributions
 #'
 #' @param x an object of class \linkS4class{iph}.
