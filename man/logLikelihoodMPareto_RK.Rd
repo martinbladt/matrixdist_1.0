@@ -6,6 +6,23 @@
 \usage{
 logLikelihoodMPareto_RK(h, pi, T, beta, obs, weight, rcens, rcweight)
 }
+\arguments{
+\item{h}{step-lenght}
+
+\item{pi}{initial probabilities}
+
+\item{T}{sub-intensity}
+
+\item{beta}{parametor of transformation}
+
+\item{obs}{the observations}
+
+\item{weight}{weight of the observations}
+
+\item{rcens}{censored observations}
+
+\item{rcweight}{weight of the censored observations}
+}
 \description{
-Loglikelihood of matrix Pareto using RK
+Loglikelihood for a sample
 }

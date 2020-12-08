@@ -2,12 +2,27 @@
 % Please edit documentation in R/RcppExports.R
 \name{logLikelihoodMWeibull_RK}
 \alias{logLikelihoodMWeibull_RK}
-\title{Loglikelihood of matrix Weibull using RK
-This is the fastest option}
+\title{Loglikelihood of matrix Weibull using RK}
 \usage{
 logLikelihoodMWeibull_RK(h, pi, T, beta, obs, weight, rcens, rcweight)
 }
+\arguments{
+\item{h}{step-lenght}
+
+\item{pi}{initial probabilities}
+
+\item{T}{sub-intensity}
+
+\item{beta}{parametor of transformation}
+
+\item{obs}{the observations}
+
+\item{weight}{weight of the observations}
+
+\item{rcens}{censored observations}
+
+\item{rcweight}{weight of the censored observations}
+}
 \description{
-Loglikelihood of matrix Weibull using RK
-This is the fastest option
+Loglikelihood for a sample
 }

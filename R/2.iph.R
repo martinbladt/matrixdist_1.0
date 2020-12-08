@@ -28,7 +28,6 @@ setClass("iph",
 #' @return An object of class \linkS4class{iph}.
 #' @export
 #'
-#' @examples
 iph <- function(ph = NULL, gfun = NULL, gfun_pars = NULL, alpha = NULL, S = NULL, structure = NULL, dimension = 3, scale = 1) {
   if (all(is.null(c(gfun, gfun_pars)))) {
     stop("input inhomogeneity function and parameters")

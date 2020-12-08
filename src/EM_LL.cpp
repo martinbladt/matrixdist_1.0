@@ -5,6 +5,11 @@ using namespace Rcpp;
 
 
 //' Default size of the steps in the RK
+//' 
+//' Computes the default step lenght for a matrix \code{T} to be employed in the RK method
+//' @param T sub-intensity matrix
+//' @return The step lenght for \code{T}
+//' 
 // [[Rcpp::export]]
 double default_step_length(const NumericMatrix & T) {
   double h{-0.1 / T(0,0)};
@@ -20,7 +25,15 @@ double default_step_length(const NumericMatrix & T) {
 
 //' Runge Kutta for the calculation of the a,b and c vectors in a EM step
 //' 
-//' I may need to change the type of avector and bvector, depending on how I call them in the EM step
+//' Performce the RK of forth order
+//' @param avector the a vector
+//' @param bvector the b vector 
+//' @param cmatrix the c matrix
+//' @param dt the increment
+//' @param h step-lenght
+//' @param T sub-intensity
+//' @param t exit rates 
+//' 
 // [[Rcpp::export]]
 void runge_kutta(NumericMatrix & avector, NumericMatrix & bvector, NumericMatrix & cmatrix, double dt, double h, const NumericMatrix & T, const NumericMatrix & t) {
   int p{T.nrow()};
@@ -155,6 +168,14 @@ void runge_kutta(NumericMatrix & avector, NumericMatrix & bvector, NumericMatrix
 //' EM step using Runge Kutta
 //' 
 //' Computes one step of the EM algorithm by using a Runge-Kutta method of 4th order
+//' @param h step-lenght
+//' @param pi initial probalities
+//' @param T sub-intensity
+//' @param obs the observations
+//' @param weight the weights for the observations
+//' @param rcens censored observations
+//' @param rcweight the weights for the censored observations
+//' 
 // [[Rcpp::export]]
 void EMstep_RK(double h, NumericVector & pi, NumericMatrix & T, const NumericVector & obs, const NumericVector & weight, const NumericVector & rcens, const NumericVector & rcweight) {
   long p{T.nrow()};
@@ -261,9 +282,14 @@ void EMstep_RK(double h, NumericVector & pi, NumericMatrix & T, const NumericVec
 }
 
 
-//' Runge Kutta for the calculation of the a vectors in a EM step - Can be used for the loglikelihood
+//' Runge Kutta for the calculation of the a vectors in a EM step 
 //' 
-//' I may need to change the type of avector
+//' Can be used for the loglikelihood
+//' @param avector the a vector
+//' @param dt increment
+//' @param h step-lenght
+//' @param T sub-intensity
+//' 
 // [[Rcpp::export]]
 void a_rungekutta(NumericMatrix & avector, double dt, double h, const NumericMatrix & T) {
   long p{T.nrow()};
@@ -317,6 +343,16 @@ void a_rungekutta(NumericMatrix & avector, double dt, double h, const NumericMat
 
 
 //' Loglikelihood using RK
+//' 
+//' Loglikelihood for a sample 
+//' @param h step-lenght
+//' @param pi initial probabilities
+//' @param T sub-intensity
+//' @param obs the observations
+//' @param weight weight of the observations
+//' @param rcens censored observations
+//' @param rcweight weight of the censored observations
+//' 
 // [[Rcpp::export]]
 double logLikelihoodPH_RK(double h, NumericVector & pi, NumericMatrix & T, const NumericVector & obs, const NumericVector & weight, const NumericVector & rcens, const NumericVector & rcweight) {
   long p{T.nrow()};
@@ -366,7 +402,17 @@ double logLikelihoodPH_RK(double h, NumericVector & pi, NumericMatrix & T, const
 
 
 //' Loglikelihood of matrix Weibull using RK
-//' This is the fastest option
+//' 
+//' Loglikelihood for a sample 
+//' @param h step-lenght
+//' @param pi initial probabilities
+//' @param T sub-intensity
+//' @param beta parametor of transformation
+//' @param obs the observations
+//' @param weight weight of the observations
+//' @param rcens censored observations
+//' @param rcweight weight of the censored observations
+//' 
 // [[Rcpp::export]]
 double logLikelihoodMWeibull_RK(double h, NumericVector & pi, NumericMatrix & T, double beta, const NumericVector & obs, const NumericVector & weight, const NumericVector & rcens, const NumericVector & rcweight) {
   
@@ -419,6 +465,17 @@ double logLikelihoodMWeibull_RK(double h, NumericVector & pi, NumericMatrix & T,
 
 
 //' Loglikelihood of matrix Pareto using RK
+//' 
+//' Loglikelihood for a sample 
+//' @param h step-lenght
+//' @param pi initial probabilities
+//' @param T sub-intensity
+//' @param beta parametor of transformation
+//' @param obs the observations
+//' @param weight weight of the observations
+//' @param rcens censored observations
+//' @param rcweight weight of the censored observations
+//' 
 // [[Rcpp::export]]
 double logLikelihoodMPareto_RK(double h, NumericVector & pi, NumericMatrix & T, double beta, const NumericVector & obs, const NumericVector & weight, const NumericVector & rcens, const NumericVector & rcweight) {
   
@@ -470,6 +527,17 @@ double logLikelihoodMPareto_RK(double h, NumericVector & pi, NumericMatrix & T, 
 }
 
 //' Loglikelihood of matrix LogNormal using RK
+//' 
+//' Loglikelihood for a sample 
+//' @param h step-lenght
+//' @param pi initial probabilities
+//' @param T sub-intensity
+//' @param beta parametor of transformation
+//' @param obs the observations
+//' @param weight weight of the observations
+//' @param rcens censored observations
+//' @param rcweight weight of the censored observations
+//' 
 // [[Rcpp::export]]
 double logLikelihoodMLogNormal_RK(double h, NumericVector & pi, NumericMatrix & T, double beta, const NumericVector & obs, const NumericVector & weight, const NumericVector & rcens, const NumericVector & rcweight) {
   
@@ -521,6 +589,17 @@ double logLikelihoodMLogNormal_RK(double h, NumericVector & pi, NumericMatrix & 
 }
 
 //' Loglikelihood of matrix Log-Logistic using RK
+//' 
+//' Loglikelihood for a sample 
+//' @param h step-lenght
+//' @param pi initial probabilities
+//' @param T sub-intensity
+//' @param beta parametor of transformation
+//' @param obs the observations
+//' @param weight weight of the observations
+//' @param rcens censored observations
+//' @param rcweight weight of the censored observations
+//' 
 // [[Rcpp::export]]
 double logLikelihoodMLogLogistic_RK(double h, NumericVector & pi, NumericMatrix & T, NumericVector beta, const NumericVector & obs, const NumericVector & weight, const NumericVector & rcens, const NumericVector & rcweight) {
   
@@ -573,6 +652,17 @@ double logLikelihoodMLogLogistic_RK(double h, NumericVector & pi, NumericMatrix 
 }
 
 //' Loglikelihood of matrix Gompertz using RK
+//' 
+//' Loglikelihood for a sample 
+//' @param h step-lenght
+//' @param pi initial probabilities
+//' @param T sub-intensity
+//' @param beta parametor of transformation
+//' @param obs the observations
+//' @param weight weight of the observations
+//' @param rcens censored observations
+//' @param rcweight weight of the censored observations
+//' 
 // [[Rcpp::export]]
 double logLikelihoodMGompertz_RK(double h, NumericVector & pi, NumericMatrix & T, double beta, const NumericVector & obs, const NumericVector & weight, const NumericVector & rcens, const NumericVector & rcweight) {
   
@@ -625,7 +715,17 @@ double logLikelihoodMGompertz_RK(double h, NumericVector & pi, NumericMatrix & T
 
 
 //' Loglikelihood of matrix GEV using RK
-//' I am assuming that the sample is given in an increasing order
+//' 
+//' Loglikelihood for a sample 
+//' @param h step-lenght
+//' @param pi initial probabilities
+//' @param T sub-intensity
+//' @param beta parametor of transformation
+//' @param obs the observations
+//' @param weight weight of the observations
+//' @param rcens censored observations
+//' @param rcweight weight of the censored observations
+//' 
 // [[Rcpp::export]]
 double logLikelihoodMGEVD_RK(double h, NumericVector & pi, NumericMatrix & T, NumericVector beta, const NumericVector & obs, const NumericVector & weight, const NumericVector & rcens, const NumericVector & rcweight) {
   
@@ -707,6 +807,12 @@ double logLikelihoodMGEVD_RK(double h, NumericVector & pi, NumericMatrix & T, Nu
 
 
 //' Applies the inverse of the GEV but giving back the vector in reverse order
+//' 
+//' Used for EM step
+//' @param observations the observations
+//' @param weights weithgs of the observations
+//' @param beta parameters of the GEV
+//' 
 // [[Rcpp::export]]
 List reversTransformData(const NumericVector & observations, const NumericVector & weights, const NumericVector & beta) {
   long N{observations.size()};
@@ -731,6 +837,17 @@ List reversTransformData(const NumericVector & observations, const NumericVector
 }
 
 //' Derivative of matrix Weibull
+//' 
+//' Can be used to increase performance
+//' @param h step-lenght
+//' @param pi initial probabilities
+//' @param T sub-intensity
+//' @param beta parametor of transformation
+//' @param obs the observations
+//' @param weight weight of the observations
+//' @param rcens censored observations
+//' @param rcweight weight of the censored observations
+//' 
 // [[Rcpp::export]]
 double derivativeMatrixWeibull(double h, const NumericVector & obs, const NumericVector & weight, const NumericVector & rcens, const NumericVector & rcweight, NumericVector & pi, NumericMatrix & T,  double beta) {
   long p{T.nrow()};

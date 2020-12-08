@@ -106,7 +106,7 @@ NumericMatrix solve_linear_system(NumericMatrix A1, const NumericMatrix & B) {
       Rcerr << "\n";
       Rcerr << "R8MAT_FSS_NEW - Fatal error!\n";
       Rcerr << "  Zero pivot on step " << jcol << "\n";
-      exit (1);
+      Rcpp::stop("Error!\n"); 
     }
     
     //  Switch rows JCOL and IPIV, and X.

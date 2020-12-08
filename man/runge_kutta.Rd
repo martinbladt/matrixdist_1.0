@@ -6,6 +6,21 @@
 \usage{
 runge_kutta(avector, bvector, cmatrix, dt, h, T, t)
 }
+\arguments{
+\item{avector}{the a vector}
+
+\item{bvector}{the b vector}
+
+\item{cmatrix}{the c matrix}
+
+\item{dt}{the increment}
+
+\item{h}{step-lenght}
+
+\item{T}{sub-intensity}
+
+\item{t}{exit rates}
+}
 \description{
-I may need to change the type of avector and bvector, depending on how I call them in the EM step
+Performce the RK of forth order
 }

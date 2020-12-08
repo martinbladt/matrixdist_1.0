@@ -6,6 +6,21 @@
 \usage{
 EMstep_RK(h, pi, T, obs, weight, rcens, rcweight)
 }
+\arguments{
+\item{h}{step-lenght}
+
+\item{pi}{initial probalities}
+
+\item{T}{sub-intensity}
+
+\item{obs}{the observations}
+
+\item{weight}{the weights for the observations}
+
+\item{rcens}{censored observations}
+
+\item{rcweight}{the weights for the censored observations}
+}
 \description{
 Computes one step of the EM algorithm by using a Runge-Kutta method of 4th order
 }

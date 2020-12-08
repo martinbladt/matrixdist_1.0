@@ -6,6 +6,23 @@
 \usage{
 derivativeMatrixWeibull(h, obs, weight, rcens, rcweight, pi, T, beta)
 }
+\arguments{
+\item{h}{step-lenght}
+
+\item{obs}{the observations}
+
+\item{weight}{weight of the observations}
+
+\item{rcens}{censored observations}
+
+\item{rcweight}{weight of the censored observations}
+
+\item{pi}{initial probabilities}
+
+\item{T}{sub-intensity}
+
+\item{beta}{parametor of transformation}
+}
 \description{
-Derivative of matrix Weibull
+Can be used to increase performance
 }

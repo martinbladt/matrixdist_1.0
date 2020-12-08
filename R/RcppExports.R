@@ -2,13 +2,26 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 #' Default size of the steps in the RK
+#' 
+#' Computes the default step lenght for a matrix \code{T} to be employed in the RK method
+#' @param T sub-intensity matrix
+#' @return The step lenght for \code{T}
+#' 
 default_step_length <- function(T) {
     .Call(`_matrixdist_default_step_length`, T)
 }
 
 #' Runge Kutta for the calculation of the a,b and c vectors in a EM step
 #' 
-#' I may need to change the type of avector and bvector, depending on how I call them in the EM step
+#' Performce the RK of forth order
+#' @param avector the a vector
+#' @param bvector the b vector 
+#' @param cmatrix the c matrix
+#' @param dt the increment
+#' @param h step-lenght
+#' @param T sub-intensity
+#' @param t exit rates 
+#' 
 runge_kutta <- function(avector, bvector, cmatrix, dt, h, T, t) {
     invisible(.Call(`_matrixdist_runge_kutta`, avector, bvector, cmatrix, dt, h, T, t))
 }
@@ -16,60 +29,164 @@ runge_kutta <- function(avector, bvector, cmatrix, dt, h, T, t) {
 #' EM step using Runge Kutta
 #' 
 #' Computes one step of the EM algorithm by using a Runge-Kutta method of 4th order
+#' @param h step-lenght
+#' @param pi initial probalities
+#' @param T sub-intensity
+#' @param obs the observations
+#' @param weight the weights for the observations
+#' @param rcens censored observations
+#' @param rcweight the weights for the censored observations
+#' 
 EMstep_RK <- function(h, pi, T, obs, weight, rcens, rcweight) {
     invisible(.Call(`_matrixdist_EMstep_RK`, h, pi, T, obs, weight, rcens, rcweight))
 }
 
-#' Runge Kutta for the calculation of the a vectors in a EM step - Can be used for the loglikelihood
+#' Runge Kutta for the calculation of the a vectors in a EM step 
 #' 
-#' I may need to change the type of avector
+#' Can be used for the loglikelihood
+#' @param avector the a vector
+#' @param dt increment
+#' @param h step-lenght
+#' @param T sub-intensity
+#' 
 a_rungekutta <- function(avector, dt, h, T) {
     invisible(.Call(`_matrixdist_a_rungekutta`, avector, dt, h, T))
 }
 
 #' Loglikelihood using RK
+#' 
+#' Loglikelihood for a sample 
+#' @param h step-lenght
+#' @param pi initial probabilities
+#' @param T sub-intensity
+#' @param obs the observations
+#' @param weight weight of the observations
+#' @param rcens censored observations
+#' @param rcweight weight of the censored observations
+#' 
 logLikelihoodPH_RK <- function(h, pi, T, obs, weight, rcens, rcweight) {
     .Call(`_matrixdist_logLikelihoodPH_RK`, h, pi, T, obs, weight, rcens, rcweight)
 }
 
 #' Loglikelihood of matrix Weibull using RK
-#' This is the fastest option
+#' 
+#' Loglikelihood for a sample 
+#' @param h step-lenght
+#' @param pi initial probabilities
+#' @param T sub-intensity
+#' @param beta parametor of transformation
+#' @param obs the observations
+#' @param weight weight of the observations
+#' @param rcens censored observations
+#' @param rcweight weight of the censored observations
+#' 
 logLikelihoodMWeibull_RK <- function(h, pi, T, beta, obs, weight, rcens, rcweight) {
     .Call(`_matrixdist_logLikelihoodMWeibull_RK`, h, pi, T, beta, obs, weight, rcens, rcweight)
 }
 
 #' Loglikelihood of matrix Pareto using RK
+#' 
+#' Loglikelihood for a sample 
+#' @param h step-lenght
+#' @param pi initial probabilities
+#' @param T sub-intensity
+#' @param beta parametor of transformation
+#' @param obs the observations
+#' @param weight weight of the observations
+#' @param rcens censored observations
+#' @param rcweight weight of the censored observations
+#' 
 logLikelihoodMPareto_RK <- function(h, pi, T, beta, obs, weight, rcens, rcweight) {
     .Call(`_matrixdist_logLikelihoodMPareto_RK`, h, pi, T, beta, obs, weight, rcens, rcweight)
 }
 
 #' Loglikelihood of matrix LogNormal using RK
+#' 
+#' Loglikelihood for a sample 
+#' @param h step-lenght
+#' @param pi initial probabilities
+#' @param T sub-intensity
+#' @param beta parametor of transformation
+#' @param obs the observations
+#' @param weight weight of the observations
+#' @param rcens censored observations
+#' @param rcweight weight of the censored observations
+#' 
 logLikelihoodMLogNormal_RK <- function(h, pi, T, beta, obs, weight, rcens, rcweight) {
     .Call(`_matrixdist_logLikelihoodMLogNormal_RK`, h, pi, T, beta, obs, weight, rcens, rcweight)
 }
 
 #' Loglikelihood of matrix Log-Logistic using RK
+#' 
+#' Loglikelihood for a sample 
+#' @param h step-lenght
+#' @param pi initial probabilities
+#' @param T sub-intensity
+#' @param beta parametor of transformation
+#' @param obs the observations
+#' @param weight weight of the observations
+#' @param rcens censored observations
+#' @param rcweight weight of the censored observations
+#' 
 logLikelihoodMLogLogistic_RK <- function(h, pi, T, beta, obs, weight, rcens, rcweight) {
     .Call(`_matrixdist_logLikelihoodMLogLogistic_RK`, h, pi, T, beta, obs, weight, rcens, rcweight)
 }
 
 #' Loglikelihood of matrix Gompertz using RK
+#' 
+#' Loglikelihood for a sample 
+#' @param h step-lenght
+#' @param pi initial probabilities
+#' @param T sub-intensity
+#' @param beta parametor of transformation
+#' @param obs the observations
+#' @param weight weight of the observations
+#' @param rcens censored observations
+#' @param rcweight weight of the censored observations
+#' 
 logLikelihoodMGompertz_RK <- function(h, pi, T, beta, obs, weight, rcens, rcweight) {
     .Call(`_matrixdist_logLikelihoodMGompertz_RK`, h, pi, T, beta, obs, weight, rcens, rcweight)
 }
 
 #' Loglikelihood of matrix GEV using RK
-#' I am assuming that the sample is given in an increasing order
+#' 
+#' Loglikelihood for a sample 
+#' @param h step-lenght
+#' @param pi initial probabilities
+#' @param T sub-intensity
+#' @param beta parametor of transformation
+#' @param obs the observations
+#' @param weight weight of the observations
+#' @param rcens censored observations
+#' @param rcweight weight of the censored observations
+#' 
 logLikelihoodMGEVD_RK <- function(h, pi, T, beta, obs, weight, rcens, rcweight) {
     .Call(`_matrixdist_logLikelihoodMGEVD_RK`, h, pi, T, beta, obs, weight, rcens, rcweight)
 }
 
 #' Applies the inverse of the GEV but giving back the vector in reverse order
+#' 
+#' Used for EM step
+#' @param observations the observations
+#' @param weights weithgs of the observations
+#' @param beta parameters of the GEV
+#' 
 reversTransformData <- function(observations, weights, beta) {
     .Call(`_matrixdist_reversTransformData`, observations, weights, beta)
 }
 
 #' Derivative of matrix Weibull
+#' 
+#' Can be used to increase performance
+#' @param h step-lenght
+#' @param pi initial probabilities
+#' @param T sub-intensity
+#' @param beta parametor of transformation
+#' @param obs the observations
+#' @param weight weight of the observations
+#' @param rcens censored observations
+#' @param rcweight weight of the censored observations
+#' 
 derivativeMatrixWeibull <- function(h, obs, weight, rcens, rcweight, pi, T, beta) {
     .Call(`_matrixdist_derivativeMatrixWeibull`, h, obs, weight, rcens, rcweight, pi, T, beta)
 }

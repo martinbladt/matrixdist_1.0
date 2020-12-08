@@ -6,6 +6,12 @@
 \usage{
 default_step_length(T)
 }
+\arguments{
+\item{T}{sub-intensity matrix}
+}
+\value{
+The step lenght for \code{T}
+}
 \description{
-Default size of the steps in the RK
+Computes the default step lenght for a matrix \code{T} to be employed in the RK method
 }

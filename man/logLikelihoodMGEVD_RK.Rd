@@ -2,12 +2,27 @@
 % Please edit documentation in R/RcppExports.R
 \name{logLikelihoodMGEVD_RK}
 \alias{logLikelihoodMGEVD_RK}
-\title{Loglikelihood of matrix GEV using RK
-I am assuming that the sample is given in an increasing order}
+\title{Loglikelihood of matrix GEV using RK}
 \usage{
 logLikelihoodMGEVD_RK(h, pi, T, beta, obs, weight, rcens, rcweight)
 }
+\arguments{
+\item{h}{step-lenght}
+
+\item{pi}{initial probabilities}
+
+\item{T}{sub-intensity}
+
+\item{beta}{parametor of transformation}
+
+\item{obs}{the observations}
+
+\item{weight}{weight of the observations}
+
+\item{rcens}{censored observations}
+
+\item{rcweight}{weight of the censored observations}
+}
 \description{
-Loglikelihood of matrix GEV using RK
-I am assuming that the sample is given in an increasing order
+Loglikelihood for a sample
 }

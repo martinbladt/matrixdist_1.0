@@ -2,10 +2,19 @@
 % Please edit documentation in R/RcppExports.R
 \name{a_rungekutta}
 \alias{a_rungekutta}
-\title{Runge Kutta for the calculation of the a vectors in a EM step - Can be used for the loglikelihood}
+\title{Runge Kutta for the calculation of the a vectors in a EM step}
 \usage{
 a_rungekutta(avector, dt, h, T)
 }
+\arguments{
+\item{avector}{the a vector}
+
+\item{dt}{increment}
+
+\item{h}{step-lenght}
+
+\item{T}{sub-intensity}
+}
 \description{
-I may need to change the type of avector
+Can be used for the loglikelihood
 }

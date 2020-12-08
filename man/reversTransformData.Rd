@@ -6,6 +6,13 @@
 \usage{
 reversTransformData(observations, weights, beta)
 }
+\arguments{
+\item{observations}{the observations}
+
+\item{weights}{weithgs of the observations}
+
+\item{beta}{parameters of the GEV}
+}
 \description{
-Applies the inverse of the GEV but giving back the vector in reverse order
+Used for EM step
 }
