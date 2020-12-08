@@ -3,14 +3,12 @@ using namespace Rcpp;
 #include "matrix_functions.h"
 
 
-//' Embeded Markov chain of a sub-intensity matrix
+//' Embedded Markov chain of a sub-intensity matrix
 //' 
-//' Returns the transition probabilities of the embeded Markov chain determined the sub-intensity matrix 
+//' Returns the transition probabilities of the embedded Markov chain determined the sub-intensity matrix 
 //' @param T A sub-intensity matrix
-//' @return The embeded Markov chain
-//' @examples
-//' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
-//' embeddedMC(T)
+//' @return The embedded Markov chain
+//' 
 // [[Rcpp::export]]
 NumericMatrix embeddedMC(NumericMatrix T) {
   long p{T.nrow()};
@@ -130,15 +128,11 @@ long newState(long previousState, NumericMatrix cumulatedEmbeddedMC, double u) {
 //' Random phase-type
 //' 
 //' Generates a sample of size \code{n} from a phase-type distribution with parameters \code{pi} and \code{T}
-//' @parm n Sample size
+//' @param n Sample size
 //' @param pi Initial probabilities
 //' @param T sub-intensity matrix
 //' @return The simulated sample
-//' @examples
-//' alpha <- c(0.5, 0.3, 0.2)
-//' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
-//' n <- 10
-//' rphasetype(n, alpha, T) 
+//' 
 // [[Rcpp::export]]
 NumericVector rphasetype(int n, NumericVector pi, NumericMatrix T) {
   
@@ -166,18 +160,13 @@ NumericVector rphasetype(int n, NumericVector pi, NumericMatrix T) {
 //' Random inhomogeneous phase-type
 //' 
 //' Generates a sample of size \code{n} from an inhomogeneous phase-type distribution with parameters \code{pi}, \code{T} and \code{beta}
-//' @parm n Sample size
-//' @parm dist_type Type of IPH: "Pareto", "Weibull", "Gompertz"
+//' @param n Sample size
+//' @param dist_type Type of IPH: "Pareto", "Weibull", "Gompertz"
 //' @param pi Initial probabilities
 //' @param T sub-intensity matrix
 //' @param beta Parameter of the transformation
 //' @return The simulated sample
-//' @examples
-//' alpha <- c(0.5, 0.3, 0.2)
-//' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
-//' beta <- 0.5
-//' n <- 10
-//' riph(n, "Pareto", alpha, T, beta) 
+//' 
 // [[Rcpp::export]]
 NumericVector riph(int n, String dist_type, NumericVector pi, NumericMatrix T, NumericVector beta) {
   
@@ -219,23 +208,15 @@ NumericVector riph(int n, String dist_type, NumericVector pi, NumericMatrix T, N
 //' Random matrix GEVD
 //' 
 //' Generates a sample of size \code{n} from an inhomogeneous phase-type distribution with parameters \code{pi}, \code{T} and \code{beta}
-//' @parm n Sample size
-//' @parm dist_type Type of IPH: "Pareto", "Weibull", "Gompertz"
+//' @param n Sample size
+//' @param dist_type Type of IPH: "Pareto", "Weibull", "Gompertz"
 //' @param pi Initial probabilities
 //' @param T sub-intensity matrix
 //' @param mu Location parameter
 //' @param sigma Scale parameter
 //' @param xi Shape parameter: Default 0 which corresponds to the Gumbel case
 //' @return The simulated sample
-//' @examples
-//' alpha <- c(0.5, 0.3, 0.2)
-//' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
-//' mu <- 3
-//' sigma <- 2
-//' xi <- 0.5
-//' n <- 10
-//' rmatrixGEVD(n, alpha, T, mu, sigma, xi) 
-//' rmatrixGEVD(n, alpha, T, mu, sigma) 
+//' 
 // [[Rcpp::export]]
 NumericVector rmatrixGEVD(int n, NumericVector pi, NumericMatrix T, double mu, double sigma, double xi = 0) {
   

@@ -19,7 +19,3 @@ Random parameters \code{pi} and \code{T} of a phase-type
 \description{
 Generates random parameters \code{pi} and \code{T} of a phase-type distribution of dimension \code{p} with chosen structure
 }
-\examples{
-random_structure(3) 
-random_structure(5, "Hyperexponential") 
-}

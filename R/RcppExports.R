@@ -74,14 +74,12 @@ derivativeMatrixWeibull <- function(h, obs, weight, rcens, rcweight, pi, T, beta
     .Call(`_matrixdist_derivativeMatrixWeibull`, h, obs, weight, rcens, rcweight, pi, T, beta)
 }
 
-#' Embeded Markov chain of a sub-intensity matrix
+#' Embedded Markov chain of a sub-intensity matrix
 #' 
-#' Returns the transition probabilities of the embeded Markov chain determined the sub-intensity matrix 
+#' Returns the transition probabilities of the embedded Markov chain determined the sub-intensity matrix 
 #' @param T A sub-intensity matrix
-#' @return The embeded Markov chain
-#' @examples
-#' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
-#' embeddedMC(T)
+#' @return The embedded Markov chain
+#' 
 embeddedMC <- function(T) {
     .Call(`_matrixdist_embeddedMC`, T)
 }
@@ -128,15 +126,11 @@ newState <- function(previousState, cumulatedEmbeddedMC, u) {
 #' Random phase-type
 #' 
 #' Generates a sample of size \code{n} from a phase-type distribution with parameters \code{pi} and \code{T}
-#' @parm n Sample size
+#' @param n Sample size
 #' @param pi Initial probabilities
 #' @param T sub-intensity matrix
 #' @return The simulated sample
-#' @examples
-#' alpha <- c(0.5, 0.3, 0.2)
-#' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
-#' n <- 10
-#' rphasetype(n, alpha, T) 
+#' 
 rphasetype <- function(n, pi, T) {
     .Call(`_matrixdist_rphasetype`, n, pi, T)
 }
@@ -144,18 +138,13 @@ rphasetype <- function(n, pi, T) {
 #' Random inhomogeneous phase-type
 #' 
 #' Generates a sample of size \code{n} from an inhomogeneous phase-type distribution with parameters \code{pi}, \code{T} and \code{beta}
-#' @parm n Sample size
-#' @parm dist_type Type of IPH: "Pareto", "Weibull", "Gompertz"
+#' @param n Sample size
+#' @param dist_type Type of IPH: "Pareto", "Weibull", "Gompertz"
 #' @param pi Initial probabilities
 #' @param T sub-intensity matrix
 #' @param beta Parameter of the transformation
 #' @return The simulated sample
-#' @examples
-#' alpha <- c(0.5, 0.3, 0.2)
-#' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
-#' beta <- 0.5
-#' n <- 10
-#' riph(n, "Pareto", alpha, T, beta) 
+#' 
 riph <- function(n, dist_type, pi, T, beta) {
     .Call(`_matrixdist_riph`, n, dist_type, pi, T, beta)
 }
@@ -163,23 +152,15 @@ riph <- function(n, dist_type, pi, T, beta) {
 #' Random matrix GEVD
 #' 
 #' Generates a sample of size \code{n} from an inhomogeneous phase-type distribution with parameters \code{pi}, \code{T} and \code{beta}
-#' @parm n Sample size
-#' @parm dist_type Type of IPH: "Pareto", "Weibull", "Gompertz"
+#' @param n Sample size
+#' @param dist_type Type of IPH: "Pareto", "Weibull", "Gompertz"
 #' @param pi Initial probabilities
 #' @param T sub-intensity matrix
 #' @param mu Location parameter
 #' @param sigma Scale parameter
 #' @param xi Shape parameter: Default 0 which corresponds to the Gumbel case
 #' @return The simulated sample
-#' @examples
-#' alpha <- c(0.5, 0.3, 0.2)
-#' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
-#' mu <- 3
-#' sigma <- 2
-#' xi <- 0.5
-#' n <- 10
-#' rmatrixGEVD(n, alpha, T, mu, sigma, xi) 
-#' rmatrixGEVD(n, alpha, T, mu, sigma) 
+#' 
 rmatrixGEVD <- function(n, pi, T, mu, sigma, xi = 0) {
     .Call(`_matrixdist_rmatrixGEVD`, n, pi, T, mu, sigma, xi)
 }
@@ -191,10 +172,7 @@ rmatrixGEVD <- function(n, pi, T, mu, sigma, xi = 0) {
 #' @param pi Initial probabilities
 #' @param T sub-intensity matrix
 #' @return The density at \code{x}
-#' @examples
-#' alpha <- c(0.5, 0.3, 0.2)
-#' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
-#' phdensity(0.5, alpha, T) 
+#' 
 phdensity <- function(x, pi, T) {
     .Call(`_matrixdist_phdensity`, x, pi, T)
 }
@@ -206,11 +184,7 @@ phdensity <- function(x, pi, T) {
 #' @param pi Initial probabilities
 #' @param T sub-intensity matrix
 #' @return The cdf (tail) at \code{x}
-#' @examples
-#' alpha <- c(0.5, 0.3, 0.2)
-#' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
-#' phcdf(0.5, alpha, T) 
-#' phcdf(0.5, alpha, T, FALSE) 
+#' 
 phcdf <- function(x, pi, T, lower_tail = TRUE) {
     .Call(`_matrixdist_phcdf`, x, pi, T, lower_tail)
 }
@@ -222,11 +196,7 @@ phcdf <- function(x, pi, T, lower_tail = TRUE) {
 #' @param pi Initial probabilities
 #' @param T sub-intensity matrix
 #' @return The k moment
-#' @examples
-#' alpha <- c(0.5, 0.3, 0.2)
-#' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
-#' phmoment(2, alpha, T) 
-#' phmoment(4, alpha, T) 
+#' 
 phmoment <- function(k, pi, T) {
     .Call(`_matrixdist_phmoment`, k, pi, T)
 }
@@ -238,11 +208,7 @@ phmoment <- function(k, pi, T) {
 #' @param pi Initial probabilities
 #' @param T sub-intensity matrix
 #' @return Laplace transform
-#' @examples
-#' alpha <- c(0.5, 0.3, 0.2)
-#' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
-#' phLaplace(0.5, alpha, T) 
-#' phLaplace(2.5, alpha, T) 
+#' 
 phLaplace <- function(s, pi, T) {
     .Call(`_matrixdist_phLaplace`, s, pi, T)
 }
@@ -255,11 +221,7 @@ phLaplace <- function(s, pi, T) {
 #' @param T sub-intensity matrix
 #' @param beta shape parameter
 #' @return The density at \code{x}
-#' @examples
-#' alpha <- c(0.5, 0.3, 0.2)
-#' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
-#' beta <- 0.5
-#' mweibullden(0.5, alpha, T, beta) 
+#' 
 mWeibullden <- function(x, pi, T, beta) {
     .Call(`_matrixdist_mWeibullden`, x, pi, T, beta)
 }
@@ -272,12 +234,7 @@ mWeibullden <- function(x, pi, T, beta) {
 #' @param T sub-intensity matrix
 #' @param beta shape parameter
 #' @return The cdf (tail) at \code{x}
-#' @examples
-#' alpha <- c(0.5, 0.3, 0.2)
-#' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
-#' beta <- 0.5
-#' mweibullcdf(0.5, alpha, T, beta) 
-#' mweibullcdf(0.5, alpha, T, beta, FALSE) 
+#' 
 mWeibullcdf <- function(x, pi, T, beta, lower_tail) {
     .Call(`_matrixdist_mWeibullcdf`, x, pi, T, beta, lower_tail)
 }
@@ -294,11 +251,7 @@ RunFunction <- function(a, func) {
 #' @param T sub-intensity matrix
 #' @param beta scale parameter
 #' @return The density at \code{x}
-#' @examples
-#' alpha <- c(0.5, 0.3, 0.2)
-#' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
-#' beta <- 0.5
-#' mparetoden(0.5, alpha, T, beta) 
+#' 
 mParetoden <- function(x, pi, T, beta) {
     .Call(`_matrixdist_mParetoden`, x, pi, T, beta)
 }
@@ -311,12 +264,7 @@ mParetoden <- function(x, pi, T, beta) {
 #' @param T sub-intensity matrix
 #' @param beta shape parameter
 #' @return The cdf (tail) at \code{x}
-#' @examples
-#' alpha <- c(0.5, 0.3, 0.2)
-#' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
-#' beta <- 0.5
-#' mparetocdf(0.5, alpha, T, beta) 
-#' mparetocdf(0.5, alpha, T, beta, FALSE) 
+#' 
 mParetocdf <- function(x, pi, T, beta, lower_tail = TRUE) {
     .Call(`_matrixdist_mParetocdf`, x, pi, T, beta, lower_tail)
 }
@@ -329,11 +277,7 @@ mParetocdf <- function(x, pi, T, beta, lower_tail = TRUE) {
 #' @param T sub-intensity matrix
 #' @param beta shape parameter
 #' @return The density at \code{x}
-#' @examples
-#' alpha <- c(0.5, 0.3, 0.2)
-#' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
-#' beta <- 0.5
-#' mweibullden(0.5, alpha, T, beta) 
+#' 
 mLogNormalden <- function(x, pi, T, beta) {
     .Call(`_matrixdist_mLogNormalden`, x, pi, T, beta)
 }
@@ -346,12 +290,7 @@ mLogNormalden <- function(x, pi, T, beta) {
 #' @param T sub-intensity matrix
 #' @param beta shape parameter
 #' @return The cdf (tail) at \code{x}
-#' @examples
-#' alpha <- c(0.5, 0.3, 0.2)
-#' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
-#' beta <- 0.5
-#' mweibullcdf(0.5, alpha, T, beta) 
-#' mweibullcdf(0.5, alpha, T, beta, FALSE) 
+#' 
 mLogNormalcdf <- function(x, pi, T, beta, lower_tail = TRUE) {
     .Call(`_matrixdist_mLogNormalcdf`, x, pi, T, beta, lower_tail)
 }
@@ -364,11 +303,7 @@ mLogNormalcdf <- function(x, pi, T, beta, lower_tail = TRUE) {
 #' @param T sub-intensity matrix
 #' @param beta scale parameter
 #' @return The density at \code{x}
-#' @examples
-#' alpha <- c(0.5, 0.3, 0.2)
-#' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
-#' beta <- 0.5
-#' mparetoden(0.5, alpha, T, beta) 
+#' 
 mLogLogisticden <- function(x, pi, T, beta) {
     .Call(`_matrixdist_mLogLogisticden`, x, pi, T, beta)
 }
@@ -381,12 +316,7 @@ mLogLogisticden <- function(x, pi, T, beta) {
 #' @param T sub-intensity matrix
 #' @param beta shape parameter
 #' @return The cdf (tail) at \code{x}
-#' @examples
-#' alpha <- c(0.5, 0.3, 0.2)
-#' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
-#' beta <- 0.5
-#' mparetocdf(0.5, alpha, T, beta) 
-#' mparetocdf(0.5, alpha, T, beta, FALSE) 
+#' 
 mLogLogisticcdf <- function(x, pi, T, beta, lower_tail = TRUE) {
     .Call(`_matrixdist_mLogLogisticcdf`, x, pi, T, beta, lower_tail)
 }
@@ -399,11 +329,7 @@ mLogLogisticcdf <- function(x, pi, T, beta, lower_tail = TRUE) {
 #' @param T sub-intensity matrix
 #' @param beta  parameter
 #' @return The density at \code{x}
-#' @examples
-#' alpha <- c(0.5, 0.3, 0.2)
-#' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
-#' beta <- 0.5
-#' mgompertzden(0.5, alpha, T, beta) 
+#' 
 mGompertzden <- function(x, pi, T, beta) {
     .Call(`_matrixdist_mGompertzden`, x, pi, T, beta)
 }
@@ -416,12 +342,7 @@ mGompertzden <- function(x, pi, T, beta) {
 #' @param T sub-intensity matrix
 #' @param beta shape parameter
 #' @return The cdf (tail) at \code{x}
-#' @examples
-#' alpha <- c(0.5, 0.3, 0.2)
-#' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
-#' beta <- 0.5
-#' mgompertzcdf(0.5, alpha, T, beta) 
-#' mgompertzcdf(0.5, alpha, T, beta, FALSE) 
+#' 
 mGompertzcdf <- function(x, pi, T, beta, lower_tail = TRUE) {
     .Call(`_matrixdist_mGompertzcdf`, x, pi, T, beta, lower_tail)
 }
@@ -435,13 +356,7 @@ mGompertzcdf <- function(x, pi, T, beta, lower_tail = TRUE) {
 #' @param T sub-intensity matrix
 #' @param beta  parameter
 #' @return The density at \code{x}
-#' @examples
-#' alpha <- c(0.5, 0.3, 0.2)
-#' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
-#' mu <- 1
-#' sigma <- 2
-#' xi <- 0.5
-#' mGEVden(0.5, alpha, T, mu, sigma, xi) 
+#' 
 mGEVDden <- function(x, pi, T, mu, sigma, xi) {
     .Call(`_matrixdist_mGEVDden`, x, pi, T, mu, sigma, xi)
 }
@@ -454,14 +369,7 @@ mGEVDden <- function(x, pi, T, mu, sigma, xi) {
 #' @param T sub-intensity matrix
 #' @param beta shape parameter
 #' @return The cdf (tail) at \code{x}
-#' @examples
-#' alpha <- c(0.5, 0.3, 0.2)
-#' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
-#' mu <- 1
-#' sigma <- 2
-#' xi <- 0.5
-#' mGEVcdf(0.5, alpha, T, mu, sigma, xi) 
-#' mGEVcdf(0.5, alpha, T, mu, sigma, xi, FALSE) 
+#' 
 mGEVDcdf <- function(x, pi, T, mu, sigma, xi, lower_tail = TRUE) {
     .Call(`_matrixdist_mGEVDcdf`, x, pi, T, mu, sigma, xi, lower_tail)
 }
@@ -555,9 +463,7 @@ sumPH <- function(pi1, T1, pi2, T2) {
 #' @param structure Type of structure: "General", "Hyperexponential", "GErlang", "Coxian" or "GCoxian"
 #' @param scale_factor A factor that multiplies the sub-intensity matrix
 #' @return Random parameters \code{pi} and \code{T} of a phase-type
-#' @examples
-#' random_structure(3) 
-#' random_structure(5, "Hyperexponential") 
+#' 
 random_structure <- function(p, structure = "General", scale_factor = 1) {
     .Call(`_matrixdist_random_structure`, p, structure, scale_factor)
 }

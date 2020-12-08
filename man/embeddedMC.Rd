@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{embeddedMC}
 \alias{embeddedMC}
-\title{Embeded Markov chain of a sub-intensity matrix}
+\title{Embedded Markov chain of a sub-intensity matrix}
 \usage{
 embeddedMC(T)
 }
@@ -10,12 +10,8 @@ embeddedMC(T)
 \item{T}{A sub-intensity matrix}
 }
 \value{
-The embeded Markov chain
+The embedded Markov chain
 }
 \description{
-Returns the transition probabilities of the embeded Markov chain determined the sub-intensity matrix
-}
-\examples{
-T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
-embeddedMC(T)
+Returns the transition probabilities of the embedded Markov chain determined the sub-intensity matrix
 }

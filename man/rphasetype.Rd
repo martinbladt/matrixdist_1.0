@@ -7,6 +7,8 @@
 rphasetype(n, pi, T)
 }
 \arguments{
+\item{n}{Sample size}
+
 \item{pi}{Initial probabilities}
 
 \item{T}{sub-intensity matrix}
@@ -16,10 +18,4 @@ The simulated sample
 }
 \description{
 Generates a sample of size \code{n} from a phase-type distribution with parameters \code{pi} and \code{T}
-}
-\examples{
-alpha <- c(0.5, 0.3, 0.2)
-T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
-n <- 10
-rphasetype(n, alpha, T) 
 }

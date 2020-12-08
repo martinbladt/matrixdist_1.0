@@ -19,8 +19,3 @@ The density at \code{x}
 \description{
 Computes the density of phase-type distribution with parameters \code{pi} and \code{T} at \code{x}
 }
-\examples{
-alpha <- c(0.5, 0.3, 0.2)
-T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
-phdensity(0.5, alpha, T) 
-}

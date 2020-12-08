@@ -7,6 +7,10 @@
 riph(n, dist_type, pi, T, beta)
 }
 \arguments{
+\item{n}{Sample size}
+
+\item{dist_type}{Type of IPH: "Pareto", "Weibull", "Gompertz"}
+
 \item{pi}{Initial probabilities}
 
 \item{T}{sub-intensity matrix}
@@ -18,11 +22,4 @@ The simulated sample
 }
 \description{
 Generates a sample of size \code{n} from an inhomogeneous phase-type distribution with parameters \code{pi}, \code{T} and \code{beta}
-}
-\examples{
-alpha <- c(0.5, 0.3, 0.2)
-T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
-beta <- 0.5
-n <- 10
-riph(n, "Pareto", alpha, T, beta) 
 }

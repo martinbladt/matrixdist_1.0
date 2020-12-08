@@ -19,9 +19,3 @@ Laplace transform
 \description{
 Computes the Laplace transform at \code{s} of a phase-type distribution with parameters \code{pi} and \code{T}
 }
-\examples{
-alpha <- c(0.5, 0.3, 0.2)
-T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
-phLaplace(0.5, alpha, T) 
-phLaplace(2.5, alpha, T) 
-}

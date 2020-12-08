@@ -19,9 +19,3 @@ The k moment
 \description{
 Computes the k moment of phase-type distribution with parameters \code{pi} and \code{T}
 }
-\examples{
-alpha <- c(0.5, 0.3, 0.2)
-T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
-phmoment(2, alpha, T) 
-phmoment(4, alpha, T) 
-}

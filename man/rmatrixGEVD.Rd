@@ -7,6 +7,8 @@
 rmatrixGEVD(n, pi, T, mu, sigma, xi = 0)
 }
 \arguments{
+\item{n}{Sample size}
+
 \item{pi}{Initial probabilities}
 
 \item{T}{sub-intensity matrix}
@@ -16,20 +18,12 @@ rmatrixGEVD(n, pi, T, mu, sigma, xi = 0)
 \item{sigma}{Scale parameter}
 
 \item{xi}{Shape parameter: Default 0 which corresponds to the Gumbel case}
+
+\item{dist_type}{Type of IPH: "Pareto", "Weibull", "Gompertz"}
 }
 \value{
 The simulated sample
 }
 \description{
 Generates a sample of size \code{n} from an inhomogeneous phase-type distribution with parameters \code{pi}, \code{T} and \code{beta}
-}
-\examples{
-alpha <- c(0.5, 0.3, 0.2)
-T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
-mu <- 3
-sigma <- 2
-xi <- 0.5
-n <- 10
-rmatrixGEVD(n, alpha, T, mu, sigma, xi) 
-rmatrixGEVD(n, alpha, T, mu, sigma) 
 }

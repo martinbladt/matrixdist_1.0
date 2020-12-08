@@ -21,10 +21,3 @@ The cdf (tail) at \code{x}
 \description{
 Computes the cdf (tail) of a matrix Gompertz distribution with parameters \code{pi}, \code{T} and \code{beta} at \code{x}
 }
-\examples{
-alpha <- c(0.5, 0.3, 0.2)
-T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
-beta <- 0.5
-mgompertzcdf(0.5, alpha, T, beta) 
-mgompertzcdf(0.5, alpha, T, beta, FALSE) 
-}

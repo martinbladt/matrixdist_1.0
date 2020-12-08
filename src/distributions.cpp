@@ -12,10 +12,7 @@ using namespace Rcpp;
 //' @param pi Initial probabilities
 //' @param T sub-intensity matrix
 //' @return The density at \code{x}
-//' @examples
-//' alpha <- c(0.5, 0.3, 0.2)
-//' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
-//' phdensity(0.5, alpha, T) 
+//' 
 // [[Rcpp::export]]
 NumericVector phdensity(NumericVector x, NumericVector pi, NumericMatrix T) {
   
@@ -45,11 +42,7 @@ NumericVector phdensity(NumericVector x, NumericVector pi, NumericMatrix T) {
 //' @param pi Initial probabilities
 //' @param T sub-intensity matrix
 //' @return The cdf (tail) at \code{x}
-//' @examples
-//' alpha <- c(0.5, 0.3, 0.2)
-//' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
-//' phcdf(0.5, alpha, T) 
-//' phcdf(0.5, alpha, T, FALSE) 
+//' 
 // [[Rcpp::export]]
 NumericVector phcdf(NumericVector x, NumericVector pi, NumericMatrix T, bool lower_tail = true) {
   
@@ -83,11 +76,7 @@ NumericVector phcdf(NumericVector x, NumericVector pi, NumericMatrix T, bool low
 //' @param pi Initial probabilities
 //' @param T sub-intensity matrix
 //' @return The k moment
-//' @examples
-//' alpha <- c(0.5, 0.3, 0.2)
-//' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
-//' phmoment(2, alpha, T) 
-//' phmoment(4, alpha, T) 
+//' 
 // [[Rcpp::export]]
 NumericVector phmoment(IntegerVector k, NumericVector pi, NumericMatrix T) {
   
@@ -116,11 +105,7 @@ NumericVector phmoment(IntegerVector k, NumericVector pi, NumericMatrix T) {
 //' @param pi Initial probabilities
 //' @param T sub-intensity matrix
 //' @return Laplace transform
-//' @examples
-//' alpha <- c(0.5, 0.3, 0.2)
-//' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
-//' phLaplace(0.5, alpha, T) 
-//' phLaplace(2.5, alpha, T) 
+//' 
 // [[Rcpp::export]]
 NumericVector phLaplace(NumericVector s, NumericVector pi, NumericMatrix T) {
   
@@ -147,11 +132,7 @@ NumericVector phLaplace(NumericVector s, NumericVector pi, NumericMatrix T) {
 //' @param T sub-intensity matrix
 //' @param beta shape parameter
 //' @return The density at \code{x}
-//' @examples
-//' alpha <- c(0.5, 0.3, 0.2)
-//' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
-//' beta <- 0.5
-//' mweibullden(0.5, alpha, T, beta) 
+//' 
 // [[Rcpp::export]]
 NumericVector mWeibullden(NumericVector x, NumericVector pi, NumericMatrix T, double beta) {
   
@@ -183,12 +164,7 @@ NumericVector mWeibullden(NumericVector x, NumericVector pi, NumericMatrix T, do
 //' @param T sub-intensity matrix
 //' @param beta shape parameter
 //' @return The cdf (tail) at \code{x}
-//' @examples
-//' alpha <- c(0.5, 0.3, 0.2)
-//' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
-//' beta <- 0.5
-//' mweibullcdf(0.5, alpha, T, beta) 
-//' mweibullcdf(0.5, alpha, T, beta, FALSE) 
+//' 
 // [[Rcpp::export]]
 NumericVector mWeibullcdf(NumericVector x, NumericVector pi, NumericMatrix T, double beta, bool lower_tail) {
   
@@ -231,11 +207,7 @@ NumericVector RunFunction(NumericVector a, Function func)
 //' @param T sub-intensity matrix
 //' @param beta scale parameter
 //' @return The density at \code{x}
-//' @examples
-//' alpha <- c(0.5, 0.3, 0.2)
-//' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
-//' beta <- 0.5
-//' mparetoden(0.5, alpha, T, beta) 
+//' 
 // [[Rcpp::export]]
 NumericVector mParetoden(NumericVector x, NumericVector pi, NumericMatrix T, double beta) {
   
@@ -267,12 +239,7 @@ NumericVector mParetoden(NumericVector x, NumericVector pi, NumericMatrix T, dou
 //' @param T sub-intensity matrix
 //' @param beta shape parameter
 //' @return The cdf (tail) at \code{x}
-//' @examples
-//' alpha <- c(0.5, 0.3, 0.2)
-//' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
-//' beta <- 0.5
-//' mparetocdf(0.5, alpha, T, beta) 
-//' mparetocdf(0.5, alpha, T, beta, FALSE) 
+//' 
 // [[Rcpp::export]]
 NumericVector mParetocdf(NumericVector x, NumericVector pi, NumericMatrix T, double beta, bool lower_tail = true) {
   
@@ -307,11 +274,7 @@ NumericVector mParetocdf(NumericVector x, NumericVector pi, NumericMatrix T, dou
 //' @param T sub-intensity matrix
 //' @param beta shape parameter
 //' @return The density at \code{x}
-//' @examples
-//' alpha <- c(0.5, 0.3, 0.2)
-//' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
-//' beta <- 0.5
-//' mweibullden(0.5, alpha, T, beta) 
+//' 
 // [[Rcpp::export]]
 NumericVector mLogNormalden(NumericVector x, NumericVector pi, NumericMatrix T, double beta) {
   
@@ -343,12 +306,7 @@ NumericVector mLogNormalden(NumericVector x, NumericVector pi, NumericMatrix T, 
 //' @param T sub-intensity matrix
 //' @param beta shape parameter
 //' @return The cdf (tail) at \code{x}
-//' @examples
-//' alpha <- c(0.5, 0.3, 0.2)
-//' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
-//' beta <- 0.5
-//' mweibullcdf(0.5, alpha, T, beta) 
-//' mweibullcdf(0.5, alpha, T, beta, FALSE) 
+//' 
 // [[Rcpp::export]]
 NumericVector mLogNormalcdf(NumericVector x, NumericVector pi, NumericMatrix T, double beta, bool lower_tail = true) {
   
@@ -384,11 +342,7 @@ NumericVector mLogNormalcdf(NumericVector x, NumericVector pi, NumericMatrix T, 
 //' @param T sub-intensity matrix
 //' @param beta scale parameter
 //' @return The density at \code{x}
-//' @examples
-//' alpha <- c(0.5, 0.3, 0.2)
-//' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
-//' beta <- 0.5
-//' mparetoden(0.5, alpha, T, beta) 
+//' 
 // [[Rcpp::export]]
 NumericVector mLogLogisticden(NumericVector x, NumericVector pi, NumericMatrix T, NumericVector beta) {
   
@@ -419,12 +373,7 @@ NumericVector mLogLogisticden(NumericVector x, NumericVector pi, NumericMatrix T
 //' @param T sub-intensity matrix
 //' @param beta shape parameter
 //' @return The cdf (tail) at \code{x}
-//' @examples
-//' alpha <- c(0.5, 0.3, 0.2)
-//' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
-//' beta <- 0.5
-//' mparetocdf(0.5, alpha, T, beta) 
-//' mparetocdf(0.5, alpha, T, beta, FALSE) 
+//' 
 // [[Rcpp::export]]
 NumericVector mLogLogisticcdf(NumericVector x, NumericVector pi, NumericMatrix T, NumericVector beta, bool lower_tail = true) {
   
@@ -459,11 +408,7 @@ NumericVector mLogLogisticcdf(NumericVector x, NumericVector pi, NumericMatrix T
 //' @param T sub-intensity matrix
 //' @param beta  parameter
 //' @return The density at \code{x}
-//' @examples
-//' alpha <- c(0.5, 0.3, 0.2)
-//' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
-//' beta <- 0.5
-//' mgompertzden(0.5, alpha, T, beta) 
+//' 
 // [[Rcpp::export]]
 NumericVector mGompertzden(NumericVector x, NumericVector pi, NumericMatrix T, double beta) {
   
@@ -495,12 +440,7 @@ NumericVector mGompertzden(NumericVector x, NumericVector pi, NumericMatrix T, d
 //' @param T sub-intensity matrix
 //' @param beta shape parameter
 //' @return The cdf (tail) at \code{x}
-//' @examples
-//' alpha <- c(0.5, 0.3, 0.2)
-//' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
-//' beta <- 0.5
-//' mgompertzcdf(0.5, alpha, T, beta) 
-//' mgompertzcdf(0.5, alpha, T, beta, FALSE) 
+//' 
 // [[Rcpp::export]]
 NumericVector mGompertzcdf(NumericVector x, NumericVector pi, NumericMatrix T, double beta, bool lower_tail = true) {
   
@@ -537,13 +477,7 @@ NumericVector mGompertzcdf(NumericVector x, NumericVector pi, NumericMatrix T, d
 //' @param T sub-intensity matrix
 //' @param beta  parameter
 //' @return The density at \code{x}
-//' @examples
-//' alpha <- c(0.5, 0.3, 0.2)
-//' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
-//' mu <- 1
-//' sigma <- 2
-//' xi <- 0.5
-//' mGEVden(0.5, alpha, T, mu, sigma, xi) 
+//' 
 // [[Rcpp::export]]
 NumericVector mGEVDden(NumericVector x, NumericVector pi, NumericMatrix T, double mu, double sigma, double xi) {
   
@@ -575,14 +509,7 @@ NumericVector mGEVDden(NumericVector x, NumericVector pi, NumericMatrix T, doubl
 //' @param T sub-intensity matrix
 //' @param beta shape parameter
 //' @return The cdf (tail) at \code{x}
-//' @examples
-//' alpha <- c(0.5, 0.3, 0.2)
-//' T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
-//' mu <- 1
-//' sigma <- 2
-//' xi <- 0.5
-//' mGEVcdf(0.5, alpha, T, mu, sigma, xi) 
-//' mGEVcdf(0.5, alpha, T, mu, sigma, xi, FALSE) 
+//' 
 // [[Rcpp::export]]
 NumericVector mGEVDcdf(NumericVector x, NumericVector pi, NumericMatrix T, double mu, double sigma, double xi, bool lower_tail = true) {
   

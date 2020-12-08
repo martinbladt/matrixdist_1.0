@@ -9,9 +9,7 @@ using namespace Rcpp;
 //' @param structure Type of structure: "General", "Hyperexponential", "GErlang", "Coxian" or "GCoxian"
 //' @param scale_factor A factor that multiplies the sub-intensity matrix
 //' @return Random parameters \code{pi} and \code{T} of a phase-type
-//' @examples
-//' random_structure(3) 
-//' random_structure(5, "Hyperexponential") 
+//' 
 // [[Rcpp::export]]
 List random_structure(int p, String structure = "General", double scale_factor = 1) {
   // Structure of pi and T

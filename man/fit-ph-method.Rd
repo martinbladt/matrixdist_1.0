@@ -11,6 +11,9 @@
   rcen = numeric(0),
   rcenweight = numeric(0),
   stepsEM = 1000,
+  rkstep = NA,
+  maxit = 100,
+  reltol = 1e-08,
   every = 100
 )
 }
@@ -26,6 +29,12 @@
 \item{rcenweight}{vector of weights for right-censored observations.}
 
 \item{stepsEM}{number of EM steps to be performed.}
+
+\item{rkstep}{Runge-Kutta step size (optional)}
+
+\item{maxit}{maximum number of iterations when optimizing g function.}
+
+\item{reltol}{relative tolerance when optimizing g function.}
 
 \item{every}{number of iterations between likelihood display updates.}
 }

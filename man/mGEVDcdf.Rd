@@ -21,12 +21,3 @@ The cdf (tail) at \code{x}
 \description{
 Computes the cdf (tail) of a matrix GEV distribution with parameters \code{pi}, \code{T} and \code{beta} at \code{x}
 }
-\examples{
-alpha <- c(0.5, 0.3, 0.2)
-T <- matrix(c(c(-1,0,0),c(1,-2,0),c(0,1,-5)), nrow = 3, ncol = 3)
-mu <- 1
-sigma <- 2
-xi <- 0.5
-mGEVcdf(0.5, alpha, T, mu, sigma, xi) 
-mGEVcdf(0.5, alpha, T, mu, sigma, xi, FALSE) 
-}
