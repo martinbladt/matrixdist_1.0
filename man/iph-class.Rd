@@ -5,7 +5,7 @@
 \alias{iph-class}
 \title{Inhomogeneous Phase Type distributions}
 \value{
-
+Class object
 }
 \description{
 Class of objects for inhomogeneous phase type distributions

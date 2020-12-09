@@ -6,7 +6,7 @@
 #' @slot gfun a list comprising of the parameters.
 #' @slot scale scale.
 #'
-#' @return
+#' @return Class object
 #' @export
 #'
 setClass("iph",
@@ -127,8 +127,6 @@ setMethod("maximum", signature(x1 = "iph", x2 = "iph"),
 #' @param object an object of class \linkS4class{iph}.
 #' @export
 #'
-#' @examples
-#'
 setMethod("show", "iph", function(object) {
   cat("object class: ", methods::is(object)[[1]], "\n", sep = "")
   cat("name: ", object@name, "\n", sep = "")
@@ -148,8 +146,6 @@ setMethod("show", "iph", function(object) {
 #'
 #' @return A realization of inhomogeneous phase type data
 #' @export
-#'
-#' @examples
 #'
 setMethod("sim", c(x = "iph"), function(x, n = 1000) {
   name <- x@gfun$name
@@ -172,8 +168,6 @@ setMethod("sim", c(x = "iph"), function(x, n = 1000) {
 #' @return Density evaluated at locations
 #' @export
 #'
-#' @examples
-#'
 setMethod("dens", c(x = "iph"), function(x, y = seq(0, quan(x, .95)$quantile, length.out = 10)) {
   fn <- base::eval(parse(text = paste("m", x@gfun$name, "den", sep = "")))
   scale <- x@scale
@@ -192,8 +186,6 @@ setMethod("dens", c(x = "iph"), function(x, y = seq(0, quan(x, .95)$quantile, le
 #'
 #' @return CDF evaluated at locations
 #' @export
-#'
-#' @examples
 #'
 setMethod("cdf", c(x = "iph"), function(x,
                                         q = seq(0, quan(x, .95)$quantile, length.out = 10),

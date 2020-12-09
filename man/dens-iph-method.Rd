@@ -17,6 +17,3 @@ Density evaluated at locations
 \description{
 Density Method for inhomogeneous phase type distributions
 }
-\examples{
-
-}

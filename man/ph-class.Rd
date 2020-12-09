@@ -5,7 +5,7 @@
 \alias{ph-class}
 \title{Phase Type distributions}
 \value{
-
+Class object
 }
 \description{
 Class of objects for phase type distributions

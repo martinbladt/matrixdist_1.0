@@ -6,7 +6,7 @@
 #' @slot pars a list comprising of the parameters
 #' @slot fit a list containing estimation information
 #'
-#' @return
+#' @return Class object
 #' @export
 #'
 setClass("ph",
@@ -227,7 +227,7 @@ setMethod("quan", c(x = "ph"), function(x,
                                         p = seq(0, 1, length.out = 10)) {
   quan <- numeric(length(p))
   for (i in seq_along(p)) {
-    quan[i] <- uniroot(f = function(q) p[i] - cdf(x, 1 / (1 - q) - 1)$cdf, interval = c(0, 1))$root
+    quan[i] <- stats::uniroot(f = function(q) p[i] - cdf(x, 1 / (1 - q) - 1)$cdf, interval = c(0, 1))$root
   }
   return(list(p = p, quantile = 1 / (1 - quan) - 1))
 })
@@ -306,7 +306,7 @@ setMethod(
         if(!is.na(rkstep)) RKstep <- rkstep else  RKstep <- default_step_length(T_fit)
         EMstep_RK(RKstep, pi_fit, T_fit, trans, trans_weight, trans_cens, trans_rcenweight)
         opt <- suppressWarnings(
-          optim(
+          stats::optim(
             par = par_g,
             fn = mLL,
             h = RKstep,

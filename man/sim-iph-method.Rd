@@ -17,6 +17,3 @@ A realization of inhomogeneous phase type data
 \description{
 Simulation Method for inhomogeneous phase type distributions
 }
-\examples{
-
-}

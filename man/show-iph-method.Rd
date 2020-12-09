@@ -12,6 +12,3 @@
 \description{
 Show Method for inhomogeneous phase type distributions
 }
-\examples{
-
-}

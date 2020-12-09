@@ -19,6 +19,3 @@ CDF evaluated at locations
 \description{
 Distribution Method for inhomogeneous phase type distributions
 }
-\examples{
-
-}
