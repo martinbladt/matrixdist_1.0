@@ -9,7 +9,7 @@ quan(x, ...)
 \arguments{
 \item{x}{an object of the model class.}
 
-\item{...}{}
+\item{...}{further parameters to be passed on}
 }
 \value{
 Quantile from the matrix distribution.

@@ -9,7 +9,7 @@ dens(x, ...)
 \arguments{
 \item{x}{an object of the model class.}
 
-\item{...}{}
+\item{...}{further parameters to be passed on}
 }
 \value{
 Density from the matrix distribution.

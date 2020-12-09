@@ -6,6 +6,9 @@
 \usage{
 matrix_exponential(A)
 }
+\arguments{
+\item{A}{a matrix}
+}
 \description{
 MATLAB's built-in algorithm - Pade approximation
 }

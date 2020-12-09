@@ -3,7 +3,8 @@
 #' Class of objects for inhomogeneous phase type distributions
 #'
 #' @slot name name of the phase type distribution
-#' @slot pars a list comprising of the parameters.
+#' @slot gfun a list comprising of the parameters.
+#' @slot scale scale.
 #'
 #' @return
 #' @export
@@ -18,12 +19,14 @@ setClass("iph",
 
 #' Constructor Function for inhomogeneous phase type distributions
 #'
+#' @param ph An object of class \linkS4class{ph}.
 #' @param alpha a probability vector.
 #' @param S a sub-intensity matrix.
 #' @param structure a valid ph structure
 #' @param dimension the dimension of the ph structure (if provided)
 #' @param gfun inhomogeneity transform
-#' @param gfunpars the parameters of the inhomogeneity function
+#' @param gfun_pars the parameters of the inhomogeneity function
+#' @param scale scale
 #'
 #' @return An object of class \linkS4class{iph}.
 #' @export
@@ -80,7 +83,7 @@ iph <- function(ph = NULL, gfun = NULL, gfun_pars = NULL, alpha = NULL, S = NULL
   else if (gfun == "GEVD") {
     ginv <- function(beta, t, w) reversTransformData(t, w, beta)
   }
-  new("iph",
+  methods::new("iph",
     name = paste("inhomogeneous ", ph@name, sep = ""),
     pars = ph@pars,
     gfun = list(name = gfun, pars = gfun_pars, inverse = ginv),
@@ -121,13 +124,13 @@ setMethod("maximum", signature(x1 = "iph", x2 = "iph"),
 
 #' Show Method for inhomogeneous phase type distributions
 #'
-#' @param x an object of class \linkS4class{iph}.
+#' @param object an object of class \linkS4class{iph}.
 #' @export
 #'
 #' @examples
 #'
 setMethod("show", "iph", function(object) {
-  cat("object class: ", is(object)[[1]], "\n", sep = "")
+  cat("object class: ", methods::is(object)[[1]], "\n", sep = "")
   cat("name: ", object@name, "\n", sep = "")
   cat("parameters: ", "\n", sep = "")
   print(object@pars)
@@ -184,7 +187,8 @@ setMethod("dens", c(x = "iph"), function(x, y = seq(0, quan(x, .95)$quantile, le
 #' Distribution Method for inhomogeneous phase type distributions
 #'
 #' @param x an object of class \linkS4class{iph}.
-#' @param y locations
+#' @param q locations
+#' @param lower.tail cdf(TRUE) or tail(FALSE)
 #'
 #' @return CDF evaluated at locations
 #' @export

@@ -6,6 +6,9 @@
 \usage{
 matrixMaxDiagonal(A)
 }
+\arguments{
+\item{A}{a matrix}
+}
 \description{
 Maximum entry in the diagonal of a matrix
 }

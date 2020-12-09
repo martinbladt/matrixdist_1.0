@@ -5,8 +5,10 @@ using namespace Rcpp;
 // The main objective is to implement a matrix exponential method and other functions for matrix that we need afterwards
 
 //' Product of two matrices
+//' @param a matrix
+//' @param b matrix
+//' @return Computes C = A * B
 //' 
-//' Computes C = A * B
 // [[Rcpp::export]]
 NumericMatrix matrix_product(NumericMatrix a, NumericMatrix b) {
   
@@ -42,6 +44,7 @@ NumericMatrix matrix_product(NumericMatrix a, NumericMatrix b) {
 //' Computes C =  A + B 
 //' @param A A matrix
 //' @param B A matrix
+//' 
 // [[Rcpp::export]]
 NumericMatrix matrix_sum(const NumericMatrix & A, const NumericMatrix & B) {
   long rows = A.nrow();
@@ -79,6 +82,9 @@ double LInf_norm(const NumericMatrix & A) {
 //' 
 //' AX=B which can be decompose as LUX=B and finds X
 //' When B is the identity matrix the solution is the inverse of A
+//' @param A1 a matrix
+//' @param B a matrix
+//' 
 // [[Rcpp::export]]
 NumericMatrix solve_linear_system(NumericMatrix A1, const NumericMatrix & B) {
   long i{};
@@ -159,6 +165,10 @@ NumericMatrix solve_linear_system(NumericMatrix A1, const NumericMatrix & B) {
 }
 
 //' Inverse of a matrix
+//' 
+//' Computes the inverse
+//' @param A a matrix
+//' 
 // [[Rcpp::export]]
 NumericMatrix matrix_inverse(NumericMatrix A) {
   return solve_linear_system(A, NumericMatrix::diag(A.nrow(), 1.0));
@@ -168,6 +178,8 @@ NumericMatrix matrix_inverse(NumericMatrix A) {
 //' Matrix exponential algorithm
 //' 
 //' MATLAB's built-in algorithm - Pade approximation
+//' @param A a matrix
+//' 
 // [[Rcpp::export]]
 NumericMatrix matrix_exponential(const NumericMatrix & A) {
   
@@ -227,6 +239,10 @@ NumericMatrix matrix_exponential(const NumericMatrix & A) {
 
 
 //' Maximum entry in a matrix
+//' 
+//' Find the maximum entry
+//' @param A a matrix
+//' 
 // [[Rcpp::export]]
 double matrixMax(const NumericMatrix & A) {
   double maximum{A(0,0)};
@@ -241,6 +257,8 @@ double matrixMax(const NumericMatrix & A) {
 }
 
 //' Maximum entry in the diagonal of a matrix
+//' 
+//' @param A a matrix
 // [[Rcpp::export]]
 double matrixMaxDiagonal(const NumericMatrix & A) {
   double maximum{A(0,0)};
@@ -253,6 +271,10 @@ double matrixMaxDiagonal(const NumericMatrix & A) {
 }
 
 //' Computes A^n
+//' 
+//' @param n integer
+//' @param A a matrix
+//' 
 // [[Rcpp::export]]
 NumericMatrix matrix_power(int n, const NumericMatrix & A) {
   if (n == 1) {
@@ -270,13 +292,20 @@ NumericMatrix matrix_power(int n, const NumericMatrix & A) {
   return newMatrix;
 }
 
-
+//' Clone a vector 
+//' 
+//' @param v a vector
+//' 
 // [[Rcpp::export]]
 NumericVector clone_vector(NumericVector v) {
   NumericVector new_v = clone(v);
   return new_v;
 }
 
+//' Clone a matrix 
+//' 
+//' @param m a matrix
+//' 
 // [[Rcpp::export]]
 NumericMatrix clone_matrix(NumericMatrix m) {
   NumericMatrix new_m = clone(m);
@@ -285,6 +314,11 @@ NumericMatrix clone_matrix(NumericMatrix m) {
 
 
 //' Creates the matrix  (A1, B1 ; 0, A2)
+//' 
+//' @param A1 a matrix
+//' @param A2 a matrix
+//' @param B1 a matrix
+//' 
 // [[Rcpp::export]]
 NumericMatrix matrix_VanLoan(const NumericMatrix & A1, const NumericMatrix & A2, const NumericMatrix & B1) {
   long p1{A1.nrow()};
@@ -313,6 +347,9 @@ NumericMatrix matrix_VanLoan(const NumericMatrix & A1, const NumericMatrix & A2,
 }
 
 //' Creates a matrix with the given vector in the diagonal
+//' 
+//' @param vec a vector
+//' 
 // [[Rcpp::export]]
 NumericMatrix diagonal_vector(const NumericVector & vec) {
   NumericMatrix diagonalMatrix(vec.size(),vec.size());

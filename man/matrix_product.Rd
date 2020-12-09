@@ -6,6 +6,14 @@
 \usage{
 matrix_product(a, b)
 }
-\description{
+\arguments{
+\item{a}{matrix}
+
+\item{b}{matrix}
+}
+\value{
 Computes C = A * B
+}
+\description{
+Product of two matrices
 }

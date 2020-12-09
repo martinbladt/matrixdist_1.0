@@ -209,7 +209,6 @@ NumericVector riph(int n, String dist_type, NumericVector pi, NumericMatrix T, N
 //' 
 //' Generates a sample of size \code{n} from an inhomogeneous phase-type distribution with parameters \code{pi}, \code{T} and \code{beta}
 //' @param n Sample size
-//' @param dist_type Type of IPH: "Pareto", "Weibull", "Gompertz"
 //' @param pi Initial probabilities
 //' @param T sub-intensity matrix
 //' @param mu Location parameter

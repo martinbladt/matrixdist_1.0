@@ -7,9 +7,11 @@
 maximum(x1, x2, ...)
 }
 \arguments{
-\item{...}{}
+\item{x1}{an object of the model class.}
 
-\item{x}{an object of the model class.}
+\item{x2}{an object of the model class.}
+
+\item{...}{further parameters to be passed on}
 }
 \value{
 A realization from the matrix distribution.

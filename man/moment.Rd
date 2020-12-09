@@ -9,7 +9,7 @@ moment(x, ...)
 \arguments{
 \item{x}{an object of the model class.}
 
-\item{...}{}
+\item{...}{further parameters to be passed on}
 }
 \value{
 A realization from the matrix distribution.

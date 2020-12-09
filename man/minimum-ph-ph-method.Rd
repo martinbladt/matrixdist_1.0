@@ -11,6 +11,9 @@
 
 \item{x2}{an object of class \linkS4class{ph}.}
 }
+\value{
+An object of class \linkS4class{ph}.
+}
 \description{
 Minimum Method for phase type distributions
 }

@@ -6,6 +6,9 @@
 \usage{
 matrix_inverse(A)
 }
+\arguments{
+\item{A}{a matrix}
+}
 \description{
-Inverse of a matrix
+Computes the inverse
 }

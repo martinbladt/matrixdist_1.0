@@ -13,7 +13,11 @@ mGEVDden(x, pi, T, mu, sigma, xi)
 
 \item{T}{sub-intensity matrix}
 
-\item{beta}{parameter}
+\item{mu}{location parameter}
+
+\item{sigma}{scale parameter}
+
+\item{xi}{shape parameter}
 }
 \value{
 The density at \code{x}

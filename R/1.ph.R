@@ -52,7 +52,7 @@ ph <- function(alpha = NULL, S = NULL, structure = NULL, dimension = 3) {
     }
     name <- "custom"
   }
-  new("ph",
+  methods::new("ph",
     name = paste(name, " ph(", length(alpha), ")", sep = ""),
     pars = list(alpha = alpha, S = S)
   )
@@ -66,7 +66,7 @@ ph <- function(alpha = NULL, S = NULL, structure = NULL, dimension = 3) {
 #'
 setMethod("+", signature(e1 = "ph", e2 = "ph"), 
           function (e1, e2){
-            if(is(e1, "iph") | is(e2, "iph")) stop("objects to be added should be ph")
+            if(methods::is(e1, "iph") | methods::is(e2, "iph")) stop("objects to be added should be ph")
             L <- sumPH(e1@pars$alpha, e1@pars$S, e2@pars$alpha, e2@pars$S)
             return(ph(alpha = L$pi, S = L$T))
           }
@@ -81,6 +81,8 @@ kronecker_sum <- function(A, B){
 #'
 #' @param x1 an object of class \linkS4class{ph}.
 #' @param x2 an object of class \linkS4class{ph}.
+#' 
+#' @return An object of class \linkS4class{ph}.
 #' @export
 #'
 setMethod("minimum", signature(x1 = "ph", x2 = "ph"), 
@@ -118,7 +120,7 @@ setMethod("maximum", signature(x1 = "ph", x2 = "ph"),
 setMethod("moment", signature(x = "ph"), 
           function (x, k = 1){
             if(k%%1 != 0 | k <= 0) return("k should be a positive integer")
-            if(is(x, "iph")) warning("moment of undelying ph structure is provided for iph objects")
+            if(methods::is(x, "iph")) warning("moment of undelying ph structure is provided for iph objects")
             return(phmoment(k, x@pars$alpha, x@pars$S))
           }
 )
@@ -126,11 +128,11 @@ setMethod("moment", signature(x = "ph"),
 
 #' Show Method for phase type distributions
 #'
-#' @param x an object of class \linkS4class{ph}.
+#' @param object an object of class \linkS4class{ph}.
 #' @export
 #'
 setMethod("show", "ph", function(object) {
-  cat("object class: ", is(object)[[1]], "\n", sep = "")
+  cat("object class: ", methods::is(object)[[1]], "\n", sep = "")
   cat("name: ", object@name, "\n", sep = "")
   cat("parameters: ", "\n", sep = "")
   print(object@pars)
@@ -175,6 +177,7 @@ setMethod("dens", c(x = "ph"), function(x, y = seq(0, quan(x, .95)$quantile, len
 #'
 #' @param x an object of class \linkS4class{ph}.
 #' @param q locations
+#' @param lower.tail cdf(TRUE) or tail(FALSE)
 #'
 #' @return CDF evaluated at locations
 #' @export
@@ -261,7 +264,7 @@ setMethod(
            maxit = 100,
            reltol = 1e-8,
            every = 100) {
-    is_iph <- is(x, "iph")
+    is_iph <- methods::is(x, "iph")
     if (is_iph) {
       par_g <- x@gfun$pars
       inv_g <- x@gfun$inverse

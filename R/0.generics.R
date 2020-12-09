@@ -3,7 +3,7 @@
 #' Methods are available for objects of class \linkS4class{ph}
 #'
 #' @param x an object of the model class.
-#' @param ...
+#' @param ... further parameters to be passed on
 #'
 #' @return A realization from the matrix distribution.
 #' @export
@@ -18,7 +18,7 @@ setGeneric("sim", function(x, ...) {
 #' Methods are available for objects of class \linkS4class{ph}
 #'
 #' @param x an object of the model class.
-#' @param ...
+#' @param ... further parameters to be passed on
 #'
 #' @return A realization from the matrix distribution.
 #' @export
@@ -33,8 +33,9 @@ setGeneric("moment", function(x, ...) {
 #'
 #' Methods are available for objects of class \linkS4class{ph}
 #'
-#' @param x an object of the model class.
-#' @param ...
+#' @param x1 an object of the model class.
+#' @param x2 an object of the model class.
+#' @param ... further parameters to be passed on
 #'
 #' @return A realization from the matrix distribution.
 #' @export
@@ -48,8 +49,9 @@ setGeneric("minimum", function(x1, x2, ...) {
 #'
 #' Methods are available for objects of class \linkS4class{ph}
 #'
-#' @param x an object of the model class.
-#' @param ...
+#' @param x1 an object of the model class.
+#' @param x2 an object of the model class.
+#' @param ... further parameters to be passed on
 #'
 #' @return A realization from the matrix distribution.
 #' @export
@@ -64,7 +66,7 @@ setGeneric("maximum", function(x1, x2, ...) {
 #' Methods are available for objects of class \linkS4class{ph}
 #'
 #' @param x an object of the model class.
-#' @param ...
+#' @param ... further parameters to be passed on
 #'
 #' @return Density from the matrix distribution.
 #' @export
@@ -79,7 +81,7 @@ setGeneric("dens", function(x, ...) {
 #' Methods are available for objects of class \linkS4class{ph}
 #'
 #' @param x an object of the model class.
-#' @param ...
+#' @param ... further parameters to be passed on
 #'
 #' @return Hazard rate from the matrix distribution.
 #' @export
@@ -94,7 +96,7 @@ setGeneric("haz", function(x, ...) {
 #' Methods are available for objects of class \linkS4class{ph}
 #'
 #' @param x an object of the model class.
-#' @param ...
+#' @param ... further parameters to be passed on
 #'
 #' @return CDF from the matrix distribution.
 #' @export
@@ -109,7 +111,7 @@ setGeneric("cdf", function(x, ...) {
 #' Methods are available for objects of class \linkS4class{ph}
 #'
 #' @param x an object of the model class.
-#' @param ...
+#' @param ... further parameters to be passed on
 #'
 #' @return Quantile from the matrix distribution.
 #' @export
@@ -125,7 +127,7 @@ setGeneric("quan", function(x, ...) {
 #'
 #' @param x an object of the model class.
 #' @param y a vector of data.
-#' @param ...
+#' @param ... further parameters to be passed on
 #'
 #' @return An object of the fitted model class.
 #' @export

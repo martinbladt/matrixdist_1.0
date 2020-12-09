@@ -10,6 +10,8 @@
 \item{x}{an object of class \linkS4class{ph}.}
 
 \item{q}{locations}
+
+\item{lower.tail}{cdf(TRUE) or tail(FALSE)}
 }
 \value{
 CDF evaluated at locations

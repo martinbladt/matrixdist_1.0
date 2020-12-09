@@ -9,7 +9,9 @@
 \arguments{
 \item{x}{an object of class \linkS4class{iph}.}
 
-\item{y}{locations}
+\item{q}{locations}
+
+\item{lower.tail}{cdf(TRUE) or tail(FALSE)}
 }
 \value{
 CDF evaluated at locations

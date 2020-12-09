@@ -270,7 +270,6 @@ riph <- function(n, dist_type, pi, T, beta) {
 #' 
 #' Generates a sample of size \code{n} from an inhomogeneous phase-type distribution with parameters \code{pi}, \code{T} and \code{beta}
 #' @param n Sample size
-#' @param dist_type Type of IPH: "Pareto", "Weibull", "Gompertz"
 #' @param pi Initial probabilities
 #' @param T sub-intensity matrix
 #' @param mu Location parameter
@@ -300,6 +299,7 @@ phdensity <- function(x, pi, T) {
 #' @param x non-negative value
 #' @param pi Initial probabilities
 #' @param T sub-intensity matrix
+#' @param lower_tail cdf or tail
 #' @return The cdf (tail) at \code{x}
 #' 
 phcdf <- function(x, pi, T, lower_tail = TRUE) {
@@ -350,6 +350,7 @@ mWeibullden <- function(x, pi, T, beta) {
 #' @param pi Initial probabilities
 #' @param T sub-intensity matrix
 #' @param beta shape parameter
+#' @param lower_tail cdf or tail
 #' @return The cdf (tail) at \code{x}
 #' 
 mWeibullcdf <- function(x, pi, T, beta, lower_tail) {
@@ -380,6 +381,7 @@ mParetoden <- function(x, pi, T, beta) {
 #' @param pi Initial probabilities
 #' @param T sub-intensity matrix
 #' @param beta shape parameter
+#' @param lower_tail cdf or tail
 #' @return The cdf (tail) at \code{x}
 #' 
 mParetocdf <- function(x, pi, T, beta, lower_tail = TRUE) {
@@ -406,6 +408,7 @@ mLogNormalden <- function(x, pi, T, beta) {
 #' @param pi Initial probabilities
 #' @param T sub-intensity matrix
 #' @param beta shape parameter
+#' @param lower_tail cdf or tail
 #' @return The cdf (tail) at \code{x}
 #' 
 mLogNormalcdf <- function(x, pi, T, beta, lower_tail = TRUE) {
@@ -432,6 +435,7 @@ mLogLogisticden <- function(x, pi, T, beta) {
 #' @param pi Initial probabilities
 #' @param T sub-intensity matrix
 #' @param beta shape parameter
+#' @param lower_tail cdf or tail
 #' @return The cdf (tail) at \code{x}
 #' 
 mLogLogisticcdf <- function(x, pi, T, beta, lower_tail = TRUE) {
@@ -444,7 +448,7 @@ mLogLogisticcdf <- function(x, pi, T, beta, lower_tail = TRUE) {
 #' @param x non-negative value
 #' @param pi Initial probabilities
 #' @param T sub-intensity matrix
-#' @param beta  parameter
+#' @param beta parameter
 #' @return The density at \code{x}
 #' 
 mGompertzden <- function(x, pi, T, beta) {
@@ -458,6 +462,7 @@ mGompertzden <- function(x, pi, T, beta) {
 #' @param pi Initial probabilities
 #' @param T sub-intensity matrix
 #' @param beta shape parameter
+#' @param lower_tail cdf or tail
 #' @return The cdf (tail) at \code{x}
 #' 
 mGompertzcdf <- function(x, pi, T, beta, lower_tail = TRUE) {
@@ -471,7 +476,9 @@ mGompertzcdf <- function(x, pi, T, beta, lower_tail = TRUE) {
 #' @param x non-negative value
 #' @param pi Initial probabilities
 #' @param T sub-intensity matrix
-#' @param beta  parameter
+#' @param mu  location parameter
+#' @param sigma scale parameter
+#' @param xi shape parameter
 #' @return The density at \code{x}
 #' 
 mGEVDden <- function(x, pi, T, mu, sigma, xi) {
@@ -484,7 +491,10 @@ mGEVDden <- function(x, pi, T, mu, sigma, xi) {
 #' @param x non-negative value
 #' @param pi Initial probabilities
 #' @param T sub-intensity matrix
-#' @param beta shape parameter
+#' @param mu  location parameter
+#' @param sigma scale parameter
+#' @param xi shape parameter
+#' @param lower_tail cdf or tail
 #' @return The cdf (tail) at \code{x}
 #' 
 mGEVDcdf <- function(x, pi, T, mu, sigma, xi, lower_tail = TRUE) {
@@ -492,8 +502,10 @@ mGEVDcdf <- function(x, pi, T, mu, sigma, xi, lower_tail = TRUE) {
 }
 
 #' Product of two matrices
+#' @param a matrix
+#' @param b matrix
+#' @return Computes C = A * B
 #' 
-#' Computes C = A * B
 matrix_product <- function(a, b) {
     .Call(`_matrixdist_matrix_product`, a, b)
 }
@@ -503,6 +515,7 @@ matrix_product <- function(a, b) {
 #' Computes C =  A + B 
 #' @param A A matrix
 #' @param B A matrix
+#' 
 matrix_sum <- function(A, B) {
     .Call(`_matrixdist_matrix_sum`, A, B)
 }
@@ -520,11 +533,18 @@ LInf_norm <- function(A) {
 #' 
 #' AX=B which can be decompose as LUX=B and finds X
 #' When B is the identity matrix the solution is the inverse of A
+#' @param A1 a matrix
+#' @param B a matrix
+#' 
 solve_linear_system <- function(A1, B) {
     .Call(`_matrixdist_solve_linear_system`, A1, B)
 }
 
 #' Inverse of a matrix
+#' 
+#' Computes the inverse
+#' @param A a matrix
+#' 
 matrix_inverse <- function(A) {
     .Call(`_matrixdist_matrix_inverse`, A)
 }
@@ -532,43 +552,78 @@ matrix_inverse <- function(A) {
 #' Matrix exponential algorithm
 #' 
 #' MATLAB's built-in algorithm - Pade approximation
+#' @param A a matrix
+#' 
 matrix_exponential <- function(A) {
     .Call(`_matrixdist_matrix_exponential`, A)
 }
 
 #' Maximum entry in a matrix
+#' 
+#' Find the maximum entry
+#' @param A a matrix
+#' 
 matrixMax <- function(A) {
     .Call(`_matrixdist_matrixMax`, A)
 }
 
 #' Maximum entry in the diagonal of a matrix
+#' 
+#' @param A a matrix
 matrixMaxDiagonal <- function(A) {
     .Call(`_matrixdist_matrixMaxDiagonal`, A)
 }
 
 #' Computes A^n
+#' 
+#' @param n integer
+#' @param A a matrix
+#' 
 matrix_power <- function(n, A) {
     .Call(`_matrixdist_matrix_power`, n, A)
 }
 
+#' Clone a vector 
+#' 
+#' @param v a vector
+#' 
 clone_vector <- function(v) {
     .Call(`_matrixdist_clone_vector`, v)
 }
 
+#' Clone a matrix 
+#' 
+#' @param m a matrix
+#' 
 clone_matrix <- function(m) {
     .Call(`_matrixdist_clone_matrix`, m)
 }
 
 #' Creates the matrix  (A1, B1 ; 0, A2)
+#' 
+#' @param A1 a matrix
+#' @param A2 a matrix
+#' @param B1 a matrix
+#' 
 matrix_VanLoan <- function(A1, A2, B1) {
     .Call(`_matrixdist_matrix_VanLoan`, A1, A2, B1)
 }
 
 #' Creates a matrix with the given vector in the diagonal
+#' 
+#' @param vec a vector
+#' 
 diagonal_vector <- function(vec) {
     .Call(`_matrixdist_diagonal_vector`, vec)
 }
 
+#' Computes the initial distriubtion and sub-intensity of the sum of PH
+#' 
+#' @param pi1 initial distribution
+#' @param T1 sub-intensity
+#' @param pi2 initial distribution
+#' @param T2 sub-intensity
+#' 
 sumPH <- function(pi1, T1, pi2, T2) {
     .Call(`_matrixdist_sumPH`, pi1, T1, pi2, T2)
 }

@@ -2,7 +2,13 @@
 using namespace Rcpp;
 #include "matrix_functions.h"
 
-
+//' Computes the initial distriubtion and sub-intensity of the sum of PH
+//' 
+//' @param pi1 initial distribution
+//' @param T1 sub-intensity
+//' @param pi2 initial distribution
+//' @param T2 sub-intensity
+//' 
 // [[Rcpp::export]]
 List sumPH(NumericVector pi1, NumericMatrix T1, NumericVector pi2, NumericMatrix T2) {
   

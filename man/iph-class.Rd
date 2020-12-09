@@ -15,6 +15,8 @@ Class of objects for inhomogeneous phase type distributions
 \describe{
 \item{\code{name}}{name of the phase type distribution}
 
-\item{\code{pars}}{a list comprising of the parameters.}
+\item{\code{gfun}}{a list comprising of the parameters.}
+
+\item{\code{scale}}{scale.}
 }}
 

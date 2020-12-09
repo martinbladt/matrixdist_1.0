@@ -13,7 +13,13 @@ mGEVDcdf(x, pi, T, mu, sigma, xi, lower_tail = TRUE)
 
 \item{T}{sub-intensity matrix}
 
-\item{beta}{shape parameter}
+\item{mu}{location parameter}
+
+\item{sigma}{scale parameter}
+
+\item{xi}{shape parameter}
+
+\item{lower_tail}{cdf or tail}
 }
 \value{
 The cdf (tail) at \code{x}

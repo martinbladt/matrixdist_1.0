@@ -6,6 +6,11 @@
 \usage{
 matrix_power(n, A)
 }
+\arguments{
+\item{n}{integer}
+
+\item{A}{a matrix}
+}
 \description{
 Computes A^n
 }

@@ -7,7 +7,7 @@
 \S4method{show}{ph}(object)
 }
 \arguments{
-\item{x}{an object of class \linkS4class{ph}.}
+\item{object}{an object of class \linkS4class{ph}.}
 }
 \description{
 Show Method for phase type distributions

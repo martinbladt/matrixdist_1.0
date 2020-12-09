@@ -6,6 +6,11 @@
 \usage{
 solve_linear_system(A1, B)
 }
+\arguments{
+\item{A1}{a matrix}
+
+\item{B}{a matrix}
+}
 \description{
 AX=B which can be decompose as LUX=B and finds X
 When B is the identity matrix the solution is the inverse of A

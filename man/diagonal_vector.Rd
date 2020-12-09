@@ -6,6 +6,9 @@
 \usage{
 diagonal_vector(vec)
 }
+\arguments{
+\item{vec}{a vector}
+}
 \description{
 Creates a matrix with the given vector in the diagonal
 }

@@ -12,6 +12,8 @@ phcdf(x, pi, T, lower_tail = TRUE)
 \item{pi}{Initial probabilities}
 
 \item{T}{sub-intensity matrix}
+
+\item{lower_tail}{cdf or tail}
 }
 \value{
 The cdf (tail) at \code{x}

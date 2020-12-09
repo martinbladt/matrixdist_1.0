@@ -9,7 +9,7 @@ cdf(x, ...)
 \arguments{
 \item{x}{an object of the model class.}
 
-\item{...}{}
+\item{...}{further parameters to be passed on}
 }
 \value{
 CDF from the matrix distribution.

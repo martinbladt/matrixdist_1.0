@@ -18,8 +18,6 @@ rmatrixGEVD(n, pi, T, mu, sigma, xi = 0)
 \item{sigma}{Scale parameter}
 
 \item{xi}{Shape parameter: Default 0 which corresponds to the Gumbel case}
-
-\item{dist_type}{Type of IPH: "Pareto", "Weibull", "Gompertz"}
 }
 \value{
 The simulated sample

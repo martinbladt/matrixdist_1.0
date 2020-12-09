@@ -41,6 +41,7 @@ NumericVector phdensity(NumericVector x, NumericVector pi, NumericMatrix T) {
 //' @param x non-negative value
 //' @param pi Initial probabilities
 //' @param T sub-intensity matrix
+//' @param lower_tail cdf or tail
 //' @return The cdf (tail) at \code{x}
 //' 
 // [[Rcpp::export]]
@@ -163,6 +164,7 @@ NumericVector mWeibullden(NumericVector x, NumericVector pi, NumericMatrix T, do
 //' @param pi Initial probabilities
 //' @param T sub-intensity matrix
 //' @param beta shape parameter
+//' @param lower_tail cdf or tail
 //' @return The cdf (tail) at \code{x}
 //' 
 // [[Rcpp::export]]
@@ -238,6 +240,7 @@ NumericVector mParetoden(NumericVector x, NumericVector pi, NumericMatrix T, dou
 //' @param pi Initial probabilities
 //' @param T sub-intensity matrix
 //' @param beta shape parameter
+//' @param lower_tail cdf or tail
 //' @return The cdf (tail) at \code{x}
 //' 
 // [[Rcpp::export]]
@@ -305,6 +308,7 @@ NumericVector mLogNormalden(NumericVector x, NumericVector pi, NumericMatrix T, 
 //' @param pi Initial probabilities
 //' @param T sub-intensity matrix
 //' @param beta shape parameter
+//' @param lower_tail cdf or tail
 //' @return The cdf (tail) at \code{x}
 //' 
 // [[Rcpp::export]]
@@ -372,6 +376,7 @@ NumericVector mLogLogisticden(NumericVector x, NumericVector pi, NumericMatrix T
 //' @param pi Initial probabilities
 //' @param T sub-intensity matrix
 //' @param beta shape parameter
+//' @param lower_tail cdf or tail
 //' @return The cdf (tail) at \code{x}
 //' 
 // [[Rcpp::export]]
@@ -406,7 +411,7 @@ NumericVector mLogLogisticcdf(NumericVector x, NumericVector pi, NumericMatrix T
 //' @param x non-negative value
 //' @param pi Initial probabilities
 //' @param T sub-intensity matrix
-//' @param beta  parameter
+//' @param beta parameter
 //' @return The density at \code{x}
 //' 
 // [[Rcpp::export]]
@@ -439,6 +444,7 @@ NumericVector mGompertzden(NumericVector x, NumericVector pi, NumericMatrix T, d
 //' @param pi Initial probabilities
 //' @param T sub-intensity matrix
 //' @param beta shape parameter
+//' @param lower_tail cdf or tail
 //' @return The cdf (tail) at \code{x}
 //' 
 // [[Rcpp::export]]
@@ -475,7 +481,9 @@ NumericVector mGompertzcdf(NumericVector x, NumericVector pi, NumericMatrix T, d
 //' @param x non-negative value
 //' @param pi Initial probabilities
 //' @param T sub-intensity matrix
-//' @param beta  parameter
+//' @param mu  location parameter
+//' @param sigma scale parameter
+//' @param xi shape parameter
 //' @return The density at \code{x}
 //' 
 // [[Rcpp::export]]
@@ -507,7 +515,10 @@ NumericVector mGEVDden(NumericVector x, NumericVector pi, NumericMatrix T, doubl
 //' @param x non-negative value
 //' @param pi Initial probabilities
 //' @param T sub-intensity matrix
-//' @param beta shape parameter
+//' @param mu  location parameter
+//' @param sigma scale parameter
+//' @param xi shape parameter
+//' @param lower_tail cdf or tail
 //' @return The cdf (tail) at \code{x}
 //' 
 // [[Rcpp::export]]

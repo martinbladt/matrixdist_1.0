@@ -16,7 +16,11 @@ iph(
 )
 }
 \arguments{
+\item{ph}{An object of class \linkS4class{ph}.}
+
 \item{gfun}{inhomogeneity transform}
+
+\item{gfun_pars}{the parameters of the inhomogeneity function}
 
 \item{alpha}{a probability vector.}
 
@@ -26,7 +30,7 @@ iph(
 
 \item{dimension}{the dimension of the ph structure (if provided)}
 
-\item{gfunpars}{the parameters of the inhomogeneity function}
+\item{scale}{scale}
 }
 \value{
 An object of class \linkS4class{iph}.

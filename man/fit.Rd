@@ -11,7 +11,7 @@ fit(x, y, ...)
 
 \item{y}{a vector of data.}
 
-\item{...}{}
+\item{...}{further parameters to be passed on}
 }
 \value{
 An object of the fitted model class.

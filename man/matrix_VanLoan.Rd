@@ -6,6 +6,13 @@
 \usage{
 matrix_VanLoan(A1, A2, B1)
 }
+\arguments{
+\item{A1}{a matrix}
+
+\item{A2}{a matrix}
+
+\item{B1}{a matrix}
+}
 \description{
 Creates the matrix  (A1, B1 ; 0, A2)
 }

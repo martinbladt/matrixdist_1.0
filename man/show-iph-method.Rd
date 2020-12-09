@@ -7,7 +7,7 @@
 \S4method{show}{iph}(object)
 }
 \arguments{
-\item{x}{an object of class \linkS4class{iph}.}
+\item{object}{an object of class \linkS4class{iph}.}
 }
 \description{
 Show Method for inhomogeneous phase type distributions
