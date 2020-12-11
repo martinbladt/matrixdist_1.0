@@ -9,7 +9,7 @@ riph(n, dist_type, pi, T, beta)
 \arguments{
 \item{n}{Sample size}
 
-\item{dist_type}{Type of IPH: "Pareto", "Weibull", "Gompertz"}
+\item{dist_type}{Type of IPH}
 
 \item{pi}{Initial probabilities}
 

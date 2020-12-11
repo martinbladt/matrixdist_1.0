@@ -414,7 +414,7 @@ double logLikelihoodPH_RK(double h, NumericVector & pi, NumericMatrix & T, const
 //' @param rcweight weight of the censored observations
 //' 
 // [[Rcpp::export]]
-double logLikelihoodMWeibull_RK(double h, NumericVector & pi, NumericMatrix & T, double beta, const NumericVector & obs, const NumericVector & weight, const NumericVector & rcens, const NumericVector & rcweight) {
+double logLikelihoodMweibull_RK(double h, NumericVector & pi, NumericMatrix & T, double beta, const NumericVector & obs, const NumericVector & weight, const NumericVector & rcens, const NumericVector & rcweight) {
   
   if(beta < 0) return NA_REAL;
   
@@ -477,7 +477,7 @@ double logLikelihoodMWeibull_RK(double h, NumericVector & pi, NumericMatrix & T,
 //' @param rcweight weight of the censored observations
 //' 
 // [[Rcpp::export]]
-double logLikelihoodMPareto_RK(double h, NumericVector & pi, NumericMatrix & T, double beta, const NumericVector & obs, const NumericVector & weight, const NumericVector & rcens, const NumericVector & rcweight) {
+double logLikelihoodMpareto_RK(double h, NumericVector & pi, NumericMatrix & T, double beta, const NumericVector & obs, const NumericVector & weight, const NumericVector & rcens, const NumericVector & rcweight) {
   
   if(beta < 0) return NA_REAL;
   
@@ -539,7 +539,7 @@ double logLikelihoodMPareto_RK(double h, NumericVector & pi, NumericMatrix & T, 
 //' @param rcweight weight of the censored observations
 //' 
 // [[Rcpp::export]]
-double logLikelihoodMLogNormal_RK(double h, NumericVector & pi, NumericMatrix & T, double beta, const NumericVector & obs, const NumericVector & weight, const NumericVector & rcens, const NumericVector & rcweight) {
+double logLikelihoodMlognormal_RK(double h, NumericVector & pi, NumericMatrix & T, double beta, const NumericVector & obs, const NumericVector & weight, const NumericVector & rcens, const NumericVector & rcweight) {
   
   if(beta < 0) return NA_REAL;
   
@@ -601,7 +601,7 @@ double logLikelihoodMLogNormal_RK(double h, NumericVector & pi, NumericMatrix & 
 //' @param rcweight weight of the censored observations
 //' 
 // [[Rcpp::export]]
-double logLikelihoodMLogLogistic_RK(double h, NumericVector & pi, NumericMatrix & T, NumericVector beta, const NumericVector & obs, const NumericVector & weight, const NumericVector & rcens, const NumericVector & rcweight) {
+double logLikelihoodMloglogistic_RK(double h, NumericVector & pi, NumericMatrix & T, NumericVector beta, const NumericVector & obs, const NumericVector & weight, const NumericVector & rcens, const NumericVector & rcweight) {
   
   if(beta[0] < 0 || beta[1] < 0) return NA_REAL;
   
@@ -664,7 +664,7 @@ double logLikelihoodMLogLogistic_RK(double h, NumericVector & pi, NumericMatrix 
 //' @param rcweight weight of the censored observations
 //' 
 // [[Rcpp::export]]
-double logLikelihoodMGompertz_RK(double h, NumericVector & pi, NumericMatrix & T, double beta, const NumericVector & obs, const NumericVector & weight, const NumericVector & rcens, const NumericVector & rcweight) {
+double logLikelihoodMgompertz_RK(double h, NumericVector & pi, NumericMatrix & T, double beta, const NumericVector & obs, const NumericVector & weight, const NumericVector & rcens, const NumericVector & rcweight) {
   
   if(beta < 0) return NA_REAL;
   
@@ -727,7 +727,7 @@ double logLikelihoodMGompertz_RK(double h, NumericVector & pi, NumericMatrix & T
 //' @param rcweight weight of the censored observations
 //' 
 // [[Rcpp::export]]
-double logLikelihoodMGEVD_RK(double h, NumericVector & pi, NumericMatrix & T, NumericVector beta, const NumericVector & obs, const NumericVector & weight, const NumericVector & rcens, const NumericVector & rcweight) {
+double logLikelihoodMgev_RK(double h, NumericVector & pi, NumericMatrix & T, NumericVector beta, const NumericVector & obs, const NumericVector & weight, const NumericVector & rcens, const NumericVector & rcweight) {
   
   if(beta[1] < 0) return NA_REAL;
   
@@ -849,7 +849,7 @@ List reversTransformData(const NumericVector & observations, const NumericVector
 //' @param rcweight weight of the censored observations
 //' 
 // [[Rcpp::export]]
-double derivativeMatrixWeibull(double h, const NumericVector & obs, const NumericVector & weight, const NumericVector & rcens, const NumericVector & rcweight, NumericVector & pi, NumericMatrix & T,  double beta) {
+double derivativeMatrixweibull(double h, const NumericVector & obs, const NumericVector & weight, const NumericVector & rcens, const NumericVector & rcweight, NumericVector & pi, NumericMatrix & T,  double beta) {
   long p{T.nrow()};
   NumericMatrix m_pi(1,p, pi.begin());
   
@@ -863,13 +863,13 @@ double derivativeMatrixWeibull(double h, const NumericVector & obs, const Numeri
   double logLh{0.0};
   for (int k{0}; k < obs.size(); ++k) {
     aux_vet[0] = pow(obs[k], beta);
-    logLh +=  weight[k] * ( (matrix_product(m_pi, matrix_product(matrix_exponential(T * pow(obs[k], beta)), matrix_product(T, t)))(0,0) * log(obs[k]) * pow(obs[k], beta) ) / mWeibullden(aux_vet, pi, T, beta)[0] + 1 / beta + log(obs[k]) );
+    logLh +=  weight[k] * ( (matrix_product(m_pi, matrix_product(matrix_exponential(T * pow(obs[k], beta)), matrix_product(T, t)))(0,0) * log(obs[k]) * pow(obs[k], beta) ) / mweibullden(aux_vet, pi, T, beta)[0] + 1 / beta + log(obs[k]) );
   }
   return logLh;
   
   for (int k{0}; k < rcens.size(); ++k) {
     aux_vet[0] = pow(rcens[k], beta);
-    logLh +=  rcweight[k] * ( (matrix_product(m_pi, matrix_product(matrix_exponential(T * pow(obs[k], beta)), matrix_product(T, e)))(0,0) * log(obs[k]) * pow(obs[k], beta) ) / mWeibullcdf(aux_vet, pi, T, beta, false)[0] );
+    logLh +=  rcweight[k] * ( (matrix_product(m_pi, matrix_product(matrix_exponential(T * pow(obs[k], beta)), matrix_product(T, e)))(0,0) * log(obs[k]) * pow(obs[k], beta) ) / mweibullcdf(aux_vet, pi, T, beta, false)[0] );
   }
   return logLh;
   

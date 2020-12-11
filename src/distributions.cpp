@@ -135,7 +135,7 @@ NumericVector phLaplace(NumericVector s, NumericVector pi, NumericMatrix T) {
 //' @return The density at \code{x}
 //' 
 // [[Rcpp::export]]
-NumericVector mWeibullden(NumericVector x, NumericVector pi, NumericMatrix T, double beta) {
+NumericVector mweibullden(NumericVector x, NumericVector pi, NumericMatrix T, double beta) {
   
   NumericVector density(x.size());
   
@@ -168,7 +168,7 @@ NumericVector mWeibullden(NumericVector x, NumericVector pi, NumericMatrix T, do
 //' @return The cdf (tail) at \code{x}
 //' 
 // [[Rcpp::export]]
-NumericVector mWeibullcdf(NumericVector x, NumericVector pi, NumericMatrix T, double beta, bool lower_tail) {
+NumericVector mweibullcdf(NumericVector x, NumericVector pi, NumericMatrix T, double beta, bool lower_tail) {
   
   NumericVector cdf(x.size());
   
@@ -211,7 +211,7 @@ NumericVector RunFunction(NumericVector a, Function func)
 //' @return The density at \code{x}
 //' 
 // [[Rcpp::export]]
-NumericVector mParetoden(NumericVector x, NumericVector pi, NumericMatrix T, double beta) {
+NumericVector mparetoden(NumericVector x, NumericVector pi, NumericMatrix T, double beta) {
   
   NumericVector density(x.size());
   
@@ -244,7 +244,7 @@ NumericVector mParetoden(NumericVector x, NumericVector pi, NumericMatrix T, dou
 //' @return The cdf (tail) at \code{x}
 //' 
 // [[Rcpp::export]]
-NumericVector mParetocdf(NumericVector x, NumericVector pi, NumericMatrix T, double beta, bool lower_tail = true) {
+NumericVector mparetocdf(NumericVector x, NumericVector pi, NumericMatrix T, double beta, bool lower_tail = true) {
   
   NumericVector cdf(x.size());
   
@@ -279,7 +279,7 @@ NumericVector mParetocdf(NumericVector x, NumericVector pi, NumericMatrix T, dou
 //' @return The density at \code{x}
 //' 
 // [[Rcpp::export]]
-NumericVector mLogNormalden(NumericVector x, NumericVector pi, NumericMatrix T, double beta) {
+NumericVector mlognormalden(NumericVector x, NumericVector pi, NumericMatrix T, double beta) {
   
   NumericVector density(x.size());
   
@@ -312,7 +312,7 @@ NumericVector mLogNormalden(NumericVector x, NumericVector pi, NumericMatrix T, 
 //' @return The cdf (tail) at \code{x}
 //' 
 // [[Rcpp::export]]
-NumericVector mLogNormalcdf(NumericVector x, NumericVector pi, NumericMatrix T, double beta, bool lower_tail = true) {
+NumericVector mlognormalcdf(NumericVector x, NumericVector pi, NumericMatrix T, double beta, bool lower_tail = true) {
   
   NumericVector cdf(x.size());
   
@@ -348,7 +348,7 @@ NumericVector mLogNormalcdf(NumericVector x, NumericVector pi, NumericMatrix T, 
 //' @return The density at \code{x}
 //' 
 // [[Rcpp::export]]
-NumericVector mLogLogisticden(NumericVector x, NumericVector pi, NumericMatrix T, NumericVector beta) {
+NumericVector mloglogisticden(NumericVector x, NumericVector pi, NumericMatrix T, NumericVector beta) {
   
   NumericVector density(x.size());
   
@@ -380,7 +380,7 @@ NumericVector mLogLogisticden(NumericVector x, NumericVector pi, NumericMatrix T
 //' @return The cdf (tail) at \code{x}
 //' 
 // [[Rcpp::export]]
-NumericVector mLogLogisticcdf(NumericVector x, NumericVector pi, NumericMatrix T, NumericVector beta, bool lower_tail = true) {
+NumericVector mloglogisticcdf(NumericVector x, NumericVector pi, NumericMatrix T, NumericVector beta, bool lower_tail = true) {
   
   NumericVector cdf(x.size());
   
@@ -415,7 +415,7 @@ NumericVector mLogLogisticcdf(NumericVector x, NumericVector pi, NumericMatrix T
 //' @return The density at \code{x}
 //' 
 // [[Rcpp::export]]
-NumericVector mGompertzden(NumericVector x, NumericVector pi, NumericMatrix T, double beta) {
+NumericVector mgompertzden(NumericVector x, NumericVector pi, NumericMatrix T, double beta) {
   
   NumericVector density(x.size());
   
@@ -448,7 +448,7 @@ NumericVector mGompertzden(NumericVector x, NumericVector pi, NumericMatrix T, d
 //' @return The cdf (tail) at \code{x}
 //' 
 // [[Rcpp::export]]
-NumericVector mGompertzcdf(NumericVector x, NumericVector pi, NumericMatrix T, double beta, bool lower_tail = true) {
+NumericVector mgompertzcdf(NumericVector x, NumericVector pi, NumericMatrix T, double beta, bool lower_tail = true) {
   
   NumericVector cdf(x.size());
   
@@ -487,7 +487,7 @@ NumericVector mGompertzcdf(NumericVector x, NumericVector pi, NumericMatrix T, d
 //' @return The density at \code{x}
 //' 
 // [[Rcpp::export]]
-NumericVector mGEVDden(NumericVector x, NumericVector pi, NumericMatrix T, double mu, double sigma, double xi) {
+NumericVector mgevden(NumericVector x, NumericVector pi, NumericMatrix T, double mu, double sigma, double xi) {
   
   NumericVector density(x.size());
   
@@ -522,7 +522,7 @@ NumericVector mGEVDden(NumericVector x, NumericVector pi, NumericMatrix T, doubl
 //' @return The cdf (tail) at \code{x}
 //' 
 // [[Rcpp::export]]
-NumericVector mGEVDcdf(NumericVector x, NumericVector pi, NumericMatrix T, double mu, double sigma, double xi, bool lower_tail = true) {
+NumericVector mgevcdf(NumericVector x, NumericVector pi, NumericMatrix T, double mu, double sigma, double xi, bool lower_tail = true) {
   
   NumericVector cdf(x.size());
   

@@ -161,7 +161,7 @@ NumericVector rphasetype(int n, NumericVector pi, NumericMatrix T) {
 //' 
 //' Generates a sample of size \code{n} from an inhomogeneous phase-type distribution with parameters \code{pi}, \code{T} and \code{beta}
 //' @param n Sample size
-//' @param dist_type Type of IPH: "Pareto", "Weibull", "Gompertz"
+//' @param dist_type Type of IPH
 //' @param pi Initial probabilities
 //' @param T sub-intensity matrix
 //' @param beta Parameter of the transformation
@@ -184,19 +184,19 @@ NumericVector riph(int n, String dist_type, NumericVector pi, NumericMatrix T, N
       time += log(1.0 - runif(1)[0]) / T(state,state);
       state = newState(state, cumulatedEmbeddedMC, runif(1)[0]);
     }
-    if (dist_type == "Pareto") {
+    if (dist_type == "pareto") {
       time = beta[0] * (exp(time) - 1);
     }
-    else if (dist_type == "Weibull") {
+    else if (dist_type == "weibull") {
       time = pow(time, 1.0 / beta[0]);
     }
-    else if (dist_type == "LogNormal") {
+    else if (dist_type == "lognormal") {
       time =  exp(pow(time, 1.0 / beta[0])) - 1;
     }
-    else if (dist_type == "LogLogistic") {
+    else if (dist_type == "loglogistic") {
       time = beta[0] * pow(exp(time) - 1, 1 / beta[1]);
     }
-    else if (dist_type == "Gompertz") {
+    else if (dist_type == "gompertz") {
       time = log(beta[0] * time + 1) / beta[0];
     }
     sample[i] = time;
@@ -205,7 +205,7 @@ NumericVector riph(int n, String dist_type, NumericVector pi, NumericMatrix T, N
 }
 
 
-//' Random matrix GEVD
+//' Random matrix GEV
 //' 
 //' Generates a sample of size \code{n} from an inhomogeneous phase-type distribution with parameters \code{pi}, \code{T} and \code{beta}
 //' @param n Sample size
@@ -217,7 +217,7 @@ NumericVector riph(int n, String dist_type, NumericVector pi, NumericMatrix T, N
 //' @return The simulated sample
 //' 
 // [[Rcpp::export]]
-NumericVector rmatrixGEVD(int n, NumericVector pi, NumericMatrix T, double mu, double sigma, double xi = 0) {
+NumericVector rmatrixgev(int n, NumericVector pi, NumericMatrix T, double mu, double sigma, double xi = 0) {
   
   NumericVector sample(n);
   

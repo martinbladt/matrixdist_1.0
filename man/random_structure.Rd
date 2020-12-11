@@ -4,12 +4,12 @@
 \alias{random_structure}
 \title{Random structure of a phase-type}
 \usage{
-random_structure(p, structure = "General", scale_factor = 1)
+random_structure(p, structure = "general", scale_factor = 1)
 }
 \arguments{
 \item{p}{Dimension of the phase-type}
 
-\item{structure}{Type of structure: "General", "Hyperexponential", "GErlang", "Coxian" or "GCoxian"}
+\item{structure}{Type of structure: "general", "hyperexponential", "gerlang", "coxian" or "gcoxian"}
 
 \item{scale_factor}{A factor that multiplies the sub-intensity matrix}
 }

@@ -80,8 +80,8 @@ logLikelihoodPH_RK <- function(h, pi, T, obs, weight, rcens, rcweight) {
 #' @param rcens censored observations
 #' @param rcweight weight of the censored observations
 #' 
-logLikelihoodMWeibull_RK <- function(h, pi, T, beta, obs, weight, rcens, rcweight) {
-    .Call(`_matrixdist_logLikelihoodMWeibull_RK`, h, pi, T, beta, obs, weight, rcens, rcweight)
+logLikelihoodMweibull_RK <- function(h, pi, T, beta, obs, weight, rcens, rcweight) {
+    .Call(`_matrixdist_logLikelihoodMweibull_RK`, h, pi, T, beta, obs, weight, rcens, rcweight)
 }
 
 #' Loglikelihood of matrix Pareto using RK
@@ -96,8 +96,8 @@ logLikelihoodMWeibull_RK <- function(h, pi, T, beta, obs, weight, rcens, rcweigh
 #' @param rcens censored observations
 #' @param rcweight weight of the censored observations
 #' 
-logLikelihoodMPareto_RK <- function(h, pi, T, beta, obs, weight, rcens, rcweight) {
-    .Call(`_matrixdist_logLikelihoodMPareto_RK`, h, pi, T, beta, obs, weight, rcens, rcweight)
+logLikelihoodMpareto_RK <- function(h, pi, T, beta, obs, weight, rcens, rcweight) {
+    .Call(`_matrixdist_logLikelihoodMpareto_RK`, h, pi, T, beta, obs, weight, rcens, rcweight)
 }
 
 #' Loglikelihood of matrix LogNormal using RK
@@ -112,8 +112,8 @@ logLikelihoodMPareto_RK <- function(h, pi, T, beta, obs, weight, rcens, rcweight
 #' @param rcens censored observations
 #' @param rcweight weight of the censored observations
 #' 
-logLikelihoodMLogNormal_RK <- function(h, pi, T, beta, obs, weight, rcens, rcweight) {
-    .Call(`_matrixdist_logLikelihoodMLogNormal_RK`, h, pi, T, beta, obs, weight, rcens, rcweight)
+logLikelihoodMlognormal_RK <- function(h, pi, T, beta, obs, weight, rcens, rcweight) {
+    .Call(`_matrixdist_logLikelihoodMlognormal_RK`, h, pi, T, beta, obs, weight, rcens, rcweight)
 }
 
 #' Loglikelihood of matrix Log-Logistic using RK
@@ -128,8 +128,8 @@ logLikelihoodMLogNormal_RK <- function(h, pi, T, beta, obs, weight, rcens, rcwei
 #' @param rcens censored observations
 #' @param rcweight weight of the censored observations
 #' 
-logLikelihoodMLogLogistic_RK <- function(h, pi, T, beta, obs, weight, rcens, rcweight) {
-    .Call(`_matrixdist_logLikelihoodMLogLogistic_RK`, h, pi, T, beta, obs, weight, rcens, rcweight)
+logLikelihoodMloglogistic_RK <- function(h, pi, T, beta, obs, weight, rcens, rcweight) {
+    .Call(`_matrixdist_logLikelihoodMloglogistic_RK`, h, pi, T, beta, obs, weight, rcens, rcweight)
 }
 
 #' Loglikelihood of matrix Gompertz using RK
@@ -144,8 +144,8 @@ logLikelihoodMLogLogistic_RK <- function(h, pi, T, beta, obs, weight, rcens, rcw
 #' @param rcens censored observations
 #' @param rcweight weight of the censored observations
 #' 
-logLikelihoodMGompertz_RK <- function(h, pi, T, beta, obs, weight, rcens, rcweight) {
-    .Call(`_matrixdist_logLikelihoodMGompertz_RK`, h, pi, T, beta, obs, weight, rcens, rcweight)
+logLikelihoodMgompertz_RK <- function(h, pi, T, beta, obs, weight, rcens, rcweight) {
+    .Call(`_matrixdist_logLikelihoodMgompertz_RK`, h, pi, T, beta, obs, weight, rcens, rcweight)
 }
 
 #' Loglikelihood of matrix GEV using RK
@@ -160,8 +160,8 @@ logLikelihoodMGompertz_RK <- function(h, pi, T, beta, obs, weight, rcens, rcweig
 #' @param rcens censored observations
 #' @param rcweight weight of the censored observations
 #' 
-logLikelihoodMGEVD_RK <- function(h, pi, T, beta, obs, weight, rcens, rcweight) {
-    .Call(`_matrixdist_logLikelihoodMGEVD_RK`, h, pi, T, beta, obs, weight, rcens, rcweight)
+logLikelihoodMgev_RK <- function(h, pi, T, beta, obs, weight, rcens, rcweight) {
+    .Call(`_matrixdist_logLikelihoodMgev_RK`, h, pi, T, beta, obs, weight, rcens, rcweight)
 }
 
 #' Applies the inverse of the GEV but giving back the vector in reverse order
@@ -187,8 +187,8 @@ reversTransformData <- function(observations, weights, beta) {
 #' @param rcens censored observations
 #' @param rcweight weight of the censored observations
 #' 
-derivativeMatrixWeibull <- function(h, obs, weight, rcens, rcweight, pi, T, beta) {
-    .Call(`_matrixdist_derivativeMatrixWeibull`, h, obs, weight, rcens, rcweight, pi, T, beta)
+derivativeMatrixweibull <- function(h, obs, weight, rcens, rcweight, pi, T, beta) {
+    .Call(`_matrixdist_derivativeMatrixweibull`, h, obs, weight, rcens, rcweight, pi, T, beta)
 }
 
 #' Embedded Markov chain of a sub-intensity matrix
@@ -256,7 +256,7 @@ rphasetype <- function(n, pi, T) {
 #' 
 #' Generates a sample of size \code{n} from an inhomogeneous phase-type distribution with parameters \code{pi}, \code{T} and \code{beta}
 #' @param n Sample size
-#' @param dist_type Type of IPH: "Pareto", "Weibull", "Gompertz"
+#' @param dist_type Type of IPH
 #' @param pi Initial probabilities
 #' @param T sub-intensity matrix
 #' @param beta Parameter of the transformation
@@ -266,7 +266,7 @@ riph <- function(n, dist_type, pi, T, beta) {
     .Call(`_matrixdist_riph`, n, dist_type, pi, T, beta)
 }
 
-#' Random matrix GEVD
+#' Random matrix GEV
 #' 
 #' Generates a sample of size \code{n} from an inhomogeneous phase-type distribution with parameters \code{pi}, \code{T} and \code{beta}
 #' @param n Sample size
@@ -277,8 +277,8 @@ riph <- function(n, dist_type, pi, T, beta) {
 #' @param xi Shape parameter: Default 0 which corresponds to the Gumbel case
 #' @return The simulated sample
 #' 
-rmatrixGEVD <- function(n, pi, T, mu, sigma, xi = 0) {
-    .Call(`_matrixdist_rmatrixGEVD`, n, pi, T, mu, sigma, xi)
+rmatrixgev <- function(n, pi, T, mu, sigma, xi = 0) {
+    .Call(`_matrixdist_rmatrixgev`, n, pi, T, mu, sigma, xi)
 }
 
 #' Phase-type density
@@ -339,8 +339,8 @@ phLaplace <- function(s, pi, T) {
 #' @param beta shape parameter
 #' @return The density at \code{x}
 #' 
-mWeibullden <- function(x, pi, T, beta) {
-    .Call(`_matrixdist_mWeibullden`, x, pi, T, beta)
+mweibullden <- function(x, pi, T, beta) {
+    .Call(`_matrixdist_mweibullden`, x, pi, T, beta)
 }
 
 #' Matrix Weibull cdf
@@ -353,8 +353,8 @@ mWeibullden <- function(x, pi, T, beta) {
 #' @param lower_tail cdf or tail
 #' @return The cdf (tail) at \code{x}
 #' 
-mWeibullcdf <- function(x, pi, T, beta, lower_tail) {
-    .Call(`_matrixdist_mWeibullcdf`, x, pi, T, beta, lower_tail)
+mweibullcdf <- function(x, pi, T, beta, lower_tail) {
+    .Call(`_matrixdist_mweibullcdf`, x, pi, T, beta, lower_tail)
 }
 
 RunFunction <- function(a, func) {
@@ -370,8 +370,8 @@ RunFunction <- function(a, func) {
 #' @param beta scale parameter
 #' @return The density at \code{x}
 #' 
-mParetoden <- function(x, pi, T, beta) {
-    .Call(`_matrixdist_mParetoden`, x, pi, T, beta)
+mparetoden <- function(x, pi, T, beta) {
+    .Call(`_matrixdist_mparetoden`, x, pi, T, beta)
 }
 
 #' Matrix Pareto cdf
@@ -384,8 +384,8 @@ mParetoden <- function(x, pi, T, beta) {
 #' @param lower_tail cdf or tail
 #' @return The cdf (tail) at \code{x}
 #' 
-mParetocdf <- function(x, pi, T, beta, lower_tail = TRUE) {
-    .Call(`_matrixdist_mParetocdf`, x, pi, T, beta, lower_tail)
+mparetocdf <- function(x, pi, T, beta, lower_tail = TRUE) {
+    .Call(`_matrixdist_mparetocdf`, x, pi, T, beta, lower_tail)
 }
 
 #' Matrix LogNormal density
@@ -397,8 +397,8 @@ mParetocdf <- function(x, pi, T, beta, lower_tail = TRUE) {
 #' @param beta shape parameter
 #' @return The density at \code{x}
 #' 
-mLogNormalden <- function(x, pi, T, beta) {
-    .Call(`_matrixdist_mLogNormalden`, x, pi, T, beta)
+mlognormalden <- function(x, pi, T, beta) {
+    .Call(`_matrixdist_mlognormalden`, x, pi, T, beta)
 }
 
 #' Matrix LogNormal cdf
@@ -411,8 +411,8 @@ mLogNormalden <- function(x, pi, T, beta) {
 #' @param lower_tail cdf or tail
 #' @return The cdf (tail) at \code{x}
 #' 
-mLogNormalcdf <- function(x, pi, T, beta, lower_tail = TRUE) {
-    .Call(`_matrixdist_mLogNormalcdf`, x, pi, T, beta, lower_tail)
+mlognormalcdf <- function(x, pi, T, beta, lower_tail = TRUE) {
+    .Call(`_matrixdist_mlognormalcdf`, x, pi, T, beta, lower_tail)
 }
 
 #' Matrix Log-Logistic density
@@ -424,8 +424,8 @@ mLogNormalcdf <- function(x, pi, T, beta, lower_tail = TRUE) {
 #' @param beta scale parameter
 #' @return The density at \code{x}
 #' 
-mLogLogisticden <- function(x, pi, T, beta) {
-    .Call(`_matrixdist_mLogLogisticden`, x, pi, T, beta)
+mloglogisticden <- function(x, pi, T, beta) {
+    .Call(`_matrixdist_mloglogisticden`, x, pi, T, beta)
 }
 
 #' Matrix Log-Logistic cdf
@@ -438,8 +438,8 @@ mLogLogisticden <- function(x, pi, T, beta) {
 #' @param lower_tail cdf or tail
 #' @return The cdf (tail) at \code{x}
 #' 
-mLogLogisticcdf <- function(x, pi, T, beta, lower_tail = TRUE) {
-    .Call(`_matrixdist_mLogLogisticcdf`, x, pi, T, beta, lower_tail)
+mloglogisticcdf <- function(x, pi, T, beta, lower_tail = TRUE) {
+    .Call(`_matrixdist_mloglogisticcdf`, x, pi, T, beta, lower_tail)
 }
 
 #' Matrix Gompertz density
@@ -451,8 +451,8 @@ mLogLogisticcdf <- function(x, pi, T, beta, lower_tail = TRUE) {
 #' @param beta parameter
 #' @return The density at \code{x}
 #' 
-mGompertzden <- function(x, pi, T, beta) {
-    .Call(`_matrixdist_mGompertzden`, x, pi, T, beta)
+mgompertzden <- function(x, pi, T, beta) {
+    .Call(`_matrixdist_mgompertzden`, x, pi, T, beta)
 }
 
 #' Matrix Gompertz cdf
@@ -465,8 +465,8 @@ mGompertzden <- function(x, pi, T, beta) {
 #' @param lower_tail cdf or tail
 #' @return The cdf (tail) at \code{x}
 #' 
-mGompertzcdf <- function(x, pi, T, beta, lower_tail = TRUE) {
-    .Call(`_matrixdist_mGompertzcdf`, x, pi, T, beta, lower_tail)
+mgompertzcdf <- function(x, pi, T, beta, lower_tail = TRUE) {
+    .Call(`_matrixdist_mgompertzcdf`, x, pi, T, beta, lower_tail)
 }
 
 #' Matrix GEV density
@@ -481,8 +481,8 @@ mGompertzcdf <- function(x, pi, T, beta, lower_tail = TRUE) {
 #' @param xi shape parameter
 #' @return The density at \code{x}
 #' 
-mGEVDden <- function(x, pi, T, mu, sigma, xi) {
-    .Call(`_matrixdist_mGEVDden`, x, pi, T, mu, sigma, xi)
+mgevden <- function(x, pi, T, mu, sigma, xi) {
+    .Call(`_matrixdist_mgevden`, x, pi, T, mu, sigma, xi)
 }
 
 #' Matrix GEV cdf
@@ -497,8 +497,8 @@ mGEVDden <- function(x, pi, T, mu, sigma, xi) {
 #' @param lower_tail cdf or tail
 #' @return The cdf (tail) at \code{x}
 #' 
-mGEVDcdf <- function(x, pi, T, mu, sigma, xi, lower_tail = TRUE) {
-    .Call(`_matrixdist_mGEVDcdf`, x, pi, T, mu, sigma, xi, lower_tail)
+mgevcdf <- function(x, pi, T, mu, sigma, xi, lower_tail = TRUE) {
+    .Call(`_matrixdist_mgevcdf`, x, pi, T, mu, sigma, xi, lower_tail)
 }
 
 #' Product of two matrices
@@ -632,11 +632,11 @@ sumPH <- function(pi1, T1, pi2, T2) {
 #' 
 #' Generates random parameters \code{pi} and \code{T} of a phase-type distribution of dimension \code{p} with chosen structure
 #' @param p Dimension of the phase-type
-#' @param structure Type of structure: "General", "Hyperexponential", "GErlang", "Coxian" or "GCoxian"
+#' @param structure Type of structure: "general", "hyperexponential", "gerlang", "coxian" or "gcoxian"
 #' @param scale_factor A factor that multiplies the sub-intensity matrix
 #' @return Random parameters \code{pi} and \code{T} of a phase-type
 #' 
-random_structure <- function(p, structure = "General", scale_factor = 1) {
+random_structure <- function(p, structure = "general", scale_factor = 1) {
     .Call(`_matrixdist_random_structure`, p, structure, scale_factor)
 }
 

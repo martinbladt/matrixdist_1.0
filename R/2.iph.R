@@ -38,10 +38,10 @@ iph <- function(ph = NULL, gfun = NULL, gfun_pars = NULL, alpha = NULL, S = NULL
   if (is.null(ph)) {
     ph <- ph(alpha = alpha, S = S, structure = structure, dimension = dimension)
   }
-  if (!gfun %in% c("Pareto", "Weibull", "LogNormal", "LogLogistic", "Gompertz", "GEVD", "Identity")) {
+  if (!gfun %in% c("pareto", "weibull", "lognormal", "loglogistic", "gompertz", "gev", "identity")) {
     stop("invalid gfun")
   }
-  if (gfun %in% c("Pareto", "Weibull", "LogNormal", "Gompertz")) {
+  if (gfun %in% c("pareto", "weibull", "lognormal", "gompertz")) {
     if(is.null(gfun_pars))gfun_pars <- 1
     if (length(gfun_pars) != 1 | sum(gfun_pars <= 0) > 0) {
       stop("gfun parameter should be positive and of length one")
@@ -49,7 +49,7 @@ iph <- function(ph = NULL, gfun = NULL, gfun_pars = NULL, alpha = NULL, S = NULL
       names(gfun_pars) <- "beta"
     }
   }
-  if (gfun %in% c("GEVD")) {
+  if (gfun %in% c("gev")) {
     if(is.null(gfun_pars))gfun_pars <- c(0, 1, 1)
     if (length(gfun_pars) != 3 | (gfun_pars[2] > 0) == FALSE) {
       stop("gfun parameter should be of length three: mu, sigma, xi, and sigma > 0")
@@ -57,7 +57,7 @@ iph <- function(ph = NULL, gfun = NULL, gfun_pars = NULL, alpha = NULL, S = NULL
       names(gfun_pars) <- c("mu", "sigma", "xi")
     }
   }
-  if (gfun %in% c("LogLogistic")) {
+  if (gfun %in% c("loglogistic")) {
     if(is.null(gfun_pars))gfun_pars <- c(1, 1)
     if (length(gfun_pars) != 2 | (gfun_pars[1] <= 0) | (gfun_pars[2] <= 0)) {
       stop("gfun parameter should be positive and of length two: alpha, theta > 0")
@@ -65,22 +65,22 @@ iph <- function(ph = NULL, gfun = NULL, gfun_pars = NULL, alpha = NULL, S = NULL
       names(gfun_pars) <- c("alpha", "theta")
     }
   }
-  if (gfun == "Weibull") {
+  if (gfun == "weibull") {
     ginv <- function(beta, t) t^{beta}
   }
-  else if (gfun == "Pareto") {
+  else if (gfun == "pareto") {
     ginv <- function(beta, t) log(t / beta + 1)
   }
-  else if (gfun == "LogNormal") {
+  else if (gfun == "lognormal") {
     ginv <- function(beta, t) log(t + 1)^{beta}
   }
-  else if (gfun == "LogLogistic") {
+  else if (gfun == "loglogistic") {
     ginv <- function(beta, t) log((t / beta[1])^{beta[2]} + 1)
   }
-  else if (gfun == "Gompertz") {
+  else if (gfun == "gompertz") {
     ginv <- function(beta, t) (exp(t * beta) - 1) / beta
   }
-  else if (gfun == "GEVD") {
+  else if (gfun == "gev") {
     ginv <- function(beta, t, w) reversTransformData(t, w, beta)
   }
   methods::new("iph",
@@ -151,11 +151,11 @@ setMethod("sim", c(x = "iph"), function(x, n = 1000) {
   name <- x@gfun$name
   pars <- x@gfun$pars
   scale <- x@scale
-  if (name %in% c("Pareto", "Weibull", "LogNormal", "LogLogistic", "Gompertz")) {
+  if (name %in% c("pareto", "weibull", "lognormal", "loglogistic", "gompertz")) {
     U <- scale * riph(n, name, x@pars$alpha, x@pars$S, pars)
   }
-  if (name %in% c("GEVD")) {
-    U <- scale * rmatrixGEVD(n, x@pars$alpha, x@pars$S, pars[1], pars[2], pars[3])
+  if (name %in% c("gev")) {
+    U <- scale * rmatrixgev(n, x@pars$alpha, x@pars$S, pars[1], pars[2], pars[3])
   }
   return(U)
 })

@@ -6,17 +6,17 @@ using namespace Rcpp;
 //' 
 //' Generates random parameters \code{pi} and \code{T} of a phase-type distribution of dimension \code{p} with chosen structure
 //' @param p Dimension of the phase-type
-//' @param structure Type of structure: "General", "Hyperexponential", "GErlang", "Coxian" or "GCoxian"
+//' @param structure Type of structure: "general", "hyperexponential", "gerlang", "coxian" or "gcoxian"
 //' @param scale_factor A factor that multiplies the sub-intensity matrix
 //' @return Random parameters \code{pi} and \code{T} of a phase-type
 //' 
 // [[Rcpp::export]]
-List random_structure(int p, String structure = "General", double scale_factor = 1) {
+List random_structure(int p, String structure = "general", double scale_factor = 1) {
   // Structure of pi and T
   NumericVector pi_legal(p);
   NumericMatrix T_legal(p, p);
   
-  if (structure == "General") {
+  if (structure == "general") {
     for (int i = 0; i < p; ++i) {
       pi_legal[i] = 1;
       for (int j = 0; j < p; ++j) {
@@ -24,20 +24,20 @@ List random_structure(int p, String structure = "General", double scale_factor =
       }
     }
   }
-  else if (structure == "Hyperexponential") {
+  else if (structure == "hyperexponential") {
     for (int i = 0; i < p; i++) {  
       pi_legal[i] = 1;
       T_legal(i, i) = 1;
     }
   }
-  else if (structure == "GErlang") {
+  else if (structure == "gerlang") {
     pi_legal[0] = 1;
     for (int i = 0; i < p - 1; ++i) {
       T_legal(i, i + 1) = 1;
     } 
     T_legal(p - 1, p - 1) = 1;
   }
-  else if (structure == "Coxian") {
+  else if (structure == "coxian") {
     pi_legal[0] = 1;
     for (int i = 0; i < p - 1; ++i) { 
       T_legal(i, i) = 1;
@@ -45,7 +45,7 @@ List random_structure(int p, String structure = "General", double scale_factor =
     }
     T_legal(p - 1, p - 1) = 1; 
   }
-  else if (structure == "GCoxian") {
+  else if (structure == "gcoxian") {
     for (int i = 0; i < p - 1; ++i) { 
       pi_legal[i] = 1;
       T_legal(i, i) = 1;
@@ -55,7 +55,7 @@ List random_structure(int p, String structure = "General", double scale_factor =
     pi_legal[p - 1] = 1;
   }
   else{
-    Rcerr << "Non-existent structure\n";
+    Rcerr << "non-existent structure\n";
   }
   
   

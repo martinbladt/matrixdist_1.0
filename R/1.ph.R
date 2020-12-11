@@ -300,7 +300,7 @@ setMethod(
       trans_weight <- weight 
       trans_rcenweight <- rcenweight
       for (k in 1:stepsEM) {
-        if(x@gfun$name != "GEVD") {trans <- inv_g(par_g, y); trans_cens <- inv_g(par_g, rcen)
+        if(x@gfun$name != "gev") {trans <- inv_g(par_g, y); trans_cens <- inv_g(par_g, rcen)
         }else{ t <- inv_g(par_g, y, weight); tc <- inv_g(par_g, rcen, rcenweight) 
         trans <- t$obs; trans_weight <- t$weight; trans_cens <- tc$obs; trans_rcenweight <- tc$weight}
         if(!is.na(rkstep)) RKstep <- rkstep else  RKstep <- default_step_length(T_fit)
@@ -368,7 +368,7 @@ data_aggregation <- function(y, w) {
 #'
 safe_cov <- function(hess) {
   hessinverse <- tryCatch(solve(hess), error = function(e) {
-    warning("Hessian can't be inverted")
+    warning("hessian can't be inverted")
     return(matrix(NA, nrow = nrow(hess), ncol = ncol(hess)))
   })
   hessinverse
