@@ -3,7 +3,7 @@
 \alias{matrixdist}
 \docType{package}
 \title{
-  A short title line describing what the package does
+  jfkdjflkjds
 }
 \description{
   A more detailed description of what the package does. A length

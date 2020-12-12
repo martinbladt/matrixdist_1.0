@@ -3,14 +3,20 @@ Type: Package
 Title: Statistics for Matrix Distributions
 Version: 1.0
 Date: 2020-04-30
-Author: Martin Bladt
-Maintainer: Martin Bladt <martinbladt@gmail.com>
+Authors@R: c(person("Martin", "Bladt", email = "martinbladt@gmail.com", role = c("aut", "cre")),
+              person("Jorge", "Yslas", email = "jorge.yslas1@gmail.com",
+              role = "aut")
+              )
 Description: This package is concerned with the estimation and simulation of matrix distributions.
-License: GPL (>= 2)
+Depends: R (>= 3.1.0)
+License: GPL-3
+Lazydata: true
 Imports: 
-    Rcpp,
-    methods
+    methods,
+    Rcpp
 LinkingTo: Rcpp
 SystemRequirements: C++11
 Encoding: UTF-8
 RoxygenNote: 7.1.1
+
+
