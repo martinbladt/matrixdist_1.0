@@ -18,6 +18,6 @@ quantiles
 Quantile Method for phase type distributions
 }
 \examples{
-obj <- ph(structure = "General")
+obj <- ph(structure = "general")
 quan(obj, c(0.5, 0.9, 0.99))
 }

@@ -18,6 +18,6 @@ Hazard rate evaluated at locations
 Hazard rate Method for phase type distributions
 }
 \examples{
-obj <- ph(structure = "General")
+obj <- ph(structure = "general")
 haz(obj, c(1, 2, 3))
 }

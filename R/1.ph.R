@@ -33,7 +33,7 @@ setClass("ph",
 #' @export
 #'
 #' @examples
-#' ph(structure = "GCoxian", dim = 5)
+#' ph(structure = "gcoxian", dim = 5)
 ph <- function(alpha = NULL, S = NULL, structure = NULL, dimension = 3) {
   if (any(is.null(alpha)) & any(is.null(S)) & is.null(structure)) {
     stop("input a vector and matrix, or a structure")
@@ -147,7 +147,7 @@ setMethod("show", "ph", function(object) {
 #' @export
 #'
 #' @examples
-#' obj <- ph(structure = "General")
+#' obj <- ph(structure = "general")
 #' sim(obj, n = 100)
 setMethod("sim", c(x = "ph"), function(x, n = 1000) {
   U <- rphasetype(n, x@pars$alpha, x@pars$S)
@@ -163,7 +163,7 @@ setMethod("sim", c(x = "ph"), function(x, n = 1000) {
 #' @export
 #'
 #' @examples
-#' obj <- ph(structure = "General")
+#' obj <- ph(structure = "general")
 #' dens(obj, c(1, 2, 3))
 setMethod("dens", c(x = "ph"), function(x, y = seq(0, quan(x, .95)$quantile, length.out = 10)) {
   y_inf <- (y == Inf)
@@ -183,7 +183,7 @@ setMethod("dens", c(x = "ph"), function(x, y = seq(0, quan(x, .95)$quantile, len
 #' @export
 #'
 #' @examples
-#' obj <- ph(structure = "General")
+#' obj <- ph(structure = "general")
 #' cdf(obj, c(1, 2, 3))
 setMethod("cdf", c(x = "ph"), function(x,
                                        q = seq(0, quan(x, .95)$quantile, length.out = 10),
@@ -204,7 +204,7 @@ setMethod("cdf", c(x = "ph"), function(x,
 #' @export
 #'
 #' @examples
-#' obj <- ph(structure = "General")
+#' obj <- ph(structure = "general")
 #' haz(obj, c(1, 2, 3))
 setMethod("haz", c(x = "ph"), function(x, y = seq(0, quan(x, .95)$quantile, length.out = 10)) {
   d <- dens(x, y)$dens
@@ -221,7 +221,7 @@ setMethod("haz", c(x = "ph"), function(x, y = seq(0, quan(x, .95)$quantile, leng
 #' @export
 #'
 #' @examples
-#' obj <- ph(structure = "General")
+#' obj <- ph(structure = "general")
 #' quan(obj, c(0.5, 0.9, 0.99))
 setMethod("quan", c(x = "ph"), function(x,
                                         p = seq(0, 1, length.out = 10)) {
@@ -249,7 +249,7 @@ setMethod("quan", c(x = "ph"), function(x,
 #' @export
 #'
 #' @examples
-#' obj <- ph(structure = "General")
+#' obj <- ph(structure = "general")
 #' data <- sim(obj)
 #' fit(obj, data)
 setMethod(
@@ -382,7 +382,7 @@ safe_cov <- function(hess) {
 #' @export
 #'
 #' @examples
-#' obj <- ph(structure = "General")
+#' obj <- ph(structure = "general")
 #' coef(obj)
 setMethod("coef", c(object = "ph"), function(object) {
   object@pars

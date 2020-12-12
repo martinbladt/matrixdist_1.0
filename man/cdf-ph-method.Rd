@@ -20,6 +20,6 @@ CDF evaluated at locations
 Distribution Method for phase type distributions
 }
 \examples{
-obj <- ph(structure = "General")
+obj <- ph(structure = "general")
 cdf(obj, c(1, 2, 3))
 }

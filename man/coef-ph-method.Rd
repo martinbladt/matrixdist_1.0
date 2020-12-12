@@ -16,6 +16,6 @@ parameters of ph model
 Coef Method for ph Class
 }
 \examples{
-obj <- ph(structure = "General")
+obj <- ph(structure = "general")
 coef(obj)
 }

@@ -18,6 +18,6 @@ A realization of a phase type data
 Simulation Method for phase type distributions
 }
 \examples{
-obj <- ph(structure = "General")
+obj <- ph(structure = "general")
 sim(obj, n = 100)
 }
