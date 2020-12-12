@@ -296,7 +296,8 @@ setMethod(
       x@pars$alpha <- pi_fit
       x@pars$S <- T_fit
       x@fit <- list(
-        loglik = logLikelihoodPH_RK(RKstep, pi_fit, T_fit, y, weight, rcen, rcenweight)
+        logLik = logLikelihoodPH_RK(RKstep, pi_fit, T_fit, y, weight, rcen, rcenweight),
+        nobs = sum(A$weights)
       )
     }
     if (is_iph) {
@@ -338,7 +339,8 @@ setMethod(
       x@pars$alpha <- pi_fit
       x@pars$S <- T_fit
       x@fit <- list(
-        loglik = -opt$value
+        logLik = -opt$value,
+        nobs = sum(A$weights)
       )
       x <- iph(x, gfun = x@gfun$name, gfun_pars = par_g)
     }
@@ -361,6 +363,21 @@ data_aggregation <- function(y, w) {
   }
   return(list(un_obs = un_obs, weights = cum_weight))
 }
+
+#' logLik Method for ph Class
+#'
+#' @param object an object of class \linkS4class{ph}.
+#'
+#' @return an object of class logLik
+#' @export
+#'
+setMethod("logLik", "ph", function(object) {
+  ll <- object@fit$logLik
+  attr(ll, "nobs") <- object@fit$nobs
+  attr(ll, "df") <- sum(unlist(coef(object)) != 0) - 1
+  class(ll) <- "logLik"
+  ll
+})
 
 #' Coef Method for ph Class
 #'
