@@ -11,6 +11,15 @@
 
 \item{x2}{an object of class \linkS4class{iph}.}
 }
+\value{
+An object of class \linkS4class{iph}.
+}
 \description{
 Maximum Method for inhomogeneous phase type distributions
+}
+\examples{
+iph1 <- iph(ph(structure = "general", dimension = 3), gfun = "weibull", gfun_pars = 2)
+iph2 <- iph(ph(structure = "gcoxian", dimension = 5), gfun = "weibull", gfun_pars = 2)
+iph_min <- maximum(iph1, iph2)
+iph_min
 }

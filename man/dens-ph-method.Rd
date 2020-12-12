@@ -9,10 +9,10 @@
 \arguments{
 \item{x}{an object of class \linkS4class{ph}.}
 
-\item{y}{locations}
+\item{y}{a vector of locations.}
 }
 \value{
-Density evaluated at locations
+A list containing the locations and corresponding density evaluations.
 }
 \description{
 Density Method for phase type distributions

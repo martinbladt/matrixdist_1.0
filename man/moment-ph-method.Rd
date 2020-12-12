@@ -9,8 +9,16 @@
 \arguments{
 \item{x}{an object of class \linkS4class{ph}.}
 
-\item{k}{a positive integer.}
+\item{k}{a positive integer of moment order.}
+}
+\value{
+The raw moment of the \linkS4class{ph} (or undelying \linkS4class{ph}) object.
 }
 \description{
 Moment Method for phase type distributions
+}
+\examples{
+ph1 <- ph(structure = "general", dimension = 3)
+moment(ph1, 2) - moment(ph1, 1)^2 #variance
+var(sim(ph1, 100000)) #monte carlo approximation
 }

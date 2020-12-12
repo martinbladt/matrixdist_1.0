@@ -9,11 +9,15 @@
 \arguments{
 \item{x}{an object of class \linkS4class{iph}.}
 
-\item{n}{length of realization.}
+\item{n}{an integer of length of realization.}
 }
 \value{
-A realization of inhomogeneous phase type data
+A realization of independent and identically distributed inhomogeneous phase-type variables.
 }
 \description{
 Simulation Method for inhomogeneous phase type distributions
+}
+\examples{
+obj <- iph(ph(structure = "general"), gfun = "lognormal", gfun_pars = 2)
+sim(obj, n = 100)
 }

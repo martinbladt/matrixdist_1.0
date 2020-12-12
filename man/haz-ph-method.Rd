@@ -9,10 +9,10 @@
 \arguments{
 \item{x}{an object of class \linkS4class{ph}.}
 
-\item{y}{locations}
+\item{y}{a vector of locations.}
 }
 \value{
-Hazard rate evaluated at locations
+A list containing the locations and corresponding hazard rate evaluations.
 }
 \description{
 Hazard rate Method for phase type distributions

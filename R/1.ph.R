@@ -2,9 +2,9 @@
 #'
 #' Class of objects for phase type distributions
 #'
-#' @slot name name of the phase type distribution
-#' @slot pars a list comprising of the parameters
-#' @slot fit a list containing estimation information
+#' @slot name name of the phase type distribution.
+#' @slot pars a list comprising of the parameters.
+#' @slot fit a list containing estimation information.
 #'
 #' @return Class object
 #' @export
@@ -26,14 +26,15 @@ setClass("ph",
 #'
 #' @param alpha a probability vector.
 #' @param S a sub-intensity matrix.
-#' @param structure a valid ph structure
-#' @param dimension the dimension of the ph structure (if structure is provided)
+#' @param structure a valid ph structure ("general", "coxian", "hyperexponential", "gcoxian", "gerlang").
+#' @param dimension the dimension of the ph structure (if structure is provided).
 #'
 #' @return An object of class \linkS4class{ph}.
 #' @export
 #'
 #' @examples
 #' ph(structure = "gcoxian", dim = 5)
+#' ph(alpha = c(.5, .5), S = matrix(c(-1, .5, .5, -1), 2, 2))
 ph <- function(alpha = NULL, S = NULL, structure = NULL, dimension = 3) {
   if (any(is.null(alpha)) & any(is.null(S)) & is.null(structure)) {
     stop("input a vector and matrix, or a structure")
@@ -62,8 +63,15 @@ ph <- function(alpha = NULL, S = NULL, structure = NULL, dimension = 3) {
 #'
 #' @param e1 an object of class \linkS4class{ph}.
 #' @param e2 an object of class \linkS4class{ph}.
+#' 
+#' @return An object of class \linkS4class{ph}.
 #' @export
-#'
+#' 
+#' @examples
+#' ph1 <- ph(structure = "general", dimension = 3)
+#' ph2 <- ph(structure = "gcoxian", dimension = 5)
+#' ph_sum <- ph1 + ph2
+#' ph_sum
 setMethod("+", signature(e1 = "ph", e2 = "ph"), 
           function (e1, e2){
             if(methods::is(e1, "iph") | methods::is(e2, "iph")) stop("objects to be added should be ph")
@@ -85,6 +93,11 @@ kronecker_sum <- function(A, B){
 #' @return An object of class \linkS4class{ph}.
 #' @export
 #'
+#' @examples
+#' ph1 <- ph(structure = "general", dimension = 3)
+#' ph2 <- ph(structure = "gcoxian", dimension = 5)
+#' ph_min <- minimum(ph1, ph2)
+#' ph_min
 setMethod("minimum", signature(x1 = "ph", x2 = "ph"), 
           function (x1, x2){
             alpha <- kronecker(x1@pars$alpha, x2@pars$alpha)
@@ -97,8 +110,15 @@ setMethod("minimum", signature(x1 = "ph", x2 = "ph"),
 #'
 #' @param x1 an object of class \linkS4class{ph}.
 #' @param x2 an object of class \linkS4class{ph}.
+#' 
+#' @return An object of class \linkS4class{ph}.
 #' @export
-#'
+#' 
+#' @examples 
+#' ph1 <- ph(structure = "general", dimension = 3)
+#' ph2 <- ph(structure = "gcoxian", dimension = 5)
+#' ph_min <- minimum(ph1, ph2)
+#' ph_min
 setMethod("maximum", signature(x1 = "ph", x2 = "ph"), 
           function (x1, x2){
             n1 <- length(x1@pars$alpha)
@@ -114,9 +134,15 @@ setMethod("maximum", signature(x1 = "ph", x2 = "ph"),
 #' Moment Method for phase type distributions
 #'
 #' @param x an object of class \linkS4class{ph}.
-#' @param k a positive integer.
+#' @param k a positive integer of moment order.
+#' 
+#' @return The raw moment of the \linkS4class{ph} (or undelying \linkS4class{ph}) object.
 #' @export
 #'
+#' @examples
+#' ph1 <- ph(structure = "general", dimension = 3)
+#' moment(ph1, 2) - moment(ph1, 1)^2 #variance
+#' var(sim(ph1, 100000)) #monte carlo approximation
 setMethod("moment", signature(x = "ph"), 
           function (x, k = 1){
             if(k%%1 != 0 | k <= 0) return("k should be a positive integer")
@@ -141,9 +167,9 @@ setMethod("show", "ph", function(object) {
 #' Simulation Method for phase type distributions
 #'
 #' @param x an object of class \linkS4class{ph}.
-#' @param n length of realization.
+#' @param n an integer of length of realization.
 #'
-#' @return A realization of a phase type data
+#' @return A realization of independent and identically distributed phase-type variables.
 #' @export
 #'
 #' @examples
@@ -157,9 +183,9 @@ setMethod("sim", c(x = "ph"), function(x, n = 1000) {
 #' Density Method for phase type distributions
 #'
 #' @param x an object of class \linkS4class{ph}.
-#' @param y locations
+#' @param y a vector of locations.
 #'
-#' @return Density evaluated at locations
+#' @return A list containing the locations and corresponding density evaluations.
 #' @export
 #'
 #' @examples
@@ -176,10 +202,10 @@ setMethod("dens", c(x = "ph"), function(x, y = seq(0, quan(x, .95)$quantile, len
 #' Distribution Method for phase type distributions
 #'
 #' @param x an object of class \linkS4class{ph}.
-#' @param q locations
-#' @param lower.tail cdf(TRUE) or tail(FALSE)
+#' @param q a vector of locations.
+#' @param lower.tail logical parameter specifying whether lower tail (cdf) or upper tail is computed.
 #'
-#' @return CDF evaluated at locations
+#' @return A list containing the locations and corresponding CDF evaluations.
 #' @export
 #'
 #' @examples
@@ -198,9 +224,9 @@ setMethod("cdf", c(x = "ph"), function(x,
 #' Hazard rate Method for phase type distributions
 #'
 #' @param x an object of class \linkS4class{ph}.
-#' @param y locations
+#' @param y a vector of locations.
 #'
-#' @return Hazard rate evaluated at locations
+#' @return A list containing the locations and corresponding hazard rate evaluations.
 #' @export
 #'
 #' @examples
@@ -215,9 +241,9 @@ setMethod("haz", c(x = "ph"), function(x, y = seq(0, quan(x, .95)$quantile, leng
 #' Quantile Method for phase type distributions
 #'
 #' @param x an object of class \linkS4class{ph}.
-#' @param p probabilities
+#' @param p a vector of probabilities.
 #'
-#' @return quantiles
+#' @return A list containing the probabilities and corresponding quantile evaluations.
 #' @export
 #'
 #' @examples
@@ -249,9 +275,9 @@ setMethod("quan", c(x = "ph"), function(x,
 #' @export
 #'
 #' @examples
-#' obj <- ph(structure = "general")
-#' data <- sim(obj)
-#' fit(obj, data)
+#' obj <- iph(ph(structure = "general", dimension = 2), gfun = "weibull", gfun_pars = 2)
+#' data <- sim(obj, n = 100)
+#' fit(obj, data, stepsEM = 1000, every = 200)
 setMethod(
   "fit", c(x = "ph", y = "ANY"),
   function(x,
@@ -368,9 +394,14 @@ data_aggregation <- function(y, w) {
 #'
 #' @param object an object of class \linkS4class{ph}.
 #'
-#' @return an object of class logLik
+#' @return An object of class logLik.
 #' @export
 #'
+#' @examples 
+#' obj <- iph(ph(structure = "general", dimension = 2), gfun = "loglogistic", gfun_pars = c(1, 1)) 
+#' data <- sim(obj, n = 200)
+#' fitted_ph <- fit(obj, data)
+#' logLik(fitted_ph)
 setMethod("logLik", "ph", function(object) {
   ll <- object@fit$logLik
   attr(ll, "nobs") <- object@fit$nobs
@@ -383,7 +414,7 @@ setMethod("logLik", "ph", function(object) {
 #'
 #' @param object an object of class \linkS4class{ph}.
 #'
-#' @return parameters of ph model
+#' @return Parameters of ph model.
 #' @export
 #'
 #' @examples

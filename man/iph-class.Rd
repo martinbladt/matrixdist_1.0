@@ -13,7 +13,7 @@ Class of objects for inhomogeneous phase type distributions
 \section{Slots}{
 
 \describe{
-\item{\code{name}}{name of the phase type distribution}
+\item{\code{name}}{name of the phase type distribution.}
 
 \item{\code{gfun}}{a list comprising of the parameters.}
 

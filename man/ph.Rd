@@ -11,9 +11,9 @@ ph(alpha = NULL, S = NULL, structure = NULL, dimension = 3)
 
 \item{S}{a sub-intensity matrix.}
 
-\item{structure}{a valid ph structure}
+\item{structure}{a valid ph structure ("general", "coxian", "hyperexponential", "gcoxian", "gerlang").}
 
-\item{dimension}{the dimension of the ph structure (if structure is provided)}
+\item{dimension}{the dimension of the ph structure (if structure is provided).}
 }
 \value{
 An object of class \linkS4class{ph}.
@@ -23,4 +23,5 @@ Constructor Function for phase type distributions
 }
 \examples{
 ph(structure = "gcoxian", dim = 5)
+ph(alpha = c(.5, .5), S = matrix(c(-1, .5, .5, -1), 2, 2))
 }

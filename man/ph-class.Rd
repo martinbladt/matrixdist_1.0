@@ -13,10 +13,10 @@ Class of objects for phase type distributions
 \section{Slots}{
 
 \describe{
-\item{\code{name}}{name of the phase type distribution}
+\item{\code{name}}{name of the phase type distribution.}
 
-\item{\code{pars}}{a list comprising of the parameters}
+\item{\code{pars}}{a list comprising of the parameters.}
 
-\item{\code{fit}}{a list containing estimation information}
+\item{\code{fit}}{a list containing estimation information.}
 }}
 

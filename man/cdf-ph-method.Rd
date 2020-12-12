@@ -9,12 +9,12 @@
 \arguments{
 \item{x}{an object of class \linkS4class{ph}.}
 
-\item{q}{locations}
+\item{q}{a vector of locations.}
 
-\item{lower.tail}{cdf(TRUE) or tail(FALSE)}
+\item{lower.tail}{logical parameter specifying whether lower tail (cdf) or upper tail is computed.}
 }
 \value{
-CDF evaluated at locations
+A list containing the locations and corresponding CDF evaluations.
 }
 \description{
 Distribution Method for phase type distributions

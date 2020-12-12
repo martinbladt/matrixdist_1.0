@@ -45,7 +45,7 @@ An object of class \linkS4class{ph}.
 Fit Method for ph Class
 }
 \examples{
-obj <- ph(structure = "general")
-data <- sim(obj)
-fit(obj, data)
+obj <- iph(ph(structure = "general", dimension = 2), gfun = "weibull", gfun_pars = 2)
+data <- sim(obj, n = 100)
+fit(obj, data, stepsEM = 1000, every = 200)
 }

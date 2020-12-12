@@ -9,11 +9,15 @@
 \arguments{
 \item{x}{an object of class \linkS4class{iph}.}
 
-\item{y}{locations}
+\item{y}{a vector of locations.}
 }
 \value{
-Density evaluated at locations
+A list containing the locations and corresponding density evaluations.
 }
 \description{
 Density Method for inhomogeneous phase type distributions
+}
+\examples{
+obj <- iph(ph(structure = "general"), gfun = "weibull", gfun_pars = 2)
+dens(obj, c(1, 2, 3))
 }

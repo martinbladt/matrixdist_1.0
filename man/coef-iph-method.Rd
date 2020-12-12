@@ -10,8 +10,12 @@
 \item{object}{an object of class \linkS4class{iph}.}
 }
 \value{
-parameters of ph model
+parameters of iph model.
 }
 \description{
 Coef Method for iph Class
+}
+\examples{
+obj <- iph(ph(structure = "general", dimension = 2), gfun = "lognormal", gfun_pars = 2)
+coef(obj)
 }

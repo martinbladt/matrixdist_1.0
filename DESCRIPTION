@@ -7,7 +7,8 @@ Authors@R: c(person("Martin", "Bladt", email = "martinbladt@gmail.com", role = c
               person("Jorge", "Yslas", email = "jorge.yslas1@gmail.com",
               role = "aut")
               )
-Description: This package is concerned with the estimation and simulation of matrix distributions.
+Description: This package is concerned with homogeneous and inhomogeneous phase--type distributions. 
+    Methods for functional evaluation, simulation and estimation using the EM algorithm are provided. 
 Depends: R (>= 3.1.0)
 License: GPL-3
 Lazydata: true

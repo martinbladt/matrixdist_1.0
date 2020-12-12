@@ -10,7 +10,7 @@
 \item{object}{an object of class \linkS4class{ph}.}
 }
 \value{
-parameters of ph model
+Parameters of ph model.
 }
 \description{
 Coef Method for ph Class

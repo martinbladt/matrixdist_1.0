@@ -9,10 +9,10 @@
 \arguments{
 \item{x}{an object of class \linkS4class{ph}.}
 
-\item{p}{probabilities}
+\item{p}{a vector of probabilities.}
 }
 \value{
-quantiles
+A list containing the probabilities and corresponding quantile evaluations.
 }
 \description{
 Quantile Method for phase type distributions

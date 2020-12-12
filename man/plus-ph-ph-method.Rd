@@ -11,6 +11,15 @@
 
 \item{e2}{an object of class \linkS4class{ph}.}
 }
+\value{
+An object of class \linkS4class{ph}.
+}
 \description{
 Sum Method for phase type distributions
+}
+\examples{
+ph1 <- ph(structure = "general", dimension = 3)
+ph2 <- ph(structure = "gcoxian", dimension = 5)
+ph_sum <- ph1 + ph2
+ph_sum
 }

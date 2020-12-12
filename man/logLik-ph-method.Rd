@@ -10,8 +10,14 @@
 \item{object}{an object of class \linkS4class{ph}.}
 }
 \value{
-an object of class logLik
+An object of class logLik.
 }
 \description{
 logLik Method for ph Class
+}
+\examples{
+obj <- iph(ph(structure = "general", dimension = 2), gfun = "loglogistic", gfun_pars = c(1, 1)) 
+data <- sim(obj, n = 200)
+fitted_ph <- fit(obj, data)
+logLik(fitted_ph)
 }

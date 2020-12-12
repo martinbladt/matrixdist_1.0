@@ -2,7 +2,7 @@
 #'
 #' Class of objects for inhomogeneous phase type distributions
 #'
-#' @slot name name of the phase type distribution
+#' @slot name name of the phase type distribution.
 #' @slot gfun a list comprising of the parameters.
 #' @slot scale scale.
 #'
@@ -30,7 +30,9 @@ setClass("iph",
 #'
 #' @return An object of class \linkS4class{iph}.
 #' @export
-#'
+#' 
+#' @examples 
+#' iph(ph(structure = "coxian", dimension = 4), gfun = "pareto", gfun_pars = 3)
 iph <- function(ph = NULL, gfun = NULL, gfun_pars = NULL, alpha = NULL, S = NULL, structure = NULL, dimension = 3, scale = 1) {
   if (all(is.null(c(gfun, gfun_pars)))) {
     stop("input inhomogeneity function and parameters")
@@ -96,8 +98,15 @@ iph <- function(ph = NULL, gfun = NULL, gfun_pars = NULL, alpha = NULL, S = NULL
 #'
 #' @param x1 an object of class \linkS4class{iph}.
 #' @param x2 an object of class \linkS4class{iph}.
+#' 
+#' @return An object of class \linkS4class{iph}.
 #' @export
 #'
+#' @examples
+#' iph1 <- iph(ph(structure = "general", dimension = 3), gfun = "weibull", gfun_pars = 2)
+#' iph2 <- iph(ph(structure = "gcoxian", dimension = 5), gfun = "weibull", gfun_pars = 2)
+#' iph_min <- minimum(iph1, iph2)
+#' iph_min
 setMethod("minimum", signature(x1 = "iph", x2 = "iph"), 
           function (x1, x2){
             if(x1@gfun$name != x2@gfun$name | !all(x1@gfun$pars == x2@gfun$pars)) stop("g functions (or parameters) are different")
@@ -107,12 +116,20 @@ setMethod("minimum", signature(x1 = "iph", x2 = "iph"),
           }
 )
 
+
 #' Maximum Method for inhomogeneous phase type distributions
 #'
 #' @param x1 an object of class \linkS4class{iph}.
 #' @param x2 an object of class \linkS4class{iph}.
+#' 
+#' @return An object of class \linkS4class{iph}.
 #' @export
 #'
+#' @examples
+#' iph1 <- iph(ph(structure = "general", dimension = 3), gfun = "weibull", gfun_pars = 2)
+#' iph2 <- iph(ph(structure = "gcoxian", dimension = 5), gfun = "weibull", gfun_pars = 2)
+#' iph_min <- maximum(iph1, iph2)
+#' iph_min
 setMethod("maximum", signature(x1 = "iph", x2 = "iph"), 
           function (x1, x2){
             if(x1@gfun$name != x2@gfun$name | !all(x1@gfun$pars == x2@gfun$pars)) stop("g functions (or parameters) are different")
@@ -135,18 +152,19 @@ setMethod("show", "iph", function(object) {
   cat("g-function name: ", object@gfun$name, "\n", sep = "")
   cat("parameters: ", "\n", sep = "")
   print(object@gfun$pars)
-  #cat("scale: ", "\n", sep = "")
-  #print(object@scale)
 })
 
 #' Simulation Method for inhomogeneous phase type distributions
 #'
 #' @param x an object of class \linkS4class{iph}.
-#' @param n length of realization.
+#' @param n an integer of length of realization.
 #'
-#' @return A realization of inhomogeneous phase type data
+#' @return A realization of independent and identically distributed inhomogeneous phase-type variables.
 #' @export
 #'
+#' @examples
+#' obj <- iph(ph(structure = "general"), gfun = "lognormal", gfun_pars = 2)
+#' sim(obj, n = 100)
 setMethod("sim", c(x = "iph"), function(x, n = 1000) {
   name <- x@gfun$name
   pars <- x@gfun$pars
@@ -163,11 +181,14 @@ setMethod("sim", c(x = "iph"), function(x, n = 1000) {
 #' Density Method for inhomogeneous phase type distributions
 #'
 #' @param x an object of class \linkS4class{iph}.
-#' @param y locations
+#' @param y a vector of locations.
 #'
-#' @return Density evaluated at locations
+#' @return A list containing the locations and corresponding density evaluations.
 #' @export
 #'
+#' @examples
+#' obj <- iph(ph(structure = "general"), gfun = "weibull", gfun_pars = 2)
+#' dens(obj, c(1, 2, 3))
 setMethod("dens", c(x = "iph"), function(x, y = seq(0, quan(x, .95)$quantile, length.out = 10)) {
   fn <- base::eval(parse(text = paste("m", x@gfun$name, "den", sep = "")))
   scale <- x@scale
@@ -181,12 +202,15 @@ setMethod("dens", c(x = "iph"), function(x, y = seq(0, quan(x, .95)$quantile, le
 #' Distribution Method for inhomogeneous phase type distributions
 #'
 #' @param x an object of class \linkS4class{iph}.
-#' @param q locations
-#' @param lower.tail cdf(TRUE) or tail(FALSE)
+#' @param q a vector of locations.
+#' @param lower.tail logical parameter specifying whether lower tail (cdf) or upper tail is computed.
 #'
-#' @return CDF evaluated at locations
+#' @return A list containing the locations and corresponding CDF evaluations.
 #' @export
 #'
+#' @examples
+#' obj <- iph(ph(structure = "general"), gfun = "weibull", gfun_pars = 2)
+#' cdf(obj, c(1, 2, 3))
 setMethod("cdf", c(x = "iph"), function(x,
                                         q = seq(0, quan(x, .95)$quantile, length.out = 10),
                                         lower.tail = TRUE) {
@@ -204,11 +228,14 @@ setMethod("cdf", c(x = "iph"), function(x,
 #'
 #' @param object an object of class \linkS4class{iph}.
 #'
-#' @return parameters of ph model
+#' @return parameters of iph model.
 #' @export
 #'
+#' @examples 
+#' obj <- iph(ph(structure = "general", dimension = 2), gfun = "lognormal", gfun_pars = 2)
+#' coef(obj)
 setMethod("coef", c(object = "iph"), function(object) {
-  L <- append(object@pars, unname(object@gfun$pars))
-  names(L)[3] <- names(object@gfun$pars)
+  L <- object@pars 
+  L$gpars <- object@gfun$pars
   L
 })

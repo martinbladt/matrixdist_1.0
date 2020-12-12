@@ -9,10 +9,10 @@
 \arguments{
 \item{x}{an object of class \linkS4class{ph}.}
 
-\item{n}{length of realization.}
+\item{n}{an integer of length of realization.}
 }
 \value{
-A realization of a phase type data
+A realization of independent and identically distributed phase-type variables.
 }
 \description{
 Simulation Method for phase type distributions

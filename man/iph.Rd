@@ -38,3 +38,6 @@ An object of class \linkS4class{iph}.
 \description{
 Constructor Function for inhomogeneous phase type distributions
 }
+\examples{
+iph(ph(structure = "coxian", dimension = 4), gfun = "pareto", gfun_pars = 3)
+}

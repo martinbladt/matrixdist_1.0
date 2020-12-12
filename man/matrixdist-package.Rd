@@ -3,32 +3,25 @@
 \alias{matrixdist}
 \docType{package}
 \title{
-  jfkdjflkjds
+  Statistics for Matrix Distributions
 }
 \description{
-  A more detailed description of what the package does. A length
-  of about one to five lines is recommended.
-}
-\details{
-  This section should provide a more detailed overview of how to use the
-  package, including the most important functions.
+  This package is concerned with homogeneous and inhomogeneous phase--type distributions. 
+ Methods for functional evaluation, simulation and estimation using the EM algorithm are provided.
 }
 \author{
-Your Name, email optional.
+Martin Bladt and Jorge Yslas.
 
-Maintainer: Your Name <your@email.com>
+Maintainer: Martin Bladt <martinbladt@gmail.com> and Jorge Yslas <jorge.yslas1@gmail.com>
 }
 \references{
-  This optional section can contain literature or other references for
-  background information.
+  Asmussen, S., Nerman, O., & Olsson, M. (1996). Fitting phase-type distributions via the EM
+  algorithm. Scandinavian Journal of Statistics, 419-441.
+  
+  Olsson, M. (1996). Estimation of phase-type distributions from censored data. Scandinavian journal of statistics, 443-460.
+  
+  Albrecher, H., & Bladt, M. (2019). Inhomogeneous phase-type distributions and heavy tails. Journal of Applied Probability, 56(4), 1044-1064.
+  
+  Albrecher, H., Bladt, M., & Yslas, J. (2020). Fitting inhomogeneous Phase‐Type distributions to data: The univariate and the multivariate case. Scandinavian Journal of Statistics.
 }
-\keyword{ package }
-\seealso{
-  Optional links to other man pages
-}
-\examples{
-  \dontrun{
-     ## Optional simple examples of the most important functions
-     ## These can be in \dontrun{} and \donttest{} blocks.   
-  }
-}
+\keyword{ matrixdist }
