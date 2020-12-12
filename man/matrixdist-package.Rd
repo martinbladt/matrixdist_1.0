@@ -12,7 +12,7 @@
 \author{
 Martin Bladt and Jorge Yslas.
 
-Maintainer: Martin Bladt <martinbladt@gmail.com> and Jorge Yslas <jorge.yslas1@gmail.com>
+Maintainer: Martin Bladt <martinbladt@gmail.com>
 }
 \references{
   Asmussen, S., Nerman, O., & Olsson, M. (1996). Fitting phase-type distributions via the EM
