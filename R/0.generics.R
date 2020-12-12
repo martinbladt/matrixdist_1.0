@@ -6,7 +6,6 @@
 #' @param ... further parameters to be passed on
 #'
 #' @return A realization from the matrix distribution.
-#' @export
 #'
 #'
 setGeneric("sim", function(x, ...) {
@@ -21,7 +20,6 @@ setGeneric("sim", function(x, ...) {
 #' @param ... further parameters to be passed on
 #'
 #' @return A realization from the matrix distribution.
-#' @export
 #'
 #'
 setGeneric("moment", function(x, ...) {
@@ -38,7 +36,6 @@ setGeneric("moment", function(x, ...) {
 #' @param ... further parameters to be passed on
 #'
 #' @return A realization from the matrix distribution.
-#' @export
 #'
 #'
 setGeneric("minimum", function(x1, x2, ...) {
@@ -54,7 +51,6 @@ setGeneric("minimum", function(x1, x2, ...) {
 #' @param ... further parameters to be passed on
 #'
 #' @return A realization from the matrix distribution.
-#' @export
 #'
 #'
 setGeneric("maximum", function(x1, x2, ...) {
@@ -69,7 +65,6 @@ setGeneric("maximum", function(x1, x2, ...) {
 #' @param ... further parameters to be passed on
 #'
 #' @return Density from the matrix distribution.
-#' @export
 #'
 #'
 setGeneric("dens", function(x, ...) {
@@ -84,7 +79,6 @@ setGeneric("dens", function(x, ...) {
 #' @param ... further parameters to be passed on
 #'
 #' @return Hazard rate from the matrix distribution.
-#' @export
 #'
 #'
 setGeneric("haz", function(x, ...) {
@@ -99,7 +93,6 @@ setGeneric("haz", function(x, ...) {
 #' @param ... further parameters to be passed on
 #'
 #' @return CDF from the matrix distribution.
-#' @export
 #'
 #'
 setGeneric("cdf", function(x, ...) {
@@ -114,7 +107,6 @@ setGeneric("cdf", function(x, ...) {
 #' @param ... further parameters to be passed on
 #'
 #' @return Quantile from the matrix distribution.
-#' @export
 #'
 #'
 setGeneric("quan", function(x, ...) {
@@ -130,7 +122,6 @@ setGeneric("quan", function(x, ...) {
 #' @param ... further parameters to be passed on
 #'
 #' @return An object of the fitted model class.
-#' @export
 #'
 #'
 setGeneric("fit", function(x, y, ...) {

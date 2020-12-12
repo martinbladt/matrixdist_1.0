@@ -295,6 +295,9 @@ setMethod(
       cat("\n", sep = "")
       x@pars$alpha <- pi_fit
       x@pars$S <- T_fit
+      x@fit <- list(
+        loglik = logLikelihoodPH_RK(RKstep, pi_fit, T_fit, y, weight, rcen, rcenweight)
+      )
     }
     if (is_iph) {
       trans_weight <- weight 
@@ -316,7 +319,7 @@ setMethod(
             weight = weight,
             rcens = rcen,
             rcweight = rcenweight,
-            hessian = (k == stepsEM),
+            hessian = FALSE,
             control = list(
               maxit = maxit,
               reltol = reltol
@@ -335,7 +338,6 @@ setMethod(
       x@pars$alpha <- pi_fit
       x@pars$S <- T_fit
       x@fit <- list(
-        cov = safe_cov(opt$hessian),
         loglik = -opt$value
       )
       x <- iph(x, gfun = x@gfun$name, gfun_pars = par_g)
@@ -358,20 +360,6 @@ data_aggregation <- function(y, w) {
     cum_weight <- c(cum_weight, sum(mat$weight[which(mat$obs == i)]))
   }
   return(list(un_obs = un_obs, weights = cum_weight))
-}
-
-#' Calculate Covariance Matrix Safely
-#'
-#' @param hess a Hessian matrix from a model fit.
-#'
-#' @return Fisher information (estimated covariance matrix)
-#'
-safe_cov <- function(hess) {
-  hessinverse <- tryCatch(solve(hess), error = function(e) {
-    warning("hessian can't be inverted")
-    return(matrix(NA, nrow = nrow(hess), ncol = ncol(hess)))
-  })
-  hessinverse
 }
 
 #' Coef Method for ph Class
