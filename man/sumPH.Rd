@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{sumPH}
 \alias{sumPH}
-\title{Computes the initial distriubtion and sub-intensity of the sum of PH}
+\title{Computes the initial distribution and sub-intensity of the sum of PH}
 \usage{
 sumPH(pi1, T1, pi2, T2)
 }
@@ -16,5 +16,5 @@ sumPH(pi1, T1, pi2, T2)
 \item{T2}{sub-intensity}
 }
 \description{
-Computes the initial distriubtion and sub-intensity of the sum of PH
+Computes the initial distribution and sub-intensity of the sum of PH
 }

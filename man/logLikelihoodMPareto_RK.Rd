@@ -7,13 +7,13 @@
 logLikelihoodMpareto_RK(h, pi, T, beta, obs, weight, rcens, rcweight)
 }
 \arguments{
-\item{h}{step-lenght}
+\item{h}{step-length}
 
 \item{pi}{initial probabilities}
 
 \item{T}{sub-intensity}
 
-\item{beta}{parametor of transformation}
+\item{beta}{parameter of transformation}
 
 \item{obs}{the observations}
 

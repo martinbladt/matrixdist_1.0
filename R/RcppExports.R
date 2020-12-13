@@ -3,9 +3,9 @@
 
 #' Default size of the steps in the RK
 #' 
-#' Computes the default step lenght for a matrix \code{T} to be employed in the RK method
+#' Computes the default step length for a matrix \code{T} to be employed in the RK method
 #' @param T sub-intensity matrix
-#' @return The step lenght for \code{T}
+#' @return The step length for \code{T}
 #' 
 default_step_length <- function(T) {
     .Call(`_matrixdist_default_step_length`, T)
@@ -18,7 +18,7 @@ default_step_length <- function(T) {
 #' @param bvector the b vector 
 #' @param cmatrix the c matrix
 #' @param dt the increment
-#' @param h step-lenght
+#' @param h step-length
 #' @param T sub-intensity
 #' @param t exit rates 
 #' 
@@ -29,7 +29,7 @@ runge_kutta <- function(avector, bvector, cmatrix, dt, h, T, t) {
 #' EM step using Runge Kutta
 #' 
 #' Computes one step of the EM algorithm by using a Runge-Kutta method of 4th order
-#' @param h step-lenght
+#' @param h step-length
 #' @param pi initial probalities
 #' @param T sub-intensity
 #' @param obs the observations
@@ -46,7 +46,7 @@ EMstep_RK <- function(h, pi, T, obs, weight, rcens, rcweight) {
 #' Can be used for the loglikelihood
 #' @param avector the a vector
 #' @param dt increment
-#' @param h step-lenght
+#' @param h step-length
 #' @param T sub-intensity
 #' 
 a_rungekutta <- function(avector, dt, h, T) {
@@ -56,7 +56,7 @@ a_rungekutta <- function(avector, dt, h, T) {
 #' Loglikelihood using RK
 #' 
 #' Loglikelihood for a sample 
-#' @param h step-lenght
+#' @param h step-length
 #' @param pi initial probabilities
 #' @param T sub-intensity
 #' @param obs the observations
@@ -71,10 +71,10 @@ logLikelihoodPH_RK <- function(h, pi, T, obs, weight, rcens, rcweight) {
 #' Loglikelihood of matrix Weibull using RK
 #' 
 #' Loglikelihood for a sample 
-#' @param h step-lenght
+#' @param h step-length
 #' @param pi initial probabilities
 #' @param T sub-intensity
-#' @param beta parametor of transformation
+#' @param beta parameter of transformation
 #' @param obs the observations
 #' @param weight weight of the observations
 #' @param rcens censored observations
@@ -87,10 +87,10 @@ logLikelihoodMweibull_RK <- function(h, pi, T, beta, obs, weight, rcens, rcweigh
 #' Loglikelihood of matrix Pareto using RK
 #' 
 #' Loglikelihood for a sample 
-#' @param h step-lenght
+#' @param h step-length
 #' @param pi initial probabilities
 #' @param T sub-intensity
-#' @param beta parametor of transformation
+#' @param beta parameter of transformation
 #' @param obs the observations
 #' @param weight weight of the observations
 #' @param rcens censored observations
@@ -103,10 +103,10 @@ logLikelihoodMpareto_RK <- function(h, pi, T, beta, obs, weight, rcens, rcweight
 #' Loglikelihood of matrix LogNormal using RK
 #' 
 #' Loglikelihood for a sample 
-#' @param h step-lenght
+#' @param h step-length
 #' @param pi initial probabilities
 #' @param T sub-intensity
-#' @param beta parametor of transformation
+#' @param beta parameter of transformation
 #' @param obs the observations
 #' @param weight weight of the observations
 #' @param rcens censored observations
@@ -119,10 +119,10 @@ logLikelihoodMlognormal_RK <- function(h, pi, T, beta, obs, weight, rcens, rcwei
 #' Loglikelihood of matrix Log-Logistic using RK
 #' 
 #' Loglikelihood for a sample 
-#' @param h step-lenght
+#' @param h step-length
 #' @param pi initial probabilities
 #' @param T sub-intensity
-#' @param beta parametor of transformation
+#' @param beta parameter of transformation
 #' @param obs the observations
 #' @param weight weight of the observations
 #' @param rcens censored observations
@@ -135,10 +135,10 @@ logLikelihoodMloglogistic_RK <- function(h, pi, T, beta, obs, weight, rcens, rcw
 #' Loglikelihood of matrix Gompertz using RK
 #' 
 #' Loglikelihood for a sample 
-#' @param h step-lenght
+#' @param h step-length
 #' @param pi initial probabilities
 #' @param T sub-intensity
-#' @param beta parametor of transformation
+#' @param beta parameter of transformation
 #' @param obs the observations
 #' @param weight weight of the observations
 #' @param rcens censored observations
@@ -151,10 +151,10 @@ logLikelihoodMgompertz_RK <- function(h, pi, T, beta, obs, weight, rcens, rcweig
 #' Loglikelihood of matrix GEV using RK
 #' 
 #' Loglikelihood for a sample 
-#' @param h step-lenght
+#' @param h step-length
 #' @param pi initial probabilities
 #' @param T sub-intensity
-#' @param beta parametor of transformation
+#' @param beta parameter of transformation
 #' @param obs the observations
 #' @param weight weight of the observations
 #' @param rcens censored observations
@@ -178,10 +178,10 @@ reversTransformData <- function(observations, weights, beta) {
 #' Derivative of matrix Weibull
 #' 
 #' Can be used to increase performance
-#' @param h step-lenght
+#' @param h step-length
 #' @param pi initial probabilities
 #' @param T sub-intensity
-#' @param beta parametor of transformation
+#' @param beta parameter of transformation
 #' @param obs the observations
 #' @param weight weight of the observations
 #' @param rcens censored observations
@@ -504,7 +504,7 @@ mgevcdf <- function(x, pi, T, mu, sigma, xi, lower_tail = TRUE) {
 #' Product of two matrices
 #' @param a matrix
 #' @param b matrix
-#' @return Computes C = A * B
+#' @return Computes c = a * b
 #' 
 matrix_product <- function(a, b) {
     .Call(`_matrixdist_matrix_product`, a, b)
@@ -531,7 +531,7 @@ LInf_norm <- function(A) {
 
 #' Solves a system with multiple right hand sides
 #' 
-#' AX=B which can be decompose as LUX=B and finds X
+#' AX=B which can be decomposed as LUX=B and finds X.
 #' When B is the identity matrix the solution is the inverse of A
 #' @param A1 a matrix
 #' @param B a matrix
@@ -617,7 +617,7 @@ diagonal_vector <- function(vec) {
     .Call(`_matrixdist_diagonal_vector`, vec)
 }
 
-#' Computes the initial distriubtion and sub-intensity of the sum of PH
+#' Computes the initial distribution and sub-intensity of the sum of PH
 #' 
 #' @param pi1 initial distribution
 #' @param T1 sub-intensity

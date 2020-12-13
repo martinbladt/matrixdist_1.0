@@ -16,8 +16,8 @@ An object of class logLik.
 logLik Method for ph Class
 }
 \examples{
-obj <- iph(ph(structure = "general", dimension = 2), gfun = "loglogistic", gfun_pars = c(1, 1)) 
-data <- sim(obj, n = 200)
-fitted_ph <- fit(obj, data)
+obj <- iph(ph(structure = "general", dimension = 2), gfun = "weibull", gfun_pars = 2) 
+data <- sim(obj, n = 100)
+fitted_ph <- fit(obj, data, stepsEM = 10)
 logLik(fitted_ph)
 }

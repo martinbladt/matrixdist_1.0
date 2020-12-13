@@ -7,7 +7,7 @@
 logLikelihoodPH_RK(h, pi, T, obs, weight, rcens, rcweight)
 }
 \arguments{
-\item{h}{step-lenght}
+\item{h}{step-length}
 
 \item{pi}{initial probabilities}
 

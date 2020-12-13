@@ -7,7 +7,7 @@ using namespace Rcpp;
 //' Product of two matrices
 //' @param a matrix
 //' @param b matrix
-//' @return Computes C = A * B
+//' @return Computes c = a * b
 //' 
 // [[Rcpp::export]]
 NumericMatrix matrix_product(NumericMatrix a, NumericMatrix b) {
@@ -80,7 +80,7 @@ double LInf_norm(const NumericMatrix & A) {
 
 //' Solves a system with multiple right hand sides
 //' 
-//' AX=B which can be decompose as LUX=B and finds X
+//' AX=B which can be decomposed as LUX=B and finds X.
 //' When B is the identity matrix the solution is the inverse of A
 //' @param A1 a matrix
 //' @param B a matrix

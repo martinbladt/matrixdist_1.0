@@ -15,7 +15,7 @@ runge_kutta(avector, bvector, cmatrix, dt, h, T, t)
 
 \item{dt}{the increment}
 
-\item{h}{step-lenght}
+\item{h}{step-length}
 
 \item{T}{sub-intensity}
 

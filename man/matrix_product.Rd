@@ -12,7 +12,7 @@ matrix_product(a, b)
 \item{b}{matrix}
 }
 \value{
-Computes C = A * B
+Computes c = a * b
 }
 \description{
 Product of two matrices

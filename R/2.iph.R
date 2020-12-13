@@ -67,24 +67,14 @@ iph <- function(ph = NULL, gfun = NULL, gfun_pars = NULL, alpha = NULL, S = NULL
       names(gfun_pars) <- c("alpha", "theta")
     }
   }
-  if (gfun == "weibull") {
-    ginv <- function(beta, t) t^{beta}
-  }
-  else if (gfun == "pareto") {
-    ginv <- function(beta, t) log(t / beta + 1)
-  }
-  else if (gfun == "lognormal") {
-    ginv <- function(beta, t) log(t + 1)^{beta}
-  }
-  else if (gfun == "loglogistic") {
-    ginv <- function(beta, t) log((t / beta[1])^{beta[2]} + 1)
-  }
-  else if (gfun == "gompertz") {
-    ginv <- function(beta, t) (exp(t * beta) - 1) / beta
-  }
-  else if (gfun == "gev") {
-    ginv <- function(beta, t, w) reversTransformData(t, w, beta)
-  }
+  f1 <- function(beta, t) t^{beta}
+  f2 <- function(beta, t) log(t / beta + 1)
+  f3 <- function(beta, t) log(t + 1)^{beta}
+  f4 <- function(beta, t) log((t / beta[1])^{beta[2]} + 1)
+  f5 <- function(beta, t) (exp(t * beta) - 1) / beta
+  f6 <- function(beta, t, w) reversTransformData(t, w, beta)
+  nb <- which(gfun == c("weibull", "pareto", "lognormal", "loglogistic", "gompertz", "gev"))
+  ginv <- base::eval(parse(text = paste("f", nb, sep = "")))
   methods::new("iph",
     name = paste("inhomogeneous ", ph@name, sep = ""),
     pars = ph@pars,
@@ -142,6 +132,7 @@ setMethod("maximum", signature(x1 = "iph", x2 = "iph"),
 #' Show Method for inhomogeneous phase type distributions
 #'
 #' @param object an object of class \linkS4class{iph}.
+#' @importFrom methods show
 #' @export
 #'
 setMethod("show", "iph", function(object) {
@@ -151,7 +142,7 @@ setMethod("show", "iph", function(object) {
   print(object@pars)
   cat("g-function name: ", object@gfun$name, "\n", sep = "")
   cat("parameters: ", "\n", sep = "")
-  print(object@gfun$pars)
+  methods::show(object@gfun$pars)
 })
 
 #' Simulation Method for inhomogeneous phase type distributions

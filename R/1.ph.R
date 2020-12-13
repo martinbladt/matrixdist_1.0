@@ -154,13 +154,14 @@ setMethod("moment", signature(x = "ph"),
 #' Show Method for phase type distributions
 #'
 #' @param object an object of class \linkS4class{ph}.
+#' @importFrom methods show
 #' @export
 #'
 setMethod("show", "ph", function(object) {
   cat("object class: ", methods::is(object)[[1]], "\n", sep = "")
   cat("name: ", object@name, "\n", sep = "")
   cat("parameters: ", "\n", sep = "")
-  print(object@pars)
+  methods::show(object@pars)
 })
 
 #' Simulation Method for phase type distributions
@@ -397,9 +398,9 @@ data_aggregation <- function(y, w) {
 #' @export
 #'
 #' @examples 
-#' obj <- iph(ph(structure = "general", dimension = 2), gfun = "loglogistic", gfun_pars = c(1, 1)) 
-#' data <- sim(obj, n = 200)
-#' fitted_ph <- fit(obj, data)
+#' obj <- iph(ph(structure = "general", dimension = 2), gfun = "weibull", gfun_pars = 2) 
+#' data <- sim(obj, n = 100)
+#' fitted_ph <- fit(obj, data, stepsEM = 10)
 #' logLik(fitted_ph)
 setMethod("logLik", "ph", function(object) {
   ll <- object@fit$logLik

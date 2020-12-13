@@ -7,7 +7,7 @@
 derivativeMatrixweibull(h, obs, weight, rcens, rcweight, pi, T, beta)
 }
 \arguments{
-\item{h}{step-lenght}
+\item{h}{step-length}
 
 \item{obs}{the observations}
 
@@ -21,7 +21,7 @@ derivativeMatrixweibull(h, obs, weight, rcens, rcweight, pi, T, beta)
 
 \item{T}{sub-intensity}
 
-\item{beta}{parametor of transformation}
+\item{beta}{parameter of transformation}
 }
 \description{
 Can be used to increase performance

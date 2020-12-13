@@ -11,7 +11,7 @@ a_rungekutta(avector, dt, h, T)
 
 \item{dt}{increment}
 
-\item{h}{step-lenght}
+\item{h}{step-length}
 
 \item{T}{sub-intensity}
 }

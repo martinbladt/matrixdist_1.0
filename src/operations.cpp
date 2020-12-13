@@ -2,7 +2,7 @@
 using namespace Rcpp;
 #include "matrix_functions.h"
 
-//' Computes the initial distriubtion and sub-intensity of the sum of PH
+//' Computes the initial distribution and sub-intensity of the sum of PH
 //' 
 //' @param pi1 initial distribution
 //' @param T1 sub-intensity

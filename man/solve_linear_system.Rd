@@ -12,6 +12,6 @@ solve_linear_system(A1, B)
 \item{B}{a matrix}
 }
 \description{
-AX=B which can be decompose as LUX=B and finds X
+AX=B which can be decomposed as LUX=B and finds X.
 When B is the identity matrix the solution is the inverse of A
 }

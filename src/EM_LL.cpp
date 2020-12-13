@@ -6,9 +6,9 @@ using namespace Rcpp;
 
 //' Default size of the steps in the RK
 //' 
-//' Computes the default step lenght for a matrix \code{T} to be employed in the RK method
+//' Computes the default step length for a matrix \code{T} to be employed in the RK method
 //' @param T sub-intensity matrix
-//' @return The step lenght for \code{T}
+//' @return The step length for \code{T}
 //' 
 // [[Rcpp::export]]
 double default_step_length(const NumericMatrix & T) {
@@ -30,7 +30,7 @@ double default_step_length(const NumericMatrix & T) {
 //' @param bvector the b vector 
 //' @param cmatrix the c matrix
 //' @param dt the increment
-//' @param h step-lenght
+//' @param h step-length
 //' @param T sub-intensity
 //' @param t exit rates 
 //' 
@@ -168,7 +168,7 @@ void runge_kutta(NumericMatrix & avector, NumericMatrix & bvector, NumericMatrix
 //' EM step using Runge Kutta
 //' 
 //' Computes one step of the EM algorithm by using a Runge-Kutta method of 4th order
-//' @param h step-lenght
+//' @param h step-length
 //' @param pi initial probalities
 //' @param T sub-intensity
 //' @param obs the observations
@@ -287,7 +287,7 @@ void EMstep_RK(double h, NumericVector & pi, NumericMatrix & T, const NumericVec
 //' Can be used for the loglikelihood
 //' @param avector the a vector
 //' @param dt increment
-//' @param h step-lenght
+//' @param h step-length
 //' @param T sub-intensity
 //' 
 // [[Rcpp::export]]
@@ -345,7 +345,7 @@ void a_rungekutta(NumericMatrix & avector, double dt, double h, const NumericMat
 //' Loglikelihood using RK
 //' 
 //' Loglikelihood for a sample 
-//' @param h step-lenght
+//' @param h step-length
 //' @param pi initial probabilities
 //' @param T sub-intensity
 //' @param obs the observations
@@ -404,10 +404,10 @@ double logLikelihoodPH_RK(double h, NumericVector & pi, NumericMatrix & T, const
 //' Loglikelihood of matrix Weibull using RK
 //' 
 //' Loglikelihood for a sample 
-//' @param h step-lenght
+//' @param h step-length
 //' @param pi initial probabilities
 //' @param T sub-intensity
-//' @param beta parametor of transformation
+//' @param beta parameter of transformation
 //' @param obs the observations
 //' @param weight weight of the observations
 //' @param rcens censored observations
@@ -467,10 +467,10 @@ double logLikelihoodMweibull_RK(double h, NumericVector & pi, NumericMatrix & T,
 //' Loglikelihood of matrix Pareto using RK
 //' 
 //' Loglikelihood for a sample 
-//' @param h step-lenght
+//' @param h step-length
 //' @param pi initial probabilities
 //' @param T sub-intensity
-//' @param beta parametor of transformation
+//' @param beta parameter of transformation
 //' @param obs the observations
 //' @param weight weight of the observations
 //' @param rcens censored observations
@@ -529,10 +529,10 @@ double logLikelihoodMpareto_RK(double h, NumericVector & pi, NumericMatrix & T, 
 //' Loglikelihood of matrix LogNormal using RK
 //' 
 //' Loglikelihood for a sample 
-//' @param h step-lenght
+//' @param h step-length
 //' @param pi initial probabilities
 //' @param T sub-intensity
-//' @param beta parametor of transformation
+//' @param beta parameter of transformation
 //' @param obs the observations
 //' @param weight weight of the observations
 //' @param rcens censored observations
@@ -591,10 +591,10 @@ double logLikelihoodMlognormal_RK(double h, NumericVector & pi, NumericMatrix & 
 //' Loglikelihood of matrix Log-Logistic using RK
 //' 
 //' Loglikelihood for a sample 
-//' @param h step-lenght
+//' @param h step-length
 //' @param pi initial probabilities
 //' @param T sub-intensity
-//' @param beta parametor of transformation
+//' @param beta parameter of transformation
 //' @param obs the observations
 //' @param weight weight of the observations
 //' @param rcens censored observations
@@ -654,10 +654,10 @@ double logLikelihoodMloglogistic_RK(double h, NumericVector & pi, NumericMatrix 
 //' Loglikelihood of matrix Gompertz using RK
 //' 
 //' Loglikelihood for a sample 
-//' @param h step-lenght
+//' @param h step-length
 //' @param pi initial probabilities
 //' @param T sub-intensity
-//' @param beta parametor of transformation
+//' @param beta parameter of transformation
 //' @param obs the observations
 //' @param weight weight of the observations
 //' @param rcens censored observations
@@ -717,10 +717,10 @@ double logLikelihoodMgompertz_RK(double h, NumericVector & pi, NumericMatrix & T
 //' Loglikelihood of matrix GEV using RK
 //' 
 //' Loglikelihood for a sample 
-//' @param h step-lenght
+//' @param h step-length
 //' @param pi initial probabilities
 //' @param T sub-intensity
-//' @param beta parametor of transformation
+//' @param beta parameter of transformation
 //' @param obs the observations
 //' @param weight weight of the observations
 //' @param rcens censored observations
@@ -751,7 +751,7 @@ double logLikelihoodMgev_RK(double h, NumericVector & pi, NumericMatrix & T, Num
   
   double logLh{0.0};
   
-  long N{obs.size()};
+  int N = static_cast<int>(obs.size());
   
   if (beta[2] == 0) {
     // Non censored data
@@ -815,7 +815,7 @@ double logLikelihoodMgev_RK(double h, NumericVector & pi, NumericMatrix & T, Num
 //' 
 // [[Rcpp::export]]
 List reversTransformData(const NumericVector & observations, const NumericVector & weights, const NumericVector & beta) {
-  long N{observations.size()};
+  int N = static_cast<int>(observations.size());
   NumericVector TransformObs(N);
   NumericVector TransWeights(N);
   if (beta[2] == 0) { // Gumbel
@@ -839,10 +839,10 @@ List reversTransformData(const NumericVector & observations, const NumericVector
 //' Derivative of matrix Weibull
 //' 
 //' Can be used to increase performance
-//' @param h step-lenght
+//' @param h step-length
 //' @param pi initial probabilities
 //' @param T sub-intensity
-//' @param beta parametor of transformation
+//' @param beta parameter of transformation
 //' @param obs the observations
 //' @param weight weight of the observations
 //' @param rcens censored observations
