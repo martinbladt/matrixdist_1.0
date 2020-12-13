@@ -19,7 +19,7 @@ NumericVector phdensity(NumericVector x, NumericVector pi, NumericMatrix T) {
   NumericVector density(x.size());
   
   NumericMatrix m_pi(1, pi.size(), pi.begin());
-  NumericVector e(pi.size(), 1);
+  NumericVector e(pi.size(), 1.0);
   NumericMatrix m_e(pi.size(), 1, e.begin());
   NumericMatrix m_t = matrix_product(T * (-1.0), m_e);
   
@@ -50,7 +50,7 @@ NumericVector phcdf(NumericVector x, NumericVector pi, NumericMatrix T, bool low
   NumericVector cdf(x.size());
   
   NumericMatrix m_pi(1, pi.size(), pi.begin());
-  NumericVector e(pi.size(), 1);
+  NumericVector e(pi.size(), 1.0);
   NumericMatrix m_e(pi.size(), 1, e.begin());
   
   for (int k = 0; k < x.size(); ++k){
@@ -86,7 +86,7 @@ NumericVector phmoment(NumericVector k, NumericVector pi, NumericMatrix T) {
   NumericVector fact_k = factorial(k);
   
   NumericMatrix m_pi(1, pi.size(), pi.begin());
-  NumericVector e(pi.size(), 1);
+  NumericVector e(pi.size(), 1.0);
   NumericMatrix m_e(pi.size(), 1, e.begin());
   
   for (int i = 0; i < k.size(); ++i){
@@ -113,7 +113,7 @@ NumericVector phLaplace(NumericVector s, NumericVector pi, NumericMatrix T) {
   NumericVector Laplace(s.size());
   
   NumericMatrix m_pi(1, pi.size(), pi.begin());
-  NumericVector e(pi.size(), 1);
+  NumericVector e(pi.size(), 1.0);
   NumericMatrix m_e(pi.size(), 1, e.begin());
   NumericMatrix m_t = matrix_product(T * (-1.0), m_e);
   
@@ -140,7 +140,7 @@ NumericVector mweibullden(NumericVector x, NumericVector pi, NumericMatrix T, do
   NumericVector density(x.size());
   
   NumericMatrix m_pi(1, pi.size(), pi.begin());
-  NumericVector e(pi.size(), 1);
+  NumericVector e(pi.size(), 1.0);
   NumericMatrix m_e(pi.size(), 1, e.begin());
   NumericMatrix m_t = matrix_product(T * (-1.0), m_e);
   
@@ -149,7 +149,7 @@ NumericVector mweibullden(NumericVector x, NumericVector pi, NumericMatrix T, do
       density[k] = (1.0 - matrix_product(m_pi, m_e)(0,0));
     }
     else {
-      density[k] = (matrix_product(m_pi, matrix_product(matrix_exponential(T * pow(x[k], beta)), m_t))(0,0)) * beta * pow(x[k], beta - 1);
+      density[k] = (matrix_product(m_pi, matrix_product(matrix_exponential(T * pow(x[k], beta)), m_t))(0,0)) * beta * pow(x[k], beta - 1.0);
     }
   }
   return density;
@@ -173,7 +173,7 @@ NumericVector mweibullcdf(NumericVector x, NumericVector pi, NumericMatrix T, do
   NumericVector cdf(x.size());
   
   NumericMatrix m_pi(1, pi.size(), pi.begin());
-  NumericVector e(pi.size(), 1);
+  NumericVector e(pi.size(), 1.0);
   NumericMatrix m_e(pi.size(), 1, e.begin());
   
   for (int k = 0; k < x.size(); ++k){
@@ -216,7 +216,7 @@ NumericVector mparetoden(NumericVector x, NumericVector pi, NumericMatrix T, dou
   NumericVector density(x.size());
   
   NumericMatrix m_pi(1, pi.size(), pi.begin());
-  NumericVector e(pi.size(), 1);
+  NumericVector e(pi.size(), 1.0);
   NumericMatrix m_e(pi.size(), 1, e.begin());
   NumericMatrix m_t = matrix_product(T * (-1.0), m_e);
   
@@ -225,7 +225,7 @@ NumericVector mparetoden(NumericVector x, NumericVector pi, NumericMatrix T, dou
       density[k] = (1.0 - matrix_product(m_pi, m_e)(0,0));
     }
     else {
-      density[k] = (matrix_product(m_pi, matrix_product(matrix_exponential(T * log(x[k] / beta + 1)), m_t))(0,0)) / (x[k] + beta);
+      density[k] = (matrix_product(m_pi, matrix_product(matrix_exponential(T * log(x[k] / beta + 1.0)), m_t))(0,0)) / (x[k] + beta);
     }
   }
   return density;
@@ -249,7 +249,7 @@ NumericVector mparetocdf(NumericVector x, NumericVector pi, NumericMatrix T, dou
   NumericVector cdf(x.size());
   
   NumericMatrix m_pi(1, pi.size(), pi.begin());
-  NumericVector e(pi.size(), 1);
+  NumericVector e(pi.size(), 1.0);
   NumericMatrix m_e(pi.size(), 1, e.begin());
   
   for (int k = 0; k < x.size(); ++k){
@@ -257,7 +257,7 @@ NumericVector mparetocdf(NumericVector x, NumericVector pi, NumericMatrix T, dou
       cdf[k] = (1.0 - matrix_product(m_pi, m_e)(0,0));
     }
     else {
-      cdf[k] = (1.0 - matrix_product(m_pi, matrix_product(matrix_exponential(T * log(x[k] / beta + 1)), m_e))(0,0));
+      cdf[k] = (1.0 - matrix_product(m_pi, matrix_product(matrix_exponential(T * log(x[k] / beta + 1.0)), m_e))(0,0));
     }
   }
   if (lower_tail == true) {
@@ -284,7 +284,7 @@ NumericVector mlognormalden(NumericVector x, NumericVector pi, NumericMatrix T, 
   NumericVector density(x.size());
   
   NumericMatrix m_pi(1, pi.size(), pi.begin());
-  NumericVector e(pi.size(), 1);
+  NumericVector e(pi.size(), 1.0);
   NumericMatrix m_e(pi.size(), 1, e.begin());
   NumericMatrix m_t = matrix_product(T * (-1.0), m_e);
   
@@ -293,7 +293,7 @@ NumericVector mlognormalden(NumericVector x, NumericVector pi, NumericMatrix T, 
       density[k] = (1.0 - matrix_product(m_pi, m_e)(0,0));
     }
     else {
-      density[k] = (matrix_product(m_pi, matrix_product(matrix_exponential(T * pow(log(x[k] + 1), beta)), m_t))(0,0)) * beta * pow(log(x[k] + 1), beta - 1)/(x[k] + 1);
+      density[k] = (matrix_product(m_pi, matrix_product(matrix_exponential(T * pow(log(x[k] + 1.0), beta)), m_t))(0,0)) * beta * pow(log(x[k] + 1), beta - 1)/(x[k] + 1);
     }
   }
   return density;
@@ -317,7 +317,7 @@ NumericVector mlognormalcdf(NumericVector x, NumericVector pi, NumericMatrix T, 
   NumericVector cdf(x.size());
   
   NumericMatrix m_pi(1, pi.size(), pi.begin());
-  NumericVector e(pi.size(), 1);
+  NumericVector e(pi.size(), 1.0);
   NumericMatrix m_e(pi.size(), 1, e.begin());
   
   for (int k = 0; k < x.size(); ++k){
@@ -325,7 +325,7 @@ NumericVector mlognormalcdf(NumericVector x, NumericVector pi, NumericMatrix T, 
       cdf[k] = (1.0 - matrix_product(m_pi, m_e)(0,0));
     }
     else {
-      cdf[k] = (1.0 - matrix_product(m_pi, matrix_product(matrix_exponential(T * pow(log(x[k] + 1), beta)), m_e))(0,0));
+      cdf[k] = (1.0 - matrix_product(m_pi, matrix_product(matrix_exponential(T * pow(log(x[k] + 1.0), beta)), m_e))(0,0));
     }
   }
   if (lower_tail == true) {
@@ -353,7 +353,7 @@ NumericVector mloglogisticden(NumericVector x, NumericVector pi, NumericMatrix T
   NumericVector density(x.size());
   
   NumericMatrix m_pi(1, pi.size(), pi.begin());
-  NumericVector e(pi.size(), 1);
+  NumericVector e(pi.size(), 1.0);
   NumericMatrix m_e(pi.size(), 1, e.begin());
   NumericMatrix m_t = matrix_product(T * (-1.0), m_e);
   
@@ -362,7 +362,7 @@ NumericVector mloglogisticden(NumericVector x, NumericVector pi, NumericMatrix T
       density[k] = (1.0 - matrix_product(m_pi, m_e)(0,0));
     }
     else {
-      density[k] = (matrix_product(m_pi, matrix_product(matrix_exponential(T * log(pow(x[k] / beta[0], beta[1]) + 1)), m_t))(0,0)) * (pow(x[k] / beta[0], beta[1] - 1) * beta[1] / beta[0]) / (pow(x[k] / beta[0], beta[1]) + 1);
+      density[k] = (matrix_product(m_pi, matrix_product(matrix_exponential(T * log(pow(x[k] / beta[0], beta[1]) + 1.0)), m_t))(0,0)) * (pow(x[k] / beta[0], beta[1] - 1) * beta[1] / beta[0]) / (pow(x[k] / beta[0], beta[1]) + 1);
     }
   }
   return density;
@@ -385,7 +385,7 @@ NumericVector mloglogisticcdf(NumericVector x, NumericVector pi, NumericMatrix T
   NumericVector cdf(x.size());
   
   NumericMatrix m_pi(1, pi.size(), pi.begin());
-  NumericVector e(pi.size(), 1);
+  NumericVector e(pi.size(), 1.0);
   NumericMatrix m_e(pi.size(), 1, e.begin());
   
   for (int k = 0; k < x.size(); ++k){
@@ -393,7 +393,7 @@ NumericVector mloglogisticcdf(NumericVector x, NumericVector pi, NumericMatrix T
       cdf[k] = (1.0 - matrix_product(m_pi, m_e)(0,0));
     }
     else {
-      cdf[k] = (1.0 - matrix_product(m_pi, matrix_product(matrix_exponential(T * log(pow(x[k] / beta[0], beta[1]) + 1)), m_e))(0,0));
+      cdf[k] = (1.0 - matrix_product(m_pi, matrix_product(matrix_exponential(T * log(pow(x[k] / beta[0], beta[1]) + 1.0)), m_e))(0,0));
     }
   }
   if (lower_tail == true) {
@@ -420,7 +420,7 @@ NumericVector mgompertzden(NumericVector x, NumericVector pi, NumericMatrix T, d
   NumericVector density(x.size());
   
   NumericMatrix m_pi(1, pi.size(), pi.begin());
-  NumericVector e(pi.size(), 1);
+  NumericVector e(pi.size(), 1.0);
   NumericMatrix m_e(pi.size(), 1, e.begin());
   NumericMatrix m_t = matrix_product(T * (-1.0), m_e);
   
@@ -429,7 +429,7 @@ NumericVector mgompertzden(NumericVector x, NumericVector pi, NumericMatrix T, d
       density[k] = (1.0 - matrix_product(m_pi, m_e)(0,0));
     }
     else {
-      density[k] = (matrix_product(m_pi, matrix_product(matrix_exponential(T * ((exp(x[k] * beta) - 1) / beta) ), m_t))(0,0)) * exp(x[k] * beta);
+      density[k] = (matrix_product(m_pi, matrix_product(matrix_exponential(T * ((exp(x[k] * beta) - 1.0) / beta) ), m_t))(0,0)) * exp(x[k] * beta);
     }
   }
   return density;
@@ -453,7 +453,7 @@ NumericVector mgompertzcdf(NumericVector x, NumericVector pi, NumericMatrix T, d
   NumericVector cdf(x.size());
   
   NumericMatrix m_pi(1, pi.size(), pi.begin());
-  NumericVector e(pi.size(), 1);
+  NumericVector e(pi.size(), 1.0);
   NumericMatrix m_e(pi.size(), 1, e.begin());
   
   for (int k = 0; k < x.size(); ++k){
@@ -461,7 +461,7 @@ NumericVector mgompertzcdf(NumericVector x, NumericVector pi, NumericMatrix T, d
       cdf[k] = (1.0 - matrix_product(m_pi, m_e)(0,0));
     }
     else {
-      cdf[k] = (1.0 - matrix_product(m_pi, matrix_product(matrix_exponential(T * ((exp(x[k] * beta) - 1) / beta)), m_e))(0,0));
+      cdf[k] = (1.0 - matrix_product(m_pi, matrix_product(matrix_exponential(T * ((exp(x[k] * beta) - 1.0) / beta)), m_e))(0,0));
     }
   }
   if (lower_tail == true) {
@@ -492,7 +492,7 @@ NumericVector mgevden(NumericVector x, NumericVector pi, NumericMatrix T, double
   NumericVector density(x.size());
   
   NumericMatrix m_pi(1, pi.size(), pi.begin());
-  NumericVector e(pi.size(), 1);
+  NumericVector e(pi.size(), 1.0);
   NumericMatrix m_e(pi.size(), 1, e.begin());
   NumericMatrix m_t = matrix_product(T * (-1.0), m_e);
   
@@ -501,7 +501,7 @@ NumericVector mgevden(NumericVector x, NumericVector pi, NumericMatrix T, double
       density[k] = (matrix_product(m_pi, matrix_product(matrix_exponential(T * exp(-(x[k] - mu) / sigma) ), m_t))(0,0)) * exp(-(x[k] - mu) / sigma) / sigma;
     }
     else {
-      density[k] = (matrix_product(m_pi, matrix_product(matrix_exponential(T * pow(1 + (xi / sigma) * (x[k] - mu), -1 / xi) ), m_t))(0,0)) * pow(1 + (xi / sigma) * (x[k] - mu), -(1 + xi) / xi) / sigma;
+      density[k] = (matrix_product(m_pi, matrix_product(matrix_exponential(T * pow(1.0 + (xi / sigma) * (x[k] - mu), -1.0 / xi) ), m_t))(0,0)) * pow(1 + (xi / sigma) * (x[k] - mu), -(1 + xi) / xi) / sigma;
     }
   }
   return density;
@@ -527,7 +527,7 @@ NumericVector mgevcdf(NumericVector x, NumericVector pi, NumericMatrix T, double
   NumericVector cdf(x.size());
   
   NumericMatrix m_pi(1, pi.size(), pi.begin());
-  NumericVector e(pi.size(), 1);
+  NumericVector e(pi.size(), 1.0);
   NumericMatrix m_e(pi.size(), 1, e.begin());
   
   for (int k = 0; k < x.size(); ++k){
@@ -535,7 +535,7 @@ NumericVector mgevcdf(NumericVector x, NumericVector pi, NumericMatrix T, double
       cdf[k] = matrix_product(m_pi, matrix_product(matrix_exponential(T * exp(-(x[k] - mu) / sigma)), m_e))(0,0);
     }
     else {
-      cdf[k] = matrix_product(m_pi, matrix_product(matrix_exponential(T * pow(1 + (xi / sigma) * (x[k] - mu), -1 / xi) ), m_e))(0,0);
+      cdf[k] = matrix_product(m_pi, matrix_product(matrix_exponential(T * pow(1.0 + (xi / sigma) * (x[k] - mu), -1.0 / xi) ), m_e))(0,0);
     }
   }
   if (lower_tail == true) {
