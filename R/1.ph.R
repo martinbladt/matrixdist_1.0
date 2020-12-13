@@ -134,22 +134,26 @@ setMethod("maximum", signature(x1 = "ph", x2 = "ph"),
 #' Moment Method for phase type distributions
 #'
 #' @param x an object of class \linkS4class{ph}.
-#' @param k a positive integer of moment order.
+#' @param k a positive real number (moment order).
 #' 
 #' @return The raw moment of the \linkS4class{ph} (or undelying \linkS4class{ph}) object.
 #' @export
 #'
 #' @examples
+#' set.seed(123)
 #' ph1 <- ph(structure = "general", dimension = 3)
-#' moment(ph1, 3)
+#' moment(ph1, 1.5)
 setMethod("moment", signature(x = "ph"), 
           function (x, k = 1){
-            if(k%%1 != 0 | k <= 0) return("k should be a positive integer")
+            if(k <= 0) return("k should be positive")
             if(methods::is(x, "iph")) warning("moment of undelying ph structure is provided for iph objects")
-            return(phmoment(k, x@pars$alpha, x@pars$S))
+            m <- solve(-x@pars$S)
+            p <- eigen(m)$vectors
+            d <- diag(eigen(m)$values^{k})
+            return(sum(gamma(k + 1) * x@pars$alpha %*% p %*% d %*% solve(p)))
+            
           }
 )
-
 
 #' Show Method for phase type distributions
 #'

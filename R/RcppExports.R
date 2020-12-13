@@ -306,30 +306,6 @@ phcdf <- function(x, pi, T, lower_tail = TRUE) {
     .Call(`_matrixdist_phcdf`, x, pi, T, lower_tail)
 }
 
-#' k moment of a phase-type
-#' 
-#' Computes the k moment of phase-type distribution with parameters \code{pi} and \code{T}
-#' @param k Integer value
-#' @param pi Initial probabilities
-#' @param T sub-intensity matrix
-#' @return The k moment
-#' 
-phmoment <- function(k, pi, T) {
-    .Call(`_matrixdist_phmoment`, k, pi, T)
-}
-
-#' Laplace transform of a phase-type
-#' 
-#' Computes the Laplace transform at \code{s} of a phase-type distribution with parameters \code{pi} and \code{T}
-#' @param s real value
-#' @param pi Initial probabilities
-#' @param T sub-intensity matrix
-#' @return Laplace transform
-#' 
-phLaplace <- function(s, pi, T) {
-    .Call(`_matrixdist_phLaplace`, s, pi, T)
-}
-
 #' Matrix Weibull density
 #' 
 #' Computes the density of a matrix Weibull distribution with parameters \code{pi}, \code{T} and \code{beta} at \code{x}

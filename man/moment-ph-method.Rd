@@ -9,7 +9,7 @@
 \arguments{
 \item{x}{an object of class \linkS4class{ph}.}
 
-\item{k}{a positive integer of moment order.}
+\item{k}{a positive real number (moment order).}
 }
 \value{
 The raw moment of the \linkS4class{ph} (or undelying \linkS4class{ph}) object.
@@ -18,6 +18,7 @@ The raw moment of the \linkS4class{ph} (or undelying \linkS4class{ph}) object.
 Moment Method for phase type distributions
 }
 \examples{
+set.seed(123)
 ph1 <- ph(structure = "general", dimension = 3)
-moment(ph1, 3)
+moment(ph1, 1.5)
 }

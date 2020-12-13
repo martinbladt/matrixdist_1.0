@@ -346,32 +346,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// phmoment
-NumericVector phmoment(NumericVector k, NumericVector pi, NumericMatrix T);
-RcppExport SEXP _matrixdist_phmoment(SEXP kSEXP, SEXP piSEXP, SEXP TSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type k(kSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type pi(piSEXP);
-    Rcpp::traits::input_parameter< NumericMatrix >::type T(TSEXP);
-    rcpp_result_gen = Rcpp::wrap(phmoment(k, pi, T));
-    return rcpp_result_gen;
-END_RCPP
-}
-// phLaplace
-NumericVector phLaplace(NumericVector s, NumericVector pi, NumericMatrix T);
-RcppExport SEXP _matrixdist_phLaplace(SEXP sSEXP, SEXP piSEXP, SEXP TSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type s(sSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type pi(piSEXP);
-    Rcpp::traits::input_parameter< NumericMatrix >::type T(TSEXP);
-    rcpp_result_gen = Rcpp::wrap(phLaplace(s, pi, T));
-    return rcpp_result_gen;
-END_RCPP
-}
 // mweibullden
 NumericVector mweibullden(NumericVector x, NumericVector pi, NumericMatrix T, double beta);
 RcppExport SEXP _matrixdist_mweibullden(SEXP xSEXP, SEXP piSEXP, SEXP TSEXP, SEXP betaSEXP) {
@@ -763,8 +737,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_rmatrixgev", (DL_FUNC) &_matrixdist_rmatrixgev, 6},
     {"_matrixdist_phdensity", (DL_FUNC) &_matrixdist_phdensity, 3},
     {"_matrixdist_phcdf", (DL_FUNC) &_matrixdist_phcdf, 4},
-    {"_matrixdist_phmoment", (DL_FUNC) &_matrixdist_phmoment, 3},
-    {"_matrixdist_phLaplace", (DL_FUNC) &_matrixdist_phLaplace, 3},
     {"_matrixdist_mweibullden", (DL_FUNC) &_matrixdist_mweibullden, 4},
     {"_matrixdist_mweibullcdf", (DL_FUNC) &_matrixdist_mweibullcdf, 5},
     {"_matrixdist_RunFunction", (DL_FUNC) &_matrixdist_RunFunction, 2},
