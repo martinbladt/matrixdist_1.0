@@ -141,8 +141,7 @@ setMethod("maximum", signature(x1 = "ph", x2 = "ph"),
 #'
 #' @examples
 #' ph1 <- ph(structure = "general", dimension = 3)
-#' moment(ph1, 2) - moment(ph1, 1)^2 #variance
-#' var(sim(ph1, 100000)) #monte carlo approximation
+#' moment(ph1, 3)
 setMethod("moment", signature(x = "ph"), 
           function (x, k = 1){
             if(k%%1 != 0 | k <= 0) return("k should be a positive integer")

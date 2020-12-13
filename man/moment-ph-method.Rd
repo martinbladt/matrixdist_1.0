@@ -19,6 +19,5 @@ Moment Method for phase type distributions
 }
 \examples{
 ph1 <- ph(structure = "general", dimension = 3)
-moment(ph1, 2) - moment(ph1, 1)^2 #variance
-var(sim(ph1, 100000)) #monte carlo approximation
+moment(ph1, 3)
 }

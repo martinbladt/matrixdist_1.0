@@ -21,7 +21,7 @@ NumericVector phdensity(NumericVector x, NumericVector pi, NumericMatrix T) {
   NumericMatrix m_pi(1, pi.size(), pi.begin());
   NumericVector e(pi.size(), 1);
   NumericMatrix m_e(pi.size(), 1, e.begin());
-  NumericMatrix m_t = matrix_product(T * (-1), m_e);
+  NumericMatrix m_t = matrix_product(T * (-1.0), m_e);
   
   for (int k = 0; k < x.size(); ++k){
     if (x[k] == 0) {
@@ -79,7 +79,7 @@ NumericVector phcdf(NumericVector x, NumericVector pi, NumericMatrix T, bool low
 //' @return The k moment
 //' 
 // [[Rcpp::export]]
-NumericVector phmoment(IntegerVector k, NumericVector pi, NumericMatrix T) {
+NumericVector phmoment(NumericVector k, NumericVector pi, NumericMatrix T) {
   
   NumericVector moments(k.size());
   
@@ -115,7 +115,7 @@ NumericVector phLaplace(NumericVector s, NumericVector pi, NumericMatrix T) {
   NumericMatrix m_pi(1, pi.size(), pi.begin());
   NumericVector e(pi.size(), 1);
   NumericMatrix m_e(pi.size(), 1, e.begin());
-  NumericMatrix m_t = matrix_product(T * (-1), m_e);
+  NumericMatrix m_t = matrix_product(T * (-1.0), m_e);
   
   NumericMatrix identity_matrix = NumericMatrix::diag(T.nrow(), 1.0);
   
@@ -142,7 +142,7 @@ NumericVector mweibullden(NumericVector x, NumericVector pi, NumericMatrix T, do
   NumericMatrix m_pi(1, pi.size(), pi.begin());
   NumericVector e(pi.size(), 1);
   NumericMatrix m_e(pi.size(), 1, e.begin());
-  NumericMatrix m_t = matrix_product(T * (-1), m_e);
+  NumericMatrix m_t = matrix_product(T * (-1.0), m_e);
   
   for (int k = 0; k < x.size(); ++k){
     if (x[k] == 0) {
@@ -188,7 +188,7 @@ NumericVector mweibullcdf(NumericVector x, NumericVector pi, NumericMatrix T, do
     return cdf;
   }
   else {
-    return (1 - cdf);
+    return (1.0 - cdf);
   }
 }
 
@@ -218,7 +218,7 @@ NumericVector mparetoden(NumericVector x, NumericVector pi, NumericMatrix T, dou
   NumericMatrix m_pi(1, pi.size(), pi.begin());
   NumericVector e(pi.size(), 1);
   NumericMatrix m_e(pi.size(), 1, e.begin());
-  NumericMatrix m_t = matrix_product(T * (-1), m_e);
+  NumericMatrix m_t = matrix_product(T * (-1.0), m_e);
   
   for (int k = 0; k < x.size(); ++k){
     if (x[k] == 0) {
@@ -264,7 +264,7 @@ NumericVector mparetocdf(NumericVector x, NumericVector pi, NumericMatrix T, dou
     return cdf;
   }
   else {
-    return (1 - cdf);
+    return (1.0 - cdf);
   }
 }
 
@@ -286,7 +286,7 @@ NumericVector mlognormalden(NumericVector x, NumericVector pi, NumericMatrix T, 
   NumericMatrix m_pi(1, pi.size(), pi.begin());
   NumericVector e(pi.size(), 1);
   NumericMatrix m_e(pi.size(), 1, e.begin());
-  NumericMatrix m_t = matrix_product(T * (-1), m_e);
+  NumericMatrix m_t = matrix_product(T * (-1.0), m_e);
   
   for (int k = 0; k < x.size(); ++k){
     if (x[k] == 0) {
@@ -332,7 +332,7 @@ NumericVector mlognormalcdf(NumericVector x, NumericVector pi, NumericMatrix T, 
     return cdf;
   }
   else {
-    return (1 - cdf);
+    return (1.0 - cdf);
   }
 }
 
@@ -355,7 +355,7 @@ NumericVector mloglogisticden(NumericVector x, NumericVector pi, NumericMatrix T
   NumericMatrix m_pi(1, pi.size(), pi.begin());
   NumericVector e(pi.size(), 1);
   NumericMatrix m_e(pi.size(), 1, e.begin());
-  NumericMatrix m_t = matrix_product(T * (-1), m_e);
+  NumericMatrix m_t = matrix_product(T * (-1.0), m_e);
   
   for (int k = 0; k < x.size(); ++k){
     if (x[k] == 0) {
@@ -400,7 +400,7 @@ NumericVector mloglogisticcdf(NumericVector x, NumericVector pi, NumericMatrix T
     return cdf;
   }
   else {
-    return (1 - cdf);
+    return (1.0 - cdf);
   }
 }
 
@@ -422,7 +422,7 @@ NumericVector mgompertzden(NumericVector x, NumericVector pi, NumericMatrix T, d
   NumericMatrix m_pi(1, pi.size(), pi.begin());
   NumericVector e(pi.size(), 1);
   NumericMatrix m_e(pi.size(), 1, e.begin());
-  NumericMatrix m_t = matrix_product(T * (-1), m_e);
+  NumericMatrix m_t = matrix_product(T * (-1.0), m_e);
   
   for (int k = 0; k < x.size(); ++k){
     if (x[k] == 0) {
@@ -468,7 +468,7 @@ NumericVector mgompertzcdf(NumericVector x, NumericVector pi, NumericMatrix T, d
     return cdf;
   }
   else {
-    return (1 - cdf);
+    return (1.0 - cdf);
   }
 }
 
@@ -494,7 +494,7 @@ NumericVector mgevden(NumericVector x, NumericVector pi, NumericMatrix T, double
   NumericMatrix m_pi(1, pi.size(), pi.begin());
   NumericVector e(pi.size(), 1);
   NumericMatrix m_e(pi.size(), 1, e.begin());
-  NumericMatrix m_t = matrix_product(T * (-1), m_e);
+  NumericMatrix m_t = matrix_product(T * (-1.0), m_e);
   
   for (int k = 0; k < x.size(); ++k){
     if (xi == 0) {
@@ -542,6 +542,6 @@ NumericVector mgevcdf(NumericVector x, NumericVector pi, NumericMatrix T, double
     return cdf;
   }
   else {
-    return (1 - cdf);
+    return (1.0 - cdf);
   }
 }

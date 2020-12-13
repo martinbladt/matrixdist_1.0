@@ -347,12 +347,12 @@ BEGIN_RCPP
 END_RCPP
 }
 // phmoment
-NumericVector phmoment(IntegerVector k, NumericVector pi, NumericMatrix T);
+NumericVector phmoment(NumericVector k, NumericVector pi, NumericMatrix T);
 RcppExport SEXP _matrixdist_phmoment(SEXP kSEXP, SEXP piSEXP, SEXP TSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< IntegerVector >::type k(kSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type k(kSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type pi(piSEXP);
     Rcpp::traits::input_parameter< NumericMatrix >::type T(TSEXP);
     rcpp_result_gen = Rcpp::wrap(phmoment(k, pi, T));

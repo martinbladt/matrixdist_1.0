@@ -8,11 +8,10 @@ Authors@R: c(person("Martin", "Bladt", email = "martinbladt@gmail.com", role = c
               role = "aut")
               )
 Maintainer: Martin Bladt <martinbladt@gmail.com>
-Description: Tools for homogeneous and inhomogeneous phase--type distributions. 
+Description: Tools for homogeneous and in-homogeneous phase--type distributions. 
     Methods for functional evaluation, simulation and estimation using the EM algorithm are provided. 
 Depends: R (>= 3.1.0)
 License: GPL-3
-Lazydata: true
 Imports: 
     methods,
     Rcpp
