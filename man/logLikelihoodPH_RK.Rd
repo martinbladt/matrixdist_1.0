@@ -4,14 +4,14 @@
 \alias{logLikelihoodPH_RK}
 \title{Loglikelihood using RK}
 \usage{
-logLikelihoodPH_RK(h, pi, T, obs, weight, rcens, rcweight)
+logLikelihoodPH_RK(h, alpha, S, obs, weight, rcens, rcweight)
 }
 \arguments{
 \item{h}{step-length}
 
-\item{pi}{initial probabilities}
+\item{alpha}{initial probabilities}
 
-\item{T}{sub-intensity}
+\item{S}{sub-intensity}
 
 \item{obs}{the observations}
 

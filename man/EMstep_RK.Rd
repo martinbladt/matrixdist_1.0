@@ -4,14 +4,14 @@
 \alias{EMstep_RK}
 \title{EM step using Runge Kutta}
 \usage{
-EMstep_RK(h, pi, T, obs, weight, rcens, rcweight)
+EMstep_RK(h, alpha, S, obs, weight, rcens, rcweight)
 }
 \arguments{
 \item{h}{step-length}
 
-\item{pi}{initial probalities}
+\item{alpha}{initial probalities}
 
-\item{T}{sub-intensity}
+\item{S}{sub-intensity}
 
 \item{obs}{the observations}
 

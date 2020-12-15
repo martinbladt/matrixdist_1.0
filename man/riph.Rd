@@ -4,16 +4,16 @@
 \alias{riph}
 \title{Random inhomogeneous phase-type}
 \usage{
-riph(n, dist_type, pi, T, beta)
+riph(n, dist_type, alpha, S, beta)
 }
 \arguments{
 \item{n}{Sample size}
 
 \item{dist_type}{Type of IPH}
 
-\item{pi}{Initial probabilities}
+\item{alpha}{Initial probabilities}
 
-\item{T}{sub-intensity matrix}
+\item{S}{sub-intensity matrix}
 
 \item{beta}{Parameter of the transformation}
 }
@@ -21,5 +21,5 @@ riph(n, dist_type, pi, T, beta)
 The simulated sample
 }
 \description{
-Generates a sample of size \code{n} from an inhomogeneous phase-type distribution with parameters \code{pi}, \code{T} and \code{beta}
+Generates a sample of size \code{n} from an inhomogeneous phase-type distribution with parameters \code{alpha}, \code{S} and \code{beta}
 }

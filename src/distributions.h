@@ -1,6 +1,6 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 
-NumericVector mweibullden(NumericVector x, NumericVector pi, NumericMatrix T, double beta);
+NumericVector mweibullden(NumericVector x, NumericVector alpha, NumericMatrix S, double beta);
 
-NumericVector mweibullcdf(NumericVector x, NumericVector pi, NumericMatrix T, double beta, bool lower_tail = true);
+NumericVector mweibullcdf(NumericVector x, NumericVector alpha, NumericMatrix S, double beta, bool lower_tail = true);

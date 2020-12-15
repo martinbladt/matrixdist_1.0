@@ -4,14 +4,14 @@
 \alias{logLikelihoodMgompertz_RK}
 \title{Loglikelihood of matrix Gompertz using RK}
 \usage{
-logLikelihoodMgompertz_RK(h, pi, T, beta, obs, weight, rcens, rcweight)
+logLikelihoodMgompertz_RK(h, alpha, S, beta, obs, weight, rcens, rcweight)
 }
 \arguments{
 \item{h}{step-length}
 
-\item{pi}{initial probabilities}
+\item{alpha}{initial probabilities}
 
-\item{T}{sub-intensity}
+\item{S}{sub-intensity}
 
 \item{beta}{parameter of transformation}
 

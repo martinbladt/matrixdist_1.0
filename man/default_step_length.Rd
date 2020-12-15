@@ -4,14 +4,14 @@
 \alias{default_step_length}
 \title{Default size of the steps in the RK}
 \usage{
-default_step_length(T)
+default_step_length(S)
 }
 \arguments{
-\item{T}{sub-intensity matrix}
+\item{S}{sub-intensity matrix}
 }
 \value{
-The step length for \code{T}
+The step length for \code{S}
 }
 \description{
-Computes the default step length for a matrix \code{T} to be employed in the RK method
+Computes the default step length for a matrix \code{S} to be employed in the RK method
 }

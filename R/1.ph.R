@@ -76,7 +76,7 @@ setMethod("+", signature(e1 = "ph", e2 = "ph"),
           function (e1, e2){
             if(methods::is(e1, "iph") | methods::is(e2, "iph")) stop("objects to be added should be ph")
             L <- sumPH(e1@pars$alpha, e1@pars$S, e2@pars$alpha, e2@pars$S)
-            return(ph(alpha = L$pi, S = L$T))
+            return(ph(alpha = L$alpha, S = L$S))
           }
           )
 
@@ -308,25 +308,25 @@ setMethod(
     rcenweight <- B$weights
 
     ph_par <- x@pars
-    pi_fit <- clone_vector(ph_par$alpha)
-    T_fit <- clone_matrix(ph_par$S)
+    alpha_fit <- clone_vector(ph_par$alpha)
+    S_fit <- clone_matrix(ph_par$S)
 
     if (!is_iph) {
       for (k in 1:stepsEM) {
-        if(!is.na(rkstep)) RKstep <- rkstep else  RKstep <- default_step_length(T_fit)
-        EMstep_RK(RKstep, pi_fit, T_fit, y, weight, rcen, rcenweight)
+        if(!is.na(rkstep)) RKstep <- rkstep else  RKstep <- default_step_length(S_fit)
+        EMstep_RK(RKstep, alpha_fit, S_fit, y, weight, rcen, rcenweight)
         if (k %% every == 0) {
           cat("\r", "iteration:", k,
-            ", logLik:", logLikelihoodPH_RK(RKstep, pi_fit, T_fit, y, weight, rcen, rcenweight),
+            ", logLik:", logLikelihoodPH_RK(RKstep, alpha_fit, S_fit, y, weight, rcen, rcenweight),
             sep = " "
           )
         }
       }
       cat("\n", sep = "")
-      x@pars$alpha <- pi_fit
-      x@pars$S <- T_fit
+      x@pars$alpha <- alpha_fit
+      x@pars$S <- S_fit
       x@fit <- list(
-        logLik = logLikelihoodPH_RK(RKstep, pi_fit, T_fit, y, weight, rcen, rcenweight),
+        logLik = logLikelihoodPH_RK(RKstep, alpha_fit, S_fit, y, weight, rcen, rcenweight),
         nobs = sum(A$weights)
       )
     }
@@ -337,15 +337,15 @@ setMethod(
         if(x@gfun$name != "gev") {trans <- inv_g(par_g, y); trans_cens <- inv_g(par_g, rcen)
         }else{ t <- inv_g(par_g, y, weight); tc <- inv_g(par_g, rcen, rcenweight) 
         trans <- t$obs; trans_weight <- t$weight; trans_cens <- tc$obs; trans_rcenweight <- tc$weight}
-        if(!is.na(rkstep)) RKstep <- rkstep else  RKstep <- default_step_length(T_fit)
-        EMstep_RK(RKstep, pi_fit, T_fit, trans, trans_weight, trans_cens, trans_rcenweight)
+        if(!is.na(rkstep)) RKstep <- rkstep else  RKstep <- default_step_length(S_fit)
+        EMstep_RK(RKstep, alpha_fit, S_fit, trans, trans_weight, trans_cens, trans_rcenweight)
         opt <- suppressWarnings(
           stats::optim(
             par = par_g,
             fn = mLL,
             h = RKstep,
-            pi = pi_fit,
-            T = T_fit,
+            alpha = alpha_fit,
+            S = S_fit,
             obs = y,
             weight = weight,
             rcens = rcen,
@@ -366,8 +366,8 @@ setMethod(
         }
       }
       cat("\n", sep = "")
-      x@pars$alpha <- pi_fit
-      x@pars$S <- T_fit
+      x@pars$alpha <- alpha_fit
+      x@pars$S <- S_fit
       x@fit <- list(
         logLik = -opt$value,
         nobs = sum(A$weights)

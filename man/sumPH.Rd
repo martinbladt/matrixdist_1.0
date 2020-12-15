@@ -4,16 +4,16 @@
 \alias{sumPH}
 \title{Computes the initial distribution and sub-intensity of the sum of PH}
 \usage{
-sumPH(pi1, T1, pi2, T2)
+sumPH(alpha1, S1, alpha2, S2)
 }
 \arguments{
-\item{pi1}{initial distribution}
+\item{alpha1}{initial distribution}
 
-\item{T1}{sub-intensity}
+\item{S1}{sub-intensity}
 
-\item{pi2}{initial distribution}
+\item{alpha2}{initial distribution}
 
-\item{T2}{sub-intensity}
+\item{S2}{sub-intensity}
 }
 \description{
 Computes the initial distribution and sub-intensity of the sum of PH

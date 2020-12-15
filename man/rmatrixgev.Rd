@@ -4,14 +4,14 @@
 \alias{rmatrixgev}
 \title{Random matrix GEV}
 \usage{
-rmatrixgev(n, pi, T, mu, sigma, xi = 0)
+rmatrixgev(n, alpha, S, mu, sigma, xi = 0)
 }
 \arguments{
 \item{n}{Sample size}
 
-\item{pi}{Initial probabilities}
+\item{alpha}{Initial probabilities}
 
-\item{T}{sub-intensity matrix}
+\item{S}{sub-intensity matrix}
 
 \item{mu}{Location parameter}
 
@@ -23,5 +23,5 @@ rmatrixgev(n, pi, T, mu, sigma, xi = 0)
 The simulated sample
 }
 \description{
-Generates a sample of size \code{n} from an inhomogeneous phase-type distribution with parameters \code{pi}, \code{T} and \code{beta}
+Generates a sample of size \code{n} from an inhomogeneous phase-type distribution with parameters \code{alpha}, \code{S} and \code{beta}
 }

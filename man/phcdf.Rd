@@ -4,14 +4,14 @@
 \alias{phcdf}
 \title{Phase-type cdf or tail}
 \usage{
-phcdf(x, pi, T, lower_tail = TRUE)
+phcdf(x, alpha, S, lower_tail = TRUE)
 }
 \arguments{
 \item{x}{non-negative value}
 
-\item{pi}{Initial probabilities}
+\item{alpha}{Initial probabilities}
 
-\item{T}{sub-intensity matrix}
+\item{S}{sub-intensity matrix}
 
 \item{lower_tail}{cdf or tail}
 }
@@ -19,5 +19,5 @@ phcdf(x, pi, T, lower_tail = TRUE)
 The cdf (tail) at \code{x}
 }
 \description{
-Computes the cdf of phase-type distribution with parameters \code{pi} and \code{T} at \code{x}
+Computes the cdf of phase-type distribution with parameters \code{alpha} and \code{S} at \code{x}
 }

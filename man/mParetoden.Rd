@@ -4,14 +4,14 @@
 \alias{mparetoden}
 \title{Matrix Pareto density}
 \usage{
-mparetoden(x, pi, T, beta)
+mparetoden(x, alpha, S, beta)
 }
 \arguments{
 \item{x}{non-negative value}
 
-\item{pi}{Initial probabilities}
+\item{alpha}{Initial probabilities}
 
-\item{T}{sub-intensity matrix}
+\item{S}{sub-intensity matrix}
 
 \item{beta}{scale parameter}
 }
@@ -19,5 +19,5 @@ mparetoden(x, pi, T, beta)
 The density at \code{x}
 }
 \description{
-Computes the density of a matrix Pareto distribution with parameters \code{pi}, \code{T} and \code{beta} at \code{x}
+Computes the density of a matrix Pareto distribution with parameters \code{alpha}, \code{S} and \code{beta} at \code{x}
 }

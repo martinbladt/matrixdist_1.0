@@ -4,14 +4,14 @@
 \alias{mgevcdf}
 \title{Matrix GEV cdf}
 \usage{
-mgevcdf(x, pi, T, mu, sigma, xi, lower_tail = TRUE)
+mgevcdf(x, alpha, S, mu, sigma, xi, lower_tail = TRUE)
 }
 \arguments{
 \item{x}{non-negative value}
 
-\item{pi}{Initial probabilities}
+\item{alpha}{Initial probabilities}
 
-\item{T}{sub-intensity matrix}
+\item{S}{sub-intensity matrix}
 
 \item{mu}{location parameter}
 
@@ -25,5 +25,5 @@ mgevcdf(x, pi, T, mu, sigma, xi, lower_tail = TRUE)
 The cdf (tail) at \code{x}
 }
 \description{
-Computes the cdf (tail) of a matrix GEV distribution with parameters \code{pi}, \code{T} and \code{beta} at \code{x}
+Computes the cdf (tail) of a matrix GEV distribution with parameters \code{alpha}, \code{S} and \code{beta} at \code{x}
 }

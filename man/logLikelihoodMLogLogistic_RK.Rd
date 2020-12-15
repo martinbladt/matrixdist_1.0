@@ -4,14 +4,14 @@
 \alias{logLikelihoodMloglogistic_RK}
 \title{Loglikelihood of matrix Log-Logistic using RK}
 \usage{
-logLikelihoodMloglogistic_RK(h, pi, T, beta, obs, weight, rcens, rcweight)
+logLikelihoodMloglogistic_RK(h, alpha, S, beta, obs, weight, rcens, rcweight)
 }
 \arguments{
 \item{h}{step-length}
 
-\item{pi}{initial probabilities}
+\item{alpha}{initial probabilities}
 
-\item{T}{sub-intensity}
+\item{S}{sub-intensity}
 
 \item{beta}{parameter of transformation}
 

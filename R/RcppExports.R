@@ -3,12 +3,12 @@
 
 #' Default size of the steps in the RK
 #' 
-#' Computes the default step length for a matrix \code{T} to be employed in the RK method
-#' @param T sub-intensity matrix
-#' @return The step length for \code{T}
+#' Computes the default step length for a matrix \code{S} to be employed in the RK method
+#' @param S sub-intensity matrix
+#' @return The step length for \code{S}
 #' 
-default_step_length <- function(T) {
-    .Call(`_matrixdist_default_step_length`, T)
+default_step_length <- function(S) {
+    .Call(`_matrixdist_default_step_length`, S)
 }
 
 #' Runge Kutta for the calculation of the a,b and c vectors in a EM step
@@ -19,26 +19,26 @@ default_step_length <- function(T) {
 #' @param cmatrix the c matrix
 #' @param dt the increment
 #' @param h step-length
-#' @param T sub-intensity
+#' @param S sub-intensity
 #' @param t exit rates 
 #' 
-runge_kutta <- function(avector, bvector, cmatrix, dt, h, T, t) {
-    invisible(.Call(`_matrixdist_runge_kutta`, avector, bvector, cmatrix, dt, h, T, t))
+runge_kutta <- function(avector, bvector, cmatrix, dt, h, S, t) {
+    invisible(.Call(`_matrixdist_runge_kutta`, avector, bvector, cmatrix, dt, h, S, t))
 }
 
 #' EM step using Runge Kutta
 #' 
 #' Computes one step of the EM algorithm by using a Runge-Kutta method of 4th order
 #' @param h step-length
-#' @param pi initial probalities
-#' @param T sub-intensity
+#' @param alpha initial probalities
+#' @param S sub-intensity
 #' @param obs the observations
 #' @param weight the weights for the observations
 #' @param rcens censored observations
 #' @param rcweight the weights for the censored observations
 #' 
-EMstep_RK <- function(h, pi, T, obs, weight, rcens, rcweight) {
-    invisible(.Call(`_matrixdist_EMstep_RK`, h, pi, T, obs, weight, rcens, rcweight))
+EMstep_RK <- function(h, alpha, S, obs, weight, rcens, rcweight) {
+    invisible(.Call(`_matrixdist_EMstep_RK`, h, alpha, S, obs, weight, rcens, rcweight))
 }
 
 #' Runge Kutta for the calculation of the a vectors in a EM step 
@@ -47,121 +47,121 @@ EMstep_RK <- function(h, pi, T, obs, weight, rcens, rcweight) {
 #' @param avector the a vector
 #' @param dt increment
 #' @param h step-length
-#' @param T sub-intensity
+#' @param S sub-intensity
 #' 
-a_rungekutta <- function(avector, dt, h, T) {
-    invisible(.Call(`_matrixdist_a_rungekutta`, avector, dt, h, T))
+a_rungekutta <- function(avector, dt, h, S) {
+    invisible(.Call(`_matrixdist_a_rungekutta`, avector, dt, h, S))
 }
 
 #' Loglikelihood using RK
 #' 
 #' Loglikelihood for a sample 
 #' @param h step-length
-#' @param pi initial probabilities
-#' @param T sub-intensity
+#' @param alpha initial probabilities
+#' @param S sub-intensity
 #' @param obs the observations
 #' @param weight weight of the observations
 #' @param rcens censored observations
 #' @param rcweight weight of the censored observations
 #' 
-logLikelihoodPH_RK <- function(h, pi, T, obs, weight, rcens, rcweight) {
-    .Call(`_matrixdist_logLikelihoodPH_RK`, h, pi, T, obs, weight, rcens, rcweight)
+logLikelihoodPH_RK <- function(h, alpha, S, obs, weight, rcens, rcweight) {
+    .Call(`_matrixdist_logLikelihoodPH_RK`, h, alpha, S, obs, weight, rcens, rcweight)
 }
 
 #' Loglikelihood of matrix Weibull using RK
 #' 
 #' Loglikelihood for a sample 
 #' @param h step-length
-#' @param pi initial probabilities
-#' @param T sub-intensity
+#' @param alpha initial probabilities
+#' @param S sub-intensity
 #' @param beta parameter of transformation
 #' @param obs the observations
 #' @param weight weight of the observations
 #' @param rcens censored observations
 #' @param rcweight weight of the censored observations
 #' 
-logLikelihoodMweibull_RK <- function(h, pi, T, beta, obs, weight, rcens, rcweight) {
-    .Call(`_matrixdist_logLikelihoodMweibull_RK`, h, pi, T, beta, obs, weight, rcens, rcweight)
+logLikelihoodMweibull_RK <- function(h, alpha, S, beta, obs, weight, rcens, rcweight) {
+    .Call(`_matrixdist_logLikelihoodMweibull_RK`, h, alpha, S, beta, obs, weight, rcens, rcweight)
 }
 
 #' Loglikelihood of matrix Pareto using RK
 #' 
 #' Loglikelihood for a sample 
 #' @param h step-length
-#' @param pi initial probabilities
-#' @param T sub-intensity
+#' @param alpha initial probabilities
+#' @param S sub-intensity
 #' @param beta parameter of transformation
 #' @param obs the observations
 #' @param weight weight of the observations
 #' @param rcens censored observations
 #' @param rcweight weight of the censored observations
 #' 
-logLikelihoodMpareto_RK <- function(h, pi, T, beta, obs, weight, rcens, rcweight) {
-    .Call(`_matrixdist_logLikelihoodMpareto_RK`, h, pi, T, beta, obs, weight, rcens, rcweight)
+logLikelihoodMpareto_RK <- function(h, alpha, S, beta, obs, weight, rcens, rcweight) {
+    .Call(`_matrixdist_logLikelihoodMpareto_RK`, h, alpha, S, beta, obs, weight, rcens, rcweight)
 }
 
 #' Loglikelihood of matrix LogNormal using RK
 #' 
 #' Loglikelihood for a sample 
 #' @param h step-length
-#' @param pi initial probabilities
-#' @param T sub-intensity
+#' @param alpha initial probabilities
+#' @param S sub-intensity
 #' @param beta parameter of transformation
 #' @param obs the observations
 #' @param weight weight of the observations
 #' @param rcens censored observations
 #' @param rcweight weight of the censored observations
 #' 
-logLikelihoodMlognormal_RK <- function(h, pi, T, beta, obs, weight, rcens, rcweight) {
-    .Call(`_matrixdist_logLikelihoodMlognormal_RK`, h, pi, T, beta, obs, weight, rcens, rcweight)
+logLikelihoodMlognormal_RK <- function(h, alpha, S, beta, obs, weight, rcens, rcweight) {
+    .Call(`_matrixdist_logLikelihoodMlognormal_RK`, h, alpha, S, beta, obs, weight, rcens, rcweight)
 }
 
 #' Loglikelihood of matrix Log-Logistic using RK
 #' 
 #' Loglikelihood for a sample 
 #' @param h step-length
-#' @param pi initial probabilities
-#' @param T sub-intensity
+#' @param alpha initial probabilities
+#' @param S sub-intensity
 #' @param beta parameter of transformation
 #' @param obs the observations
 #' @param weight weight of the observations
 #' @param rcens censored observations
 #' @param rcweight weight of the censored observations
 #' 
-logLikelihoodMloglogistic_RK <- function(h, pi, T, beta, obs, weight, rcens, rcweight) {
-    .Call(`_matrixdist_logLikelihoodMloglogistic_RK`, h, pi, T, beta, obs, weight, rcens, rcweight)
+logLikelihoodMloglogistic_RK <- function(h, alpha, S, beta, obs, weight, rcens, rcweight) {
+    .Call(`_matrixdist_logLikelihoodMloglogistic_RK`, h, alpha, S, beta, obs, weight, rcens, rcweight)
 }
 
 #' Loglikelihood of matrix Gompertz using RK
 #' 
 #' Loglikelihood for a sample 
 #' @param h step-length
-#' @param pi initial probabilities
-#' @param T sub-intensity
+#' @param alpha initial probabilities
+#' @param S sub-intensity
 #' @param beta parameter of transformation
 #' @param obs the observations
 #' @param weight weight of the observations
 #' @param rcens censored observations
 #' @param rcweight weight of the censored observations
 #' 
-logLikelihoodMgompertz_RK <- function(h, pi, T, beta, obs, weight, rcens, rcweight) {
-    .Call(`_matrixdist_logLikelihoodMgompertz_RK`, h, pi, T, beta, obs, weight, rcens, rcweight)
+logLikelihoodMgompertz_RK <- function(h, alpha, S, beta, obs, weight, rcens, rcweight) {
+    .Call(`_matrixdist_logLikelihoodMgompertz_RK`, h, alpha, S, beta, obs, weight, rcens, rcweight)
 }
 
 #' Loglikelihood of matrix GEV using RK
 #' 
 #' Loglikelihood for a sample 
 #' @param h step-length
-#' @param pi initial probabilities
-#' @param T sub-intensity
+#' @param alpha initial probabilities
+#' @param S sub-intensity
 #' @param beta parameter of transformation
 #' @param obs the observations
 #' @param weight weight of the observations
 #' @param rcens censored observations
 #' @param rcweight weight of the censored observations
 #' 
-logLikelihoodMgev_RK <- function(h, pi, T, beta, obs, weight, rcens, rcweight) {
-    .Call(`_matrixdist_logLikelihoodMgev_RK`, h, pi, T, beta, obs, weight, rcens, rcweight)
+logLikelihoodMgev_RK <- function(h, alpha, S, beta, obs, weight, rcens, rcweight) {
+    .Call(`_matrixdist_logLikelihoodMgev_RK`, h, alpha, S, beta, obs, weight, rcens, rcweight)
 }
 
 #' Applies the inverse of the GEV but giving back the vector in reverse order
@@ -179,26 +179,26 @@ reversTransformData <- function(observations, weights, beta) {
 #' 
 #' Can be used to increase performance
 #' @param h step-length
-#' @param pi initial probabilities
-#' @param T sub-intensity
+#' @param alpha initial probabilities
+#' @param S sub-intensity
 #' @param beta parameter of transformation
 #' @param obs the observations
 #' @param weight weight of the observations
 #' @param rcens censored observations
 #' @param rcweight weight of the censored observations
 #' 
-derivativeMatrixweibull <- function(h, obs, weight, rcens, rcweight, pi, T, beta) {
-    .Call(`_matrixdist_derivativeMatrixweibull`, h, obs, weight, rcens, rcweight, pi, T, beta)
+derivativeMatrixweibull <- function(h, obs, weight, rcens, rcweight, alpha, S, beta) {
+    .Call(`_matrixdist_derivativeMatrixweibull`, h, obs, weight, rcens, rcweight, alpha, S, beta)
 }
 
 #' Embedded Markov chain of a sub-intensity matrix
 #' 
 #' Returns the transition probabilities of the embedded Markov chain determined the sub-intensity matrix 
-#' @param T A sub-intensity matrix
+#' @param S A sub-intensity matrix
 #' @return The embedded Markov chain
 #' 
-embeddedMC <- function(T) {
-    .Call(`_matrixdist_embeddedMC`, T)
+embeddedMC <- function(S) {
+    .Call(`_matrixdist_embeddedMC`, S)
 }
 
 #' Cumulate matrix
@@ -242,95 +242,95 @@ newState <- function(previousState, cumulatedEmbeddedMC, u) {
 
 #' Random phase-type
 #' 
-#' Generates a sample of size \code{n} from a phase-type distribution with parameters \code{pi} and \code{T}
+#' Generates a sample of size \code{n} from a phase-type distribution with parameters \code{alpha} and \code{S}
 #' @param n Sample size
-#' @param pi Initial probabilities
-#' @param T sub-intensity matrix
+#' @param alpha Initial probabilities
+#' @param S sub-intensity matrix
 #' @return The simulated sample
 #' 
-rphasetype <- function(n, pi, T) {
-    .Call(`_matrixdist_rphasetype`, n, pi, T)
+rphasetype <- function(n, alpha, S) {
+    .Call(`_matrixdist_rphasetype`, n, alpha, S)
 }
 
 #' Random inhomogeneous phase-type
 #' 
-#' Generates a sample of size \code{n} from an inhomogeneous phase-type distribution with parameters \code{pi}, \code{T} and \code{beta}
+#' Generates a sample of size \code{n} from an inhomogeneous phase-type distribution with parameters \code{alpha}, \code{S} and \code{beta}
 #' @param n Sample size
 #' @param dist_type Type of IPH
-#' @param pi Initial probabilities
-#' @param T sub-intensity matrix
+#' @param alpha Initial probabilities
+#' @param S sub-intensity matrix
 #' @param beta Parameter of the transformation
 #' @return The simulated sample
 #' 
-riph <- function(n, dist_type, pi, T, beta) {
-    .Call(`_matrixdist_riph`, n, dist_type, pi, T, beta)
+riph <- function(n, dist_type, alpha, S, beta) {
+    .Call(`_matrixdist_riph`, n, dist_type, alpha, S, beta)
 }
 
 #' Random matrix GEV
 #' 
-#' Generates a sample of size \code{n} from an inhomogeneous phase-type distribution with parameters \code{pi}, \code{T} and \code{beta}
+#' Generates a sample of size \code{n} from an inhomogeneous phase-type distribution with parameters \code{alpha}, \code{S} and \code{beta}
 #' @param n Sample size
-#' @param pi Initial probabilities
-#' @param T sub-intensity matrix
+#' @param alpha Initial probabilities
+#' @param S sub-intensity matrix
 #' @param mu Location parameter
 #' @param sigma Scale parameter
 #' @param xi Shape parameter: Default 0 which corresponds to the Gumbel case
 #' @return The simulated sample
 #' 
-rmatrixgev <- function(n, pi, T, mu, sigma, xi = 0) {
-    .Call(`_matrixdist_rmatrixgev`, n, pi, T, mu, sigma, xi)
+rmatrixgev <- function(n, alpha, S, mu, sigma, xi = 0) {
+    .Call(`_matrixdist_rmatrixgev`, n, alpha, S, mu, sigma, xi)
 }
 
 #' Phase-type density
 #' 
-#' Computes the density of phase-type distribution with parameters \code{pi} and \code{T} at \code{x}
+#' Computes the density of phase-type distribution with parameters \code{alpha} and \code{S} at \code{x}
 #' @param x non-negative value
-#' @param pi Initial probabilities
-#' @param T sub-intensity matrix
+#' @param alpha Initial probabilities
+#' @param S sub-intensity matrix
 #' @return The density at \code{x}
 #' 
-phdensity <- function(x, pi, T) {
-    .Call(`_matrixdist_phdensity`, x, pi, T)
+phdensity <- function(x, alpha, S) {
+    .Call(`_matrixdist_phdensity`, x, alpha, S)
 }
 
 #' Phase-type cdf or tail
 #' 
-#' Computes the cdf of phase-type distribution with parameters \code{pi} and \code{T} at \code{x}
+#' Computes the cdf of phase-type distribution with parameters \code{alpha} and \code{S} at \code{x}
 #' @param x non-negative value
-#' @param pi Initial probabilities
-#' @param T sub-intensity matrix
+#' @param alpha Initial probabilities
+#' @param S sub-intensity matrix
 #' @param lower_tail cdf or tail
 #' @return The cdf (tail) at \code{x}
 #' 
-phcdf <- function(x, pi, T, lower_tail = TRUE) {
-    .Call(`_matrixdist_phcdf`, x, pi, T, lower_tail)
+phcdf <- function(x, alpha, S, lower_tail = TRUE) {
+    .Call(`_matrixdist_phcdf`, x, alpha, S, lower_tail)
 }
 
 #' Matrix Weibull density
 #' 
-#' Computes the density of a matrix Weibull distribution with parameters \code{pi}, \code{T} and \code{beta} at \code{x}
+#' Computes the density of a matrix Weibull distribution with parameters \code{alpha}, \code{S} and \code{beta} at \code{x}
 #' @param x non-negative value
-#' @param pi Initial probabilities
-#' @param T sub-intensity matrix
+#' @param alpha Initial probabilities
+#' @param S sub-intensity matrix
 #' @param beta shape parameter
 #' @return The density at \code{x}
 #' 
-mweibullden <- function(x, pi, T, beta) {
-    .Call(`_matrixdist_mweibullden`, x, pi, T, beta)
+mweibullden <- function(x, alpha, S, beta) {
+    .Call(`_matrixdist_mweibullden`, x, alpha, S, beta)
 }
 
 #' Matrix Weibull cdf
 #' 
-#' Computes the cdf (tail) of a matrix Weibull distribution with parameters \code{pi}, \code{T} and \code{beta} at \code{x}
+#' Computes the cdf (tail) of a matrix Weibull distribution with parameters \code{alpha}, \code{S} and \code{beta} at \code{x}
 #' @param x non-negative value
-#' @param pi Initial probabilities
-#' @param T sub-intensity matrix
+#' @param alpha Initial probabilities
+#' @param S sub-intensity matrix
 #' @param beta shape parameter
 #' @param lower_tail cdf or tail
 #' @return The cdf (tail) at \code{x}
 #' 
-mweibullcdf <- function(x, pi, T, beta, lower_tail) {
-    .Call(`_matrixdist_mweibullcdf`, x, pi, T, beta, lower_tail)
+mweibullcdf <- function(x, alpha, S, beta, lower_tail) {
+    .Call(`_matrixdist_mweibullcdf`, x, alpha, S, beta, lower_tail)
 }
 
 RunFunction <- function(a, func) {
@@ -339,142 +339,142 @@ RunFunction <- function(a, func) {
 
 #' Matrix Pareto density
 #' 
-#' Computes the density of a matrix Pareto distribution with parameters \code{pi}, \code{T} and \code{beta} at \code{x}
+#' Computes the density of a matrix Pareto distribution with parameters \code{alpha}, \code{S} and \code{beta} at \code{x}
 #' @param x non-negative value
-#' @param pi Initial probabilities
-#' @param T sub-intensity matrix
+#' @param alpha Initial probabilities
+#' @param S sub-intensity matrix
 #' @param beta scale parameter
 #' @return The density at \code{x}
 #' 
-mparetoden <- function(x, pi, T, beta) {
-    .Call(`_matrixdist_mparetoden`, x, pi, T, beta)
+mparetoden <- function(x, alpha, S, beta) {
+    .Call(`_matrixdist_mparetoden`, x, alpha, S, beta)
 }
 
 #' Matrix Pareto cdf
 #' 
-#' Computes the cdf (tail) of a matrix Pareto distribution with parameters \code{pi}, \code{T} and \code{beta} at \code{x}
+#' Computes the cdf (tail) of a matrix Pareto distribution with parameters \code{alpha}, \code{S} and \code{beta} at \code{x}
 #' @param x non-negative value
-#' @param pi Initial probabilities
-#' @param T sub-intensity matrix
+#' @param alpha Initial probabilities
+#' @param S sub-intensity matrix
 #' @param beta shape parameter
 #' @param lower_tail cdf or tail
 #' @return The cdf (tail) at \code{x}
 #' 
-mparetocdf <- function(x, pi, T, beta, lower_tail = TRUE) {
-    .Call(`_matrixdist_mparetocdf`, x, pi, T, beta, lower_tail)
+mparetocdf <- function(x, alpha, S, beta, lower_tail = TRUE) {
+    .Call(`_matrixdist_mparetocdf`, x, alpha, S, beta, lower_tail)
 }
 
 #' Matrix LogNormal density
 #' 
-#' Computes the density of a matrix LogNormal distribution with parameters \code{pi}, \code{T} and \code{beta} at \code{x}
+#' Computes the density of a matrix LogNormal distribution with parameters \code{alpha}, \code{S} and \code{beta} at \code{x}
 #' @param x non-negative value
-#' @param pi Initial probabilities
-#' @param T sub-intensity matrix
+#' @param alpha Initial probabilities
+#' @param S sub-intensity matrix
 #' @param beta shape parameter
 #' @return The density at \code{x}
 #' 
-mlognormalden <- function(x, pi, T, beta) {
-    .Call(`_matrixdist_mlognormalden`, x, pi, T, beta)
+mlognormalden <- function(x, alpha, S, beta) {
+    .Call(`_matrixdist_mlognormalden`, x, alpha, S, beta)
 }
 
 #' Matrix LogNormal cdf
 #' 
-#' Computes the cdf (tail) of a matrix LogNormal distribution with parameters \code{pi}, \code{T} and \code{beta} at \code{x}
+#' Computes the cdf (tail) of a matrix LogNormal distribution with parameters \code{alpha}, \code{S} and \code{beta} at \code{x}
 #' @param x non-negative value
-#' @param pi Initial probabilities
-#' @param T sub-intensity matrix
+#' @param alpha Initial probabilities
+#' @param S sub-intensity matrix
 #' @param beta shape parameter
 #' @param lower_tail cdf or tail
 #' @return The cdf (tail) at \code{x}
 #' 
-mlognormalcdf <- function(x, pi, T, beta, lower_tail = TRUE) {
-    .Call(`_matrixdist_mlognormalcdf`, x, pi, T, beta, lower_tail)
+mlognormalcdf <- function(x, alpha, S, beta, lower_tail = TRUE) {
+    .Call(`_matrixdist_mlognormalcdf`, x, alpha, S, beta, lower_tail)
 }
 
 #' Matrix Log-Logistic density
 #' 
-#' Computes the density of a matrix Log-Logistic distribution with parameters \code{pi}, \code{T} and \code{beta} at \code{x}
+#' Computes the density of a matrix Log-Logistic distribution with parameters \code{alpha}, \code{S} and \code{beta} at \code{x}
 #' @param x non-negative value
-#' @param pi Initial probabilities
-#' @param T sub-intensity matrix
+#' @param alpha Initial probabilities
+#' @param S sub-intensity matrix
 #' @param beta scale parameter
 #' @return The density at \code{x}
 #' 
-mloglogisticden <- function(x, pi, T, beta) {
-    .Call(`_matrixdist_mloglogisticden`, x, pi, T, beta)
+mloglogisticden <- function(x, alpha, S, beta) {
+    .Call(`_matrixdist_mloglogisticden`, x, alpha, S, beta)
 }
 
 #' Matrix Log-Logistic cdf
 #' 
-#' Computes the cdf (tail) of a matrix Log-Logistic distribution with parameters \code{pi}, \code{T} and \code{beta} at \code{x}
+#' Computes the cdf (tail) of a matrix Log-Logistic distribution with parameters \code{alpha}, \code{S} and \code{beta} at \code{x}
 #' @param x non-negative value
-#' @param pi Initial probabilities
-#' @param T sub-intensity matrix
+#' @param alpha Initial probabilities
+#' @param S sub-intensity matrix
 #' @param beta shape parameter
 #' @param lower_tail cdf or tail
 #' @return The cdf (tail) at \code{x}
 #' 
-mloglogisticcdf <- function(x, pi, T, beta, lower_tail = TRUE) {
-    .Call(`_matrixdist_mloglogisticcdf`, x, pi, T, beta, lower_tail)
+mloglogisticcdf <- function(x, alpha, S, beta, lower_tail = TRUE) {
+    .Call(`_matrixdist_mloglogisticcdf`, x, alpha, S, beta, lower_tail)
 }
 
 #' Matrix Gompertz density
 #' 
-#' Computes the density of a matrix Gompertz distribution with parameters \code{pi}, \code{T} and \code{beta} at \code{x}
+#' Computes the density of a matrix Gompertz distribution with parameters \code{alpha}, \code{S} and \code{beta} at \code{x}
 #' @param x non-negative value
-#' @param pi Initial probabilities
-#' @param T sub-intensity matrix
+#' @param alpha Initial probabilities
+#' @param S sub-intensity matrix
 #' @param beta parameter
 #' @return The density at \code{x}
 #' 
-mgompertzden <- function(x, pi, T, beta) {
-    .Call(`_matrixdist_mgompertzden`, x, pi, T, beta)
+mgompertzden <- function(x, alpha, S, beta) {
+    .Call(`_matrixdist_mgompertzden`, x, alpha, S, beta)
 }
 
 #' Matrix Gompertz cdf
 #' 
-#' Computes the cdf (tail) of a matrix Gompertz distribution with parameters \code{pi}, \code{T} and \code{beta} at \code{x}
+#' Computes the cdf (tail) of a matrix Gompertz distribution with parameters \code{alpha}, \code{S} and \code{beta} at \code{x}
 #' @param x non-negative value
-#' @param pi Initial probabilities
-#' @param T sub-intensity matrix
+#' @param alpha Initial probabilities
+#' @param S sub-intensity matrix
 #' @param beta shape parameter
 #' @param lower_tail cdf or tail
 #' @return The cdf (tail) at \code{x}
 #' 
-mgompertzcdf <- function(x, pi, T, beta, lower_tail = TRUE) {
-    .Call(`_matrixdist_mgompertzcdf`, x, pi, T, beta, lower_tail)
+mgompertzcdf <- function(x, alpha, S, beta, lower_tail = TRUE) {
+    .Call(`_matrixdist_mgompertzcdf`, x, alpha, S, beta, lower_tail)
 }
 
 #' Matrix GEV density
 #' 
-#' Computes the density of a matrix GEV distribution with parameters \code{pi}, \code{T} and \code{beta} at \code{x}
+#' Computes the density of a matrix GEV distribution with parameters \code{alpha}, \code{S} and \code{beta} at \code{x}
 #' Dont allow for atoms in zero
 #' @param x non-negative value
-#' @param pi Initial probabilities
-#' @param T sub-intensity matrix
+#' @param alpha Initial probabilities
+#' @param S sub-intensity matrix
 #' @param mu  location parameter
 #' @param sigma scale parameter
 #' @param xi shape parameter
 #' @return The density at \code{x}
 #' 
-mgevden <- function(x, pi, T, mu, sigma, xi) {
-    .Call(`_matrixdist_mgevden`, x, pi, T, mu, sigma, xi)
+mgevden <- function(x, alpha, S, mu, sigma, xi) {
+    .Call(`_matrixdist_mgevden`, x, alpha, S, mu, sigma, xi)
 }
 
 #' Matrix GEV cdf
 #' 
-#' Computes the cdf (tail) of a matrix GEV distribution with parameters \code{pi}, \code{T} and \code{beta} at \code{x}
+#' Computes the cdf (tail) of a matrix GEV distribution with parameters \code{alpha}, \code{S} and \code{beta} at \code{x}
 #' @param x non-negative value
-#' @param pi Initial probabilities
-#' @param T sub-intensity matrix
+#' @param alpha Initial probabilities
+#' @param S sub-intensity matrix
 #' @param mu  location parameter
 #' @param sigma scale parameter
 #' @param xi shape parameter
 #' @param lower_tail cdf or tail
 #' @return The cdf (tail) at \code{x}
 #' 
-mgevcdf <- function(x, pi, T, mu, sigma, xi, lower_tail = TRUE) {
-    .Call(`_matrixdist_mgevcdf`, x, pi, T, mu, sigma, xi, lower_tail)
+mgevcdf <- function(x, alpha, S, mu, sigma, xi, lower_tail = TRUE) {
+    .Call(`_matrixdist_mgevcdf`, x, alpha, S, mu, sigma, xi, lower_tail)
 }
 
 #' Product of two matrices
@@ -595,22 +595,22 @@ diagonal_vector <- function(vec) {
 
 #' Computes the initial distribution and sub-intensity of the sum of PH
 #' 
-#' @param pi1 initial distribution
-#' @param T1 sub-intensity
-#' @param pi2 initial distribution
-#' @param T2 sub-intensity
+#' @param alpha1 initial distribution
+#' @param S1 sub-intensity
+#' @param alpha2 initial distribution
+#' @param S2 sub-intensity
 #' 
-sumPH <- function(pi1, T1, pi2, T2) {
-    .Call(`_matrixdist_sumPH`, pi1, T1, pi2, T2)
+sumPH <- function(alpha1, S1, alpha2, S2) {
+    .Call(`_matrixdist_sumPH`, alpha1, S1, alpha2, S2)
 }
 
 #' Random structure of a phase-type
 #' 
-#' Generates random parameters \code{pi} and \code{T} of a phase-type distribution of dimension \code{p} with chosen structure
+#' Generates random parameters \code{alpha} and \code{S} of a phase-type distribution of dimension \code{p} with chosen structure
 #' @param p Dimension of the phase-type
 #' @param structure Type of structure: "general", "hyperexponential", "gerlang", "coxian" or "gcoxian"
 #' @param scale_factor A factor that multiplies the sub-intensity matrix
-#' @return Random parameters \code{pi} and \code{T} of a phase-type
+#' @return Random parameters \code{alpha} and \code{S} of a phase-type
 #' 
 random_structure <- function(p, structure = "general", scale_factor = 1) {
     .Call(`_matrixdist_random_structure`, p, structure, scale_factor)

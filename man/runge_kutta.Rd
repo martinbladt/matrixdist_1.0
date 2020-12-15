@@ -4,7 +4,7 @@
 \alias{runge_kutta}
 \title{Runge Kutta for the calculation of the a,b and c vectors in a EM step}
 \usage{
-runge_kutta(avector, bvector, cmatrix, dt, h, T, t)
+runge_kutta(avector, bvector, cmatrix, dt, h, S, t)
 }
 \arguments{
 \item{avector}{the a vector}
@@ -17,7 +17,7 @@ runge_kutta(avector, bvector, cmatrix, dt, h, T, t)
 
 \item{h}{step-length}
 
-\item{T}{sub-intensity}
+\item{S}{sub-intensity}
 
 \item{t}{exit rates}
 }

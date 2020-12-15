@@ -4,7 +4,7 @@
 \alias{a_rungekutta}
 \title{Runge Kutta for the calculation of the a vectors in a EM step}
 \usage{
-a_rungekutta(avector, dt, h, T)
+a_rungekutta(avector, dt, h, S)
 }
 \arguments{
 \item{avector}{the a vector}
@@ -13,7 +13,7 @@ a_rungekutta(avector, dt, h, T)
 
 \item{h}{step-length}
 
-\item{T}{sub-intensity}
+\item{S}{sub-intensity}
 }
 \description{
 Can be used for the loglikelihood

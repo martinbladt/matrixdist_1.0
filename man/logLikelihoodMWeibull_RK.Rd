@@ -4,14 +4,14 @@
 \alias{logLikelihoodMweibull_RK}
 \title{Loglikelihood of matrix Weibull using RK}
 \usage{
-logLikelihoodMweibull_RK(h, pi, T, beta, obs, weight, rcens, rcweight)
+logLikelihoodMweibull_RK(h, alpha, S, beta, obs, weight, rcens, rcweight)
 }
 \arguments{
 \item{h}{step-length}
 
-\item{pi}{initial probabilities}
+\item{alpha}{initial probabilities}
 
-\item{T}{sub-intensity}
+\item{S}{sub-intensity}
 
 \item{beta}{parameter of transformation}
 

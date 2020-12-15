@@ -4,7 +4,7 @@
 \alias{derivativeMatrixweibull}
 \title{Derivative of matrix Weibull}
 \usage{
-derivativeMatrixweibull(h, obs, weight, rcens, rcweight, pi, T, beta)
+derivativeMatrixweibull(h, obs, weight, rcens, rcweight, alpha, S, beta)
 }
 \arguments{
 \item{h}{step-length}
@@ -17,9 +17,9 @@ derivativeMatrixweibull(h, obs, weight, rcens, rcweight, pi, T, beta)
 
 \item{rcweight}{weight of the censored observations}
 
-\item{pi}{initial probabilities}
+\item{alpha}{initial probabilities}
 
-\item{T}{sub-intensity}
+\item{S}{sub-intensity}
 
 \item{beta}{parameter of transformation}
 }

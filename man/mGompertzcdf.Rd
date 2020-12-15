@@ -4,14 +4,14 @@
 \alias{mgompertzcdf}
 \title{Matrix Gompertz cdf}
 \usage{
-mgompertzcdf(x, pi, T, beta, lower_tail = TRUE)
+mgompertzcdf(x, alpha, S, beta, lower_tail = TRUE)
 }
 \arguments{
 \item{x}{non-negative value}
 
-\item{pi}{Initial probabilities}
+\item{alpha}{Initial probabilities}
 
-\item{T}{sub-intensity matrix}
+\item{S}{sub-intensity matrix}
 
 \item{beta}{shape parameter}
 
@@ -21,5 +21,5 @@ mgompertzcdf(x, pi, T, beta, lower_tail = TRUE)
 The cdf (tail) at \code{x}
 }
 \description{
-Computes the cdf (tail) of a matrix Gompertz distribution with parameters \code{pi}, \code{T} and \code{beta} at \code{x}
+Computes the cdf (tail) of a matrix Gompertz distribution with parameters \code{alpha}, \code{S} and \code{beta} at \code{x}
 }

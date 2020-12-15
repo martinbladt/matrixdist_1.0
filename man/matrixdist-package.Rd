@@ -23,5 +23,7 @@ Maintainer: Martin Bladt <martinbladt@gmail.com>
   Albrecher, H., & Bladt, M. (2019). Inhomogeneous phase-type distributions and heavy tails. Journal of Applied Probability, 56(4), 1044-1064.
   
   Albrecher, H., Bladt, M., & Yslas, J. (2020). Fitting inhomogeneous Phase-Type distributions to data: The univariate and the multivariate case. Scandinavian Journal of Statistics.
+  
+  Bladt, M., & Yslas, J. (2020). Inhomogeneous Markov Survival Regression Models. arXiv:2011.03219.
 }
 \keyword{ matrixdist }

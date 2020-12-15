@@ -4,14 +4,14 @@
 \alias{logLikelihoodMpareto_RK}
 \title{Loglikelihood of matrix Pareto using RK}
 \usage{
-logLikelihoodMpareto_RK(h, pi, T, beta, obs, weight, rcens, rcweight)
+logLikelihoodMpareto_RK(h, alpha, S, beta, obs, weight, rcens, rcweight)
 }
 \arguments{
 \item{h}{step-length}
 
-\item{pi}{initial probabilities}
+\item{alpha}{initial probabilities}
 
-\item{T}{sub-intensity}
+\item{S}{sub-intensity}
 
 \item{beta}{parameter of transformation}
 

@@ -4,18 +4,18 @@
 \alias{phdensity}
 \title{Phase-type density}
 \usage{
-phdensity(x, pi, T)
+phdensity(x, alpha, S)
 }
 \arguments{
 \item{x}{non-negative value}
 
-\item{pi}{Initial probabilities}
+\item{alpha}{Initial probabilities}
 
-\item{T}{sub-intensity matrix}
+\item{S}{sub-intensity matrix}
 }
 \value{
 The density at \code{x}
 }
 \description{
-Computes the density of phase-type distribution with parameters \code{pi} and \code{T} at \code{x}
+Computes the density of phase-type distribution with parameters \code{alpha} and \code{S} at \code{x}
 }

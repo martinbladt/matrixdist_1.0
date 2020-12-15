@@ -209,7 +209,7 @@ setMethod("cdf", c(x = "iph"), function(x,
   scale <- x@scale
   q_inf <- (q == Inf)
   cdf <- q
-  cdf[!q_inf] <- fn(q / scale, x@pars$alpha, x@pars$S, x@gfun$pars, lower.tail)
+  cdf[!q_inf] <- fn(q[!q_inf] / scale, x@pars$alpha, x@pars$S, x@gfun$pars, lower.tail)
   cdf[q_inf] <- as.numeric(1 * lower.tail)
   return(list(q = q, cdf = cdf))
 })

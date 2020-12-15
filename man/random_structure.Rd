@@ -14,8 +14,8 @@ random_structure(p, structure = "general", scale_factor = 1)
 \item{scale_factor}{A factor that multiplies the sub-intensity matrix}
 }
 \value{
-Random parameters \code{pi} and \code{T} of a phase-type
+Random parameters \code{alpha} and \code{S} of a phase-type
 }
 \description{
-Generates random parameters \code{pi} and \code{T} of a phase-type distribution of dimension \code{p} with chosen structure
+Generates random parameters \code{alpha} and \code{S} of a phase-type distribution of dimension \code{p} with chosen structure
 }

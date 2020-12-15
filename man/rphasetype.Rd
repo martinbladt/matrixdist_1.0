@@ -4,18 +4,18 @@
 \alias{rphasetype}
 \title{Random phase-type}
 \usage{
-rphasetype(n, pi, T)
+rphasetype(n, alpha, S)
 }
 \arguments{
 \item{n}{Sample size}
 
-\item{pi}{Initial probabilities}
+\item{alpha}{Initial probabilities}
 
-\item{T}{sub-intensity matrix}
+\item{S}{sub-intensity matrix}
 }
 \value{
 The simulated sample
 }
 \description{
-Generates a sample of size \code{n} from a phase-type distribution with parameters \code{pi} and \code{T}
+Generates a sample of size \code{n} from a phase-type distribution with parameters \code{alpha} and \code{S}
 }

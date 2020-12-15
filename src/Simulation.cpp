@@ -6,25 +6,25 @@ using namespace Rcpp;
 //' Embedded Markov chain of a sub-intensity matrix
 //' 
 //' Returns the transition probabilities of the embedded Markov chain determined the sub-intensity matrix 
-//' @param T A sub-intensity matrix
+//' @param S A sub-intensity matrix
 //' @return The embedded Markov chain
 //' 
 // [[Rcpp::export]]
-NumericMatrix embeddedMC(NumericMatrix T) {
-  long p{T.nrow()};
+NumericMatrix embeddedMC(NumericMatrix S) {
+  long p{S.nrow()};
   NumericMatrix Q(p + 1, p + 1);
   
   NumericVector ee(p, 1);
   NumericMatrix m_e(p, 1, ee.begin());
-  NumericMatrix t = matrix_product(T * (-1), m_e);
+  NumericMatrix t = matrix_product(S * (-1), m_e);
   
   for (int i = 0; i < p; ++i) {
     for (int j = 0; j < p + 1; ++j) {
       if (j != i && j < p) {
-        Q(i,j) = -1.0 * T(i,j) / T(i,i);
+        Q(i,j) = -1.0 * S(i,j) / S(i,i);
       }
       else if(j == p) {
-        Q(i,j) = -1.0 * t(i,0) / T(i,i);
+        Q(i,j) = -1.0 * t(i,0) / S(i,i);
       }
     }
   }
@@ -127,27 +127,27 @@ long newState(long previousState, NumericMatrix cumulatedEmbeddedMC, double u) {
 
 //' Random phase-type
 //' 
-//' Generates a sample of size \code{n} from a phase-type distribution with parameters \code{pi} and \code{T}
+//' Generates a sample of size \code{n} from a phase-type distribution with parameters \code{alpha} and \code{S}
 //' @param n Sample size
-//' @param pi Initial probabilities
-//' @param T sub-intensity matrix
+//' @param alpha Initial probabilities
+//' @param S sub-intensity matrix
 //' @return The simulated sample
 //' 
 // [[Rcpp::export]]
-NumericVector rphasetype(int n, NumericVector pi, NumericMatrix T) {
+NumericVector rphasetype(int n, NumericVector alpha, NumericMatrix S) {
   
   NumericVector sample(n);
   
-  NumericMatrix cumulatedEmbeddedMC = cumulateMatrix(embeddedMC(T));
-  NumericVector cumulatedPi = cumulateVector(pi);
+  NumericMatrix cumulatedEmbeddedMC = cumulateMatrix(embeddedMC(S));
+  NumericVector cumulatedPi = cumulateVector(alpha);
   
-  int p = pi.size();
+  int p = alpha.size();
   long state = 0;
   for (int i = 0; i < n; ++i) {
     double time = 0.0;
     state = initialState(cumulatedPi, runif(1)[0]);
     while (state != p) {
-      time += log(1.0 - runif(1)[0]) / T(state,state);
+      time += log(1.0 - runif(1)[0]) / S(state,state);
       state = newState(state, cumulatedEmbeddedMC, runif(1)[0]);
     }
     sample[i] = time;
@@ -159,29 +159,29 @@ NumericVector rphasetype(int n, NumericVector pi, NumericMatrix T) {
 
 //' Random inhomogeneous phase-type
 //' 
-//' Generates a sample of size \code{n} from an inhomogeneous phase-type distribution with parameters \code{pi}, \code{T} and \code{beta}
+//' Generates a sample of size \code{n} from an inhomogeneous phase-type distribution with parameters \code{alpha}, \code{S} and \code{beta}
 //' @param n Sample size
 //' @param dist_type Type of IPH
-//' @param pi Initial probabilities
-//' @param T sub-intensity matrix
+//' @param alpha Initial probabilities
+//' @param S sub-intensity matrix
 //' @param beta Parameter of the transformation
 //' @return The simulated sample
 //' 
 // [[Rcpp::export]]
-NumericVector riph(int n, String dist_type, NumericVector pi, NumericMatrix T, NumericVector beta) {
+NumericVector riph(int n, String dist_type, NumericVector alpha, NumericMatrix S, NumericVector beta) {
   
   NumericVector sample(n);
   
-  NumericMatrix cumulatedEmbeddedMC = cumulateMatrix(embeddedMC(T));
-  NumericVector cumulatedPi = cumulateVector(pi);
+  NumericMatrix cumulatedEmbeddedMC = cumulateMatrix(embeddedMC(S));
+  NumericVector cumulatedPi = cumulateVector(alpha);
   
-  int p = pi.size();
+  int p = alpha.size();
   long state = 0;
   for (int i = 0; i < n; ++i) {
     double time = 0.0;
     state = initialState(cumulatedPi, runif(1)[0]);
     while (state != p) {
-      time += log(1.0 - runif(1)[0]) / T(state,state);
+      time += log(1.0 - runif(1)[0]) / S(state,state);
       state = newState(state, cumulatedEmbeddedMC, runif(1)[0]);
     }
     if (dist_type == "pareto") {
@@ -207,30 +207,30 @@ NumericVector riph(int n, String dist_type, NumericVector pi, NumericMatrix T, N
 
 //' Random matrix GEV
 //' 
-//' Generates a sample of size \code{n} from an inhomogeneous phase-type distribution with parameters \code{pi}, \code{T} and \code{beta}
+//' Generates a sample of size \code{n} from an inhomogeneous phase-type distribution with parameters \code{alpha}, \code{S} and \code{beta}
 //' @param n Sample size
-//' @param pi Initial probabilities
-//' @param T sub-intensity matrix
+//' @param alpha Initial probabilities
+//' @param S sub-intensity matrix
 //' @param mu Location parameter
 //' @param sigma Scale parameter
 //' @param xi Shape parameter: Default 0 which corresponds to the Gumbel case
 //' @return The simulated sample
 //' 
 // [[Rcpp::export]]
-NumericVector rmatrixgev(int n, NumericVector pi, NumericMatrix T, double mu, double sigma, double xi = 0) {
+NumericVector rmatrixgev(int n, NumericVector alpha, NumericMatrix S, double mu, double sigma, double xi = 0) {
   
   NumericVector sample(n);
   
-  NumericMatrix cumulatedEmbeddedMC = cumulateMatrix(embeddedMC(T));
-  NumericVector cumulatedPi = cumulateVector(pi);
+  NumericMatrix cumulatedEmbeddedMC = cumulateMatrix(embeddedMC(S));
+  NumericVector cumulatedPi = cumulateVector(alpha);
   
-  int p = pi.size();
+  int p = alpha.size();
   long state = 0;
   for (int i = 0; i < n; ++i) {
     double time = 0.0;
     state = initialState(cumulatedPi, runif(1)[0]);
     while (state != p) {
-      time += log(1.0 - runif(1)[0]) / T(state,state);
+      time += log(1.0 - runif(1)[0]) / S(state,state);
       state = newState(state, cumulatedEmbeddedMC, runif(1)[0]);
     }
     if (xi == 0) {

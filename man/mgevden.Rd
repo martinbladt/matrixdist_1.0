@@ -4,14 +4,14 @@
 \alias{mgevden}
 \title{Matrix GEV density}
 \usage{
-mgevden(x, pi, T, mu, sigma, xi)
+mgevden(x, alpha, S, mu, sigma, xi)
 }
 \arguments{
 \item{x}{non-negative value}
 
-\item{pi}{Initial probabilities}
+\item{alpha}{Initial probabilities}
 
-\item{T}{sub-intensity matrix}
+\item{S}{sub-intensity matrix}
 
 \item{mu}{location parameter}
 
@@ -23,6 +23,6 @@ mgevden(x, pi, T, mu, sigma, xi)
 The density at \code{x}
 }
 \description{
-Computes the density of a matrix GEV distribution with parameters \code{pi}, \code{T} and \code{beta} at \code{x}
+Computes the density of a matrix GEV distribution with parameters \code{alpha}, \code{S} and \code{beta} at \code{x}
 Dont allow for atoms in zero
 }
