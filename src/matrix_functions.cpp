@@ -71,7 +71,7 @@ double LInf_norm(const NumericMatrix & A) {
   for (int i{0}; i < A.nrow(); ++i) {
     double row_sum{0.0};
     for (int j{0}; j < A.ncol(); ++j) {
-      row_sum += abs(A(i,j));
+      row_sum += std::abs(A(i,j));
     }
     value = std::max(value, row_sum);
   }
@@ -99,11 +99,11 @@ NumericMatrix solve_linear_system(NumericMatrix A1, const NumericMatrix & B) {
   
   for (jcol = 1; jcol <= A.nrow(); ++jcol) {
     //  Find the maximum element in column I.
-    piv = abs(A(jcol - 1,jcol - 1));
+    piv = std::abs(A(jcol - 1,jcol - 1));
     ipiv = jcol;
     for (i = jcol + 1; i <= A.nrow(); ++i) {
-      if (piv < abs(A(i - 1,jcol - 1))) {
-        piv = abs(A(i - 1,jcol - 1));
+      if (piv < std::abs(A(i - 1,jcol - 1))) {
+        piv = std::abs(A(i - 1,jcol - 1));
         ipiv = i;
       }
     }
