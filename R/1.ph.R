@@ -274,6 +274,7 @@ setMethod("quan", c(x = "ph"), function(x,
 #' @param maxit maximum number of iterations when optimizing g function.
 #' @param reltol relative tolerance when optimizing g function.
 #' @param every number of iterations between likelihood display updates.
+#' @param plot logical indicating whether to plot the fit at each iteration.
 #' 
 #' @return An object of class \linkS4class{ph}.
 #' @export
@@ -293,7 +294,8 @@ setMethod(
            rkstep = NA,
            maxit = 100,
            reltol = 1e-8,
-           every = 100) {
+           every = 100,
+           plot = FALSE) {
     if(!all(c(y, weight, rcen, rcenweight) > 0)) stop("data and weights should be positive")
     is_iph <- methods::is(x, "iph")
     if (is_iph) {
@@ -307,6 +309,14 @@ setMethod(
     B <- data_aggregation(rcen, rcenweight)
     rcen <- B$un_obs
     rcenweight <- B$weights
+    
+    if(plot == TRUE){
+      if(length(rcen)>0) stop("plot option only available for non-censored data")
+      h <- hist(rep(y, weight), breaks = 30, plot = FALSE)
+      sq <- seq(0, 1.1 * max(y), length.out = 200)
+      plot(head(h$breaks, length(h$density)), h$density, col = "#b2df8a", 
+           main = "Histogram", xlab = "data", ylab = "density", type = "s", lwd = 2)
+    }
 
     ph_par <- x@pars
     alpha_fit <- clone_vector(ph_par$alpha)
@@ -321,6 +331,23 @@ setMethod(
             ", logLik:", logLikelihoodPH_RK(RKstep, alpha_fit, S_fit, y, weight, rcen, rcenweight),
             sep = " "
           )
+          if(plot == TRUE){
+            dev.off()
+            plot(head(h$breaks, length(h$density)), h$density, col = "#b2df8a", 
+                 main = "Histogram", xlab = "data", ylab = "density", type = "s", lwd = 2)
+            tmp_ph <- ph(alpha_fit, S_fit)
+            lines(sq, dens(tmp_ph, sq)$dens, col = "#33a02c", lwd = 2, lty = 1)
+            legend("topright", 
+                   legend = c("PH fit"), 
+                   col = c("#33a02c"), 
+                   lty = c(1), 
+                   bty = "n", 
+                   lwd = 2, 
+                   cex = 1.2, 
+                   text.col = "black", 
+                   horiz = FALSE, 
+                   inset = c(0, 0))
+          }
         }
       }
       cat("\n", sep = "")
@@ -364,6 +391,23 @@ setMethod(
             ", logLik:", -opt$value,
             sep = " "
           )
+          if(plot == TRUE){
+            dev.off()
+            plot(head(h$breaks, length(h$density)), h$density, col = "#b2df8a", 
+                 main = "Histogram", xlab = "data", ylab = "density", type = "s", lwd = 2)
+            tmp_ph <- iph(ph(alpha_fit, S_fit), gfun = x@gfun$name, gfun_pars = par_g)
+            lines(sq, dens(tmp_ph, sq)$dens, col = "#33a02c", lwd = 2, lty = 1)
+            legend("topright", 
+                   legend = c(paste("Matrix-", x@gfun$name," fit", sep ="")), 
+                   col = c("#33a02c"), 
+                   lty = c(1), 
+                   bty = "n", 
+                   lwd = 2, 
+                   cex = 1.2, 
+                   text.col = "black", 
+                   horiz = FALSE, 
+                   inset = c(0, 0))
+          }
         }
       }
       cat("\n", sep = "")

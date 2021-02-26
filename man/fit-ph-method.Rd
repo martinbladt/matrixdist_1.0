@@ -14,7 +14,8 @@
   rkstep = NA,
   maxit = 100,
   reltol = 1e-08,
-  every = 100
+  every = 100,
+  plot = FALSE
 )
 }
 \arguments{
@@ -37,6 +38,8 @@
 \item{reltol}{relative tolerance when optimizing g function.}
 
 \item{every}{number of iterations between likelihood display updates.}
+
+\item{plot}{logical indicating whether to plot the fit at each iteration.}
 }
 \value{
 An object of class \linkS4class{ph}.
