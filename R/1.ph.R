@@ -338,15 +338,15 @@ setMethod(
             tmp_ph <- ph(alpha_fit, S_fit)
             lines(sq, dens(tmp_ph, sq)$dens, col = "#33a02c", lwd = 2, lty = 1)
             legend("topright", 
-                   legend = c("PH fit"), 
-                   col = c("#33a02c"), 
-                   lty = c(1), 
+                   legend = c("Data", "PH fit"), 
+                   col = c("#b2df8a", "#33a02c"), 
+                   lty = c(1,1), 
                    bty = "n", 
                    lwd = 2, 
                    cex = 1.2, 
                    text.col = "black", 
                    horiz = FALSE, 
-                   inset = c(0, 0))
+                   inset = c(0.05, 0.05))
           }
         }
       }
@@ -398,15 +398,15 @@ setMethod(
             tmp_ph <- iph(ph(alpha_fit, S_fit), gfun = x@gfun$name, gfun_pars = par_g)
             lines(sq, dens(tmp_ph, sq)$dens, col = "#33a02c", lwd = 2, lty = 1)
             legend("topright", 
-                   legend = c(paste("Matrix-", x@gfun$name," fit", sep ="")), 
-                   col = c("#33a02c"), 
-                   lty = c(1), 
+                   legend = c("Data", paste("Matrix-", x@gfun$name," fit", sep ="")), 
+                   col = c("#b2df8a", "#33a02c"), 
+                   lty = c(1,1), 
                    bty = "n", 
                    lwd = 2, 
                    cex = 1.2, 
                    text.col = "black", 
                    horiz = FALSE, 
-                   inset = c(0, 0))
+                   inset = c(0.05, 0.05))
           }
         }
       }
