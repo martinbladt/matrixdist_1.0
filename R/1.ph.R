@@ -296,7 +296,8 @@ setMethod(
            reltol = 1e-8,
            every = 100,
            plot = FALSE) {
-    if(!all(c(y, weight, rcen, rcenweight) > 0)) stop("data and weights should be positive")
+    if(!all(c(y, rcen) > 0)) stop("data should be positive")
+    if(!all(c(weight, rcenweight) >= 0)) stop("weights should be non-negative")
     is_iph <- methods::is(x, "iph")
     if (is_iph) {
       par_g <- x@gfun$pars
