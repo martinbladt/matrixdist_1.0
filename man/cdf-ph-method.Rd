@@ -4,7 +4,7 @@
 \alias{cdf,ph-method}
 \title{Distribution Method for phase type distributions}
 \usage{
-\S4method{cdf}{ph}(x, q = seq(0, quan(x, 0.95)$quantile, length.out = 10), lower.tail = TRUE)
+\S4method{cdf}{ph}(x, q, lower.tail = TRUE)
 }
 \arguments{
 \item{x}{an object of class \linkS4class{ph}.}

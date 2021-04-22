@@ -7,7 +7,7 @@ NumericMatrix matrix_sum(const NumericMatrix & A, const NumericMatrix & B);
 
 NumericMatrix matrix_inverse(NumericMatrix A);
 
-NumericMatrix matrix_exponential(const NumericMatrix & A);
+NumericMatrix matrix_exponential_slow(const NumericMatrix & A);
 
 NumericMatrix matrix_power(int n, const NumericMatrix & A);
 

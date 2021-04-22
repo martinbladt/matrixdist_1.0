@@ -4,7 +4,7 @@
 \alias{quan,ph-method}
 \title{Quantile Method for phase type distributions}
 \usage{
-\S4method{quan}{ph}(x, p = seq(0, 1, length.out = 10))
+\S4method{quan}{ph}(x, p)
 }
 \arguments{
 \item{x}{an object of class \linkS4class{ph}.}

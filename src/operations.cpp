@@ -1,6 +1,7 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 #include "matrix_functions.h"
+#include "exp_arm.h"
 
 //' Computes the initial distribution and sub-intensity of the sum of PH
 //' 

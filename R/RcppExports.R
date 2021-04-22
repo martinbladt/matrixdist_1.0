@@ -477,6 +477,31 @@ mgevcdf <- function(x, alpha, S, mu, sigma, xi, lower_tail = TRUE) {
     .Call(`_matrixdist_mgevcdf`, x, alpha, S, mu, sigma, xi, lower_tail)
 }
 
+productArma <- function(A1, A2) {
+    .Call(`_matrixdist_productArma`, A1, A2)
+}
+
+sumArma <- function(A1, A2) {
+    .Call(`_matrixdist_sumArma`, A1, A2)
+}
+
+invArma <- function(A) {
+    .Call(`_matrixdist_invArma`, A)
+}
+
+LInf_normArma <- function(A) {
+    .Call(`_matrixdist_LInf_normArma`, A)
+}
+
+#' Matrix exponential algorithm
+#' 
+#' MATLAB's built-in algorithm - Pade approximation
+#' @param Ainput a matrix
+#' 
+matrix_exponential <- function(Ainput) {
+    .Call(`_matrixdist_matrix_exponential`, Ainput)
+}
+
 #' Product of two matrices
 #' @param a matrix
 #' @param b matrix
@@ -530,8 +555,8 @@ matrix_inverse <- function(A) {
 #' MATLAB's built-in algorithm - Pade approximation
 #' @param A a matrix
 #' 
-matrix_exponential <- function(A) {
-    .Call(`_matrixdist_matrix_exponential`, A)
+matrix_exponential_slow <- function(A) {
+    .Call(`_matrixdist_matrix_exponential_slow`, A)
 }
 
 #' Maximum entry in a matrix

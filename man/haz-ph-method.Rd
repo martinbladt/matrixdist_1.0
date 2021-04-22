@@ -4,7 +4,7 @@
 \alias{haz,ph-method}
 \title{Hazard rate Method for phase type distributions}
 \usage{
-\S4method{haz}{ph}(x, y = seq(0, quan(x, 0.95)$quantile, length.out = 10))
+\S4method{haz}{ph}(x, y)
 }
 \arguments{
 \item{x}{an object of class \linkS4class{ph}.}

@@ -21,8 +21,9 @@ Depends: R (>= 3.1.0)
 License: GPL-3
 Imports: 
     Rcpp,
+    RcppArmadillo,
     methods
-LinkingTo: Rcpp
+LinkingTo: Rcpp, RcppArmadillo
 SystemRequirements: C++11
 Encoding: UTF-8
 RoxygenNote: 7.1.1

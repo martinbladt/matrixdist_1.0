@@ -4,7 +4,7 @@
 \alias{dens,iph-method}
 \title{Density Method for inhomogeneous phase type distributions}
 \usage{
-\S4method{dens}{iph}(x, y = seq(0, quan(x, 0.95)$quantile, length.out = 10))
+\S4method{dens}{iph}(x, y)
 }
 \arguments{
 \item{x}{an object of class \linkS4class{iph}.}

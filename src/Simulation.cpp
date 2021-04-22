@@ -1,6 +1,7 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 #include "matrix_functions.h"
+#include "exp_arm.h"
 
 
 //' Embedded Markov chain of a sub-intensity matrix

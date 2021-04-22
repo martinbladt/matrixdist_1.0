@@ -4,7 +4,7 @@
 \alias{cdf,iph-method}
 \title{Distribution Method for inhomogeneous phase type distributions}
 \usage{
-\S4method{cdf}{iph}(x, q = seq(0, quan(x, 0.95)$quantile, length.out = 10), lower.tail = TRUE)
+\S4method{cdf}{iph}(x, q, lower.tail = TRUE)
 }
 \arguments{
 \item{x}{an object of class \linkS4class{iph}.}

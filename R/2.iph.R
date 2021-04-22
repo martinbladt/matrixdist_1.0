@@ -180,14 +180,14 @@ setMethod("sim", c(x = "iph"), function(x, n = 1000) {
 #' @examples
 #' obj <- iph(ph(structure = "general"), gfun = "weibull", gfun_pars = 2)
 #' dens(obj, c(1, 2, 3))
-setMethod("dens", c(x = "iph"), function(x, y = seq(0, quan(x, .95)$quantile, length.out = 10)) {
+setMethod("dens", c(x = "iph"), function(x, y) {
   fn <- base::eval(parse(text = paste("m", x@gfun$name, "den", sep = "")))
   scale <- x@scale
   y_inf <- (y == Inf)
   dens <- y
   dens[!y_inf] <- fn(y / scale, x@pars$alpha, x@pars$S, x@gfun$pars) / scale
   dens[y_inf] <- 0
-  return(list(y = y, dens = dens))
+  return(dens)
 })
 
 #' Distribution Method for inhomogeneous phase type distributions
@@ -203,7 +203,7 @@ setMethod("dens", c(x = "iph"), function(x, y = seq(0, quan(x, .95)$quantile, le
 #' obj <- iph(ph(structure = "general"), gfun = "weibull", gfun_pars = 2)
 #' cdf(obj, c(1, 2, 3))
 setMethod("cdf", c(x = "iph"), function(x,
-                                        q = seq(0, quan(x, .95)$quantile, length.out = 10),
+                                        q,
                                         lower.tail = TRUE) {
   fn <- base::eval(parse(text = paste("m", x@gfun$name, "cdf", sep = "")))
   scale <- x@scale
@@ -211,7 +211,7 @@ setMethod("cdf", c(x = "iph"), function(x,
   cdf <- q
   cdf[!q_inf] <- fn(q[!q_inf] / scale, x@pars$alpha, x@pars$S, x@gfun$pars, lower.tail)
   cdf[q_inf] <- as.numeric(1 * lower.tail)
-  return(list(q = q, cdf = cdf))
+  return(cdf)
 })
 
 

@@ -1,4 +1,5 @@
 #include "matrix_functions.h"
+#include "exp_arm.h"
 #include <Rcpp.h>
 using namespace Rcpp;
 
@@ -181,7 +182,7 @@ NumericMatrix matrix_inverse(NumericMatrix A) {
 //' @param A a matrix
 //' 
 // [[Rcpp::export]]
-NumericMatrix matrix_exponential(const NumericMatrix & A) {
+NumericMatrix matrix_exponential_slow(const NumericMatrix & A) {
   
   const int q{6};
   

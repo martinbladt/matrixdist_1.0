@@ -195,12 +195,12 @@ setMethod("sim", c(x = "ph"), function(x, n = 1000) {
 #' @examples
 #' obj <- ph(structure = "general")
 #' dens(obj, c(1, 2, 3))
-setMethod("dens", c(x = "ph"), function(x, y = seq(0, quan(x, .95)$quantile, length.out = 10)) {
+setMethod("dens", c(x = "ph"), function(x, y) {
   y_inf <- (y == Inf)
   dens <- y
   dens[!y_inf] <- phdensity(y, x@pars$alpha, x@pars$S)
   dens[y_inf] <- 0
-  return(list(y = y, dens = dens))
+  return(dens)
 })
 
 #' Distribution Method for phase type distributions
@@ -216,13 +216,13 @@ setMethod("dens", c(x = "ph"), function(x, y = seq(0, quan(x, .95)$quantile, len
 #' obj <- ph(structure = "general")
 #' cdf(obj, c(1, 2, 3))
 setMethod("cdf", c(x = "ph"), function(x,
-                                       q = seq(0, quan(x, .95)$quantile, length.out = 10),
+                                       q,
                                        lower.tail = TRUE) {
   q_inf <- (q == Inf)
   cdf <- q
   cdf[!q_inf] <- phcdf(q[!q_inf], x@pars$alpha, x@pars$S, lower.tail)
   cdf[q_inf] <- as.numeric(1 * lower.tail)
-  return(list(q = q, cdf = cdf))
+  return(cdf)
 })
 
 #' Hazard rate Method for phase type distributions
@@ -236,10 +236,10 @@ setMethod("cdf", c(x = "ph"), function(x,
 #' @examples
 #' obj <- ph(structure = "general")
 #' haz(obj, c(1, 2, 3))
-setMethod("haz", c(x = "ph"), function(x, y = seq(0, quan(x, .95)$quantile, length.out = 10)) {
-  d <- dens(x, y)$dens
-  s <- cdf(x, y, lower.tail = FALSE)$cdf
-  return(list(y = y, haz = d / s))
+setMethod("haz", c(x = "ph"), function(x, y) {
+  d <- dens(x, y)
+  s <- cdf(x, y, lower.tail = FALSE)
+  return(d / s)
 })
 
 #' Quantile Method for phase type distributions
@@ -254,12 +254,12 @@ setMethod("haz", c(x = "ph"), function(x, y = seq(0, quan(x, .95)$quantile, leng
 #' obj <- ph(structure = "general")
 #' quan(obj, c(0.5, 0.9, 0.99))
 setMethod("quan", c(x = "ph"), function(x,
-                                        p = seq(0, 1, length.out = 10)) {
+                                        p) {
   quan <- numeric(length(p))
   for (i in seq_along(p)) {
-    quan[i] <- stats::uniroot(f = function(q) p[i] - cdf(x, 1 / (1 - q) - 1)$cdf, interval = c(0, 1))$root
+    quan[i] <- stats::uniroot(f = function(q) p[i] - cdf(x, 1 / (1 - q) - 1), interval = c(0, 1))$root
   }
-  return(list(p = p, quantile = 1 / (1 - quan) - 1))
+  return(1 / (1 - quan) - 1)
 })
 
 #' Fit Method for ph Class
@@ -277,6 +277,11 @@ setMethod("quan", c(x = "ph"), function(x,
 #' @param plot logical indicating whether to plot the fit at each iteration.
 #' 
 #' @return An object of class \linkS4class{ph}.
+#' 
+#' @importFrom grDevices dev.off
+#' @importFrom graphics hist legend lines
+#' @importFrom utils head
+#' 
 #' @export
 #'
 #' @examples
@@ -337,7 +342,7 @@ setMethod(
             plot(head(h$breaks, length(h$density)), h$density, col = "#b2df8a", 
                  main = "Histogram", xlab = "data", ylab = "density", type = "s", lwd = 2)
             tmp_ph <- ph(alpha_fit, S_fit)
-            lines(sq, dens(tmp_ph, sq)$dens, col = "#33a02c", lwd = 2, lty = 1)
+            lines(sq, dens(tmp_ph, sq), col = "#33a02c", lwd = 2, lty = 1)
             legend("topright", 
                    legend = c("Data", "PH fit"), 
                    col = c("#b2df8a", "#33a02c"), 
@@ -397,7 +402,7 @@ setMethod(
             plot(head(h$breaks, length(h$density)), h$density, col = "#b2df8a", 
                  main = "Histogram", xlab = "data", ylab = "density", type = "s", lwd = 2)
             tmp_ph <- iph(ph(alpha_fit, S_fit), gfun = x@gfun$name, gfun_pars = par_g)
-            lines(sq, dens(tmp_ph, sq)$dens, col = "#33a02c", lwd = 2, lty = 1)
+            lines(sq, dens(tmp_ph, sq), col = "#33a02c", lwd = 2, lty = 1)
             legend("topright", 
                    legend = c("Data", paste("Matrix-", x@gfun$name," fit", sep ="")), 
                    col = c("#b2df8a", "#33a02c"), 
