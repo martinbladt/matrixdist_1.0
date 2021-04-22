@@ -2,17 +2,30 @@
 #include "exp_arm.h"
 // [[ Rcpp :: depends ( RcppArmadillo )]]
 
+//' Product of two matrices
+//' @param A1 matrix
+//' @param A2 matrix
+//' @return Computes C = A1 * A2
+//' 
 // [[Rcpp::export]]
-Rcpp::NumericMatrix productArma(arma::mat A1, arma::mat A2) {
-  return(Rcpp::wrap(A1 * A2));
+Rcpp::NumericMatrix matrix_product(Rcpp::NumericMatrix A1, Rcpp::NumericMatrix A2) {
+  arma::mat AA1 = Rcpp::as<arma::mat>(A1);
+  arma::mat AA2 = Rcpp::as<arma::mat>(A2);
+  return(Rcpp::wrap(AA1 * AA2));
 }
 // [[Rcpp::export]]
 Rcpp::NumericMatrix sumArma(arma::mat A1, arma::mat A2) {
   return(Rcpp::wrap(A1 + A2));
 }
+//' Inverse of a matrix
+//' 
+//' Computes the inverse
+//' @param A a matrix
+//' 
 // [[Rcpp::export]]
-Rcpp::NumericMatrix invArma(arma::mat A) {
-  return(Rcpp::wrap(inv(A)));
+Rcpp::NumericMatrix matrix_inverse(Rcpp::NumericMatrix A) {
+  arma::mat AA = Rcpp::as<arma::mat>(A);
+  return(Rcpp::wrap(inv(AA)));
 }
 // [[Rcpp::export]]
 double LInf_normArma(arma::mat A) {

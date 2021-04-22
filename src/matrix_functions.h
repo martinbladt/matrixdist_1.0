@@ -1,11 +1,11 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 
-NumericMatrix matrix_product(NumericMatrix a, NumericMatrix b);
+NumericMatrix matrix_product_slow(NumericMatrix a, NumericMatrix b);
 
 NumericMatrix matrix_sum(const NumericMatrix & A, const NumericMatrix & B);
 
-NumericMatrix matrix_inverse(NumericMatrix A);
+NumericMatrix matrix_inverse_slow(NumericMatrix A);
 
 NumericMatrix matrix_exponential_slow(const NumericMatrix & A);
 

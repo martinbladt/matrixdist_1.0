@@ -477,16 +477,26 @@ mgevcdf <- function(x, alpha, S, mu, sigma, xi, lower_tail = TRUE) {
     .Call(`_matrixdist_mgevcdf`, x, alpha, S, mu, sigma, xi, lower_tail)
 }
 
-productArma <- function(A1, A2) {
-    .Call(`_matrixdist_productArma`, A1, A2)
+#' Product of two matrices
+#' @param A1 matrix
+#' @param A2 matrix
+#' @return Computes C = A1 * A2
+#' 
+matrix_product <- function(A1, A2) {
+    .Call(`_matrixdist_matrix_product`, A1, A2)
 }
 
 sumArma <- function(A1, A2) {
     .Call(`_matrixdist_sumArma`, A1, A2)
 }
 
-invArma <- function(A) {
-    .Call(`_matrixdist_invArma`, A)
+#' Inverse of a matrix
+#' 
+#' Computes the inverse
+#' @param A a matrix
+#' 
+matrix_inverse <- function(A) {
+    .Call(`_matrixdist_matrix_inverse`, A)
 }
 
 LInf_normArma <- function(A) {
@@ -507,8 +517,8 @@ matrix_exponential <- function(Ainput) {
 #' @param b matrix
 #' @return Computes c = a * b
 #' 
-matrix_product <- function(a, b) {
-    .Call(`_matrixdist_matrix_product`, a, b)
+matrix_product_slow <- function(a, b) {
+    .Call(`_matrixdist_matrix_product_slow`, a, b)
 }
 
 #' Add matrices
@@ -546,8 +556,8 @@ solve_linear_system <- function(A1, B) {
 #' Computes the inverse
 #' @param A a matrix
 #' 
-matrix_inverse <- function(A) {
-    .Call(`_matrixdist_matrix_inverse`, A)
+matrix_inverse_slow <- function(A) {
+    .Call(`_matrixdist_matrix_inverse_slow`, A)
 }
 
 #' Matrix exponential algorithm
