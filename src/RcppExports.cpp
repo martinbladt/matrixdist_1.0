@@ -6,88 +6,6 @@
 
 using namespace Rcpp;
 
-// vectorOfMatrices_arma
-void vectorOfMatrices_arma(std::vector<arma::mat>& theVector, const arma::mat& S, double a, int sizevect);
-RcppExport SEXP _matrixdist_vectorOfMatrices_arma(SEXP theVectorSEXP, SEXP SSEXP, SEXP aSEXP, SEXP sizevectSEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< std::vector<arma::mat>& >::type theVector(theVectorSEXP);
-    Rcpp::traits::input_parameter< const arma::mat& >::type S(SSEXP);
-    Rcpp::traits::input_parameter< double >::type a(aSEXP);
-    Rcpp::traits::input_parameter< int >::type sizevect(sizevectSEXP);
-    vectorOfMatrices_arma(theVector, S, a, sizevect);
-    return R_NilValue;
-END_RCPP
-}
-// matrixExpSum_arma
-arma::mat matrixExpSum_arma(double x, int n, const std::vector<arma::mat>& powerVector, double a);
-RcppExport SEXP _matrixdist_matrixExpSum_arma(SEXP xSEXP, SEXP nSEXP, SEXP powerVectorSEXP, SEXP aSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< double >::type x(xSEXP);
-    Rcpp::traits::input_parameter< int >::type n(nSEXP);
-    Rcpp::traits::input_parameter< const std::vector<arma::mat>& >::type powerVector(powerVectorSEXP);
-    Rcpp::traits::input_parameter< double >::type a(aSEXP);
-    rcpp_result_gen = Rcpp::wrap(matrixExpSum_arma(x, n, powerVector, a));
-    return rcpp_result_gen;
-END_RCPP
-}
-// pow2Matrix_arma
-void pow2Matrix_arma(int n, arma::mat& A);
-RcppExport SEXP _matrixdist_pow2Matrix_arma(SEXP nSEXP, SEXP ASEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< int >::type n(nSEXP);
-    Rcpp::traits::input_parameter< arma::mat& >::type A(ASEXP);
-    pow2Matrix_arma(n, A);
-    return R_NilValue;
-END_RCPP
-}
-// EMstep_UNI
-void EMstep_UNI(double epsilon, arma::vec& alpha, arma::mat& S, const Rcpp::NumericVector& obs, const Rcpp::NumericVector& weight, const Rcpp::NumericVector& rcens, const Rcpp::NumericVector& rcweight);
-RcppExport SEXP _matrixdist_EMstep_UNI(SEXP epsilonSEXP, SEXP alphaSEXP, SEXP SSEXP, SEXP obsSEXP, SEXP weightSEXP, SEXP rcensSEXP, SEXP rcweightSEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< double >::type epsilon(epsilonSEXP);
-    Rcpp::traits::input_parameter< arma::vec& >::type alpha(alphaSEXP);
-    Rcpp::traits::input_parameter< arma::mat& >::type S(SSEXP);
-    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type obs(obsSEXP);
-    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type weight(weightSEXP);
-    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type rcens(rcensSEXP);
-    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type rcweight(rcweightSEXP);
-    EMstep_UNI(epsilon, alpha, S, obs, weight, rcens, rcweight);
-    return R_NilValue;
-END_RCPP
-}
-// vectorOfMatrices_arma2
-void vectorOfMatrices_arma2(std::vector<arma::mat>& theVector, const arma::mat& S, int sizevect);
-RcppExport SEXP _matrixdist_vectorOfMatrices_arma2(SEXP theVectorSEXP, SEXP SSEXP, SEXP sizevectSEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< std::vector<arma::mat>& >::type theVector(theVectorSEXP);
-    Rcpp::traits::input_parameter< const arma::mat& >::type S(SSEXP);
-    Rcpp::traits::input_parameter< int >::type sizevect(sizevectSEXP);
-    vectorOfMatrices_arma2(theVector, S, sizevect);
-    return R_NilValue;
-END_RCPP
-}
-// EMstep_PADE
-void EMstep_PADE(double epsilon, arma::vec& alpha, arma::mat& S, const Rcpp::NumericVector& obs, const Rcpp::NumericVector& weight, const Rcpp::NumericVector& rcens, const Rcpp::NumericVector& rcweight);
-RcppExport SEXP _matrixdist_EMstep_PADE(SEXP epsilonSEXP, SEXP alphaSEXP, SEXP SSEXP, SEXP obsSEXP, SEXP weightSEXP, SEXP rcensSEXP, SEXP rcweightSEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< double >::type epsilon(epsilonSEXP);
-    Rcpp::traits::input_parameter< arma::vec& >::type alpha(alphaSEXP);
-    Rcpp::traits::input_parameter< arma::mat& >::type S(SSEXP);
-    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type obs(obsSEXP);
-    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type weight(weightSEXP);
-    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type rcens(rcensSEXP);
-    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type rcweight(rcweightSEXP);
-    EMstep_PADE(epsilon, alpha, S, obs, weight, rcens, rcweight);
-    return R_NilValue;
-END_RCPP
-}
 // default_step_length
 double default_step_length(const NumericMatrix& S);
 RcppExport SEXP _matrixdist_default_step_length(SEXP SSEXP) {
@@ -300,6 +218,105 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// vectorOfMatrices_arma2
+void vectorOfMatrices_arma2(std::vector<arma::mat>& theVector, const arma::mat& S, int sizevect);
+RcppExport SEXP _matrixdist_vectorOfMatrices_arma2(SEXP theVectorSEXP, SEXP SSEXP, SEXP sizevectSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::vector<arma::mat>& >::type theVector(theVectorSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type S(SSEXP);
+    Rcpp::traits::input_parameter< int >::type sizevect(sizevectSEXP);
+    vectorOfMatrices_arma2(theVector, S, sizevect);
+    return R_NilValue;
+END_RCPP
+}
+// EMstep_PADE
+void EMstep_PADE(double epsilon, arma::vec& alpha, arma::mat& S, const Rcpp::NumericVector& obs, const Rcpp::NumericVector& weight, const Rcpp::NumericVector& rcens, const Rcpp::NumericVector& rcweight);
+RcppExport SEXP _matrixdist_EMstep_PADE(SEXP epsilonSEXP, SEXP alphaSEXP, SEXP SSEXP, SEXP obsSEXP, SEXP weightSEXP, SEXP rcensSEXP, SEXP rcweightSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type epsilon(epsilonSEXP);
+    Rcpp::traits::input_parameter< arma::vec& >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type S(SSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type obs(obsSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type weight(weightSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type rcens(rcensSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type rcweight(rcweightSEXP);
+    EMstep_PADE(epsilon, alpha, S, obs, weight, rcens, rcweight);
+    return R_NilValue;
+END_RCPP
+}
+// vectorOfMatrices_arma
+void vectorOfMatrices_arma(std::vector<arma::mat>& theVector, const arma::mat& S, double a, int sizevect);
+RcppExport SEXP _matrixdist_vectorOfMatrices_arma(SEXP theVectorSEXP, SEXP SSEXP, SEXP aSEXP, SEXP sizevectSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::vector<arma::mat>& >::type theVector(theVectorSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type S(SSEXP);
+    Rcpp::traits::input_parameter< double >::type a(aSEXP);
+    Rcpp::traits::input_parameter< int >::type sizevect(sizevectSEXP);
+    vectorOfMatrices_arma(theVector, S, a, sizevect);
+    return R_NilValue;
+END_RCPP
+}
+// matrixExpSum_arma
+arma::mat matrixExpSum_arma(double x, int n, const std::vector<arma::mat>& powerVector, double a);
+RcppExport SEXP _matrixdist_matrixExpSum_arma(SEXP xSEXP, SEXP nSEXP, SEXP powerVectorSEXP, SEXP aSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type x(xSEXP);
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< const std::vector<arma::mat>& >::type powerVector(powerVectorSEXP);
+    Rcpp::traits::input_parameter< double >::type a(aSEXP);
+    rcpp_result_gen = Rcpp::wrap(matrixExpSum_arma(x, n, powerVector, a));
+    return rcpp_result_gen;
+END_RCPP
+}
+// pow2Matrix_arma
+void pow2Matrix_arma(int n, arma::mat& A);
+RcppExport SEXP _matrixdist_pow2Matrix_arma(SEXP nSEXP, SEXP ASEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type A(ASEXP);
+    pow2Matrix_arma(n, A);
+    return R_NilValue;
+END_RCPP
+}
+// EMstep_UNI
+void EMstep_UNI(double epsilon, arma::vec& alpha, arma::mat& S, const Rcpp::NumericVector& obs, const Rcpp::NumericVector& weight, const Rcpp::NumericVector& rcens, const Rcpp::NumericVector& rcweight);
+RcppExport SEXP _matrixdist_EMstep_UNI(SEXP epsilonSEXP, SEXP alphaSEXP, SEXP SSEXP, SEXP obsSEXP, SEXP weightSEXP, SEXP rcensSEXP, SEXP rcweightSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type epsilon(epsilonSEXP);
+    Rcpp::traits::input_parameter< arma::vec& >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type S(SSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type obs(obsSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type weight(weightSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type rcens(rcensSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type rcweight(rcweightSEXP);
+    EMstep_UNI(epsilon, alpha, S, obs, weight, rcens, rcweight);
+    return R_NilValue;
+END_RCPP
+}
+// logLikelihoodPH_UNI
+double logLikelihoodPH_UNI(double epsilon, arma::vec& alpha, arma::mat& S, const Rcpp::NumericVector& obs, const Rcpp::NumericVector& weight, const Rcpp::NumericVector& rcens, const Rcpp::NumericVector& rcweight);
+RcppExport SEXP _matrixdist_logLikelihoodPH_UNI(SEXP epsilonSEXP, SEXP alphaSEXP, SEXP SSEXP, SEXP obsSEXP, SEXP weightSEXP, SEXP rcensSEXP, SEXP rcweightSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type epsilon(epsilonSEXP);
+    Rcpp::traits::input_parameter< arma::vec& >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type S(SSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type obs(obsSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type weight(weightSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type rcens(rcensSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type rcweight(rcweightSEXP);
+    rcpp_result_gen = Rcpp::wrap(logLikelihoodPH_UNI(epsilon, alpha, S, obs, weight, rcens, rcweight));
+    return rcpp_result_gen;
+END_RCPP
+}
 // embeddedMC
 NumericMatrix embeddedMC(NumericMatrix S);
 RcppExport SEXP _matrixdist_embeddedMC(SEXP SSEXP) {
@@ -402,41 +419,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// productArma
-Rcpp::NumericMatrix productArma(Rcpp::NumericMatrix A1, Rcpp::NumericMatrix A2);
-RcppExport SEXP _matrixdist_productArma(SEXP A1SEXP, SEXP A2SEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type A1(A1SEXP);
-    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type A2(A2SEXP);
-    rcpp_result_gen = Rcpp::wrap(productArma(A1, A2));
-    return rcpp_result_gen;
-END_RCPP
-}
-// sumArma
-Rcpp::NumericMatrix sumArma(arma::mat A1, arma::mat A2);
-RcppExport SEXP _matrixdist_sumArma(SEXP A1SEXP, SEXP A2SEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::mat >::type A1(A1SEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type A2(A2SEXP);
-    rcpp_result_gen = Rcpp::wrap(sumArma(A1, A2));
-    return rcpp_result_gen;
-END_RCPP
-}
-// invArma
-Rcpp::NumericMatrix invArma(arma::mat A);
-RcppExport SEXP _matrixdist_invArma(SEXP ASEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::mat >::type A(ASEXP);
-    rcpp_result_gen = Rcpp::wrap(invArma(A));
-    return rcpp_result_gen;
-END_RCPP
-}
 // LInf_normArma
 double LInf_normArma(arma::mat A);
 RcppExport SEXP _matrixdist_LInf_normArma(SEXP ASEXP) {
@@ -445,17 +427,6 @@ BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< arma::mat >::type A(ASEXP);
     rcpp_result_gen = Rcpp::wrap(LInf_normArma(A));
-    return rcpp_result_gen;
-END_RCPP
-}
-// mexponentialArma
-arma::mat mexponentialArma(arma::mat Ainput);
-RcppExport SEXP _matrixdist_mexponentialArma(SEXP AinputSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::mat >::type Ainput(AinputSEXP);
-    rcpp_result_gen = Rcpp::wrap(mexponentialArma(Ainput));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -935,12 +906,6 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_matrixdist_vectorOfMatrices_arma", (DL_FUNC) &_matrixdist_vectorOfMatrices_arma, 4},
-    {"_matrixdist_matrixExpSum_arma", (DL_FUNC) &_matrixdist_matrixExpSum_arma, 4},
-    {"_matrixdist_pow2Matrix_arma", (DL_FUNC) &_matrixdist_pow2Matrix_arma, 2},
-    {"_matrixdist_EMstep_UNI", (DL_FUNC) &_matrixdist_EMstep_UNI, 7},
-    {"_matrixdist_vectorOfMatrices_arma2", (DL_FUNC) &_matrixdist_vectorOfMatrices_arma2, 3},
-    {"_matrixdist_EMstep_PADE", (DL_FUNC) &_matrixdist_EMstep_PADE, 7},
     {"_matrixdist_default_step_length", (DL_FUNC) &_matrixdist_default_step_length, 1},
     {"_matrixdist_runge_kutta", (DL_FUNC) &_matrixdist_runge_kutta, 7},
     {"_matrixdist_EMstep_RK", (DL_FUNC) &_matrixdist_EMstep_RK, 7},
@@ -954,6 +919,13 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_logLikelihoodMgev_RK", (DL_FUNC) &_matrixdist_logLikelihoodMgev_RK, 8},
     {"_matrixdist_reversTransformData", (DL_FUNC) &_matrixdist_reversTransformData, 3},
     {"_matrixdist_derivativeMatrixweibull", (DL_FUNC) &_matrixdist_derivativeMatrixweibull, 8},
+    {"_matrixdist_vectorOfMatrices_arma2", (DL_FUNC) &_matrixdist_vectorOfMatrices_arma2, 3},
+    {"_matrixdist_EMstep_PADE", (DL_FUNC) &_matrixdist_EMstep_PADE, 7},
+    {"_matrixdist_vectorOfMatrices_arma", (DL_FUNC) &_matrixdist_vectorOfMatrices_arma, 4},
+    {"_matrixdist_matrixExpSum_arma", (DL_FUNC) &_matrixdist_matrixExpSum_arma, 4},
+    {"_matrixdist_pow2Matrix_arma", (DL_FUNC) &_matrixdist_pow2Matrix_arma, 2},
+    {"_matrixdist_EMstep_UNI", (DL_FUNC) &_matrixdist_EMstep_UNI, 7},
+    {"_matrixdist_logLikelihoodPH_UNI", (DL_FUNC) &_matrixdist_logLikelihoodPH_UNI, 7},
     {"_matrixdist_embeddedMC", (DL_FUNC) &_matrixdist_embeddedMC, 1},
     {"_matrixdist_cumulateMatrix", (DL_FUNC) &_matrixdist_cumulateMatrix, 1},
     {"_matrixdist_cumulateVector", (DL_FUNC) &_matrixdist_cumulateVector, 1},
@@ -962,11 +934,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_rphasetype", (DL_FUNC) &_matrixdist_rphasetype, 3},
     {"_matrixdist_riph", (DL_FUNC) &_matrixdist_riph, 5},
     {"_matrixdist_rmatrixgev", (DL_FUNC) &_matrixdist_rmatrixgev, 6},
-    {"_matrixdist_productArma", (DL_FUNC) &_matrixdist_productArma, 2},
-    {"_matrixdist_sumArma", (DL_FUNC) &_matrixdist_sumArma, 2},
-    {"_matrixdist_invArma", (DL_FUNC) &_matrixdist_invArma, 1},
     {"_matrixdist_LInf_normArma", (DL_FUNC) &_matrixdist_LInf_normArma, 1},
-    {"_matrixdist_mexponentialArma", (DL_FUNC) &_matrixdist_mexponentialArma, 1},
     {"_matrixdist_matrix_VanLoanArma", (DL_FUNC) &_matrixdist_matrix_VanLoanArma, 3},
     {"_matrixdist_matrixMaxDiagonal_arma", (DL_FUNC) &_matrixdist_matrixMaxDiagonal_arma, 1},
     {"_matrixdist_phdensity", (DL_FUNC) &_matrixdist_phdensity, 3},
