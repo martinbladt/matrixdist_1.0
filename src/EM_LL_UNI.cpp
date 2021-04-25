@@ -14,8 +14,6 @@
 //' @param sizevect size of vector
 // [[Rcpp::export]]
 void vectorOfMatrices_arma(std::vector<arma::mat> & theVector, const arma::mat & S, double a, int sizevect) {
-  long p{S.n_rows};
-  
   arma::mat I;
   I.eye(size(S));
   
@@ -49,7 +47,7 @@ arma::mat matrixExpSum_arma(double x, int n, const std::vector<arma::mat> & powe
 // Computes (A)^(2^n)
 // [[Rcpp::export]]
 void pow2Matrix_arma(int n , arma::mat & A) {
-  arma::mat auxMat(A.n_rows,A.n_cols);
+  arma::mat auxMat(size(A));
   
   for (int i{1}; i <= n; ++i) {
     auxMat = A * A;
@@ -250,7 +248,6 @@ void EMstep_UNI(double epsilon, arma::vec & alpha, arma::mat & S, const Rcpp::Nu
 //' 
 // [[Rcpp::export]]
 double logLikelihoodPH_UNI(double epsilon, arma::vec & alpha, arma::mat & S, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight) {
-  long p{S.n_rows};
   
   arma::mat e; e.ones(S.n_cols, 1);
   arma::mat s = (S * (-1)) * e;
