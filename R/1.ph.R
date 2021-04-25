@@ -270,7 +270,9 @@ setMethod("quan", c(x = "ph"), function(x,
 #' @param rcen vector of right-censored observations
 #' @param rcenweight vector of weights for right-censored observations.
 #' @param stepsEM number of EM steps to be performed.
+#' @param method method to use for matrix exponential calculation: RM, UNI or PADE
 #' @param rkstep Runge-Kutta step size (optional)
+#' @param uni_epsilon epsilon parameter for uniformization method
 #' @param maxit maximum number of iterations when optimizing g function.
 #' @param reltol relative tolerance when optimizing g function.
 #' @param every number of iterations between likelihood display updates.
@@ -296,11 +298,14 @@ setMethod(
            rcen = numeric(0),
            rcenweight = numeric(0),
            stepsEM = 1000,
+           method = "RK",
            rkstep = NA,
+           uni_epsilon = NA,
            maxit = 100,
            reltol = 1e-8,
            every = 100,
            plot = FALSE) {
+    EMstep <- eval(parse(text = paste("EMstep_", method, sep = "")))
     if(!all(c(y, rcen) > 0)) stop("data should be positive")
     if(!all(c(weight, rcenweight) >= 0)) stop("weights should be non-negative")
     is_iph <- methods::is(x, "iph")
@@ -327,14 +332,22 @@ setMethod(
     ph_par <- x@pars
     alpha_fit <- clone_vector(ph_par$alpha)
     S_fit <- clone_matrix(ph_par$S)
+    epsilon <- 0
 
     if (!is_iph) {
       for (k in 1:stepsEM) {
-        if(!is.na(rkstep)) RKstep <- rkstep else  RKstep <- default_step_length(S_fit)
-        EMstep_RK(RKstep, alpha_fit, S_fit, y, weight, rcen, rcenweight)
+        if(method %in% c("RK", "PADE")){
+          if(!is.na(rkstep)){epsilon <- epsilon2 <- rkstep
+          }else{epsilon <- epsilon2 <- default_step_length(S_fit)}
+        }else if(method == "UNI"){
+          if(!is.na(uni_epsilon)){epsilon <- uni_epsilon
+          }else{epsilon <- 1e-4}
+          epsilon2 <- default_step_length(S_fit)
+        }
+        EMstep(epsilon, alpha_fit, S_fit, y, weight, rcen, rcenweight)
         if (k %% every == 0) {
           cat("\r", "iteration:", k,
-            ", logLik:", logLikelihoodPH_RK(RKstep, alpha_fit, S_fit, y, weight, rcen, rcenweight),
+            ", logLik:", logLikelihoodPH_RK(epsilon2, alpha_fit, S_fit, y, weight, rcen, rcenweight),
             sep = " "
           )
           if(plot == TRUE){
@@ -360,7 +373,7 @@ setMethod(
       x@pars$alpha <- alpha_fit
       x@pars$S <- S_fit
       x@fit <- list(
-        logLik = logLikelihoodPH_RK(RKstep, alpha_fit, S_fit, y, weight, rcen, rcenweight),
+        logLik = logLikelihoodPH_RK(epsilon, alpha_fit, S_fit, y, weight, rcen, rcenweight),
         nobs = sum(A$weights)
       )
     }
@@ -371,13 +384,20 @@ setMethod(
         if(x@gfun$name != "gev") {trans <- inv_g(par_g, y); trans_cens <- inv_g(par_g, rcen)
         }else{ t <- inv_g(par_g, y, weight); tc <- inv_g(par_g, rcen, rcenweight) 
         trans <- t$obs; trans_weight <- t$weight; trans_cens <- tc$obs; trans_rcenweight <- tc$weight}
-        if(!is.na(rkstep)) RKstep <- rkstep else  RKstep <- default_step_length(S_fit)
-        EMstep_RK(RKstep, alpha_fit, S_fit, trans, trans_weight, trans_cens, trans_rcenweight)
+        if(method %in% c("RK", "PADE")){
+          if(!is.na(rkstep)){epsilon <- epsilon2 <- rkstep
+          }else{epsilon <- epsilon2 <- default_step_length(S_fit)}
+        }else if(method == "UNI"){
+          if(!is.na(uni_epsilon)){epsilon <- uni_epsilon
+          }else{epsilon <- 1e-4}
+          epsilon2 <- default_step_length(S_fit)
+        }
+        EMstep(epsilon, alpha_fit, S_fit, trans, trans_weight, trans_cens, trans_rcenweight)
         opt <- suppressWarnings(
           stats::optim(
             par = par_g,
             fn = mLL,
-            h = RKstep,
+            h = epsilon2,
             alpha = alpha_fit,
             S = S_fit,
             obs = y,

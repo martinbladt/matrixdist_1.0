@@ -11,7 +11,9 @@
   rcen = numeric(0),
   rcenweight = numeric(0),
   stepsEM = 1000,
+  method = "RK",
   rkstep = NA,
+  uni_epsilon = NA,
   maxit = 100,
   reltol = 1e-08,
   every = 100,
@@ -31,7 +33,11 @@
 
 \item{stepsEM}{number of EM steps to be performed.}
 
+\item{method}{method to use for matrix exponential calculation: RM, UNI or PADE}
+
 \item{rkstep}{Runge-Kutta step size (optional)}
+
+\item{uni_epsilon}{epsilon parameter for uniformization method}
 
 \item{maxit}{maximum number of iterations when optimizing g function.}
 

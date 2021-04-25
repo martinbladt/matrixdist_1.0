@@ -1,34 +1,30 @@
+#include "auxilliary.h"
 # include <RcppArmadillo.h>
-#include "exp_arm.h"
 // [[ Rcpp :: depends ( RcppArmadillo )]]
 
-//' Product of two matrices
-//' @param A1 matrix
-//' @param A2 matrix
-//' @return Computes C = A1 * A2
-//' 
+
 // [[Rcpp::export]]
-Rcpp::NumericMatrix matrix_product(Rcpp::NumericMatrix A1, Rcpp::NumericMatrix A2) {
+Rcpp::NumericMatrix productArma(Rcpp::NumericMatrix A1, Rcpp::NumericMatrix A2) {
   arma::mat AA1 = Rcpp::as<arma::mat>(A1);
   arma::mat AA2 = Rcpp::as<arma::mat>(A2);
   return(Rcpp::wrap(AA1 * AA2));
 }
+
+
 // [[Rcpp::export]]
-Rcpp::NumericMatrix sumArma_0(arma::mat A1, arma::mat A2) {
+Rcpp::NumericMatrix sumArma(arma::mat A1, arma::mat A2) {
   return(Rcpp::wrap(A1 + A2));
 }
-//' Inverse of a matrix
-//' 
-//' Computes the inverse
-//' @param A a matrix
-//' 
+
+
 // [[Rcpp::export]]
-Rcpp::NumericMatrix matrix_inverse(Rcpp::NumericMatrix A) {
-  arma::mat AA = Rcpp::as<arma::mat>(A);
-  return(Rcpp::wrap(inv(AA)));
+Rcpp::NumericMatrix invArma(arma::mat A) {
+  return(Rcpp::wrap(inv(A)));
 }
+
+
 // [[Rcpp::export]]
-double LInf_normArma_0(arma::mat A) {
+double LInf_normArma(arma::mat A) {
   double value{0.0};
   
   for (int i{0}; i < A.n_rows; ++i) {
@@ -47,15 +43,16 @@ double LInf_normArma_0(arma::mat A) {
 //' @param Ainput a matrix
 //' 
 // [[Rcpp::export]]
-Rcpp::NumericMatrix matrix_exponential(Rcpp::NumericMatrix Ainput) {
-  arma::mat A = Rcpp::as<arma::mat>(Ainput);
-
+arma::mat mexponentialArma(arma::mat Ainput) {
+  
+  arma::mat A = (Ainput); 
+  
   const int q{6};
   
   arma::mat matrixAuxiliar(A.n_rows,A.n_cols);
   arma::mat ExpM(A.n_rows,A.n_cols);
   
-  double aNorm{LInf_normArma_0(A)};
+  double aNorm{LInf_normArma(A)};
   
   int ee{static_cast<int>(log2(aNorm)) + 1};
   
@@ -101,5 +98,50 @@ Rcpp::NumericMatrix matrix_exponential(Rcpp::NumericMatrix Ainput) {
   for (int k = 1; k <= s; ++k) {
     ExpM = ExpM * ExpM;
   }
-  return(Rcpp::wrap(ExpM));
+  return(ExpM);
+}
+
+//' Creates the matrix  (A1, B1 ; 0, A2)
+//' @param A1 matrix
+//' @param A2 matrix
+//' @param B1 matrix
+//' @return Computes (A1, B1 ; 0, A2)
+//' 
+// [[Rcpp::export]]
+arma::mat matrix_VanLoanArma(arma::mat A1, arma::mat A2, arma::mat B1) {
+  long p1{A1.n_rows};
+  long p2{A2.n_rows};
+  long p{p1 + p2};
+  
+  arma::mat auxiliarMatrix(p, p);
+  
+  for (int i{0}; i < p; ++i) {
+    for (int j{0}; j < p; ++j) {
+      if ( i < p1 && j < p1) {
+        auxiliarMatrix(i,j) = A1(i,j);
+      }
+      else if (i >= p1 && j < p1) {
+        auxiliarMatrix(i,j) = 0;
+      }
+      else if (i < p1 && j >= p1) {
+        auxiliarMatrix(i,j) = B1(i,j - p1);
+      }
+      else {
+        auxiliarMatrix(i,j) = A2(i - p1,j - p1);
+      }
+    }
+  }
+  return auxiliarMatrix;
+}
+
+
+// [[Rcpp::export]]
+double matrixMaxDiagonal_arma(const arma::mat & A) {
+  double maximum{A(0,0)};
+  for (int i{0}; i < A.n_rows; ++i) {
+    if (A(i,i) > maximum) {
+      maximum = A(i,i);
+    }
+  }
+  return maximum;
 }
