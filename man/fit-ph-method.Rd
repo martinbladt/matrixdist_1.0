@@ -11,7 +11,7 @@
   rcen = numeric(0),
   rcenweight = numeric(0),
   stepsEM = 1000,
-  method = "RK",
+  methods = c("RK", "RK"),
   rkstep = NA,
   uni_epsilon = NA,
   maxit = 100,
@@ -33,7 +33,7 @@
 
 \item{stepsEM}{number of EM steps to be performed.}
 
-\item{method}{method to use for matrix exponential calculation: RM, UNI or PADE}
+\item{methods}{methods to use for matrix exponential calculation: RM, UNI or PADE}
 
 \item{rkstep}{Runge-Kutta step size (optional)}
 

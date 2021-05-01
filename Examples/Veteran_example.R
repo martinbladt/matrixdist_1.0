@@ -31,7 +31,10 @@ set.seed(1)
 dev.off()
 A <- iph(ph(structure = "general", dimension = 2), gfun = "pareto", gfun_par = 1/2)
 
-B <- fit(A, y = y, rcen = rcen, stepsEM = 2000, method = "RK")
+B <- fit(A, y = y, rcen = rcen, stepsEM = 1000, methods = c("RK", "RK"))
+B <- fit(A, y = y, rcen = rcen, stepsEM = 1000, methods = c("RK", "UNI"))
+B <- fit(A, y = y, rcen = rcen, stepsEM = 1000, methods = c("UNI", "UNI"), uni_epsilon = 0.0000000000000001)
+B <- fit(A, y = y, rcen = rcen, stepsEM = 1000, methods = c("UNI", "PADE"))
 
 base::plot(survival::survfit(survival::Surv(time, status) ~ 1, data = dat))
 sq <- seq(0,10, by = .05)
@@ -43,12 +46,24 @@ lines(sq, pp, col = "red")
 set.seed(1)
 iA <- reg(x = iph(ph(structure = "coxian", dimension = 1),
                   gfun = "weibull", gfun_pars = 1),
-          y = y, rcen = rcen, X = X, stepsEM = 300)
+          y = y, rcen = rcen, X = X, stepsEM = 300, methods = c("UNI", "PADE"))
 
 set.seed(1)
-iB <- reg(x = iph(ph(structure = "general", dimension = 3),
+iB <- reg(x = iph(ph(structure = "general", dimension = 5),
                   gfun = "weibull", gfun_pars = 1),
-          y = y, rcen = rcen, X = X, stepsEM = 300)
+          y = y, rcen = rcen, X = X, stepsEM = 300,
+          methods = c("RK","UNI"))
+
+set.seed(1)
+iB <- reg(x = iph(ph(structure = "general", dimension = 5),
+                  gfun = "weibull", gfun_pars = 1),
+          y = y, rcen = rcen, X = X, stepsEM = 300,
+          methods = c("RK","PADE"))
+set.seed(1)
+iB <- reg(x = iph(ph(structure = "general", dimension = 5),
+                  gfun = "weibull", gfun_pars = 1),
+          y = y, rcen = rcen, X = X, stepsEM = 1000,
+          methods = c("UNI","UNI"), uni_epsilon = 0.0000000000000001)
 
 
 iA@fit$loglik

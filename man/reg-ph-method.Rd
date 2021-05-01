@@ -12,7 +12,13 @@
   rcenweight = numeric(0),
   X = numeric(0),
   B0 = numeric(0),
-  stepsEM = 1000
+  stepsEM = 1000,
+  methods = c("RK", "UNI"),
+  rkstep = NA,
+  uni_epsilon = NA,
+  maxit = 50,
+  reltol = 1e-08,
+  every = 10
 )
 }
 \arguments{
@@ -31,9 +37,21 @@
 \item{B0}{initial regression coefficients (optional).}
 
 \item{stepsEM}{number of EM steps to be performed.}
+
+\item{methods}{methods to use for matrix exponential calculation: RM, UNI or PADE}
+
+\item{rkstep}{Runge-Kutta step size (optional)}
+
+\item{uni_epsilon}{epsilon parameter for uniformization method}
+
+\item{maxit}{maximum number of iterations when optimizing g function.}
+
+\item{reltol}{relative tolerance when optimizing g function.}
+
+\item{every}{number of iterations between likelihood display updates.}
 }
 \value{
-An object of class \linkS4class{ph}.
+An object of class \linkS4class{sph}.
 }
 \description{
 Regression Method for ph Class
