@@ -461,7 +461,7 @@ double logLikelihoodMweibull_RK(double h, NumericVector & alpha, NumericMatrix &
     if (k < rcens.size() - 1) {dt = pow(rcens[k + 1], beta) - pow(rcens[k], beta);}
   }
   
-  return -logLh;
+  return logLh;
 }
 
 
@@ -524,7 +524,7 @@ double logLikelihoodMpareto_RK(double h, NumericVector & alpha, NumericMatrix & 
     if (k < rcens.size() - 1) {dt = log(rcens[k + 1] / beta + 1) - log(rcens[k] / beta + 1);}
   }
   
-  return -logLh;
+  return logLh;
 }
 
 //' Loglikelihood of matrix LogNormal using RK
@@ -586,7 +586,7 @@ double logLikelihoodMlognormal_RK(double h, NumericVector & alpha, NumericMatrix
     if (k < rcens.size() - 1) {dt = pow(log(rcens[k + 1] + 1), beta) - pow(log(rcens[k] + 1), beta);}
   }
   
-  return -logLh;
+  return logLh;
 }
 
 //' Loglikelihood of matrix Log-Logistic using RK
@@ -649,7 +649,7 @@ double logLikelihoodMloglogistic_RK(double h, NumericVector & alpha, NumericMatr
     if (k < rcens.size() - 1) {dt = log(pow(rcens[k + 1] / beta[0], beta[1]) + 1) - log(pow(rcens[k] / beta[0], beta[1]) + 1);}
   }
   
-  return -logLh;
+  return logLh;
 }
 
 //' Loglikelihood of matrix Gompertz using RK
@@ -711,7 +711,7 @@ double logLikelihoodMgompertz_RK(double h, NumericVector & alpha, NumericMatrix 
     if (k < rcens.size() - 1) {dt = (exp(rcens[k + 1] * beta) - 1) / beta - (exp(rcens[k] * beta) - 1) / beta;}
   }
   
-  return -logLh;
+  return logLh;
 }
 
 
@@ -803,7 +803,7 @@ double logLikelihoodMgev_RK(double h, NumericVector & alpha, NumericMatrix & S, 
       if (k < N) {dt = pow(1 + (beta[2] / beta[1]) * (rcens[N - k - 1] - beta[0]) , - 1 / beta[2]) - pow(1 + (beta[2] / beta[1]) * (rcens[N - k] - beta[0]) , - 1 / beta[2]);}
     }
   }
-  return -logLh;
+  return logLh;
 }
 
 
@@ -875,4 +875,385 @@ double derivativeMatrixweibull(double h, const NumericVector & obs, const Numeri
   return logLh;
   
 }
+
+
+////////////////////////////////////////////
+// Scaled versions of loglikelihoods (for regression):
+////////////////////////////////////////////
+
+
+//' Loglikelihood of PH using RK
+//' 
+//' Loglikelihood for a sample 
+//' @param h positive parameter
+//' @param alpha initial probabilities
+//' @param S sub-intensity
+//' @param obs the observations
+//' @param weight weight of the observations
+//' @param rcens censored observations
+//' @param rcweight weight of the censored observations
+//' @param scale1 scale for observations
+//' @param scale2 scale for censored observations
+//' 
+// [[Rcpp::export]]
+double logLikelihoodPH_RKs(double h, NumericVector & alpha, NumericMatrix & S, const NumericVector & obs, const NumericVector & weight, const NumericVector & rcens, const NumericVector & rcweight, const NumericVector & scale1, const NumericVector & scale2) {
+  long p{S.nrow()};
+  NumericMatrix m_alpha(1,p, alpha.begin());
+  
+  NumericMatrix avector(1,p);
+  
+  NumericVector m_e(p, 1);
+  NumericMatrix e(p, 1, m_e.begin());
+  
+  NumericMatrix t = matrix_product(S * (-1), e);
+  
+  // Uncensored data
+  //   initial condition
+  avector = clone(m_alpha);
+  
+  double dt{0.0};
+  
+  double density{0.0};
+  
+  double logLh{0.0};
+  
+  // Non censored data
+  if (obs.size() > 0) {
+    dt = scale1[0] * obs[0];
+  }
+  for (int k{0}; k < obs.size(); ++k) {
+    if(dt > 0) a_rungekutta(avector, dt, h, S);
+    density = matrix_product(avector, t)(0,0);
+    logLh += weight[k] * (log(density) + log(scale1[k]));
+    if (k < obs.size() - 1){dt = scale1[k + 1] * obs[k + 1] - scale1[k] * obs[k];}
+  }
+  //Right censored data
+  if (rcens.size() > 0) {
+    dt = scale2[0] * rcens[0];
+    avector = clone(m_alpha);
+  }
+  for (int k{0}; k < rcens.size(); ++k) {
+    if(dt > 0) a_rungekutta(avector, dt, h, S);
+    density = matrix_product(avector, e)(0,0);
+    logLh += rcweight[k] * log(density);
+    if (k < rcens.size() - 1){dt = scale2[k + 1] * rcens[k + 1] - scale2[k] * rcens[k];}
+  }
+  
+  return logLh;
+}
+
+
+//' Loglikelihood of matrix-Weibull using RK
+//' 
+//' Loglikelihood for a sample 
+//' @param h positive parameter
+//' @param alpha initial probabilities
+//' @param S sub-intensity
+//' @param beta parameter of transformation
+//' @param obs the observations
+//' @param weight weight of the observations
+//' @param rcens censored observations
+//' @param rcweight weight of the censored observations
+//' @param scale1 scale for observations
+//' @param scale2 scale for censored observations
+//' 
+// [[Rcpp::export]]
+double logLikelihoodMweibull_RKs(double h, NumericVector & alpha, NumericMatrix & S, double beta, const NumericVector & obs, const NumericVector & weight, const NumericVector & rcens, const NumericVector & rcweight, const NumericVector & scale1, const NumericVector & scale2) {
+  long p{S.nrow()};
+  NumericMatrix m_alpha(1,p, alpha.begin());
+  
+  NumericMatrix avector(1,p);
+  
+  NumericVector m_e(p, 1);
+  NumericMatrix e(p, 1, m_e.begin());
+  
+  NumericMatrix t = matrix_product(S * (-1), e);
+  
+  // Uncensored data
+  //   initial condition
+  avector = clone(m_alpha);
+  
+  double dt{0.0};
+  
+  double density{0.0};
+  
+  double logLh{0.0};
+  
+  // Non censored data
+  if (obs.size() > 0) {
+    dt = scale1[0] * pow(obs[0], beta);
+  }
+  for (int k{0}; k < obs.size(); ++k) {
+    if(dt > 0) a_rungekutta(avector, dt, h, S);
+    density = matrix_product(avector, t)(0,0);
+    logLh += weight[k] * (log(density) + log(scale1[k]) + log(beta) + (beta -1) * log(obs[k]));
+    if (k < obs.size() - 1){dt = scale1[k + 1] * pow(obs[k + 1], beta) - scale1[k] * pow(obs[k], beta);}
+  }
+  //Right censored data
+  if (rcens.size() > 0) {
+    dt = scale2[0] * pow(rcens[0], beta);
+    avector = clone(m_alpha);
+  }
+  for (int k{0}; k < rcens.size(); ++k) {
+    if(dt > 0) a_rungekutta(avector, dt, h, S);
+    density = matrix_product(avector, e)(0,0);
+    logLh += rcweight[k] * log(density);
+    if (k < rcens.size() - 1){dt = scale2[k + 1] * pow(rcens[k + 1], beta) - scale2[k] * pow(rcens[k], beta);}
+  }
+  
+  return logLh;
+}
+
+
+//' Loglikelihood of matrix-Pareto using RK
+//' 
+//' Loglikelihood for a sample 
+//' @param h positive parameter
+//' @param alpha initial probabilities
+//' @param S sub-intensity
+//' @param beta parameter of transformation
+//' @param obs the observations
+//' @param weight weight of the observations
+//' @param rcens censored observations
+//' @param rcweight weight of the censored observations
+//' @param scale1 scale for observations
+//' @param scale2 scale for censored observations
+//' 
+// [[Rcpp::export]]
+double logLikelihoodMpareto_RKs(double h, NumericVector & alpha, NumericMatrix & S, double beta, const NumericVector & obs, const NumericVector & weight, const NumericVector & rcens, const NumericVector & rcweight, const NumericVector & scale1, const NumericVector & scale2) {
+  long p{S.nrow()};
+  NumericMatrix m_alpha(1,p, alpha.begin());
+  
+  NumericMatrix avector(1,p);
+  
+  NumericVector m_e(p, 1);
+  NumericMatrix e(p, 1, m_e.begin());
+  
+  NumericMatrix t = matrix_product(S * (-1), e);
+  
+  // Uncensored data
+  //   initial condition
+  avector = clone(m_alpha);
+  
+  double dt{0.0};
+  
+  double density{0.0};
+  
+  double logLh{0.0};
+  
+  // Non censored data
+  if (obs.size() > 0) {
+    dt = scale1[0] * log(obs[0] / beta + 1);
+  }
+  for (int k{0}; k < obs.size(); ++k) {
+    if(dt > 0) a_rungekutta(avector, dt, h, S);
+    density = matrix_product(avector, t)(0,0);
+    logLh += weight[k] * (log(density) + log(scale1[k]) - log(obs[k] + beta));
+    if (k < obs.size() - 1){dt = scale1[k + 1] * log(obs[k + 1] / beta + 1) - scale1[k] * log(obs[k] / beta + 1);}
+  }
+  //Right censored data
+  if (rcens.size() > 0) {
+    dt = scale2[0] * log(rcens[0] / beta + 1);
+    avector = clone(m_alpha);
+  }
+  for (int k{0}; k < rcens.size(); ++k) {
+    if(dt > 0) a_rungekutta(avector, dt, h, S);
+    density = matrix_product(avector, e)(0,0);
+    logLh += rcweight[k] * log(density);
+    if (k < rcens.size() - 1){dt = scale2[k + 1] * log(rcens[k + 1] / beta + 1) - scale2[k] * log(rcens[k] / beta + 1);}
+  }
+  
+  return logLh;
+}
+
+
+//' Loglikelihood of matrix-lognormal using RK
+//' 
+//' Loglikelihood for a sample 
+//' @param h positive parameter
+//' @param alpha initial probabilities
+//' @param S sub-intensity
+//' @param beta parameter of transformation
+//' @param obs the observations
+//' @param weight weight of the observations
+//' @param rcens censored observations
+//' @param rcweight weight of the censored observations
+//' @param scale1 scale for observations
+//' @param scale2 scale for censored observations
+//' 
+// [[Rcpp::export]]
+double logLikelihoodMlognormal_RKs(double h, NumericVector & alpha, NumericMatrix & S, double beta, const NumericVector & obs, const NumericVector & weight, const NumericVector & rcens, const NumericVector & rcweight, const NumericVector & scale1, const NumericVector & scale2) {
+  long p{S.nrow()};
+  NumericMatrix m_alpha(1,p, alpha.begin());
+  
+  NumericMatrix avector(1,p);
+  
+  NumericVector m_e(p, 1);
+  NumericMatrix e(p, 1, m_e.begin());
+  
+  NumericMatrix t = matrix_product(S * (-1), e);
+  
+  // Uncensored data
+  //   initial condition
+  avector = clone(m_alpha);
+  
+  double dt{0.0};
+  
+  double density{0.0};
+  
+  double logLh{0.0};
+  
+  // Non censored data
+  if (obs.size() > 0) {
+    dt = scale1[0] * pow(log(obs[0] + 1), beta);
+  }
+  for (int k{0}; k < obs.size(); ++k) {
+    if(dt > 0) a_rungekutta(avector, dt, h, S);
+    density = matrix_product(avector, t)(0,0);
+    logLh += weight[k] * (log(density) + log(scale1[k]) + log(beta) + (beta -1) * log(log(obs[k] + 1)) - log(obs[k] + 1));
+    if (k < obs.size() - 1){dt = scale1[k + 1] * pow(log(obs[k + 1] + 1), beta) - scale1[k] * pow(log(obs[k] + 1), beta);}
+  }
+  //Right censored data
+  if (rcens.size() > 0) {
+    dt = scale2[0] * pow(log(rcens[0] + 1), beta);
+    avector = clone(m_alpha);
+  }
+  for (int k{0}; k < rcens.size(); ++k) {
+    if(dt > 0) a_rungekutta(avector, dt, h, S);
+    density = matrix_product(avector, e)(0,0);
+    logLh += rcweight[k] * log(density);
+    if (k < rcens.size() - 1){dt = scale2[k + 1] * pow(log(rcens[k + 1] + 1), beta) - scale2[k] * pow(log(rcens[k] + 1), beta);}
+  }
+  
+  return logLh;
+}
+
+
+
+//' Loglikelihood of matrix-loglogistic using RK
+//' 
+//' Loglikelihood for a sample 
+//' @param h positive parameter
+//' @param alpha initial probabilities
+//' @param S sub-intensity
+//' @param beta parameter of transformation
+//' @param obs the observations
+//' @param weight weight of the observations
+//' @param rcens censored observations
+//' @param rcweight weight of the censored observations
+//' @param scale1 scale for observations
+//' @param scale2 scale for censored observations
+//' 
+// [[Rcpp::export]]
+double logLikelihoodMloglogistic_RKs(double h, NumericVector & alpha, NumericMatrix & S, NumericVector beta, const NumericVector & obs, const NumericVector & weight, const NumericVector & rcens, const NumericVector & rcweight, const NumericVector & scale1, const NumericVector & scale2) {
+  long p{S.nrow()};
+  NumericMatrix m_alpha(1,p, alpha.begin());
+  
+  NumericMatrix avector(1,p);
+  
+  NumericVector m_e(p, 1);
+  NumericMatrix e(p, 1, m_e.begin());
+  
+  NumericMatrix t = matrix_product(S * (-1), e);
+  
+  // Uncensored data
+  //   initial condition
+  avector = clone(m_alpha);
+  
+  double dt{0.0};
+  
+  double density{0.0};
+  
+  double logLh{0.0};
+  
+  // Non censored data
+  if (obs.size() > 0) {
+    dt = scale1[0] * log(pow(obs[0] / beta[0], beta[1]) + 1);
+  }
+  for (int k{0}; k < obs.size(); ++k) {
+    if(dt > 0) a_rungekutta(avector, dt, h, S);
+    density = matrix_product(avector, t)(0,0);
+    logLh += weight[k] * (log(density) + log(scale1[k]) + log(beta[1]) - log(beta[0]) + (beta[1] - 1) * (log(obs[k]) - log(beta[0])) - log(pow(obs[k] / beta[0], beta[1]) + 1));
+    if (k < obs.size() - 1){dt = scale1[k + 1] * log(pow(obs[k + 1] / beta[0], beta[1]) + 1) - scale1[k] * log(pow(obs[k] / beta[0], beta[1]) + 1);}
+  }
+  //Right censored data
+  if (rcens.size() > 0) {
+    dt = scale2[0] * log(pow(rcens[0] / beta[0], beta[1]) + 1);
+    avector = clone(m_alpha);
+  }
+  for (int k{0}; k < rcens.size(); ++k) {
+    if(dt > 0) a_rungekutta(avector, dt, h, S);
+    density = matrix_product(avector, e)(0,0);
+    logLh += rcweight[k] * log(density);
+    if (k < rcens.size() - 1){dt = scale2[k + 1] * log(pow(rcens[k + 1] / beta[0], beta[1]) + 1) - scale2[k] * log(pow(rcens[k] / beta[0], beta[1]) + 1);}
+  }
+  
+  return logLh;
+}
+
+
+
+//' Loglikelihood of matrix-Gompertz using RK
+//' 
+//' Loglikelihood for a sample 
+//' @param h positive parameter
+//' @param alpha initial probabilities
+//' @param S sub-intensity
+//' @param beta parameter of transformation
+//' @param obs the observations
+//' @param weight weight of the observations
+//' @param rcens censored observations
+//' @param rcweight weight of the censored observations
+//' @param scale1 scale for observations
+//' @param scale2 scale for censored observations
+//' 
+// [[Rcpp::export]]
+double logLikelihoodMgompertz_RKs(double h, NumericVector & alpha, NumericMatrix & S, double beta, const NumericVector & obs, const NumericVector & weight, const NumericVector & rcens, const NumericVector & rcweight, const NumericVector & scale1, const NumericVector & scale2) {
+  long p{S.nrow()};
+  NumericMatrix m_alpha(1,p, alpha.begin());
+  
+  NumericMatrix avector(1,p);
+  
+  NumericVector m_e(p, 1);
+  NumericMatrix e(p, 1, m_e.begin());
+  
+  NumericMatrix t = matrix_product(S * (-1), e);
+  
+  // Uncensored data
+  //   initial condition
+  avector = clone(m_alpha);
+  
+  double dt{0.0};
+  
+  double density{0.0};
+  
+  double logLh{0.0};
+  
+  // Non censored data
+  if (obs.size() > 0) {
+    dt = scale1[0] * (exp(obs[0] * beta) - 1) / beta;
+  }
+  for (int k{0}; k < obs.size(); ++k) {
+    if(dt > 0) a_rungekutta(avector, dt, h, S);
+    density = matrix_product(avector, t)(0,0);
+    logLh += weight[k] * (log(density) + log(scale1[k]) + obs[k] * beta);
+    if (k < obs.size() - 1){dt = scale1[k + 1] * (exp(obs[k + 1] * beta) - 1) / beta - scale1[k] * (exp(obs[k] * beta) - 1) / beta;}
+  }
+  //Right censored data
+  if (rcens.size() > 0) {
+    dt = scale2[0] * (exp(rcens[0] * beta) - 1) / beta;
+    avector = clone(m_alpha);
+  }
+  for (int k{0}; k < rcens.size(); ++k) {
+    if(dt > 0) a_rungekutta(avector, dt, h, S);
+    density = matrix_product(avector, e)(0,0);
+    logLh += rcweight[k] * log(density);
+    if (k < rcens.size() - 1){dt = scale2[k + 1] * (exp(rcens[k + 1] * beta) - 1) / beta - scale2[k] * (exp(rcens[k] * beta) - 1) / beta;}
+  }
+  
+  return logLh;
+}
+
+
+
 

@@ -309,10 +309,12 @@ setMethod(
     if(!all(c(y, rcen) > 0)) stop("data should be positive")
     if(!all(c(weight, rcenweight) >= 0)) stop("weights should be non-negative")
     is_iph <- methods::is(x, "iph")
-    if (is_iph) {
+    if (!is_iph) {
+      LL <- eval(parse(text = paste("logLikelihoodPH_", method, sep = "")))
+    }else if (is_iph) {
       par_g <- x@gfun$pars
       inv_g <- x@gfun$inverse
-      mLL <- eval(parse(text = paste("logLikelihoodM", x@gfun$name, "_RK", sep = "")))
+      LL <- eval(parse(text = paste("logLikelihoodM", x@gfun$name, "_", method, sep = "")))
     }
     A <- data_aggregation(y, weight)
     y <- A$un_obs
@@ -337,17 +339,16 @@ setMethod(
     if (!is_iph) {
       for (k in 1:stepsEM) {
         if(method %in% c("RK", "PADE")){
-          if(!is.na(rkstep)){epsilon <- epsilon2 <- rkstep
-          }else{epsilon <- epsilon2 <- default_step_length(S_fit)}
+          if(!is.na(rkstep)){epsilon <- rkstep
+          }else{epsilon <- default_step_length(S_fit)}
         }else if(method == "UNI"){
           if(!is.na(uni_epsilon)){epsilon <- uni_epsilon
           }else{epsilon <- 1e-4}
-          epsilon2 <- default_step_length(S_fit)
         }
         EMstep(epsilon, alpha_fit, S_fit, y, weight, rcen, rcenweight)
         if (k %% every == 0) {
           cat("\r", "iteration:", k,
-            ", logLik:", logLikelihoodPH_RK(epsilon2, alpha_fit, S_fit, y, weight, rcen, rcenweight),
+            ", logLik:", LL(epsilon, alpha_fit, S_fit, y, weight, rcen, rcenweight),
             sep = " "
           )
           if(plot == TRUE){
@@ -373,7 +374,7 @@ setMethod(
       x@pars$alpha <- alpha_fit
       x@pars$S <- S_fit
       x@fit <- list(
-        logLik = logLikelihoodPH_RK(epsilon, alpha_fit, S_fit, y, weight, rcen, rcenweight),
+        logLik = LL(epsilon, alpha_fit, S_fit, y, weight, rcen, rcenweight),
         nobs = sum(A$weights)
       )
     }
@@ -385,19 +386,18 @@ setMethod(
         }else{ t <- inv_g(par_g, y, weight); tc <- inv_g(par_g, rcen, rcenweight) 
         trans <- t$obs; trans_weight <- t$weight; trans_cens <- tc$obs; trans_rcenweight <- tc$weight}
         if(method %in% c("RK", "PADE")){
-          if(!is.na(rkstep)){epsilon <- epsilon2 <- rkstep
-          }else{epsilon <- epsilon2 <- default_step_length(S_fit)}
+          if(!is.na(rkstep)){epsilon <- rkstep
+          }else{epsilon <- default_step_length(S_fit)}
         }else if(method == "UNI"){
           if(!is.na(uni_epsilon)){epsilon <- uni_epsilon
           }else{epsilon <- 1e-4}
-          epsilon2 <- default_step_length(S_fit)
         }
         EMstep(epsilon, alpha_fit, S_fit, trans, trans_weight, trans_cens, trans_rcenweight)
         opt <- suppressWarnings(
           stats::optim(
             par = par_g,
-            fn = mLL,
-            h = epsilon2,
+            fn = LL,
+            h = epsilon,
             alpha = alpha_fit,
             S = S_fit,
             obs = y,
@@ -407,14 +407,15 @@ setMethod(
             hessian = FALSE,
             control = list(
               maxit = maxit,
-              reltol = reltol
+              reltol = reltol,
+              fnscale = -1
             )
           )
         )
         par_g <- opt$par
         if (k %% every == 0) {
           cat("\r", "iteration:", k,
-            ", logLik:", -opt$value,
+            ", logLik:", opt$value,
             sep = " "
           )
           if(plot == TRUE){

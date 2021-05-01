@@ -4,10 +4,10 @@
 \alias{EMstep_UNI}
 \title{EM using Uniformization for matrix exponential}
 \usage{
-EMstep_UNI(epsilon, alpha, S, obs, weight, rcens, rcweight)
+EMstep_UNI(h, alpha, S, obs, weight, rcens, rcweight)
 }
 \arguments{
-\item{epsilon}{positive parameter}
+\item{h}{positive parameter}
 
 \item{alpha}{initial probalities}
 

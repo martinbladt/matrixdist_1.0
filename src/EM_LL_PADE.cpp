@@ -28,7 +28,7 @@ void vectorOfMatrices_arma2(std::vector<arma::mat> & theVector, const arma::mat 
 
 //' EM using Matlab algorithm for matrix exponential in combination with Armadillo
 //' 
-//' @param epsilon nuisance parameter
+//' @param h nuisance parameter
 //' @param alpha initial probalities
 //' @param S sub-intensity
 //' @param obs the observations
@@ -37,7 +37,7 @@ void vectorOfMatrices_arma2(std::vector<arma::mat> & theVector, const arma::mat 
 //' @param rcweight the weights for the censored observations
 //' 
 // [[Rcpp::export]]
-void EMstep_PADE(double epsilon, arma::vec & alpha,  arma::mat & S, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight) {
+void EMstep_PADE(double h, arma::vec & alpha,  arma::mat & S, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight) {
   long p{S.n_rows};
   
   arma::mat e; e.ones(S.n_cols, 1);
@@ -223,3 +223,1637 @@ void EMstep_PADE(double epsilon, arma::vec & alpha,  arma::mat & S, const Rcpp::
     }
   }
 }
+
+////////////////////////////////////////////
+// Loglikelihoods
+////////////////////////////////////////////
+
+
+//' Loglikelihood of PH using Pade
+//' 
+//' Loglikelihood for a sample 
+//' @param h nuisance parameter
+//' @param alpha initial probabilities
+//' @param S sub-intensity
+//' @param obs the observations
+//' @param weight weight of the observations
+//' @param rcens censored observations
+//' @param rcweight weight of the censored observations
+//' 
+// [[Rcpp::export]]
+double logLikelihoodPH_PADE(double h, arma::vec & alpha, arma::mat & S, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight) {
+  long p{S.n_rows};
+  arma::mat e; e.ones(S.n_cols, 1);
+  arma::mat t = (S * (-1)) * e;
+  
+  arma::mat E(size(S));
+  
+  double JNorm{LInf_normArma(S)};
+  
+  std::vector<arma::mat> theVector;
+  
+  vectorOfMatrices_arma2(theVector, S, 6);
+  
+  
+  arma::mat X(p,p);
+  arma::mat D(p,p);
+  
+  const int q{6};
+  int s{};
+  double xmod{};
+  double c{};
+  
+  arma::mat aux_mat(1,1);
+  
+  double density{0.0};
+  
+  double logLh{0.0};
+  
+  // Non censored data
+  for (int k{0}; k < obs.size(); ++k) {
+    
+    // Matrix exponential
+    int pind{1};
+    int ee{static_cast<int>(log2(JNorm  * obs[k])) + 1};
+    s = std::max(0, ee + 1);
+    xmod = obs[k] / pow(2, s);
+    c = 0.5;
+    X = theVector[1] * (c * xmod);
+    
+    E = theVector[0] + X;
+    D = theVector[0] - X;
+    
+    for (int l{2}; l <= q; ++l) {
+      c = c * static_cast<double>(q - l + 1) / static_cast<double>(l * (2 * q - l + 1));
+      X = theVector[l] * (c * pow(xmod,l));
+      E = E + X;
+      if (pind) {
+        D =  D + X;
+      }
+      else {
+        D = D - X;
+      }
+      pind = !pind;
+    }
+    E = inv(D) * E;
+    for (int l = 1; l <= s; ++l) {
+      E = E * E;
+    }
+    
+    aux_mat = alpha.t() * E * t;
+    density = aux_mat(0,0);
+    logLh += weight[k] * log(density);
+  }
+  //Right censored data
+  for (int k{0}; k < rcens.size(); ++k) {
+    
+    // Matrix exponential
+    int pind{1};
+    int ee{static_cast<int>(log2(JNorm  * rcens[k])) + 1};
+    s = std::max(0, ee + 1);
+    xmod = rcens[k] / pow(2, s);
+    c = 0.5;
+    X = theVector[1] * (c * xmod);
+    
+    E = theVector[0] + X;
+    D = theVector[0] - X;
+    
+    for (int l{2}; l <= q; ++l) {
+      c = c * static_cast<double>(q - l + 1) / static_cast<double>(l * (2 * q - l + 1));
+      X = theVector[l] * (c * pow(xmod,l));
+      E = E + X;
+      if (pind) {
+        D =  D + X;
+      }
+      else {
+        D = D - X;
+      }
+      pind = !pind;
+    }
+    E = inv(D) * E;
+    for (int l = 1; l <= s; ++l) {
+      E = E * E;
+    }
+    
+    aux_mat = alpha.t() * E * e;
+    density = aux_mat(0,0);
+    logLh += rcweight[k] * log(density);
+  }
+  
+  return logLh;
+}
+
+
+
+//' Loglikelihood of matrix-Weibull using Pade
+//' 
+//' Loglikelihood for a sample 
+//' @param h nuisance parameter
+//' @param alpha initial probabilities
+//' @param S sub-intensity
+//' @param beta in-homogeneity parameter
+//' @param obs the observations
+//' @param weight weight of the observations
+//' @param rcens censored observations
+//' @param rcweight weight of the censored observations
+//' 
+// [[Rcpp::export]]
+double logLikelihoodMweibull_PADE(double h, arma::vec & alpha, arma::mat & S, double beta, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight) {
+  if(beta < 0) return NA_REAL;
+  
+  long p{S.n_rows};
+  arma::mat e; e.ones(S.n_cols, 1);
+  arma::mat t = (S * (-1)) * e;
+  
+  arma::mat E(size(S));
+  
+  double JNorm{LInf_normArma(S)};
+  
+  std::vector<arma::mat> theVector;
+  
+  vectorOfMatrices_arma2(theVector, S, 6);
+  
+  
+  arma::mat X(p,p);
+  arma::mat D(p,p);
+  
+  const int q{6};
+  int s{};
+  double xmod{};
+  double c{};
+  
+  arma::mat aux_mat(1,1);
+  
+  double density{0.0};
+  
+  double logLh{0.0};
+  
+  // Non censored data
+  for (int k{0}; k < obs.size(); ++k) {
+    
+    // Matrix exponential
+    int pind{1};
+    int ee{static_cast<int>(log2(JNorm  * pow(obs[k], beta))) + 1};
+    s = std::max(0, ee + 1);
+    xmod = pow(obs[k], beta) / pow(2, s);
+    c = 0.5;
+    X = theVector[1] * (c * xmod);
+    
+    E = theVector[0] + X;
+    D = theVector[0] - X;
+    
+    for (int l{2}; l <= q; ++l) {
+      c = c * static_cast<double>(q - l + 1) / static_cast<double>(l * (2 * q - l + 1));
+      X = theVector[l] * (c * pow(xmod,l));
+      E = E + X;
+      if (pind) {
+        D =  D + X;
+      }
+      else {
+        D = D - X;
+      }
+      pind = !pind;
+    }
+    E = inv(D) * E;
+    for (int l = 1; l <= s; ++l) {
+      E = E * E;
+    }
+    
+    aux_mat = alpha.t() * E * t;
+    density = aux_mat(0,0);
+    logLh += weight[k] * (log(density) + log(beta) + (beta - 1) * log(obs[k]));
+  }
+  //Right censored data
+  for (int k{0}; k < rcens.size(); ++k) {
+    
+    // Matrix exponential
+    int pind{1};
+    int ee{static_cast<int>(log2(JNorm  * pow(rcens[k], beta))) + 1};
+    s = std::max(0, ee + 1);
+    xmod = pow(rcens[k], beta) / pow(2, s);
+    c = 0.5;
+    X = theVector[1] * (c * xmod);
+    
+    E = theVector[0] + X;
+    D = theVector[0] - X;
+    
+    for (int l{2}; l <= q; ++l) {
+      c = c * static_cast<double>(q - l + 1) / static_cast<double>(l * (2 * q - l + 1));
+      X = theVector[l] * (c * pow(xmod,l));
+      E = E + X;
+      if (pind) {
+        D =  D + X;
+      }
+      else {
+        D = D - X;
+      }
+      pind = !pind;
+    }
+    E = inv(D) * E;
+    for (int l = 1; l <= s; ++l) {
+      E = E * E;
+    }
+    
+    aux_mat = alpha.t() * E * e;
+    density = aux_mat(0,0);
+    logLh += rcweight[k] * log(density);
+  }
+  
+  return logLh;
+}
+
+
+
+
+//' Loglikelihood of matrix-Pareto using Pade
+//' 
+//' Loglikelihood for a sample 
+//' @param h nuisance parameter
+//' @param alpha initial probabilities
+//' @param S sub-intensity
+//' @param beta in-homogeneity parameter
+//' @param obs the observations
+//' @param weight weight of the observations
+//' @param rcens censored observations
+//' @param rcweight weight of the censored observations
+//' 
+// [[Rcpp::export]]
+double logLikelihoodMpareto_PADE(double h, arma::vec & alpha, arma::mat & S, double beta, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight) {
+  if(beta < 0) return NA_REAL;
+  
+  long p{S.n_rows};
+  arma::mat e; e.ones(S.n_cols, 1);
+  arma::mat t = (S * (-1)) * e;
+  
+  arma::mat E(size(S));
+  
+  double JNorm{LInf_normArma(S)};
+  
+  std::vector<arma::mat> theVector;
+  
+  vectorOfMatrices_arma2(theVector, S, 6);
+  
+  
+  arma::mat X(p,p);
+  arma::mat D(p,p);
+  
+  const int q{6};
+  int s{};
+  double xmod{};
+  double c{};
+  
+  arma::mat aux_mat(1,1);
+  
+  double density{0.0};
+  
+  double logLh{0.0};
+  
+  // Non censored data
+  for (int k{0}; k < obs.size(); ++k) {
+    
+    // Matrix exponential
+    int pind{1};
+    int ee{static_cast<int>(log2(JNorm  * log(obs[k] / beta + 1))) + 1};
+    s = std::max(0, ee + 1);
+    xmod = log(obs[k] / beta + 1) / pow(2, s);
+    c = 0.5;
+    X = theVector[1] * (c * xmod);
+    
+    E = theVector[0] + X;
+    D = theVector[0] - X;
+    
+    for (int l{2}; l <= q; ++l) {
+      c = c * static_cast<double>(q - l + 1) / static_cast<double>(l * (2 * q - l + 1));
+      X = theVector[l] * (c * pow(xmod,l));
+      E = E + X;
+      if (pind) {
+        D =  D + X;
+      }
+      else {
+        D = D - X;
+      }
+      pind = !pind;
+    }
+    E = inv(D) * E;
+    for (int l = 1; l <= s; ++l) {
+      E = E * E;
+    }
+    
+    aux_mat = alpha.t() * E * t;
+    density = aux_mat(0,0);
+    logLh += weight[k] * (log(density) - log(obs[k] + beta));
+  }
+  //Right censored data
+  for (int k{0}; k < rcens.size(); ++k) {
+    
+    // Matrix exponential
+    int pind{1};
+    int ee{static_cast<int>(log2(JNorm  * log(rcens[k] / beta + 1))) + 1};
+    s = std::max(0, ee + 1);
+    xmod = log(rcens[k] / beta + 1) / pow(2, s);
+    c = 0.5;
+    X = theVector[1] * (c * xmod);
+    
+    E = theVector[0] + X;
+    D = theVector[0] - X;
+    
+    for (int l{2}; l <= q; ++l) {
+      c = c * static_cast<double>(q - l + 1) / static_cast<double>(l * (2 * q - l + 1));
+      X = theVector[l] * (c * pow(xmod,l));
+      E = E + X;
+      if (pind) {
+        D =  D + X;
+      }
+      else {
+        D = D - X;
+      }
+      pind = !pind;
+    }
+    E = inv(D) * E;
+    for (int l = 1; l <= s; ++l) {
+      E = E * E;
+    }
+    
+    aux_mat = alpha.t() * E * e;
+    density = aux_mat(0,0);
+    logLh += rcweight[k] * log(density);
+  }
+  
+  return logLh;
+}
+
+
+
+
+//' Loglikelihood of matrix-lognormal using Pade
+//' 
+//' Loglikelihood for a sample 
+//' @param h nuisance parameter
+//' @param alpha initial probabilities
+//' @param S sub-intensity
+//' @param beta in-homogeneity parameter
+//' @param obs the observations
+//' @param weight weight of the observations
+//' @param rcens censored observations
+//' @param rcweight weight of the censored observations
+//' 
+// [[Rcpp::export]]
+double logLikelihoodMlognormal_PADE(double h, arma::vec & alpha, arma::mat & S, double beta, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight) {
+  if(beta < 0) return NA_REAL;
+  
+  long p{S.n_rows};
+  arma::mat e; e.ones(S.n_cols, 1);
+  arma::mat t = (S * (-1)) * e;
+  
+  arma::mat E(size(S));
+  
+  double JNorm{LInf_normArma(S)};
+  
+  std::vector<arma::mat> theVector;
+  
+  vectorOfMatrices_arma2(theVector, S, 6);
+  
+  
+  arma::mat X(p,p);
+  arma::mat D(p,p);
+  
+  const int q{6};
+  int s{};
+  double xmod{};
+  double c{};
+  
+  arma::mat aux_mat(1,1);
+  
+  double density{0.0};
+  
+  double logLh{0.0};
+  
+  // Non censored data
+  for (int k{0}; k < obs.size(); ++k) {
+    
+    // Matrix exponential
+    int pind{1};
+    int ee{static_cast<int>(log2(JNorm  * pow(log(obs[k] + 1), beta))) + 1};
+    s = std::max(0, ee + 1);
+    xmod = pow(log(obs[k] + 1), beta) / pow(2, s);
+    c = 0.5;
+    X = theVector[1] * (c * xmod);
+    
+    E = theVector[0] + X;
+    D = theVector[0] - X;
+    
+    for (int l{2}; l <= q; ++l) {
+      c = c * static_cast<double>(q - l + 1) / static_cast<double>(l * (2 * q - l + 1));
+      X = theVector[l] * (c * pow(xmod,l));
+      E = E + X;
+      if (pind) {
+        D =  D + X;
+      }
+      else {
+        D = D - X;
+      }
+      pind = !pind;
+    }
+    E = inv(D) * E;
+    for (int l = 1; l <= s; ++l) {
+      E = E * E;
+    }
+    
+    aux_mat = alpha.t() * E * t;
+    density = aux_mat(0,0);
+    logLh += weight[k] * (log(density) + log(beta) + (beta -1) * log(log(obs[k] + 1)) - log(obs[k] + 1));
+  }
+  //Right censored data
+  for (int k{0}; k < rcens.size(); ++k) {
+    
+    // Matrix exponential
+    int pind{1};
+    int ee{static_cast<int>(log2(JNorm  * pow(log(rcens[k] + 1), beta))) + 1};
+    s = std::max(0, ee + 1);
+    xmod = pow(log(rcens[k] + 1), beta) / pow(2, s);
+    c = 0.5;
+    X = theVector[1] * (c * xmod);
+    
+    E = theVector[0] + X;
+    D = theVector[0] - X;
+    
+    for (int l{2}; l <= q; ++l) {
+      c = c * static_cast<double>(q - l + 1) / static_cast<double>(l * (2 * q - l + 1));
+      X = theVector[l] * (c * pow(xmod,l));
+      E = E + X;
+      if (pind) {
+        D =  D + X;
+      }
+      else {
+        D = D - X;
+      }
+      pind = !pind;
+    }
+    E = inv(D) * E;
+    for (int l = 1; l <= s; ++l) {
+      E = E * E;
+    }
+    
+    aux_mat = alpha.t() * E * e;
+    density = aux_mat(0,0);
+    logLh += rcweight[k] * log(density);
+  }
+  
+  return logLh;
+}
+
+
+
+//' Loglikelihood of matrix-loglogistic using Pade
+//' 
+//' Loglikelihood for a sample 
+//' @param h nuisance parameter
+//' @param alpha initial probabilities
+//' @param S sub-intensity
+//' @param beta in-homogeneity parameter
+//' @param obs the observations
+//' @param weight weight of the observations
+//' @param rcens censored observations
+//' @param rcweight weight of the censored observations
+//' 
+// [[Rcpp::export]]
+double logLikelihoodMloglogistic_PADE(double h, arma::vec & alpha, arma::mat & S, Rcpp::NumericVector beta, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight) {
+  if(beta[0] < 0 || beta[1] < 0) return NA_REAL;
+  
+  long p{S.n_rows};
+  arma::mat e; e.ones(S.n_cols, 1);
+  arma::mat t = (S * (-1)) * e;
+  
+  arma::mat E(size(S));
+  
+  double JNorm{LInf_normArma(S)};
+  
+  std::vector<arma::mat> theVector;
+  
+  vectorOfMatrices_arma2(theVector, S, 6);
+  
+  
+  arma::mat X(p,p);
+  arma::mat D(p,p);
+  
+  const int q{6};
+  int s{};
+  double xmod{};
+  double c{};
+  
+  arma::mat aux_mat(1,1);
+  
+  double density{0.0};
+  
+  double logLh{0.0};
+  
+  // Non censored data
+  for (int k{0}; k < obs.size(); ++k) {
+    
+    // Matrix exponential
+    int pind{1};
+    int ee{static_cast<int>(log2(JNorm  * log(pow(obs[k] / beta[0], beta[1]) + 1))) + 1};
+    s = std::max(0, ee + 1);
+    xmod = log(pow(obs[k] / beta[0], beta[1]) + 1) / pow(2, s);
+    c = 0.5;
+    X = theVector[1] * (c * xmod);
+    
+    E = theVector[0] + X;
+    D = theVector[0] - X;
+    
+    for (int l{2}; l <= q; ++l) {
+      c = c * static_cast<double>(q - l + 1) / static_cast<double>(l * (2 * q - l + 1));
+      X = theVector[l] * (c * pow(xmod,l));
+      E = E + X;
+      if (pind) {
+        D =  D + X;
+      }
+      else {
+        D = D - X;
+      }
+      pind = !pind;
+    }
+    E = inv(D) * E;
+    for (int l = 1; l <= s; ++l) {
+      E = E * E;
+    }
+    
+    aux_mat = alpha.t() * E * t;
+    density = aux_mat(0,0);
+    logLh += weight[k] * (log(density) + log(beta[1]) - log(beta[0]) + (beta[1] - 1) * (log(obs[k]) - log(beta[0])) - log(pow(obs[k] / beta[0], beta[1]) + 1));
+  }
+  //Right censored data
+  for (int k{0}; k < rcens.size(); ++k) {
+    
+    // Matrix exponential
+    int pind{1};
+    int ee{static_cast<int>(log2(JNorm  * log(pow(rcens[k] / beta[0], beta[1]) + 1))) + 1};
+    s = std::max(0, ee + 1);
+    xmod = log(pow(rcens[k] / beta[0], beta[1]) + 1) / pow(2, s);
+    c = 0.5;
+    X = theVector[1] * (c * xmod);
+    
+    E = theVector[0] + X;
+    D = theVector[0] - X;
+    
+    for (int l{2}; l <= q; ++l) {
+      c = c * static_cast<double>(q - l + 1) / static_cast<double>(l * (2 * q - l + 1));
+      X = theVector[l] * (c * pow(xmod,l));
+      E = E + X;
+      if (pind) {
+        D =  D + X;
+      }
+      else {
+        D = D - X;
+      }
+      pind = !pind;
+    }
+    E = inv(D) * E;
+    for (int l = 1; l <= s; ++l) {
+      E = E * E;
+    }
+    
+    aux_mat = alpha.t() * E * e;
+    density = aux_mat(0,0);
+    logLh += rcweight[k] * log(density);
+  }
+  
+  return logLh;
+}
+
+
+
+//' Loglikelihood of matrix-Gompertz using Pade
+//' 
+//' Loglikelihood for a sample 
+//' @param h nuisance parameter
+//' @param alpha initial probabilities
+//' @param S sub-intensity
+//' @param beta in-homogeneity parameter
+//' @param obs the observations
+//' @param weight weight of the observations
+//' @param rcens censored observations
+//' @param rcweight weight of the censored observations
+//' 
+// [[Rcpp::export]]
+double logLikelihoodMgompertz_PADE(double h, arma::vec & alpha, arma::mat & S, double beta, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight) {
+  if(beta < 0) return NA_REAL;
+  
+  long p{S.n_rows};
+  arma::mat e; e.ones(S.n_cols, 1);
+  arma::mat t = (S * (-1)) * e;
+  
+  arma::mat E(size(S));
+  
+  double JNorm{LInf_normArma(S)};
+  
+  std::vector<arma::mat> theVector;
+  
+  vectorOfMatrices_arma2(theVector, S, 6);
+  
+  
+  arma::mat X(p,p);
+  arma::mat D(p,p);
+  
+  const int q{6};
+  int s{};
+  double xmod{};
+  double c{};
+  
+  arma::mat aux_mat(1,1);
+  
+  double density{0.0};
+  
+  double logLh{0.0};
+  
+  // Non censored data
+  for (int k{0}; k < obs.size(); ++k) {
+    
+    // Matrix exponential
+    int pind{1};
+    int ee{static_cast<int>(log2(JNorm  * (exp(obs[k] * beta) - 1) / beta)) + 1};
+    s = std::max(0, ee + 1);
+    xmod = (exp(obs[k] * beta) - 1) / beta / pow(2, s);
+    c = 0.5;
+    X = theVector[1] * (c * xmod);
+    
+    E = theVector[0] + X;
+    D = theVector[0] - X;
+    
+    for (int l{2}; l <= q; ++l) {
+      c = c * static_cast<double>(q - l + 1) / static_cast<double>(l * (2 * q - l + 1));
+      X = theVector[l] * (c * pow(xmod,l));
+      E = E + X;
+      if (pind) {
+        D =  D + X;
+      }
+      else {
+        D = D - X;
+      }
+      pind = !pind;
+    }
+    E = inv(D) * E;
+    for (int l = 1; l <= s; ++l) {
+      E = E * E;
+    }
+    
+    aux_mat = alpha.t() * E * t;
+    density = aux_mat(0,0);
+    logLh += weight[k] * (log(density) + obs[k] * beta);
+  }
+  //Right censored data
+  for (int k{0}; k < rcens.size(); ++k) {
+    
+    // Matrix exponential
+    int pind{1};
+    int ee{static_cast<int>(log2(JNorm  * (exp(rcens[k] * beta) - 1) / beta)) + 1};
+    s = std::max(0, ee + 1);
+    xmod = (exp(rcens[k] * beta) - 1) / beta / pow(2, s);
+    c = 0.5;
+    X = theVector[1] * (c * xmod);
+    
+    E = theVector[0] + X;
+    D = theVector[0] - X;
+    
+    for (int l{2}; l <= q; ++l) {
+      c = c * static_cast<double>(q - l + 1) / static_cast<double>(l * (2 * q - l + 1));
+      X = theVector[l] * (c * pow(xmod,l));
+      E = E + X;
+      if (pind) {
+        D =  D + X;
+      }
+      else {
+        D = D - X;
+      }
+      pind = !pind;
+    }
+    E = inv(D) * E;
+    for (int l = 1; l <= s; ++l) {
+      E = E * E;
+    }
+    
+    aux_mat = alpha.t() * E * e;
+    density = aux_mat(0,0);
+    logLh += rcweight[k] * log(density);
+  }
+  
+  return logLh;
+}
+
+//' Loglikelihood of matrix-GEV using Pade
+//' 
+//' Loglikelihood for a sample 
+//' @param h nuisance parameter
+//' @param alpha initial probabilities
+//' @param S sub-intensity
+//' @param beta in-homogeneity parameter
+//' @param obs the observations
+//' @param weight weight of the observations
+//' @param rcens censored observations
+//' @param rcweight weight of the censored observations
+//' 
+// [[Rcpp::export]]
+double logLikelihoodMgev_PADE(double h, arma::vec & alpha, arma::mat & S, Rcpp::NumericVector beta, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight) {
+  if(beta[1] < 0) return NA_REAL;
+  
+  long p{S.n_rows};
+  arma::mat e; e.ones(S.n_cols, 1);
+  arma::mat t = (S * (-1)) * e;
+  
+  arma::mat E(size(S));
+  
+  double JNorm{LInf_normArma(S)};
+  
+  std::vector<arma::mat> theVector;
+  
+  vectorOfMatrices_arma2(theVector, S, 6);
+  
+  
+  arma::mat X(p,p);
+  arma::mat D(p,p);
+  
+  const int q{6};
+  int s{};
+  double xmod{};
+  double c{};
+  
+  arma::mat aux_mat(1,1);
+  
+  double density{0.0};
+  
+  double logLh{0.0};
+  if (beta[2] == 0) {
+    // Non censored data
+    for (int k{0}; k < obs.size(); ++k) {
+      
+      // Matrix exponential
+      int pind{1};
+      int ee{static_cast<int>(log2(JNorm  * exp(-(obs[k] - beta[0]) / beta[1]))) + 1};
+      s = std::max(0, ee + 1);
+      xmod = exp(-(obs[k] - beta[0]) / beta[1])/ pow(2, s);
+      c = 0.5;
+      X = theVector[1] * (c * xmod);
+      
+      E = theVector[0] + X;
+      D = theVector[0] - X;
+      
+      for (int l{2}; l <= q; ++l) {
+        c = c * static_cast<double>(q - l + 1) / static_cast<double>(l * (2 * q - l + 1));
+        X = theVector[l] * (c * pow(xmod,l));
+        E = E + X;
+        if (pind) {
+          D =  D + X;
+        }
+        else {
+          D = D - X;
+        }
+        pind = !pind;
+      }
+      E = inv(D) * E;
+      for (int l = 1; l <= s; ++l) {
+        E = E * E;
+      }
+      
+      aux_mat = alpha.t() * E * t;
+      density = aux_mat(0,0);
+      logLh += weight[k] * (log(density) - log(beta[1]) - (obs[k] - beta[0]) / beta[1]);
+    }
+    //Right censored data
+    for (int k{0}; k < rcens.size(); ++k) {
+      
+      // Matrix exponential
+      int pind{1};
+      int ee{static_cast<int>(log2(JNorm  * exp(-(rcens[k] - beta[0]) / beta[1]))) + 1};
+      s = std::max(0, ee + 1);
+      xmod = exp(-(rcens[k] - beta[0]) / beta[1]) / pow(2, s);
+      c = 0.5;
+      X = theVector[1] * (c * xmod);
+      
+      E = theVector[0] + X;
+      D = theVector[0] - X;
+      
+      for (int l{2}; l <= q; ++l) {
+        c = c * static_cast<double>(q - l + 1) / static_cast<double>(l * (2 * q - l + 1));
+        X = theVector[l] * (c * pow(xmod,l));
+        E = E + X;
+        if (pind) {
+          D =  D + X;
+        }
+        else {
+          D = D - X;
+        }
+        pind = !pind;
+      }
+      E = inv(D) * E;
+      for (int l = 1; l <= s; ++l) {
+        E = E * E;
+      }
+      
+      aux_mat = alpha.t() * E * e;
+      density = aux_mat(0,0);
+      logLh += rcweight[k] * log(density);
+    }
+  }
+  else{
+    // Non censored data
+    for (int k{0}; k < obs.size(); ++k) {
+      
+      // Matrix exponential
+      int pind{1};
+      int ee{static_cast<int>(log2(JNorm  * pow(1 + (beta[2] / beta[1]) * (obs[k] - beta[0]) , - 1 / beta[2]))) + 1};
+      s = std::max(0, ee + 1);
+      xmod = pow(1 + (beta[2] / beta[1]) * (obs[k] - beta[0]) , - 1 / beta[2]) / pow(2, s);
+      c = 0.5;
+      X = theVector[1] * (c * xmod);
+      
+      E = theVector[0] + X;
+      D = theVector[0] - X;
+      
+      for (int l{2}; l <= q; ++l) {
+        c = c * static_cast<double>(q - l + 1) / static_cast<double>(l * (2 * q - l + 1));
+        X = theVector[l] * (c * pow(xmod,l));
+        E = E + X;
+        if (pind) {
+          D =  D + X;
+        }
+        else {
+          D = D - X;
+        }
+        pind = !pind;
+      }
+      E = inv(D) * E;
+      for (int l = 1; l <= s; ++l) {
+        E = E * E;
+      }
+      
+      aux_mat = alpha.t() * E * t;
+      density = aux_mat(0,0);
+      logLh += weight[k] * (log(density) - log(beta[1]) - (1 + 1 / beta[2]) * log(1 + (beta[2] / beta[1]) * (obs[k] - beta[0])));
+    }
+    //Right censored data
+    for (int k{0}; k < rcens.size(); ++k) {
+      
+      // Matrix exponential
+      int pind{1};
+      int ee{static_cast<int>(log2(JNorm  * pow(1 + (beta[2] / beta[1]) * (rcens[k] - beta[0]) , - 1 / beta[2]))) + 1};
+      s = std::max(0, ee + 1);
+      xmod = pow(1 + (beta[2] / beta[1]) * (rcens[k] - beta[0]) , - 1 / beta[2]) / pow(2, s);
+      c = 0.5;
+      X = theVector[1] * (c * xmod);
+      
+      E = theVector[0] + X;
+      D = theVector[0] - X;
+      
+      for (int l{2}; l <= q; ++l) {
+        c = c * static_cast<double>(q - l + 1) / static_cast<double>(l * (2 * q - l + 1));
+        X = theVector[l] * (c * pow(xmod,l));
+        E = E + X;
+        if (pind) {
+          D =  D + X;
+        }
+        else {
+          D = D - X;
+        }
+        pind = !pind;
+      }
+      E = inv(D) * E;
+      for (int l = 1; l <= s; ++l) {
+        E = E * E;
+      }
+      
+      aux_mat = alpha.t() * E * e;
+      density = aux_mat(0,0);
+      logLh += rcweight[k] * log(density);
+    }
+  }
+  return logLh;
+}
+
+
+////////////////////////////////////////////
+// Scaled versions of loglikelihoods (for regression):
+////////////////////////////////////////////
+
+
+//' Loglikelihood of PH using Pade
+//' 
+//' Loglikelihood for a sample 
+//' @param h nuisance parameter
+//' @param alpha initial probabilities
+//' @param S sub-intensity
+//' @param obs the observations
+//' @param weight weight of the observations
+//' @param rcens censored observations
+//' @param rcweight weight of the censored observations
+//' @param scale1 scale for observations
+//' @param scale2 scale for censored observations
+//' 
+// [[Rcpp::export]]
+double logLikelihoodPH_PADEs(double h, arma::vec & alpha, arma::mat & S, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight, const Rcpp::NumericVector & scale1, const Rcpp::NumericVector & scale2) {
+  long p{S.n_rows};
+  arma::mat e; e.ones(S.n_cols, 1);
+  arma::mat t = (S * (-1)) * e;
+  
+  arma::mat E(size(S));
+  
+  double JNorm{LInf_normArma(S)};
+  
+  std::vector<arma::mat> theVector;
+  
+  vectorOfMatrices_arma2(theVector, S, 6);
+  
+  
+  arma::mat X(p,p);
+  arma::mat D(p,p);
+  
+  const int q{6};
+  int s{};
+  double xmod{};
+  double c{};
+  
+  arma::mat aux_mat(1,1);
+  
+  double density{0.0};
+  
+  double logLh{0.0};
+  
+  // Non censored data
+  for (int k{0}; k < obs.size(); ++k) {
+    
+    // Matrix exponential
+    int pind{1};
+    int ee{static_cast<int>(log2(JNorm  * scale1[k] * obs[k])) + 1};
+    s = std::max(0, ee + 1);
+    xmod = scale1[k] * obs[k] / pow(2, s);
+    c = 0.5;
+    X = theVector[1] * (c * xmod);
+    
+    E = theVector[0] + X;
+    D = theVector[0] - X;
+    
+    for (int l{2}; l <= q; ++l) {
+      c = c * static_cast<double>(q - l + 1) / static_cast<double>(l * (2 * q - l + 1));
+      X = theVector[l] * (c * pow(xmod,l));
+      E = E + X;
+      if (pind) {
+        D =  D + X;
+      }
+      else {
+        D = D - X;
+      }
+      pind = !pind;
+    }
+    E = inv(D) * E;
+    for (int l = 1; l <= s; ++l) {
+      E = E * E;
+    }
+    
+    aux_mat = alpha.t() * E * t;
+    density = aux_mat(0,0);
+    logLh += weight[k] * (log(density) + log(scale1[k]));
+  }
+  //Right censored data
+  for (int k{0}; k < rcens.size(); ++k) {
+    
+    // Matrix exponential
+    int pind{1};
+    int ee{static_cast<int>(log2(JNorm  * scale2[k] * rcens[k])) + 1};
+    s = std::max(0, ee + 1);
+    xmod = scale2[k] * rcens[k] / pow(2, s);
+    c = 0.5;
+    X = theVector[1] * (c * xmod);
+    
+    E = theVector[0] + X;
+    D = theVector[0] - X;
+    
+    for (int l{2}; l <= q; ++l) {
+      c = c * static_cast<double>(q - l + 1) / static_cast<double>(l * (2 * q - l + 1));
+      X = theVector[l] * (c * pow(xmod,l));
+      E = E + X;
+      if (pind) {
+        D =  D + X;
+      }
+      else {
+        D = D - X;
+      }
+      pind = !pind;
+    }
+    E = inv(D) * E;
+    for (int l = 1; l <= s; ++l) {
+      E = E * E;
+    }
+    
+    aux_mat = alpha.t() * E * e;
+    density = aux_mat(0,0);
+    logLh += rcweight[k] * log(density);
+  }
+  
+  return logLh;
+}
+
+
+
+//' Loglikelihood of matrix-Weibull using Pade
+//' 
+//' Loglikelihood for a sample 
+//' @param h nuisance parameter
+//' @param alpha initial probabilities
+//' @param S sub-intensity
+//' @param beta in-homogeneity parameter
+//' @param obs the observations
+//' @param weight weight of the observations
+//' @param rcens censored observations
+//' @param rcweight weight of the censored observations
+//' @param scale1 scale for observations
+//' @param scale2 scale for censored observations
+//' 
+// [[Rcpp::export]]
+double logLikelihoodMweibull_PADEs(double h, arma::vec & alpha, arma::mat & S, double beta, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight, const Rcpp::NumericVector & scale1, const Rcpp::NumericVector & scale2) {
+  if(beta < 0) return NA_REAL;
+  
+  long p{S.n_rows};
+  arma::mat e; e.ones(S.n_cols, 1);
+  arma::mat t = (S * (-1)) * e;
+  
+  arma::mat E(size(S));
+  
+  double JNorm{LInf_normArma(S)};
+  
+  std::vector<arma::mat> theVector;
+  
+  vectorOfMatrices_arma2(theVector, S, 6);
+  
+  
+  arma::mat X(p,p);
+  arma::mat D(p,p);
+  
+  const int q{6};
+  int s{};
+  double xmod{};
+  double c{};
+  
+  arma::mat aux_mat(1,1);
+  
+  double density{0.0};
+  
+  double logLh{0.0};
+  
+  // Non censored data
+  for (int k{0}; k < obs.size(); ++k) {
+    
+    // Matrix exponential
+    int pind{1};
+    int ee{static_cast<int>(log2(JNorm  * scale1[k] * pow(obs[k], beta))) + 1};
+    s = std::max(0, ee + 1);
+    xmod = scale1[k] * pow(obs[k], beta) / pow(2, s);
+    c = 0.5;
+    X = theVector[1] * (c * xmod);
+    
+    E = theVector[0] + X;
+    D = theVector[0] - X;
+    
+    for (int l{2}; l <= q; ++l) {
+      c = c * static_cast<double>(q - l + 1) / static_cast<double>(l * (2 * q - l + 1));
+      X = theVector[l] * (c * pow(xmod,l));
+      E = E + X;
+      if (pind) {
+        D =  D + X;
+      }
+      else {
+        D = D - X;
+      }
+      pind = !pind;
+    }
+    E = inv(D) * E;
+    for (int l = 1; l <= s; ++l) {
+      E = E * E;
+    }
+    
+    aux_mat = alpha.t() * E * t;
+    density = aux_mat(0,0);
+    logLh += weight[k] * (log(density) + log(scale1[k]) + log(beta) + (beta - 1) * log(obs[k]));
+  }
+  //Right censored data
+  for (int k{0}; k < rcens.size(); ++k) {
+    
+    // Matrix exponential
+    int pind{1};
+    int ee{static_cast<int>(log2(JNorm  * scale2[k] * pow(rcens[k], beta))) + 1};
+    s = std::max(0, ee + 1);
+    xmod = scale2[k] * pow(rcens[k], beta) / pow(2, s);
+    c = 0.5;
+    X = theVector[1] * (c * xmod);
+    
+    E = theVector[0] + X;
+    D = theVector[0] - X;
+    
+    for (int l{2}; l <= q; ++l) {
+      c = c * static_cast<double>(q - l + 1) / static_cast<double>(l * (2 * q - l + 1));
+      X = theVector[l] * (c * pow(xmod,l));
+      E = E + X;
+      if (pind) {
+        D =  D + X;
+      }
+      else {
+        D = D - X;
+      }
+      pind = !pind;
+    }
+    E = inv(D) * E;
+    for (int l = 1; l <= s; ++l) {
+      E = E * E;
+    }
+    
+    aux_mat = alpha.t() * E * e;
+    density = aux_mat(0,0);
+    logLh += rcweight[k] * log(density);
+  }
+  
+  return logLh;
+}
+
+
+
+
+//' Loglikelihood of matrix-Pareto using Pade
+//' 
+//' Loglikelihood for a sample 
+//' @param h nuisance parameter
+//' @param alpha initial probabilities
+//' @param S sub-intensity
+//' @param beta in-homogeneity parameter
+//' @param obs the observations
+//' @param weight weight of the observations
+//' @param rcens censored observations
+//' @param rcweight weight of the censored observations
+//' @param scale1 scale for observations
+//' @param scale2 scale for censored observations
+//' 
+// [[Rcpp::export]]
+double logLikelihoodMpareto_PADEs(double h, arma::vec & alpha, arma::mat & S, double beta, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight, const Rcpp::NumericVector & scale1, const Rcpp::NumericVector & scale2) {
+  if(beta < 0) return NA_REAL;
+  
+  long p{S.n_rows};
+  arma::mat e; e.ones(S.n_cols, 1);
+  arma::mat t = (S * (-1)) * e;
+  
+  arma::mat E(size(S));
+  
+  double JNorm{LInf_normArma(S)};
+  
+  std::vector<arma::mat> theVector;
+  
+  vectorOfMatrices_arma2(theVector, S, 6);
+  
+  
+  arma::mat X(p,p);
+  arma::mat D(p,p);
+  
+  const int q{6};
+  int s{};
+  double xmod{};
+  double c{};
+  
+  arma::mat aux_mat(1,1);
+  
+  double density{0.0};
+  
+  double logLh{0.0};
+  
+  // Non censored data
+  for (int k{0}; k < obs.size(); ++k) {
+    
+    // Matrix exponential
+    int pind{1};
+    int ee{static_cast<int>(log2(JNorm  * scale1[k] * log(obs[k] / beta + 1))) + 1};
+    s = std::max(0, ee + 1);
+    xmod = scale1[k] * log(obs[k] / beta + 1) / pow(2, s);
+    c = 0.5;
+    X = theVector[1] * (c * xmod);
+    
+    E = theVector[0] + X;
+    D = theVector[0] - X;
+    
+    for (int l{2}; l <= q; ++l) {
+      c = c * static_cast<double>(q - l + 1) / static_cast<double>(l * (2 * q - l + 1));
+      X = theVector[l] * (c * pow(xmod,l));
+      E = E + X;
+      if (pind) {
+        D =  D + X;
+      }
+      else {
+        D = D - X;
+      }
+      pind = !pind;
+    }
+    E = inv(D) * E;
+    for (int l = 1; l <= s; ++l) {
+      E = E * E;
+    }
+    
+    aux_mat = alpha.t() * E * t;
+    density = aux_mat(0,0);
+    logLh += weight[k] * (log(density) + log(scale1[k]) - log(obs[k] + beta));
+  }
+  //Right censored data
+  for (int k{0}; k < rcens.size(); ++k) {
+    
+    // Matrix exponential
+    int pind{1};
+    int ee{static_cast<int>(log2(JNorm  * scale2[k] * log(rcens[k] / beta + 1))) + 1};
+    s = std::max(0, ee + 1);
+    xmod = scale2[k] * log(rcens[k] / beta + 1) / pow(2, s);
+    c = 0.5;
+    X = theVector[1] * (c * xmod);
+    
+    E = theVector[0] + X;
+    D = theVector[0] - X;
+    
+    for (int l{2}; l <= q; ++l) {
+      c = c * static_cast<double>(q - l + 1) / static_cast<double>(l * (2 * q - l + 1));
+      X = theVector[l] * (c * pow(xmod,l));
+      E = E + X;
+      if (pind) {
+        D =  D + X;
+      }
+      else {
+        D = D - X;
+      }
+      pind = !pind;
+    }
+    E = inv(D) * E;
+    for (int l = 1; l <= s; ++l) {
+      E = E * E;
+    }
+    
+    aux_mat = alpha.t() * E * e;
+    density = aux_mat(0,0);
+    logLh += rcweight[k] * log(density);
+  }
+  
+  return logLh;
+}
+
+
+
+//' Loglikelihood of matrix-lognormal using Pade
+//' 
+//' Loglikelihood for a sample 
+//' @param h nuisance parameter
+//' @param alpha initial probabilities
+//' @param S sub-intensity
+//' @param beta in-homogeneity parameter
+//' @param obs the observations
+//' @param weight weight of the observations
+//' @param rcens censored observations
+//' @param rcweight weight of the censored observations
+//' @param scale1 scale for observations
+//' @param scale2 scale for censored observations
+//' 
+// [[Rcpp::export]]
+double logLikelihoodMlognormal_PADEs(double h, arma::vec & alpha, arma::mat & S, double beta, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight, const Rcpp::NumericVector & scale1, const Rcpp::NumericVector & scale2) {
+  if(beta < 0) return NA_REAL;
+  
+  long p{S.n_rows};
+  arma::mat e; e.ones(S.n_cols, 1);
+  arma::mat t = (S * (-1)) * e;
+  
+  arma::mat E(size(S));
+  
+  double JNorm{LInf_normArma(S)};
+  
+  std::vector<arma::mat> theVector;
+  
+  vectorOfMatrices_arma2(theVector, S, 6);
+  
+  
+  arma::mat X(p,p);
+  arma::mat D(p,p);
+  
+  const int q{6};
+  int s{};
+  double xmod{};
+  double c{};
+  
+  arma::mat aux_mat(1,1);
+  
+  double density{0.0};
+  
+  double logLh{0.0};
+  
+  // Non censored data
+  for (int k{0}; k < obs.size(); ++k) {
+    
+    // Matrix exponential
+    int pind{1};
+    int ee{static_cast<int>(log2(JNorm  * scale1[k] * pow(log(obs[k] + 1), beta))) + 1};
+    s = std::max(0, ee + 1);
+    xmod = scale1[k] * pow(log(obs[k] + 1), beta) / pow(2, s);
+    c = 0.5;
+    X = theVector[1] * (c * xmod);
+    
+    E = theVector[0] + X;
+    D = theVector[0] - X;
+    
+    for (int l{2}; l <= q; ++l) {
+      c = c * static_cast<double>(q - l + 1) / static_cast<double>(l * (2 * q - l + 1));
+      X = theVector[l] * (c * pow(xmod,l));
+      E = E + X;
+      if (pind) {
+        D =  D + X;
+      }
+      else {
+        D = D - X;
+      }
+      pind = !pind;
+    }
+    E = inv(D) * E;
+    for (int l = 1; l <= s; ++l) {
+      E = E * E;
+    }
+    
+    aux_mat = alpha.t() * E * t;
+    density = aux_mat(0,0);
+    logLh += weight[k] * (log(density) + log(scale1[k]) + log(beta) + (beta -1) * log(log(obs[k] + 1)) - log(obs[k] + 1));
+  }
+  //Right censored data
+  for (int k{0}; k < rcens.size(); ++k) {
+    
+    // Matrix exponential
+    int pind{1};
+    int ee{static_cast<int>(log2(JNorm  * scale2[k] * pow(log(rcens[k] + 1), beta))) + 1};
+    s = std::max(0, ee + 1);
+    xmod = scale2[k] * pow(log(rcens[k] + 1), beta) / pow(2, s);
+    c = 0.5;
+    X = theVector[1] * (c * xmod);
+    
+    E = theVector[0] + X;
+    D = theVector[0] - X;
+    
+    for (int l{2}; l <= q; ++l) {
+      c = c * static_cast<double>(q - l + 1) / static_cast<double>(l * (2 * q - l + 1));
+      X = theVector[l] * (c * pow(xmod,l));
+      E = E + X;
+      if (pind) {
+        D =  D + X;
+      }
+      else {
+        D = D - X;
+      }
+      pind = !pind;
+    }
+    E = inv(D) * E;
+    for (int l = 1; l <= s; ++l) {
+      E = E * E;
+    }
+    
+    aux_mat = alpha.t() * E * e;
+    density = aux_mat(0,0);
+    logLh += rcweight[k] * log(density);
+  }
+  
+  return logLh;
+}
+
+
+
+//' Loglikelihood of matrix-loglogistic using Pade
+//' 
+//' Loglikelihood for a sample 
+//' @param h nuisance parameter
+//' @param alpha initial probabilities
+//' @param S sub-intensity
+//' @param beta in-homogeneity parameter
+//' @param obs the observations
+//' @param weight weight of the observations
+//' @param rcens censored observations
+//' @param rcweight weight of the censored observations
+//' @param scale1 scale for observations
+//' @param scale2 scale for censored observations
+//' 
+// [[Rcpp::export]]
+double logLikelihoodMloglogistic_PADEs(double h, arma::vec & alpha, arma::mat & S, Rcpp::NumericVector beta, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight, const Rcpp::NumericVector & scale1, const Rcpp::NumericVector & scale2) {
+  if(beta[0] < 0 || beta[1] < 0) return NA_REAL;
+  
+  long p{S.n_rows};
+  arma::mat e; e.ones(S.n_cols, 1);
+  arma::mat t = (S * (-1)) * e;
+  
+  arma::mat E(size(S));
+  
+  double JNorm{LInf_normArma(S)};
+  
+  std::vector<arma::mat> theVector;
+  
+  vectorOfMatrices_arma2(theVector, S, 6);
+  
+  
+  arma::mat X(p,p);
+  arma::mat D(p,p);
+  
+  const int q{6};
+  int s{};
+  double xmod{};
+  double c{};
+  
+  arma::mat aux_mat(1,1);
+  
+  double density{0.0};
+  
+  double logLh{0.0};
+  
+  // Non censored data
+  for (int k{0}; k < obs.size(); ++k) {
+    
+    // Matrix exponential
+    int pind{1};
+    int ee{static_cast<int>(log2(JNorm  * scale1[k] * log(pow(obs[k] / beta[0], beta[1]) + 1))) + 1};
+    s = std::max(0, ee + 1);
+    xmod = scale1[k] * log(pow(obs[k] / beta[0], beta[1]) + 1) / pow(2, s);
+    c = 0.5;
+    X = theVector[1] * (c * xmod);
+    
+    E = theVector[0] + X;
+    D = theVector[0] - X;
+    
+    for (int l{2}; l <= q; ++l) {
+      c = c * static_cast<double>(q - l + 1) / static_cast<double>(l * (2 * q - l + 1));
+      X = theVector[l] * (c * pow(xmod,l));
+      E = E + X;
+      if (pind) {
+        D =  D + X;
+      }
+      else {
+        D = D - X;
+      }
+      pind = !pind;
+    }
+    E = inv(D) * E;
+    for (int l = 1; l <= s; ++l) {
+      E = E * E;
+    }
+    
+    aux_mat = alpha.t() * E * t;
+    density = aux_mat(0,0);
+    logLh += weight[k] * (log(density) + log(scale1[k]) + log(beta[1]) - log(beta[0]) + (beta[1] - 1) * (log(obs[k]) - log(beta[0])) - log(pow(obs[k] / beta[0], beta[1]) + 1));
+  }
+  //Right censored data
+  for (int k{0}; k < rcens.size(); ++k) {
+    
+    // Matrix exponential
+    int pind{1};
+    int ee{static_cast<int>(log2(JNorm  * scale2[k] * log(pow(rcens[k] / beta[0], beta[1]) + 1))) + 1};
+    s = std::max(0, ee + 1);
+    xmod = scale2[k] * log(pow(rcens[k] / beta[0], beta[1]) + 1) / pow(2, s);
+    c = 0.5;
+    X = theVector[1] * (c * xmod);
+    
+    E = theVector[0] + X;
+    D = theVector[0] - X;
+    
+    for (int l{2}; l <= q; ++l) {
+      c = c * static_cast<double>(q - l + 1) / static_cast<double>(l * (2 * q - l + 1));
+      X = theVector[l] * (c * pow(xmod,l));
+      E = E + X;
+      if (pind) {
+        D =  D + X;
+      }
+      else {
+        D = D - X;
+      }
+      pind = !pind;
+    }
+    E = inv(D) * E;
+    for (int l = 1; l <= s; ++l) {
+      E = E * E;
+    }
+    
+    aux_mat = alpha.t() * E * e;
+    density = aux_mat(0,0);
+    logLh += rcweight[k] * log(density);
+  }
+  
+  return logLh;
+}
+
+
+
+//' Loglikelihood of matrix-Gompertz using Pade
+//' 
+//' Loglikelihood for a sample 
+//' @param h nuisance parameter
+//' @param alpha initial probabilities
+//' @param S sub-intensity
+//' @param beta in-homogeneity parameter
+//' @param obs the observations
+//' @param weight weight of the observations
+//' @param rcens censored observations
+//' @param rcweight weight of the censored observations
+//' @param scale1 scale for observations
+//' @param scale2 scale for censored observations
+//' 
+// [[Rcpp::export]]
+double logLikelihoodMgompertz_PADEs(double h, arma::vec & alpha, arma::mat & S, double beta, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight, const Rcpp::NumericVector & scale1, const Rcpp::NumericVector & scale2) {
+  if(beta < 0) return NA_REAL;
+  
+  long p{S.n_rows};
+  arma::mat e; e.ones(S.n_cols, 1);
+  arma::mat t = (S * (-1)) * e;
+  
+  arma::mat E(size(S));
+  
+  double JNorm{LInf_normArma(S)};
+  
+  std::vector<arma::mat> theVector;
+  
+  vectorOfMatrices_arma2(theVector, S, 6);
+  
+  
+  arma::mat X(p,p);
+  arma::mat D(p,p);
+  
+  const int q{6};
+  int s{};
+  double xmod{};
+  double c{};
+  
+  arma::mat aux_mat(1,1);
+  
+  double density{0.0};
+  
+  double logLh{0.0};
+  
+  // Non censored data
+  for (int k{0}; k < obs.size(); ++k) {
+    
+    // Matrix exponential
+    int pind{1};
+    int ee{static_cast<int>(log2(JNorm  * scale1[k] * (exp(obs[k] * beta) - 1) / beta)) + 1};
+    s = std::max(0, ee + 1);
+    xmod = scale1[k] * (exp(obs[k] * beta) - 1) / beta / pow(2, s);
+    c = 0.5;
+    X = theVector[1] * (c * xmod);
+    
+    E = theVector[0] + X;
+    D = theVector[0] - X;
+    
+    for (int l{2}; l <= q; ++l) {
+      c = c * static_cast<double>(q - l + 1) / static_cast<double>(l * (2 * q - l + 1));
+      X = theVector[l] * (c * pow(xmod,l));
+      E = E + X;
+      if (pind) {
+        D =  D + X;
+      }
+      else {
+        D = D - X;
+      }
+      pind = !pind;
+    }
+    E = inv(D) * E;
+    for (int l = 1; l <= s; ++l) {
+      E = E * E;
+    }
+    
+    aux_mat = alpha.t() * E * t;
+    density = aux_mat(0,0);
+    logLh += weight[k] * (log(density) + log(scale1[k]) + obs[k] * beta);
+  }
+  //Right censored data
+  for (int k{0}; k < rcens.size(); ++k) {
+    
+    // Matrix exponential
+    int pind{1};
+    int ee{static_cast<int>(log2(JNorm  * scale2[k] * (exp(rcens[k] * beta) - 1) / beta)) + 1};
+    s = std::max(0, ee + 1);
+    xmod = scale2[k] * (exp(rcens[k] * beta) - 1) / beta / pow(2, s);
+    c = 0.5;
+    X = theVector[1] * (c * xmod);
+    
+    E = theVector[0] + X;
+    D = theVector[0] - X;
+    
+    for (int l{2}; l <= q; ++l) {
+      c = c * static_cast<double>(q - l + 1) / static_cast<double>(l * (2 * q - l + 1));
+      X = theVector[l] * (c * pow(xmod,l));
+      E = E + X;
+      if (pind) {
+        D =  D + X;
+      }
+      else {
+        D = D - X;
+      }
+      pind = !pind;
+    }
+    E = inv(D) * E;
+    for (int l = 1; l <= s; ++l) {
+      E = E * E;
+    }
+    
+    aux_mat = alpha.t() * E * e;
+    density = aux_mat(0,0);
+    logLh += rcweight[k] * log(density);
+  }
+  
+  return logLh;
+}
+

@@ -4,10 +4,10 @@
 \alias{EMstep_PADE}
 \title{EM using Matlab algorithm for matrix exponential in combination with Armadillo}
 \usage{
-EMstep_PADE(epsilon, alpha, S, obs, weight, rcens, rcweight)
+EMstep_PADE(h, alpha, S, obs, weight, rcens, rcweight)
 }
 \arguments{
-\item{epsilon}{nuisance parameter}
+\item{h}{nuisance parameter}
 
 \item{alpha}{initial probalities}
 
