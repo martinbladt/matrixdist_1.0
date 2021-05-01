@@ -46,7 +46,7 @@ lines(sq, pp, col = "red")
 set.seed(1)
 iA <- reg(x = iph(ph(structure = "coxian", dimension = 1),
                   gfun = "weibull", gfun_pars = 1),
-          y = y, rcen = rcen, X = X, stepsEM = 300, methods = c("UNI", "PADE"))
+          y = y, rcen = rcen, X = X, stepsEM = 300, methods = c("RK", "UNI"))
 
 set.seed(1)
 iB <- reg(x = iph(ph(structure = "general", dimension = 5),
@@ -55,7 +55,7 @@ iB <- reg(x = iph(ph(structure = "general", dimension = 5),
           methods = c("RK","UNI"))
 
 set.seed(1)
-iB <- reg(x = iph(ph(structure = "general", dimension = 5),
+iB <- reg(x = iph(ph(structure = "coxian", dimension = 3),
                   gfun = "weibull", gfun_pars = 1),
           y = y, rcen = rcen, X = X, stepsEM = 300,
           methods = c("RK","PADE"))
@@ -65,9 +65,7 @@ iB <- reg(x = iph(ph(structure = "general", dimension = 5),
           y = y, rcen = rcen, X = X, stepsEM = 1000,
           methods = c("UNI","UNI"), uni_epsilon = 0.0000000000000001)
 
-
-iA@fit$loglik
-iB@fit$loglik
+stats4::AIC(iB)
 
 
 logLik(survival::survreg(survival::Surv(time,status) ~  trt + karno ,dist="exponential", data = dat))

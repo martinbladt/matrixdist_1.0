@@ -155,3 +155,17 @@ setGeneric("reg", function(x, y, ...) {
 setGeneric("evaluate", function(x, subject, ...) {
   standardGeneric("evaluate")
 })
+#' New Generic for doing a likelihood ratio test between two Matrix Distribution models
+#'
+#' Methods are available for objects of class \linkS4class{ph}
+#'
+#' @param x,y objects of the model class.
+#' @param ...
+#'
+#' @return a likelihood ratio test result.
+#' @export
+#'
+#'
+setGeneric("LRT", function(x, y, ...) {
+  standardGeneric("LRT")
+})

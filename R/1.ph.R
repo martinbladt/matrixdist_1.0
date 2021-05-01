@@ -500,3 +500,16 @@ setMethod("logLik", "ph", function(object) {
 setMethod("coef", c(object = "ph"), function(object) {
   object@pars
 })
+
+#' LRT Method for ph Class
+#'
+#' @param x,y objects of class \linkS4class{ph}.
+#'
+#' @return LRT between the models.
+#' @export
+#'
+setMethod("LRT", c(x = "ph", y = "ph"), function(x, y) {
+  LR <- 2 * abs(logLik(y) - logLik(x))
+  degrees <- abs(attributes(logLik(y))$df - attributes(logLik(x))$df)
+  return(c(LR = LR, p.val = pchisq(LR, df = degrees, lower.tail = FALSE)))
+})
