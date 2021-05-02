@@ -169,7 +169,7 @@ void EMstep_UNI(double h, arma::vec & alpha, arma::mat & S, const Rcpp::NumericV
   for (int k{0}; k < rcens.size(); ++k) {
     SumOfCensored += rcweight[k];
     
-    double x{rcweight[k]};
+    double x{rcens[k]};
     
     if (x * a <= 1.0) {
       J = matrixExpSum_arma(x, N, theVector, a);
