@@ -160,7 +160,7 @@ setGeneric("evaluate", function(x, subject, ...) {
 #' Methods are available for objects of class \linkS4class{ph}
 #'
 #' @param x,y objects of the model class.
-#' @param ...
+#' @param ... further parameters to be passed on
 #'
 #' @return a likelihood ratio test result.
 #' @export

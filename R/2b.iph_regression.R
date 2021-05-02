@@ -11,6 +11,7 @@
 #' @param methods methods to use for matrix exponential calculation: RM, UNI or PADE
 #' @param rkstep Runge-Kutta step size (optional)
 #' @param uni_epsilon epsilon parameter for uniformization method
+#' @param optim_method method to use in gradient optimization
 #' @param maxit maximum number of iterations when optimizing g function.
 #' @param reltol relative tolerance when optimizing g function.
 #' @param every number of iterations between likelihood display updates.
@@ -36,9 +37,23 @@ setMethod(
            methods = c("RK", "UNI"),
            rkstep = NA,
            uni_epsilon = NA,
+           optim_method = "BFGS",
            maxit = 50,
            reltol = 1e-8,
            every = 10) {
+    control <- if(optim_method == "BFGS"){
+      list(
+        maxit = maxit,
+        factr = reltol,
+        fnscale = -1
+      )
+    }else{
+      list(
+        maxit = maxit,
+        reltol = reltol,
+        fnscale = -1
+      )
+    }
     X <- as.matrix(X)
     if(methods[2] == "RK") stop("For second method, select UNI or PADE (ordering avoided)")
     if(any(dim(X) == 0)) stop("input covariate matrix X, or use fit method instead")
@@ -86,7 +101,6 @@ setMethod(
     S_fit <- clone_matrix(ph_par$S)
     if(length(B0) == 0){B_fit <- rep(0, p)
     }else{B_fit <- B0}
-    
     for (k in 1:stepsEM) {
       prop <- exp(X%*%B_fit)
       
@@ -116,12 +130,8 @@ setMethod(
                                     rcweight = rcenweight,
                                     X = X,
                                     hessian = FALSE,
-                                    method = ifelse(k == stepsEM, "Nelder-Mead", "Nelder-Mead"),
-                                    control = list(
-                                      maxit = maxit,
-                                      reltol = reltol,
-                                      fnscale = -1
-                                    )
+                                    method = optim_method,
+                                    control = control
                                     )
                               )
       par_g <- head(opt$par, ng)

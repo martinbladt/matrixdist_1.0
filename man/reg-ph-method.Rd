@@ -16,6 +16,7 @@
   methods = c("RK", "UNI"),
   rkstep = NA,
   uni_epsilon = NA,
+  optim_method = "BFGS",
   maxit = 50,
   reltol = 1e-08,
   every = 10
@@ -43,6 +44,8 @@
 \item{rkstep}{Runge-Kutta step size (optional)}
 
 \item{uni_epsilon}{epsilon parameter for uniformization method}
+
+\item{optim_method}{method to use in gradient optimization}
 
 \item{maxit}{maximum number of iterations when optimizing g function.}
 

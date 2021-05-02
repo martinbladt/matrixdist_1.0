@@ -507,7 +507,8 @@ setMethod("coef", c(object = "ph"), function(object) {
 #'
 #' @return LRT between the models.
 #' @export
-#'
+#' @importFrom stats pchisq
+#' 
 setMethod("LRT", c(x = "ph", y = "ph"), function(x, y) {
   LR <- 2 * abs(logLik(y) - logLik(x))
   degrees <- abs(attributes(logLik(y))$df - attributes(logLik(x))$df)

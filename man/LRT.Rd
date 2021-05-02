@@ -9,7 +9,7 @@ LRT(x, y, ...)
 \arguments{
 \item{x, y}{objects of the model class.}
 
-\item{...}{}
+\item{...}{further parameters to be passed on}
 }
 \value{
 a likelihood ratio test result.
