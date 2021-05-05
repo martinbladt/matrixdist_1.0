@@ -122,4 +122,45 @@ setMethod("evaluate", c(x = "sph"), function(x, subject) {
   }
   return(z)
 })
+
+#' Fisher Information Method for sph Class
+#'
+#' @param x an object of class \linkS4class{sph}.
+#' @param y independent variate.
+#' @param X matrix of covariates.
+#' @param w weights.
+#' 
+#' @return a matrix.
+#' @export
+#'
+setMethod("Fisher", c(x = "sph"), function(x, y, X, w = numeric(0)) {
+  if(x@type != "reg") stop("method not implemented")
+  if(length(w) == 0) w <- rep(1, length(y))
+  n <- ncol(X)
+  result <- matrix(0, n, n)
+  for(j in 1:length(w)){
+    v <- log_lik_derivative(x, y[j], X[j,])
+    result <- result + w[j] * outer(v,v)
+  }
+  return(result)
+})
+log_lik_derivative <- function(x, z, Z){
+  Z <- as.matrix(Z)
+  p <- length(Z)
+  result <- numeric(p)
   
+  gfn <- x@gfun$inverse
+  gfn_pr <- x@gfun$pars; gf <- gfn(gfn_pr, z)
+  alpha <- x@pars$alpha
+  ee <- rep(1, length(alpha))
+  S <- x@pars$S
+  B <- x@coefs$B
+  M <- matrix_exponential(exp(Z%*%B) * gf * S)
+  
+  for(i in 1:p){
+    a <- - Z[i] * gf * exp(Z%*%B) * alpha %*% M %*% S %*% S %*% ee
+    b <- - alpha%*% M %*% S %*% ee
+    result[i] <- Z[i] + a/b
+  }
+  return(result)
+}

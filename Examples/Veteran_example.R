@@ -1,7 +1,9 @@
 library(matrixdist)
 library(survival)
 
-dim(veteran)
+veteran$status <- veteran$status^0
+
+veteran <- rbind(veteran,veteran)
 
 vfit <- coxph(Surv(time, status) ~ trt + karno + prior, veteran)
 zp <- cox.zph(vfit, transform= function(time) log(time +20))
@@ -48,6 +50,12 @@ iA <- reg(x = iph(ph(structure = "coxian", dimension = 1),
                   gfun = "weibull", gfun_pars = 1),
           y = y, rcen = rcen, X = X, stepsEM = 300, methods = c("RK", "UNI"))
 
+sqrt(diag(solve(-iA@fit$hessian)))
+sqrt(diag(solve(length(y)*Fisher(x,y,X))))
+-iA@fit$hessian[2:4,2:4]
+Fisher(x,y,X)[1:3,1:3]
+X
+
 set.seed(1)
 iB <- reg(x = iph(ph(structure = "general", dimension = 5),
                   gfun = "weibull", gfun_pars = 1),
@@ -67,7 +75,7 @@ iB <- reg(x = iph(ph(structure = "general", dimension = 5),
 
 stats4::AIC(iB)
 
-
+summary(survival::survreg(survival::Surv(time,status) ~  trt + karno+prior ,dist="exponential", data = dat))
 logLik(survival::survreg(survival::Surv(time,status) ~  trt + karno ,dist="exponential", data = dat))
 logLik(survival::survreg(survival::Surv(time,status) ~  trt + karno ,dist="weibull", data = dat))
 

@@ -157,6 +157,7 @@ setMethod(
   }
 )
 
+
 # reg_g_specs <- function(name){
 #   if(name == "Homogeneous"){
 #     inv_g <- function(t, w, beta) return(list(obs = t, weight = w)) 

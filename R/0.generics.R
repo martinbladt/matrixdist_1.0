@@ -169,3 +169,15 @@ setGeneric("evaluate", function(x, subject, ...) {
 setGeneric("LRT", function(x, y, ...) {
   standardGeneric("LRT")
 })
+#' New Generic for obtaining the Fisher Information of Survival Matrix Distributions
+#'
+#' Methods are available for objects of class \linkS4class{sph}
+#'
+#' @param x an object of the model class.
+#' @param ... further parameters to be passed on
+#'
+#' @export
+#'
+setGeneric("Fisher", function(x, ...) {
+  standardGeneric("Fisher")
+})
