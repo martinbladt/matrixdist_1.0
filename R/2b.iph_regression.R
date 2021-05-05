@@ -129,7 +129,7 @@ setMethod(
                                     rcens = rcen, 
                                     rcweight = rcenweight,
                                     X = X,
-                                    hessian = FALSE,
+                                    hessian = (k == stepsEM),
                                     method = optim_method,
                                     control = control
                                     )
@@ -147,7 +147,8 @@ setMethod(
     x@pars$S <- S_fit
     x@fit <- list(
       logLik = opt$value,
-      nobs = sum(A$weights)
+      nobs = sum(A$weights),
+      hessian = opt$hessian
     )
     s <- sph(x, type = "reg")
     s@gfun$pars <- par_g
