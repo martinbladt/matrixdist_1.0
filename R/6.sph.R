@@ -136,17 +136,16 @@ setMethod("evaluate", c(x = "sph"), function(x, subject) {
 setMethod("Fisher", c(x = "sph"), function(x, y, X, w = numeric(0)) {
   if(x@type != "reg") stop("method not implemented")
   if(length(w) == 0) w <- rep(1, length(y))
-  n <- ncol(X)
+  n <- ncol(X) + 1
   result <- matrix(0, n, n)
   for(j in 1:length(w)){
-    v <- log_lik_derivative(x, y[j], X[j,])
+    v <- log_lik_derivative(x, z = y[j], Z = X[j,])
     result <- result + w[j] * outer(v,v)
   }
   return(result)
 })
 log_lik_derivative <- function(x, z, Z){
-  Z <- as.matrix(Z)
-  p <- length(Z)
+  p <- length(Z) + 1
   result <- numeric(p)
   
   gfn <- x@gfun$inverse
@@ -155,12 +154,14 @@ log_lik_derivative <- function(x, z, Z){
   ee <- rep(1, length(alpha))
   S <- x@pars$S
   B <- x@coefs$B
-  M <- matrix_exponential(exp(Z%*%B) * gf * S)
-  
-  for(i in 1:p){
-    a <- - Z[i] * gf * exp(Z%*%B) * alpha %*% M %*% S %*% S %*% ee
-    b <- - alpha%*% M %*% S %*% ee
-    result[i] <- Z[i] + a/b
+  M <- matrix_exponential(exp(sum(Z*B)) * gf * S)
+  ratio <- x@gfun$intensity_prime(gfn_pr, z)/x@gfun$intensity(gfn_pr, z)
+  a <- - alpha %*% M %*% S %*% S %*% ee
+  b <- - alpha%*% M %*% S %*% ee
+  result[1] <- ratio + a * exp(sum(Z*B)) * x@gfun$inverse_prime(gfn_pr, z)/b
+  for(i in 2:p){
+    a2 <- Z[i - 1] * gf * exp(sum(Z*B)) * a
+    result[i] <- Z[i - 1] + a2/b
   }
   return(result)
 }

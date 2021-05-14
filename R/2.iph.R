@@ -75,10 +75,39 @@ iph <- function(ph = NULL, gfun = NULL, gfun_pars = NULL, alpha = NULL, S = NULL
   f6 <- function(beta, t, w) reversTransformData(t, w, beta)
   nb <- which(gfun == c("weibull", "pareto", "lognormal", "loglogistic", "gompertz", "gev"))
   ginv <- base::eval(parse(text = paste("f", nb, sep = "")))
+  
+  f1 <- function(beta, t) t^{beta} * log(t)
+  f2 <- function(beta, t) -t/(beta * t + beta^2)
+  f3 <- function(beta, t) log(t + 1)^{beta} * log(log(t + 1))
+  f4 <- NA
+  f5 <- function(beta, t) exp(t * beta) * (t * beta - 1)  / beta^2
+  f6 <- NA
+  nb <- which(gfun == c("weibull", "pareto", "lognormal", "loglogistic", "gompertz", "gev"))
+  ginv_prime <- base::eval(parse(text = paste("f", nb, sep = "")))
+  
+  f1 <- function(beta, t) beta * t^{beta - 1}
+  f2 <- function(beta, t) (t + beta)^{-1}
+  f3 <- function(beta, t) beta * log(t + 1)^{beta - 1}/(t + 1)
+  f4 <- NA
+  f5 <- function(beta, t) exp(t * beta)
+  f6 <- NA
+  nb <- which(gfun == c("weibull", "pareto", "lognormal", "loglogistic", "gompertz", "gev"))
+  lambda <- base::eval(parse(text = paste("f", nb, sep = "")))
+  
+  f1 <- function(beta, t) t^{beta - 1} + beta * t^{beta - 1} * log(t)
+  f2 <- function(beta, t) -(t + beta)^{-2}
+  f3 <- function(beta, t) log(t + 1)^{beta - 1}/(t + 1) + beta * log(t + 1)^{beta - 1} * log(log(t + 1))/(t + 1)
+  f4 <- NA
+  f5 <- function(beta, t) t * exp(t * beta)
+  f6 <- NA
+  nb <- which(gfun == c("weibull", "pareto", "lognormal", "loglogistic", "gompertz", "gev"))
+  lambda_prime <- base::eval(parse(text = paste("f", nb, sep = "")))
+  
   methods::new("iph",
     name = paste("inhomogeneous ", ph@name, sep = ""),
     pars = ph@pars,
-    gfun = list(name = gfun, pars = gfun_pars, inverse = ginv),
+    gfun = list(name = gfun, pars = gfun_pars, inverse = ginv, 
+                intensity = lambda, inverse_prime = ginv_prime, intensity_prime = lambda_prime),
     scale = scale,
     fit = ph@fit
   )
