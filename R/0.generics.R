@@ -142,21 +142,6 @@ setGeneric("fit", function(x, y, ...) {
 setGeneric("reg", function(x, y, ...) {
   standardGeneric("reg")
 })
-#' New Generic for Regression with Matrix Distributions using Newton-Raphson
-#'
-#' Methods are available for objects of class \linkS4class{ph}
-#'
-#' @param x an object of the model class.
-#' @param y a vector of data.
-#' @param ... further parameters to be passed on
-#'
-#' @return An object of the fitted model class.
-#' @export
-#'
-#'
-setGeneric("reg_newton", function(x, y, ...) {
-  standardGeneric("reg_newton")
-})
 #' New Generic for Evaluating Survival Matrix Distributions
 #'
 #' Methods are available for objects of class \linkS4class{sph}
