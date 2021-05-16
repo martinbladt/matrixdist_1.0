@@ -103,7 +103,7 @@ iph <- function(ph = NULL, gfun = NULL, gfun_pars = NULL, alpha = NULL, S = NULL
   # nb <- which(gfun == c("weibull", "pareto", "lognormal", "loglogistic", "gompertz", "gev"))
   # lambda_prime <- base::eval(parse(text = paste("f", nb, sep = "")))
   # 
-  name <- if(!is(ph, "iph")){ph@name}else{paste("inhomogeneous ", ph@name, sep = "")}
+  name <- if(is(ph, "iph")){ph@name}else{paste("inhomogeneous ", ph@name, sep = "")}
   
   methods::new("iph",
     name = name,
