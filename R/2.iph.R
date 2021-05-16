@@ -108,8 +108,8 @@ iph <- function(ph = NULL, gfun = NULL, gfun_pars = NULL, alpha = NULL, S = NULL
   methods::new("iph",
     name = name,
     pars = ph@pars,
-    gfun = list(name = gfun, pars = gfun_pars, inverse = ginv, 
-                #intensity = lambda, inverse_prime = ginv_prime, intensity_prime = lambda_prime
+    gfun = list(name = gfun, pars = gfun_pars, inverse = ginv
+                #,intensity = lambda, inverse_prime = ginv_prime, intensity_prime = lambda_prime
                 ),
     scale = scale,
     fit = ph@fit
