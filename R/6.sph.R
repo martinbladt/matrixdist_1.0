@@ -139,7 +139,7 @@ setMethod("Fisher", c(x = "sph"), function(x, y, X, w = numeric(0)) {
   n <- ncol(X) + 1
   result <- matrix(0, n, n)
   for(j in 1:length(w)){
-    v <- log_lik_derivative(x, z = y[j], Z = X[j,])
+    v <- unlist(log_lik_derivative(x, z = y[j], Z = X[j,]))
     result <- result + w[j] * outer(v,v)
   }
   return(result)
