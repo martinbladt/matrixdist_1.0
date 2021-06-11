@@ -100,6 +100,7 @@ setMethod(
     S_fit <- clone_matrix(ph_par$S)
     if(length(B0) == 0){B_fit <- rep(0, p)
     }else{B_fit <- B0}
+    
     for (k in 1:stepsEM) {
       prop <- exp(X%*%B_fit)
       

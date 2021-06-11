@@ -452,14 +452,14 @@ setMethod(
 )
 
 data_aggregation <- function(y, w) {
+  observations <- cbind(y, w)
+  mat <- data.frame(observations)
+  names(mat) <- c("obs", "weight")
   y <- sort(as.numeric(y))
   un_obs <- unique(y)
   if (length(w) == 0) {
     w <- rep(1, length(y))
   }
-  observations <- cbind(y, w)
-  mat <- data.frame(observations)
-  names(mat) <- c("obs", "weight")
   cum_weight <- numeric(0)
   for (i in un_obs) {
     cum_weight <- c(cum_weight, sum(mat$weight[which(mat$obs == i)]))
