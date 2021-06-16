@@ -319,10 +319,11 @@ setMethod(
     A <- data_aggregation(y, weight)
     y <- A$un_obs
     weight <- A$weights
-    B <- data_aggregation(rcen, rcenweight)
-    rcen <- B$un_obs
-    rcenweight <- B$weights
-    
+    if(length(rcen)>0){
+      B <- data_aggregation(rcen, rcenweight)
+      rcen <- B$un_obs
+      rcenweight <- B$weights
+    }
     if(plot == TRUE){
       if(length(rcen)>0) stop("plot option only available for non-censored data")
       h <- hist(rep(y, weight), breaks = 30, plot = FALSE)
@@ -452,6 +453,7 @@ setMethod(
 )
 
 data_aggregation <- function(y, w) {
+  if(length(w) == 0) w <- rep(1, length(y))
   observations <- cbind(y, w)
   mat <- data.frame(observations)
   names(mat) <- c("obs", "weight")
