@@ -81,7 +81,7 @@ int findN_arma(double h, double lambda) {
 //' 
 // [[Rcpp::export]]
 void EMstep_UNI(double h, arma::vec & alpha, arma::mat & S, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight) {
-  long p{S.n_rows};
+  unsigned p{S.n_rows};
   
   
   arma::mat e; e.ones(S.n_cols, 1);

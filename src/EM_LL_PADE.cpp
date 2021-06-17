@@ -38,7 +38,7 @@ void vectorOfMatrices_arma2(std::vector<arma::mat> & theVector, const arma::mat 
 //' 
 // [[Rcpp::export]]
 void EMstep_PADE(double h, arma::vec & alpha,  arma::mat & S, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight) {
-  long p{S.n_rows};
+  unsigned p{S.n_rows};
   
   arma::mat e; e.ones(S.n_cols, 1);
   arma::mat t = (S * (-1)) * e;
@@ -242,7 +242,7 @@ void EMstep_PADE(double h, arma::vec & alpha,  arma::mat & S, const Rcpp::Numeri
 //' 
 // [[Rcpp::export]]
 double logLikelihoodPH_PADE(double h, arma::vec & alpha, arma::mat & S, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight) {
-  long p{S.n_rows};
+  unsigned p{S.n_rows};
   arma::mat e; e.ones(S.n_cols, 1);
   arma::mat t = (S * (-1)) * e;
   
@@ -361,7 +361,7 @@ double logLikelihoodPH_PADE(double h, arma::vec & alpha, arma::mat & S, const Rc
 double logLikelihoodMweibull_PADE(double h, arma::vec & alpha, arma::mat & S, double beta, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight) {
   if(beta < 0) return NA_REAL;
   
-  long p{S.n_rows};
+  unsigned p{S.n_rows};
   arma::mat e; e.ones(S.n_cols, 1);
   arma::mat t = (S * (-1)) * e;
   
@@ -481,7 +481,7 @@ double logLikelihoodMweibull_PADE(double h, arma::vec & alpha, arma::mat & S, do
 double logLikelihoodMpareto_PADE(double h, arma::vec & alpha, arma::mat & S, double beta, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight) {
   if(beta < 0) return NA_REAL;
   
-  long p{S.n_rows};
+  unsigned p{S.n_rows};
   arma::mat e; e.ones(S.n_cols, 1);
   arma::mat t = (S * (-1)) * e;
   
@@ -601,7 +601,7 @@ double logLikelihoodMpareto_PADE(double h, arma::vec & alpha, arma::mat & S, dou
 double logLikelihoodMlognormal_PADE(double h, arma::vec & alpha, arma::mat & S, double beta, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight) {
   if(beta < 0) return NA_REAL;
   
-  long p{S.n_rows};
+  unsigned p{S.n_rows};
   arma::mat e; e.ones(S.n_cols, 1);
   arma::mat t = (S * (-1)) * e;
   
@@ -720,7 +720,7 @@ double logLikelihoodMlognormal_PADE(double h, arma::vec & alpha, arma::mat & S, 
 double logLikelihoodMloglogistic_PADE(double h, arma::vec & alpha, arma::mat & S, Rcpp::NumericVector beta, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight) {
   if(beta[0] < 0 || beta[1] < 0) return NA_REAL;
   
-  long p{S.n_rows};
+  unsigned p{S.n_rows};
   arma::mat e; e.ones(S.n_cols, 1);
   arma::mat t = (S * (-1)) * e;
   
@@ -839,7 +839,7 @@ double logLikelihoodMloglogistic_PADE(double h, arma::vec & alpha, arma::mat & S
 double logLikelihoodMgompertz_PADE(double h, arma::vec & alpha, arma::mat & S, double beta, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight) {
   if(beta < 0) return NA_REAL;
   
-  long p{S.n_rows};
+  unsigned p{S.n_rows};
   arma::mat e; e.ones(S.n_cols, 1);
   arma::mat t = (S * (-1)) * e;
   
@@ -956,7 +956,7 @@ double logLikelihoodMgompertz_PADE(double h, arma::vec & alpha, arma::mat & S, d
 double logLikelihoodMgev_PADE(double h, arma::vec & alpha, arma::mat & S, Rcpp::NumericVector beta, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight) {
   if(beta[1] < 0) return NA_REAL;
   
-  long p{S.n_rows};
+  unsigned p{S.n_rows};
   arma::mat e; e.ones(S.n_cols, 1);
   arma::mat t = (S * (-1)) * e;
   
@@ -1150,7 +1150,7 @@ double logLikelihoodMgev_PADE(double h, arma::vec & alpha, arma::mat & S, Rcpp::
 //' 
 // [[Rcpp::export]]
 double logLikelihoodPH_PADEs(double h, arma::vec & alpha, arma::mat & S, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight, const Rcpp::NumericVector & scale1, const Rcpp::NumericVector & scale2) {
-  long p{S.n_rows};
+  unsigned p{S.n_rows};
   arma::mat e; e.ones(S.n_cols, 1);
   arma::mat t = (S * (-1)) * e;
   
@@ -1271,7 +1271,7 @@ double logLikelihoodPH_PADEs(double h, arma::vec & alpha, arma::mat & S, const R
 double logLikelihoodMweibull_PADEs(double h, arma::vec & alpha, arma::mat & S, double beta, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight, const Rcpp::NumericVector & scale1, const Rcpp::NumericVector & scale2) {
   if(beta < 0) return NA_REAL;
   
-  long p{S.n_rows};
+  unsigned p{S.n_rows};
   arma::mat e; e.ones(S.n_cols, 1);
   arma::mat t = (S * (-1)) * e;
   
@@ -1393,7 +1393,7 @@ double logLikelihoodMweibull_PADEs(double h, arma::vec & alpha, arma::mat & S, d
 double logLikelihoodMpareto_PADEs(double h, arma::vec & alpha, arma::mat & S, double beta, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight, const Rcpp::NumericVector & scale1, const Rcpp::NumericVector & scale2) {
   if(beta < 0) return NA_REAL;
   
-  long p{S.n_rows};
+  unsigned p{S.n_rows};
   arma::mat e; e.ones(S.n_cols, 1);
   arma::mat t = (S * (-1)) * e;
   
@@ -1514,7 +1514,7 @@ double logLikelihoodMpareto_PADEs(double h, arma::vec & alpha, arma::mat & S, do
 double logLikelihoodMlognormal_PADEs(double h, arma::vec & alpha, arma::mat & S, double beta, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight, const Rcpp::NumericVector & scale1, const Rcpp::NumericVector & scale2) {
   if(beta < 0) return NA_REAL;
   
-  long p{S.n_rows};
+  unsigned p{S.n_rows};
   arma::mat e; e.ones(S.n_cols, 1);
   arma::mat t = (S * (-1)) * e;
   
@@ -1635,7 +1635,7 @@ double logLikelihoodMlognormal_PADEs(double h, arma::vec & alpha, arma::mat & S,
 double logLikelihoodMloglogistic_PADEs(double h, arma::vec & alpha, arma::mat & S, Rcpp::NumericVector beta, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight, const Rcpp::NumericVector & scale1, const Rcpp::NumericVector & scale2) {
   if(beta[0] < 0 || beta[1] < 0) return NA_REAL;
   
-  long p{S.n_rows};
+  unsigned p{S.n_rows};
   arma::mat e; e.ones(S.n_cols, 1);
   arma::mat t = (S * (-1)) * e;
   
@@ -1756,7 +1756,7 @@ double logLikelihoodMloglogistic_PADEs(double h, arma::vec & alpha, arma::mat & 
 double logLikelihoodMgompertz_PADEs(double h, arma::vec & alpha, arma::mat & S, double beta, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight, const Rcpp::NumericVector & scale1, const Rcpp::NumericVector & scale2) {
   if(beta < 0) return NA_REAL;
   
-  long p{S.n_rows};
+  unsigned p{S.n_rows};
   arma::mat e; e.ones(S.n_cols, 1);
   arma::mat t = (S * (-1)) * e;
   

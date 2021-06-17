@@ -28,9 +28,9 @@ double LInf_normArma(arma::mat A) {
 //' 
 // [[Rcpp::export]]
 arma::mat matrix_VanLoanArma(arma::mat A1, arma::mat A2, arma::mat B1) {
-  long p1{A1.n_rows};
-  long p2{A2.n_rows};
-  long p{p1 + p2};
+  unsigned p1{A1.n_rows};
+  unsigned p2{A2.n_rows};
+  unsigned p{p1 + p2};
   
   arma::mat auxiliarMatrix(p, p);
   
