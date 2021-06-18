@@ -91,7 +91,7 @@ void EMstep_PADE(double h, arma::vec & alpha,  arma::mat & S, const Rcpp::Numeri
     int pind{1};
     int ee{static_cast<int>(log2(JNorm  * obs[k])) + 1};
     s = std::max(0, ee + 1);
-    xmod = obs[k] / pow(2, s);
+    xmod = obs[k] / pow(2.0, s);
     c = 0.5;
     X = theVector[1] * (c * xmod);
     
@@ -155,7 +155,7 @@ void EMstep_PADE(double h, arma::vec & alpha,  arma::mat & S, const Rcpp::Numeri
     int pind{1};
     int ee{static_cast<int>(log2(JNorm  * rcens[k])) + 1};
     s = std::max(0, ee + 1);
-    xmod = rcens[k] / pow(2, s);
+    xmod = rcens[k] / pow(2.0, s);
     c = 0.5;
     X = theVector[1] * (c * xmod);
     
@@ -276,7 +276,7 @@ double logLikelihoodPH_PADE(double h, arma::vec & alpha, arma::mat & S, const Rc
     int pind{1};
     int ee{static_cast<int>(log2(JNorm  * obs[k])) + 1};
     s = std::max(0, ee + 1);
-    xmod = obs[k] / pow(2, s);
+    xmod = obs[k] / pow(2.0, s);
     c = 0.5;
     X = theVector[1] * (c * xmod);
     
@@ -311,7 +311,7 @@ double logLikelihoodPH_PADE(double h, arma::vec & alpha, arma::mat & S, const Rc
     int pind{1};
     int ee{static_cast<int>(log2(JNorm  * rcens[k])) + 1};
     s = std::max(0, ee + 1);
-    xmod = rcens[k] / pow(2, s);
+    xmod = rcens[k] / pow(2.0, s);
     c = 0.5;
     X = theVector[1] * (c * xmod);
     
@@ -395,7 +395,7 @@ double logLikelihoodMweibull_PADE(double h, arma::vec & alpha, arma::mat & S, do
     int pind{1};
     int ee{static_cast<int>(log2(JNorm  * pow(obs[k], beta))) + 1};
     s = std::max(0, ee + 1);
-    xmod = pow(obs[k], beta) / pow(2, s);
+    xmod = pow(obs[k], beta) / pow(2.0, s);
     c = 0.5;
     X = theVector[1] * (c * xmod);
     
@@ -430,7 +430,7 @@ double logLikelihoodMweibull_PADE(double h, arma::vec & alpha, arma::mat & S, do
     int pind{1};
     int ee{static_cast<int>(log2(JNorm  * pow(rcens[k], beta))) + 1};
     s = std::max(0, ee + 1);
-    xmod = pow(rcens[k], beta) / pow(2, s);
+    xmod = pow(rcens[k], beta) / pow(2.0, s);
     c = 0.5;
     X = theVector[1] * (c * xmod);
     
@@ -515,7 +515,7 @@ double logLikelihoodMpareto_PADE(double h, arma::vec & alpha, arma::mat & S, dou
     int pind{1};
     int ee{static_cast<int>(log2(JNorm  * log(obs[k] / beta + 1))) + 1};
     s = std::max(0, ee + 1);
-    xmod = log(obs[k] / beta + 1) / pow(2, s);
+    xmod = log(obs[k] / beta + 1) / pow(2.0, s);
     c = 0.5;
     X = theVector[1] * (c * xmod);
     
@@ -550,7 +550,7 @@ double logLikelihoodMpareto_PADE(double h, arma::vec & alpha, arma::mat & S, dou
     int pind{1};
     int ee{static_cast<int>(log2(JNorm  * log(rcens[k] / beta + 1))) + 1};
     s = std::max(0, ee + 1);
-    xmod = log(rcens[k] / beta + 1) / pow(2, s);
+    xmod = log(rcens[k] / beta + 1) / pow(2.0, s);
     c = 0.5;
     X = theVector[1] * (c * xmod);
     
@@ -635,7 +635,7 @@ double logLikelihoodMlognormal_PADE(double h, arma::vec & alpha, arma::mat & S, 
     int pind{1};
     int ee{static_cast<int>(log2(JNorm  * pow(log(obs[k] + 1), beta))) + 1};
     s = std::max(0, ee + 1);
-    xmod = pow(log(obs[k] + 1), beta) / pow(2, s);
+    xmod = pow(log(obs[k] + 1), beta) / pow(2.0, s);
     c = 0.5;
     X = theVector[1] * (c * xmod);
     
@@ -670,7 +670,7 @@ double logLikelihoodMlognormal_PADE(double h, arma::vec & alpha, arma::mat & S, 
     int pind{1};
     int ee{static_cast<int>(log2(JNorm  * pow(log(rcens[k] + 1), beta))) + 1};
     s = std::max(0, ee + 1);
-    xmod = pow(log(rcens[k] + 1), beta) / pow(2, s);
+    xmod = pow(log(rcens[k] + 1), beta) / pow(2.0, s);
     c = 0.5;
     X = theVector[1] * (c * xmod);
     
@@ -754,7 +754,7 @@ double logLikelihoodMloglogistic_PADE(double h, arma::vec & alpha, arma::mat & S
     int pind{1};
     int ee{static_cast<int>(log2(JNorm  * log(pow(obs[k] / beta[0], beta[1]) + 1))) + 1};
     s = std::max(0, ee + 1);
-    xmod = log(pow(obs[k] / beta[0], beta[1]) + 1) / pow(2, s);
+    xmod = log(pow(obs[k] / beta[0], beta[1]) + 1) / pow(2.0, s);
     c = 0.5;
     X = theVector[1] * (c * xmod);
     
@@ -789,7 +789,7 @@ double logLikelihoodMloglogistic_PADE(double h, arma::vec & alpha, arma::mat & S
     int pind{1};
     int ee{static_cast<int>(log2(JNorm  * log(pow(rcens[k] / beta[0], beta[1]) + 1))) + 1};
     s = std::max(0, ee + 1);
-    xmod = log(pow(rcens[k] / beta[0], beta[1]) + 1) / pow(2, s);
+    xmod = log(pow(rcens[k] / beta[0], beta[1]) + 1) / pow(2.0, s);
     c = 0.5;
     X = theVector[1] * (c * xmod);
     
@@ -873,7 +873,7 @@ double logLikelihoodMgompertz_PADE(double h, arma::vec & alpha, arma::mat & S, d
     int pind{1};
     int ee{static_cast<int>(log2(JNorm  * (exp(obs[k] * beta) - 1) / beta)) + 1};
     s = std::max(0, ee + 1);
-    xmod = (exp(obs[k] * beta) - 1) / beta / pow(2, s);
+    xmod = (exp(obs[k] * beta) - 1) / beta / pow(2.0, s);
     c = 0.5;
     X = theVector[1] * (c * xmod);
     
@@ -908,7 +908,7 @@ double logLikelihoodMgompertz_PADE(double h, arma::vec & alpha, arma::mat & S, d
     int pind{1};
     int ee{static_cast<int>(log2(JNorm  * (exp(rcens[k] * beta) - 1) / beta)) + 1};
     s = std::max(0, ee + 1);
-    xmod = (exp(rcens[k] * beta) - 1) / beta / pow(2, s);
+    xmod = (exp(rcens[k] * beta) - 1) / beta / pow(2.0, s);
     c = 0.5;
     X = theVector[1] * (c * xmod);
     
@@ -990,7 +990,7 @@ double logLikelihoodMgev_PADE(double h, arma::vec & alpha, arma::mat & S, Rcpp::
       int pind{1};
       int ee{static_cast<int>(log2(JNorm  * exp(-(obs[k] - beta[0]) / beta[1]))) + 1};
       s = std::max(0, ee + 1);
-      xmod = exp(-(obs[k] - beta[0]) / beta[1])/ pow(2, s);
+      xmod = exp(-(obs[k] - beta[0]) / beta[1])/ pow(2.0, s);
       c = 0.5;
       X = theVector[1] * (c * xmod);
       
@@ -1025,7 +1025,7 @@ double logLikelihoodMgev_PADE(double h, arma::vec & alpha, arma::mat & S, Rcpp::
       int pind{1};
       int ee{static_cast<int>(log2(JNorm  * exp(-(rcens[k] - beta[0]) / beta[1]))) + 1};
       s = std::max(0, ee + 1);
-      xmod = exp(-(rcens[k] - beta[0]) / beta[1]) / pow(2, s);
+      xmod = exp(-(rcens[k] - beta[0]) / beta[1]) / pow(2.0, s);
       c = 0.5;
       X = theVector[1] * (c * xmod);
       
@@ -1062,7 +1062,7 @@ double logLikelihoodMgev_PADE(double h, arma::vec & alpha, arma::mat & S, Rcpp::
       int pind{1};
       int ee{static_cast<int>(log2(JNorm  * pow(1 + (beta[2] / beta[1]) * (obs[k] - beta[0]) , - 1 / beta[2]))) + 1};
       s = std::max(0, ee + 1);
-      xmod = pow(1 + (beta[2] / beta[1]) * (obs[k] - beta[0]) , - 1 / beta[2]) / pow(2, s);
+      xmod = pow(1 + (beta[2] / beta[1]) * (obs[k] - beta[0]) , - 1 / beta[2]) / pow(2.0, s);
       c = 0.5;
       X = theVector[1] * (c * xmod);
       
@@ -1097,7 +1097,7 @@ double logLikelihoodMgev_PADE(double h, arma::vec & alpha, arma::mat & S, Rcpp::
       int pind{1};
       int ee{static_cast<int>(log2(JNorm  * pow(1 + (beta[2] / beta[1]) * (rcens[k] - beta[0]) , - 1 / beta[2]))) + 1};
       s = std::max(0, ee + 1);
-      xmod = pow(1 + (beta[2] / beta[1]) * (rcens[k] - beta[0]) , - 1 / beta[2]) / pow(2, s);
+      xmod = pow(1 + (beta[2] / beta[1]) * (rcens[k] - beta[0]) , - 1 / beta[2]) / pow(2.0, s);
       c = 0.5;
       X = theVector[1] * (c * xmod);
       
@@ -1184,7 +1184,7 @@ double logLikelihoodPH_PADEs(double h, arma::vec & alpha, arma::mat & S, const R
     int pind{1};
     int ee{static_cast<int>(log2(JNorm  * scale1[k] * obs[k])) + 1};
     s = std::max(0, ee + 1);
-    xmod = scale1[k] * obs[k] / pow(2, s);
+    xmod = scale1[k] * obs[k] / pow(2.0, s);
     c = 0.5;
     X = theVector[1] * (c * xmod);
     
@@ -1219,7 +1219,7 @@ double logLikelihoodPH_PADEs(double h, arma::vec & alpha, arma::mat & S, const R
     int pind{1};
     int ee{static_cast<int>(log2(JNorm  * scale2[k] * rcens[k])) + 1};
     s = std::max(0, ee + 1);
-    xmod = scale2[k] * rcens[k] / pow(2, s);
+    xmod = scale2[k] * rcens[k] / pow(2.0, s);
     c = 0.5;
     X = theVector[1] * (c * xmod);
     
@@ -1305,7 +1305,7 @@ double logLikelihoodMweibull_PADEs(double h, arma::vec & alpha, arma::mat & S, d
     int pind{1};
     int ee{static_cast<int>(log2(JNorm  * scale1[k] * pow(obs[k], beta))) + 1};
     s = std::max(0, ee + 1);
-    xmod = scale1[k] * pow(obs[k], beta) / pow(2, s);
+    xmod = scale1[k] * pow(obs[k], beta) / pow(2.0, s);
     c = 0.5;
     X = theVector[1] * (c * xmod);
     
@@ -1340,7 +1340,7 @@ double logLikelihoodMweibull_PADEs(double h, arma::vec & alpha, arma::mat & S, d
     int pind{1};
     int ee{static_cast<int>(log2(JNorm  * scale2[k] * pow(rcens[k], beta))) + 1};
     s = std::max(0, ee + 1);
-    xmod = scale2[k] * pow(rcens[k], beta) / pow(2, s);
+    xmod = scale2[k] * pow(rcens[k], beta) / pow(2.0, s);
     c = 0.5;
     X = theVector[1] * (c * xmod);
     
@@ -1427,7 +1427,7 @@ double logLikelihoodMpareto_PADEs(double h, arma::vec & alpha, arma::mat & S, do
     int pind{1};
     int ee{static_cast<int>(log2(JNorm  * scale1[k] * log(obs[k] / beta + 1))) + 1};
     s = std::max(0, ee + 1);
-    xmod = scale1[k] * log(obs[k] / beta + 1) / pow(2, s);
+    xmod = scale1[k] * log(obs[k] / beta + 1) / pow(2.0, s);
     c = 0.5;
     X = theVector[1] * (c * xmod);
     
@@ -1462,7 +1462,7 @@ double logLikelihoodMpareto_PADEs(double h, arma::vec & alpha, arma::mat & S, do
     int pind{1};
     int ee{static_cast<int>(log2(JNorm  * scale2[k] * log(rcens[k] / beta + 1))) + 1};
     s = std::max(0, ee + 1);
-    xmod = scale2[k] * log(rcens[k] / beta + 1) / pow(2, s);
+    xmod = scale2[k] * log(rcens[k] / beta + 1) / pow(2.0, s);
     c = 0.5;
     X = theVector[1] * (c * xmod);
     
@@ -1548,7 +1548,7 @@ double logLikelihoodMlognormal_PADEs(double h, arma::vec & alpha, arma::mat & S,
     int pind{1};
     int ee{static_cast<int>(log2(JNorm  * scale1[k] * pow(log(obs[k] + 1), beta))) + 1};
     s = std::max(0, ee + 1);
-    xmod = scale1[k] * pow(log(obs[k] + 1), beta) / pow(2, s);
+    xmod = scale1[k] * pow(log(obs[k] + 1), beta) / pow(2.0, s);
     c = 0.5;
     X = theVector[1] * (c * xmod);
     
@@ -1583,7 +1583,7 @@ double logLikelihoodMlognormal_PADEs(double h, arma::vec & alpha, arma::mat & S,
     int pind{1};
     int ee{static_cast<int>(log2(JNorm  * scale2[k] * pow(log(rcens[k] + 1), beta))) + 1};
     s = std::max(0, ee + 1);
-    xmod = scale2[k] * pow(log(rcens[k] + 1), beta) / pow(2, s);
+    xmod = scale2[k] * pow(log(rcens[k] + 1), beta) / pow(2.0, s);
     c = 0.5;
     X = theVector[1] * (c * xmod);
     
@@ -1669,7 +1669,7 @@ double logLikelihoodMloglogistic_PADEs(double h, arma::vec & alpha, arma::mat & 
     int pind{1};
     int ee{static_cast<int>(log2(JNorm  * scale1[k] * log(pow(obs[k] / beta[0], beta[1]) + 1))) + 1};
     s = std::max(0, ee + 1);
-    xmod = scale1[k] * log(pow(obs[k] / beta[0], beta[1]) + 1) / pow(2, s);
+    xmod = scale1[k] * log(pow(obs[k] / beta[0], beta[1]) + 1) / pow(2.0, s);
     c = 0.5;
     X = theVector[1] * (c * xmod);
     
@@ -1704,7 +1704,7 @@ double logLikelihoodMloglogistic_PADEs(double h, arma::vec & alpha, arma::mat & 
     int pind{1};
     int ee{static_cast<int>(log2(JNorm  * scale2[k] * log(pow(rcens[k] / beta[0], beta[1]) + 1))) + 1};
     s = std::max(0, ee + 1);
-    xmod = scale2[k] * log(pow(rcens[k] / beta[0], beta[1]) + 1) / pow(2, s);
+    xmod = scale2[k] * log(pow(rcens[k] / beta[0], beta[1]) + 1) / pow(2.0, s);
     c = 0.5;
     X = theVector[1] * (c * xmod);
     
@@ -1790,7 +1790,7 @@ double logLikelihoodMgompertz_PADEs(double h, arma::vec & alpha, arma::mat & S, 
     int pind{1};
     int ee{static_cast<int>(log2(JNorm  * scale1[k] * (exp(obs[k] * beta) - 1) / beta)) + 1};
     s = std::max(0, ee + 1);
-    xmod = scale1[k] * (exp(obs[k] * beta) - 1) / beta / pow(2, s);
+    xmod = scale1[k] * (exp(obs[k] * beta) - 1) / beta / pow(2.0, s);
     c = 0.5;
     X = theVector[1] * (c * xmod);
     
@@ -1825,7 +1825,7 @@ double logLikelihoodMgompertz_PADEs(double h, arma::vec & alpha, arma::mat & S, 
     int pind{1};
     int ee{static_cast<int>(log2(JNorm  * scale2[k] * (exp(rcens[k] * beta) - 1) / beta)) + 1};
     s = std::max(0, ee + 1);
-    xmod = scale2[k] * (exp(rcens[k] * beta) - 1) / beta / pow(2, s);
+    xmod = scale2[k] * (exp(rcens[k] * beta) - 1) / beta / pow(2.0, s);
     c = 0.5;
     X = theVector[1] * (c * xmod);
     
