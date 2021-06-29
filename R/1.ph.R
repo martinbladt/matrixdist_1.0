@@ -304,17 +304,28 @@ setMethod(
            maxit = 100,
            reltol = 1e-8,
            every = 100,
-           plot = FALSE) {
+           plot = FALSE,
+           coxian_explicit = FALSE) {
     EMstep <- eval(parse(text = paste("EMstep_", methods[1], sep = "")))
     if(!all(c(y, rcen) > 0)) stop("data should be positive")
     if(!all(c(weight, rcenweight) >= 0)) stop("weights should be non-negative")
     is_iph <- methods::is(x, "iph")
     if (!is_iph) {
-      LL <- eval(parse(text = paste("logLikelihoodPH_", methods[2], sep = "")))
+      if(coxian_explicit){
+        LL <- function(h,alpha,S,obs,weight,rcens,rcweight){sum(log(dc(obs,alpha,S)))}
+      }else{
+        LL <- eval(parse(text = paste("logLikelihoodPH_", methods[2], sep = "")))}
     }else if (is_iph) {
-      par_g <- x@gfun$pars
-      inv_g <- x@gfun$inverse
-      LL <- eval(parse(text = paste("logLikelihoodM", x@gfun$name, "_", methods[2], sep = "")))
+      if(coxian_explicit){
+        par_g <- x@gfun$pars
+        inv_g <- x@gfun$inverse
+        intens <- x@gfun$intensity
+        LL <- function(h,alpha,S,beta,obs,weight,rcens,rcweight){sum(log(dc(inv_g(beta,obs),alpha,S)*intens(beta,obs)))}
+      }else{
+        par_g <- x@gfun$pars
+        inv_g <- x@gfun$inverse
+        LL <- eval(parse(text = paste("logLikelihoodM", x@gfun$name, "_", methods[2], sep = "")))
+      }
     }
     A <- data_aggregation(y, weight)
     y <- A$un_obs
@@ -467,6 +478,30 @@ data_aggregation <- function(y, w) {
     cum_weight <- c(cum_weight, sum(mat$weight[which(mat$obs == i)]))
   }
   return(list(un_obs = un_obs, weights = cum_weight))
+}
+
+dc=function(x, alpha, S){ #density of gcoxian ph
+  lambda <- -diag(S)
+  mu <- 1+rowSums(S)/lambda
+  p=length(lambda)
+  total <- numeric(length(x))
+  for(j in 1:p){
+    if(alpha[j] != 0){
+      for(k in j:p){
+        pr <- 1
+        if(k>j) pr <- lambda[j:(k-1)]*mu[j:(k-1)]
+        a=prod(pr)*lambda[k]*(1-mu[k])
+        b=0
+        for(m in j:k){
+          factor=lambda[j:k]-lambda[m]
+          factor <- prod(factor[factor != 0])
+          b=b+exp(-lambda[m]*x)/factor
+        }
+        total=total+alpha[j]*a*b
+      }
+    }
+  }
+  return(total)
 }
 
 #' logLik Method for ph Class
