@@ -302,7 +302,7 @@ double logLikelihoodPH_PADE(double h, arma::vec & alpha, arma::mat & S, const Rc
     
     aux_mat = alpha.t() * E * t;
     density = aux_mat(0,0);
-    logLh += weight[k] * log(density);
+    logLh += weight[k] * std::log(density);
   }
   //Right censored data
   for (int k{0}; k < rcens.size(); ++k) {
@@ -337,7 +337,7 @@ double logLikelihoodPH_PADE(double h, arma::vec & alpha, arma::mat & S, const Rc
     
     aux_mat = alpha.t() * E * e;
     density = aux_mat(0,0);
-    logLh += rcweight[k] * log(density);
+    logLh += rcweight[k] * std::log(density);
   }
   
   return logLh;
@@ -421,7 +421,7 @@ double logLikelihoodMweibull_PADE(double h, arma::vec & alpha, arma::mat & S, do
     
     aux_mat = alpha.t() * E * t;
     density = aux_mat(0,0);
-    logLh += weight[k] * (log(density) + log(beta) + (beta - 1) * log(obs[k]));
+    logLh += weight[k] * (std::log(density) + std::log(beta) + (beta - 1) * std::log(obs[k]));
   }
   //Right censored data
   for (int k{0}; k < rcens.size(); ++k) {
@@ -456,7 +456,7 @@ double logLikelihoodMweibull_PADE(double h, arma::vec & alpha, arma::mat & S, do
     
     aux_mat = alpha.t() * E * e;
     density = aux_mat(0,0);
-    logLh += rcweight[k] * log(density);
+    logLh += rcweight[k] * std::log(density);
   }
   
   return logLh;
@@ -513,9 +513,9 @@ double logLikelihoodMpareto_PADE(double h, arma::vec & alpha, arma::mat & S, dou
     
     // Matrix exponential
     int pind{1};
-    int ee{static_cast<int>(log2(JNorm  * log(obs[k] / beta + 1))) + 1};
+    int ee{static_cast<int>(log2(JNorm  * std::log(obs[k] / beta + 1))) + 1};
     s = std::max(0, ee + 1);
-    xmod = log(obs[k] / beta + 1) / pow(2.0, s);
+    xmod = std::log(obs[k] / beta + 1) / pow(2.0, s);
     c = 0.5;
     X = theVector[1] * (c * xmod);
     
@@ -541,16 +541,16 @@ double logLikelihoodMpareto_PADE(double h, arma::vec & alpha, arma::mat & S, dou
     
     aux_mat = alpha.t() * E * t;
     density = aux_mat(0,0);
-    logLh += weight[k] * (log(density) - log(obs[k] + beta));
+    logLh += weight[k] * (std::log(density) - std::log(obs[k] + beta));
   }
   //Right censored data
   for (int k{0}; k < rcens.size(); ++k) {
     
     // Matrix exponential
     int pind{1};
-    int ee{static_cast<int>(log2(JNorm  * log(rcens[k] / beta + 1))) + 1};
+    int ee{static_cast<int>(log2(JNorm  * std::log(rcens[k] / beta + 1))) + 1};
     s = std::max(0, ee + 1);
-    xmod = log(rcens[k] / beta + 1) / pow(2.0, s);
+    xmod = std::log(rcens[k] / beta + 1) / pow(2.0, s);
     c = 0.5;
     X = theVector[1] * (c * xmod);
     
@@ -576,7 +576,7 @@ double logLikelihoodMpareto_PADE(double h, arma::vec & alpha, arma::mat & S, dou
     
     aux_mat = alpha.t() * E * e;
     density = aux_mat(0,0);
-    logLh += rcweight[k] * log(density);
+    logLh += rcweight[k] * std::log(density);
   }
   
   return logLh;
@@ -633,9 +633,9 @@ double logLikelihoodMlognormal_PADE(double h, arma::vec & alpha, arma::mat & S, 
     
     // Matrix exponential
     int pind{1};
-    int ee{static_cast<int>(log2(JNorm  * pow(log(obs[k] + 1), beta))) + 1};
+    int ee{static_cast<int>(log2(JNorm  * pow(std::log(obs[k] + 1), beta))) + 1};
     s = std::max(0, ee + 1);
-    xmod = pow(log(obs[k] + 1), beta) / pow(2.0, s);
+    xmod = pow(std::log(obs[k] + 1), beta) / pow(2.0, s);
     c = 0.5;
     X = theVector[1] * (c * xmod);
     
@@ -661,16 +661,16 @@ double logLikelihoodMlognormal_PADE(double h, arma::vec & alpha, arma::mat & S, 
     
     aux_mat = alpha.t() * E * t;
     density = aux_mat(0,0);
-    logLh += weight[k] * (log(density) + log(beta) + (beta -1) * log(log(obs[k] + 1)) - log(obs[k] + 1));
+    logLh += weight[k] * (std::log(density) + std::log(beta) + (beta -1) * std::log(std::log(obs[k] + 1)) - std::log(obs[k] + 1));
   }
   //Right censored data
   for (int k{0}; k < rcens.size(); ++k) {
     
     // Matrix exponential
     int pind{1};
-    int ee{static_cast<int>(log2(JNorm  * pow(log(rcens[k] + 1), beta))) + 1};
+    int ee{static_cast<int>(log2(JNorm  * pow(std::log(rcens[k] + 1), beta))) + 1};
     s = std::max(0, ee + 1);
-    xmod = pow(log(rcens[k] + 1), beta) / pow(2.0, s);
+    xmod = pow(std::log(rcens[k] + 1), beta) / pow(2.0, s);
     c = 0.5;
     X = theVector[1] * (c * xmod);
     
@@ -696,7 +696,7 @@ double logLikelihoodMlognormal_PADE(double h, arma::vec & alpha, arma::mat & S, 
     
     aux_mat = alpha.t() * E * e;
     density = aux_mat(0,0);
-    logLh += rcweight[k] * log(density);
+    logLh += rcweight[k] * std::log(density);
   }
   
   return logLh;
@@ -752,9 +752,9 @@ double logLikelihoodMloglogistic_PADE(double h, arma::vec & alpha, arma::mat & S
     
     // Matrix exponential
     int pind{1};
-    int ee{static_cast<int>(log2(JNorm  * log(pow(obs[k] / beta[0], beta[1]) + 1))) + 1};
+    int ee{static_cast<int>(log2(JNorm  * std::log(pow(obs[k] / beta[0], beta[1]) + 1))) + 1};
     s = std::max(0, ee + 1);
-    xmod = log(pow(obs[k] / beta[0], beta[1]) + 1) / pow(2.0, s);
+    xmod = std::log(pow(obs[k] / beta[0], beta[1]) + 1) / pow(2.0, s);
     c = 0.5;
     X = theVector[1] * (c * xmod);
     
@@ -780,16 +780,16 @@ double logLikelihoodMloglogistic_PADE(double h, arma::vec & alpha, arma::mat & S
     
     aux_mat = alpha.t() * E * t;
     density = aux_mat(0,0);
-    logLh += weight[k] * (log(density) + log(beta[1]) - log(beta[0]) + (beta[1] - 1) * (log(obs[k]) - log(beta[0])) - log(pow(obs[k] / beta[0], beta[1]) + 1));
+    logLh += weight[k] * (std::log(density) + std::log(beta[1]) - std::log(beta[0]) + (beta[1] - 1) * (std::log(obs[k]) - std::log(beta[0])) - std::log(pow(obs[k] / beta[0], beta[1]) + 1));
   }
   //Right censored data
   for (int k{0}; k < rcens.size(); ++k) {
     
     // Matrix exponential
     int pind{1};
-    int ee{static_cast<int>(log2(JNorm  * log(pow(rcens[k] / beta[0], beta[1]) + 1))) + 1};
+    int ee{static_cast<int>(log2(JNorm  * std::log(pow(rcens[k] / beta[0], beta[1]) + 1))) + 1};
     s = std::max(0, ee + 1);
-    xmod = log(pow(rcens[k] / beta[0], beta[1]) + 1) / pow(2.0, s);
+    xmod = std::log(pow(rcens[k] / beta[0], beta[1]) + 1) / pow(2.0, s);
     c = 0.5;
     X = theVector[1] * (c * xmod);
     
@@ -815,7 +815,7 @@ double logLikelihoodMloglogistic_PADE(double h, arma::vec & alpha, arma::mat & S
     
     aux_mat = alpha.t() * E * e;
     density = aux_mat(0,0);
-    logLh += rcweight[k] * log(density);
+    logLh += rcweight[k] * std::log(density);
   }
   
   return logLh;
@@ -899,7 +899,7 @@ double logLikelihoodMgompertz_PADE(double h, arma::vec & alpha, arma::mat & S, d
     
     aux_mat = alpha.t() * E * t;
     density = aux_mat(0,0);
-    logLh += weight[k] * (log(density) + obs[k] * beta);
+    logLh += weight[k] * (std::log(density) + obs[k] * beta);
   }
   //Right censored data
   for (int k{0}; k < rcens.size(); ++k) {
@@ -934,7 +934,7 @@ double logLikelihoodMgompertz_PADE(double h, arma::vec & alpha, arma::mat & S, d
     
     aux_mat = alpha.t() * E * e;
     density = aux_mat(0,0);
-    logLh += rcweight[k] * log(density);
+    logLh += rcweight[k] * std::log(density);
   }
   
   return logLh;
@@ -1016,7 +1016,7 @@ double logLikelihoodMgev_PADE(double h, arma::vec & alpha, arma::mat & S, Rcpp::
       
       aux_mat = alpha.t() * E * t;
       density = aux_mat(0,0);
-      logLh += weight[k] * (log(density) - log(beta[1]) - (obs[k] - beta[0]) / beta[1]);
+      logLh += weight[k] * (std::log(density) - std::log(beta[1]) - (obs[k] - beta[0]) / beta[1]);
     }
     //Right censored data
     for (int k{0}; k < rcens.size(); ++k) {
@@ -1051,7 +1051,7 @@ double logLikelihoodMgev_PADE(double h, arma::vec & alpha, arma::mat & S, Rcpp::
       
       aux_mat = alpha.t() * E * e;
       density = aux_mat(0,0);
-      logLh += rcweight[k] * log(density);
+      logLh += rcweight[k] * std::log(density);
     }
   }
   else{
@@ -1088,7 +1088,7 @@ double logLikelihoodMgev_PADE(double h, arma::vec & alpha, arma::mat & S, Rcpp::
       
       aux_mat = alpha.t() * E * t;
       density = aux_mat(0,0);
-      logLh += weight[k] * (log(density) - log(beta[1]) - (1 + 1 / beta[2]) * log(1 + (beta[2] / beta[1]) * (obs[k] - beta[0])));
+      logLh += weight[k] * (std::log(density) - std::log(beta[1]) - (1 + 1 / beta[2]) * std::log(1 + (beta[2] / beta[1]) * (obs[k] - beta[0])));
     }
     //Right censored data
     for (int k{0}; k < rcens.size(); ++k) {
@@ -1123,7 +1123,7 @@ double logLikelihoodMgev_PADE(double h, arma::vec & alpha, arma::mat & S, Rcpp::
       
       aux_mat = alpha.t() * E * e;
       density = aux_mat(0,0);
-      logLh += rcweight[k] * log(density);
+      logLh += rcweight[k] * std::log(density);
     }
   }
   return logLh;
@@ -1210,7 +1210,7 @@ double logLikelihoodPH_PADEs(double h, arma::vec & alpha, arma::mat & S, const R
     
     aux_mat = alpha.t() * E * t;
     density = aux_mat(0,0);
-    logLh += weight[k] * (log(density) + log(scale1[k]));
+    logLh += weight[k] * (std::log(density) + std::log(scale1[k]));
   }
   //Right censored data
   for (int k{0}; k < rcens.size(); ++k) {
@@ -1245,7 +1245,7 @@ double logLikelihoodPH_PADEs(double h, arma::vec & alpha, arma::mat & S, const R
     
     aux_mat = alpha.t() * E * e;
     density = aux_mat(0,0);
-    logLh += rcweight[k] * log(density);
+    logLh += rcweight[k] * std::log(density);
   }
   
   return logLh;
@@ -1331,7 +1331,7 @@ double logLikelihoodMweibull_PADEs(double h, arma::vec & alpha, arma::mat & S, d
     
     aux_mat = alpha.t() * E * t;
     density = aux_mat(0,0);
-    logLh += weight[k] * (log(density) + log(scale1[k]) + log(beta) + (beta - 1) * log(obs[k]));
+    logLh += weight[k] * (std::log(density) + std::log(scale1[k]) + std::log(beta) + (beta - 1) * std::log(obs[k]));
   }
   //Right censored data
   for (int k{0}; k < rcens.size(); ++k) {
@@ -1366,7 +1366,7 @@ double logLikelihoodMweibull_PADEs(double h, arma::vec & alpha, arma::mat & S, d
     
     aux_mat = alpha.t() * E * e;
     density = aux_mat(0,0);
-    logLh += rcweight[k] * log(density);
+    logLh += rcweight[k] * std::log(density);
   }
   
   return logLh;
@@ -1425,9 +1425,9 @@ double logLikelihoodMpareto_PADEs(double h, arma::vec & alpha, arma::mat & S, do
     
     // Matrix exponential
     int pind{1};
-    int ee{static_cast<int>(log2(JNorm  * scale1[k] * log(obs[k] / beta + 1))) + 1};
+    int ee{static_cast<int>(log2(JNorm  * scale1[k] * std::log(obs[k] / beta + 1))) + 1};
     s = std::max(0, ee + 1);
-    xmod = scale1[k] * log(obs[k] / beta + 1) / pow(2.0, s);
+    xmod = scale1[k] * std::log(obs[k] / beta + 1) / pow(2.0, s);
     c = 0.5;
     X = theVector[1] * (c * xmod);
     
@@ -1453,16 +1453,16 @@ double logLikelihoodMpareto_PADEs(double h, arma::vec & alpha, arma::mat & S, do
     
     aux_mat = alpha.t() * E * t;
     density = aux_mat(0,0);
-    logLh += weight[k] * (log(density) + log(scale1[k]) - log(obs[k] + beta));
+    logLh += weight[k] * (std::log(density) + std::log(scale1[k]) - std::log(obs[k] + beta));
   }
   //Right censored data
   for (int k{0}; k < rcens.size(); ++k) {
     
     // Matrix exponential
     int pind{1};
-    int ee{static_cast<int>(log2(JNorm  * scale2[k] * log(rcens[k] / beta + 1))) + 1};
+    int ee{static_cast<int>(log2(JNorm  * scale2[k] * std::log(rcens[k] / beta + 1))) + 1};
     s = std::max(0, ee + 1);
-    xmod = scale2[k] * log(rcens[k] / beta + 1) / pow(2.0, s);
+    xmod = scale2[k] * std::log(rcens[k] / beta + 1) / pow(2.0, s);
     c = 0.5;
     X = theVector[1] * (c * xmod);
     
@@ -1488,7 +1488,7 @@ double logLikelihoodMpareto_PADEs(double h, arma::vec & alpha, arma::mat & S, do
     
     aux_mat = alpha.t() * E * e;
     density = aux_mat(0,0);
-    logLh += rcweight[k] * log(density);
+    logLh += rcweight[k] * std::log(density);
   }
   
   return logLh;
@@ -1546,9 +1546,9 @@ double logLikelihoodMlognormal_PADEs(double h, arma::vec & alpha, arma::mat & S,
     
     // Matrix exponential
     int pind{1};
-    int ee{static_cast<int>(log2(JNorm  * scale1[k] * pow(log(obs[k] + 1), beta))) + 1};
+    int ee{static_cast<int>(log2(JNorm  * scale1[k] * pow(std::log(obs[k] + 1), beta))) + 1};
     s = std::max(0, ee + 1);
-    xmod = scale1[k] * pow(log(obs[k] + 1), beta) / pow(2.0, s);
+    xmod = scale1[k] * pow(std::log(obs[k] + 1), beta) / pow(2.0, s);
     c = 0.5;
     X = theVector[1] * (c * xmod);
     
@@ -1574,16 +1574,16 @@ double logLikelihoodMlognormal_PADEs(double h, arma::vec & alpha, arma::mat & S,
     
     aux_mat = alpha.t() * E * t;
     density = aux_mat(0,0);
-    logLh += weight[k] * (log(density) + log(scale1[k]) + log(beta) + (beta -1) * log(log(obs[k] + 1)) - log(obs[k] + 1));
+    logLh += weight[k] * (std::log(density) + std::log(scale1[k]) + std::log(beta) + (beta -1) * std::log(std::log(obs[k] + 1)) - std::log(obs[k] + 1));
   }
   //Right censored data
   for (int k{0}; k < rcens.size(); ++k) {
     
     // Matrix exponential
     int pind{1};
-    int ee{static_cast<int>(log2(JNorm  * scale2[k] * pow(log(rcens[k] + 1), beta))) + 1};
+    int ee{static_cast<int>(log2(JNorm  * scale2[k] * pow(std::log(rcens[k] + 1), beta))) + 1};
     s = std::max(0, ee + 1);
-    xmod = scale2[k] * pow(log(rcens[k] + 1), beta) / pow(2.0, s);
+    xmod = scale2[k] * pow(std::log(rcens[k] + 1), beta) / pow(2.0, s);
     c = 0.5;
     X = theVector[1] * (c * xmod);
     
@@ -1609,7 +1609,7 @@ double logLikelihoodMlognormal_PADEs(double h, arma::vec & alpha, arma::mat & S,
     
     aux_mat = alpha.t() * E * e;
     density = aux_mat(0,0);
-    logLh += rcweight[k] * log(density);
+    logLh += rcweight[k] * std::log(density);
   }
   
   return logLh;
@@ -1667,9 +1667,9 @@ double logLikelihoodMloglogistic_PADEs(double h, arma::vec & alpha, arma::mat & 
     
     // Matrix exponential
     int pind{1};
-    int ee{static_cast<int>(log2(JNorm  * scale1[k] * log(pow(obs[k] / beta[0], beta[1]) + 1))) + 1};
+    int ee{static_cast<int>(log2(JNorm  * scale1[k] * std::log(pow(obs[k] / beta[0], beta[1]) + 1))) + 1};
     s = std::max(0, ee + 1);
-    xmod = scale1[k] * log(pow(obs[k] / beta[0], beta[1]) + 1) / pow(2.0, s);
+    xmod = scale1[k] * std::log(pow(obs[k] / beta[0], beta[1]) + 1) / pow(2.0, s);
     c = 0.5;
     X = theVector[1] * (c * xmod);
     
@@ -1695,16 +1695,16 @@ double logLikelihoodMloglogistic_PADEs(double h, arma::vec & alpha, arma::mat & 
     
     aux_mat = alpha.t() * E * t;
     density = aux_mat(0,0);
-    logLh += weight[k] * (log(density) + log(scale1[k]) + log(beta[1]) - log(beta[0]) + (beta[1] - 1) * (log(obs[k]) - log(beta[0])) - log(pow(obs[k] / beta[0], beta[1]) + 1));
+    logLh += weight[k] * (std::log(density) + std::log(scale1[k]) + std::log(beta[1]) - std::log(beta[0]) + (beta[1] - 1) * (std::log(obs[k]) - std::log(beta[0])) - std::log(pow(obs[k] / beta[0], beta[1]) + 1));
   }
   //Right censored data
   for (int k{0}; k < rcens.size(); ++k) {
     
     // Matrix exponential
     int pind{1};
-    int ee{static_cast<int>(log2(JNorm  * scale2[k] * log(pow(rcens[k] / beta[0], beta[1]) + 1))) + 1};
+    int ee{static_cast<int>(log2(JNorm  * scale2[k] * std::log(pow(rcens[k] / beta[0], beta[1]) + 1))) + 1};
     s = std::max(0, ee + 1);
-    xmod = scale2[k] * log(pow(rcens[k] / beta[0], beta[1]) + 1) / pow(2.0, s);
+    xmod = scale2[k] * std::log(pow(rcens[k] / beta[0], beta[1]) + 1) / pow(2.0, s);
     c = 0.5;
     X = theVector[1] * (c * xmod);
     
@@ -1730,7 +1730,7 @@ double logLikelihoodMloglogistic_PADEs(double h, arma::vec & alpha, arma::mat & 
     
     aux_mat = alpha.t() * E * e;
     density = aux_mat(0,0);
-    logLh += rcweight[k] * log(density);
+    logLh += rcweight[k] * std::log(density);
   }
   
   return logLh;
@@ -1816,7 +1816,7 @@ double logLikelihoodMgompertz_PADEs(double h, arma::vec & alpha, arma::mat & S, 
     
     aux_mat = alpha.t() * E * t;
     density = aux_mat(0,0);
-    logLh += weight[k] * (log(density) + log(scale1[k]) + obs[k] * beta);
+    logLh += weight[k] * (std::log(density) + std::log(scale1[k]) + obs[k] * beta);
   }
   //Right censored data
   for (int k{0}; k < rcens.size(); ++k) {
@@ -1851,7 +1851,7 @@ double logLikelihoodMgompertz_PADEs(double h, arma::vec & alpha, arma::mat & S, 
     
     aux_mat = alpha.t() * E * e;
     density = aux_mat(0,0);
-    logLh += rcweight[k] * log(density);
+    logLh += rcweight[k] * std::log(density);
   }
   
   return logLh;

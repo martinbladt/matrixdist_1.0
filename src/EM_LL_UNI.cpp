@@ -37,7 +37,7 @@ arma::mat matrixExpSum_arma(double x, int n, const std::vector<arma::mat> & powe
   arma::mat resultmatrix = powerVector[0];
   
   for (int i{1}; i <= n; ++i) {
-    resultmatrix = resultmatrix + powerVector[i] * exp(i * log(a * x));
+    resultmatrix = resultmatrix + powerVector[i] * exp(i * std::log(a * x));
   }
   resultmatrix = resultmatrix * exp(-a * x);
   
@@ -128,7 +128,7 @@ void EMstep_UNI(double h, arma::vec & alpha, arma::mat & S, const Rcpp::NumericV
     }
     else {
       int n{};
-      n = log(a * x) / log(2);
+      n = std::log(a * x) / std::log(2.0);
       ++n;
       
       J = matrixExpSum_arma(x / pow(2.0, n), N, theVector, a);
@@ -176,7 +176,7 @@ void EMstep_UNI(double h, arma::vec & alpha, arma::mat & S, const Rcpp::NumericV
     }
     else {
       int n{};
-      n = log(a * x) / log(2);
+      n = std::log(a * x) / std::log(2.0);
       ++n;
       
       J = matrixExpSum_arma(x / pow(2.0, n), N, theVector, a);
@@ -277,7 +277,7 @@ double logLikelihoodPH_UNI(double h, arma::vec & alpha, arma::mat & S, const Rcp
     }
     else {
       int n{};
-      n = log(a * x) / log(2);
+      n = std::log(a * x) / std::log(2.0);
       ++n;
       
       mExp = matrixExpSum_arma(x / pow(2.0, n), N, theVector, a);
@@ -286,7 +286,7 @@ double logLikelihoodPH_UNI(double h, arma::vec & alpha, arma::mat & S, const Rcp
     }
     aux_mat = alpha.t() * mExp * s;
     density = aux_mat(0,0);
-    logLh += weight[k] * log(density);
+    logLh += weight[k] * std::log(density);
   }
   //Right censored data
   for (int k{0}; k < rcens.size(); ++k) {
@@ -297,7 +297,7 @@ double logLikelihoodPH_UNI(double h, arma::vec & alpha, arma::mat & S, const Rcp
     }
     else {
       int n{};
-      n = log(a * x) / log(2);
+      n = std::log(a * x) / std::log(2.0);
       ++n;
       
       mExp = matrixExpSum_arma(x / pow(2.0, n), N, theVector, a);
@@ -306,7 +306,7 @@ double logLikelihoodPH_UNI(double h, arma::vec & alpha, arma::mat & S, const Rcp
     }
     aux_mat = alpha.t() * mExp * e;
     density = aux_mat(0,0);
-    logLh += rcweight[k] * log(density);
+    logLh += rcweight[k] * std::log(density);
   }
   
   return logLh;
@@ -358,7 +358,7 @@ double logLikelihoodMweibull_UNI(double h, arma::vec & alpha, arma::mat & S, dou
     }
     else {
       int n{};
-      n = log(a * x) / log(2);
+      n = std::log(a * x) / std::log(2.0);
       ++n;
       
       mExp = matrixExpSum_arma(x / pow(2.0, n), N, theVector, a);
@@ -367,7 +367,7 @@ double logLikelihoodMweibull_UNI(double h, arma::vec & alpha, arma::mat & S, dou
     }
     aux_mat = alpha.t() * mExp * s;
     density = aux_mat(0,0);
-    logLh += weight[k] * (log(density) + log(beta) + (beta - 1) * log(obs[k]));
+    logLh += weight[k] * (std::log(density) + std::log(beta) + (beta - 1) * std::log(obs[k]));
   }
   //Right censored data
   for (int k{0}; k < rcens.size(); ++k) {
@@ -378,7 +378,7 @@ double logLikelihoodMweibull_UNI(double h, arma::vec & alpha, arma::mat & S, dou
     }
     else {
       int n{};
-      n = log(a * x) / log(2);
+      n = std::log(a * x) / std::log(2.0);
       ++n;
       
       mExp = matrixExpSum_arma(x / pow(2.0, n), N, theVector, a);
@@ -387,7 +387,7 @@ double logLikelihoodMweibull_UNI(double h, arma::vec & alpha, arma::mat & S, dou
     }
     aux_mat = alpha.t() * mExp * e;
     density = aux_mat(0,0);
-    logLh += rcweight[k] * log(density);
+    logLh += rcweight[k] * std::log(density);
   }
   
   return logLh;
@@ -433,14 +433,14 @@ double logLikelihoodMpareto_UNI(double h, arma::vec & alpha, arma::mat & S, doub
   
   // Non censored data
   for (int k{0}; k < obs.size(); ++k) {
-    double x{log(obs[k] / beta + 1)};
+    double x{std::log(obs[k] / beta + 1)};
     
     if (x * a <= 1.0) {
       mExp = matrixExpSum_arma(x, N, theVector, a);
     }
     else {
       int n{};
-      n = log(a * x) / log(2);
+      n = std::log(a * x) / std::log(2.0);
       ++n;
       
       mExp = matrixExpSum_arma(x / pow(2.0, n), N, theVector, a);
@@ -449,18 +449,18 @@ double logLikelihoodMpareto_UNI(double h, arma::vec & alpha, arma::mat & S, doub
     }
     aux_mat = alpha.t() * mExp * s;
     density = aux_mat(0,0);
-    logLh += weight[k] * (log(density) - log(obs[k] + beta));
+    logLh += weight[k] * (std::log(density) - std::log(obs[k] + beta));
   }
   //Right censored data
   for (int k{0}; k < rcens.size(); ++k) {
-    double x{log(rcens[k] / beta + 1)};
+    double x{std::log(rcens[k] / beta + 1)};
     
     if (x * a <= 1.0) {
       mExp = matrixExpSum_arma(x, N, theVector, a);
     }
     else {
       int n{};
-      n = log(a * x) / log(2);
+      n = std::log(a * x) / std::log(2.0);
       ++n;
       
       mExp = matrixExpSum_arma(x / pow(2.0, n), N, theVector, a);
@@ -469,7 +469,7 @@ double logLikelihoodMpareto_UNI(double h, arma::vec & alpha, arma::mat & S, doub
     }
     aux_mat = alpha.t() * mExp * e;
     density = aux_mat(0,0);
-    logLh += rcweight[k] * log(density);
+    logLh += rcweight[k] * std::log(density);
   }
   
   return logLh;
@@ -515,14 +515,14 @@ double logLikelihoodMlognormal_UNI(double h, arma::vec & alpha, arma::mat & S, d
   
   // Non censored data
   for (int k{0}; k < obs.size(); ++k) {
-    double x{pow(log(obs[k] + 1), beta)};
+    double x{pow(std::log(obs[k] + 1), beta)};
     
     if (x * a <= 1.0) {
       mExp = matrixExpSum_arma(x, N, theVector, a);
     }
     else {
       int n{};
-      n = log(a * x) / log(2);
+      n = std::log(a * x) / std::log(2.0);
       ++n;
       
       mExp = matrixExpSum_arma(x / pow(2.0, n), N, theVector, a);
@@ -531,18 +531,18 @@ double logLikelihoodMlognormal_UNI(double h, arma::vec & alpha, arma::mat & S, d
     }
     aux_mat = alpha.t() * mExp * s;
     density = aux_mat(0,0);
-    logLh += weight[k] * (log(density) + log(beta) + (beta -1) * log(log(obs[k] + 1)) - log(obs[k] + 1));
+    logLh += weight[k] * (std::log(density) + std::log(beta) + (beta -1) * std::log(std::log(obs[k] + 1)) - std::log(obs[k] + 1));
   }
   //Right censored data
   for (int k{0}; k < rcens.size(); ++k) {
-    double x{pow(log(rcens[k] + 1), beta)};
+    double x{pow(std::log(rcens[k] + 1), beta)};
     
     if (x * a <= 1.0) {
       mExp = matrixExpSum_arma(x, N, theVector, a);
     }
     else {
       int n{};
-      n = log(a * x) / log(2);
+      n = std::log(a * x) / std::log(2.0);
       ++n;
       
       mExp = matrixExpSum_arma(x / pow(2.0, n), N, theVector, a);
@@ -551,7 +551,7 @@ double logLikelihoodMlognormal_UNI(double h, arma::vec & alpha, arma::mat & S, d
     }
     aux_mat = alpha.t() * mExp * e;
     density = aux_mat(0,0);
-    logLh += rcweight[k] * log(density);
+    logLh += rcweight[k] * std::log(density);
   }
   
   return logLh;
@@ -597,14 +597,14 @@ double logLikelihoodMloglogistic_UNI(double h, arma::vec & alpha, arma::mat & S,
   
   // Non censored data
   for (int k{0}; k < obs.size(); ++k) {
-    double x{log(pow(obs[k] / beta[0], beta[1]) + 1)};
+    double x{std::log(pow(obs[k] / beta[0], beta[1]) + 1)};
     
     if (x * a <= 1.0) {
       mExp = matrixExpSum_arma(x, N, theVector, a);
     }
     else {
       int n{};
-      n = log(a * x) / log(2);
+      n = std::log(a * x) / std::log(2.0);
       ++n;
       
       mExp = matrixExpSum_arma(x / pow(2.0, n), N, theVector, a);
@@ -613,18 +613,18 @@ double logLikelihoodMloglogistic_UNI(double h, arma::vec & alpha, arma::mat & S,
     }
     aux_mat = alpha.t() * mExp * s;
     density = aux_mat(0,0);
-    logLh += weight[k] * (log(density) + log(beta[1]) - log(beta[0]) + (beta[1] - 1) * (log(obs[k]) - log(beta[0])) - log(pow(obs[k] / beta[0], beta[1]) + 1));
+    logLh += weight[k] * (std::log(density) + std::log(beta[1]) - std::log(beta[0]) + (beta[1] - 1) * (std::log(obs[k]) - std::log(beta[0])) - std::log(pow(obs[k] / beta[0], beta[1]) + 1));
   }
   //Right censored data
   for (int k{0}; k < rcens.size(); ++k) {
-    double x{log(pow(rcens[k] / beta[0], beta[1]) + 1)};
+    double x{std::log(pow(rcens[k] / beta[0], beta[1]) + 1)};
     
     if (x * a <= 1.0) {
       mExp = matrixExpSum_arma(x, N, theVector, a);
     }
     else {
       int n{};
-      n = log(a * x) / log(2);
+      n = std::log(a * x) / std::log(2.0);
       ++n;
       
       mExp = matrixExpSum_arma(x / pow(2.0, n), N, theVector, a);
@@ -633,7 +633,7 @@ double logLikelihoodMloglogistic_UNI(double h, arma::vec & alpha, arma::mat & S,
     }
     aux_mat = alpha.t() * mExp * e;
     density = aux_mat(0,0);
-    logLh += rcweight[k] * log(density);
+    logLh += rcweight[k] * std::log(density);
   }
   
   return logLh;
@@ -686,7 +686,7 @@ double logLikelihoodMgompertz_UNI(double h, arma::vec & alpha, arma::mat & S, do
     }
     else {
       int n{};
-      n = log(a * x) / log(2);
+      n = std::log(a * x) / std::log(2.0);
       ++n;
       
       mExp = matrixExpSum_arma(x / pow(2.0, n), N, theVector, a);
@@ -695,7 +695,7 @@ double logLikelihoodMgompertz_UNI(double h, arma::vec & alpha, arma::mat & S, do
     }
     aux_mat = alpha.t() * mExp * s;
     density = aux_mat(0,0);
-    logLh += weight[k] * (log(density) + obs[k] * beta);
+    logLh += weight[k] * (std::log(density) + obs[k] * beta);
   }
   //Right censored data
   for (int k{0}; k < rcens.size(); ++k) {
@@ -706,7 +706,7 @@ double logLikelihoodMgompertz_UNI(double h, arma::vec & alpha, arma::mat & S, do
     }
     else {
       int n{};
-      n = log(a * x) / log(2);
+      n = std::log(a * x) / std::log(2.0);
       ++n;
       
       mExp = matrixExpSum_arma(x / pow(2.0, n), N, theVector, a);
@@ -715,7 +715,7 @@ double logLikelihoodMgompertz_UNI(double h, arma::vec & alpha, arma::mat & S, do
     }
     aux_mat = alpha.t() * mExp * e;
     density = aux_mat(0,0);
-    logLh += rcweight[k] * log(density);
+    logLh += rcweight[k] * std::log(density);
   }
   
   return logLh;
@@ -769,7 +769,7 @@ double logLikelihoodMgev_UNI(double h, arma::vec & alpha, arma::mat & S, Rcpp::N
       }
       else {
         int n{};
-        n = log(a * x) / log(2);
+        n = std::log(a * x) / std::log(2.0);
         ++n;
         
         mExp = matrixExpSum_arma(x / pow(2.0, n), N, theVector, a);
@@ -778,7 +778,7 @@ double logLikelihoodMgev_UNI(double h, arma::vec & alpha, arma::mat & S, Rcpp::N
       }
       aux_mat = alpha.t() * mExp * s;
       density = aux_mat(0,0);
-      logLh += weight[k] * (log(density) - log(beta[1]) - (obs[k] - beta[0]) / beta[1]);
+      logLh += weight[k] * (std::log(density) - std::log(beta[1]) - (obs[k] - beta[0]) / beta[1]);
     }
     //Right censored data
     for (int k{0}; k < rcens.size(); ++k) {
@@ -789,7 +789,7 @@ double logLikelihoodMgev_UNI(double h, arma::vec & alpha, arma::mat & S, Rcpp::N
       }
       else {
         int n{};
-        n = log(a * x) / log(2);
+        n = std::log(a * x) / std::log(2.0);
         ++n;
         
         mExp = matrixExpSum_arma(x / pow(2.0, n), N, theVector, a);
@@ -798,7 +798,7 @@ double logLikelihoodMgev_UNI(double h, arma::vec & alpha, arma::mat & S, Rcpp::N
       }
       aux_mat = alpha.t() * mExp * e;
       density = aux_mat(0,0);
-      logLh += rcweight[k] * log(density);
+      logLh += rcweight[k] * std::log(density);
     }
   }
   else {
@@ -811,7 +811,7 @@ double logLikelihoodMgev_UNI(double h, arma::vec & alpha, arma::mat & S, Rcpp::N
       }
       else {
         int n{};
-        n = log(a * x) / log(2);
+        n = std::log(a * x) / std::log(2.0);
         ++n;
         
         mExp = matrixExpSum_arma(x / pow(2.0, n), N, theVector, a);
@@ -820,7 +820,7 @@ double logLikelihoodMgev_UNI(double h, arma::vec & alpha, arma::mat & S, Rcpp::N
       }
       aux_mat = alpha.t() * mExp * s;
       density = aux_mat(0,0);
-      logLh += weight[k] * (log(density) - log(beta[1]) - (1 + 1 / beta[2]) * log(1 + (beta[2] / beta[1]) * (obs[k] - beta[0])));
+      logLh += weight[k] * (std::log(density) - std::log(beta[1]) - (1 + 1 / beta[2]) * std::log(1 + (beta[2] / beta[1]) * (obs[k] - beta[0])));
     }
     //Right censored data
     for (int k{0}; k < rcens.size(); ++k) {
@@ -831,7 +831,7 @@ double logLikelihoodMgev_UNI(double h, arma::vec & alpha, arma::mat & S, Rcpp::N
       }
       else {
         int n{};
-        n = log(a * x) / log(2);
+        n = std::log(a * x) / std::log(2.0);
         ++n;
         
         mExp = matrixExpSum_arma(x / pow(2.0, n), N, theVector, a);
@@ -840,7 +840,7 @@ double logLikelihoodMgev_UNI(double h, arma::vec & alpha, arma::mat & S, Rcpp::N
       }
       aux_mat = alpha.t() * mExp * e;
       density = aux_mat(0,0);
-      logLh += rcweight[k] * log(density);
+      logLh += rcweight[k] * std::log(density);
     }
   }
   return logLh;
@@ -896,7 +896,7 @@ double logLikelihoodPH_UNIs(double h, arma::vec & alpha, arma::mat & S, const Rc
     }
     else {
       int n{};
-      n = log(a * x) / log(2);
+      n = std::log(a * x) / std::log(2.0);
       ++n;
       
       mExp = matrixExpSum_arma(x / pow(2.0, n), N, theVector, a);
@@ -905,7 +905,7 @@ double logLikelihoodPH_UNIs(double h, arma::vec & alpha, arma::mat & S, const Rc
     }
     aux_mat = alpha.t() * mExp * s;
     density = aux_mat(0,0);
-    logLh += weight[k] * (log(density) + log(scale1[k]));
+    logLh += weight[k] * (std::log(density) + std::log(scale1[k]));
   }
   //Right censored data
   for (int k{0}; k < rcens.size(); ++k) {
@@ -916,7 +916,7 @@ double logLikelihoodPH_UNIs(double h, arma::vec & alpha, arma::mat & S, const Rc
     }
     else {
       int n{};
-      n = log(a * x) / log(2);
+      n = std::log(a * x) / std::log(2.0);
       ++n;
       
       mExp = matrixExpSum_arma(x / pow(2.0, n), N, theVector, a);
@@ -925,7 +925,7 @@ double logLikelihoodPH_UNIs(double h, arma::vec & alpha, arma::mat & S, const Rc
     }
     aux_mat = alpha.t() * mExp * e;
     density = aux_mat(0,0);
-    logLh += rcweight[k] * log(density);
+    logLh += rcweight[k] * std::log(density);
   }
   
   return logLh;
@@ -980,7 +980,7 @@ double logLikelihoodMweibull_UNIs(double h, arma::vec & alpha, arma::mat & S, do
     }
     else {
       int n{};
-      n = log(a * x) / log(2);
+      n = std::log(a * x) / std::log(2.0);
       ++n;
       
       mExp = matrixExpSum_arma(x / pow(2.0, n), N, theVector, a);
@@ -989,7 +989,7 @@ double logLikelihoodMweibull_UNIs(double h, arma::vec & alpha, arma::mat & S, do
     }
     aux_mat = alpha.t() * mExp * s;
     density = aux_mat(0,0);
-    logLh += weight[k] * (log(density) + log(scale1[k]) + log(beta) + (beta -1) * log(obs[k]));
+    logLh += weight[k] * (std::log(density) + std::log(scale1[k]) + std::log(beta) + (beta -1) * std::log(obs[k]));
   }
   //Right censored data
   for (int k{0}; k < rcens.size(); ++k) {
@@ -1000,7 +1000,7 @@ double logLikelihoodMweibull_UNIs(double h, arma::vec & alpha, arma::mat & S, do
     }
     else {
       int n{};
-      n = log(a * x) / log(2);
+      n = std::log(a * x) / std::log(2.0);
       ++n;
       
       mExp = matrixExpSum_arma(x / pow(2.0, n), N, theVector, a);
@@ -1009,7 +1009,7 @@ double logLikelihoodMweibull_UNIs(double h, arma::vec & alpha, arma::mat & S, do
     }
     aux_mat = alpha.t() * mExp * e;
     density = aux_mat(0,0);
-    logLh += rcweight[k] * log(density);
+    logLh += rcweight[k] * std::log(density);
   }
   
   return logLh;
@@ -1057,14 +1057,14 @@ double logLikelihoodMpareto_UNIs(double h, arma::vec & alpha, arma::mat & S, dou
   
   // Non censored data
   for (int k{0}; k < obs.size(); ++k) {
-    double x{scale1[k] * log(obs[k] / beta + 1)};
+    double x{scale1[k] * std::log(obs[k] / beta + 1)};
     
     if (x * a <= 1.0) {
       mExp = matrixExpSum_arma(x, N, theVector, a);
     }
     else {
       int n{};
-      n = log(a * x) / log(2);
+      n = std::log(a * x) / std::log(2.0);
       ++n;
       
       mExp = matrixExpSum_arma(x / pow(2.0, n), N, theVector, a);
@@ -1073,18 +1073,18 @@ double logLikelihoodMpareto_UNIs(double h, arma::vec & alpha, arma::mat & S, dou
     }
     aux_mat = alpha.t() * mExp * s;
     density = aux_mat(0,0);
-    logLh += weight[k] * (log(density) + log(scale1[k]) - log(obs[k] + beta));
+    logLh += weight[k] * (std::log(density) + std::log(scale1[k]) - std::log(obs[k] + beta));
   }
   //Right censored data
   for (int k{0}; k < rcens.size(); ++k) {
-    double x{scale2[k] * log(rcens[k] / beta + 1)};
+    double x{scale2[k] * std::log(rcens[k] / beta + 1)};
     
     if (x * a <= 1.0) {
       mExp = matrixExpSum_arma(x, N, theVector, a);
     }
     else {
       int n{};
-      n = log(a * x) / log(2);
+      n = std::log(a * x) / std::log(2.0);
       ++n;
       
       mExp = matrixExpSum_arma(x / pow(2.0, n), N, theVector, a);
@@ -1093,7 +1093,7 @@ double logLikelihoodMpareto_UNIs(double h, arma::vec & alpha, arma::mat & S, dou
     }
     aux_mat = alpha.t() * mExp * e;
     density = aux_mat(0,0);
-    logLh += rcweight[k] * log(density);
+    logLh += rcweight[k] * std::log(density);
   }
   
   return logLh;
@@ -1141,14 +1141,14 @@ double logLikelihoodMlognormal_UNIs(double h, arma::vec & alpha, arma::mat & S, 
   
   // Non censored data
   for (int k{0}; k < obs.size(); ++k) {
-    double x{scale1[k] * pow(log(obs[k] + 1), beta)};
+    double x{scale1[k] * pow(std::log(obs[k] + 1), beta)};
     
     if (x * a <= 1.0) {
       mExp = matrixExpSum_arma(x, N, theVector, a);
     }
     else {
       int n{};
-      n = log(a * x) / log(2);
+      n = std::log(a * x) / std::log(2.0);
       ++n;
       
       mExp = matrixExpSum_arma(x / pow(2.0, n), N, theVector, a);
@@ -1157,18 +1157,18 @@ double logLikelihoodMlognormal_UNIs(double h, arma::vec & alpha, arma::mat & S, 
     }
     aux_mat = alpha.t() * mExp * s;
     density = aux_mat(0,0);
-    logLh += weight[k] * (log(density) + log(scale1[k]) + log(beta) + (beta - 1) * log(log(obs[k] + 1)) - log(obs[k] + 1));
+    logLh += weight[k] * (std::log(density) + std::log(scale1[k]) + std::log(beta) + (beta - 1) * std::log(std::log(obs[k] + 1)) - std::log(obs[k] + 1));
   }
   //Right censored data
   for (int k{0}; k < rcens.size(); ++k) {
-    double x{scale2[k] * pow(log(rcens[k] + 1), beta)};
+    double x{scale2[k] * pow(std::log(rcens[k] + 1), beta)};
     
     if (x * a <= 1.0) {
       mExp = matrixExpSum_arma(x, N, theVector, a);
     }
     else {
       int n{};
-      n = log(a * x) / log(2);
+      n = std::log(a * x) / std::log(2.0);
       ++n;
       
       mExp = matrixExpSum_arma(x / pow(2.0, n), N, theVector, a);
@@ -1177,7 +1177,7 @@ double logLikelihoodMlognormal_UNIs(double h, arma::vec & alpha, arma::mat & S, 
     }
     aux_mat = alpha.t() * mExp * e;
     density = aux_mat(0,0);
-    logLh += rcweight[k] * log(density);
+    logLh += rcweight[k] * std::log(density);
   }
   
   return logLh;
@@ -1225,14 +1225,14 @@ double logLikelihoodMloglogistic_UNIs(double h, arma::vec & alpha, arma::mat & S
   
   // Non censored data
   for (int k{0}; k < obs.size(); ++k) {
-    double x{scale1[k] * log(pow(obs[k] / beta[0], beta[1]) + 1)};
+    double x{scale1[k] * std::log(pow(obs[k] / beta[0], beta[1]) + 1)};
     
     if (x * a <= 1.0) {
       mExp = matrixExpSum_arma(x, N, theVector, a);
     }
     else {
       int n{};
-      n = log(a * x) / log(2);
+      n = std::log(a * x) / std::log(2.0);
       ++n;
       
       mExp = matrixExpSum_arma(x / pow(2.0, n), N, theVector, a);
@@ -1241,18 +1241,18 @@ double logLikelihoodMloglogistic_UNIs(double h, arma::vec & alpha, arma::mat & S
     }
     aux_mat = alpha.t() * mExp * s;
     density = aux_mat(0,0);
-    logLh += weight[k] * (log(density) + log(scale1[k]) + log(beta[1]) - log(beta[0]) + (beta[1] - 1) * (log(obs[k]) - log(beta[0])) - log(pow(obs[k] / beta[0], beta[1]) + 1));
+    logLh += weight[k] * (std::log(density) + std::log(scale1[k]) + std::log(beta[1]) - std::log(beta[0]) + (beta[1] - 1) * (std::log(obs[k]) - std::log(beta[0])) - std::log(pow(obs[k] / beta[0], beta[1]) + 1));
   }
   //Right censored data
   for (int k{0}; k < rcens.size(); ++k) {
-    double x{scale2[k] * log(pow(rcens[k] / beta[0], beta[1]) + 1)};
+    double x{scale2[k] * std::log(pow(rcens[k] / beta[0], beta[1]) + 1)};
     
     if (x * a <= 1.0) {
       mExp = matrixExpSum_arma(x, N, theVector, a);
     }
     else {
       int n{};
-      n = log(a * x) / log(2);
+      n = std::log(a * x) / std::log(2.0);
       ++n;
       
       mExp = matrixExpSum_arma(x / pow(2.0, n), N, theVector, a);
@@ -1261,7 +1261,7 @@ double logLikelihoodMloglogistic_UNIs(double h, arma::vec & alpha, arma::mat & S
     }
     aux_mat = alpha.t() * mExp * e;
     density = aux_mat(0,0);
-    logLh += rcweight[k] * log(density);
+    logLh += rcweight[k] * std::log(density);
   }
   
   return logLh;
@@ -1316,7 +1316,7 @@ double logLikelihoodMgompertz_UNIs(double h, arma::vec & alpha, arma::mat & S, d
     }
     else {
       int n{};
-      n = log(a * x) / log(2);
+      n = std::log(a * x) / std::log(2.0);
       ++n;
       
       mExp = matrixExpSum_arma(x / pow(2.0, n), N, theVector, a);
@@ -1325,7 +1325,7 @@ double logLikelihoodMgompertz_UNIs(double h, arma::vec & alpha, arma::mat & S, d
     }
     aux_mat = alpha.t() * mExp * s;
     density = aux_mat(0,0);
-    logLh += weight[k] * (log(density) + log(scale1[k]) + obs[k] * beta);
+    logLh += weight[k] * (std::log(density) + std::log(scale1[k]) + obs[k] * beta);
   }
   //Right censored data
   for (int k{0}; k < rcens.size(); ++k) {
@@ -1336,7 +1336,7 @@ double logLikelihoodMgompertz_UNIs(double h, arma::vec & alpha, arma::mat & S, d
     }
     else {
       int n{};
-      n = log(a * x) / log(2);
+      n = std::log(a * x) / std::log(2.0);
       ++n;
       
       mExp = matrixExpSum_arma(x / pow(2.0, n), N, theVector, a);
@@ -1345,7 +1345,7 @@ double logLikelihoodMgompertz_UNIs(double h, arma::vec & alpha, arma::mat & S, d
     }
     aux_mat = alpha.t() * mExp * e;
     density = aux_mat(0,0);
-    logLh += rcweight[k] * log(density);
+    logLh += rcweight[k] * std::log(density);
   }
   
   return logLh;

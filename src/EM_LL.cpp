@@ -383,7 +383,7 @@ double logLikelihoodPH_RK(double h, NumericVector & alpha, NumericMatrix & S, co
   for (int k{0}; k < obs.size(); ++k) {
     a_rungekutta(avector, dt, h, S);
     density = matrix_product(avector, t)(0,0);
-    logLh += weight[k] * log(density);
+    logLh += weight[k] * std::log(density);
     if (k < obs.size() - 1) {dt = obs[k + 1] - obs[k]; }
   }
   //Right censored data
@@ -394,7 +394,7 @@ double logLikelihoodPH_RK(double h, NumericVector & alpha, NumericMatrix & S, co
   for (int k{0}; k < rcens.size(); ++k) {
     a_rungekutta(avector, dt, h, S);
     density = matrix_product(avector, e)(0,0);
-    logLh += rcweight[k] * log(density);
+    logLh += rcweight[k] * std::log(density);
     if (k < rcens.size() - 1) {dt = rcens[k + 1] - rcens[k];}
   }
   
@@ -446,7 +446,7 @@ double logLikelihoodMweibull_RK(double h, NumericVector & alpha, NumericMatrix &
   for (int k{0}; k < obs.size(); ++k) {
     a_rungekutta(avector, dt, h, S);
     density = matrix_product(avector, t)(0,0);
-    logLh += weight[k] * (log(density) + log(beta) + (beta -1) * log(obs[k]));
+    logLh += weight[k] * (std::log(density) + std::log(beta) + (beta -1) * std::log(obs[k]));
     if (k < obs.size() - 1) {dt = pow(obs[k + 1], beta) - pow(obs[k], beta);}
   }
   //Right censored data
@@ -457,7 +457,7 @@ double logLikelihoodMweibull_RK(double h, NumericVector & alpha, NumericMatrix &
   for (int k{0}; k < rcens.size(); ++k) {
     a_rungekutta(avector, dt, h, S);
     density = matrix_product(avector, e)(0,0);
-    logLh += rcweight[k] * log(density);
+    logLh += rcweight[k] * std::log(density);
     if (k < rcens.size() - 1) {dt = pow(rcens[k + 1], beta) - pow(rcens[k], beta);}
   }
   
@@ -504,24 +504,24 @@ double logLikelihoodMpareto_RK(double h, NumericVector & alpha, NumericMatrix & 
   
   // Non censored data
   if (obs.size() > 0) {
-    dt = log(obs[0] / beta + 1);
+    dt = std::log(obs[0] / beta + 1);
   }
   for (int k{0}; k < obs.size(); ++k) {
     a_rungekutta(avector, dt, h, S);
     density = matrix_product(avector, t)(0,0);
-    logLh += weight[k] * (log(density) - log(obs[k] + beta));
-    if (k < obs.size() - 1) {dt = log(obs[k + 1] / beta + 1) - log(obs[k] / beta + 1);}
+    logLh += weight[k] * (std::log(density) - std::log(obs[k] + beta));
+    if (k < obs.size() - 1) {dt = std::log(obs[k + 1] / beta + 1) - std::log(obs[k] / beta + 1);}
   }
   //Right censored data
   if (rcens.size() > 0) {
-    dt = log(rcens[0] / beta + 1);
+    dt = std::log(rcens[0] / beta + 1);
     avector = clone(m_alpha);
   }
   for (int k{0}; k < rcens.size(); ++k) {
     a_rungekutta(avector, dt, h, S);
     density = matrix_product(avector, e)(0,0);
-    logLh += rcweight[k] * log(density);
-    if (k < rcens.size() - 1) {dt = log(rcens[k + 1] / beta + 1) - log(rcens[k] / beta + 1);}
+    logLh += rcweight[k] * std::log(density);
+    if (k < rcens.size() - 1) {dt = std::log(rcens[k + 1] / beta + 1) - std::log(rcens[k] / beta + 1);}
   }
   
   return logLh;
@@ -566,24 +566,24 @@ double logLikelihoodMlognormal_RK(double h, NumericVector & alpha, NumericMatrix
 
   // Non censored data
   if (obs.size() > 0) {
-    dt = pow(log(obs[0] + 1), beta);
+    dt = pow(std::log(obs[0] + 1), beta);
   }
   for (int k{0}; k < obs.size(); ++k) {
     a_rungekutta(avector, dt, h, S);
     density = matrix_product(avector, t)(0,0);
-    logLh += weight[k] * (log(density) + log(beta) + (beta -1) * log(log(obs[k] + 1)) - log(obs[k] + 1));
-    if (k < obs.size() - 1) {dt = pow(log(obs[k + 1] + 1), beta) - pow(log(obs[k] + 1), beta);}
+    logLh += weight[k] * (std::log(density) + std::log(beta) + (beta -1) * std::log(std::log(obs[k] + 1)) - std::log(obs[k] + 1));
+    if (k < obs.size() - 1) {dt = pow(std::log(obs[k + 1] + 1), beta) - pow(std::log(obs[k] + 1), beta);}
   }
   //Right censored data
   if (rcens.size() > 0) {
-    dt = pow(log(rcens[0] + 1), beta);
+    dt = pow(std::log(rcens[0] + 1), beta);
     avector = clone(m_alpha);
   }
   for (int k{0}; k < rcens.size(); ++k) {
     a_rungekutta(avector, dt, h, S);
     density = matrix_product(avector, e)(0,0);
-    logLh += rcweight[k] * log(density);
-    if (k < rcens.size() - 1) {dt = pow(log(rcens[k + 1] + 1), beta) - pow(log(rcens[k] + 1), beta);}
+    logLh += rcweight[k] * std::log(density);
+    if (k < rcens.size() - 1) {dt = pow(std::log(rcens[k + 1] + 1), beta) - pow(std::log(rcens[k] + 1), beta);}
   }
   
   return logLh;
@@ -629,24 +629,24 @@ double logLikelihoodMloglogistic_RK(double h, NumericVector & alpha, NumericMatr
   
   // Non censored data
   if (obs.size() > 0) {
-    dt = log(pow(obs[0] / beta[0], beta[1]) + 1);
+    dt = std::log(pow(obs[0] / beta[0], beta[1]) + 1);
   }
   for (int k{0}; k < obs.size(); ++k) {
     a_rungekutta(avector, dt, h, S);
     density = matrix_product(avector, t)(0,0);
-    logLh += weight[k] * (log(density) + log(beta[1]) - log(beta[0]) + (beta[1] - 1) * (log(obs[k]) - log(beta[0])) - log(pow(obs[k] / beta[0], beta[1]) + 1));
-    if (k < obs.size() - 1) {dt = log(pow(obs[k + 1] / beta[0], beta[1]) + 1) - log(pow(obs[k] / beta[0], beta[1]) + 1);}
+    logLh += weight[k] * (std::log(density) + std::log(beta[1]) - std::log(beta[0]) + (beta[1] - 1) * (std::log(obs[k]) - std::log(beta[0])) - std::log(pow(obs[k] / beta[0], beta[1]) + 1));
+    if (k < obs.size() - 1) {dt = std::log(pow(obs[k + 1] / beta[0], beta[1]) + 1) - std::log(pow(obs[k] / beta[0], beta[1]) + 1);}
   }
   //Right censored data
   if (rcens.size() > 0) {
-    dt = log(pow(rcens[0] / beta[0], beta[1]) + 1);
+    dt = std::log(pow(rcens[0] / beta[0], beta[1]) + 1);
     avector = clone(m_alpha);
   }
   for (int k{0}; k < rcens.size(); ++k) {
     a_rungekutta(avector, dt, h, S);
     density = matrix_product(avector, e)(0,0);
-    logLh += rcweight[k] * log(density);
-    if (k < rcens.size() - 1) {dt = log(pow(rcens[k + 1] / beta[0], beta[1]) + 1) - log(pow(rcens[k] / beta[0], beta[1]) + 1);}
+    logLh += rcweight[k] * std::log(density);
+    if (k < rcens.size() - 1) {dt = std::log(pow(rcens[k + 1] / beta[0], beta[1]) + 1) - std::log(pow(rcens[k] / beta[0], beta[1]) + 1);}
   }
   
   return logLh;
@@ -696,7 +696,7 @@ double logLikelihoodMgompertz_RK(double h, NumericVector & alpha, NumericMatrix 
   for (int k{0}; k < obs.size(); ++k) {
     a_rungekutta(avector, dt, h, S);
     density = matrix_product(avector, t)(0,0);
-    logLh += weight[k] * (log(density) + obs[k] * beta);
+    logLh += weight[k] * (std::log(density) + obs[k] * beta);
     if (k < obs.size() - 1) {dt = (exp(obs[k + 1] * beta) - 1) / beta - (exp(obs[k] * beta) - 1) / beta;}
   }
   //Right censored data
@@ -707,7 +707,7 @@ double logLikelihoodMgompertz_RK(double h, NumericVector & alpha, NumericMatrix 
   for (int k{0}; k < rcens.size(); ++k) {
     a_rungekutta(avector, dt, h, S);
     density = matrix_product(avector, e)(0,0);
-    logLh += rcweight[k] * log(density);
+    logLh += rcweight[k] * std::log(density);
     if (k < rcens.size() - 1) {dt = (exp(rcens[k + 1] * beta) - 1) / beta - (exp(rcens[k] * beta) - 1) / beta;}
   }
   
@@ -762,7 +762,7 @@ double logLikelihoodMgev_RK(double h, NumericVector & alpha, NumericMatrix & S, 
     for (int k{1}; k <= N; ++k) {
       a_rungekutta(avector, dt, h, S);
       density = matrix_product(avector, t)(0,0);
-      logLh += weight[N - k] * (log(density) - log(beta[1]) - (obs[N - k] - beta[0]) / beta[1]);
+      logLh += weight[N - k] * (std::log(density) - std::log(beta[1]) - (obs[N - k] - beta[0]) / beta[1]);
       if (k < N) {dt = exp(-(obs[N - k - 1] - beta[0]) / beta[1]) - exp(-(obs[N - k] - beta[0]) / beta[1]);}
     }
     //Right censored data
@@ -774,7 +774,7 @@ double logLikelihoodMgev_RK(double h, NumericVector & alpha, NumericMatrix & S, 
     for (int k{1}; k <= N; ++k) {
       a_rungekutta(avector, dt, h, S);
       density = matrix_product(avector, e)(0,0);
-      logLh += rcweight[N - k] * log(density);
+      logLh += rcweight[N - k] * std::log(density);
       if (k < N) { dt = exp(-(rcens[N - k - 1] - beta[0]) / beta[1]) - exp(-(rcens[N - k] - beta[0]) / beta[1]);}
     }
   }
@@ -786,7 +786,7 @@ double logLikelihoodMgev_RK(double h, NumericVector & alpha, NumericMatrix & S, 
     for (int k{1}; k <= N; ++k) {
       a_rungekutta(avector, dt, h, S);
       density = matrix_product(avector, t)(0,0);
-      logLh += weight[N - k] * (log(density) - log(beta[1]) - (1 + 1 / beta[2]) * log(1 + (beta[2] / beta[1]) * (obs[N - k] - beta[0])));
+      logLh += weight[N - k] * (std::log(density) - std::log(beta[1]) - (1 + 1 / beta[2]) * std::log(1 + (beta[2] / beta[1]) * (obs[N - k] - beta[0])));
       if (k < N) {dt = pow(1 + (beta[2] / beta[1]) * (obs[N - k - 1] - beta[0]) , - 1 / beta[2]) - pow(1 + (beta[2] / beta[1]) * (obs[N - k] - beta[0]) , - 1 / beta[2]);}
       
     }
@@ -799,7 +799,7 @@ double logLikelihoodMgev_RK(double h, NumericVector & alpha, NumericMatrix & S, 
     for (int k{1}; k <= N; ++k) {
       a_rungekutta(avector, dt, h, S);
       density = matrix_product(avector, e)(0,0);
-      logLh += rcweight[N - k] * log(density);
+      logLh += rcweight[N - k] * std::log(density);
       if (k < N) {dt = pow(1 + (beta[2] / beta[1]) * (rcens[N - k - 1] - beta[0]) , - 1 / beta[2]) - pow(1 + (beta[2] / beta[1]) * (rcens[N - k] - beta[0]) , - 1 / beta[2]);}
     }
   }
@@ -864,13 +864,13 @@ double derivativeMatrixweibull(double h, const NumericVector & obs, const Numeri
   double logLh{0.0};
   for (int k{0}; k < obs.size(); ++k) {
     aux_vet[0] = pow(obs[k], beta);
-    logLh +=  weight[k] * ( (matrix_product(m_alpha, matrix_product(matrix_exponential(S * pow(obs[k], beta)), matrix_product(S, t)))(0,0) * log(obs[k]) * pow(obs[k], beta) ) / mweibullden(aux_vet, alpha, S, beta)[0] + 1 / beta + log(obs[k]) );
+    logLh +=  weight[k] * ( (matrix_product(m_alpha, matrix_product(matrix_exponential(S * pow(obs[k], beta)), matrix_product(S, t)))(0,0) * std::log(obs[k]) * pow(obs[k], beta) ) / mweibullden(aux_vet, alpha, S, beta)[0] + 1 / beta + std::log(obs[k]) );
   }
   return logLh;
   
   for (int k{0}; k < rcens.size(); ++k) {
     aux_vet[0] = pow(rcens[k], beta);
-    logLh +=  rcweight[k] * ( (matrix_product(m_alpha, matrix_product(matrix_exponential(S * pow(obs[k], beta)), matrix_product(S, e)))(0,0) * log(obs[k]) * pow(obs[k], beta) ) / mweibullcdf(aux_vet, alpha, S, beta, false)[0] );
+    logLh +=  rcweight[k] * ( (matrix_product(m_alpha, matrix_product(matrix_exponential(S * pow(obs[k], beta)), matrix_product(S, e)))(0,0) * std::log(obs[k]) * pow(obs[k], beta) ) / mweibullcdf(aux_vet, alpha, S, beta, false)[0] );
   }
   return logLh;
   
@@ -924,7 +924,7 @@ double logLikelihoodPH_RKs(double h, NumericVector & alpha, NumericMatrix & S, c
   for (int k{0}; k < obs.size(); ++k) {
     if(dt > 0) a_rungekutta(avector, dt, h, S);
     density = matrix_product(avector, t)(0,0);
-    logLh += weight[k] * (log(density) + log(scale1[k]));
+    logLh += weight[k] * (std::log(density) + std::log(scale1[k]));
     if (k < obs.size() - 1){dt = scale1[k + 1] * obs[k + 1] - scale1[k] * obs[k];}
   }
   //Right censored data
@@ -935,7 +935,7 @@ double logLikelihoodPH_RKs(double h, NumericVector & alpha, NumericMatrix & S, c
   for (int k{0}; k < rcens.size(); ++k) {
     if(dt > 0) a_rungekutta(avector, dt, h, S);
     density = matrix_product(avector, e)(0,0);
-    logLh += rcweight[k] * log(density);
+    logLh += rcweight[k] * std::log(density);
     if (k < rcens.size() - 1){dt = scale2[k + 1] * rcens[k + 1] - scale2[k] * rcens[k];}
   }
   
@@ -986,7 +986,7 @@ double logLikelihoodMweibull_RKs(double h, NumericVector & alpha, NumericMatrix 
   for (int k{0}; k < obs.size(); ++k) {
     if(dt > 0) a_rungekutta(avector, dt, h, S);
     density = matrix_product(avector, t)(0,0);
-    logLh += weight[k] * (log(density) + log(scale1[k]) + log(beta) + (beta -1) * log(obs[k]));
+    logLh += weight[k] * (std::log(density) + std::log(scale1[k]) + std::log(beta) + (beta -1) * std::log(obs[k]));
     if (k < obs.size() - 1){dt = scale1[k + 1] * pow(obs[k + 1], beta) - scale1[k] * pow(obs[k], beta);}
   }
   //Right censored data
@@ -997,7 +997,7 @@ double logLikelihoodMweibull_RKs(double h, NumericVector & alpha, NumericMatrix 
   for (int k{0}; k < rcens.size(); ++k) {
     if(dt > 0) a_rungekutta(avector, dt, h, S);
     density = matrix_product(avector, e)(0,0);
-    logLh += rcweight[k] * log(density);
+    logLh += rcweight[k] * std::log(density);
     if (k < rcens.size() - 1){dt = scale2[k + 1] * pow(rcens[k + 1], beta) - scale2[k] * pow(rcens[k], beta);}
   }
   
@@ -1043,24 +1043,24 @@ double logLikelihoodMpareto_RKs(double h, NumericVector & alpha, NumericMatrix &
   
   // Non censored data
   if (obs.size() > 0) {
-    dt = scale1[0] * log(obs[0] / beta + 1);
+    dt = scale1[0] * std::log(obs[0] / beta + 1);
   }
   for (int k{0}; k < obs.size(); ++k) {
     if(dt > 0) a_rungekutta(avector, dt, h, S);
     density = matrix_product(avector, t)(0,0);
-    logLh += weight[k] * (log(density) + log(scale1[k]) - log(obs[k] + beta));
-    if (k < obs.size() - 1){dt = scale1[k + 1] * log(obs[k + 1] / beta + 1) - scale1[k] * log(obs[k] / beta + 1);}
+    logLh += weight[k] * (std::log(density) + std::log(scale1[k]) - std::log(obs[k] + beta));
+    if (k < obs.size() - 1){dt = scale1[k + 1] * std::log(obs[k + 1] / beta + 1) - scale1[k] * std::log(obs[k] / beta + 1);}
   }
   //Right censored data
   if (rcens.size() > 0) {
-    dt = scale2[0] * log(rcens[0] / beta + 1);
+    dt = scale2[0] * std::log(rcens[0] / beta + 1);
     avector = clone(m_alpha);
   }
   for (int k{0}; k < rcens.size(); ++k) {
     if(dt > 0) a_rungekutta(avector, dt, h, S);
     density = matrix_product(avector, e)(0,0);
-    logLh += rcweight[k] * log(density);
-    if (k < rcens.size() - 1){dt = scale2[k + 1] * log(rcens[k + 1] / beta + 1) - scale2[k] * log(rcens[k] / beta + 1);}
+    logLh += rcweight[k] * std::log(density);
+    if (k < rcens.size() - 1){dt = scale2[k + 1] * std::log(rcens[k + 1] / beta + 1) - scale2[k] * std::log(rcens[k] / beta + 1);}
   }
   
   return logLh;
@@ -1105,24 +1105,24 @@ double logLikelihoodMlognormal_RKs(double h, NumericVector & alpha, NumericMatri
   
   // Non censored data
   if (obs.size() > 0) {
-    dt = scale1[0] * pow(log(obs[0] + 1), beta);
+    dt = scale1[0] * pow(std::log(obs[0] + 1), beta);
   }
   for (int k{0}; k < obs.size(); ++k) {
     if(dt > 0) a_rungekutta(avector, dt, h, S);
     density = matrix_product(avector, t)(0,0);
-    logLh += weight[k] * (log(density) + log(scale1[k]) + log(beta) + (beta -1) * log(log(obs[k] + 1)) - log(obs[k] + 1));
-    if (k < obs.size() - 1){dt = scale1[k + 1] * pow(log(obs[k + 1] + 1), beta) - scale1[k] * pow(log(obs[k] + 1), beta);}
+    logLh += weight[k] * (std::log(density) + std::log(scale1[k]) + std::log(beta) + (beta -1) * std::log(std::log(obs[k] + 1)) - std::log(obs[k] + 1));
+    if (k < obs.size() - 1){dt = scale1[k + 1] * pow(std::log(obs[k + 1] + 1), beta) - scale1[k] * pow(std::log(obs[k] + 1), beta);}
   }
   //Right censored data
   if (rcens.size() > 0) {
-    dt = scale2[0] * pow(log(rcens[0] + 1), beta);
+    dt = scale2[0] * pow(std::log(rcens[0] + 1), beta);
     avector = clone(m_alpha);
   }
   for (int k{0}; k < rcens.size(); ++k) {
     if(dt > 0) a_rungekutta(avector, dt, h, S);
     density = matrix_product(avector, e)(0,0);
-    logLh += rcweight[k] * log(density);
-    if (k < rcens.size() - 1){dt = scale2[k + 1] * pow(log(rcens[k + 1] + 1), beta) - scale2[k] * pow(log(rcens[k] + 1), beta);}
+    logLh += rcweight[k] * std::log(density);
+    if (k < rcens.size() - 1){dt = scale2[k + 1] * pow(std::log(rcens[k + 1] + 1), beta) - scale2[k] * pow(std::log(rcens[k] + 1), beta);}
   }
   
   return logLh;
@@ -1168,24 +1168,24 @@ double logLikelihoodMloglogistic_RKs(double h, NumericVector & alpha, NumericMat
   
   // Non censored data
   if (obs.size() > 0) {
-    dt = scale1[0] * log(pow(obs[0] / beta[0], beta[1]) + 1);
+    dt = scale1[0] * std::log(pow(obs[0] / beta[0], beta[1]) + 1);
   }
   for (int k{0}; k < obs.size(); ++k) {
     if(dt > 0) a_rungekutta(avector, dt, h, S);
     density = matrix_product(avector, t)(0,0);
-    logLh += weight[k] * (log(density) + log(scale1[k]) + log(beta[1]) - log(beta[0]) + (beta[1] - 1) * (log(obs[k]) - log(beta[0])) - log(pow(obs[k] / beta[0], beta[1]) + 1));
-    if (k < obs.size() - 1){dt = scale1[k + 1] * log(pow(obs[k + 1] / beta[0], beta[1]) + 1) - scale1[k] * log(pow(obs[k] / beta[0], beta[1]) + 1);}
+    logLh += weight[k] * (std::log(density) + std::log(scale1[k]) + std::log(beta[1]) - std::log(beta[0]) + (beta[1] - 1) * (std::log(obs[k]) - std::log(beta[0])) - std::log(pow(obs[k] / beta[0], beta[1]) + 1));
+    if (k < obs.size() - 1){dt = scale1[k + 1] * std::log(pow(obs[k + 1] / beta[0], beta[1]) + 1) - scale1[k] * std::log(pow(obs[k] / beta[0], beta[1]) + 1);}
   }
   //Right censored data
   if (rcens.size() > 0) {
-    dt = scale2[0] * log(pow(rcens[0] / beta[0], beta[1]) + 1);
+    dt = scale2[0] * std::log(pow(rcens[0] / beta[0], beta[1]) + 1);
     avector = clone(m_alpha);
   }
   for (int k{0}; k < rcens.size(); ++k) {
     if(dt > 0) a_rungekutta(avector, dt, h, S);
     density = matrix_product(avector, e)(0,0);
-    logLh += rcweight[k] * log(density);
-    if (k < rcens.size() - 1){dt = scale2[k + 1] * log(pow(rcens[k + 1] / beta[0], beta[1]) + 1) - scale2[k] * log(pow(rcens[k] / beta[0], beta[1]) + 1);}
+    logLh += rcweight[k] * std::log(density);
+    if (k < rcens.size() - 1){dt = scale2[k + 1] * std::log(pow(rcens[k + 1] / beta[0], beta[1]) + 1) - scale2[k] * std::log(pow(rcens[k] / beta[0], beta[1]) + 1);}
   }
   
   return logLh;
@@ -1236,7 +1236,7 @@ double logLikelihoodMgompertz_RKs(double h, NumericVector & alpha, NumericMatrix
   for (int k{0}; k < obs.size(); ++k) {
     if(dt > 0) a_rungekutta(avector, dt, h, S);
     density = matrix_product(avector, t)(0,0);
-    logLh += weight[k] * (log(density) + log(scale1[k]) + obs[k] * beta);
+    logLh += weight[k] * (std::log(density) + std::log(scale1[k]) + obs[k] * beta);
     if (k < obs.size() - 1){dt = scale1[k + 1] * (exp(obs[k + 1] * beta) - 1) / beta - scale1[k] * (exp(obs[k] * beta) - 1) / beta;}
   }
   //Right censored data
@@ -1247,7 +1247,7 @@ double logLikelihoodMgompertz_RKs(double h, NumericVector & alpha, NumericMatrix
   for (int k{0}; k < rcens.size(); ++k) {
     if(dt > 0) a_rungekutta(avector, dt, h, S);
     density = matrix_product(avector, e)(0,0);
-    logLh += rcweight[k] * log(density);
+    logLh += rcweight[k] * std::log(density);
     if (k < rcens.size() - 1){dt = scale2[k + 1] * (exp(rcens[k + 1] * beta) - 1) / beta - scale2[k] * (exp(rcens[k] * beta) - 1) / beta;}
   }
   
