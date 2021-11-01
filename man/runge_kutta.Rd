@@ -7,20 +7,20 @@
 runge_kutta(avector, bvector, cmatrix, dt, h, S, t)
 }
 \arguments{
-\item{avector}{the a vector}
+\item{avector}{The a vector.}
 
-\item{bvector}{the b vector}
+\item{bvector}{The b vector.}
 
-\item{cmatrix}{the c matrix}
+\item{cmatrix}{The c matrix.}
 
-\item{dt}{the increment}
+\item{dt}{The increment.}
 
-\item{h}{step-length}
+\item{h}{Step-length.}
 
-\item{S}{sub-intensity}
+\item{S}{Sub-intensity.}
 
-\item{t}{exit rates}
+\item{t}{Exit rates.}
 }
 \description{
-Performce the RK of forth order
+Performs the RK of forth order
 }

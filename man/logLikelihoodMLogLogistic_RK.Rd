@@ -7,22 +7,22 @@
 logLikelihoodMloglogistic_RK(h, alpha, S, beta, obs, weight, rcens, rcweight)
 }
 \arguments{
-\item{h}{step-length}
+\item{h}{Step-length.}
 
-\item{alpha}{initial probabilities}
+\item{alpha}{Initial probabilities.}
 
-\item{S}{sub-intensity}
+\item{S}{Sub-intensity.}
 
-\item{beta}{parameter of transformation}
+\item{beta}{Parameter of transformation}
 
-\item{obs}{the observations}
+\item{obs}{The observations.}
 
-\item{weight}{weight of the observations}
+\item{weight}{Weight of the observations.}
 
-\item{rcens}{censored observations}
+\item{rcens}{Censored observations.}
 
-\item{rcweight}{weight of the censored observations}
+\item{rcweight}{Weight of the censored observations.}
 }
 \description{
-Loglikelihood for a sample
+Loglikelihood for a sample.
 }

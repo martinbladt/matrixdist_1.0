@@ -4,9 +4,11 @@ using namespace Rcpp;
 
 //' Default size of the steps in the RK
 //' 
-//' Computes the default step length for a matrix \code{S} to be employed in the RK method
-//' @param S sub-intensity matrix
-//' @return The step length for \code{S}
+//' Computes the default step length for a matrix \code{S} to be employed in the
+//'  RK method.
+//'  
+//' @param S Sub-intensity matrix.
+//' @return The step length for \code{S}.
 //' 
 // [[Rcpp::export]]
 double default_step_length(const NumericMatrix & S) {
@@ -23,14 +25,15 @@ double default_step_length(const NumericMatrix & S) {
 
 //' Runge Kutta for the calculation of the a,b and c vectors in a EM step
 //' 
-//' Performce the RK of forth order
-//' @param avector the a vector
-//' @param bvector the b vector 
-//' @param cmatrix the c matrix
-//' @param dt the increment
-//' @param h step-length
-//' @param S sub-intensity
-//' @param t exit rates 
+//' Performs the RK of forth order
+//' 
+//' @param avector The a vector.
+//' @param bvector The b vector.
+//' @param cmatrix The c matrix.
+//' @param dt The increment.
+//' @param h Step-length.
+//' @param S Sub-intensity.
+//' @param t Exit rates.
 //' 
 // [[Rcpp::export]]
 void runge_kutta(NumericMatrix & avector, NumericMatrix & bvector, NumericMatrix & cmatrix, double dt, double h, const NumericMatrix & S, const NumericMatrix & t) {
@@ -166,13 +169,14 @@ void runge_kutta(NumericMatrix & avector, NumericMatrix & bvector, NumericMatrix
 //' EM step using Runge Kutta
 //' 
 //' Computes one step of the EM algorithm by using a Runge-Kutta method of 4th order
-//' @param h step-length
-//' @param alpha initial probalities
-//' @param S sub-intensity
-//' @param obs the observations
-//' @param weight the weights for the observations
-//' @param rcens censored observations
-//' @param rcweight the weights for the censored observations
+//' 
+//' @param h Step-length.
+//' @param alpha Initial probabilities.
+//' @param S Sub-intensity.
+//' @param obs The observations.
+//' @param weight The weights for the observations.
+//' @param rcens Censored observations.
+//' @param rcweight The weights for the censored observations.
 //' 
 // [[Rcpp::export]]
 void EMstep_RK(double h, NumericVector & alpha, NumericMatrix & S, const NumericVector & obs, const NumericVector & weight, const NumericVector & rcens, const NumericVector & rcweight) {
@@ -282,11 +286,10 @@ void EMstep_RK(double h, NumericVector & alpha, NumericMatrix & S, const Numeric
 
 //' Runge Kutta for the calculation of the a vectors in a EM step 
 //' 
-//' Can be used for the loglikelihood
-//' @param avector the a vector
-//' @param dt increment
-//' @param h step-length
-//' @param S sub-intensity
+//' @param avector The a vector.
+//' @param dt Increment.
+//' @param h Step-length.
+//' @param S Sub-intensity.
 //' 
 // [[Rcpp::export]]
 void a_rungekutta(NumericMatrix & avector, double dt, double h, const NumericMatrix & S) {
@@ -342,14 +345,15 @@ void a_rungekutta(NumericMatrix & avector, double dt, double h, const NumericMat
 
 //' Loglikelihood using RK
 //' 
-//' Loglikelihood for a sample 
-//' @param h step-length
-//' @param alpha initial probabilities
-//' @param S sub-intensity
-//' @param obs the observations
-//' @param weight weight of the observations
-//' @param rcens censored observations
-//' @param rcweight weight of the censored observations
+//' Loglikelihood for a sample.
+//' 
+//' @param h Step-length.
+//' @param alpha Initial probabilities.
+//' @param S Sub-intensity.
+//' @param obs The observations.
+//' @param weight Weight of the observations.
+//' @param rcens Censored observations.
+//' @param rcweight Weight of the censored observations.
 //' 
 // [[Rcpp::export]]
 double logLikelihoodPH_RK(double h, NumericVector & alpha, NumericMatrix & S, const NumericVector & obs, const NumericVector & weight, const NumericVector & rcens, const NumericVector & rcweight) {
@@ -401,15 +405,16 @@ double logLikelihoodPH_RK(double h, NumericVector & alpha, NumericMatrix & S, co
 
 //' Loglikelihood of matrix Weibull using RK
 //' 
-//' Loglikelihood for a sample 
-//' @param h step-length
-//' @param alpha initial probabilities
-//' @param S sub-intensity
-//' @param beta parameter of transformation
-//' @param obs the observations
-//' @param weight weight of the observations
-//' @param rcens censored observations
-//' @param rcweight weight of the censored observations
+//' Loglikelihood for a sample.
+//' 
+//' @param h Step-length.
+//' @param alpha Initial probabilities.
+//' @param S Sub-intensity.
+//' @param beta Parameter of transformation
+//' @param obs The observations.
+//' @param weight Weight of the observations.
+//' @param rcens Censored observations.
+//' @param rcweight Weight of the censored observations.
 //' 
 // [[Rcpp::export]]
 double logLikelihoodMweibull_RK(double h, NumericVector & alpha, NumericMatrix & S, double beta, const NumericVector & obs, const NumericVector & weight, const NumericVector & rcens, const NumericVector & rcweight) {
@@ -464,15 +469,16 @@ double logLikelihoodMweibull_RK(double h, NumericVector & alpha, NumericMatrix &
 
 //' Loglikelihood of matrix Pareto using RK
 //' 
-//' Loglikelihood for a sample 
-//' @param h step-length
-//' @param alpha initial probabilities
-//' @param S sub-intensity
-//' @param beta parameter of transformation
-//' @param obs the observations
-//' @param weight weight of the observations
-//' @param rcens censored observations
-//' @param rcweight weight of the censored observations
+//' Loglikelihood for a sample.
+//' 
+//' @param h Step-length.
+//' @param alpha Initial probabilities.
+//' @param S Sub-intensity.
+//' @param beta Parameter of transformation
+//' @param obs The observations.
+//' @param weight Weight of the observations.
+//' @param rcens Censored observations.
+//' @param rcweight Weight of the censored observations.
 //' 
 // [[Rcpp::export]]
 double logLikelihoodMpareto_RK(double h, NumericVector & alpha, NumericMatrix & S, double beta, const NumericVector & obs, const NumericVector & weight, const NumericVector & rcens, const NumericVector & rcweight) {
@@ -526,15 +532,16 @@ double logLikelihoodMpareto_RK(double h, NumericVector & alpha, NumericMatrix & 
 
 //' Loglikelihood of matrix LogNormal using RK
 //' 
-//' Loglikelihood for a sample 
-//' @param h step-length
-//' @param alpha initial probabilities
-//' @param S sub-intensity
-//' @param beta parameter of transformation
-//' @param obs the observations
-//' @param weight weight of the observations
-//' @param rcens censored observations
-//' @param rcweight weight of the censored observations
+//' Loglikelihood for a sample.
+//' 
+//' @param h Step-length.
+//' @param alpha Initial probabilities.
+//' @param S Sub-intensity.
+//' @param beta Parameter of transformation
+//' @param obs The observations.
+//' @param weight Weight of the observations.
+//' @param rcens Censored observations.
+//' @param rcweight Weight of the censored observations.
 //' 
 // [[Rcpp::export]]
 double logLikelihoodMlognormal_RK(double h, NumericVector & alpha, NumericMatrix & S, double beta, const NumericVector & obs, const NumericVector & weight, const NumericVector & rcens, const NumericVector & rcweight) {
@@ -588,15 +595,16 @@ double logLikelihoodMlognormal_RK(double h, NumericVector & alpha, NumericMatrix
 
 //' Loglikelihood of matrix Log-Logistic using RK
 //' 
-//' Loglikelihood for a sample 
-//' @param h step-length
-//' @param alpha initial probabilities
-//' @param S sub-intensity
-//' @param beta parameter of transformation
-//' @param obs the observations
-//' @param weight weight of the observations
-//' @param rcens censored observations
-//' @param rcweight weight of the censored observations
+//' Loglikelihood for a sample.
+//' 
+//' @param h Step-length.
+//' @param alpha Initial probabilities.
+//' @param S Sub-intensity.
+//' @param beta Parameter of transformation
+//' @param obs The observations.
+//' @param weight Weight of the observations.
+//' @param rcens Censored observations.
+//' @param rcweight Weight of the censored observations.
 //' 
 // [[Rcpp::export]]
 double logLikelihoodMloglogistic_RK(double h, NumericVector & alpha, NumericMatrix & S, NumericVector beta, const NumericVector & obs, const NumericVector & weight, const NumericVector & rcens, const NumericVector & rcweight) {
@@ -651,15 +659,16 @@ double logLikelihoodMloglogistic_RK(double h, NumericVector & alpha, NumericMatr
 
 //' Loglikelihood of matrix Gompertz using RK
 //' 
-//' Loglikelihood for a sample 
-//' @param h step-length
-//' @param alpha initial probabilities
-//' @param S sub-intensity
-//' @param beta parameter of transformation
-//' @param obs the observations
-//' @param weight weight of the observations
-//' @param rcens censored observations
-//' @param rcweight weight of the censored observations
+//' Loglikelihood for a sample.
+//' 
+//' @param h Step-length.
+//' @param alpha Initial probabilities.
+//' @param S Sub-intensity.
+//' @param beta Parameter of transformation
+//' @param obs The observations.
+//' @param weight Weight of the observations.
+//' @param rcens Censored observations.
+//' @param rcweight Weight of the censored observations.
 //' 
 // [[Rcpp::export]]
 double logLikelihoodMgompertz_RK(double h, NumericVector & alpha, NumericMatrix & S, double beta, const NumericVector & obs, const NumericVector & weight, const NumericVector & rcens, const NumericVector & rcweight) {
@@ -714,15 +723,16 @@ double logLikelihoodMgompertz_RK(double h, NumericVector & alpha, NumericMatrix 
 
 //' Loglikelihood of matrix GEV using RK
 //' 
-//' Loglikelihood for a sample 
-//' @param h step-length
-//' @param alpha initial probabilities
-//' @param S sub-intensity
-//' @param beta parameter of transformation
-//' @param obs the observations
-//' @param weight weight of the observations
-//' @param rcens censored observations
-//' @param rcweight weight of the censored observations
+//' Loglikelihood for a sample.
+//' 
+//' @param h Step-length.
+//' @param alpha Initial probabilities.
+//' @param S Sub-intensity.
+//' @param beta Parameter of transformation
+//' @param obs The observations.
+//' @param weight Weight of the observations.
+//' @param rcens Censored observations.
+//' @param rcweight Weight of the censored observations.
 //' 
 // [[Rcpp::export]]
 double logLikelihoodMgev_RK(double h, NumericVector & alpha, NumericMatrix & S, NumericVector beta, const NumericVector & obs, const NumericVector & weight, const NumericVector & rcens, const NumericVector & rcweight) {
@@ -806,10 +816,11 @@ double logLikelihoodMgev_RK(double h, NumericVector & alpha, NumericMatrix & S, 
 
 //' Applies the inverse of the GEV but giving back the vector in reverse order
 //' 
-//' Used for EM step
-//' @param observations the observations
-//' @param weights weithgs of the observations
-//' @param beta parameters of the GEV
+//' Used for EM step.
+//' 
+//' @param observations The observations.
+//' @param weights Weights of the observations.
+//' @param beta Parameters of the GEV.
 //' 
 // [[Rcpp::export]]
 List reversTransformData(const NumericVector & observations, const NumericVector & weights, const NumericVector & beta) {
@@ -843,16 +854,17 @@ List reversTransformData(const NumericVector & observations, const NumericVector
 
 //' Loglikelihood of PH using RK
 //' 
-//' Loglikelihood for a sample 
-//' @param h positive parameter
-//' @param alpha initial probabilities
-//' @param S sub-intensity
-//' @param obs the observations
-//' @param weight weight of the observations
-//' @param rcens censored observations
-//' @param rcweight weight of the censored observations
-//' @param scale1 scale for observations
-//' @param scale2 scale for censored observations
+//' Loglikelihood for a sample.
+//' 
+//' @param h Step-length.
+//' @param alpha Initial probabilities.
+//' @param S Sub-intensity.
+//' @param obs The observations.
+//' @param weight Weight of the observations.
+//' @param rcens Censored observations.
+//' @param rcweight Weight of the censored observations.
+//' @param scale1 Scale for observations.
+//' @param scale2 Scale for censored observations.
 //' 
 // [[Rcpp::export]]
 double logLikelihoodPH_RKs(double h, NumericVector & alpha, NumericMatrix & S, const NumericVector & obs, const NumericVector & weight, const NumericVector & rcens, const NumericVector & rcweight, const NumericVector & scale1, const NumericVector & scale2) {
@@ -904,17 +916,18 @@ double logLikelihoodPH_RKs(double h, NumericVector & alpha, NumericMatrix & S, c
 
 //' Loglikelihood of matrix-Weibull using RK
 //' 
-//' Loglikelihood for a sample 
-//' @param h positive parameter
-//' @param alpha initial probabilities
-//' @param S sub-intensity
-//' @param beta parameter of transformation
-//' @param obs the observations
-//' @param weight weight of the observations
-//' @param rcens censored observations
-//' @param rcweight weight of the censored observations
-//' @param scale1 scale for observations
-//' @param scale2 scale for censored observations
+//' Loglikelihood for a sample.
+//' 
+//' @param h Step-length.
+//' @param alpha Initial probabilities.
+//' @param S Sub-intensity.
+//' @param beta Parameter of transformation
+//' @param obs The observations.
+//' @param weight Weight of the observations.
+//' @param rcens Censored observations.
+//' @param rcweight Weight of the censored observations.
+//' @param scale1 Scale for observations.
+//' @param scale2 Scale for censored observations.
 //' 
 // [[Rcpp::export]]
 double logLikelihoodMweibull_RKs(double h, NumericVector & alpha, NumericMatrix & S, double beta, const NumericVector & obs, const NumericVector & weight, const NumericVector & rcens, const NumericVector & rcweight, const NumericVector & scale1, const NumericVector & scale2) {
@@ -966,17 +979,18 @@ double logLikelihoodMweibull_RKs(double h, NumericVector & alpha, NumericMatrix 
 
 //' Loglikelihood of matrix-Pareto using RK
 //' 
-//' Loglikelihood for a sample 
-//' @param h positive parameter
-//' @param alpha initial probabilities
-//' @param S sub-intensity
-//' @param beta parameter of transformation
-//' @param obs the observations
-//' @param weight weight of the observations
-//' @param rcens censored observations
-//' @param rcweight weight of the censored observations
-//' @param scale1 scale for observations
-//' @param scale2 scale for censored observations
+//' Loglikelihood for a sample.
+//' 
+//' @param h Step-length.
+//' @param alpha Initial probabilities.
+//' @param S Sub-intensity.
+//' @param beta Parameter of transformation
+//' @param obs The observations.
+//' @param weight Weight of the observations.
+//' @param rcens Censored observations.
+//' @param rcweight Weight of the censored observations.
+//' @param scale1 Scale for observations.
+//' @param scale2 Scale for censored observations.
 //' 
 // [[Rcpp::export]]
 double logLikelihoodMpareto_RKs(double h, NumericVector & alpha, NumericMatrix & S, double beta, const NumericVector & obs, const NumericVector & weight, const NumericVector & rcens, const NumericVector & rcweight, const NumericVector & scale1, const NumericVector & scale2) {
@@ -1028,17 +1042,18 @@ double logLikelihoodMpareto_RKs(double h, NumericVector & alpha, NumericMatrix &
 
 //' Loglikelihood of matrix-lognormal using RK
 //' 
-//' Loglikelihood for a sample 
-//' @param h positive parameter
-//' @param alpha initial probabilities
-//' @param S sub-intensity
-//' @param beta parameter of transformation
-//' @param obs the observations
-//' @param weight weight of the observations
-//' @param rcens censored observations
-//' @param rcweight weight of the censored observations
-//' @param scale1 scale for observations
-//' @param scale2 scale for censored observations
+//' Loglikelihood for a sample.
+//' 
+//' @param h Step-length.
+//' @param alpha Initial probabilities.
+//' @param S Sub-intensity.
+//' @param beta Parameter of transformation
+//' @param obs The observations.
+//' @param weight Weight of the observations.
+//' @param rcens Censored observations.
+//' @param rcweight Weight of the censored observations.
+//' @param scale1 Scale for observations.
+//' @param scale2 Scale for censored observations.
 //' 
 // [[Rcpp::export]]
 double logLikelihoodMlognormal_RKs(double h, NumericVector & alpha, NumericMatrix & S, double beta, const NumericVector & obs, const NumericVector & weight, const NumericVector & rcens, const NumericVector & rcweight, const NumericVector & scale1, const NumericVector & scale2) {
@@ -1091,17 +1106,18 @@ double logLikelihoodMlognormal_RKs(double h, NumericVector & alpha, NumericMatri
 
 //' Loglikelihood of matrix-loglogistic using RK
 //' 
-//' Loglikelihood for a sample 
-//' @param h positive parameter
-//' @param alpha initial probabilities
-//' @param S sub-intensity
-//' @param beta parameter of transformation
-//' @param obs the observations
-//' @param weight weight of the observations
-//' @param rcens censored observations
-//' @param rcweight weight of the censored observations
-//' @param scale1 scale for observations
-//' @param scale2 scale for censored observations
+//' Loglikelihood for a sample.
+//' 
+//' @param h Step-length.
+//' @param alpha Initial probabilities.
+//' @param S Sub-intensity.
+//' @param beta Parameter of transformation
+//' @param obs The observations.
+//' @param weight Weight of the observations.
+//' @param rcens Censored observations.
+//' @param rcweight Weight of the censored observations.
+//' @param scale1 Scale for observations.
+//' @param scale2 Scale for censored observations.
 //' 
 // [[Rcpp::export]]
 double logLikelihoodMloglogistic_RKs(double h, NumericVector & alpha, NumericMatrix & S, NumericVector beta, const NumericVector & obs, const NumericVector & weight, const NumericVector & rcens, const NumericVector & rcweight, const NumericVector & scale1, const NumericVector & scale2) {
@@ -1154,17 +1170,18 @@ double logLikelihoodMloglogistic_RKs(double h, NumericVector & alpha, NumericMat
 
 //' Loglikelihood of matrix-Gompertz using RK
 //' 
-//' Loglikelihood for a sample 
-//' @param h positive parameter
-//' @param alpha initial probabilities
-//' @param S sub-intensity
-//' @param beta parameter of transformation
-//' @param obs the observations
-//' @param weight weight of the observations
-//' @param rcens censored observations
-//' @param rcweight weight of the censored observations
-//' @param scale1 scale for observations
-//' @param scale2 scale for censored observations
+//' Loglikelihood for a sample.
+//' 
+//' @param h Step-length.
+//' @param alpha Initial probabilities.
+//' @param S Sub-intensity.
+//' @param beta Parameter of transformation
+//' @param obs The observations.
+//' @param weight Weight of the observations.
+//' @param rcens Censored observations.
+//' @param rcweight Weight of the censored observations.
+//' @param scale1 Scale for observations.
+//' @param scale2 Scale for censored observations.
 //' 
 // [[Rcpp::export]]
 double logLikelihoodMgompertz_RKs(double h, NumericVector & alpha, NumericMatrix & S, double beta, const NumericVector & obs, const NumericVector & weight, const NumericVector & rcens, const NumericVector & rcweight, const NumericVector & scale1, const NumericVector & scale2) {
