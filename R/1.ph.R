@@ -63,25 +63,29 @@ ph <- function(alpha = NULL, S = NULL, structure = NULL, dimension = 3) {
 #'
 #' @param e1 An object of class \linkS4class{ph}.
 #' @param e2 An object of class \linkS4class{ph}.
-#' 
+#'
 #' @return An object of class \linkS4class{ph}.
 #' @export
-#' 
+#'
 #' @examples
 #' ph1 <- ph(structure = "general", dimension = 3)
 #' ph2 <- ph(structure = "gcoxian", dimension = 5)
 #' ph_sum <- ph1 + ph2
 #' ph_sum
-setMethod("+", signature(e1 = "ph", e2 = "ph"), 
-          function (e1, e2){
-            if(methods::is(e1, "iph") | methods::is(e2, "iph")) stop("objects to be added should be ph")
-            L <- sumPH(e1@pars$alpha, e1@pars$S, e2@pars$alpha, e2@pars$S)
-            return(ph(alpha = L$alpha, S = L$S))
-          }
-          )
+setMethod(
+  "+", signature(e1 = "ph", e2 = "ph"),
+  function(e1, e2) {
+    if (methods::is(e1, "iph") | methods::is(e2, "iph")) {
+      stop("objects to be added should be ph")
+    }
+    L <- sumPH(e1@pars$alpha, e1@pars$S, e2@pars$alpha, e2@pars$S)
+    return(ph(alpha = L$alpha, S = L$S))
+  }
+)
 
-kronecker_sum <- function(A, B){
-  n <- nrow(A); m <- nrow(B)
+kronecker_sum <- function(A, B) {
+  n <- nrow(A)
+  m <- nrow(B)
   kronecker(A, diag(m)) + kronecker(diag(n), B)
 }
 
@@ -89,7 +93,7 @@ kronecker_sum <- function(A, B){
 #'
 #' @param x1 An object of class \linkS4class{ph}.
 #' @param x2 An object of class \linkS4class{ph}.
-#' 
+#'
 #' @return An object of class \linkS4class{ph}.
 #' @export
 #'
@@ -98,44 +102,46 @@ kronecker_sum <- function(A, B){
 #' ph2 <- ph(structure = "gcoxian", dimension = 5)
 #' ph_min <- minimum(ph1, ph2)
 #' ph_min
-setMethod("minimum", signature(x1 = "ph", x2 = "ph"), 
-          function (x1, x2){
-            alpha <- kronecker(x1@pars$alpha, x2@pars$alpha)
-            S <- kronecker_sum(x1@pars$S, x2@pars$S)
-            return(ph(alpha = alpha, S = S))
-          }
+setMethod(
+  "minimum", signature(x1 = "ph", x2 = "ph"),
+  function(x1, x2) {
+    alpha <- kronecker(x1@pars$alpha, x2@pars$alpha)
+    S <- kronecker_sum(x1@pars$S, x2@pars$S)
+    return(ph(alpha = alpha, S = S))
+  }
 )
 
 #' Maximum Method for phase type distributions
 #'
 #' @param x1 An object of class \linkS4class{ph}.
 #' @param x2 An object of class \linkS4class{ph}.
-#' 
+#'
 #' @return An object of class \linkS4class{ph}.
 #' @export
-#' 
-#' @examples 
+#'
+#' @examples
 #' ph1 <- ph(structure = "general", dimension = 3)
 #' ph2 <- ph(structure = "gcoxian", dimension = 5)
 #' ph_min <- minimum(ph1, ph2)
 #' ph_min
-setMethod("maximum", signature(x1 = "ph", x2 = "ph"), 
-          function (x1, x2){
-            n1 <- length(x1@pars$alpha)
-            n2 <- length(x2@pars$alpha)
-            alpha <- c(kronecker(x1@pars$alpha, x2@pars$alpha), rep(0, n1 + n2))
-            S1 <- rbind(kronecker_sum(x1@pars$S, x2@pars$S), matrix(0, n1 + n2, n1 * n2))
-            S2 <- rbind(kronecker(diag(n1), -rowSums(x2@pars$S)), x1@pars$S, matrix(0, n2, n1))
-            S3 <- rbind(kronecker(-rowSums(x1@pars$S), diag(n2)), matrix(0, n1, n2), x2@pars$S)
-            return(ph(alpha = alpha, S = cbind(S1, S2, S3)))
-          }
+setMethod(
+  "maximum", signature(x1 = "ph", x2 = "ph"),
+  function(x1, x2) {
+    n1 <- length(x1@pars$alpha)
+    n2 <- length(x2@pars$alpha)
+    alpha <- c(kronecker(x1@pars$alpha, x2@pars$alpha), rep(0, n1 + n2))
+    S1 <- rbind(kronecker_sum(x1@pars$S, x2@pars$S), matrix(0, n1 + n2, n1 * n2))
+    S2 <- rbind(kronecker(diag(n1), -rowSums(x2@pars$S)), x1@pars$S, matrix(0, n2, n1))
+    S3 <- rbind(kronecker(-rowSums(x1@pars$S), diag(n2)), matrix(0, n1, n2), x2@pars$S)
+    return(ph(alpha = alpha, S = cbind(S1, S2, S3)))
+  }
 )
 
 #' Moment Method for phase type distributions
 #'
 #' @param x An object of class \linkS4class{ph}.
 #' @param k A positive integer (moment order).
-#' 
+#'
 #' @return The raw moment of the \linkS4class{ph} (or undelying \linkS4class{ph}) object.
 #' @export
 #'
@@ -143,16 +149,25 @@ setMethod("maximum", signature(x1 = "ph", x2 = "ph"),
 #' set.seed(123)
 #' ph1 <- ph(structure = "general", dimension = 3)
 #' moment(ph1, 2)
-setMethod("moment", signature(x = "ph"), 
-          function (x, k = 1){
-            if(k <= 0) return("k should be positive")
-            if((k%%1) != 0) return("k should be an integer")
-            if(methods::is(x, "iph")) warning("moment of undelying ph structure is provided for iph objects")
-            m <- solve(-x@pars$S)
-            prod <- diag(nrow(m))
-            for(i in 1:k){prod <- prod %*% m}
-            return(factorial(k)*sum(x@pars$alpha %*% prod))
-          }
+setMethod(
+  "moment", signature(x = "ph"),
+  function(x, k = 1) {
+    if (k <= 0) {
+      return("k should be positive")
+    }
+    if ((k %% 1) != 0) {
+      return("k should be an integer")
+    }
+    if (methods::is(x, "iph")) {
+      warning("moment of undelying ph structure is provided for iph objects")
+    }
+    m <- solve(-x@pars$S)
+    prod <- diag(nrow(m))
+    for (i in 1:k) {
+      prod <- prod %*% m
+    }
+    return(factorial(k) * sum(x@pars$alpha %*% prod))
+  }
 )
 
 #' Show Method for phase type distributions
@@ -207,7 +222,7 @@ setMethod("dens", c(x = "ph"), function(x, y) {
 #'
 #' @param x An object of class \linkS4class{ph}.
 #' @param q A vector of locations.
-#' @param lower.tail Logical parameter specifying whether lower tail (cdf) or 
+#' @param lower.tail Logical parameter specifying whether lower tail (cdf) or
 #' upper tail is computed.
 #'
 #' @return A list containing the locations and corresponding CDF evaluations.
@@ -307,8 +322,12 @@ setMethod(
            every = 100,
            plot = FALSE) {
     EMstep <- eval(parse(text = paste("EMstep_", methods[1], sep = "")))
-    if(!all(c(y, rcen) > 0)) stop("data should be positive")
-    if(!all(c(weight, rcenweight) >= 0)) stop("weights should be non-negative")
+    if(!all(c(y, rcen) > 0)) {
+      stop("data should be positive")
+    }
+    if(!all(c(weight, rcenweight) >= 0)) {
+      stop("weights should be non-negative")
+    }
     is_iph <- methods::is(x, "iph")
     if (is_iph) {
       par_g <- x@gfun$pars
@@ -324,7 +343,9 @@ setMethod(
       rcenweight <- B$weights
     }
     if(plot == TRUE){
-      if(length(rcen)>0) stop("plot option only available for non-censored data")
+      if(length(rcen)>0) {
+        stop("plot option only available for non-censored data")
+      }
       h <- hist(rep(y, weight), breaks = 30, plot = FALSE)
       sq <- seq(0, 1.1 * max(y), length.out = 200)
       plot(head(h$breaks, length(h$density)), h$density, col = "#b2df8a", 
@@ -338,12 +359,12 @@ setMethod(
     if (!is_iph) {
       for (k in 1:stepsEM) {
         epsilon1 <- switch(which(methods[1] == c("RK", "UNI","PADE")),
-                           if(!is.na(rkstep)){rkstep} else{default_step_length(S_fit)},
-                           if(!is.na(uni_epsilon)){uni_epsilon} else{1e-4},
+                           if(!is.na(rkstep)) rkstep else default_step_length(S_fit),
+                           if(!is.na(uni_epsilon)) uni_epsilon else 1e-4,
                            0)
         epsilon2 <- switch(which(methods[2] == c("RK", "UNI","PADE")),
-                           if(!is.na(rkstep)){rkstep} else{default_step_length(S_fit)},
-                           if(!is.na(uni_epsilon)){uni_epsilon} else{1e-4},
+                           if(!is.na(rkstep)) rkstep else default_step_length(S_fit),
+                           if(!is.na(uni_epsilon)) uni_epsilon else 1e-4,
                            0)
         EMstep(epsilon1, alpha_fit, S_fit, y, weight, rcen, rcenweight)
         if (k %% every == 0) {
@@ -386,12 +407,12 @@ setMethod(
         }else{ t <- inv_g(par_g, y, weight); tc <- inv_g(par_g, rcen, rcenweight) 
         trans <- t$obs; trans_weight <- t$weight; trans_cens <- tc$obs; trans_rcenweight <- tc$weight}
         epsilon1 <- switch(which(methods[1] == c("RK", "UNI","PADE")),
-                           if(!is.na(rkstep)){rkstep} else{default_step_length(S_fit)},
-                           if(!is.na(uni_epsilon)){uni_epsilon} else{1e-4},
+                           if(!is.na(rkstep)) rkstep else default_step_length(S_fit),
+                           if(!is.na(uni_epsilon)) uni_epsilon else 1e-4,
                            0)
         epsilon2 <- switch(which(methods[2] == c("RK", "UNI","PADE")),
-                           if(!is.na(rkstep)){rkstep} else{default_step_length(S_fit)},
-                           if(!is.na(uni_epsilon)){uni_epsilon} else{1e-4},
+                           if(!is.na(rkstep)) rkstep else default_step_length(S_fit),
+                           if(!is.na(uni_epsilon)) uni_epsilon else 1e-4,
                            0)
         EMstep(epsilon1, alpha_fit, S_fit, trans, trans_weight, trans_cens, trans_rcenweight)
         opt <- suppressWarnings(
@@ -452,7 +473,7 @@ setMethod(
 )
 
 data_aggregation <- function(y, w) {
-  if(length(w) == 0) w <- rep(1, length(y))
+  if (length(w) == 0) w <- rep(1, length(y))
   observations <- cbind(y, w)
   mat <- data.frame(observations)
   names(mat) <- c("obs", "weight")
@@ -475,8 +496,8 @@ data_aggregation <- function(y, w) {
 #' @return An object of class logLik.
 #' @export
 #'
-#' @examples 
-#' obj <- iph(ph(structure = "general", dimension = 2), gfun = "weibull", gfun_pars = 2) 
+#' @examples
+#' obj <- iph(ph(structure = "general", dimension = 2), gfun = "weibull", gfun_pars = 2)
 #' data <- sim(obj, n = 100)
 #' fitted_ph <- fit(obj, data, stepsEM = 10)
 #' logLik(fitted_ph)
@@ -509,7 +530,7 @@ setMethod("coef", c(object = "ph"), function(object) {
 #' @return LRT between the models.
 #' @export
 #' @importFrom stats pchisq
-#' 
+#'
 setMethod("LRT", c(x = "ph", y = "ph"), function(x, y) {
   LR <- 2 * abs(logLik(y) - logLik(x))
   degrees <- abs(attributes(logLik(y))$df - attributes(logLik(x))$df)
