@@ -1278,18 +1278,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// sumArma_0
-Rcpp::NumericMatrix sumArma_0(arma::mat A1, arma::mat A2);
-RcppExport SEXP _matrixdist_sumArma_0(SEXP A1SEXP, SEXP A2SEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::mat >::type A1(A1SEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type A2(A2SEXP);
-    rcpp_result_gen = Rcpp::wrap(sumArma_0(A1, A2));
-    return rcpp_result_gen;
-END_RCPP
-}
 // matrix_inverse
 Rcpp::NumericMatrix matrix_inverse(Rcpp::NumericMatrix A);
 RcppExport SEXP _matrixdist_matrix_inverse(SEXP ASEXP) {
@@ -1323,63 +1311,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// matrix_sum
-NumericMatrix matrix_sum(const NumericMatrix& A, const NumericMatrix& B);
-RcppExport SEXP _matrixdist_matrix_sum(SEXP ASEXP, SEXP BSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const NumericMatrix& >::type A(ASEXP);
-    Rcpp::traits::input_parameter< const NumericMatrix& >::type B(BSEXP);
-    rcpp_result_gen = Rcpp::wrap(matrix_sum(A, B));
-    return rcpp_result_gen;
-END_RCPP
-}
-// LInf_norm
-double LInf_norm(const NumericMatrix& A);
-RcppExport SEXP _matrixdist_LInf_norm(SEXP ASEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const NumericMatrix& >::type A(ASEXP);
-    rcpp_result_gen = Rcpp::wrap(LInf_norm(A));
-    return rcpp_result_gen;
-END_RCPP
-}
-// matrixMax
-double matrixMax(const NumericMatrix& A);
-RcppExport SEXP _matrixdist_matrixMax(SEXP ASEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const NumericMatrix& >::type A(ASEXP);
-    rcpp_result_gen = Rcpp::wrap(matrixMax(A));
-    return rcpp_result_gen;
-END_RCPP
-}
-// matrixMaxDiagonal
-double matrixMaxDiagonal(const NumericMatrix& A);
-RcppExport SEXP _matrixdist_matrixMaxDiagonal(SEXP ASEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const NumericMatrix& >::type A(ASEXP);
-    rcpp_result_gen = Rcpp::wrap(matrixMaxDiagonal(A));
-    return rcpp_result_gen;
-END_RCPP
-}
-// matrix_power
-NumericMatrix matrix_power(int n, const NumericMatrix& A);
-RcppExport SEXP _matrixdist_matrix_power(SEXP nSEXP, SEXP ASEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< int >::type n(nSEXP);
-    Rcpp::traits::input_parameter< const NumericMatrix& >::type A(ASEXP);
-    rcpp_result_gen = Rcpp::wrap(matrix_power(n, A));
-    return rcpp_result_gen;
-END_RCPP
-}
 // clone_vector
 NumericVector clone_vector(NumericVector v);
 RcppExport SEXP _matrixdist_clone_vector(SEXP vSEXP) {
@@ -1399,30 +1330,6 @@ BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericMatrix >::type m(mSEXP);
     rcpp_result_gen = Rcpp::wrap(clone_matrix(m));
-    return rcpp_result_gen;
-END_RCPP
-}
-// matrix_VanLoan
-NumericMatrix matrix_VanLoan(const NumericMatrix& A1, const NumericMatrix& A2, const NumericMatrix& B1);
-RcppExport SEXP _matrixdist_matrix_VanLoan(SEXP A1SEXP, SEXP A2SEXP, SEXP B1SEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const NumericMatrix& >::type A1(A1SEXP);
-    Rcpp::traits::input_parameter< const NumericMatrix& >::type A2(A2SEXP);
-    Rcpp::traits::input_parameter< const NumericMatrix& >::type B1(B1SEXP);
-    rcpp_result_gen = Rcpp::wrap(matrix_VanLoan(A1, A2, B1));
-    return rcpp_result_gen;
-END_RCPP
-}
-// diagonal_vector
-NumericMatrix diagonal_vector(const NumericVector& vec);
-RcppExport SEXP _matrixdist_diagonal_vector(SEXP vecSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const NumericVector& >::type vec(vecSEXP);
-    rcpp_result_gen = Rcpp::wrap(diagonal_vector(vec));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1533,19 +1440,11 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_mgevden", (DL_FUNC) &_matrixdist_mgevden, 6},
     {"_matrixdist_mgevcdf", (DL_FUNC) &_matrixdist_mgevcdf, 7},
     {"_matrixdist_matrix_product", (DL_FUNC) &_matrixdist_matrix_product, 2},
-    {"_matrixdist_sumArma_0", (DL_FUNC) &_matrixdist_sumArma_0, 2},
     {"_matrixdist_matrix_inverse", (DL_FUNC) &_matrixdist_matrix_inverse, 1},
     {"_matrixdist_LInf_normArma_0", (DL_FUNC) &_matrixdist_LInf_normArma_0, 1},
     {"_matrixdist_matrix_exponential", (DL_FUNC) &_matrixdist_matrix_exponential, 1},
-    {"_matrixdist_matrix_sum", (DL_FUNC) &_matrixdist_matrix_sum, 2},
-    {"_matrixdist_LInf_norm", (DL_FUNC) &_matrixdist_LInf_norm, 1},
-    {"_matrixdist_matrixMax", (DL_FUNC) &_matrixdist_matrixMax, 1},
-    {"_matrixdist_matrixMaxDiagonal", (DL_FUNC) &_matrixdist_matrixMaxDiagonal, 1},
-    {"_matrixdist_matrix_power", (DL_FUNC) &_matrixdist_matrix_power, 2},
     {"_matrixdist_clone_vector", (DL_FUNC) &_matrixdist_clone_vector, 1},
     {"_matrixdist_clone_matrix", (DL_FUNC) &_matrixdist_clone_matrix, 1},
-    {"_matrixdist_matrix_VanLoan", (DL_FUNC) &_matrixdist_matrix_VanLoan, 3},
-    {"_matrixdist_diagonal_vector", (DL_FUNC) &_matrixdist_diagonal_vector, 1},
     {"_matrixdist_sumPH", (DL_FUNC) &_matrixdist_sumPH, 4},
     {"_matrixdist_random_structure", (DL_FUNC) &_matrixdist_random_structure, 3},
     {NULL, NULL, 0}

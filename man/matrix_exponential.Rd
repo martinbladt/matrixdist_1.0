@@ -7,8 +7,8 @@
 matrix_exponential(Ainput)
 }
 \arguments{
-\item{Ainput}{a matrix}
+\item{Ainput}{A matrix.}
 }
 \description{
-MATLAB's built-in algorithm - Pade approximation
+MATLAB's built-in algorithm - Pade approximation.
 }

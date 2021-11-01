@@ -3,9 +3,10 @@
 // [[ Rcpp :: depends ( RcppArmadillo )]]
 
 //' Product of two matrices
-//' @param A1 matrix
-//' @param A2 matrix
-//' @return Computes C = A1 * A2
+//' 
+//' @param A1 Matrix.
+//' @param A2 Matrix.
+//' @return Computes C = A1 * A2.
 //' 
 // [[Rcpp::export]]
 Rcpp::NumericMatrix matrix_product(Rcpp::NumericMatrix A1, Rcpp::NumericMatrix A2) {
@@ -13,20 +14,23 @@ Rcpp::NumericMatrix matrix_product(Rcpp::NumericMatrix A1, Rcpp::NumericMatrix A
   arma::mat AA2 = Rcpp::as<arma::mat>(A2);
   return(Rcpp::wrap(AA1 * AA2));
 }
-// [[Rcpp::export]]
-Rcpp::NumericMatrix sumArma_0(arma::mat A1, arma::mat A2) {
-  return(Rcpp::wrap(A1 + A2));
-}
+
 //' Inverse of a matrix
 //' 
-//' Computes the inverse
-//' @param A a matrix
+//' @param A A matrix.
 //' 
 // [[Rcpp::export]]
 Rcpp::NumericMatrix matrix_inverse(Rcpp::NumericMatrix A) {
   arma::mat AA = Rcpp::as<arma::mat>(A);
   return(Rcpp::wrap(inv(AA)));
 }
+
+//' L inf norm of a matrix
+//' 
+//' Computes the L inf norm of a matrix \code{A}, which is defined as:
+//' L_inf A =  max ( 1 <= I <= M ) sum ( 1 <= J <= N ) abs ( A(I,J) ).
+//' @param A A matrix.
+//' 
 // [[Rcpp::export]]
 double LInf_normArma_0(arma::mat A) {
   double value{0.0};
@@ -43,8 +47,9 @@ double LInf_normArma_0(arma::mat A) {
 
 //' Matrix exponential algorithm
 //' 
-//' MATLAB's built-in algorithm - Pade approximation
-//' @param Ainput a matrix
+//' MATLAB's built-in algorithm - Pade approximation.
+//' 
+//' @param Ainput A matrix.
 //' 
 // [[Rcpp::export]]
 Rcpp::NumericMatrix matrix_exponential(Rcpp::NumericMatrix Ainput) {
