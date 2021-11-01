@@ -86,7 +86,7 @@ double max_diagonal(const arma::mat & A) {
 //' @param A A matrix.
 //' 
 // [[Rcpp::export]]
-arma::mat matrix_exponential_tem(arma::mat A) {
+arma::mat matrix_exponential(arma::mat A) {
   const int q{6};
   
   arma::mat matrixAuxiliar(A.n_rows,A.n_cols);

@@ -29,7 +29,7 @@ Rcpp::NumericVector phdensity(Rcpp::NumericVector x, arma::vec alpha, arma::mat 
       density[k] = 1.0 - aux_mat(0,0);
     }
     else {
-      aux_mat = alpha.t() * matrix_exponential_tem(S * x[k]) * exit_vect;
+      aux_mat = alpha.t() * matrix_exponential(S * x[k]) * exit_vect;
       density[k] = aux_mat(0,0);
     }
   }
@@ -61,7 +61,7 @@ Rcpp::NumericVector phcdf(Rcpp::NumericVector x, arma::vec alpha, arma::mat S, b
       cdf[k] = 1.0 - aux_mat(0,0);
     }
     else {
-      aux_mat = alpha.t() * matrix_exponential_tem(S * x[k]) * e;
+      aux_mat = alpha.t() * matrix_exponential(S * x[k]) * e;
       cdf[k] = 1.0 - aux_mat(0,0);
     }
   }
@@ -100,7 +100,7 @@ Rcpp::NumericVector mweibullden(Rcpp::NumericVector x, arma::vec alpha, arma::ma
       density[k] = 1.0 - aux_mat(0,0);
     }
     else {
-      aux_mat = alpha.t() * matrix_exponential_tem(S * pow(x[k], beta)) * exit_vect;
+      aux_mat = alpha.t() * matrix_exponential(S * pow(x[k], beta)) * exit_vect;
       density[k] = aux_mat(0,0) * beta * pow(x[k], beta - 1.0);
     }
   }
@@ -133,7 +133,7 @@ Rcpp::NumericVector mweibullcdf(Rcpp::NumericVector x, arma::vec alpha, arma::ma
       cdf[k] = 1.0 - aux_mat(0,0);
     }
     else {
-      aux_mat = alpha.t() * matrix_exponential_tem(S * pow(x[k], beta)) * e;
+      aux_mat = alpha.t() * matrix_exponential(S * pow(x[k], beta)) * e;
       cdf[k] = 1.0 - aux_mat(0,0);
     }
   }
@@ -172,7 +172,7 @@ Rcpp::NumericVector mparetoden(Rcpp::NumericVector x, arma::vec alpha, arma::mat
       density[k] = 1.0 - aux_mat(0,0);
     }
     else {
-      aux_mat = alpha.t() * matrix_exponential_tem(S * log(x[k] / beta + 1.0)) * exit_vect;
+      aux_mat = alpha.t() * matrix_exponential(S * log(x[k] / beta + 1.0)) * exit_vect;
       density[k] = aux_mat(0,0) / (x[k] + beta);
     }
   }
@@ -205,7 +205,7 @@ Rcpp::NumericVector mparetocdf(Rcpp::NumericVector x, arma::vec alpha, arma::mat
       cdf[k] = 1.0 - aux_mat(0,0);
     }
     else {
-      aux_mat = alpha.t() * matrix_exponential_tem(S * log(x[k] / beta + 1.0)) * e;
+      aux_mat = alpha.t() * matrix_exponential(S * log(x[k] / beta + 1.0)) * e;
       cdf[k] = 1.0 - aux_mat(0,0);
     }
   }
@@ -244,7 +244,7 @@ Rcpp::NumericVector mlognormalden(Rcpp::NumericVector x, arma::vec alpha, arma::
       density[k] = 1.0 - aux_mat(0,0);
     }
     else {
-      aux_mat = alpha.t() * matrix_exponential_tem(S * pow(log(x[k] + 1.0), beta)) * exit_vect;
+      aux_mat = alpha.t() * matrix_exponential(S * pow(log(x[k] + 1.0), beta)) * exit_vect;
       density[k] = aux_mat(0,0) * beta * pow(log(x[k] + 1), beta - 1)/(x[k] + 1);
     }
   }
@@ -277,7 +277,7 @@ Rcpp::NumericVector mlognormalcdf(Rcpp::NumericVector x, arma::vec alpha, arma::
       cdf[k] = 1.0 - aux_mat(0,0);
     }
     else {
-      aux_mat = alpha.t() * matrix_exponential_tem(S * pow(log(x[k] + 1.0), beta)) * e;
+      aux_mat = alpha.t() * matrix_exponential(S * pow(log(x[k] + 1.0), beta)) * e;
       cdf[k] = 1.0 - aux_mat(0,0);
     }
   }
@@ -316,7 +316,7 @@ Rcpp::NumericVector mloglogisticden(Rcpp::NumericVector x, arma::vec alpha, arma
       density[k] = 1.0 - aux_mat(0,0);
     }
     else {
-      aux_mat = alpha.t() * matrix_exponential_tem(S * log(pow(x[k] / beta[0], beta[1]) + 1.0)) * exit_vect;
+      aux_mat = alpha.t() * matrix_exponential(S * log(pow(x[k] / beta[0], beta[1]) + 1.0)) * exit_vect;
       density[k] = aux_mat(0,0) * (pow(x[k] / beta[0], beta[1] - 1) * beta[1] / beta[0]) / (pow(x[k] / beta[0], beta[1]) + 1);
     }
   }
@@ -349,7 +349,7 @@ Rcpp::NumericVector mloglogisticcdf(Rcpp::NumericVector x, arma::vec alpha, arma
       cdf[k] = 1.0 - aux_mat(0,0);
     }
     else {
-      aux_mat = alpha.t() * matrix_exponential_tem(S * log(pow(x[k] / beta[0], beta[1]) + 1.0)) * e;
+      aux_mat = alpha.t() * matrix_exponential(S * log(pow(x[k] / beta[0], beta[1]) + 1.0)) * e;
       cdf[k] = 1.0 - aux_mat(0,0);
     }
   }
@@ -388,7 +388,7 @@ Rcpp::NumericVector mgompertzden(Rcpp::NumericVector x, arma::vec alpha, arma::m
       density[k] = 1.0 - aux_mat(0,0);
     }
     else {
-      aux_mat = alpha.t() * matrix_exponential_tem(S * ((exp(x[k] * beta) - 1.0) / beta)) * exit_vect;
+      aux_mat = alpha.t() * matrix_exponential(S * ((exp(x[k] * beta) - 1.0) / beta)) * exit_vect;
       density[k] = aux_mat(0,0) * exp(x[k] * beta);
     }
   }
@@ -421,7 +421,7 @@ Rcpp::NumericVector mgompertzcdf(Rcpp::NumericVector x, arma::vec alpha, arma::m
       cdf[k] = 1.0 - aux_mat(0,0);
     }
     else {
-      aux_mat = alpha.t() * matrix_exponential_tem(S * ((exp(x[k] * beta) - 1.0) / beta)) * e;
+      aux_mat = alpha.t() * matrix_exponential(S * ((exp(x[k] * beta) - 1.0) / beta)) * e;
       cdf[k] = 1.0 - aux_mat(0,0);
     }
   }
@@ -461,11 +461,11 @@ Rcpp::NumericVector mgevden(Rcpp::NumericVector x, arma::vec alpha, arma::mat S,
   
   for (int k = 0; k < x.size(); ++k){
     if (xi == 0) {
-      aux_mat = alpha.t() * matrix_exponential_tem(S * exp(-(x[k] - mu) / sigma)) * exit_vect;
+      aux_mat = alpha.t() * matrix_exponential(S * exp(-(x[k] - mu) / sigma)) * exit_vect;
       density[k] = aux_mat(0,0) * exp(-(x[k] - mu) / sigma) / sigma;
     }
     else {
-      aux_mat = alpha.t() * matrix_exponential_tem(S * pow(1.0 + (xi / sigma) * (x[k] - mu), -1.0 / xi)) * exit_vect;
+      aux_mat = alpha.t() * matrix_exponential(S * pow(1.0 + (xi / sigma) * (x[k] - mu), -1.0 / xi)) * exit_vect;
       density[k] = aux_mat(0,0) * pow(1 + (xi / sigma) * (x[k] - mu), -(1 + xi) / xi) / sigma;
     }
   }
@@ -499,11 +499,11 @@ Rcpp::NumericVector mgevcdf(Rcpp::NumericVector x, arma::vec alpha, arma::mat S,
   
   for (int k = 0; k < x.size(); ++k){
     if (xi == 0) {
-      aux_mat = alpha.t() * matrix_exponential_tem(S * exp(-(x[k] - mu) / sigma)) * e;
+      aux_mat = alpha.t() * matrix_exponential(S * exp(-(x[k] - mu) / sigma)) * e;
       cdf[k] = 1.0 - aux_mat(0,0);
     }
     else {
-      aux_mat = alpha.t() * matrix_exponential_tem(S * pow(1.0 + (xi / sigma) * (x[k] - mu), -1.0 / xi)) * e;
+      aux_mat = alpha.t() * matrix_exponential(S * pow(1.0 + (xi / sigma) * (x[k] - mu), -1.0 / xi)) * e;
       cdf[k] = 1.0 - aux_mat(0,0);
     }
   }

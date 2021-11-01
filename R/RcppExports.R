@@ -931,8 +931,8 @@ max_diagonal <- function(A) {
 #' 
 #' @param A A matrix.
 #' 
-matrix_exponential_tem <- function(A) {
-    .Call(`_matrixdist_matrix_exponential_tem`, A)
+matrix_exponential <- function(A) {
+    .Call(`_matrixdist_matrix_exponential`, A)
 }
 
 #' Phase-type density
@@ -1155,28 +1155,6 @@ matrix_product <- function(A1, A2) {
 #' 
 matrix_inverse <- function(A) {
     .Call(`_matrixdist_matrix_inverse`, A)
-}
-
-#' L inf norm of a matrix
-#' 
-#' Computes the L inf norm of a matrix \code{A}, which is defined as:
-#' L_inf A =  max ( 1 <= I <= M ) sum ( 1 <= J <= N ) abs ( A(I,J) ).
-#' 
-#' @param A A matrix.
-#' @return The L inf norm.
-#' 
-inf_norm_0 <- function(A) {
-    .Call(`_matrixdist_inf_norm_0`, A)
-}
-
-#' Matrix exponential algorithm
-#' 
-#' MATLAB's built-in algorithm - Pade approximation.
-#' 
-#' @param Ainput A matrix.
-#' 
-matrix_exponential <- function(Ainput) {
-    .Call(`_matrixdist_matrix_exponential`, Ainput)
 }
 
 #' Clone a vector 

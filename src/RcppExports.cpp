@@ -1031,14 +1031,14 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// matrix_exponential_tem
-arma::mat matrix_exponential_tem(arma::mat A);
-RcppExport SEXP _matrixdist_matrix_exponential_tem(SEXP ASEXP) {
+// matrix_exponential
+arma::mat matrix_exponential(arma::mat A);
+RcppExport SEXP _matrixdist_matrix_exponential(SEXP ASEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< arma::mat >::type A(ASEXP);
-    rcpp_result_gen = Rcpp::wrap(matrix_exponential_tem(A));
+    rcpp_result_gen = Rcpp::wrap(matrix_exponential(A));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1266,28 +1266,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// inf_norm_0
-double inf_norm_0(arma::mat A);
-RcppExport SEXP _matrixdist_inf_norm_0(SEXP ASEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::mat >::type A(ASEXP);
-    rcpp_result_gen = Rcpp::wrap(inf_norm_0(A));
-    return rcpp_result_gen;
-END_RCPP
-}
-// matrix_exponential
-Rcpp::NumericMatrix matrix_exponential(Rcpp::NumericMatrix Ainput);
-RcppExport SEXP _matrixdist_matrix_exponential(SEXP AinputSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type Ainput(AinputSEXP);
-    rcpp_result_gen = Rcpp::wrap(matrix_exponential(Ainput));
-    return rcpp_result_gen;
-END_RCPP
-}
 // clone_vector
 NumericVector clone_vector(NumericVector v);
 RcppExport SEXP _matrixdist_clone_vector(SEXP vSEXP) {
@@ -1311,15 +1289,15 @@ BEGIN_RCPP
 END_RCPP
 }
 // sumPH
-List sumPH(NumericVector alpha1, NumericMatrix S1, NumericVector alpha2, NumericMatrix S2);
+Rcpp::List sumPH(arma::rowvec alpha1, arma::mat S1, arma::rowvec alpha2, arma::mat S2);
 RcppExport SEXP _matrixdist_sumPH(SEXP alpha1SEXP, SEXP S1SEXP, SEXP alpha2SEXP, SEXP S2SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type alpha1(alpha1SEXP);
-    Rcpp::traits::input_parameter< NumericMatrix >::type S1(S1SEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type alpha2(alpha2SEXP);
-    Rcpp::traits::input_parameter< NumericMatrix >::type S2(S2SEXP);
+    Rcpp::traits::input_parameter< arma::rowvec >::type alpha1(alpha1SEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type S1(S1SEXP);
+    Rcpp::traits::input_parameter< arma::rowvec >::type alpha2(alpha2SEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type S2(S2SEXP);
     rcpp_result_gen = Rcpp::wrap(sumPH(alpha1, S1, alpha2, S2));
     return rcpp_result_gen;
 END_RCPP
@@ -1400,7 +1378,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_inf_norm", (DL_FUNC) &_matrixdist_inf_norm, 1},
     {"_matrixdist_matrix_VanLoan", (DL_FUNC) &_matrixdist_matrix_VanLoan, 3},
     {"_matrixdist_max_diagonal", (DL_FUNC) &_matrixdist_max_diagonal, 1},
-    {"_matrixdist_matrix_exponential_tem", (DL_FUNC) &_matrixdist_matrix_exponential_tem, 1},
+    {"_matrixdist_matrix_exponential", (DL_FUNC) &_matrixdist_matrix_exponential, 1},
     {"_matrixdist_phdensity", (DL_FUNC) &_matrixdist_phdensity, 3},
     {"_matrixdist_phcdf", (DL_FUNC) &_matrixdist_phcdf, 4},
     {"_matrixdist_mweibullden", (DL_FUNC) &_matrixdist_mweibullden, 4},
@@ -1417,8 +1395,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_mgevcdf", (DL_FUNC) &_matrixdist_mgevcdf, 5},
     {"_matrixdist_matrix_product", (DL_FUNC) &_matrixdist_matrix_product, 2},
     {"_matrixdist_matrix_inverse", (DL_FUNC) &_matrixdist_matrix_inverse, 1},
-    {"_matrixdist_inf_norm_0", (DL_FUNC) &_matrixdist_inf_norm_0, 1},
-    {"_matrixdist_matrix_exponential", (DL_FUNC) &_matrixdist_matrix_exponential, 1},
     {"_matrixdist_clone_vector", (DL_FUNC) &_matrixdist_clone_vector, 1},
     {"_matrixdist_clone_matrix", (DL_FUNC) &_matrixdist_clone_matrix, 1},
     {"_matrixdist_sumPH", (DL_FUNC) &_matrixdist_sumPH, 4},
