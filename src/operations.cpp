@@ -1,14 +1,13 @@
 #include <Rcpp.h>
 using namespace Rcpp;
-#include "matrix_functions.h"
 #include "exp_arm.h"
 
 //' Computes the initial distribution and sub-intensity of the sum of PH
 //' 
-//' @param alpha1 initial distribution
-//' @param S1 sub-intensity
-//' @param alpha2 initial distribution
-//' @param S2 sub-intensity
+//' @param alpha1 Initial distribution.
+//' @param S1 Sub-intensity.
+//' @param alpha2 Initial distribution.
+//' @param S2 Sub-intensity.
 //' 
 // [[Rcpp::export]]
 List sumPH(NumericVector alpha1, NumericMatrix S1, NumericVector alpha2, NumericMatrix S2) {

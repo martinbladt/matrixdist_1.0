@@ -794,74 +794,85 @@ logLikelihoodMgompertz_UNIs <- function(h, alpha, S, beta, obs, weight, rcens, r
 
 #' Embedded Markov chain of a sub-intensity matrix
 #' 
-#' Returns the transition probabilities of the embedded Markov chain determined the sub-intensity matrix 
-#' @param S A sub-intensity matrix
-#' @return The embedded Markov chain
+#' Returns the transition probabilities of the embedded Markov chain determined
+#'  the sub-intensity matrix 
+#' @param S A sub-intensity matrix.
+#' @return The embedded Markov chain.
 #' 
-embeddedMC <- function(S) {
-    .Call(`_matrixdist_embeddedMC`, S)
+embedded_mc <- function(S) {
+    .Call(`_matrixdist_embedded_mc`, S)
 }
 
 #' Cumulate matrix
-#' 
-#' Creates a new matrix with entries the cumulated rows of \code{A}
-#' @param A A matrix
-#' @return The cumulated matrix
-cumulateMatrix <- function(A) {
-    .Call(`_matrixdist_cumulateMatrix`, A)
+#'
+#' Creates a new matrix with entries the cumulated rows of \code{A}.
+#' @param A A matrix.
+#' @return The cumulated matrix.
+#'
+cumulate_matrix <- function(A) {
+    .Call(`_matrixdist_cumulate_matrix`, A)
 }
 
 #' Cumulate vector
-#' 
-#' Creates a new vector with entries the cumulated entries of \code{A}
-#' @param A A vector
-#' @return The cumulated vector
-cumulateVector <- function(A) {
-    .Call(`_matrixdist_cumulateVector`, A)
+#'
+#' Creates a new vector with entries the cumulated entries of \code{A}.
+#' @param A A vector.
+#' @return The cumulated vector.
+#'
+cumulate_vector <- function(A) {
+    .Call(`_matrixdist_cumulate_vector`, A)
 }
 
 #' Initial state of Markov jump process
-#' 
-#' Given the accumulated values of the initial probabilities \code{Pi} and a uniform value \code{u}, it returns the initial state of a Markov jump process
-#' @param cumulatedPi A vector
-#' @param u A random value in (0,1)
-#' @return The initial state of the Markov jump process
-initialState <- function(cumulatedPi, u) {
-    .Call(`_matrixdist_initialState`, cumulatedPi, u)
+#'
+#' Given the accumulated values of the initial probabilities \code{Pi} and a
+#' uniform value \code{u}, it returns the initial state of a Markov jump process.
+#' This corresponds to the states satisfying cum_pi_(k-1)<u<cum_pi_(k).
+#' @param cum_alpha A vector.
+#' @param u Random value in (0,1).
+#' @return Initial state of the Markov jump process.
+#'
+initial_state <- function(cum_alpha, u) {
+    .Call(`_matrixdist_initial_state`, cum_alpha, u)
 }
 
 #' New state in a Markov jump process
-#' 
-#' Given a transition matrix \code{Q}, a uniform value \code{u}, and a previous state \code{k}, it returns the new state of a Markov jump process
-#' @param previousState Previous state of the Markov jump process
-#' @param cumulatedEmbeddedMC A transition matrix
-#' @param u A random value in (0,1)
-#' @return The next state of the Markov jump process
-newState <- function(previousState, cumulatedEmbeddedMC, u) {
-    .Call(`_matrixdist_newState`, previousState, cumulatedEmbeddedMC, u)
+#'
+#' Given a transition matrix \code{Q}, a uniform value \code{u}, and a previous
+#' state \code{k}, it returns the new state of a Markov jump process.
+#' @param prev_state Previous state of the Markov jump process.
+#' @param cum_embedded_mc Transition matrix.
+#' @param u Random value in (0,1).
+#' @return Next state of the Markov jump process.
+#'
+new_state <- function(prev_state, cum_embedded_mc, u) {
+    .Call(`_matrixdist_new_state`, prev_state, cum_embedded_mc, u)
 }
 
-#' Random phase-type
-#' 
-#' Generates a sample of size \code{n} from a phase-type distribution with parameters \code{alpha} and \code{S}
-#' @param n Sample size
-#' @param alpha Initial probabilities
-#' @param S sub-intensity matrix
-#' @return The simulated sample
-#' 
+#' Simulate phase-type
+#'
+#' Generates a sample of size \code{n} from a phase-type distribution with
+#' parameters \code{alpha} and \code{S}.
+#' @param n Sample size.
+#' @param alpha Vector of initial probabilities.
+#' @param S Sub-intensity matrix.
+#' @return Simulated sample.
+#' @export
+#'
 rphasetype <- function(n, alpha, S) {
     .Call(`_matrixdist_rphasetype`, n, alpha, S)
 }
 
 #' Random inhomogeneous phase-type
 #' 
-#' Generates a sample of size \code{n} from an inhomogeneous phase-type distribution with parameters \code{alpha}, \code{S} and \code{beta}
-#' @param n Sample size
-#' @param dist_type Type of IPH
-#' @param alpha Initial probabilities
-#' @param S sub-intensity matrix
-#' @param beta Parameter of the transformation
-#' @return The simulated sample
+#' Generates a sample of size \code{n} from an inhomogeneous phase-type 
+#' distribution with parameters \code{alpha}, \code{S} and \code{beta}.
+#' @param n Sample size.
+#' @param dist_type Type of IPH.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity matrix.
+#' @param beta Parameter of the transformation.
+#' @return The simulated sample.
 #' 
 riph <- function(n, dist_type, alpha, S, beta) {
     .Call(`_matrixdist_riph`, n, dist_type, alpha, S, beta)
@@ -869,14 +880,15 @@ riph <- function(n, dist_type, alpha, S, beta) {
 
 #' Random matrix GEV
 #' 
-#' Generates a sample of size \code{n} from an inhomogeneous phase-type distribution with parameters \code{alpha}, \code{S} and \code{beta}
-#' @param n Sample size
-#' @param alpha Initial probabilities
-#' @param S sub-intensity matrix
-#' @param mu Location parameter
-#' @param sigma Scale parameter
-#' @param xi Shape parameter: Default 0 which corresponds to the Gumbel case
-#' @return The simulated sample
+#' Generates a sample of size \code{n} from an inhomogeneous phase-type 
+#' distribution with parameters \code{alpha}, \code{S} and \code{beta}.
+#' @param n Sample size.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity matrix.
+#' @param mu Location parameter.
+#' @param sigma Scale parameter.
+#' @param xi Shape parameter: Default 0 which corresponds to the Gumbel case.
+#' @return The simulated sample.
 #' 
 rmatrixgev <- function(n, alpha, S, mu, sigma, xi = 0) {
     .Call(`_matrixdist_rmatrixgev`, n, alpha, S, mu, sigma, xi)
@@ -1131,15 +1143,6 @@ matrix_exponential <- function(Ainput) {
     .Call(`_matrixdist_matrix_exponential`, Ainput)
 }
 
-#' Product of two matrices
-#' @param a matrix
-#' @param b matrix
-#' @return Computes c = a * b
-#' 
-matrix_product_slow <- function(a, b) {
-    .Call(`_matrixdist_matrix_product_slow`, a, b)
-}
-
 #' Add matrices
 #' 
 #' Computes C =  A + B 
@@ -1157,35 +1160,6 @@ matrix_sum <- function(A, B) {
 #' @param A A matrix
 LInf_norm <- function(A) {
     .Call(`_matrixdist_LInf_norm`, A)
-}
-
-#' Solves a system with multiple right hand sides
-#' 
-#' AX=B which can be decomposed as LUX=B and finds X.
-#' When B is the identity matrix the solution is the inverse of A
-#' @param A1 a matrix
-#' @param B a matrix
-#' 
-solve_linear_system <- function(A1, B) {
-    .Call(`_matrixdist_solve_linear_system`, A1, B)
-}
-
-#' Inverse of a matrix
-#' 
-#' Computes the inverse
-#' @param A a matrix
-#' 
-matrix_inverse_slow <- function(A) {
-    .Call(`_matrixdist_matrix_inverse_slow`, A)
-}
-
-#' Matrix exponential algorithm
-#' 
-#' MATLAB's built-in algorithm - Pade approximation
-#' @param A a matrix
-#' 
-matrix_exponential_slow <- function(A) {
-    .Call(`_matrixdist_matrix_exponential_slow`, A)
 }
 
 #' Maximum entry in a matrix
@@ -1249,10 +1223,10 @@ diagonal_vector <- function(vec) {
 
 #' Computes the initial distribution and sub-intensity of the sum of PH
 #' 
-#' @param alpha1 initial distribution
-#' @param S1 sub-intensity
-#' @param alpha2 initial distribution
-#' @param S2 sub-intensity
+#' @param alpha1 Initial distribution.
+#' @param S1 Sub-intensity.
+#' @param alpha2 Initial distribution.
+#' @param S2 Sub-intensity.
 #' 
 sumPH <- function(alpha1, S1, alpha2, S2) {
     .Call(`_matrixdist_sumPH`, alpha1, S1, alpha2, S2)
@@ -1260,11 +1234,13 @@ sumPH <- function(alpha1, S1, alpha2, S2) {
 
 #' Random structure of a phase-type
 #' 
-#' Generates random parameters \code{alpha} and \code{S} of a phase-type distribution of dimension \code{p} with chosen structure
-#' @param p Dimension of the phase-type
-#' @param structure Type of structure: "general", "hyperexponential", "gerlang", "coxian" or "gcoxian"
-#' @param scale_factor A factor that multiplies the sub-intensity matrix
-#' @return Random parameters \code{alpha} and \code{S} of a phase-type
+#' Generates random parameters \code{alpha} and \code{S} of a phase-type 
+#' distribution of dimension \code{p} with chosen structure.
+#' @param p Dimension of the phase-type.
+#' @param structure Type of structure: "general", "hyperexponential", "gerlang",
+#' "coxian" or "gcoxian".
+#' @param scale_factor A factor that multiplies the sub-intensity matrix.
+#' @return Random parameters \code{alpha} and \code{S} of a phase-type.
 #' 
 random_structure <- function(p, structure = "general", scale_factor = 1) {
     .Call(`_matrixdist_random_structure`, p, structure, scale_factor)

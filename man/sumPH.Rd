@@ -7,13 +7,13 @@
 sumPH(alpha1, S1, alpha2, S2)
 }
 \arguments{
-\item{alpha1}{initial distribution}
+\item{alpha1}{Initial distribution.}
 
-\item{S1}{sub-intensity}
+\item{S1}{Sub-intensity.}
 
-\item{alpha2}{initial distribution}
+\item{alpha2}{Initial distribution.}
 
-\item{S2}{sub-intensity}
+\item{S2}{Sub-intensity.}
 }
 \description{
 Computes the initial distribution and sub-intensity of the sum of PH

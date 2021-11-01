@@ -7,15 +7,17 @@
 random_structure(p, structure = "general", scale_factor = 1)
 }
 \arguments{
-\item{p}{Dimension of the phase-type}
+\item{p}{Dimension of the phase-type.}
 
-\item{structure}{Type of structure: "general", "hyperexponential", "gerlang", "coxian" or "gcoxian"}
+\item{structure}{Type of structure: "general", "hyperexponential", "gerlang",
+"coxian" or "gcoxian".}
 
-\item{scale_factor}{A factor that multiplies the sub-intensity matrix}
+\item{scale_factor}{A factor that multiplies the sub-intensity matrix.}
 }
 \value{
-Random parameters \code{alpha} and \code{S} of a phase-type
+Random parameters \code{alpha} and \code{S} of a phase-type.
 }
 \description{
-Generates random parameters \code{alpha} and \code{S} of a phase-type distribution of dimension \code{p} with chosen structure
+Generates random parameters \code{alpha} and \code{S} of a phase-type 
+distribution of dimension \code{p} with chosen structure.
 }

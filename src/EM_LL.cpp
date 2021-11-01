@@ -1,6 +1,5 @@
 #include <Rcpp.h>
 using namespace Rcpp;
-#include "matrix_functions.h"
 #include "exp_arm.h"
 #include "distributions.h"
 
