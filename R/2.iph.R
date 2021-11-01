@@ -1,12 +1,12 @@
 #' Inhomogeneous Phase Type distributions
 #'
-#' Class of objects for inhomogeneous phase type distributions
+#' Class of objects for inhomogeneous phase type distributions.
 #'
-#' @slot name name of the phase type distribution.
-#' @slot gfun a list comprising of the parameters.
-#' @slot scale scale.
+#' @slot name Name of the phase type distribution.
+#' @slot gfun A list comprising of the parameters.
+#' @slot scale Scale.
 #'
-#' @return Class object
+#' @return Class object.
 #' @export
 #'
 setClass("iph",
@@ -20,13 +20,13 @@ setClass("iph",
 #' Constructor Function for inhomogeneous phase type distributions
 #'
 #' @param ph An object of class \linkS4class{ph}.
-#' @param alpha a probability vector.
-#' @param S a sub-intensity matrix.
-#' @param structure a valid ph structure
-#' @param dimension the dimension of the ph structure (if provided)
-#' @param gfun inhomogeneity transform
-#' @param gfun_pars the parameters of the inhomogeneity function
-#' @param scale scale
+#' @param alpha A probability vector.
+#' @param S A sub-intensity matrix.
+#' @param structure A valid ph structure.
+#' @param dimension The dimension of the ph structure (if provided).
+#' @param gfun Inhomogeneity transform.
+#' @param gfun_pars The parameters of the inhomogeneity function.
+#' @param scale Scale.
 #'
 #' @return An object of class \linkS4class{iph}.
 #' @export
@@ -67,36 +67,36 @@ iph <- function(ph = NULL, gfun = NULL, gfun_pars = NULL, alpha = NULL, S = NULL
       names(gfun_pars) <- c("alpha", "theta")
     }
   }
-  f1 <- function(beta, t) t^{beta}
+  f1 <- function(beta, t) t^(beta)
   f2 <- function(beta, t) log(t / beta + 1)
-  f3 <- function(beta, t) log(t + 1)^{beta}
-  f4 <- function(beta, t) log((t / beta[1])^{beta[2]} + 1)
+  f3 <- function(beta, t) log(t + 1)^(beta)
+  f4 <- function(beta, t) log((t / beta[1])^(beta[2]) + 1)
   f5 <- function(beta, t) (exp(t * beta) - 1) / beta
   f6 <- function(beta, t, w) reversTransformData(t, w, beta)
   nb <- which(gfun == c("weibull", "pareto", "lognormal", "loglogistic", "gompertz", "gev"))
   ginv <- base::eval(parse(text = paste("f", nb, sep = "")))
   
-  f1 <- function(beta, t) t^{beta} * log(t)
+  f1 <- function(beta, t) t^(beta) * log(t)
   f2 <- function(beta, t) -t/(beta * t + beta^2)
-  f3 <- function(beta, t) log(t + 1)^{beta} * log(log(t + 1))
+  f3 <- function(beta, t) log(t + 1)^(beta) * log(log(t + 1))
   f4 <- NA
   f5 <- function(beta, t) exp(t * beta) * (t * beta - 1)  / beta^2
   f6 <- NA
   nb <- which(gfun == c("weibull", "pareto", "lognormal", "loglogistic", "gompertz", "gev"))
   ginv_prime <- base::eval(parse(text = paste("f", nb, sep = "")))
 
-  f1 <- function(beta, t) beta * t^{beta - 1}
-  f2 <- function(beta, t) (t + beta)^{-1}
-  f3 <- function(beta, t) beta * log(t + 1)^{beta - 1}/(t + 1)
+  f1 <- function(beta, t) beta * t^(beta - 1)
+  f2 <- function(beta, t) (t + beta)^(-1)
+  f3 <- function(beta, t) beta * log(t + 1)^(beta - 1)/(t + 1)
   f4 <- NA
   f5 <- function(beta, t) exp(t * beta)
   f6 <- NA
   nb <- which(gfun == c("weibull", "pareto", "lognormal", "loglogistic", "gompertz", "gev"))
   lambda <- base::eval(parse(text = paste("f", nb, sep = "")))
 
-  f1 <- function(beta, t) t^{beta - 1} + beta * t^{beta - 1} * log(t)
-  f2 <- function(beta, t) -(t + beta)^{-2}
-  f3 <- function(beta, t) log(t + 1)^{beta - 1}/(t + 1) + beta * log(t + 1)^{beta - 1} * log(log(t + 1))/(t + 1)
+  f1 <- function(beta, t) t^(beta - 1) + beta * t^(beta - 1) * log(t)
+  f2 <- function(beta, t) -(t + beta)^(-2)
+  f3 <- function(beta, t) log(t + 1)^(beta - 1)/(t + 1) + beta * log(t + 1)^(beta - 1) * log(log(t + 1))/(t + 1)
   f4 <- NA
   f5 <- function(beta, t) t * exp(t * beta)
   f6 <- NA
@@ -117,8 +117,8 @@ iph <- function(ph = NULL, gfun = NULL, gfun_pars = NULL, alpha = NULL, S = NULL
 
 #' Minimum Method for inhomogeneous phase type distributions
 #'
-#' @param x1 an object of class \linkS4class{iph}.
-#' @param x2 an object of class \linkS4class{iph}.
+#' @param x1 An object of class \linkS4class{iph}.
+#' @param x2 An object of class \linkS4class{iph}.
 #' 
 #' @return An object of class \linkS4class{iph}.
 #' @export
@@ -140,8 +140,8 @@ setMethod("minimum", signature(x1 = "iph", x2 = "iph"),
 
 #' Maximum Method for inhomogeneous phase type distributions
 #'
-#' @param x1 an object of class \linkS4class{iph}.
-#' @param x2 an object of class \linkS4class{iph}.
+#' @param x1 An object of class \linkS4class{iph}.
+#' @param x2 An object of class \linkS4class{iph}.
 #' 
 #' @return An object of class \linkS4class{iph}.
 #' @export
@@ -162,7 +162,7 @@ setMethod("maximum", signature(x1 = "iph", x2 = "iph"),
 
 #' Show Method for inhomogeneous phase type distributions
 #'
-#' @param object an object of class \linkS4class{iph}.
+#' @param object An object of class \linkS4class{iph}.
 #' @importFrom methods show
 #' @export
 #'
@@ -178,10 +178,11 @@ setMethod("show", "iph", function(object) {
 
 #' Simulation Method for inhomogeneous phase type distributions
 #'
-#' @param x an object of class \linkS4class{iph}.
-#' @param n an integer of length of realization.
+#' @param x An object of class \linkS4class{iph}.
+#' @param n An integer of length of realization.
 #'
-#' @return A realization of independent and identically distributed inhomogeneous phase-type variables.
+#' @return A realization of independent and identically distributed inhomogeneous
+#' phase-type variables.
 #' @export
 #'
 #' @examples
@@ -202,8 +203,8 @@ setMethod("sim", c(x = "iph"), function(x, n = 1000) {
 
 #' Density Method for inhomogeneous phase type distributions
 #'
-#' @param x an object of class \linkS4class{iph}.
-#' @param y a vector of locations.
+#' @param x An object of class \linkS4class{iph}.
+#' @param y A vector of locations.
 #'
 #' @return A list containing the locations and corresponding density evaluations.
 #' @export
@@ -223,9 +224,10 @@ setMethod("dens", c(x = "iph"), function(x, y) {
 
 #' Distribution Method for inhomogeneous phase type distributions
 #'
-#' @param x an object of class \linkS4class{iph}.
-#' @param q a vector of locations.
-#' @param lower.tail logical parameter specifying whether lower tail (cdf) or upper tail is computed.
+#' @param x An object of class \linkS4class{iph}.
+#' @param q A vector of locations.
+#' @param lower.tail Logical parameter specifying whether lower tail (cdf) or 
+#' upper tail is computed.
 #'
 #' @return A list containing the locations and corresponding CDF evaluations.
 #' @export
@@ -248,9 +250,9 @@ setMethod("cdf", c(x = "iph"), function(x,
 
 #' Coef Method for iph Class
 #'
-#' @param object an object of class \linkS4class{iph}.
+#' @param object An object of class \linkS4class{iph}.
 #'
-#' @return parameters of iph model.
+#' @return Parameters of iph model.
 #' @export
 #'
 #' @examples 

@@ -7,7 +7,7 @@
 \S4method{LRT}{ph,ph}(x, y)
 }
 \arguments{
-\item{x, y}{objects of class \linkS4class{ph}.}
+\item{x, y}{Objects of class \linkS4class{ph}.}
 }
 \value{
 LRT between the models.

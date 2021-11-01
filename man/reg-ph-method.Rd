@@ -23,35 +23,35 @@
 )
 }
 \arguments{
-\item{x}{an object of class \linkS4class{ph}.}
+\item{x}{An object of class \linkS4class{ph}.}
 
-\item{y}{vector or data.}
+\item{y}{Vector or data.}
 
-\item{weight}{vector of weights.}
+\item{weight}{Vector of weights.}
 
-\item{rcen}{vector of right-censored observations}
+\item{rcen}{Vector of right-censored observations.}
 
-\item{rcenweight}{vector of weights for right-censored observations.}
+\item{rcenweight}{Vector of weights for right-censored observations.}
 
-\item{X}{model matrix (no intercept needed).}
+\item{X}{Model matrix (no intercept needed).}
 
-\item{B0}{initial regression coefficients (optional).}
+\item{B0}{Initial regression coefficients (optional).}
 
-\item{stepsEM}{number of EM steps to be performed.}
+\item{stepsEM}{Number of EM steps to be performed.}
 
-\item{methods}{methods to use for matrix exponential calculation: RM, UNI or PADE}
+\item{methods}{Methods to use for matrix exponential calculation: RM, UNI or PADE.}
 
 \item{rkstep}{Runge-Kutta step size (optional)}
 
-\item{uni_epsilon}{epsilon parameter for uniformization method}
+\item{uni_epsilon}{Epsilon parameter for uniformization method.}
 
-\item{optim_method}{method to use in gradient optimization}
+\item{optim_method}{Method to use in gradient optimization.}
 
-\item{maxit}{maximum number of iterations when optimizing g function.}
+\item{maxit}{Maximum number of iterations when optimizing g function.}
 
-\item{reltol}{relative tolerance when optimizing g function.}
+\item{reltol}{Relative tolerance when optimizing g function.}
 
-\item{every}{number of iterations between likelihood display updates.}
+\item{every}{Number of iterations between likelihood display updates.}
 }
 \value{
 An object of class \linkS4class{sph}.

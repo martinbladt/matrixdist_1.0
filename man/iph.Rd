@@ -18,19 +18,19 @@ iph(
 \arguments{
 \item{ph}{An object of class \linkS4class{ph}.}
 
-\item{gfun}{inhomogeneity transform}
+\item{gfun}{Inhomogeneity transform.}
 
-\item{gfun_pars}{the parameters of the inhomogeneity function}
+\item{gfun_pars}{The parameters of the inhomogeneity function.}
 
-\item{alpha}{a probability vector.}
+\item{alpha}{A probability vector.}
 
-\item{S}{a sub-intensity matrix.}
+\item{S}{A sub-intensity matrix.}
 
-\item{structure}{a valid ph structure}
+\item{structure}{A valid ph structure.}
 
-\item{dimension}{the dimension of the ph structure (if provided)}
+\item{dimension}{The dimension of the ph structure (if provided).}
 
-\item{scale}{scale}
+\item{scale}{Scale.}
 }
 \value{
 An object of class \linkS4class{iph}.

@@ -7,9 +7,9 @@
 \S4method{+}{ph,ph}(e1, e2)
 }
 \arguments{
-\item{e1}{an object of class \linkS4class{ph}.}
+\item{e1}{An object of class \linkS4class{ph}.}
 
-\item{e2}{an object of class \linkS4class{ph}.}
+\item{e2}{An object of class \linkS4class{ph}.}
 }
 \value{
 An object of class \linkS4class{ph}.

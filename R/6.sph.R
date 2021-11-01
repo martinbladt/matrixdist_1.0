@@ -2,8 +2,8 @@
 #'
 #' Class of objects for inhomogeneous phase type distributions
 #'
-#' @slot coefs coefficients of the survival regression object.
-#' @slot type type of survival object.
+#' @slot coefs Coefficients of the survival regression object.
+#' @slot type Type of survival object.
 #'
 #' @return Class object
 #' @export
@@ -19,8 +19,8 @@ setClass("sph",
 #' Constructor Function for Survival phase type objects
 #'
 #' @param x An object of class \linkS4class{ph}
-#' @param coefs coefficients of the survival regression object.
-#' @param type type of survival object.
+#' @param coefs Coefficients of the survival regression object.
+#' @param type Type of survival object.
 #' 
 #' @return An object of class \linkS4class{sph}.
 #' @export
@@ -48,7 +48,7 @@ sph <- function(x = NULL, coefs = list(B = numeric(0), C = numeric(0)), type = "
 
 #' Show Method for survival phase type objects
 #'
-#' @param object an object of class \linkS4class{sph}.
+#' @param object An object of class \linkS4class{sph}.
 #' @export
 #'
 setMethod("show", "sph", function(object) {
@@ -65,9 +65,9 @@ setMethod("show", "sph", function(object) {
 
 #' Coef Method for sph Class
 #'
-#' @param object an object of class \linkS4class{sph}.
+#' @param object An object of class \linkS4class{sph}.
 #'
-#' @return parameters of sph model
+#' @return Parameters of sph model.
 #' @export
 #'
 setMethod("coef", c(object = "sph"), function(object) {
@@ -78,10 +78,10 @@ setMethod("coef", c(object = "sph"), function(object) {
 
 #' Evaluation Method for sph Class
 #'
-#' @param x an object of class \linkS4class{sph}.
-#' @param subject covariates of a single subject.
+#' @param x An object of class \linkS4class{sph}.
+#' @param subject Covariates of a single subject.
 #' 
-#' @return a \linkS4class{ph} model
+#' @return A \linkS4class{ph} model.
 #' @export
 #'
 setMethod("evaluate", c(x = "sph"), function(x, subject) {
@@ -125,12 +125,12 @@ setMethod("evaluate", c(x = "sph"), function(x, subject) {
 
 #' Fisher Information Method for sph Class
 #'
-#' @param x an object of class \linkS4class{sph}.
-#' @param y independent variate.
-#' @param X matrix of covariates.
-#' @param w weights.
+#' @param x An object of class \linkS4class{sph}.
+#' @param y Independent variate.
+#' @param X Matrix of covariates.
+#' @param w Weights.
 #' 
-#' @return a matrix.
+#' @return A matrix.
 #' @export
 #'
 setMethod("Fisher", c(x = "sph"), function(x, y, X, w = numeric(0)) {

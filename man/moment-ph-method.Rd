@@ -7,9 +7,9 @@
 \S4method{moment}{ph}(x, k = 1)
 }
 \arguments{
-\item{x}{an object of class \linkS4class{ph}.}
+\item{x}{An object of class \linkS4class{ph}.}
 
-\item{k}{a positive integer (moment order).}
+\item{k}{A positive integer (moment order).}
 }
 \value{
 The raw moment of the \linkS4class{ph} (or undelying \linkS4class{ph}) object.

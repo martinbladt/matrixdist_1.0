@@ -1,20 +1,20 @@
 #' Regression Method for ph Class
 #'
-#' @param x an object of class \linkS4class{ph}.
-#' @param y vector or data.
-#' @param X model matrix (no intercept needed).
-#' @param B0 initial regression coefficients (optional).
-#' @param weight vector of weights.
-#' @param rcen vector of right-censored observations
-#' @param rcenweight vector of weights for right-censored observations.
-#' @param stepsEM number of EM steps to be performed.
-#' @param methods methods to use for matrix exponential calculation: RM, UNI or PADE
+#' @param x An object of class \linkS4class{ph}.
+#' @param y Vector or data.
+#' @param X Model matrix (no intercept needed).
+#' @param B0 Initial regression coefficients (optional).
+#' @param weight Vector of weights.
+#' @param rcen Vector of right-censored observations.
+#' @param rcenweight Vector of weights for right-censored observations.
+#' @param stepsEM Number of EM steps to be performed.
+#' @param methods Methods to use for matrix exponential calculation: RM, UNI or PADE.
 #' @param rkstep Runge-Kutta step size (optional)
-#' @param uni_epsilon epsilon parameter for uniformization method
-#' @param optim_method method to use in gradient optimization
-#' @param maxit maximum number of iterations when optimizing g function.
-#' @param reltol relative tolerance when optimizing g function.
-#' @param every number of iterations between likelihood display updates.
+#' @param uni_epsilon Epsilon parameter for uniformization method.
+#' @param optim_method Method to use in gradient optimization.
+#' @param maxit Maximum number of iterations when optimizing g function.
+#' @param reltol Relative tolerance when optimizing g function.
+#' @param every Number of iterations between likelihood display updates.
 #'
 #' @return An object of class \linkS4class{sph}.
 #' 

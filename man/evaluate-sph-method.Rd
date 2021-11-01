@@ -7,12 +7,12 @@
 \S4method{evaluate}{sph}(x, subject)
 }
 \arguments{
-\item{x}{an object of class \linkS4class{sph}.}
+\item{x}{An object of class \linkS4class{sph}.}
 
-\item{subject}{covariates of a single subject.}
+\item{subject}{Covariates of a single subject.}
 }
 \value{
-a \linkS4class{ph} model
+A \linkS4class{ph} model.
 }
 \description{
 Evaluation Method for sph Class

@@ -1,12 +1,12 @@
 #' Phase Type distributions
 #'
-#' Class of objects for phase type distributions
+#' Class of objects for phase type distributions.
 #'
-#' @slot name name of the phase type distribution.
-#' @slot pars a list comprising of the parameters.
-#' @slot fit a list containing estimation information.
+#' @slot name Name of the phase type distribution.
+#' @slot pars A list comprising of the parameters.
+#' @slot fit A list containing estimation information.
 #'
-#' @return Class object
+#' @return Class object.
 #' @export
 #'
 setClass("ph",
@@ -24,10 +24,10 @@ setClass("ph",
 
 #' Constructor Function for phase type distributions
 #'
-#' @param alpha a probability vector.
-#' @param S a sub-intensity matrix.
-#' @param structure a valid ph structure ("general", "coxian", "hyperexponential", "gcoxian", "gerlang").
-#' @param dimension the dimension of the ph structure (if structure is provided).
+#' @param alpha A probability vector.
+#' @param S A sub-intensity matrix.
+#' @param structure A valid ph structure ("general", "coxian", "hyperexponential", "gcoxian", "gerlang").
+#' @param dimension The dimension of the ph structure (if structure is provided).
 #'
 #' @return An object of class \linkS4class{ph}.
 #' @export
@@ -61,8 +61,8 @@ ph <- function(alpha = NULL, S = NULL, structure = NULL, dimension = 3) {
 
 #' Sum Method for phase type distributions
 #'
-#' @param e1 an object of class \linkS4class{ph}.
-#' @param e2 an object of class \linkS4class{ph}.
+#' @param e1 An object of class \linkS4class{ph}.
+#' @param e2 An object of class \linkS4class{ph}.
 #' 
 #' @return An object of class \linkS4class{ph}.
 #' @export
@@ -87,8 +87,8 @@ kronecker_sum <- function(A, B){
 
 #' Minimum Method for phase type distributions
 #'
-#' @param x1 an object of class \linkS4class{ph}.
-#' @param x2 an object of class \linkS4class{ph}.
+#' @param x1 An object of class \linkS4class{ph}.
+#' @param x2 An object of class \linkS4class{ph}.
 #' 
 #' @return An object of class \linkS4class{ph}.
 #' @export
@@ -108,8 +108,8 @@ setMethod("minimum", signature(x1 = "ph", x2 = "ph"),
 
 #' Maximum Method for phase type distributions
 #'
-#' @param x1 an object of class \linkS4class{ph}.
-#' @param x2 an object of class \linkS4class{ph}.
+#' @param x1 An object of class \linkS4class{ph}.
+#' @param x2 An object of class \linkS4class{ph}.
 #' 
 #' @return An object of class \linkS4class{ph}.
 #' @export
@@ -133,8 +133,8 @@ setMethod("maximum", signature(x1 = "ph", x2 = "ph"),
 
 #' Moment Method for phase type distributions
 #'
-#' @param x an object of class \linkS4class{ph}.
-#' @param k a positive integer (moment order).
+#' @param x An object of class \linkS4class{ph}.
+#' @param k A positive integer (moment order).
 #' 
 #' @return The raw moment of the \linkS4class{ph} (or undelying \linkS4class{ph}) object.
 #' @export
@@ -157,7 +157,7 @@ setMethod("moment", signature(x = "ph"),
 
 #' Show Method for phase type distributions
 #'
-#' @param object an object of class \linkS4class{ph}.
+#' @param object An object of class \linkS4class{ph}.
 #' @importFrom methods show
 #' @export
 #'
@@ -170,8 +170,8 @@ setMethod("show", "ph", function(object) {
 
 #' Simulation Method for phase type distributions
 #'
-#' @param x an object of class \linkS4class{ph}.
-#' @param n an integer of length of realization.
+#' @param x An object of class \linkS4class{ph}.
+#' @param n An integer of length of realization.
 #'
 #' @return A realization of independent and identically distributed phase-type variables.
 #' @export
@@ -186,8 +186,8 @@ setMethod("sim", c(x = "ph"), function(x, n = 1000) {
 
 #' Density Method for phase type distributions
 #'
-#' @param x an object of class \linkS4class{ph}.
-#' @param y a vector of locations.
+#' @param x An object of class \linkS4class{ph}.
+#' @param y A vector of locations.
 #'
 #' @return A list containing the locations and corresponding density evaluations.
 #' @export
@@ -205,9 +205,10 @@ setMethod("dens", c(x = "ph"), function(x, y) {
 
 #' Distribution Method for phase type distributions
 #'
-#' @param x an object of class \linkS4class{ph}.
-#' @param q a vector of locations.
-#' @param lower.tail logical parameter specifying whether lower tail (cdf) or upper tail is computed.
+#' @param x An object of class \linkS4class{ph}.
+#' @param q A vector of locations.
+#' @param lower.tail Logical parameter specifying whether lower tail (cdf) or 
+#' upper tail is computed.
 #'
 #' @return A list containing the locations and corresponding CDF evaluations.
 #' @export
@@ -227,8 +228,8 @@ setMethod("cdf", c(x = "ph"), function(x,
 
 #' Hazard rate Method for phase type distributions
 #'
-#' @param x an object of class \linkS4class{ph}.
-#' @param y a vector of locations.
+#' @param x An object of class \linkS4class{ph}.
+#' @param y A vector of locations.
 #'
 #' @return A list containing the locations and corresponding hazard rate evaluations.
 #' @export
@@ -244,8 +245,8 @@ setMethod("haz", c(x = "ph"), function(x, y) {
 
 #' Quantile Method for phase type distributions
 #'
-#' @param x an object of class \linkS4class{ph}.
-#' @param p a vector of probabilities.
+#' @param x An object of class \linkS4class{ph}.
+#' @param p A vector of probabilities.
 #'
 #' @return A list containing the probabilities and corresponding quantile evaluations.
 #' @export
@@ -264,19 +265,19 @@ setMethod("quan", c(x = "ph"), function(x,
 
 #' Fit Method for ph Class
 #'
-#' @param x an object of class \linkS4class{ph}.
-#' @param y vector or data.
-#' @param weight vector of weights.
-#' @param rcen vector of right-censored observations
-#' @param rcenweight vector of weights for right-censored observations.
-#' @param stepsEM number of EM steps to be performed.
-#' @param methods methods to use for matrix exponential calculation: RM, UNI or PADE
-#' @param rkstep Runge-Kutta step size (optional)
-#' @param uni_epsilon epsilon parameter for uniformization method
-#' @param maxit maximum number of iterations when optimizing g function.
-#' @param reltol relative tolerance when optimizing g function.
-#' @param every number of iterations between likelihood display updates.
-#' @param plot logical indicating whether to plot the fit at each iteration.
+#' @param x An object of class \linkS4class{ph}.
+#' @param y Vector or data.
+#' @param weight Vector of weights.
+#' @param rcen Vector of right-censored observations
+#' @param rcenweight Vector of weights for right-censored observations.
+#' @param stepsEM Number of EM steps to be performed.
+#' @param methods Methods to use for matrix exponential calculation: RM, UNI or PADE.
+#' @param rkstep Runge-Kutta step size (optional).
+#' @param uni_epsilon Epsilon parameter for uniformization method.
+#' @param maxit Maximum number of iterations when optimizing g function.
+#' @param reltol Relative tolerance when optimizing g function.
+#' @param every Number of iterations between likelihood display updates.
+#' @param plot Logical indicating whether to plot the fit at each iteration.
 #' 
 #' @return An object of class \linkS4class{ph}.
 #' 
@@ -469,7 +470,7 @@ data_aggregation <- function(y, w) {
 
 #' logLik Method for ph Class
 #'
-#' @param object an object of class \linkS4class{ph}.
+#' @param object An object of class \linkS4class{ph}.
 #'
 #' @return An object of class logLik.
 #' @export
@@ -489,7 +490,7 @@ setMethod("logLik", "ph", function(object) {
 
 #' Coef Method for ph Class
 #'
-#' @param object an object of class \linkS4class{ph}.
+#' @param object An object of class \linkS4class{ph}.
 #'
 #' @return Parameters of ph model.
 #' @export
@@ -503,7 +504,7 @@ setMethod("coef", c(object = "ph"), function(object) {
 
 #' LRT Method for ph Class
 #'
-#' @param x,y objects of class \linkS4class{ph}.
+#' @param x,y Objects of class \linkS4class{ph}.
 #'
 #' @return LRT between the models.
 #' @export
