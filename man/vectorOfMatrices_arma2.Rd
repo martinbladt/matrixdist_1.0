@@ -7,11 +7,11 @@
 vectorOfMatrices_arma2(theVector, S, sizevect)
 }
 \arguments{
-\item{theVector}{a vector}
+\item{theVector}{A vector.}
 
-\item{S}{sub-untensity matrix}
+\item{S}{Sub-intensity matrix.}
 
-\item{sizevect}{size of vector}
+\item{sizevect}{Size of vector.}
 }
 \description{
 Computes elements S^n / n! until the value size

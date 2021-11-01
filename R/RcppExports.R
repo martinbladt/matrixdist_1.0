@@ -299,22 +299,24 @@ logLikelihoodMgompertz_RKs <- function(h, alpha, S, beta, obs, weight, rcens, rc
 }
 
 #' Computes elements S^n / n! until the value size
-#' @param theVector a vector
-#' @param S sub-untensity matrix
-#' @param sizevect size of vector
+#' 
+#' @param theVector A vector.
+#' @param S Sub-intensity matrix.
+#' @param sizevect Size of vector.
+#' 
 vectorOfMatrices_arma2 <- function(theVector, S, sizevect) {
     invisible(.Call(`_matrixdist_vectorOfMatrices_arma2`, theVector, S, sizevect))
 }
 
 #' EM using Matlab algorithm for matrix exponential in combination with Armadillo
 #' 
-#' @param h nuisance parameter
-#' @param alpha initial probalities
-#' @param S sub-intensity
-#' @param obs the observations
-#' @param weight the weights for the observations
-#' @param rcens censored observations
-#' @param rcweight the weights for the censored observations
+#' @param h Nuisance parameter.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity.
+#' @param obs The observations.
+#' @param weight The weights for the observations.
+#' @param rcens Censored observations.
+#' @param rcweight The weights for the censored observations.
 #' 
 EMstep_PADE <- function(h, alpha, S, obs, weight, rcens, rcweight) {
     invisible(.Call(`_matrixdist_EMstep_PADE`, h, alpha, S, obs, weight, rcens, rcweight))
@@ -322,14 +324,15 @@ EMstep_PADE <- function(h, alpha, S, obs, weight, rcens, rcweight) {
 
 #' Loglikelihood of PH using Pade
 #' 
-#' Loglikelihood for a sample 
-#' @param h nuisance parameter
-#' @param alpha initial probabilities
-#' @param S sub-intensity
-#' @param obs the observations
-#' @param weight weight of the observations
-#' @param rcens censored observations
-#' @param rcweight weight of the censored observations
+#' Loglikelihood for a sample.
+#' 
+#' @param h Nuisance parameter.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity.
+#' @param obs The observations.
+#' @param weight Weight of the observations.
+#' @param rcens Censored observations.
+#' @param rcweight Weight of the censored observations.
 #' 
 logLikelihoodPH_PADE <- function(h, alpha, S, obs, weight, rcens, rcweight) {
     .Call(`_matrixdist_logLikelihoodPH_PADE`, h, alpha, S, obs, weight, rcens, rcweight)
@@ -337,15 +340,16 @@ logLikelihoodPH_PADE <- function(h, alpha, S, obs, weight, rcens, rcweight) {
 
 #' Loglikelihood of matrix-Weibull using Pade
 #' 
-#' Loglikelihood for a sample 
-#' @param h nuisance parameter
-#' @param alpha initial probabilities
-#' @param S sub-intensity
-#' @param beta in-homogeneity parameter
-#' @param obs the observations
-#' @param weight weight of the observations
-#' @param rcens censored observations
-#' @param rcweight weight of the censored observations
+#' Loglikelihood for a sample.
+#' 
+#' @param h Nuisance parameter.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity.
+#' @param beta Inhomogeneity parameter.
+#' @param obs The observations.
+#' @param weight Weight of the observations.
+#' @param rcens Censored observations.
+#' @param rcweight Weight of the censored observations.
 #' 
 logLikelihoodMweibull_PADE <- function(h, alpha, S, beta, obs, weight, rcens, rcweight) {
     .Call(`_matrixdist_logLikelihoodMweibull_PADE`, h, alpha, S, beta, obs, weight, rcens, rcweight)
@@ -353,15 +357,16 @@ logLikelihoodMweibull_PADE <- function(h, alpha, S, beta, obs, weight, rcens, rc
 
 #' Loglikelihood of matrix-Pareto using Pade
 #' 
-#' Loglikelihood for a sample 
-#' @param h nuisance parameter
-#' @param alpha initial probabilities
-#' @param S sub-intensity
-#' @param beta in-homogeneity parameter
-#' @param obs the observations
-#' @param weight weight of the observations
-#' @param rcens censored observations
-#' @param rcweight weight of the censored observations
+#' Loglikelihood for a sample.
+#' 
+#' @param h Nuisance parameter.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity.
+#' @param beta Inhomogeneity parameter.
+#' @param obs The observations.
+#' @param weight Weight of the observations.
+#' @param rcens Censored observations.
+#' @param rcweight Weight of the censored observations.
 #' 
 logLikelihoodMpareto_PADE <- function(h, alpha, S, beta, obs, weight, rcens, rcweight) {
     .Call(`_matrixdist_logLikelihoodMpareto_PADE`, h, alpha, S, beta, obs, weight, rcens, rcweight)
@@ -369,15 +374,16 @@ logLikelihoodMpareto_PADE <- function(h, alpha, S, beta, obs, weight, rcens, rcw
 
 #' Loglikelihood of matrix-lognormal using Pade
 #' 
-#' Loglikelihood for a sample 
-#' @param h nuisance parameter
-#' @param alpha initial probabilities
-#' @param S sub-intensity
-#' @param beta in-homogeneity parameter
-#' @param obs the observations
-#' @param weight weight of the observations
-#' @param rcens censored observations
-#' @param rcweight weight of the censored observations
+#' Loglikelihood for a sample.
+#' 
+#' @param h Nuisance parameter.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity.
+#' @param beta Inhomogeneity parameter.
+#' @param obs The observations.
+#' @param weight Weight of the observations.
+#' @param rcens Censored observations.
+#' @param rcweight Weight of the censored observations.
 #' 
 logLikelihoodMlognormal_PADE <- function(h, alpha, S, beta, obs, weight, rcens, rcweight) {
     .Call(`_matrixdist_logLikelihoodMlognormal_PADE`, h, alpha, S, beta, obs, weight, rcens, rcweight)
@@ -386,14 +392,15 @@ logLikelihoodMlognormal_PADE <- function(h, alpha, S, beta, obs, weight, rcens, 
 #' Loglikelihood of matrix-loglogistic using Pade
 #' 
 #' Loglikelihood for a sample 
-#' @param h nuisance parameter
-#' @param alpha initial probabilities
-#' @param S sub-intensity
-#' @param beta in-homogeneity parameter
-#' @param obs the observations
-#' @param weight weight of the observations
-#' @param rcens censored observations
-#' @param rcweight weight of the censored observations
+#' 
+#' @param h Nuisance parameter.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity.
+#' @param beta Inhomogeneity parameter.
+#' @param obs The observations.
+#' @param weight Weight of the observations.
+#' @param rcens Censored observations.
+#' @param rcweight Weight of the censored observations.
 #' 
 logLikelihoodMloglogistic_PADE <- function(h, alpha, S, beta, obs, weight, rcens, rcweight) {
     .Call(`_matrixdist_logLikelihoodMloglogistic_PADE`, h, alpha, S, beta, obs, weight, rcens, rcweight)
@@ -401,15 +408,16 @@ logLikelihoodMloglogistic_PADE <- function(h, alpha, S, beta, obs, weight, rcens
 
 #' Loglikelihood of matrix-Gompertz using Pade
 #' 
-#' Loglikelihood for a sample 
-#' @param h nuisance parameter
-#' @param alpha initial probabilities
-#' @param S sub-intensity
-#' @param beta in-homogeneity parameter
-#' @param obs the observations
-#' @param weight weight of the observations
-#' @param rcens censored observations
-#' @param rcweight weight of the censored observations
+#' Loglikelihood for a sample.
+#' 
+#' @param h Nuisance parameter.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity.
+#' @param beta Inhomogeneity parameter.
+#' @param obs The observations.
+#' @param weight Weight of the observations.
+#' @param rcens Censored observations.
+#' @param rcweight Weight of the censored observations.
 #' 
 logLikelihoodMgompertz_PADE <- function(h, alpha, S, beta, obs, weight, rcens, rcweight) {
     .Call(`_matrixdist_logLikelihoodMgompertz_PADE`, h, alpha, S, beta, obs, weight, rcens, rcweight)
@@ -418,14 +426,15 @@ logLikelihoodMgompertz_PADE <- function(h, alpha, S, beta, obs, weight, rcens, r
 #' Loglikelihood of matrix-GEV using Pade
 #' 
 #' Loglikelihood for a sample 
-#' @param h nuisance parameter
-#' @param alpha initial probabilities
-#' @param S sub-intensity
-#' @param beta in-homogeneity parameter
-#' @param obs the observations
-#' @param weight weight of the observations
-#' @param rcens censored observations
-#' @param rcweight weight of the censored observations
+#' 
+#' @param h Nuisance parameter.
+#' @param alpha Initial probabilities.
+#' @param S sub-intensity.
+#' @param beta Inhomogeneity parameter.
+#' @param obs The observations.
+#' @param weight Weight of the observations.
+#' @param rcens Censored observations.
+#' @param rcweight Weight of the censored observations.
 #' 
 logLikelihoodMgev_PADE <- function(h, alpha, S, beta, obs, weight, rcens, rcweight) {
     .Call(`_matrixdist_logLikelihoodMgev_PADE`, h, alpha, S, beta, obs, weight, rcens, rcweight)
@@ -434,15 +443,16 @@ logLikelihoodMgev_PADE <- function(h, alpha, S, beta, obs, weight, rcens, rcweig
 #' Loglikelihood of PH using Pade
 #' 
 #' Loglikelihood for a sample 
-#' @param h nuisance parameter
-#' @param alpha initial probabilities
-#' @param S sub-intensity
-#' @param obs the observations
-#' @param weight weight of the observations
-#' @param rcens censored observations
-#' @param rcweight weight of the censored observations
-#' @param scale1 scale for observations
-#' @param scale2 scale for censored observations
+#' 
+#' @param h Nuisance parameter.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity.
+#' @param obs The observations.
+#' @param weight Weight of the observations.
+#' @param rcens Censored observations.
+#' @param rcweight Weight of the censored observations.
+#' @param scale1 Scale for observations.
+#' @param scale2 Scale for censored observations.
 #' 
 logLikelihoodPH_PADEs <- function(h, alpha, S, obs, weight, rcens, rcweight, scale1, scale2) {
     .Call(`_matrixdist_logLikelihoodPH_PADEs`, h, alpha, S, obs, weight, rcens, rcweight, scale1, scale2)
@@ -450,17 +460,18 @@ logLikelihoodPH_PADEs <- function(h, alpha, S, obs, weight, rcens, rcweight, sca
 
 #' Loglikelihood of matrix-Weibull using Pade
 #' 
-#' Loglikelihood for a sample 
-#' @param h nuisance parameter
-#' @param alpha initial probabilities
-#' @param S sub-intensity
-#' @param beta in-homogeneity parameter
-#' @param obs the observations
-#' @param weight weight of the observations
-#' @param rcens censored observations
-#' @param rcweight weight of the censored observations
-#' @param scale1 scale for observations
-#' @param scale2 scale for censored observations
+#' Loglikelihood for a sample.
+#' 
+#' @param h Nuisance parameter.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity.
+#' @param beta Inhomogeneity parameter.
+#' @param obs The observations.
+#' @param weight Weight of the observations.
+#' @param rcens Censored observations.
+#' @param rcweight Weight of the censored observations.
+#' @param scale1 Scale for observations.
+#' @param scale2 Scale for censored observations.
 #' 
 logLikelihoodMweibull_PADEs <- function(h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2) {
     .Call(`_matrixdist_logLikelihoodMweibull_PADEs`, h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2)
@@ -468,17 +479,18 @@ logLikelihoodMweibull_PADEs <- function(h, alpha, S, beta, obs, weight, rcens, r
 
 #' Loglikelihood of matrix-Pareto using Pade
 #' 
-#' Loglikelihood for a sample 
-#' @param h nuisance parameter
-#' @param alpha initial probabilities
-#' @param S sub-intensity
-#' @param beta in-homogeneity parameter
-#' @param obs the observations
-#' @param weight weight of the observations
-#' @param rcens censored observations
-#' @param rcweight weight of the censored observations
-#' @param scale1 scale for observations
-#' @param scale2 scale for censored observations
+#' Loglikelihood for a sample.
+#' 
+#' @param h Nuisance parameter.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity.
+#' @param beta Inhomogeneity parameter.
+#' @param obs The observations.
+#' @param weight Weight of the observations.
+#' @param rcens Censored observations.
+#' @param rcweight Weight of the censored observations.
+#' @param scale1 Scale for observations.
+#' @param scale2 Scale for censored observations.
 #' 
 logLikelihoodMpareto_PADEs <- function(h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2) {
     .Call(`_matrixdist_logLikelihoodMpareto_PADEs`, h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2)
@@ -486,17 +498,18 @@ logLikelihoodMpareto_PADEs <- function(h, alpha, S, beta, obs, weight, rcens, rc
 
 #' Loglikelihood of matrix-lognormal using Pade
 #' 
-#' Loglikelihood for a sample 
-#' @param h nuisance parameter
-#' @param alpha initial probabilities
-#' @param S sub-intensity
-#' @param beta in-homogeneity parameter
-#' @param obs the observations
-#' @param weight weight of the observations
-#' @param rcens censored observations
-#' @param rcweight weight of the censored observations
-#' @param scale1 scale for observations
-#' @param scale2 scale for censored observations
+#' Loglikelihood for a sample.
+#' 
+#' @param h Nuisance parameter.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity.
+#' @param beta Inhomogeneity parameter.
+#' @param obs The observations.
+#' @param weight Weight of the observations.
+#' @param rcens Censored observations.
+#' @param rcweight Weight of the censored observations.
+#' @param scale1 Scale for observations.
+#' @param scale2 Scale for censored observations.
 #' 
 logLikelihoodMlognormal_PADEs <- function(h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2) {
     .Call(`_matrixdist_logLikelihoodMlognormal_PADEs`, h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2)
@@ -504,17 +517,18 @@ logLikelihoodMlognormal_PADEs <- function(h, alpha, S, beta, obs, weight, rcens,
 
 #' Loglikelihood of matrix-loglogistic using Pade
 #' 
-#' Loglikelihood for a sample 
-#' @param h nuisance parameter
-#' @param alpha initial probabilities
-#' @param S sub-intensity
-#' @param beta in-homogeneity parameter
-#' @param obs the observations
-#' @param weight weight of the observations
-#' @param rcens censored observations
-#' @param rcweight weight of the censored observations
-#' @param scale1 scale for observations
-#' @param scale2 scale for censored observations
+#' Loglikelihood for a sample.
+#' 
+#' @param h Nuisance parameter.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity.
+#' @param beta Inhomogeneity parameter.
+#' @param obs The observations.
+#' @param weight Weight of the observations.
+#' @param rcens Censored observations.
+#' @param rcweight Weight of the censored observations.
+#' @param scale1 Scale for observations.
+#' @param scale2 Scale for censored observations.
 #' 
 logLikelihoodMloglogistic_PADEs <- function(h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2) {
     .Call(`_matrixdist_logLikelihoodMloglogistic_PADEs`, h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2)
@@ -522,17 +536,18 @@ logLikelihoodMloglogistic_PADEs <- function(h, alpha, S, beta, obs, weight, rcen
 
 #' Loglikelihood of matrix-Gompertz using Pade
 #' 
-#' Loglikelihood for a sample 
-#' @param h nuisance parameter
-#' @param alpha initial probabilities
-#' @param S sub-intensity
-#' @param beta in-homogeneity parameter
-#' @param obs the observations
-#' @param weight weight of the observations
-#' @param rcens censored observations
-#' @param rcweight weight of the censored observations
-#' @param scale1 scale for observations
-#' @param scale2 scale for censored observations
+#' Loglikelihood for a sample.
+#' 
+#' @param h Nuisance parameter.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity.
+#' @param beta Inhomogeneity parameter.
+#' @param obs The observations.
+#' @param weight Weight of the observations.
+#' @param rcens Censored observations.
+#' @param rcweight Weight of the censored observations.
+#' @param scale1 Scale for observations.
+#' @param scale2 Scale for censored observations.
 #' 
 logLikelihoodMgompertz_PADEs <- function(h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2) {
     .Call(`_matrixdist_logLikelihoodMgompertz_PADEs`, h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2)
@@ -914,11 +929,12 @@ matrixMaxDiagonal_arma <- function(A) {
 
 #' Phase-type density
 #' 
-#' Computes the density of phase-type distribution with parameters \code{alpha} and \code{S} at \code{x}
-#' @param x non-negative value
-#' @param alpha Initial probabilities
-#' @param S sub-intensity matrix
-#' @return The density at \code{x}
+#' Computes the density of phase-type distribution with parameters \code{alpha}
+#'  and \code{S} at \code{x}.
+#' @param x Non-negative value.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity matrix.
+#' @return The density at \code{x}.
 #' 
 phdensity <- function(x, alpha, S) {
     .Call(`_matrixdist_phdensity`, x, alpha, S)
@@ -926,11 +942,12 @@ phdensity <- function(x, alpha, S) {
 
 #' Phase-type cdf or tail
 #' 
-#' Computes the cdf of phase-type distribution with parameters \code{alpha} and \code{S} at \code{x}
-#' @param x non-negative value
-#' @param alpha Initial probabilities
-#' @param S sub-intensity matrix
-#' @param lower_tail cdf or tail
+#' Computes the cdf of phase-type distribution with parameters \code{alpha} and
+#'  \code{S} at \code{x}.
+#' @param x Non-negative value.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity matrix.
+#' @param lower_tail Cdf or tail.
 #' @return The cdf (tail) at \code{x}
 #' 
 phcdf <- function(x, alpha, S, lower_tail = TRUE) {
@@ -939,12 +956,13 @@ phcdf <- function(x, alpha, S, lower_tail = TRUE) {
 
 #' Matrix Weibull density
 #' 
-#' Computes the density of a matrix Weibull distribution with parameters \code{alpha}, \code{S} and \code{beta} at \code{x}
-#' @param x non-negative value
-#' @param alpha Initial probabilities
-#' @param S sub-intensity matrix
-#' @param beta shape parameter
-#' @return The density at \code{x}
+#' Computes the density of a matrix Weibull distribution with parameters
+#'  \code{alpha}, \code{S} and \code{beta} at \code{x}.
+#' @param x Non-negative value.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity matrix.
+#' @param beta Shape parameter.
+#' @return The density at \code{x}.
 #' 
 mweibullden <- function(x, alpha, S, beta) {
     .Call(`_matrixdist_mweibullden`, x, alpha, S, beta)
@@ -952,13 +970,14 @@ mweibullden <- function(x, alpha, S, beta) {
 
 #' Matrix Weibull cdf
 #' 
-#' Computes the cdf (tail) of a matrix Weibull distribution with parameters \code{alpha}, \code{S} and \code{beta} at \code{x}
-#' @param x non-negative value
-#' @param alpha Initial probabilities
-#' @param S sub-intensity matrix
-#' @param beta shape parameter
-#' @param lower_tail cdf or tail
-#' @return The cdf (tail) at \code{x}
+#' Computes the cdf (tail) of a matrix Weibull distribution with parameters
+#'  \code{alpha}, \code{S} and \code{beta} at \code{x}.
+#' @param x Non-negative value.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity matrix.
+#' @param beta Shape parameter.
+#' @param lower_tail Cdf or tail.
+#' @return The cdf (tail) at \code{x}.
 #' 
 mweibullcdf <- function(x, alpha, S, beta, lower_tail) {
     .Call(`_matrixdist_mweibullcdf`, x, alpha, S, beta, lower_tail)
@@ -970,12 +989,13 @@ RunFunction <- function(a, func) {
 
 #' Matrix Pareto density
 #' 
-#' Computes the density of a matrix Pareto distribution with parameters \code{alpha}, \code{S} and \code{beta} at \code{x}
-#' @param x non-negative value
-#' @param alpha Initial probabilities
-#' @param S sub-intensity matrix
-#' @param beta scale parameter
-#' @return The density at \code{x}
+#' Computes the density of a matrix Pareto distribution with parameters
+#'  \code{alpha}, \code{S} and \code{beta} at \code{x}.
+#' @param x Non-negative value.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity matrix.
+#' @param beta Scale parameter.
+#' @return The density at \code{x}.
 #' 
 mparetoden <- function(x, alpha, S, beta) {
     .Call(`_matrixdist_mparetoden`, x, alpha, S, beta)
@@ -983,13 +1003,14 @@ mparetoden <- function(x, alpha, S, beta) {
 
 #' Matrix Pareto cdf
 #' 
-#' Computes the cdf (tail) of a matrix Pareto distribution with parameters \code{alpha}, \code{S} and \code{beta} at \code{x}
-#' @param x non-negative value
-#' @param alpha Initial probabilities
-#' @param S sub-intensity matrix
-#' @param beta shape parameter
-#' @param lower_tail cdf or tail
-#' @return The cdf (tail) at \code{x}
+#' Computes the cdf (tail) of a matrix Pareto distribution with parameters
+#'  \code{alpha}, \code{S} and \code{beta} at \code{x}.
+#' @param x Non-negative value.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity matrix.
+#' @param beta Shape parameter.
+#' @param lower_tail Cdf or tail.
+#' @return The cdf (tail) at \code{x}.
 #' 
 mparetocdf <- function(x, alpha, S, beta, lower_tail = TRUE) {
     .Call(`_matrixdist_mparetocdf`, x, alpha, S, beta, lower_tail)
@@ -997,12 +1018,13 @@ mparetocdf <- function(x, alpha, S, beta, lower_tail = TRUE) {
 
 #' Matrix LogNormal density
 #' 
-#' Computes the density of a matrix LogNormal distribution with parameters \code{alpha}, \code{S} and \code{beta} at \code{x}
-#' @param x non-negative value
-#' @param alpha Initial probabilities
-#' @param S sub-intensity matrix
-#' @param beta shape parameter
-#' @return The density at \code{x}
+#' Computes the density of a matrix LogNormal distribution with parameters
+#'  \code{alpha}, \code{S} and \code{beta} at \code{x}.
+#' @param x Non-negative value.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity matrix.
+#' @param beta Shape parameter.
+#' @return The density at \code{x}.
 #' 
 mlognormalden <- function(x, alpha, S, beta) {
     .Call(`_matrixdist_mlognormalden`, x, alpha, S, beta)
@@ -1010,13 +1032,14 @@ mlognormalden <- function(x, alpha, S, beta) {
 
 #' Matrix LogNormal cdf
 #' 
-#' Computes the cdf (tail) of a matrix LogNormal distribution with parameters \code{alpha}, \code{S} and \code{beta} at \code{x}
-#' @param x non-negative value
-#' @param alpha Initial probabilities
-#' @param S sub-intensity matrix
-#' @param beta shape parameter
-#' @param lower_tail cdf or tail
-#' @return The cdf (tail) at \code{x}
+#' Computes the cdf (tail) of a matrix LogNormal distribution with parameters
+#'  \code{alpha}, \code{S} and \code{beta} at \code{x}.
+#' @param x Non-negative value.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity matrix.
+#' @param beta Shape parameter.
+#' @param lower_tail Cdf or tail.
+#' @return The cdf (tail) at \code{x}.
 #' 
 mlognormalcdf <- function(x, alpha, S, beta, lower_tail = TRUE) {
     .Call(`_matrixdist_mlognormalcdf`, x, alpha, S, beta, lower_tail)
@@ -1024,12 +1047,13 @@ mlognormalcdf <- function(x, alpha, S, beta, lower_tail = TRUE) {
 
 #' Matrix Log-Logistic density
 #' 
-#' Computes the density of a matrix Log-Logistic distribution with parameters \code{alpha}, \code{S} and \code{beta} at \code{x}
-#' @param x non-negative value
-#' @param alpha Initial probabilities
-#' @param S sub-intensity matrix
-#' @param beta scale parameter
-#' @return The density at \code{x}
+#' Computes the density of a matrix Log-Logistic distribution with parameters
+#'  \code{alpha}, \code{S} and \code{beta} at \code{x}.
+#' @param x Non-negative value.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity matrix.
+#' @param beta Scale parameter.
+#' @return The density at \code{x}.
 #' 
 mloglogisticden <- function(x, alpha, S, beta) {
     .Call(`_matrixdist_mloglogisticden`, x, alpha, S, beta)
@@ -1037,13 +1061,14 @@ mloglogisticden <- function(x, alpha, S, beta) {
 
 #' Matrix Log-Logistic cdf
 #' 
-#' Computes the cdf (tail) of a matrix Log-Logistic distribution with parameters \code{alpha}, \code{S} and \code{beta} at \code{x}
-#' @param x non-negative value
-#' @param alpha Initial probabilities
-#' @param S sub-intensity matrix
-#' @param beta shape parameter
-#' @param lower_tail cdf or tail
-#' @return The cdf (tail) at \code{x}
+#' Computes the cdf (tail) of a matrix Log-Logistic distribution with parameters
+#'  \code{alpha}, \code{S} and \code{beta} at \code{x}
+#' @param x Non-negative value.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity matrix.
+#' @param beta Shape parameter.
+#' @param lower_tail Cdf or tail.
+#' @return The cdf (tail) at \code{x}.
 #' 
 mloglogisticcdf <- function(x, alpha, S, beta, lower_tail = TRUE) {
     .Call(`_matrixdist_mloglogisticcdf`, x, alpha, S, beta, lower_tail)
@@ -1051,12 +1076,13 @@ mloglogisticcdf <- function(x, alpha, S, beta, lower_tail = TRUE) {
 
 #' Matrix Gompertz density
 #' 
-#' Computes the density of a matrix Gompertz distribution with parameters \code{alpha}, \code{S} and \code{beta} at \code{x}
-#' @param x non-negative value
-#' @param alpha Initial probabilities
-#' @param S sub-intensity matrix
-#' @param beta parameter
-#' @return The density at \code{x}
+#' Computes the density of a matrix Gompertz distribution with parameters
+#'  \code{alpha}, \code{S} and \code{beta} at \code{x}.
+#' @param x Non-negative value.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity matrix.
+#' @param beta Parameter.
+#' @return The density at \code{x}.
 #' 
 mgompertzden <- function(x, alpha, S, beta) {
     .Call(`_matrixdist_mgompertzden`, x, alpha, S, beta)
@@ -1064,13 +1090,14 @@ mgompertzden <- function(x, alpha, S, beta) {
 
 #' Matrix Gompertz cdf
 #' 
-#' Computes the cdf (tail) of a matrix Gompertz distribution with parameters \code{alpha}, \code{S} and \code{beta} at \code{x}
-#' @param x non-negative value
-#' @param alpha Initial probabilities
-#' @param S sub-intensity matrix
-#' @param beta shape parameter
-#' @param lower_tail cdf or tail
-#' @return The cdf (tail) at \code{x}
+#' Computes the cdf (tail) of a matrix Gompertz distribution with parameters
+#'  \code{alpha}, \code{S} and \code{beta} at \code{x}.
+#' @param x Non-negative value.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity matrix.
+#' @param beta Shape parameter.
+#' @param lower_tail Cdf or tail.
+#' @return The cdf (tail) at \code{x}.
 #' 
 mgompertzcdf <- function(x, alpha, S, beta, lower_tail = TRUE) {
     .Call(`_matrixdist_mgompertzcdf`, x, alpha, S, beta, lower_tail)
@@ -1078,15 +1105,17 @@ mgompertzcdf <- function(x, alpha, S, beta, lower_tail = TRUE) {
 
 #' Matrix GEV density
 #' 
-#' Computes the density of a matrix GEV distribution with parameters \code{alpha}, \code{S} and \code{beta} at \code{x}
+#' Computes the density of a matrix GEV distribution with parameters
+#'  \code{alpha}, \code{S} and \code{beta} at \code{x}.
 #' Dont allow for atoms in zero
-#' @param x non-negative value
-#' @param alpha Initial probabilities
-#' @param S sub-intensity matrix
-#' @param mu  location parameter
-#' @param sigma scale parameter
-#' @param xi shape parameter
-#' @return The density at \code{x}
+#' 
+#' @param x Non-negative value.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity matrix.
+#' @param mu Location parameter.
+#' @param sigma Scale parameter.
+#' @param xi Shape parameter.
+#' @return The density at \code{x}.
 #' 
 mgevden <- function(x, alpha, S, mu, sigma, xi) {
     .Call(`_matrixdist_mgevden`, x, alpha, S, mu, sigma, xi)
@@ -1094,15 +1123,16 @@ mgevden <- function(x, alpha, S, mu, sigma, xi) {
 
 #' Matrix GEV cdf
 #' 
-#' Computes the cdf (tail) of a matrix GEV distribution with parameters \code{alpha}, \code{S} and \code{beta} at \code{x}
-#' @param x non-negative value
-#' @param alpha Initial probabilities
-#' @param S sub-intensity matrix
-#' @param mu  location parameter
-#' @param sigma scale parameter
-#' @param xi shape parameter
-#' @param lower_tail cdf or tail
-#' @return The cdf (tail) at \code{x}
+#' Computes the cdf (tail) of a matrix GEV distribution with parameters 
+#' \code{alpha}, \code{S} and \code{beta} at \code{x}.
+#' @param x Non-negative value.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity matrix.
+#' @param mu Location parameter.
+#' @param sigma Scale parameter.
+#' @param xi Shape parameter.
+#' @param lower_tail Cdf or tail.
+#' @return The cdf (tail) at \code{x}.
 #' 
 mgevcdf <- function(x, alpha, S, mu, sigma, xi, lower_tail = TRUE) {
     .Call(`_matrixdist_mgevcdf`, x, alpha, S, mu, sigma, xi, lower_tail)

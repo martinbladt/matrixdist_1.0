@@ -7,21 +7,21 @@
 logLikelihoodMgev_PADE(h, alpha, S, beta, obs, weight, rcens, rcweight)
 }
 \arguments{
-\item{h}{nuisance parameter}
+\item{h}{Nuisance parameter.}
 
-\item{alpha}{initial probabilities}
+\item{alpha}{Initial probabilities.}
 
-\item{S}{sub-intensity}
+\item{S}{sub-intensity.}
 
-\item{beta}{in-homogeneity parameter}
+\item{beta}{Inhomogeneity parameter.}
 
-\item{obs}{the observations}
+\item{obs}{The observations.}
 
-\item{weight}{weight of the observations}
+\item{weight}{Weight of the observations.}
 
-\item{rcens}{censored observations}
+\item{rcens}{Censored observations.}
 
-\item{rcweight}{weight of the censored observations}
+\item{rcweight}{Weight of the censored observations.}
 }
 \description{
 Loglikelihood for a sample

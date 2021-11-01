@@ -7,17 +7,18 @@
 phcdf(x, alpha, S, lower_tail = TRUE)
 }
 \arguments{
-\item{x}{non-negative value}
+\item{x}{Non-negative value.}
 
-\item{alpha}{Initial probabilities}
+\item{alpha}{Initial probabilities.}
 
-\item{S}{sub-intensity matrix}
+\item{S}{Sub-intensity matrix.}
 
-\item{lower_tail}{cdf or tail}
+\item{lower_tail}{Cdf or tail.}
 }
 \value{
 The cdf (tail) at \code{x}
 }
 \description{
-Computes the cdf of phase-type distribution with parameters \code{alpha} and \code{S} at \code{x}
+Computes the cdf of phase-type distribution with parameters \code{alpha} and
+ \code{S} at \code{x}.
 }

@@ -7,11 +7,12 @@ using namespace Rcpp;
 
 //' Phase-type density
 //' 
-//' Computes the density of phase-type distribution with parameters \code{alpha} and \code{S} at \code{x}
-//' @param x non-negative value
-//' @param alpha Initial probabilities
-//' @param S sub-intensity matrix
-//' @return The density at \code{x}
+//' Computes the density of phase-type distribution with parameters \code{alpha}
+//'  and \code{S} at \code{x}.
+//' @param x Non-negative value.
+//' @param alpha Initial probabilities.
+//' @param S Sub-intensity matrix.
+//' @return The density at \code{x}.
 //' 
 // [[Rcpp::export]]
 NumericVector phdensity(NumericVector x, NumericVector alpha, NumericMatrix S) {
@@ -37,11 +38,12 @@ NumericVector phdensity(NumericVector x, NumericVector alpha, NumericMatrix S) {
 
 //' Phase-type cdf or tail
 //' 
-//' Computes the cdf of phase-type distribution with parameters \code{alpha} and \code{S} at \code{x}
-//' @param x non-negative value
-//' @param alpha Initial probabilities
-//' @param S sub-intensity matrix
-//' @param lower_tail cdf or tail
+//' Computes the cdf of phase-type distribution with parameters \code{alpha} and
+//'  \code{S} at \code{x}.
+//' @param x Non-negative value.
+//' @param alpha Initial probabilities.
+//' @param S Sub-intensity matrix.
+//' @param lower_tail Cdf or tail.
 //' @return The cdf (tail) at \code{x}
 //' 
 // [[Rcpp::export]]
@@ -71,12 +73,13 @@ NumericVector phcdf(NumericVector x, NumericVector alpha, NumericMatrix S, bool 
 
 //' Matrix Weibull density
 //' 
-//' Computes the density of a matrix Weibull distribution with parameters \code{alpha}, \code{S} and \code{beta} at \code{x}
-//' @param x non-negative value
-//' @param alpha Initial probabilities
-//' @param S sub-intensity matrix
-//' @param beta shape parameter
-//' @return The density at \code{x}
+//' Computes the density of a matrix Weibull distribution with parameters
+//'  \code{alpha}, \code{S} and \code{beta} at \code{x}.
+//' @param x Non-negative value.
+//' @param alpha Initial probabilities.
+//' @param S Sub-intensity matrix.
+//' @param beta Shape parameter.
+//' @return The density at \code{x}.
 //' 
 // [[Rcpp::export]]
 NumericVector mweibullden(NumericVector x, NumericVector alpha, NumericMatrix S, double beta) {
@@ -103,13 +106,14 @@ NumericVector mweibullden(NumericVector x, NumericVector alpha, NumericMatrix S,
 
 //' Matrix Weibull cdf
 //' 
-//' Computes the cdf (tail) of a matrix Weibull distribution with parameters \code{alpha}, \code{S} and \code{beta} at \code{x}
-//' @param x non-negative value
-//' @param alpha Initial probabilities
-//' @param S sub-intensity matrix
-//' @param beta shape parameter
-//' @param lower_tail cdf or tail
-//' @return The cdf (tail) at \code{x}
+//' Computes the cdf (tail) of a matrix Weibull distribution with parameters
+//'  \code{alpha}, \code{S} and \code{beta} at \code{x}.
+//' @param x Non-negative value.
+//' @param alpha Initial probabilities.
+//' @param S Sub-intensity matrix.
+//' @param beta Shape parameter.
+//' @param lower_tail Cdf or tail.
+//' @return The cdf (tail) at \code{x}.
 //' 
 // [[Rcpp::export]]
 NumericVector mweibullcdf(NumericVector x, NumericVector alpha, NumericMatrix S, double beta, bool lower_tail) {
@@ -147,12 +151,13 @@ NumericVector RunFunction(NumericVector a, Function func)
 
 //' Matrix Pareto density
 //' 
-//' Computes the density of a matrix Pareto distribution with parameters \code{alpha}, \code{S} and \code{beta} at \code{x}
-//' @param x non-negative value
-//' @param alpha Initial probabilities
-//' @param S sub-intensity matrix
-//' @param beta scale parameter
-//' @return The density at \code{x}
+//' Computes the density of a matrix Pareto distribution with parameters
+//'  \code{alpha}, \code{S} and \code{beta} at \code{x}.
+//' @param x Non-negative value.
+//' @param alpha Initial probabilities.
+//' @param S Sub-intensity matrix.
+//' @param beta Scale parameter.
+//' @return The density at \code{x}.
 //' 
 // [[Rcpp::export]]
 NumericVector mparetoden(NumericVector x, NumericVector alpha, NumericMatrix S, double beta) {
@@ -179,13 +184,14 @@ NumericVector mparetoden(NumericVector x, NumericVector alpha, NumericMatrix S, 
 
 //' Matrix Pareto cdf
 //' 
-//' Computes the cdf (tail) of a matrix Pareto distribution with parameters \code{alpha}, \code{S} and \code{beta} at \code{x}
-//' @param x non-negative value
-//' @param alpha Initial probabilities
-//' @param S sub-intensity matrix
-//' @param beta shape parameter
-//' @param lower_tail cdf or tail
-//' @return The cdf (tail) at \code{x}
+//' Computes the cdf (tail) of a matrix Pareto distribution with parameters
+//'  \code{alpha}, \code{S} and \code{beta} at \code{x}.
+//' @param x Non-negative value.
+//' @param alpha Initial probabilities.
+//' @param S Sub-intensity matrix.
+//' @param beta Shape parameter.
+//' @param lower_tail Cdf or tail.
+//' @return The cdf (tail) at \code{x}.
 //' 
 // [[Rcpp::export]]
 NumericVector mparetocdf(NumericVector x, NumericVector alpha, NumericMatrix S, double beta, bool lower_tail = true) {
@@ -215,12 +221,13 @@ NumericVector mparetocdf(NumericVector x, NumericVector alpha, NumericMatrix S, 
 
 //' Matrix LogNormal density
 //' 
-//' Computes the density of a matrix LogNormal distribution with parameters \code{alpha}, \code{S} and \code{beta} at \code{x}
-//' @param x non-negative value
-//' @param alpha Initial probabilities
-//' @param S sub-intensity matrix
-//' @param beta shape parameter
-//' @return The density at \code{x}
+//' Computes the density of a matrix LogNormal distribution with parameters
+//'  \code{alpha}, \code{S} and \code{beta} at \code{x}.
+//' @param x Non-negative value.
+//' @param alpha Initial probabilities.
+//' @param S Sub-intensity matrix.
+//' @param beta Shape parameter.
+//' @return The density at \code{x}.
 //' 
 // [[Rcpp::export]]
 NumericVector mlognormalden(NumericVector x, NumericVector alpha, NumericMatrix S, double beta) {
@@ -247,13 +254,14 @@ NumericVector mlognormalden(NumericVector x, NumericVector alpha, NumericMatrix 
 
 //' Matrix LogNormal cdf
 //' 
-//' Computes the cdf (tail) of a matrix LogNormal distribution with parameters \code{alpha}, \code{S} and \code{beta} at \code{x}
-//' @param x non-negative value
-//' @param alpha Initial probabilities
-//' @param S sub-intensity matrix
-//' @param beta shape parameter
-//' @param lower_tail cdf or tail
-//' @return The cdf (tail) at \code{x}
+//' Computes the cdf (tail) of a matrix LogNormal distribution with parameters
+//'  \code{alpha}, \code{S} and \code{beta} at \code{x}.
+//' @param x Non-negative value.
+//' @param alpha Initial probabilities.
+//' @param S Sub-intensity matrix.
+//' @param beta Shape parameter.
+//' @param lower_tail Cdf or tail.
+//' @return The cdf (tail) at \code{x}.
 //' 
 // [[Rcpp::export]]
 NumericVector mlognormalcdf(NumericVector x, NumericVector alpha, NumericMatrix S, double beta, bool lower_tail = true) {
@@ -284,12 +292,13 @@ NumericVector mlognormalcdf(NumericVector x, NumericVector alpha, NumericMatrix 
 
 //' Matrix Log-Logistic density
 //' 
-//' Computes the density of a matrix Log-Logistic distribution with parameters \code{alpha}, \code{S} and \code{beta} at \code{x}
-//' @param x non-negative value
-//' @param alpha Initial probabilities
-//' @param S sub-intensity matrix
-//' @param beta scale parameter
-//' @return The density at \code{x}
+//' Computes the density of a matrix Log-Logistic distribution with parameters
+//'  \code{alpha}, \code{S} and \code{beta} at \code{x}.
+//' @param x Non-negative value.
+//' @param alpha Initial probabilities.
+//' @param S Sub-intensity matrix.
+//' @param beta Scale parameter.
+//' @return The density at \code{x}.
 //' 
 // [[Rcpp::export]]
 NumericVector mloglogisticden(NumericVector x, NumericVector alpha, NumericMatrix S, NumericVector beta) {
@@ -315,13 +324,14 @@ NumericVector mloglogisticden(NumericVector x, NumericVector alpha, NumericMatri
 
 //' Matrix Log-Logistic cdf
 //' 
-//' Computes the cdf (tail) of a matrix Log-Logistic distribution with parameters \code{alpha}, \code{S} and \code{beta} at \code{x}
-//' @param x non-negative value
-//' @param alpha Initial probabilities
-//' @param S sub-intensity matrix
-//' @param beta shape parameter
-//' @param lower_tail cdf or tail
-//' @return The cdf (tail) at \code{x}
+//' Computes the cdf (tail) of a matrix Log-Logistic distribution with parameters
+//'  \code{alpha}, \code{S} and \code{beta} at \code{x}
+//' @param x Non-negative value.
+//' @param alpha Initial probabilities.
+//' @param S Sub-intensity matrix.
+//' @param beta Shape parameter.
+//' @param lower_tail Cdf or tail.
+//' @return The cdf (tail) at \code{x}.
 //' 
 // [[Rcpp::export]]
 NumericVector mloglogisticcdf(NumericVector x, NumericVector alpha, NumericMatrix S, NumericVector beta, bool lower_tail = true) {
@@ -351,12 +361,13 @@ NumericVector mloglogisticcdf(NumericVector x, NumericVector alpha, NumericMatri
 
 //' Matrix Gompertz density
 //' 
-//' Computes the density of a matrix Gompertz distribution with parameters \code{alpha}, \code{S} and \code{beta} at \code{x}
-//' @param x non-negative value
-//' @param alpha Initial probabilities
-//' @param S sub-intensity matrix
-//' @param beta parameter
-//' @return The density at \code{x}
+//' Computes the density of a matrix Gompertz distribution with parameters
+//'  \code{alpha}, \code{S} and \code{beta} at \code{x}.
+//' @param x Non-negative value.
+//' @param alpha Initial probabilities.
+//' @param S Sub-intensity matrix.
+//' @param beta Parameter.
+//' @return The density at \code{x}.
 //' 
 // [[Rcpp::export]]
 NumericVector mgompertzden(NumericVector x, NumericVector alpha, NumericMatrix S, double beta) {
@@ -383,13 +394,14 @@ NumericVector mgompertzden(NumericVector x, NumericVector alpha, NumericMatrix S
 
 //' Matrix Gompertz cdf
 //' 
-//' Computes the cdf (tail) of a matrix Gompertz distribution with parameters \code{alpha}, \code{S} and \code{beta} at \code{x}
-//' @param x non-negative value
-//' @param alpha Initial probabilities
-//' @param S sub-intensity matrix
-//' @param beta shape parameter
-//' @param lower_tail cdf or tail
-//' @return The cdf (tail) at \code{x}
+//' Computes the cdf (tail) of a matrix Gompertz distribution with parameters
+//'  \code{alpha}, \code{S} and \code{beta} at \code{x}.
+//' @param x Non-negative value.
+//' @param alpha Initial probabilities.
+//' @param S Sub-intensity matrix.
+//' @param beta Shape parameter.
+//' @param lower_tail Cdf or tail.
+//' @return The cdf (tail) at \code{x}.
 //' 
 // [[Rcpp::export]]
 NumericVector mgompertzcdf(NumericVector x, NumericVector alpha, NumericMatrix S, double beta, bool lower_tail = true) {
@@ -420,15 +432,17 @@ NumericVector mgompertzcdf(NumericVector x, NumericVector alpha, NumericMatrix S
 
 //' Matrix GEV density
 //' 
-//' Computes the density of a matrix GEV distribution with parameters \code{alpha}, \code{S} and \code{beta} at \code{x}
+//' Computes the density of a matrix GEV distribution with parameters
+//'  \code{alpha}, \code{S} and \code{beta} at \code{x}.
 //' Dont allow for atoms in zero
-//' @param x non-negative value
-//' @param alpha Initial probabilities
-//' @param S sub-intensity matrix
-//' @param mu  location parameter
-//' @param sigma scale parameter
-//' @param xi shape parameter
-//' @return The density at \code{x}
+//' 
+//' @param x Non-negative value.
+//' @param alpha Initial probabilities.
+//' @param S Sub-intensity matrix.
+//' @param mu Location parameter.
+//' @param sigma Scale parameter.
+//' @param xi Shape parameter.
+//' @return The density at \code{x}.
 //' 
 // [[Rcpp::export]]
 NumericVector mgevden(NumericVector x, NumericVector alpha, NumericMatrix S, double mu, double sigma, double xi) {
@@ -455,15 +469,16 @@ NumericVector mgevden(NumericVector x, NumericVector alpha, NumericMatrix S, dou
 
 //' Matrix GEV cdf
 //' 
-//' Computes the cdf (tail) of a matrix GEV distribution with parameters \code{alpha}, \code{S} and \code{beta} at \code{x}
-//' @param x non-negative value
-//' @param alpha Initial probabilities
-//' @param S sub-intensity matrix
-//' @param mu  location parameter
-//' @param sigma scale parameter
-//' @param xi shape parameter
-//' @param lower_tail cdf or tail
-//' @return The cdf (tail) at \code{x}
+//' Computes the cdf (tail) of a matrix GEV distribution with parameters 
+//' \code{alpha}, \code{S} and \code{beta} at \code{x}.
+//' @param x Non-negative value.
+//' @param alpha Initial probabilities.
+//' @param S Sub-intensity matrix.
+//' @param mu Location parameter.
+//' @param sigma Scale parameter.
+//' @param xi Shape parameter.
+//' @param lower_tail Cdf or tail.
+//' @return The cdf (tail) at \code{x}.
 //' 
 // [[Rcpp::export]]
 NumericVector mgevcdf(NumericVector x, NumericVector alpha, NumericMatrix S, double mu, double sigma, double xi, bool lower_tail = true) {

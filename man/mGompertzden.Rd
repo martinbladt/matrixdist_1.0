@@ -7,17 +7,18 @@
 mgompertzden(x, alpha, S, beta)
 }
 \arguments{
-\item{x}{non-negative value}
+\item{x}{Non-negative value.}
 
-\item{alpha}{Initial probabilities}
+\item{alpha}{Initial probabilities.}
 
-\item{S}{sub-intensity matrix}
+\item{S}{Sub-intensity matrix.}
 
-\item{beta}{parameter}
+\item{beta}{Parameter.}
 }
 \value{
-The density at \code{x}
+The density at \code{x}.
 }
 \description{
-Computes the density of a matrix Gompertz distribution with parameters \code{alpha}, \code{S} and \code{beta} at \code{x}
+Computes the density of a matrix Gompertz distribution with parameters
+ \code{alpha}, \code{S} and \code{beta} at \code{x}.
 }

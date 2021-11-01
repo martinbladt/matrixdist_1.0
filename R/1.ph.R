@@ -293,13 +293,13 @@ setMethod("quan", c(x = "ph"), function(x,
 #' @param reltol Relative tolerance when optimizing g function.
 #' @param every Number of iterations between likelihood display updates.
 #' @param plot Logical indicating whether to plot the fit at each iteration.
-#' 
+#'
 #' @return An object of class \linkS4class{ph}.
-#' 
+#'
 #' @importFrom grDevices dev.off
 #' @importFrom graphics hist legend lines
 #' @importFrom utils head
-#' 
+#'
 #' @export
 #'
 #' @examples
@@ -322,34 +322,40 @@ setMethod(
            every = 100,
            plot = FALSE) {
     EMstep <- eval(parse(text = paste("EMstep_", methods[1], sep = "")))
-    if(!all(c(y, rcen) > 0)) {
+    if (!all(c(y, rcen) > 0)) {
       stop("data should be positive")
     }
-    if(!all(c(weight, rcenweight) >= 0)) {
+    if (!all(c(weight, rcenweight) >= 0)) {
       stop("weights should be non-negative")
     }
     is_iph <- methods::is(x, "iph")
     if (is_iph) {
       par_g <- x@gfun$pars
-      inv_g <- x@gfun$inverse}
-    LL <- if(is_iph){eval(parse(text = paste("logLikelihoodM", x@gfun$name, "_", methods[2], sep = "")))
-      }else{eval(parse(text = paste("logLikelihoodPH_", methods[2], sep = "")))}
+      inv_g <- x@gfun$inverse
+    }
+    LL <- if (is_iph) {
+      eval(parse(text = paste("logLikelihoodM", x@gfun$name, "_", methods[2], sep = "")))
+    } else {
+      eval(parse(text = paste("logLikelihoodPH_", methods[2], sep = "")))
+    }
     A <- data_aggregation(y, weight)
     y <- A$un_obs
     weight <- A$weights
-    if(length(rcen)>0){
+    if (length(rcen) > 0) {
       B <- data_aggregation(rcen, rcenweight)
       rcen <- B$un_obs
       rcenweight <- B$weights
     }
-    if(plot == TRUE){
-      if(length(rcen)>0) {
+    if (plot == TRUE) {
+      if (length(rcen) > 0) {
         stop("plot option only available for non-censored data")
       }
       h <- hist(rep(y, weight), breaks = 30, plot = FALSE)
       sq <- seq(0, 1.1 * max(y), length.out = 200)
-      plot(head(h$breaks, length(h$density)), h$density, col = "#b2df8a", 
-           main = "Histogram", xlab = "data", ylab = "density", type = "s", lwd = 2)
+      plot(head(h$breaks, length(h$density)), h$density,
+        col = "#b2df8a",
+        main = "Histogram", xlab = "data", ylab = "density", type = "s", lwd = 2
+      )
     }
 
     ph_par <- x@pars
@@ -358,36 +364,41 @@ setMethod(
 
     if (!is_iph) {
       for (k in 1:stepsEM) {
-        epsilon1 <- switch(which(methods[1] == c("RK", "UNI","PADE")),
-                           if(!is.na(rkstep)) rkstep else default_step_length(S_fit),
-                           if(!is.na(uni_epsilon)) uni_epsilon else 1e-4,
-                           0)
-        epsilon2 <- switch(which(methods[2] == c("RK", "UNI","PADE")),
-                           if(!is.na(rkstep)) rkstep else default_step_length(S_fit),
-                           if(!is.na(uni_epsilon)) uni_epsilon else 1e-4,
-                           0)
+        epsilon1 <- switch(which(methods[1] == c("RK", "UNI", "PADE")),
+          if (!is.na(rkstep)) rkstep else default_step_length(S_fit),
+          if (!is.na(uni_epsilon)) uni_epsilon else 1e-4,
+          0
+        )
+        epsilon2 <- switch(which(methods[2] == c("RK", "UNI", "PADE")),
+          if (!is.na(rkstep)) rkstep else default_step_length(S_fit),
+          if (!is.na(uni_epsilon)) uni_epsilon else 1e-4,
+          0
+        )
         EMstep(epsilon1, alpha_fit, S_fit, y, weight, rcen, rcenweight)
         if (k %% every == 0) {
           cat("\r", "iteration:", k,
             ", logLik:", LL(epsilon2, alpha_fit, S_fit, y, weight, rcen, rcenweight),
             sep = " "
           )
-          if(plot == TRUE){
+          if (plot == TRUE) {
             dev.off()
-            plot(head(h$breaks, length(h$density)), h$density, col = "#b2df8a", 
-                 main = "Histogram", xlab = "data", ylab = "density", type = "s", lwd = 2)
+            plot(head(h$breaks, length(h$density)), h$density,
+              col = "#b2df8a",
+              main = "Histogram", xlab = "data", ylab = "density", type = "s", lwd = 2
+            )
             tmp_ph <- ph(alpha_fit, S_fit)
             lines(sq, dens(tmp_ph, sq), col = "#33a02c", lwd = 2, lty = 1)
-            legend("topright", 
-                   legend = c("Data", "PH fit"), 
-                   col = c("#b2df8a", "#33a02c"), 
-                   lty = c(1,1), 
-                   bty = "n", 
-                   lwd = 2, 
-                   cex = 1.2, 
-                   text.col = "black", 
-                   horiz = FALSE, 
-                   inset = c(0.05, 0.05))
+            legend("topright",
+              legend = c("Data", "PH fit"),
+              col = c("#b2df8a", "#33a02c"),
+              lty = c(1, 1),
+              bty = "n",
+              lwd = 2,
+              cex = 1.2,
+              text.col = "black",
+              horiz = FALSE,
+              inset = c(0.05, 0.05)
+            )
           }
         }
       }
@@ -400,20 +411,30 @@ setMethod(
       )
     }
     if (is_iph) {
-      trans_weight <- weight 
+      trans_weight <- weight
       trans_rcenweight <- rcenweight
       for (k in 1:stepsEM) {
-        if(x@gfun$name != "gev") {trans <- inv_g(par_g, y); trans_cens <- inv_g(par_g, rcen)
-        }else{ t <- inv_g(par_g, y, weight); tc <- inv_g(par_g, rcen, rcenweight) 
-        trans <- t$obs; trans_weight <- t$weight; trans_cens <- tc$obs; trans_rcenweight <- tc$weight}
-        epsilon1 <- switch(which(methods[1] == c("RK", "UNI","PADE")),
-                           if(!is.na(rkstep)) rkstep else default_step_length(S_fit),
-                           if(!is.na(uni_epsilon)) uni_epsilon else 1e-4,
-                           0)
-        epsilon2 <- switch(which(methods[2] == c("RK", "UNI","PADE")),
-                           if(!is.na(rkstep)) rkstep else default_step_length(S_fit),
-                           if(!is.na(uni_epsilon)) uni_epsilon else 1e-4,
-                           0)
+        if (x@gfun$name != "gev") {
+          trans <- inv_g(par_g, y)
+          trans_cens <- inv_g(par_g, rcen)
+        } else {
+          t <- inv_g(par_g, y, weight)
+          tc <- inv_g(par_g, rcen, rcenweight)
+          trans <- t$obs
+          trans_weight <- t$weight
+          trans_cens <- tc$obs
+          trans_rcenweight <- tc$weight
+        }
+        epsilon1 <- switch(which(methods[1] == c("RK", "UNI", "PADE")),
+          if (!is.na(rkstep)) rkstep else default_step_length(S_fit),
+          if (!is.na(uni_epsilon)) uni_epsilon else 1e-4,
+          0
+        )
+        epsilon2 <- switch(which(methods[2] == c("RK", "UNI", "PADE")),
+          if (!is.na(rkstep)) rkstep else default_step_length(S_fit),
+          if (!is.na(uni_epsilon)) uni_epsilon else 1e-4,
+          0
+        )
         EMstep(epsilon1, alpha_fit, S_fit, trans, trans_weight, trans_cens, trans_rcenweight)
         opt <- suppressWarnings(
           stats::optim(
@@ -440,22 +461,25 @@ setMethod(
             ", logLik:", opt$value,
             sep = " "
           )
-          if(plot == TRUE){
+          if (plot == TRUE) {
             dev.off()
-            plot(head(h$breaks, length(h$density)), h$density, col = "#b2df8a", 
-                 main = "Histogram", xlab = "data", ylab = "density", type = "s", lwd = 2)
+            plot(head(h$breaks, length(h$density)), h$density,
+              col = "#b2df8a",
+              main = "Histogram", xlab = "data", ylab = "density", type = "s", lwd = 2
+            )
             tmp_ph <- iph(ph(alpha_fit, S_fit), gfun = x@gfun$name, gfun_pars = par_g)
             lines(sq, dens(tmp_ph, sq), col = "#33a02c", lwd = 2, lty = 1)
-            legend("topright", 
-                   legend = c("Data", paste("Matrix-", x@gfun$name," fit", sep ="")), 
-                   col = c("#b2df8a", "#33a02c"), 
-                   lty = c(1,1), 
-                   bty = "n", 
-                   lwd = 2, 
-                   cex = 1.2, 
-                   text.col = "black", 
-                   horiz = FALSE, 
-                   inset = c(0.05, 0.05))
+            legend("topright",
+              legend = c("Data", paste("Matrix-", x@gfun$name, " fit", sep = "")),
+              col = c("#b2df8a", "#33a02c"),
+              lty = c(1, 1),
+              bty = "n",
+              lwd = 2,
+              cex = 1.2,
+              text.col = "black",
+              horiz = FALSE,
+              inset = c(0.05, 0.05)
+            )
           }
         }
       }
