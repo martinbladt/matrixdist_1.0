@@ -179,7 +179,7 @@ void runge_kutta(NumericMatrix & avector, NumericMatrix & bvector, NumericMatrix
 //' @param rcweight The weights for the censored observations.
 //' 
 // [[Rcpp::export]]
-void EMstep_RK(double h, NumericVector & alpha, NumericMatrix & S, const NumericVector & obs, const NumericVector & weight, const NumericVector & rcens, const NumericVector & rcweight) {
+void EMstep_RK_old(double h, NumericVector & alpha, NumericMatrix & S, const NumericVector & obs, const NumericVector & weight, const NumericVector & rcens, const NumericVector & rcweight) {
   long p{S.nrow()};
   
   NumericMatrix m_alpha(1, p, alpha.begin()); //Matrix version of alpha for computations
@@ -356,7 +356,7 @@ void a_rungekutta(NumericMatrix & avector, double dt, double h, const NumericMat
 //' @param rcweight Weight of the censored observations.
 //' 
 // [[Rcpp::export]]
-double logLikelihoodPH_RK(double h, NumericVector & alpha, NumericMatrix & S, const NumericVector & obs, const NumericVector & weight, const NumericVector & rcens, const NumericVector & rcweight) {
+double logLikelihoodPH_RK_old(double h, NumericVector & alpha, NumericMatrix & S, const NumericVector & obs, const NumericVector & weight, const NumericVector & rcens, const NumericVector & rcweight) {
   long p{S.nrow()};
   NumericMatrix m_alpha(1,p, alpha.begin());
   

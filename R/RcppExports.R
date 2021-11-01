@@ -41,8 +41,8 @@ runge_kutta <- function(avector, bvector, cmatrix, dt, h, S, t) {
 #' @param rcens Censored observations.
 #' @param rcweight The weights for the censored observations.
 #' 
-EMstep_RK <- function(h, alpha, S, obs, weight, rcens, rcweight) {
-    invisible(.Call(`_matrixdist_EMstep_RK`, h, alpha, S, obs, weight, rcens, rcweight))
+EMstep_RK_old <- function(h, alpha, S, obs, weight, rcens, rcweight) {
+    invisible(.Call(`_matrixdist_EMstep_RK_old`, h, alpha, S, obs, weight, rcens, rcweight))
 }
 
 #' Runge Kutta for the calculation of the a vectors in a EM step 
@@ -68,8 +68,8 @@ a_rungekutta <- function(avector, dt, h, S) {
 #' @param rcens Censored observations.
 #' @param rcweight Weight of the censored observations.
 #' 
-logLikelihoodPH_RK <- function(h, alpha, S, obs, weight, rcens, rcweight) {
-    .Call(`_matrixdist_logLikelihoodPH_RK`, h, alpha, S, obs, weight, rcens, rcweight)
+logLikelihoodPH_RK_old <- function(h, alpha, S, obs, weight, rcens, rcweight) {
+    .Call(`_matrixdist_logLikelihoodPH_RK_old`, h, alpha, S, obs, weight, rcens, rcweight)
 }
 
 #' Loglikelihood of matrix Weibull using RK
@@ -806,6 +806,65 @@ logLikelihoodMloglogistic_UNIs <- function(h, alpha, S, beta, obs, weight, rcens
 #' 
 logLikelihoodMgompertz_UNIs <- function(h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2) {
     .Call(`_matrixdist_logLikelihoodMgompertz_UNIs`, h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2)
+}
+
+#' Runge Kutta for the calculation of the a,b and c vectors in a EM step
+#' 
+#' Performs the RK of forth order
+#' 
+#' @param avector The a vector.
+#' @param bvector The b vector.
+#' @param cmatrix The c matrix.
+#' @param dt The increment.
+#' @param h Step-length.
+#' @param S Sub-intensity.
+#' @param s Exit rates.
+#' 
+runge_kutta_new <- function(avector, bvector, cmatrix, dt, h, S, s) {
+    invisible(.Call(`_matrixdist_runge_kutta_new`, avector, bvector, cmatrix, dt, h, S, s))
+}
+
+#' EM step using Runge Kutta
+#' 
+#' Computes one step of the EM algorithm by using a Runge-Kutta method of 4th order
+#' 
+#' @param h Step-length.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity.
+#' @param obs The observations.
+#' @param weight The weights for the observations.
+#' @param rcens Censored observations.
+#' @param rcweight The weights for the censored observations.
+#' 
+EMstep_RK <- function(h, alpha, S, obs, weight, rcens, rcweight) {
+    invisible(.Call(`_matrixdist_EMstep_RK`, h, alpha, S, obs, weight, rcens, rcweight))
+}
+
+#' Runge Kutta for the calculation of the a vectors in a EM step 
+#' 
+#' @param avector The a vector.
+#' @param dt Increment.
+#' @param h Step-length.
+#' @param S Sub-intensity.
+#' 
+a_rungekutta_new <- function(avector, dt, h, S) {
+    invisible(.Call(`_matrixdist_a_rungekutta_new`, avector, dt, h, S))
+}
+
+#' Loglikelihood using RK
+#' 
+#' Loglikelihood for a sample.
+#' 
+#' @param h Step-length.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity.
+#' @param obs The observations.
+#' @param weight Weight of the observations.
+#' @param rcens Censored observations.
+#' @param rcweight Weight of the censored observations.
+#' 
+logLikelihoodPH_RK <- function(h, alpha, S, obs, weight, rcens, rcweight) {
+    .Call(`_matrixdist_logLikelihoodPH_RK`, h, alpha, S, obs, weight, rcens, rcweight)
 }
 
 #' Embedded Markov chain of a sub-intensity matrix
