@@ -996,91 +996,102 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// LInf_normArma
-double LInf_normArma(arma::mat A);
-RcppExport SEXP _matrixdist_LInf_normArma(SEXP ASEXP) {
+// inf_norm
+double inf_norm(arma::mat A);
+RcppExport SEXP _matrixdist_inf_norm(SEXP ASEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< arma::mat >::type A(ASEXP);
-    rcpp_result_gen = Rcpp::wrap(LInf_normArma(A));
+    rcpp_result_gen = Rcpp::wrap(inf_norm(A));
     return rcpp_result_gen;
 END_RCPP
 }
-// matrix_VanLoanArma
-arma::mat matrix_VanLoanArma(arma::mat A1, arma::mat A2, arma::mat B1);
-RcppExport SEXP _matrixdist_matrix_VanLoanArma(SEXP A1SEXP, SEXP A2SEXP, SEXP B1SEXP) {
+// matrix_VanLoan
+arma::mat matrix_VanLoan(arma::mat A1, arma::mat A2, arma::mat B1);
+RcppExport SEXP _matrixdist_matrix_VanLoan(SEXP A1SEXP, SEXP A2SEXP, SEXP B1SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< arma::mat >::type A1(A1SEXP);
     Rcpp::traits::input_parameter< arma::mat >::type A2(A2SEXP);
     Rcpp::traits::input_parameter< arma::mat >::type B1(B1SEXP);
-    rcpp_result_gen = Rcpp::wrap(matrix_VanLoanArma(A1, A2, B1));
+    rcpp_result_gen = Rcpp::wrap(matrix_VanLoan(A1, A2, B1));
     return rcpp_result_gen;
 END_RCPP
 }
-// matrixMaxDiagonal_arma
-double matrixMaxDiagonal_arma(const arma::mat& A);
-RcppExport SEXP _matrixdist_matrixMaxDiagonal_arma(SEXP ASEXP) {
+// max_diagonal
+double max_diagonal(const arma::mat& A);
+RcppExport SEXP _matrixdist_max_diagonal(SEXP ASEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const arma::mat& >::type A(ASEXP);
-    rcpp_result_gen = Rcpp::wrap(matrixMaxDiagonal_arma(A));
+    rcpp_result_gen = Rcpp::wrap(max_diagonal(A));
+    return rcpp_result_gen;
+END_RCPP
+}
+// matrix_exponential_tem
+arma::mat matrix_exponential_tem(arma::mat A);
+RcppExport SEXP _matrixdist_matrix_exponential_tem(SEXP ASEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type A(ASEXP);
+    rcpp_result_gen = Rcpp::wrap(matrix_exponential_tem(A));
     return rcpp_result_gen;
 END_RCPP
 }
 // phdensity
-NumericVector phdensity(NumericVector x, NumericVector alpha, NumericMatrix S);
+Rcpp::NumericVector phdensity(Rcpp::NumericVector x, arma::vec alpha, arma::mat S);
 RcppExport SEXP _matrixdist_phdensity(SEXP xSEXP, SEXP alphaSEXP, SEXP SSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type alpha(alphaSEXP);
-    Rcpp::traits::input_parameter< NumericMatrix >::type S(SSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type S(SSEXP);
     rcpp_result_gen = Rcpp::wrap(phdensity(x, alpha, S));
     return rcpp_result_gen;
 END_RCPP
 }
 // phcdf
-NumericVector phcdf(NumericVector x, NumericVector alpha, NumericMatrix S, bool lower_tail);
+Rcpp::NumericVector phcdf(Rcpp::NumericVector x, arma::vec alpha, arma::mat S, bool lower_tail);
 RcppExport SEXP _matrixdist_phcdf(SEXP xSEXP, SEXP alphaSEXP, SEXP SSEXP, SEXP lower_tailSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type alpha(alphaSEXP);
-    Rcpp::traits::input_parameter< NumericMatrix >::type S(SSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type S(SSEXP);
     Rcpp::traits::input_parameter< bool >::type lower_tail(lower_tailSEXP);
     rcpp_result_gen = Rcpp::wrap(phcdf(x, alpha, S, lower_tail));
     return rcpp_result_gen;
 END_RCPP
 }
 // mweibullden
-NumericVector mweibullden(NumericVector x, NumericVector alpha, NumericMatrix S, double beta);
+Rcpp::NumericVector mweibullden(Rcpp::NumericVector x, arma::vec alpha, arma::mat S, double beta);
 RcppExport SEXP _matrixdist_mweibullden(SEXP xSEXP, SEXP alphaSEXP, SEXP SSEXP, SEXP betaSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type alpha(alphaSEXP);
-    Rcpp::traits::input_parameter< NumericMatrix >::type S(SSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type S(SSEXP);
     Rcpp::traits::input_parameter< double >::type beta(betaSEXP);
     rcpp_result_gen = Rcpp::wrap(mweibullden(x, alpha, S, beta));
     return rcpp_result_gen;
 END_RCPP
 }
 // mweibullcdf
-NumericVector mweibullcdf(NumericVector x, NumericVector alpha, NumericMatrix S, double beta, bool lower_tail);
+Rcpp::NumericVector mweibullcdf(Rcpp::NumericVector x, arma::vec alpha, arma::mat S, double beta, bool lower_tail);
 RcppExport SEXP _matrixdist_mweibullcdf(SEXP xSEXP, SEXP alphaSEXP, SEXP SSEXP, SEXP betaSEXP, SEXP lower_tailSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type alpha(alphaSEXP);
-    Rcpp::traits::input_parameter< NumericMatrix >::type S(SSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type S(SSEXP);
     Rcpp::traits::input_parameter< double >::type beta(betaSEXP);
     Rcpp::traits::input_parameter< bool >::type lower_tail(lower_tailSEXP);
     rcpp_result_gen = Rcpp::wrap(mweibullcdf(x, alpha, S, beta, lower_tail));
@@ -1088,28 +1099,28 @@ BEGIN_RCPP
 END_RCPP
 }
 // mparetoden
-NumericVector mparetoden(NumericVector x, NumericVector alpha, NumericMatrix S, double beta);
+Rcpp::NumericVector mparetoden(Rcpp::NumericVector x, arma::vec alpha, arma::mat S, double beta);
 RcppExport SEXP _matrixdist_mparetoden(SEXP xSEXP, SEXP alphaSEXP, SEXP SSEXP, SEXP betaSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type alpha(alphaSEXP);
-    Rcpp::traits::input_parameter< NumericMatrix >::type S(SSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type S(SSEXP);
     Rcpp::traits::input_parameter< double >::type beta(betaSEXP);
     rcpp_result_gen = Rcpp::wrap(mparetoden(x, alpha, S, beta));
     return rcpp_result_gen;
 END_RCPP
 }
 // mparetocdf
-NumericVector mparetocdf(NumericVector x, NumericVector alpha, NumericMatrix S, double beta, bool lower_tail);
+Rcpp::NumericVector mparetocdf(Rcpp::NumericVector x, arma::vec alpha, arma::mat S, double beta, bool lower_tail);
 RcppExport SEXP _matrixdist_mparetocdf(SEXP xSEXP, SEXP alphaSEXP, SEXP SSEXP, SEXP betaSEXP, SEXP lower_tailSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type alpha(alphaSEXP);
-    Rcpp::traits::input_parameter< NumericMatrix >::type S(SSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type S(SSEXP);
     Rcpp::traits::input_parameter< double >::type beta(betaSEXP);
     Rcpp::traits::input_parameter< bool >::type lower_tail(lower_tailSEXP);
     rcpp_result_gen = Rcpp::wrap(mparetocdf(x, alpha, S, beta, lower_tail));
@@ -1117,28 +1128,28 @@ BEGIN_RCPP
 END_RCPP
 }
 // mlognormalden
-NumericVector mlognormalden(NumericVector x, NumericVector alpha, NumericMatrix S, double beta);
+Rcpp::NumericVector mlognormalden(Rcpp::NumericVector x, arma::vec alpha, arma::mat S, double beta);
 RcppExport SEXP _matrixdist_mlognormalden(SEXP xSEXP, SEXP alphaSEXP, SEXP SSEXP, SEXP betaSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type alpha(alphaSEXP);
-    Rcpp::traits::input_parameter< NumericMatrix >::type S(SSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type S(SSEXP);
     Rcpp::traits::input_parameter< double >::type beta(betaSEXP);
     rcpp_result_gen = Rcpp::wrap(mlognormalden(x, alpha, S, beta));
     return rcpp_result_gen;
 END_RCPP
 }
 // mlognormalcdf
-NumericVector mlognormalcdf(NumericVector x, NumericVector alpha, NumericMatrix S, double beta, bool lower_tail);
+Rcpp::NumericVector mlognormalcdf(Rcpp::NumericVector x, arma::vec alpha, arma::mat S, double beta, bool lower_tail);
 RcppExport SEXP _matrixdist_mlognormalcdf(SEXP xSEXP, SEXP alphaSEXP, SEXP SSEXP, SEXP betaSEXP, SEXP lower_tailSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type alpha(alphaSEXP);
-    Rcpp::traits::input_parameter< NumericMatrix >::type S(SSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type S(SSEXP);
     Rcpp::traits::input_parameter< double >::type beta(betaSEXP);
     Rcpp::traits::input_parameter< bool >::type lower_tail(lower_tailSEXP);
     rcpp_result_gen = Rcpp::wrap(mlognormalcdf(x, alpha, S, beta, lower_tail));
@@ -1146,57 +1157,57 @@ BEGIN_RCPP
 END_RCPP
 }
 // mloglogisticden
-NumericVector mloglogisticden(NumericVector x, NumericVector alpha, NumericMatrix S, NumericVector beta);
+Rcpp::NumericVector mloglogisticden(Rcpp::NumericVector x, arma::vec alpha, arma::mat S, Rcpp::NumericVector beta);
 RcppExport SEXP _matrixdist_mloglogisticden(SEXP xSEXP, SEXP alphaSEXP, SEXP SSEXP, SEXP betaSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type alpha(alphaSEXP);
-    Rcpp::traits::input_parameter< NumericMatrix >::type S(SSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type beta(betaSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type S(SSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type beta(betaSEXP);
     rcpp_result_gen = Rcpp::wrap(mloglogisticden(x, alpha, S, beta));
     return rcpp_result_gen;
 END_RCPP
 }
 // mloglogisticcdf
-NumericVector mloglogisticcdf(NumericVector x, NumericVector alpha, NumericMatrix S, NumericVector beta, bool lower_tail);
+Rcpp::NumericVector mloglogisticcdf(Rcpp::NumericVector x, arma::vec alpha, arma::mat S, Rcpp::NumericVector beta, bool lower_tail);
 RcppExport SEXP _matrixdist_mloglogisticcdf(SEXP xSEXP, SEXP alphaSEXP, SEXP SSEXP, SEXP betaSEXP, SEXP lower_tailSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type alpha(alphaSEXP);
-    Rcpp::traits::input_parameter< NumericMatrix >::type S(SSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type beta(betaSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type S(SSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type beta(betaSEXP);
     Rcpp::traits::input_parameter< bool >::type lower_tail(lower_tailSEXP);
     rcpp_result_gen = Rcpp::wrap(mloglogisticcdf(x, alpha, S, beta, lower_tail));
     return rcpp_result_gen;
 END_RCPP
 }
 // mgompertzden
-NumericVector mgompertzden(NumericVector x, NumericVector alpha, NumericMatrix S, double beta);
+Rcpp::NumericVector mgompertzden(Rcpp::NumericVector x, arma::vec alpha, arma::mat S, double beta);
 RcppExport SEXP _matrixdist_mgompertzden(SEXP xSEXP, SEXP alphaSEXP, SEXP SSEXP, SEXP betaSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type alpha(alphaSEXP);
-    Rcpp::traits::input_parameter< NumericMatrix >::type S(SSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type S(SSEXP);
     Rcpp::traits::input_parameter< double >::type beta(betaSEXP);
     rcpp_result_gen = Rcpp::wrap(mgompertzden(x, alpha, S, beta));
     return rcpp_result_gen;
 END_RCPP
 }
 // mgompertzcdf
-NumericVector mgompertzcdf(NumericVector x, NumericVector alpha, NumericMatrix S, double beta, bool lower_tail);
+Rcpp::NumericVector mgompertzcdf(Rcpp::NumericVector x, arma::vec alpha, arma::mat S, double beta, bool lower_tail);
 RcppExport SEXP _matrixdist_mgompertzcdf(SEXP xSEXP, SEXP alphaSEXP, SEXP SSEXP, SEXP betaSEXP, SEXP lower_tailSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type alpha(alphaSEXP);
-    Rcpp::traits::input_parameter< NumericMatrix >::type S(SSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type S(SSEXP);
     Rcpp::traits::input_parameter< double >::type beta(betaSEXP);
     Rcpp::traits::input_parameter< bool >::type lower_tail(lower_tailSEXP);
     rcpp_result_gen = Rcpp::wrap(mgompertzcdf(x, alpha, S, beta, lower_tail));
@@ -1204,35 +1215,31 @@ BEGIN_RCPP
 END_RCPP
 }
 // mgevden
-NumericVector mgevden(NumericVector x, NumericVector alpha, NumericMatrix S, double mu, double sigma, double xi);
-RcppExport SEXP _matrixdist_mgevden(SEXP xSEXP, SEXP alphaSEXP, SEXP SSEXP, SEXP muSEXP, SEXP sigmaSEXP, SEXP xiSEXP) {
+Rcpp::NumericVector mgevden(Rcpp::NumericVector x, arma::vec alpha, arma::mat S, Rcpp::NumericVector beta);
+RcppExport SEXP _matrixdist_mgevden(SEXP xSEXP, SEXP alphaSEXP, SEXP SSEXP, SEXP betaSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type alpha(alphaSEXP);
-    Rcpp::traits::input_parameter< NumericMatrix >::type S(SSEXP);
-    Rcpp::traits::input_parameter< double >::type mu(muSEXP);
-    Rcpp::traits::input_parameter< double >::type sigma(sigmaSEXP);
-    Rcpp::traits::input_parameter< double >::type xi(xiSEXP);
-    rcpp_result_gen = Rcpp::wrap(mgevden(x, alpha, S, mu, sigma, xi));
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type S(SSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type beta(betaSEXP);
+    rcpp_result_gen = Rcpp::wrap(mgevden(x, alpha, S, beta));
     return rcpp_result_gen;
 END_RCPP
 }
 // mgevcdf
-NumericVector mgevcdf(NumericVector x, NumericVector alpha, NumericMatrix S, double mu, double sigma, double xi, bool lower_tail);
-RcppExport SEXP _matrixdist_mgevcdf(SEXP xSEXP, SEXP alphaSEXP, SEXP SSEXP, SEXP muSEXP, SEXP sigmaSEXP, SEXP xiSEXP, SEXP lower_tailSEXP) {
+Rcpp::NumericVector mgevcdf(Rcpp::NumericVector x, arma::vec alpha, arma::mat S, Rcpp::NumericVector beta, bool lower_tail);
+RcppExport SEXP _matrixdist_mgevcdf(SEXP xSEXP, SEXP alphaSEXP, SEXP SSEXP, SEXP betaSEXP, SEXP lower_tailSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type alpha(alphaSEXP);
-    Rcpp::traits::input_parameter< NumericMatrix >::type S(SSEXP);
-    Rcpp::traits::input_parameter< double >::type mu(muSEXP);
-    Rcpp::traits::input_parameter< double >::type sigma(sigmaSEXP);
-    Rcpp::traits::input_parameter< double >::type xi(xiSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type S(SSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type beta(betaSEXP);
     Rcpp::traits::input_parameter< bool >::type lower_tail(lower_tailSEXP);
-    rcpp_result_gen = Rcpp::wrap(mgevcdf(x, alpha, S, mu, sigma, xi, lower_tail));
+    rcpp_result_gen = Rcpp::wrap(mgevcdf(x, alpha, S, beta, lower_tail));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1259,14 +1266,14 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// LInf_normArma_0
-double LInf_normArma_0(arma::mat A);
-RcppExport SEXP _matrixdist_LInf_normArma_0(SEXP ASEXP) {
+// inf_norm_0
+double inf_norm_0(arma::mat A);
+RcppExport SEXP _matrixdist_inf_norm_0(SEXP ASEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< arma::mat >::type A(ASEXP);
-    rcpp_result_gen = Rcpp::wrap(LInf_normArma_0(A));
+    rcpp_result_gen = Rcpp::wrap(inf_norm_0(A));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1390,9 +1397,10 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_rphasetype", (DL_FUNC) &_matrixdist_rphasetype, 3},
     {"_matrixdist_riph", (DL_FUNC) &_matrixdist_riph, 5},
     {"_matrixdist_rmatrixgev", (DL_FUNC) &_matrixdist_rmatrixgev, 6},
-    {"_matrixdist_LInf_normArma", (DL_FUNC) &_matrixdist_LInf_normArma, 1},
-    {"_matrixdist_matrix_VanLoanArma", (DL_FUNC) &_matrixdist_matrix_VanLoanArma, 3},
-    {"_matrixdist_matrixMaxDiagonal_arma", (DL_FUNC) &_matrixdist_matrixMaxDiagonal_arma, 1},
+    {"_matrixdist_inf_norm", (DL_FUNC) &_matrixdist_inf_norm, 1},
+    {"_matrixdist_matrix_VanLoan", (DL_FUNC) &_matrixdist_matrix_VanLoan, 3},
+    {"_matrixdist_max_diagonal", (DL_FUNC) &_matrixdist_max_diagonal, 1},
+    {"_matrixdist_matrix_exponential_tem", (DL_FUNC) &_matrixdist_matrix_exponential_tem, 1},
     {"_matrixdist_phdensity", (DL_FUNC) &_matrixdist_phdensity, 3},
     {"_matrixdist_phcdf", (DL_FUNC) &_matrixdist_phcdf, 4},
     {"_matrixdist_mweibullden", (DL_FUNC) &_matrixdist_mweibullden, 4},
@@ -1405,11 +1413,11 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_mloglogisticcdf", (DL_FUNC) &_matrixdist_mloglogisticcdf, 5},
     {"_matrixdist_mgompertzden", (DL_FUNC) &_matrixdist_mgompertzden, 4},
     {"_matrixdist_mgompertzcdf", (DL_FUNC) &_matrixdist_mgompertzcdf, 5},
-    {"_matrixdist_mgevden", (DL_FUNC) &_matrixdist_mgevden, 6},
-    {"_matrixdist_mgevcdf", (DL_FUNC) &_matrixdist_mgevcdf, 7},
+    {"_matrixdist_mgevden", (DL_FUNC) &_matrixdist_mgevden, 4},
+    {"_matrixdist_mgevcdf", (DL_FUNC) &_matrixdist_mgevcdf, 5},
     {"_matrixdist_matrix_product", (DL_FUNC) &_matrixdist_matrix_product, 2},
     {"_matrixdist_matrix_inverse", (DL_FUNC) &_matrixdist_matrix_inverse, 1},
-    {"_matrixdist_LInf_normArma_0", (DL_FUNC) &_matrixdist_LInf_normArma_0, 1},
+    {"_matrixdist_inf_norm_0", (DL_FUNC) &_matrixdist_inf_norm_0, 1},
     {"_matrixdist_matrix_exponential", (DL_FUNC) &_matrixdist_matrix_exponential, 1},
     {"_matrixdist_clone_vector", (DL_FUNC) &_matrixdist_clone_vector, 1},
     {"_matrixdist_clone_matrix", (DL_FUNC) &_matrixdist_clone_matrix, 1},

@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{mloglogisticden}
 \alias{mloglogisticden}
-\title{Matrix Log-Logistic density}
+\title{Matrix Log-logistic density}
 \usage{
 mloglogisticden(x, alpha, S, beta)
 }
@@ -13,7 +13,7 @@ mloglogisticden(x, alpha, S, beta)
 
 \item{S}{Sub-intensity matrix.}
 
-\item{beta}{Scale parameter.}
+\item{beta}{Parameters.}
 }
 \value{
 The density at \code{x}.

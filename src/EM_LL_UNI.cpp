@@ -102,9 +102,9 @@ void EMstep_UNI(double h, arma::vec & alpha, arma::mat & S, const Rcpp::NumericV
   arma::mat tProductPi(p,p);
   tProductPi = t * alpha.t();
   
-  J = matrix_VanLoanArma(S, S, tProductPi);
+  J = matrix_VanLoan(S, S, tProductPi);
   
-  double a = matrixMaxDiagonal_arma(J * (-1));
+  double a = max_diagonal(J * (-1));
   
   int N{findN_arma(h, 1)};
   
@@ -162,7 +162,7 @@ void EMstep_UNI(double h, arma::vec & alpha, arma::mat & S, const Rcpp::NumericV
   double SumOfCensored{0.0};
   if (rcens.size() > 0) {
     tProductPi = e * alpha.t();
-    J = matrix_VanLoanArma(S, S, tProductPi);
+    J = matrix_VanLoan(S, S, tProductPi);
     theVector.clear();
     vectorOfMatrices_arma(theVector, J, a, N);
   }
@@ -254,7 +254,7 @@ double logLikelihoodPH_UNI(double h, arma::vec & alpha, arma::mat & S, const Rcp
   
   arma::mat mExp(size(S));
   
-  double a = matrixMaxDiagonal_arma(S * (-1));
+  double a = max_diagonal(S * (-1));
   
   int N{findN_arma(h, 1)};
   
@@ -335,7 +335,7 @@ double logLikelihoodMweibull_UNI(double h, arma::vec & alpha, arma::mat & S, dou
   
   arma::mat mExp(size(S));
   
-  double a = matrixMaxDiagonal_arma(S * (-1));
+  double a = max_diagonal(S * (-1));
   
   int N{findN_arma(h, 1)};
   
@@ -417,7 +417,7 @@ double logLikelihoodMpareto_UNI(double h, arma::vec & alpha, arma::mat & S, doub
   
   arma::mat mExp(size(S));
   
-  double a = matrixMaxDiagonal_arma(S * (-1));
+  double a = max_diagonal(S * (-1));
   
   int N{findN_arma(h, 1)};
   
@@ -499,7 +499,7 @@ double logLikelihoodMlognormal_UNI(double h, arma::vec & alpha, arma::mat & S, d
   
   arma::mat mExp(size(S));
   
-  double a = matrixMaxDiagonal_arma(S * (-1));
+  double a = max_diagonal(S * (-1));
   
   int N{findN_arma(h, 1)};
   
@@ -581,7 +581,7 @@ double logLikelihoodMloglogistic_UNI(double h, arma::vec & alpha, arma::mat & S,
   
   arma::mat mExp(size(S));
   
-  double a = matrixMaxDiagonal_arma(S * (-1));
+  double a = max_diagonal(S * (-1));
   
   int N{findN_arma(h, 1)};
   
@@ -663,7 +663,7 @@ double logLikelihoodMgompertz_UNI(double h, arma::vec & alpha, arma::mat & S, do
   
   arma::mat mExp(size(S));
   
-  double a = matrixMaxDiagonal_arma(S * (-1));
+  double a = max_diagonal(S * (-1));
   
   int N{findN_arma(h, 1)};
   
@@ -745,7 +745,7 @@ double logLikelihoodMgev_UNI(double h, arma::vec & alpha, arma::mat & S, Rcpp::N
   
   arma::mat mExp(size(S));
   
-  double a = matrixMaxDiagonal_arma(S * (-1));
+  double a = max_diagonal(S * (-1));
   
   int N{findN_arma(h, 1)};
   
@@ -873,7 +873,7 @@ double logLikelihoodPH_UNIs(double h, arma::vec & alpha, arma::mat & S, const Rc
   
   arma::mat mExp(size(S));
   
-  double a = matrixMaxDiagonal_arma(S * (-1));
+  double a = max_diagonal(S * (-1));
   
   int N{findN_arma(h, 1)};
   
@@ -957,7 +957,7 @@ double logLikelihoodMweibull_UNIs(double h, arma::vec & alpha, arma::mat & S, do
   
   arma::mat mExp(size(S));
   
-  double a = matrixMaxDiagonal_arma(S * (-1));
+  double a = max_diagonal(S * (-1));
   
   int N{findN_arma(h, 1)};
   
@@ -1041,7 +1041,7 @@ double logLikelihoodMpareto_UNIs(double h, arma::vec & alpha, arma::mat & S, dou
   
   arma::mat mExp(size(S));
   
-  double a = matrixMaxDiagonal_arma(S * (-1));
+  double a = max_diagonal(S * (-1));
   
   int N{findN_arma(h, 1)};
   
@@ -1125,7 +1125,7 @@ double logLikelihoodMlognormal_UNIs(double h, arma::vec & alpha, arma::mat & S, 
   
   arma::mat mExp(size(S));
   
-  double a = matrixMaxDiagonal_arma(S * (-1));
+  double a = max_diagonal(S * (-1));
   
   int N{findN_arma(h, 1)};
   
@@ -1209,7 +1209,7 @@ double logLikelihoodMloglogistic_UNIs(double h, arma::vec & alpha, arma::mat & S
   
   arma::mat mExp(size(S));
   
-  double a = matrixMaxDiagonal_arma(S * (-1));
+  double a = max_diagonal(S * (-1));
   
   int N{findN_arma(h, 1)};
   
@@ -1293,7 +1293,7 @@ double logLikelihoodMgompertz_UNIs(double h, arma::vec & alpha, arma::mat & S, d
   
   arma::mat mExp(size(S));
   
-  double a = matrixMaxDiagonal_arma(S * (-1));
+  double a = max_diagonal(S * (-1));
   
   int N{findN_arma(h, 1)};
   

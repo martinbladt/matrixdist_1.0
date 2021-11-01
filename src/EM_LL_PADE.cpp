@@ -61,10 +61,10 @@ void EMstep_PADE(double h, arma::vec & alpha,  arma::mat & S, const Rcpp::Numeri
   tProductPi = t * alpha.t();
   
   
-  J = matrix_VanLoanArma(S, S, tProductPi);
+  J = matrix_VanLoan(S, S, tProductPi);
   
   
-  double JNorm{LInf_normArma(J)};
+  double JNorm{inf_norm(J)};
   
   std::vector<arma::mat> theVector;
   
@@ -145,8 +145,8 @@ void EMstep_PADE(double h, arma::vec & alpha,  arma::mat & S, const Rcpp::Numeri
   double SumOfCensored{0.0};
   if (rcens.size() > 0) {
     tProductPi = e * alpha.t();
-    J = matrix_VanLoanArma(S, S, tProductPi);
-    JNorm = LInf_normArma(J);
+    J = matrix_VanLoan(S, S, tProductPi);
+    JNorm = inf_norm(J);
     theVector.clear();
     vectorOfMatrices_arma2(theVector, J, 6);
   }
@@ -251,7 +251,7 @@ double logLikelihoodPH_PADE(double h, arma::vec & alpha, arma::mat & S, const Rc
   
   arma::mat E(size(S));
   
-  double JNorm{LInf_normArma(S)};
+  double JNorm{inf_norm(S)};
   
   std::vector<arma::mat> theVector;
   
@@ -371,7 +371,7 @@ double logLikelihoodMweibull_PADE(double h, arma::vec & alpha, arma::mat & S, do
   
   arma::mat E(size(S));
   
-  double JNorm{LInf_normArma(S)};
+  double JNorm{inf_norm(S)};
   
   std::vector<arma::mat> theVector;
   
@@ -492,7 +492,7 @@ double logLikelihoodMpareto_PADE(double h, arma::vec & alpha, arma::mat & S, dou
   
   arma::mat E(size(S));
   
-  double JNorm{LInf_normArma(S)};
+  double JNorm{inf_norm(S)};
   
   std::vector<arma::mat> theVector;
   
@@ -613,7 +613,7 @@ double logLikelihoodMlognormal_PADE(double h, arma::vec & alpha, arma::mat & S, 
   
   arma::mat E(size(S));
   
-  double JNorm{LInf_normArma(S)};
+  double JNorm{inf_norm(S)};
   
   std::vector<arma::mat> theVector;
   
@@ -733,7 +733,7 @@ double logLikelihoodMloglogistic_PADE(double h, arma::vec & alpha, arma::mat & S
   
   arma::mat E(size(S));
   
-  double JNorm{LInf_normArma(S)};
+  double JNorm{inf_norm(S)};
   
   std::vector<arma::mat> theVector;
   
@@ -853,7 +853,7 @@ double logLikelihoodMgompertz_PADE(double h, arma::vec & alpha, arma::mat & S, d
   
   arma::mat E(size(S));
   
-  double JNorm{LInf_normArma(S)};
+  double JNorm{inf_norm(S)};
   
   std::vector<arma::mat> theVector;
   
@@ -971,7 +971,7 @@ double logLikelihoodMgev_PADE(double h, arma::vec & alpha, arma::mat & S, Rcpp::
   
   arma::mat E(size(S));
   
-  double JNorm{LInf_normArma(S)};
+  double JNorm{inf_norm(S)};
   
   std::vector<arma::mat> theVector;
   
@@ -1166,7 +1166,7 @@ double logLikelihoodPH_PADEs(double h, arma::vec & alpha, arma::mat & S, const R
   
   arma::mat E(size(S));
   
-  double JNorm{LInf_normArma(S)};
+  double JNorm{inf_norm(S)};
   
   std::vector<arma::mat> theVector;
   
@@ -1288,7 +1288,7 @@ double logLikelihoodMweibull_PADEs(double h, arma::vec & alpha, arma::mat & S, d
   
   arma::mat E(size(S));
   
-  double JNorm{LInf_normArma(S)};
+  double JNorm{inf_norm(S)};
   
   std::vector<arma::mat> theVector;
   
@@ -1411,7 +1411,7 @@ double logLikelihoodMpareto_PADEs(double h, arma::vec & alpha, arma::mat & S, do
   
   arma::mat E(size(S));
   
-  double JNorm{LInf_normArma(S)};
+  double JNorm{inf_norm(S)};
   
   std::vector<arma::mat> theVector;
   
@@ -1533,7 +1533,7 @@ double logLikelihoodMlognormal_PADEs(double h, arma::vec & alpha, arma::mat & S,
   
   arma::mat E(size(S));
   
-  double JNorm{LInf_normArma(S)};
+  double JNorm{inf_norm(S)};
   
   std::vector<arma::mat> theVector;
   
@@ -1655,7 +1655,7 @@ double logLikelihoodMloglogistic_PADEs(double h, arma::vec & alpha, arma::mat & 
   
   arma::mat E(size(S));
   
-  double JNorm{LInf_normArma(S)};
+  double JNorm{inf_norm(S)};
   
   std::vector<arma::mat> theVector;
   
@@ -1777,7 +1777,7 @@ double logLikelihoodMgompertz_PADEs(double h, arma::vec & alpha, arma::mat & S, 
   
   arma::mat E(size(S));
   
-  double JNorm{LInf_normArma(S)};
+  double JNorm{inf_norm(S)};
   
   std::vector<arma::mat> theVector;
   

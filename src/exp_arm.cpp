@@ -29,10 +29,12 @@ Rcpp::NumericMatrix matrix_inverse(Rcpp::NumericMatrix A) {
 //' 
 //' Computes the L inf norm of a matrix \code{A}, which is defined as:
 //' L_inf A =  max ( 1 <= I <= M ) sum ( 1 <= J <= N ) abs ( A(I,J) ).
+//' 
 //' @param A A matrix.
+//' @return The L inf norm.
 //' 
 // [[Rcpp::export]]
-double LInf_normArma_0(arma::mat A) {
+double inf_norm_0(arma::mat A) {
   double value{0.0};
   
   for (int i{0}; i < A.n_rows; ++i) {
@@ -60,7 +62,7 @@ Rcpp::NumericMatrix matrix_exponential(Rcpp::NumericMatrix Ainput) {
   arma::mat matrixAuxiliar(A.n_rows,A.n_cols);
   arma::mat ExpM(A.n_rows,A.n_cols);
   
-  double aNorm{LInf_normArma_0(A)};
+  double aNorm{inf_norm_0(A)};
   
   int ee{static_cast<int>(log2(aNorm)) + 1};
   

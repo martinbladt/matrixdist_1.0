@@ -893,22 +893,46 @@ rmatrixgev <- function(n, alpha, S, mu, sigma, xi = 0) {
     .Call(`_matrixdist_rmatrixgev`, n, alpha, S, mu, sigma, xi)
 }
 
-LInf_normArma <- function(A) {
-    .Call(`_matrixdist_LInf_normArma`, A)
+#' L inf norm of a matrix
+#' 
+#' Computes the L inf norm of a matrix \code{A}, which is defined as:
+#' L_inf A =  max ( 1 <= I <= M ) sum ( 1 <= J <= N ) abs ( A(I,J) ).
+#' 
+#' @param A A matrix.
+#' @return The L inf norm.
+#' 
+inf_norm <- function(A) {
+    .Call(`_matrixdist_inf_norm`, A)
 }
 
 #' Creates the matrix  (A1, B1 ; 0, A2)
-#' @param A1 matrix
-#' @param A2 matrix
-#' @param B1 matrix
-#' @return Computes (A1, B1 ; 0, A2)
 #' 
-matrix_VanLoanArma <- function(A1, A2, B1) {
-    .Call(`_matrixdist_matrix_VanLoanArma`, A1, A2, B1)
+#' @param A1 Matrix.
+#' @param A2 Matrix.
+#' @param B1 Matrix.
+#' @return Computes (A1, B1 ; 0, A2).
+#' 
+matrix_VanLoan <- function(A1, A2, B1) {
+    .Call(`_matrixdist_matrix_VanLoan`, A1, A2, B1)
 }
 
-matrixMaxDiagonal_arma <- function(A) {
-    .Call(`_matrixdist_matrixMaxDiagonal_arma`, A)
+#' Maximum diagonal element of a matrix
+#' 
+#' @param A Matrix.
+#' @return The maximum value in the diagonal.
+#' 
+max_diagonal <- function(A) {
+    .Call(`_matrixdist_max_diagonal`, A)
+}
+
+#' Matrix exponential algorithm
+#' 
+#' MATLAB's built-in algorithm - Pade approximation.
+#' 
+#' @param A A matrix.
+#' 
+matrix_exponential_tem <- function(A) {
+    .Call(`_matrixdist_matrix_exponential_tem`, A)
 }
 
 #' Phase-type density
@@ -963,7 +987,7 @@ mweibullden <- function(x, alpha, S, beta) {
 #' @param lower_tail Cdf or tail.
 #' @return The cdf (tail) at \code{x}.
 #' 
-mweibullcdf <- function(x, alpha, S, beta, lower_tail) {
+mweibullcdf <- function(x, alpha, S, beta, lower_tail = TRUE) {
     .Call(`_matrixdist_mweibullcdf`, x, alpha, S, beta, lower_tail)
 }
 
@@ -996,7 +1020,7 @@ mparetocdf <- function(x, alpha, S, beta, lower_tail = TRUE) {
     .Call(`_matrixdist_mparetocdf`, x, alpha, S, beta, lower_tail)
 }
 
-#' Matrix LogNormal density
+#' Matrix Lognormal density
 #' 
 #' Computes the density of a matrix LogNormal distribution with parameters
 #'  \code{alpha}, \code{S} and \code{beta} at \code{x}.
@@ -1010,7 +1034,7 @@ mlognormalden <- function(x, alpha, S, beta) {
     .Call(`_matrixdist_mlognormalden`, x, alpha, S, beta)
 }
 
-#' Matrix LogNormal cdf
+#' Matrix Lognormal cdf
 #' 
 #' Computes the cdf (tail) of a matrix LogNormal distribution with parameters
 #'  \code{alpha}, \code{S} and \code{beta} at \code{x}.
@@ -1025,14 +1049,14 @@ mlognormalcdf <- function(x, alpha, S, beta, lower_tail = TRUE) {
     .Call(`_matrixdist_mlognormalcdf`, x, alpha, S, beta, lower_tail)
 }
 
-#' Matrix Log-Logistic density
+#' Matrix Log-logistic density
 #' 
 #' Computes the density of a matrix Log-Logistic distribution with parameters
 #'  \code{alpha}, \code{S} and \code{beta} at \code{x}.
 #' @param x Non-negative value.
 #' @param alpha Initial probabilities.
 #' @param S Sub-intensity matrix.
-#' @param beta Scale parameter.
+#' @param beta Parameters.
 #' @return The density at \code{x}.
 #' 
 mloglogisticden <- function(x, alpha, S, beta) {
@@ -1046,7 +1070,7 @@ mloglogisticden <- function(x, alpha, S, beta) {
 #' @param x Non-negative value.
 #' @param alpha Initial probabilities.
 #' @param S Sub-intensity matrix.
-#' @param beta Shape parameter.
+#' @param beta Parameters.
 #' @param lower_tail Cdf or tail.
 #' @return The cdf (tail) at \code{x}.
 #' 
@@ -1092,30 +1116,27 @@ mgompertzcdf <- function(x, alpha, S, beta, lower_tail = TRUE) {
 #' @param x Non-negative value.
 #' @param alpha Initial probabilities.
 #' @param S Sub-intensity matrix.
-#' @param mu Location parameter.
-#' @param sigma Scale parameter.
-#' @param xi Shape parameter.
+#' @param beta Parameters.
 #' @return The density at \code{x}.
 #' 
-mgevden <- function(x, alpha, S, mu, sigma, xi) {
-    .Call(`_matrixdist_mgevden`, x, alpha, S, mu, sigma, xi)
+mgevden <- function(x, alpha, S, beta) {
+    .Call(`_matrixdist_mgevden`, x, alpha, S, beta)
 }
 
 #' Matrix GEV cdf
 #' 
-#' Computes the cdf (tail) of a matrix GEV distribution with parameters 
-#' \code{alpha}, \code{S} and \code{beta} at \code{x}.
+#' Computes the cdf (tail) of a matrix GEV distribution with parameters
+#'  \code{alpha}, \code{S} and \code{beta} at \code{x}.
+#' 
 #' @param x Non-negative value.
 #' @param alpha Initial probabilities.
 #' @param S Sub-intensity matrix.
-#' @param mu Location parameter.
-#' @param sigma Scale parameter.
-#' @param xi Shape parameter.
+#' @param beta Parameters. 
 #' @param lower_tail Cdf or tail.
 #' @return The cdf (tail) at \code{x}.
 #' 
-mgevcdf <- function(x, alpha, S, mu, sigma, xi, lower_tail = TRUE) {
-    .Call(`_matrixdist_mgevcdf`, x, alpha, S, mu, sigma, xi, lower_tail)
+mgevcdf <- function(x, alpha, S, beta, lower_tail = TRUE) {
+    .Call(`_matrixdist_mgevcdf`, x, alpha, S, beta, lower_tail)
 }
 
 #' Product of two matrices
@@ -1140,10 +1161,12 @@ matrix_inverse <- function(A) {
 #' 
 #' Computes the L inf norm of a matrix \code{A}, which is defined as:
 #' L_inf A =  max ( 1 <= I <= M ) sum ( 1 <= J <= N ) abs ( A(I,J) ).
-#' @param A A matrix.
 #' 
-LInf_normArma_0 <- function(A) {
-    .Call(`_matrixdist_LInf_normArma_0`, A)
+#' @param A A matrix.
+#' @return The L inf norm.
+#' 
+inf_norm_0 <- function(A) {
+    .Call(`_matrixdist_inf_norm_0`, A)
 }
 
 #' Matrix exponential algorithm

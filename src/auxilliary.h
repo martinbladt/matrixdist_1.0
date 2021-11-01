@@ -1,7 +1,9 @@
 # include <RcppArmadillo.h>
 
-double LInf_normArma(arma::mat A);
+double inf_norm(arma::mat A);
 
-arma::mat matrix_VanLoanArma(arma::mat A1, arma::mat A2, arma::mat B1);
+arma::mat matrix_VanLoan(arma::mat A1, arma::mat A2, arma::mat B1);
 
-double matrixMaxDiagonal_arma(const arma::mat & A);
+double max_diagonal(const arma::mat & A);
+
+arma::mat matrix_exponential_tem(arma::mat A);

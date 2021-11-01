@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{mlognormalcdf}
 \alias{mlognormalcdf}
-\title{Matrix LogNormal cdf}
+\title{Matrix Lognormal cdf}
 \usage{
 mlognormalcdf(x, alpha, S, beta, lower_tail = TRUE)
 }

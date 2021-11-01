@@ -4,7 +4,7 @@
 \alias{mgevden}
 \title{Matrix GEV density}
 \usage{
-mgevden(x, alpha, S, mu, sigma, xi)
+mgevden(x, alpha, S, beta)
 }
 \arguments{
 \item{x}{Non-negative value.}
@@ -13,11 +13,7 @@ mgevden(x, alpha, S, mu, sigma, xi)
 
 \item{S}{Sub-intensity matrix.}
 
-\item{mu}{Location parameter.}
-
-\item{sigma}{Scale parameter.}
-
-\item{xi}{Shape parameter.}
+\item{beta}{Parameters.}
 }
 \value{
 The density at \code{x}.
