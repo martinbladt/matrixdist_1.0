@@ -175,22 +175,6 @@ reversTransformData <- function(observations, weights, beta) {
     .Call(`_matrixdist_reversTransformData`, observations, weights, beta)
 }
 
-#' Derivative of matrix Weibull
-#' 
-#' Can be used to increase performance
-#' @param h step-length
-#' @param alpha initial probabilities
-#' @param S sub-intensity
-#' @param beta parameter of transformation
-#' @param obs the observations
-#' @param weight weight of the observations
-#' @param rcens censored observations
-#' @param rcweight weight of the censored observations
-#' 
-derivativeMatrixweibull <- function(h, obs, weight, rcens, rcweight, alpha, S, beta) {
-    .Call(`_matrixdist_derivativeMatrixweibull`, h, obs, weight, rcens, rcweight, alpha, S, beta)
-}
-
 #' Loglikelihood of PH using RK
 #' 
 #' Loglikelihood for a sample 
@@ -981,10 +965,6 @@ mweibullden <- function(x, alpha, S, beta) {
 #' 
 mweibullcdf <- function(x, alpha, S, beta, lower_tail) {
     .Call(`_matrixdist_mweibullcdf`, x, alpha, S, beta, lower_tail)
-}
-
-RunFunction <- function(a, func) {
-    .Call(`_matrixdist_RunFunction`, a, func)
 }
 
 #' Matrix Pareto density

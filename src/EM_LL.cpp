@@ -1,8 +1,6 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 #include "exp_arm.h"
-#include "distributions.h"
-
 
 //' Default size of the steps in the RK
 //' 
@@ -836,44 +834,6 @@ List reversTransformData(const NumericVector & observations, const NumericVector
   return L;
 }
 
-//' Derivative of matrix Weibull
-//' 
-//' Can be used to increase performance
-//' @param h step-length
-//' @param alpha initial probabilities
-//' @param S sub-intensity
-//' @param beta parameter of transformation
-//' @param obs the observations
-//' @param weight weight of the observations
-//' @param rcens censored observations
-//' @param rcweight weight of the censored observations
-//' 
-// [[Rcpp::export]]
-double derivativeMatrixweibull(double h, const NumericVector & obs, const NumericVector & weight, const NumericVector & rcens, const NumericVector & rcweight, NumericVector & alpha, NumericMatrix & S,  double beta) {
-  long p{S.nrow()};
-  NumericMatrix m_alpha(1,p, alpha.begin());
-  
-  NumericVector m_e(p, 1);
-  NumericMatrix e(p, 1, m_e.begin());
-  
-  NumericMatrix t = matrix_product(S * (-1), e);
-  
-  NumericVector aux_vet(1);
-  
-  double logLh{0.0};
-  for (int k{0}; k < obs.size(); ++k) {
-    aux_vet[0] = pow(obs[k], beta);
-    logLh +=  weight[k] * ( (matrix_product(m_alpha, matrix_product(matrix_exponential(S * pow(obs[k], beta)), matrix_product(S, t)))(0,0) * std::log(obs[k]) * pow(obs[k], beta) ) / mweibullden(aux_vet, alpha, S, beta)[0] + 1 / beta + std::log(obs[k]) );
-  }
-  return logLh;
-  
-  for (int k{0}; k < rcens.size(); ++k) {
-    aux_vet[0] = pow(rcens[k], beta);
-    logLh +=  rcweight[k] * ( (matrix_product(m_alpha, matrix_product(matrix_exponential(S * pow(obs[k], beta)), matrix_product(S, e)))(0,0) * std::log(obs[k]) * pow(obs[k], beta) ) / mweibullcdf(aux_vet, alpha, S, beta, false)[0] );
-  }
-  return logLh;
-  
-}
 
 
 ////////////////////////////////////////////

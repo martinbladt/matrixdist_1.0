@@ -1,7 +1,6 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 #include "exp_arm.h"
-#include "distributions.h"
 
 // Distributions
 
@@ -139,14 +138,6 @@ NumericVector mweibullcdf(NumericVector x, NumericVector alpha, NumericMatrix S,
     return (1.0 - cdf);
   }
 }
-
-// [[Rcpp::export]]
-NumericVector RunFunction(NumericVector a, Function func)
-{
-  NumericVector b = func(a);
-  return b;
-}
-
 
 
 //' Matrix Pareto density
