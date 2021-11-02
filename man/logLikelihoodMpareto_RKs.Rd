@@ -24,7 +24,7 @@ logLikelihoodMpareto_RKs(
 
 \item{S}{Sub-intensity.}
 
-\item{beta}{Parameter of transformation}
+\item{beta}{Parameter of transformation.}
 
 \item{obs}{The observations.}
 

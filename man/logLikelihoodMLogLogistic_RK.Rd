@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{logLikelihoodMloglogistic_RK}
 \alias{logLikelihoodMloglogistic_RK}
-\title{Loglikelihood of matrix Log-Logistic using RK}
+\title{Loglikelihood of matrix Log-logistic using RK}
 \usage{
 logLikelihoodMloglogistic_RK(h, alpha, S, beta, obs, weight, rcens, rcweight)
 }
@@ -13,7 +13,7 @@ logLikelihoodMloglogistic_RK(h, alpha, S, beta, obs, weight, rcens, rcweight)
 
 \item{S}{Sub-intensity.}
 
-\item{beta}{Parameter of transformation}
+\item{beta}{Parameters of transformation.}
 
 \item{obs}{The observations.}
 

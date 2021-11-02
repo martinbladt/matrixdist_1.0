@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{logLikelihoodMlognormal_RK}
 \alias{logLikelihoodMlognormal_RK}
-\title{Loglikelihood of matrix LogNormal using RK}
+\title{Loglikelihood of matrix Lognormal using RK}
 \usage{
 logLikelihoodMlognormal_RK(h, alpha, S, beta, obs, weight, rcens, rcweight)
 }
@@ -13,7 +13,7 @@ logLikelihoodMlognormal_RK(h, alpha, S, beta, obs, weight, rcens, rcweight)
 
 \item{S}{Sub-intensity.}
 
-\item{beta}{Parameter of transformation}
+\item{beta}{Parameter of transformation.}
 
 \item{obs}{The observations.}
 

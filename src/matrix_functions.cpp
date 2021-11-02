@@ -2,6 +2,58 @@
 using namespace Rcpp;
 
 
+//' Default size of the steps in the RK
+//' 
+//' Computes the default step length for a matrix \code{S} to be employed in the
+//'  RK method.
+//'  
+//' @param S Sub-intensity matrix.
+//' @return The step length for \code{S}.
+//' 
+// [[Rcpp::export]]
+double default_step_length(const NumericMatrix & S) {
+  double h{-0.1 / S(0,0)};
+  
+  for (int i{1}; i < S.nrow(); ++i) {
+    if (h > -0.1 / S(i,i)) {
+      h = -0.1 / S(i,i);
+    }
+  }
+  return h;
+}
+
+//' Applies the inverse of the GEV but giving back the vector in reverse order
+//' 
+//' Used for EM step.
+//' 
+//' @param observations The observations.
+//' @param weights Weights of the observations.
+//' @param beta Parameters of the GEV.
+//' 
+// [[Rcpp::export]]
+List reversTransformData(const NumericVector & observations, const NumericVector & weights, const NumericVector & beta) {
+  int N = static_cast<int>(observations.size());
+  NumericVector SransformObs(N);
+  NumericVector SransWeights(N);
+  if (beta[2] == 0) { // Gumbel
+    for (int i{0}; i < N; ++i) {
+      SransformObs[i] = exp( -(observations[N - i - 1] - beta[0]) / beta[1]) ;
+      SransWeights[i] = weights[N - i - 1];
+    }
+  }
+  else { // GEVD
+    for (int i{0}; i < N; ++i) {
+      SransformObs[i] = pow( 1 + beta[2] * (observations[N - i - 1] - beta[0]) / beta[1] , -1 / beta[2]);
+      SransWeights[i] = weights[N - i - 1];
+    }
+  }
+  
+  List L = List::create(Named("obs") = SransformObs, _["weight"] = SransWeights);
+  
+  return L;
+}
+
+
 //' Clone a vector 
 //' 
 //' @param v A vector.

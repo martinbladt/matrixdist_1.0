@@ -4,7 +4,7 @@
 \alias{runge_kutta}
 \title{Runge Kutta for the calculation of the a,b and c vectors in a EM step}
 \usage{
-runge_kutta(avector, bvector, cmatrix, dt, h, S, t)
+runge_kutta(avector, bvector, cmatrix, dt, h, S, s)
 }
 \arguments{
 \item{avector}{The a vector.}
@@ -19,7 +19,7 @@ runge_kutta(avector, bvector, cmatrix, dt, h, S, t)
 
 \item{S}{Sub-intensity.}
 
-\item{t}{Exit rates.}
+\item{s}{Exit rates.}
 }
 \description{
 Performs the RK of forth order

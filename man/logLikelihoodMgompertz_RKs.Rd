@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{logLikelihoodMgompertz_RKs}
 \alias{logLikelihoodMgompertz_RKs}
-\title{Loglikelihood of matrix-Gompertz using RK}
+\title{Loglikelihood of matrix Gompertz using RK}
 \usage{
 logLikelihoodMgompertz_RKs(
   h,
@@ -24,7 +24,7 @@ logLikelihoodMgompertz_RKs(
 
 \item{S}{Sub-intensity.}
 
-\item{beta}{Parameter of transformation}
+\item{beta}{Parameter of transformation.}
 
 \item{obs}{The observations.}
 

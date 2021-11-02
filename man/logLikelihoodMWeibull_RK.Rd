@@ -13,7 +13,7 @@ logLikelihoodMweibull_RK(h, alpha, S, beta, obs, weight, rcens, rcweight)
 
 \item{S}{Sub-intensity.}
 
-\item{beta}{Parameter of transformation}
+\item{beta}{Parameter of transformation.}
 
 \item{obs}{The observations.}
 

@@ -71,7 +71,7 @@ setMethod(
     }
     if (!is_iph) {
       par_g <- numeric(0)
-      inv_g <- function(x) x
+      inv_g <- function(par, x) x
       LL_base <- eval(parse(text = paste("logLikelihoodPH_", methods[2], "s", sep = "")))
       LL <- function(h, alpha, S, theta, obs, weight, rcens, rcweight, X) {
         ex <- exp(X %*% theta)

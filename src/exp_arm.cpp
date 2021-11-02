@@ -1,5 +1,4 @@
 # include <RcppArmadillo.h>
-#include "exp_arm.h"
 // [[ Rcpp :: depends ( RcppArmadillo )]]
 
 //' Product of two matrices

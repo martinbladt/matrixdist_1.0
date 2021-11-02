@@ -24,7 +24,7 @@ logLikelihoodMloglogistic_RKs(
 
 \item{S}{Sub-intensity.}
 
-\item{beta}{Parameter of transformation}
+\item{beta}{Parameters of transformation.}
 
 \item{obs}{The observations.}
 

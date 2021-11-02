@@ -11,315 +11,291 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
-// default_step_length
-double default_step_length(const NumericMatrix& S);
-RcppExport SEXP _matrixdist_default_step_length(SEXP SSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const NumericMatrix& >::type S(SSEXP);
-    rcpp_result_gen = Rcpp::wrap(default_step_length(S));
-    return rcpp_result_gen;
-END_RCPP
-}
 // runge_kutta
-void runge_kutta(NumericMatrix& avector, NumericMatrix& bvector, NumericMatrix& cmatrix, double dt, double h, const NumericMatrix& S, const NumericMatrix& t);
-RcppExport SEXP _matrixdist_runge_kutta(SEXP avectorSEXP, SEXP bvectorSEXP, SEXP cmatrixSEXP, SEXP dtSEXP, SEXP hSEXP, SEXP SSEXP, SEXP tSEXP) {
+void runge_kutta(arma::vec& avector, arma::mat& bvector, arma::mat& cmatrix, double dt, double h, const arma::mat& S, const arma::mat& s);
+RcppExport SEXP _matrixdist_runge_kutta(SEXP avectorSEXP, SEXP bvectorSEXP, SEXP cmatrixSEXP, SEXP dtSEXP, SEXP hSEXP, SEXP SSEXP, SEXP sSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericMatrix& >::type avector(avectorSEXP);
-    Rcpp::traits::input_parameter< NumericMatrix& >::type bvector(bvectorSEXP);
-    Rcpp::traits::input_parameter< NumericMatrix& >::type cmatrix(cmatrixSEXP);
+    Rcpp::traits::input_parameter< arma::vec& >::type avector(avectorSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type bvector(bvectorSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type cmatrix(cmatrixSEXP);
     Rcpp::traits::input_parameter< double >::type dt(dtSEXP);
     Rcpp::traits::input_parameter< double >::type h(hSEXP);
-    Rcpp::traits::input_parameter< const NumericMatrix& >::type S(SSEXP);
-    Rcpp::traits::input_parameter< const NumericMatrix& >::type t(tSEXP);
-    runge_kutta(avector, bvector, cmatrix, dt, h, S, t);
+    Rcpp::traits::input_parameter< const arma::mat& >::type S(SSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type s(sSEXP);
+    runge_kutta(avector, bvector, cmatrix, dt, h, S, s);
     return R_NilValue;
 END_RCPP
 }
-// EMstep_RK_old
-void EMstep_RK_old(double h, NumericVector& alpha, NumericMatrix& S, const NumericVector& obs, const NumericVector& weight, const NumericVector& rcens, const NumericVector& rcweight);
-RcppExport SEXP _matrixdist_EMstep_RK_old(SEXP hSEXP, SEXP alphaSEXP, SEXP SSEXP, SEXP obsSEXP, SEXP weightSEXP, SEXP rcensSEXP, SEXP rcweightSEXP) {
+// EMstep_RK
+void EMstep_RK(double h, arma::vec& alpha, arma::mat& S, const Rcpp::NumericVector& obs, const Rcpp::NumericVector& weight, const Rcpp::NumericVector& rcens, const Rcpp::NumericVector& rcweight);
+RcppExport SEXP _matrixdist_EMstep_RK(SEXP hSEXP, SEXP alphaSEXP, SEXP SSEXP, SEXP obsSEXP, SEXP weightSEXP, SEXP rcensSEXP, SEXP rcweightSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< double >::type h(hSEXP);
-    Rcpp::traits::input_parameter< NumericVector& >::type alpha(alphaSEXP);
-    Rcpp::traits::input_parameter< NumericMatrix& >::type S(SSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type obs(obsSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type weight(weightSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type rcens(rcensSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type rcweight(rcweightSEXP);
-    EMstep_RK_old(h, alpha, S, obs, weight, rcens, rcweight);
+    Rcpp::traits::input_parameter< arma::vec& >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type S(SSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type obs(obsSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type weight(weightSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type rcens(rcensSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type rcweight(rcweightSEXP);
+    EMstep_RK(h, alpha, S, obs, weight, rcens, rcweight);
     return R_NilValue;
 END_RCPP
 }
 // a_rungekutta
-void a_rungekutta(NumericMatrix& avector, double dt, double h, const NumericMatrix& S);
+void a_rungekutta(arma::vec& avector, double dt, double h, const arma::mat& S);
 RcppExport SEXP _matrixdist_a_rungekutta(SEXP avectorSEXP, SEXP dtSEXP, SEXP hSEXP, SEXP SSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericMatrix& >::type avector(avectorSEXP);
+    Rcpp::traits::input_parameter< arma::vec& >::type avector(avectorSEXP);
     Rcpp::traits::input_parameter< double >::type dt(dtSEXP);
     Rcpp::traits::input_parameter< double >::type h(hSEXP);
-    Rcpp::traits::input_parameter< const NumericMatrix& >::type S(SSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type S(SSEXP);
     a_rungekutta(avector, dt, h, S);
     return R_NilValue;
 END_RCPP
 }
-// logLikelihoodPH_RK_old
-double logLikelihoodPH_RK_old(double h, NumericVector& alpha, NumericMatrix& S, const NumericVector& obs, const NumericVector& weight, const NumericVector& rcens, const NumericVector& rcweight);
-RcppExport SEXP _matrixdist_logLikelihoodPH_RK_old(SEXP hSEXP, SEXP alphaSEXP, SEXP SSEXP, SEXP obsSEXP, SEXP weightSEXP, SEXP rcensSEXP, SEXP rcweightSEXP) {
+// logLikelihoodPH_RK
+double logLikelihoodPH_RK(double h, arma::vec& alpha, arma::mat& S, const Rcpp::NumericVector& obs, const Rcpp::NumericVector& weight, const Rcpp::NumericVector& rcens, const Rcpp::NumericVector& rcweight);
+RcppExport SEXP _matrixdist_logLikelihoodPH_RK(SEXP hSEXP, SEXP alphaSEXP, SEXP SSEXP, SEXP obsSEXP, SEXP weightSEXP, SEXP rcensSEXP, SEXP rcweightSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< double >::type h(hSEXP);
-    Rcpp::traits::input_parameter< NumericVector& >::type alpha(alphaSEXP);
-    Rcpp::traits::input_parameter< NumericMatrix& >::type S(SSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type obs(obsSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type weight(weightSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type rcens(rcensSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type rcweight(rcweightSEXP);
-    rcpp_result_gen = Rcpp::wrap(logLikelihoodPH_RK_old(h, alpha, S, obs, weight, rcens, rcweight));
+    Rcpp::traits::input_parameter< arma::vec& >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type S(SSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type obs(obsSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type weight(weightSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type rcens(rcensSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type rcweight(rcweightSEXP);
+    rcpp_result_gen = Rcpp::wrap(logLikelihoodPH_RK(h, alpha, S, obs, weight, rcens, rcweight));
     return rcpp_result_gen;
 END_RCPP
 }
 // logLikelihoodMweibull_RK
-double logLikelihoodMweibull_RK(double h, NumericVector& alpha, NumericMatrix& S, double beta, const NumericVector& obs, const NumericVector& weight, const NumericVector& rcens, const NumericVector& rcweight);
+double logLikelihoodMweibull_RK(double h, arma::vec& alpha, arma::mat& S, double beta, const Rcpp::NumericVector& obs, const Rcpp::NumericVector& weight, const Rcpp::NumericVector& rcens, const Rcpp::NumericVector& rcweight);
 RcppExport SEXP _matrixdist_logLikelihoodMweibull_RK(SEXP hSEXP, SEXP alphaSEXP, SEXP SSEXP, SEXP betaSEXP, SEXP obsSEXP, SEXP weightSEXP, SEXP rcensSEXP, SEXP rcweightSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< double >::type h(hSEXP);
-    Rcpp::traits::input_parameter< NumericVector& >::type alpha(alphaSEXP);
-    Rcpp::traits::input_parameter< NumericMatrix& >::type S(SSEXP);
+    Rcpp::traits::input_parameter< arma::vec& >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type S(SSEXP);
     Rcpp::traits::input_parameter< double >::type beta(betaSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type obs(obsSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type weight(weightSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type rcens(rcensSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type rcweight(rcweightSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type obs(obsSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type weight(weightSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type rcens(rcensSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type rcweight(rcweightSEXP);
     rcpp_result_gen = Rcpp::wrap(logLikelihoodMweibull_RK(h, alpha, S, beta, obs, weight, rcens, rcweight));
     return rcpp_result_gen;
 END_RCPP
 }
 // logLikelihoodMpareto_RK
-double logLikelihoodMpareto_RK(double h, NumericVector& alpha, NumericMatrix& S, double beta, const NumericVector& obs, const NumericVector& weight, const NumericVector& rcens, const NumericVector& rcweight);
+double logLikelihoodMpareto_RK(double h, arma::vec& alpha, arma::mat& S, double beta, const Rcpp::NumericVector& obs, const Rcpp::NumericVector& weight, const Rcpp::NumericVector& rcens, const Rcpp::NumericVector& rcweight);
 RcppExport SEXP _matrixdist_logLikelihoodMpareto_RK(SEXP hSEXP, SEXP alphaSEXP, SEXP SSEXP, SEXP betaSEXP, SEXP obsSEXP, SEXP weightSEXP, SEXP rcensSEXP, SEXP rcweightSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< double >::type h(hSEXP);
-    Rcpp::traits::input_parameter< NumericVector& >::type alpha(alphaSEXP);
-    Rcpp::traits::input_parameter< NumericMatrix& >::type S(SSEXP);
+    Rcpp::traits::input_parameter< arma::vec& >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type S(SSEXP);
     Rcpp::traits::input_parameter< double >::type beta(betaSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type obs(obsSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type weight(weightSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type rcens(rcensSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type rcweight(rcweightSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type obs(obsSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type weight(weightSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type rcens(rcensSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type rcweight(rcweightSEXP);
     rcpp_result_gen = Rcpp::wrap(logLikelihoodMpareto_RK(h, alpha, S, beta, obs, weight, rcens, rcweight));
     return rcpp_result_gen;
 END_RCPP
 }
 // logLikelihoodMlognormal_RK
-double logLikelihoodMlognormal_RK(double h, NumericVector& alpha, NumericMatrix& S, double beta, const NumericVector& obs, const NumericVector& weight, const NumericVector& rcens, const NumericVector& rcweight);
+double logLikelihoodMlognormal_RK(double h, arma::vec& alpha, arma::mat& S, double beta, const Rcpp::NumericVector& obs, const Rcpp::NumericVector& weight, const Rcpp::NumericVector& rcens, const Rcpp::NumericVector& rcweight);
 RcppExport SEXP _matrixdist_logLikelihoodMlognormal_RK(SEXP hSEXP, SEXP alphaSEXP, SEXP SSEXP, SEXP betaSEXP, SEXP obsSEXP, SEXP weightSEXP, SEXP rcensSEXP, SEXP rcweightSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< double >::type h(hSEXP);
-    Rcpp::traits::input_parameter< NumericVector& >::type alpha(alphaSEXP);
-    Rcpp::traits::input_parameter< NumericMatrix& >::type S(SSEXP);
+    Rcpp::traits::input_parameter< arma::vec& >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type S(SSEXP);
     Rcpp::traits::input_parameter< double >::type beta(betaSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type obs(obsSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type weight(weightSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type rcens(rcensSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type rcweight(rcweightSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type obs(obsSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type weight(weightSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type rcens(rcensSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type rcweight(rcweightSEXP);
     rcpp_result_gen = Rcpp::wrap(logLikelihoodMlognormal_RK(h, alpha, S, beta, obs, weight, rcens, rcweight));
     return rcpp_result_gen;
 END_RCPP
 }
 // logLikelihoodMloglogistic_RK
-double logLikelihoodMloglogistic_RK(double h, NumericVector& alpha, NumericMatrix& S, NumericVector beta, const NumericVector& obs, const NumericVector& weight, const NumericVector& rcens, const NumericVector& rcweight);
+double logLikelihoodMloglogistic_RK(double h, arma::vec& alpha, arma::mat& S, Rcpp::NumericVector beta, const Rcpp::NumericVector& obs, const Rcpp::NumericVector& weight, const Rcpp::NumericVector& rcens, const Rcpp::NumericVector& rcweight);
 RcppExport SEXP _matrixdist_logLikelihoodMloglogistic_RK(SEXP hSEXP, SEXP alphaSEXP, SEXP SSEXP, SEXP betaSEXP, SEXP obsSEXP, SEXP weightSEXP, SEXP rcensSEXP, SEXP rcweightSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< double >::type h(hSEXP);
-    Rcpp::traits::input_parameter< NumericVector& >::type alpha(alphaSEXP);
-    Rcpp::traits::input_parameter< NumericMatrix& >::type S(SSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type beta(betaSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type obs(obsSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type weight(weightSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type rcens(rcensSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type rcweight(rcweightSEXP);
+    Rcpp::traits::input_parameter< arma::vec& >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type S(SSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type beta(betaSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type obs(obsSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type weight(weightSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type rcens(rcensSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type rcweight(rcweightSEXP);
     rcpp_result_gen = Rcpp::wrap(logLikelihoodMloglogistic_RK(h, alpha, S, beta, obs, weight, rcens, rcweight));
     return rcpp_result_gen;
 END_RCPP
 }
 // logLikelihoodMgompertz_RK
-double logLikelihoodMgompertz_RK(double h, NumericVector& alpha, NumericMatrix& S, double beta, const NumericVector& obs, const NumericVector& weight, const NumericVector& rcens, const NumericVector& rcweight);
+double logLikelihoodMgompertz_RK(double h, arma::vec& alpha, arma::mat& S, double beta, const Rcpp::NumericVector& obs, const Rcpp::NumericVector& weight, const Rcpp::NumericVector& rcens, const Rcpp::NumericVector& rcweight);
 RcppExport SEXP _matrixdist_logLikelihoodMgompertz_RK(SEXP hSEXP, SEXP alphaSEXP, SEXP SSEXP, SEXP betaSEXP, SEXP obsSEXP, SEXP weightSEXP, SEXP rcensSEXP, SEXP rcweightSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< double >::type h(hSEXP);
-    Rcpp::traits::input_parameter< NumericVector& >::type alpha(alphaSEXP);
-    Rcpp::traits::input_parameter< NumericMatrix& >::type S(SSEXP);
+    Rcpp::traits::input_parameter< arma::vec& >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type S(SSEXP);
     Rcpp::traits::input_parameter< double >::type beta(betaSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type obs(obsSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type weight(weightSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type rcens(rcensSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type rcweight(rcweightSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type obs(obsSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type weight(weightSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type rcens(rcensSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type rcweight(rcweightSEXP);
     rcpp_result_gen = Rcpp::wrap(logLikelihoodMgompertz_RK(h, alpha, S, beta, obs, weight, rcens, rcweight));
     return rcpp_result_gen;
 END_RCPP
 }
 // logLikelihoodMgev_RK
-double logLikelihoodMgev_RK(double h, NumericVector& alpha, NumericMatrix& S, NumericVector beta, const NumericVector& obs, const NumericVector& weight, const NumericVector& rcens, const NumericVector& rcweight);
+double logLikelihoodMgev_RK(double h, arma::vec& alpha, arma::mat& S, Rcpp::NumericVector beta, const Rcpp::NumericVector& obs, const Rcpp::NumericVector& weight, const Rcpp::NumericVector& rcens, const Rcpp::NumericVector& rcweight);
 RcppExport SEXP _matrixdist_logLikelihoodMgev_RK(SEXP hSEXP, SEXP alphaSEXP, SEXP SSEXP, SEXP betaSEXP, SEXP obsSEXP, SEXP weightSEXP, SEXP rcensSEXP, SEXP rcweightSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< double >::type h(hSEXP);
-    Rcpp::traits::input_parameter< NumericVector& >::type alpha(alphaSEXP);
-    Rcpp::traits::input_parameter< NumericMatrix& >::type S(SSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type beta(betaSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type obs(obsSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type weight(weightSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type rcens(rcensSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type rcweight(rcweightSEXP);
+    Rcpp::traits::input_parameter< arma::vec& >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type S(SSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type beta(betaSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type obs(obsSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type weight(weightSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type rcens(rcensSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type rcweight(rcweightSEXP);
     rcpp_result_gen = Rcpp::wrap(logLikelihoodMgev_RK(h, alpha, S, beta, obs, weight, rcens, rcweight));
     return rcpp_result_gen;
 END_RCPP
 }
-// reversTransformData
-List reversTransformData(const NumericVector& observations, const NumericVector& weights, const NumericVector& beta);
-RcppExport SEXP _matrixdist_reversTransformData(SEXP observationsSEXP, SEXP weightsSEXP, SEXP betaSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const NumericVector& >::type observations(observationsSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type weights(weightsSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type beta(betaSEXP);
-    rcpp_result_gen = Rcpp::wrap(reversTransformData(observations, weights, beta));
-    return rcpp_result_gen;
-END_RCPP
-}
 // logLikelihoodPH_RKs
-double logLikelihoodPH_RKs(double h, NumericVector& alpha, NumericMatrix& S, const NumericVector& obs, const NumericVector& weight, const NumericVector& rcens, const NumericVector& rcweight, const NumericVector& scale1, const NumericVector& scale2);
+double logLikelihoodPH_RKs(double h, arma::vec& alpha, arma::mat& S, const Rcpp::NumericVector& obs, const Rcpp::NumericVector& weight, const Rcpp::NumericVector& rcens, const Rcpp::NumericVector& rcweight, const Rcpp::NumericVector& scale1, const Rcpp::NumericVector& scale2);
 RcppExport SEXP _matrixdist_logLikelihoodPH_RKs(SEXP hSEXP, SEXP alphaSEXP, SEXP SSEXP, SEXP obsSEXP, SEXP weightSEXP, SEXP rcensSEXP, SEXP rcweightSEXP, SEXP scale1SEXP, SEXP scale2SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< double >::type h(hSEXP);
-    Rcpp::traits::input_parameter< NumericVector& >::type alpha(alphaSEXP);
-    Rcpp::traits::input_parameter< NumericMatrix& >::type S(SSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type obs(obsSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type weight(weightSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type rcens(rcensSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type rcweight(rcweightSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type scale1(scale1SEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type scale2(scale2SEXP);
+    Rcpp::traits::input_parameter< arma::vec& >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type S(SSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type obs(obsSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type weight(weightSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type rcens(rcensSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type rcweight(rcweightSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type scale1(scale1SEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type scale2(scale2SEXP);
     rcpp_result_gen = Rcpp::wrap(logLikelihoodPH_RKs(h, alpha, S, obs, weight, rcens, rcweight, scale1, scale2));
     return rcpp_result_gen;
 END_RCPP
 }
 // logLikelihoodMweibull_RKs
-double logLikelihoodMweibull_RKs(double h, NumericVector& alpha, NumericMatrix& S, double beta, const NumericVector& obs, const NumericVector& weight, const NumericVector& rcens, const NumericVector& rcweight, const NumericVector& scale1, const NumericVector& scale2);
+double logLikelihoodMweibull_RKs(double h, arma::vec& alpha, arma::mat& S, double beta, const Rcpp::NumericVector& obs, const Rcpp::NumericVector& weight, const Rcpp::NumericVector& rcens, const Rcpp::NumericVector& rcweight, const Rcpp::NumericVector& scale1, const Rcpp::NumericVector& scale2);
 RcppExport SEXP _matrixdist_logLikelihoodMweibull_RKs(SEXP hSEXP, SEXP alphaSEXP, SEXP SSEXP, SEXP betaSEXP, SEXP obsSEXP, SEXP weightSEXP, SEXP rcensSEXP, SEXP rcweightSEXP, SEXP scale1SEXP, SEXP scale2SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< double >::type h(hSEXP);
-    Rcpp::traits::input_parameter< NumericVector& >::type alpha(alphaSEXP);
-    Rcpp::traits::input_parameter< NumericMatrix& >::type S(SSEXP);
+    Rcpp::traits::input_parameter< arma::vec& >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type S(SSEXP);
     Rcpp::traits::input_parameter< double >::type beta(betaSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type obs(obsSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type weight(weightSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type rcens(rcensSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type rcweight(rcweightSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type scale1(scale1SEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type scale2(scale2SEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type obs(obsSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type weight(weightSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type rcens(rcensSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type rcweight(rcweightSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type scale1(scale1SEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type scale2(scale2SEXP);
     rcpp_result_gen = Rcpp::wrap(logLikelihoodMweibull_RKs(h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2));
     return rcpp_result_gen;
 END_RCPP
 }
 // logLikelihoodMpareto_RKs
-double logLikelihoodMpareto_RKs(double h, NumericVector& alpha, NumericMatrix& S, double beta, const NumericVector& obs, const NumericVector& weight, const NumericVector& rcens, const NumericVector& rcweight, const NumericVector& scale1, const NumericVector& scale2);
+double logLikelihoodMpareto_RKs(double h, arma::vec& alpha, arma::mat& S, double beta, const Rcpp::NumericVector& obs, const Rcpp::NumericVector& weight, const Rcpp::NumericVector& rcens, const Rcpp::NumericVector& rcweight, const Rcpp::NumericVector& scale1, const Rcpp::NumericVector& scale2);
 RcppExport SEXP _matrixdist_logLikelihoodMpareto_RKs(SEXP hSEXP, SEXP alphaSEXP, SEXP SSEXP, SEXP betaSEXP, SEXP obsSEXP, SEXP weightSEXP, SEXP rcensSEXP, SEXP rcweightSEXP, SEXP scale1SEXP, SEXP scale2SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< double >::type h(hSEXP);
-    Rcpp::traits::input_parameter< NumericVector& >::type alpha(alphaSEXP);
-    Rcpp::traits::input_parameter< NumericMatrix& >::type S(SSEXP);
+    Rcpp::traits::input_parameter< arma::vec& >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type S(SSEXP);
     Rcpp::traits::input_parameter< double >::type beta(betaSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type obs(obsSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type weight(weightSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type rcens(rcensSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type rcweight(rcweightSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type scale1(scale1SEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type scale2(scale2SEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type obs(obsSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type weight(weightSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type rcens(rcensSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type rcweight(rcweightSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type scale1(scale1SEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type scale2(scale2SEXP);
     rcpp_result_gen = Rcpp::wrap(logLikelihoodMpareto_RKs(h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2));
     return rcpp_result_gen;
 END_RCPP
 }
 // logLikelihoodMlognormal_RKs
-double logLikelihoodMlognormal_RKs(double h, NumericVector& alpha, NumericMatrix& S, double beta, const NumericVector& obs, const NumericVector& weight, const NumericVector& rcens, const NumericVector& rcweight, const NumericVector& scale1, const NumericVector& scale2);
+double logLikelihoodMlognormal_RKs(double h, arma::vec& alpha, arma::mat& S, double beta, const Rcpp::NumericVector& obs, const Rcpp::NumericVector& weight, const Rcpp::NumericVector& rcens, const Rcpp::NumericVector& rcweight, const Rcpp::NumericVector& scale1, const Rcpp::NumericVector& scale2);
 RcppExport SEXP _matrixdist_logLikelihoodMlognormal_RKs(SEXP hSEXP, SEXP alphaSEXP, SEXP SSEXP, SEXP betaSEXP, SEXP obsSEXP, SEXP weightSEXP, SEXP rcensSEXP, SEXP rcweightSEXP, SEXP scale1SEXP, SEXP scale2SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< double >::type h(hSEXP);
-    Rcpp::traits::input_parameter< NumericVector& >::type alpha(alphaSEXP);
-    Rcpp::traits::input_parameter< NumericMatrix& >::type S(SSEXP);
+    Rcpp::traits::input_parameter< arma::vec& >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type S(SSEXP);
     Rcpp::traits::input_parameter< double >::type beta(betaSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type obs(obsSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type weight(weightSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type rcens(rcensSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type rcweight(rcweightSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type scale1(scale1SEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type scale2(scale2SEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type obs(obsSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type weight(weightSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type rcens(rcensSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type rcweight(rcweightSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type scale1(scale1SEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type scale2(scale2SEXP);
     rcpp_result_gen = Rcpp::wrap(logLikelihoodMlognormal_RKs(h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2));
     return rcpp_result_gen;
 END_RCPP
 }
 // logLikelihoodMloglogistic_RKs
-double logLikelihoodMloglogistic_RKs(double h, NumericVector& alpha, NumericMatrix& S, NumericVector beta, const NumericVector& obs, const NumericVector& weight, const NumericVector& rcens, const NumericVector& rcweight, const NumericVector& scale1, const NumericVector& scale2);
+double logLikelihoodMloglogistic_RKs(double h, arma::vec& alpha, arma::mat& S, Rcpp::NumericVector beta, const Rcpp::NumericVector& obs, const Rcpp::NumericVector& weight, const Rcpp::NumericVector& rcens, const Rcpp::NumericVector& rcweight, const Rcpp::NumericVector& scale1, const Rcpp::NumericVector& scale2);
 RcppExport SEXP _matrixdist_logLikelihoodMloglogistic_RKs(SEXP hSEXP, SEXP alphaSEXP, SEXP SSEXP, SEXP betaSEXP, SEXP obsSEXP, SEXP weightSEXP, SEXP rcensSEXP, SEXP rcweightSEXP, SEXP scale1SEXP, SEXP scale2SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< double >::type h(hSEXP);
-    Rcpp::traits::input_parameter< NumericVector& >::type alpha(alphaSEXP);
-    Rcpp::traits::input_parameter< NumericMatrix& >::type S(SSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type beta(betaSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type obs(obsSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type weight(weightSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type rcens(rcensSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type rcweight(rcweightSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type scale1(scale1SEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type scale2(scale2SEXP);
+    Rcpp::traits::input_parameter< arma::vec& >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type S(SSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type beta(betaSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type obs(obsSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type weight(weightSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type rcens(rcensSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type rcweight(rcweightSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type scale1(scale1SEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type scale2(scale2SEXP);
     rcpp_result_gen = Rcpp::wrap(logLikelihoodMloglogistic_RKs(h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2));
     return rcpp_result_gen;
 END_RCPP
 }
 // logLikelihoodMgompertz_RKs
-double logLikelihoodMgompertz_RKs(double h, NumericVector& alpha, NumericMatrix& S, double beta, const NumericVector& obs, const NumericVector& weight, const NumericVector& rcens, const NumericVector& rcweight, const NumericVector& scale1, const NumericVector& scale2);
+double logLikelihoodMgompertz_RKs(double h, arma::vec& alpha, arma::mat& S, double beta, const Rcpp::NumericVector& obs, const Rcpp::NumericVector& weight, const Rcpp::NumericVector& rcens, const Rcpp::NumericVector& rcweight, const Rcpp::NumericVector& scale1, const Rcpp::NumericVector& scale2);
 RcppExport SEXP _matrixdist_logLikelihoodMgompertz_RKs(SEXP hSEXP, SEXP alphaSEXP, SEXP SSEXP, SEXP betaSEXP, SEXP obsSEXP, SEXP weightSEXP, SEXP rcensSEXP, SEXP rcweightSEXP, SEXP scale1SEXP, SEXP scale2SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< double >::type h(hSEXP);
-    Rcpp::traits::input_parameter< NumericVector& >::type alpha(alphaSEXP);
-    Rcpp::traits::input_parameter< NumericMatrix& >::type S(SSEXP);
+    Rcpp::traits::input_parameter< arma::vec& >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type S(SSEXP);
     Rcpp::traits::input_parameter< double >::type beta(betaSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type obs(obsSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type weight(weightSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type rcens(rcensSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type rcweight(rcweightSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type scale1(scale1SEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type scale2(scale2SEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type obs(obsSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type weight(weightSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type rcens(rcensSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type rcweight(rcweightSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type scale1(scale1SEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type scale2(scale2SEXP);
     rcpp_result_gen = Rcpp::wrap(logLikelihoodMgompertz_RKs(h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2));
     return rcpp_result_gen;
 END_RCPP
@@ -894,68 +870,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// runge_kutta_new
-void runge_kutta_new(arma::vec& avector, arma::mat& bvector, arma::mat& cmatrix, double dt, double h, const arma::mat& S, const arma::mat& s);
-RcppExport SEXP _matrixdist_runge_kutta_new(SEXP avectorSEXP, SEXP bvectorSEXP, SEXP cmatrixSEXP, SEXP dtSEXP, SEXP hSEXP, SEXP SSEXP, SEXP sSEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::vec& >::type avector(avectorSEXP);
-    Rcpp::traits::input_parameter< arma::mat& >::type bvector(bvectorSEXP);
-    Rcpp::traits::input_parameter< arma::mat& >::type cmatrix(cmatrixSEXP);
-    Rcpp::traits::input_parameter< double >::type dt(dtSEXP);
-    Rcpp::traits::input_parameter< double >::type h(hSEXP);
-    Rcpp::traits::input_parameter< const arma::mat& >::type S(SSEXP);
-    Rcpp::traits::input_parameter< const arma::mat& >::type s(sSEXP);
-    runge_kutta_new(avector, bvector, cmatrix, dt, h, S, s);
-    return R_NilValue;
-END_RCPP
-}
-// EMstep_RK
-void EMstep_RK(double h, arma::vec& alpha, arma::mat& S, const Rcpp::NumericVector& obs, const Rcpp::NumericVector& weight, const Rcpp::NumericVector& rcens, const Rcpp::NumericVector& rcweight);
-RcppExport SEXP _matrixdist_EMstep_RK(SEXP hSEXP, SEXP alphaSEXP, SEXP SSEXP, SEXP obsSEXP, SEXP weightSEXP, SEXP rcensSEXP, SEXP rcweightSEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< double >::type h(hSEXP);
-    Rcpp::traits::input_parameter< arma::vec& >::type alpha(alphaSEXP);
-    Rcpp::traits::input_parameter< arma::mat& >::type S(SSEXP);
-    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type obs(obsSEXP);
-    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type weight(weightSEXP);
-    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type rcens(rcensSEXP);
-    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type rcweight(rcweightSEXP);
-    EMstep_RK(h, alpha, S, obs, weight, rcens, rcweight);
-    return R_NilValue;
-END_RCPP
-}
-// a_rungekutta_new
-void a_rungekutta_new(arma::vec& avector, double dt, double h, const arma::mat& S);
-RcppExport SEXP _matrixdist_a_rungekutta_new(SEXP avectorSEXP, SEXP dtSEXP, SEXP hSEXP, SEXP SSEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::vec& >::type avector(avectorSEXP);
-    Rcpp::traits::input_parameter< double >::type dt(dtSEXP);
-    Rcpp::traits::input_parameter< double >::type h(hSEXP);
-    Rcpp::traits::input_parameter< const arma::mat& >::type S(SSEXP);
-    a_rungekutta_new(avector, dt, h, S);
-    return R_NilValue;
-END_RCPP
-}
-// logLikelihoodPH_RK
-double logLikelihoodPH_RK(double h, arma::vec& alpha, arma::mat& S, const Rcpp::NumericVector& obs, const Rcpp::NumericVector& weight, const Rcpp::NumericVector& rcens, const Rcpp::NumericVector& rcweight);
-RcppExport SEXP _matrixdist_logLikelihoodPH_RK(SEXP hSEXP, SEXP alphaSEXP, SEXP SSEXP, SEXP obsSEXP, SEXP weightSEXP, SEXP rcensSEXP, SEXP rcweightSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< double >::type h(hSEXP);
-    Rcpp::traits::input_parameter< arma::vec& >::type alpha(alphaSEXP);
-    Rcpp::traits::input_parameter< arma::mat& >::type S(SSEXP);
-    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type obs(obsSEXP);
-    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type weight(weightSEXP);
-    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type rcens(rcensSEXP);
-    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type rcweight(rcweightSEXP);
-    rcpp_result_gen = Rcpp::wrap(logLikelihoodPH_RK(h, alpha, S, obs, weight, rcens, rcweight));
-    return rcpp_result_gen;
-END_RCPP
-}
 // embedded_mc
 arma::mat embedded_mc(arma::mat S);
 RcppExport SEXP _matrixdist_embedded_mc(SEXP SSEXP) {
@@ -1328,6 +1242,30 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// default_step_length
+double default_step_length(const NumericMatrix& S);
+RcppExport SEXP _matrixdist_default_step_length(SEXP SSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const NumericMatrix& >::type S(SSEXP);
+    rcpp_result_gen = Rcpp::wrap(default_step_length(S));
+    return rcpp_result_gen;
+END_RCPP
+}
+// reversTransformData
+List reversTransformData(const NumericVector& observations, const NumericVector& weights, const NumericVector& beta);
+RcppExport SEXP _matrixdist_reversTransformData(SEXP observationsSEXP, SEXP weightsSEXP, SEXP betaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const NumericVector& >::type observations(observationsSEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type weights(weightsSEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type beta(betaSEXP);
+    rcpp_result_gen = Rcpp::wrap(reversTransformData(observations, weights, beta));
+    return rcpp_result_gen;
+END_RCPP
+}
 // clone_vector
 NumericVector clone_vector(NumericVector v);
 RcppExport SEXP _matrixdist_clone_vector(SEXP vSEXP) {
@@ -1379,18 +1317,16 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_matrixdist_default_step_length", (DL_FUNC) &_matrixdist_default_step_length, 1},
     {"_matrixdist_runge_kutta", (DL_FUNC) &_matrixdist_runge_kutta, 7},
-    {"_matrixdist_EMstep_RK_old", (DL_FUNC) &_matrixdist_EMstep_RK_old, 7},
+    {"_matrixdist_EMstep_RK", (DL_FUNC) &_matrixdist_EMstep_RK, 7},
     {"_matrixdist_a_rungekutta", (DL_FUNC) &_matrixdist_a_rungekutta, 4},
-    {"_matrixdist_logLikelihoodPH_RK_old", (DL_FUNC) &_matrixdist_logLikelihoodPH_RK_old, 7},
+    {"_matrixdist_logLikelihoodPH_RK", (DL_FUNC) &_matrixdist_logLikelihoodPH_RK, 7},
     {"_matrixdist_logLikelihoodMweibull_RK", (DL_FUNC) &_matrixdist_logLikelihoodMweibull_RK, 8},
     {"_matrixdist_logLikelihoodMpareto_RK", (DL_FUNC) &_matrixdist_logLikelihoodMpareto_RK, 8},
     {"_matrixdist_logLikelihoodMlognormal_RK", (DL_FUNC) &_matrixdist_logLikelihoodMlognormal_RK, 8},
     {"_matrixdist_logLikelihoodMloglogistic_RK", (DL_FUNC) &_matrixdist_logLikelihoodMloglogistic_RK, 8},
     {"_matrixdist_logLikelihoodMgompertz_RK", (DL_FUNC) &_matrixdist_logLikelihoodMgompertz_RK, 8},
     {"_matrixdist_logLikelihoodMgev_RK", (DL_FUNC) &_matrixdist_logLikelihoodMgev_RK, 8},
-    {"_matrixdist_reversTransformData", (DL_FUNC) &_matrixdist_reversTransformData, 3},
     {"_matrixdist_logLikelihoodPH_RKs", (DL_FUNC) &_matrixdist_logLikelihoodPH_RKs, 9},
     {"_matrixdist_logLikelihoodMweibull_RKs", (DL_FUNC) &_matrixdist_logLikelihoodMweibull_RKs, 10},
     {"_matrixdist_logLikelihoodMpareto_RKs", (DL_FUNC) &_matrixdist_logLikelihoodMpareto_RKs, 10},
@@ -1429,10 +1365,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_logLikelihoodMlognormal_UNIs", (DL_FUNC) &_matrixdist_logLikelihoodMlognormal_UNIs, 10},
     {"_matrixdist_logLikelihoodMloglogistic_UNIs", (DL_FUNC) &_matrixdist_logLikelihoodMloglogistic_UNIs, 10},
     {"_matrixdist_logLikelihoodMgompertz_UNIs", (DL_FUNC) &_matrixdist_logLikelihoodMgompertz_UNIs, 10},
-    {"_matrixdist_runge_kutta_new", (DL_FUNC) &_matrixdist_runge_kutta_new, 7},
-    {"_matrixdist_EMstep_RK", (DL_FUNC) &_matrixdist_EMstep_RK, 7},
-    {"_matrixdist_a_rungekutta_new", (DL_FUNC) &_matrixdist_a_rungekutta_new, 4},
-    {"_matrixdist_logLikelihoodPH_RK", (DL_FUNC) &_matrixdist_logLikelihoodPH_RK, 7},
     {"_matrixdist_embedded_mc", (DL_FUNC) &_matrixdist_embedded_mc, 1},
     {"_matrixdist_cumulate_matrix", (DL_FUNC) &_matrixdist_cumulate_matrix, 1},
     {"_matrixdist_cumulate_vector", (DL_FUNC) &_matrixdist_cumulate_vector, 1},
@@ -1461,6 +1393,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_mgevcdf", (DL_FUNC) &_matrixdist_mgevcdf, 5},
     {"_matrixdist_matrix_product", (DL_FUNC) &_matrixdist_matrix_product, 2},
     {"_matrixdist_matrix_inverse", (DL_FUNC) &_matrixdist_matrix_inverse, 1},
+    {"_matrixdist_default_step_length", (DL_FUNC) &_matrixdist_default_step_length, 1},
+    {"_matrixdist_reversTransformData", (DL_FUNC) &_matrixdist_reversTransformData, 3},
     {"_matrixdist_clone_vector", (DL_FUNC) &_matrixdist_clone_vector, 1},
     {"_matrixdist_clone_matrix", (DL_FUNC) &_matrixdist_clone_matrix, 1},
     {"_matrixdist_sumPH", (DL_FUNC) &_matrixdist_sumPH, 4},
