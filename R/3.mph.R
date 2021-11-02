@@ -144,48 +144,177 @@ setMethod("cdf", c(x = "mph"), function(x,
 setMethod(
   "fit", c(x = "mph", y = "ANY"),
   function(x,y,
-           stepsEM = 1000,
-           uni_epsilon = 1e-30) {
-    d <- length(x@pars$S)
-    p <- length(x@pars$alpha)
-    n <- nrow(y)
-    marginal <- list()
-    for(m in 1:d){marginal[[m]] <- ph(alpha=x@pars$alpha,S=x@pars$S[[m]])}
+           stepsEM = 1000) {
+    alpha_fit <- x@pars$alpha
+    S_fit <- x@pars$S
     for(k in 1:stepsEM){
-      alpha_global <- rep(0,p)
-      for(m in 1:d){
-        log <- capture.output({
-          marginal[[m]] <- fit(marginal[[m]], y[,m], stepsEM = 1,uni_epsilon=uni_epsilon)}
-          )
-      }
-      for(m in 1:d){alpha_global <- alpha_global + marginal[[m]]@pars$alpha}
-      for(m in 1:d){marginal[[m]]@pars$alpha <- alpha_global/d}
-      
-      res <- numeric(n)
-      for(j in 1:p){
-        in_vect <- rep(0,p); in_vect[j] <- 1
-        aux <- matrix(0,n,d)
-        for(m in 1:d){
-          aux[,m] <-  matrixdist:::phdensity(y[,m], in_vect, marginal[[m]]@pars$S)
-        }
-        res <- res + alpha_global[j]/d * apply(aux, 1, prod)
-      }
-      LL <- sum(log(res))
-      LL
+      aux <- EM_step_mph(alpha_fit,S_fit,y)
+      alpha_fit <- aux$alpha
+      S_fit <- aux$S
       cat("\r", "iteration:", k,
-          ", logLik:", LL,
+          ", logLik:", aux$logLik,
           sep = " "
       )
     }
     cat("\n", sep = "")
-    for(m in 1:d){
-      x@pars$S[[m]] <- marginal[[m]]@pars$S
-    }
-    x@pars$alpha <- alpha_global/d
-    x@fit$logLik <- LL
+    x@pars$S <- S_fit
+    x@pars$alpha <- alpha_fit
+    x@fit$logLik <- aux$logLik
     return(x)
   }
 )
-## NOW MAKE MUCH FASTER WITH EXPLICIT EM FUNCTION CALLING,
-#TO AVOID DEALING WITH SO MANY CLASSES
+
+EM_step_mph <- function(alpha, S_list, y){
+  p <- length(alpha)
+  n <- nrow(y)
+  d <- ncol(y)
+  matrix_integrals <- list()
+  for(i in 1:d){    
+    s <- -rowSums(S_list[[i]])
+    marg <- list()
+    for(j in 1:p){
+      e <- rep(0,p); e[j] <- 1
+      big_mat <- rbind(cbind(S_list[[i]], outer(s,e)),
+                       cbind(matrix(0,p,p), S_list[[i]]))
+      marg[[j]] <- vapply(X = y[,i], FUN = function(yy){matrix_exponential(yy * big_mat)},
+                          FUN.VALUE = matrix(1,2*p,2*p))
+    }
+    matrix_integrals[[i]] <- marg
+  }
+  ###
+  a_kij <- array(NA,c(n,p,d,p))
+  for(k in 1:p){
+    for(j in 1:p){
+      for(i in 1:d){
+        for(m in 1:n){
+          a_kij[m,k,i,j] <- matrix_integrals[[i]][[1]][k,j,m]
+        }
+      }
+    }
+  }
+  ###
+  a_ki <- array(NA,c(n,p,d))
+  for(k in 1:p){
+    for(i in 1:d){
+      ti <- -rowSums(S_list[[i]])
+      for(m in 1:n){
+        a_ki[m,k,i] <- sum(ti * a_kij[m,k,i,])
+      }
+    }
+  }
+  ###
+  a_k_minus_i <- array(NA,c(n,p,d))
+  for(k in 1:p){
+    for(i in 1:d){
+      for(m in 1:n){
+        a_k_minus_i[m,k,i] <- prod(a_ki[m,k,-i])
+      }
+    }
+  }
+  ###
+  a_k <- array(NA,c(n,p))
+  for(k in 1:p){
+    for(m in 1:n){
+      a_k[m,k] <- prod(a_ki[m,k,])
+    }
+  }
+  ###
+  a_tilde_ki <- array(NA,c(n,p,d))
+  for(k in 1:p){
+    for(i in 1:d){
+      for(m in 1:n){
+        a_tilde_ki[m,k,i] <- sum(alpha * a_kij[m,,i,k] * a_k_minus_i[m,,i])
+      }
+    }
+  }
+  ###
+  a <- array(NA,c(n))
+  for(m in 1:n){
+    a[m] <- sum(alpha * a_k[m,])
+  }
+  ###
+  b_skij <- array(NA,c(n,p,p,d,p))
+  for(s in 1:p){
+    for(k in 1:p){
+      for(j in 1:p){
+        for(i in 1:d){
+          for(m in 1:n){
+            b_skij[m,s,k,i,j] <- matrix_integrals[[i]][[j]][s,k + p,m]
+          }
+        }
+      }
+    }
+  }
+  ###
+  b_ski <- array(NA,c(n,p,p,d))
+  for(s in 1:p){
+    for(k in 1:p){
+      for(i in 1:d){
+        for(m in 1:n){
+          b_ski[m,s,k,i] <- sum(alpha * a_k_minus_i[m,,i] * b_skij[m,s,k,i,])
+        }
+      }
+    }
+  }
+  ###
+  # E STEP
+  ###
+  EB_k <- numeric(p)
+  for(k in 1:p){
+    EB_k[k] <- alpha[k] * sum(a_k[,k]/a)
+  }
+  EZ_ki <- array(NA,c(p,d))
+  for(k in 1:p){
+    for(i in 1:d){
+      EZ_ki[k,i] <- sum(b_ski[,k,k,i]/a)
+    }
+  }
+  EN_ksi <- array(NA,c(p,p,d))
+  for(i in 1:d){
+    for(s in 1:p){
+      for(k in 1:p){
+        t_ksi <- S_list[[i]][k,s]
+        EN_ksi[k,s,i] <- t_ksi * sum(b_ski[,s,k,i]/a)
+      }
+    }
+  }
+  EN_ki <- array(NA,c(p,d))
+  for(i in 1:d){
+    for(k in 1:p){
+      t_ki <- -rowSums(S_list[[i]])[k]
+      EN_ki[k,i] <- t_ki * sum(a_tilde_ki[,k,i]/a)
+    }
+  }
+  ###
+  # M STEP
+  ###
+  alpha <- numeric(p)
+  for(k in 1:p){
+    alpha[k] <- EB_k[k]/n
+  }
+  S <- array(NA,c(p,p,d))
+  for(i in 1:d){
+    for(s in 1:p){
+      for(k in 1:p){
+        S[k,s,i] <- EN_ksi[k,s,i]/EZ_ki[k,i]
+      }
+    }
+  }
+  s <- array(NA,c(p,d))
+  for(i in 1:d){
+    for(k in 1:p){
+      s[k,i] <- EN_ki[k,i]/EZ_ki[k,i]
+    }
+  }
+  for(k in 1:p){
+    for(i in 1:d){
+      S[k,k,i] <- - sum(S[k,-k,i]) - s[k,i]
+    }
+  }
+  ll <- list()
+  for(i in 1:d){
+    ll[[i]] <- S[,,i]
+  }
+  return(list(alpha = alpha, S = ll, logLik = sum(log(a))))
+}
 

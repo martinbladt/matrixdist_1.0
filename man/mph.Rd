@@ -4,7 +4,7 @@
 \alias{mph}
 \title{Constructor Function for multivariate phase type distributions}
 \usage{
-mph(alpha = NULL, S = NULL, structure = NULL, dimension = 3, variables = 2)
+mph(alpha = NULL, S = NULL, structure = NULL, dimension = 3, variables = NULL)
 }
 \arguments{
 \item{alpha}{a probability vector.}
