@@ -9,9 +9,9 @@ sph(x = NULL, coefs = list(B = numeric(0), C = numeric(0)), type = "reg")
 \arguments{
 \item{x}{An object of class \linkS4class{ph}}
 
-\item{coefs}{coefficients of the survival regression object.}
+\item{coefs}{Coefficients of the survival regression object.}
 
-\item{type}{type of survival object.}
+\item{type}{Type of survival object.}
 }
 \value{
 An object of class \linkS4class{sph}.

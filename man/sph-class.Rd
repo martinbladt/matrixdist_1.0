@@ -13,8 +13,8 @@ Class of objects for inhomogeneous phase type distributions
 \section{Slots}{
 
 \describe{
-\item{\code{coefs}}{coefficients of the survival regression object.}
+\item{\code{coefs}}{Coefficients of the survival regression object.}
 
-\item{\code{type}}{type of survival object.}
+\item{\code{type}}{Type of survival object.}
 }}
 

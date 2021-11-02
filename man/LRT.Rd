@@ -7,13 +7,13 @@
 LRT(x, y, ...)
 }
 \arguments{
-\item{x, y}{objects of the model class.}
+\item{x, y}{Objects of the model class.}
 
-\item{...}{further parameters to be passed on}
+\item{...}{Further parameters to be passed on.}
 }
 \value{
-a likelihood ratio test result.
+A likelihood ratio test result.
 }
 \description{
-Methods are available for objects of class \linkS4class{ph}
+Methods are available for objects of class \linkS4class{ph}.
 }

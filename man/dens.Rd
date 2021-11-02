@@ -7,13 +7,13 @@
 dens(x, ...)
 }
 \arguments{
-\item{x}{an object of the model class.}
+\item{x}{An object of the model class.}
 
-\item{...}{further parameters to be passed on}
+\item{...}{Further parameters to be passed on.}
 }
 \value{
 Density from the matrix distribution.
 }
 \description{
-Methods are available for objects of class \linkS4class{ph}
+Methods are available for objects of class \linkS4class{ph}.
 }

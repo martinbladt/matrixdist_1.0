@@ -7,19 +7,19 @@
 EMstep_PADE(h, alpha, S, obs, weight, rcens, rcweight)
 }
 \arguments{
-\item{h}{nuisance parameter}
+\item{h}{Nuisance parameter.}
 
-\item{alpha}{initial probalities}
+\item{alpha}{Initial probabilities.}
 
-\item{S}{sub-intensity}
+\item{S}{Sub-intensity.}
 
-\item{obs}{the observations}
+\item{obs}{The observations.}
 
-\item{weight}{the weights for the observations}
+\item{weight}{The weights for the observations.}
 
-\item{rcens}{censored observations}
+\item{rcens}{Censored observations.}
 
-\item{rcweight}{the weights for the censored observations}
+\item{rcweight}{The weights for the censored observations.}
 }
 \description{
 EM using Matlab algorithm for matrix exponential in combination with Armadillo

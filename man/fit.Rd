@@ -7,15 +7,15 @@
 fit(x, y, ...)
 }
 \arguments{
-\item{x}{an object of the model class.}
+\item{x}{An object of the model class.}
 
-\item{y}{a vector of data.}
+\item{y}{A vector of data.}
 
-\item{...}{further parameters to be passed on}
+\item{...}{Further parameters to be passed on.}
 }
 \value{
 An object of the fitted model class.
 }
 \description{
-Methods are available for objects of class \linkS4class{ph}
+Methods are available for objects of class \linkS4class{ph}.
 }

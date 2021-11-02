@@ -7,12 +7,12 @@
 reversTransformData(observations, weights, beta)
 }
 \arguments{
-\item{observations}{the observations}
+\item{observations}{The observations.}
 
-\item{weights}{weithgs of the observations}
+\item{weights}{Weights of the observations.}
 
-\item{beta}{parameters of the GEV}
+\item{beta}{Parameters of the GEV.}
 }
 \description{
-Used for EM step
+Used for EM step.
 }

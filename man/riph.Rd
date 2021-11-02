@@ -7,19 +7,20 @@
 riph(n, dist_type, alpha, S, beta)
 }
 \arguments{
-\item{n}{Sample size}
+\item{n}{Sample size.}
 
-\item{dist_type}{Type of IPH}
+\item{dist_type}{Type of IPH.}
 
-\item{alpha}{Initial probabilities}
+\item{alpha}{Initial probabilities.}
 
-\item{S}{sub-intensity matrix}
+\item{S}{Sub-intensity matrix.}
 
-\item{beta}{Parameter of the transformation}
+\item{beta}{Parameter of the transformation.}
 }
 \value{
-The simulated sample
+The simulated sample.
 }
 \description{
-Generates a sample of size \code{n} from an inhomogeneous phase-type distribution with parameters \code{alpha}, \code{S} and \code{beta}
+Generates a sample of size \code{n} from an inhomogeneous phase-type 
+distribution with parameters \code{alpha}, \code{S} and \code{beta}.
 }

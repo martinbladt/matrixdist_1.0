@@ -1,12 +1,12 @@
 #' Inhomogeneous Phase Type distributions
 #'
-#' Class of objects for inhomogeneous phase type distributions
+#' Class of objects for inhomogeneous phase type distributions.
 #'
-#' @slot name name of the phase type distribution.
-#' @slot gfun a list comprising of the parameters.
-#' @slot scale scale.
+#' @slot name Name of the phase type distribution.
+#' @slot gfun A list comprising of the parameters.
+#' @slot scale Scale.
 #'
-#' @return Class object
+#' @return Class object.
 #' @export
 #'
 setClass("iph",
@@ -20,18 +20,18 @@ setClass("iph",
 #' Constructor Function for inhomogeneous phase type distributions
 #'
 #' @param ph An object of class \linkS4class{ph}.
-#' @param alpha a probability vector.
-#' @param S a sub-intensity matrix.
-#' @param structure a valid ph structure
-#' @param dimension the dimension of the ph structure (if provided)
-#' @param gfun inhomogeneity transform
-#' @param gfun_pars the parameters of the inhomogeneity function
-#' @param scale scale
+#' @param alpha A probability vector.
+#' @param S A sub-intensity matrix.
+#' @param structure A valid ph structure.
+#' @param dimension The dimension of the ph structure (if provided).
+#' @param gfun Inhomogeneity transform.
+#' @param gfun_pars The parameters of the inhomogeneity function.
+#' @param scale Scale.
 #'
 #' @return An object of class \linkS4class{iph}.
 #' @export
-#' 
-#' @examples 
+#'
+#' @examples
 #' iph(ph(structure = "coxian", dimension = 4), gfun = "pareto", gfun_pars = 3)
 iph <- function(ph = NULL, gfun = NULL, gfun_pars = NULL, alpha = NULL, S = NULL, structure = NULL, dimension = 3, scale = 1) {
   if (all(is.null(c(gfun, gfun_pars)))) {
@@ -44,7 +44,7 @@ iph <- function(ph = NULL, gfun = NULL, gfun_pars = NULL, alpha = NULL, S = NULL
     stop("invalid gfun")
   }
   if (gfun %in% c("pareto", "weibull", "lognormal", "gompertz")) {
-    if(is.null(gfun_pars))gfun_pars <- 1
+    if (is.null(gfun_pars)) gfun_pars <- 1
     if (length(gfun_pars) != 1 | sum(gfun_pars <= 0) > 0) {
       stop("gfun parameter should be positive and of length one")
     } else {
@@ -52,7 +52,7 @@ iph <- function(ph = NULL, gfun = NULL, gfun_pars = NULL, alpha = NULL, S = NULL
     }
   }
   if (gfun %in% c("gev")) {
-    if(is.null(gfun_pars))gfun_pars <- c(0, 1, 1)
+    if (is.null(gfun_pars)) gfun_pars <- c(0, 1, 1)
     if (length(gfun_pars) != 3 | (gfun_pars[2] > 0) == FALSE) {
       stop("gfun parameter should be of length three: mu, sigma, xi, and sigma > 0")
     } else {
@@ -60,56 +60,58 @@ iph <- function(ph = NULL, gfun = NULL, gfun_pars = NULL, alpha = NULL, S = NULL
     }
   }
   if (gfun %in% c("loglogistic")) {
-    if(is.null(gfun_pars))gfun_pars <- c(1, 1)
+    if (is.null(gfun_pars)) gfun_pars <- c(1, 1)
     if (length(gfun_pars) != 2 | (gfun_pars[1] <= 0) | (gfun_pars[2] <= 0)) {
       stop("gfun parameter should be positive and of length two: alpha, theta > 0")
     } else {
       names(gfun_pars) <- c("alpha", "theta")
     }
   }
-  f1 <- function(beta, t) t^{beta}
+  f1 <- function(beta, t) t^(beta)
   f2 <- function(beta, t) log(t / beta + 1)
-  f3 <- function(beta, t) log(t + 1)^{beta}
-  f4 <- function(beta, t) log((t / beta[1])^{beta[2]} + 1)
+  f3 <- function(beta, t) log(t + 1)^(beta)
+  f4 <- function(beta, t) log((t / beta[1])^(beta[2]) + 1)
   f5 <- function(beta, t) (exp(t * beta) - 1) / beta
   f6 <- function(beta, t, w) reversTransformData(t, w, beta)
   nb <- which(gfun == c("weibull", "pareto", "lognormal", "loglogistic", "gompertz", "gev"))
   ginv <- base::eval(parse(text = paste("f", nb, sep = "")))
-  
-  f1 <- function(beta, t) t^{beta} * log(t)
-  f2 <- function(beta, t) -t/(beta * t + beta^2)
-  f3 <- function(beta, t) log(t + 1)^{beta} * log(log(t + 1))
+
+  f1 <- function(beta, t) t^(beta) * log(t)
+  f2 <- function(beta, t) -t / (beta * t + beta^2)
+  f3 <- function(beta, t) log(t + 1)^(beta) * log(log(t + 1))
   f4 <- NA
-  f5 <- function(beta, t) exp(t * beta) * (t * beta - 1)  / beta^2
+  f5 <- function(beta, t) exp(t * beta) * (t * beta - 1) / beta^2
   f6 <- NA
   nb <- which(gfun == c("weibull", "pareto", "lognormal", "loglogistic", "gompertz", "gev"))
   ginv_prime <- base::eval(parse(text = paste("f", nb, sep = "")))
 
-  f1 <- function(beta, t) beta * t^{beta - 1}
-  f2 <- function(beta, t) (t + beta)^{-1}
-  f3 <- function(beta, t) beta * log(t + 1)^{beta - 1}/(t + 1)
+  f1 <- function(beta, t) beta * t^(beta - 1)
+  f2 <- function(beta, t) (t + beta)^(-1)
+  f3 <- function(beta, t) beta * log(t + 1)^(beta - 1) / (t + 1)
   f4 <- NA
   f5 <- function(beta, t) exp(t * beta)
   f6 <- NA
   nb <- which(gfun == c("weibull", "pareto", "lognormal", "loglogistic", "gompertz", "gev"))
   lambda <- base::eval(parse(text = paste("f", nb, sep = "")))
 
-  f1 <- function(beta, t) t^{beta - 1} + beta * t^{beta - 1} * log(t)
-  f2 <- function(beta, t) -(t + beta)^{-2}
-  f3 <- function(beta, t) log(t + 1)^{beta - 1}/(t + 1) + beta * log(t + 1)^{beta - 1} * log(log(t + 1))/(t + 1)
+  f1 <- function(beta, t) t^(beta - 1) + beta * t^(beta - 1) * log(t)
+  f2 <- function(beta, t) -(t + beta)^(-2)
+  f3 <- function(beta, t) log(t + 1)^(beta - 1) / (t + 1) + beta * log(t + 1)^(beta - 1) * log(log(t + 1)) / (t + 1)
   f4 <- NA
   f5 <- function(beta, t) t * exp(t * beta)
   f6 <- NA
   nb <- which(gfun == c("weibull", "pareto", "lognormal", "loglogistic", "gompertz", "gev"))
   lambda_prime <- base::eval(parse(text = paste("f", nb, sep = "")))
 
-  name <- if(is(ph, "iph")){ph@name}else{paste("inhomogeneous ", ph@name, sep = "")}
-  
+  name <- if (is(ph, "iph")) ph@name else paste("inhomogeneous ", ph@name, sep = "")
+
   methods::new("iph",
     name = name,
     pars = ph@pars,
-    gfun = list(name = gfun, pars = gfun_pars, inverse = ginv,
-                inverse_prime = ginv_prime, intensity = lambda, intensity_prime = lambda_prime),
+    gfun = list(
+      name = gfun, pars = gfun_pars, inverse = ginv,
+      inverse_prime = ginv_prime, intensity = lambda, intensity_prime = lambda_prime
+    ),
     scale = scale,
     fit = ph@fit
   )
@@ -117,9 +119,9 @@ iph <- function(ph = NULL, gfun = NULL, gfun_pars = NULL, alpha = NULL, S = NULL
 
 #' Minimum Method for inhomogeneous phase type distributions
 #'
-#' @param x1 an object of class \linkS4class{iph}.
-#' @param x2 an object of class \linkS4class{iph}.
-#' 
+#' @param x1 An object of class \linkS4class{iph}.
+#' @param x2 An object of class \linkS4class{iph}.
+#'
 #' @return An object of class \linkS4class{iph}.
 #' @export
 #'
@@ -128,21 +130,24 @@ iph <- function(ph = NULL, gfun = NULL, gfun_pars = NULL, alpha = NULL, S = NULL
 #' iph2 <- iph(ph(structure = "gcoxian", dimension = 5), gfun = "weibull", gfun_pars = 2)
 #' iph_min <- minimum(iph1, iph2)
 #' iph_min
-setMethod("minimum", signature(x1 = "iph", x2 = "iph"), 
-          function (x1, x2){
-            if(x1@gfun$name != x2@gfun$name | !all(x1@gfun$pars == x2@gfun$pars)) stop("g functions (or parameters) are different")
-            ph1 <- ph(alpha = x1@pars$alpha, S = x1@pars$S)
-            ph2 <- ph(alpha = x2@pars$alpha, S = x2@pars$S)
-            return(iph(ph = minimum(ph1, ph2), gfun = x1@gfun$name, gfun_pars = x1@gfun$pars))
-          }
+setMethod(
+  "minimum", signature(x1 = "iph", x2 = "iph"),
+  function(x1, x2) {
+    if (x1@gfun$name != x2@gfun$name | !all(x1@gfun$pars == x2@gfun$pars)) {
+      stop("g functions (or parameters) are different")
+    }
+    ph1 <- ph(alpha = x1@pars$alpha, S = x1@pars$S)
+    ph2 <- ph(alpha = x2@pars$alpha, S = x2@pars$S)
+    return(iph(ph = minimum(ph1, ph2), gfun = x1@gfun$name, gfun_pars = x1@gfun$pars))
+  }
 )
 
 
 #' Maximum Method for inhomogeneous phase type distributions
 #'
-#' @param x1 an object of class \linkS4class{iph}.
-#' @param x2 an object of class \linkS4class{iph}.
-#' 
+#' @param x1 An object of class \linkS4class{iph}.
+#' @param x2 An object of class \linkS4class{iph}.
+#'
 #' @return An object of class \linkS4class{iph}.
 #' @export
 #'
@@ -151,18 +156,21 @@ setMethod("minimum", signature(x1 = "iph", x2 = "iph"),
 #' iph2 <- iph(ph(structure = "gcoxian", dimension = 5), gfun = "weibull", gfun_pars = 2)
 #' iph_min <- maximum(iph1, iph2)
 #' iph_min
-setMethod("maximum", signature(x1 = "iph", x2 = "iph"), 
-          function (x1, x2){
-            if(x1@gfun$name != x2@gfun$name | !all(x1@gfun$pars == x2@gfun$pars)) stop("g functions (or parameters) are different")
-            ph1 <- ph(alpha = x1@pars$alpha, S = x1@pars$S)
-            ph2 <- ph(alpha = x2@pars$alpha, S = x2@pars$S)
-            return(iph(ph = maximum(ph1, ph2), gfun = x1@gfun$name, gfun_pars = x1@gfun$pars))
-          }
+setMethod(
+  "maximum", signature(x1 = "iph", x2 = "iph"),
+  function(x1, x2) {
+    if (x1@gfun$name != x2@gfun$name | !all(x1@gfun$pars == x2@gfun$pars)) {
+      stop("g functions (or parameters) are different")
+    }
+    ph1 <- ph(alpha = x1@pars$alpha, S = x1@pars$S)
+    ph2 <- ph(alpha = x2@pars$alpha, S = x2@pars$S)
+    return(iph(ph = maximum(ph1, ph2), gfun = x1@gfun$name, gfun_pars = x1@gfun$pars))
+  }
 )
 
 #' Show Method for inhomogeneous phase type distributions
 #'
-#' @param object an object of class \linkS4class{iph}.
+#' @param object An object of class \linkS4class{iph}.
 #' @importFrom methods show
 #' @export
 #'
@@ -178,10 +186,11 @@ setMethod("show", "iph", function(object) {
 
 #' Simulation Method for inhomogeneous phase type distributions
 #'
-#' @param x an object of class \linkS4class{iph}.
-#' @param n an integer of length of realization.
+#' @param x An object of class \linkS4class{iph}.
+#' @param n An integer of length of realization.
 #'
-#' @return A realization of independent and identically distributed inhomogeneous phase-type variables.
+#' @return A realization of independent and identically distributed inhomogeneous
+#' phase-type variables.
 #' @export
 #'
 #' @examples
@@ -202,8 +211,8 @@ setMethod("sim", c(x = "iph"), function(x, n = 1000) {
 
 #' Density Method for inhomogeneous phase type distributions
 #'
-#' @param x an object of class \linkS4class{iph}.
-#' @param y a vector of locations.
+#' @param x An object of class \linkS4class{iph}.
+#' @param y A vector of locations.
 #'
 #' @return A list containing the locations and corresponding density evaluations.
 #' @export
@@ -223,9 +232,10 @@ setMethod("dens", c(x = "iph"), function(x, y) {
 
 #' Distribution Method for inhomogeneous phase type distributions
 #'
-#' @param x an object of class \linkS4class{iph}.
-#' @param q a vector of locations.
-#' @param lower.tail logical parameter specifying whether lower tail (cdf) or upper tail is computed.
+#' @param x An object of class \linkS4class{iph}.
+#' @param q A vector of locations.
+#' @param lower.tail Logical parameter specifying whether lower tail (cdf) or
+#' upper tail is computed.
 #'
 #' @return A list containing the locations and corresponding CDF evaluations.
 #' @export
@@ -248,16 +258,16 @@ setMethod("cdf", c(x = "iph"), function(x,
 
 #' Coef Method for iph Class
 #'
-#' @param object an object of class \linkS4class{iph}.
+#' @param object An object of class \linkS4class{iph}.
 #'
-#' @return parameters of iph model.
+#' @return Parameters of iph model.
 #' @export
 #'
-#' @examples 
+#' @examples
 #' obj <- iph(ph(structure = "general", dimension = 2), gfun = "lognormal", gfun_pars = 2)
 #' coef(obj)
 setMethod("coef", c(object = "iph"), function(object) {
-  L <- object@pars 
+  L <- object@pars
   L$gpars <- object@gfun$pars
   L
 })

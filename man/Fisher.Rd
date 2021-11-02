@@ -7,10 +7,10 @@
 Fisher(x, ...)
 }
 \arguments{
-\item{x}{an object of the model class.}
+\item{x}{An object of the model class.}
 
-\item{...}{further parameters to be passed on}
+\item{...}{Further parameters to be passed on.}
 }
 \description{
-Methods are available for objects of class \linkS4class{sph}
+Methods are available for objects of class \linkS4class{sph}.
 }

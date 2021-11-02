@@ -5,18 +5,18 @@
 \alias{iph-class}
 \title{Inhomogeneous Phase Type distributions}
 \value{
-Class object
+Class object.
 }
 \description{
-Class of objects for inhomogeneous phase type distributions
+Class of objects for inhomogeneous phase type distributions.
 }
 \section{Slots}{
 
 \describe{
-\item{\code{name}}{name of the phase type distribution.}
+\item{\code{name}}{Name of the phase type distribution.}
 
-\item{\code{gfun}}{a list comprising of the parameters.}
+\item{\code{gfun}}{A list comprising of the parameters.}
 
-\item{\code{scale}}{scale.}
+\item{\code{scale}}{Scale.}
 }}
 

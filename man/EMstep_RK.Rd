@@ -7,19 +7,19 @@
 EMstep_RK(h, alpha, S, obs, weight, rcens, rcweight)
 }
 \arguments{
-\item{h}{step-length}
+\item{h}{Step-length.}
 
-\item{alpha}{initial probalities}
+\item{alpha}{Initial probabilities.}
 
-\item{S}{sub-intensity}
+\item{S}{Sub-intensity.}
 
-\item{obs}{the observations}
+\item{obs}{The observations.}
 
-\item{weight}{the weights for the observations}
+\item{weight}{The weights for the observations.}
 
-\item{rcens}{censored observations}
+\item{rcens}{Censored observations.}
 
-\item{rcweight}{the weights for the censored observations}
+\item{rcweight}{The weights for the censored observations.}
 }
 \description{
 Computes one step of the EM algorithm by using a Runge-Kutta method of 4th order

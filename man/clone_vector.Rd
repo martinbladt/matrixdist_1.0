@@ -7,7 +7,7 @@
 clone_vector(v)
 }
 \arguments{
-\item{v}{a vector}
+\item{v}{A vector.}
 }
 \description{
 Clone a vector

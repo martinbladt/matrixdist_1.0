@@ -7,7 +7,7 @@
 \S4method{coef}{ph}(object)
 }
 \arguments{
-\item{object}{an object of class \linkS4class{ph}.}
+\item{object}{An object of class \linkS4class{ph}.}
 }
 \value{
 Parameters of ph model.

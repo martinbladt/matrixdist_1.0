@@ -7,21 +7,22 @@
 rmatrixgev(n, alpha, S, mu, sigma, xi = 0)
 }
 \arguments{
-\item{n}{Sample size}
+\item{n}{Sample size.}
 
-\item{alpha}{Initial probabilities}
+\item{alpha}{Initial probabilities.}
 
-\item{S}{sub-intensity matrix}
+\item{S}{Sub-intensity matrix.}
 
-\item{mu}{Location parameter}
+\item{mu}{Location parameter.}
 
-\item{sigma}{Scale parameter}
+\item{sigma}{Scale parameter.}
 
-\item{xi}{Shape parameter: Default 0 which corresponds to the Gumbel case}
+\item{xi}{Shape parameter: Default 0 which corresponds to the Gumbel case.}
 }
 \value{
-The simulated sample
+The simulated sample.
 }
 \description{
-Generates a sample of size \code{n} from an inhomogeneous phase-type distribution with parameters \code{alpha}, \code{S} and \code{beta}
+Generates a sample of size \code{n} from an inhomogeneous phase-type 
+distribution with parameters \code{alpha}, \code{S} and \code{beta}.
 }

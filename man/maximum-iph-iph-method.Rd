@@ -7,9 +7,9 @@
 \S4method{maximum}{iph,iph}(x1, x2)
 }
 \arguments{
-\item{x1}{an object of class \linkS4class{iph}.}
+\item{x1}{An object of class \linkS4class{iph}.}
 
-\item{x2}{an object of class \linkS4class{iph}.}
+\item{x2}{An object of class \linkS4class{iph}.}
 }
 \value{
 An object of class \linkS4class{iph}.

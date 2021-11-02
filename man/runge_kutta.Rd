@@ -4,23 +4,23 @@
 \alias{runge_kutta}
 \title{Runge Kutta for the calculation of the a,b and c vectors in a EM step}
 \usage{
-runge_kutta(avector, bvector, cmatrix, dt, h, S, t)
+runge_kutta(avector, bvector, cmatrix, dt, h, S, s)
 }
 \arguments{
-\item{avector}{the a vector}
+\item{avector}{The a vector.}
 
-\item{bvector}{the b vector}
+\item{bvector}{The b vector.}
 
-\item{cmatrix}{the c matrix}
+\item{cmatrix}{The c matrix.}
 
-\item{dt}{the increment}
+\item{dt}{The increment.}
 
-\item{h}{step-length}
+\item{h}{Step-length.}
 
-\item{S}{sub-intensity}
+\item{S}{Sub-intensity.}
 
-\item{t}{exit rates}
+\item{s}{Exit rates.}
 }
 \description{
-Performce the RK of forth order
+Performs the RK of forth order
 }

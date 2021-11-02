@@ -7,7 +7,7 @@
 \S4method{show}{sph}(object)
 }
 \arguments{
-\item{object}{an object of class \linkS4class{sph}.}
+\item{object}{An object of class \linkS4class{sph}.}
 }
 \description{
 Show Method for survival phase type objects

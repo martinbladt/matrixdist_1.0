@@ -7,9 +7,9 @@
 \S4method{quan}{ph}(x, p)
 }
 \arguments{
-\item{x}{an object of class \linkS4class{ph}.}
+\item{x}{An object of class \linkS4class{ph}.}
 
-\item{p}{a vector of probabilities.}
+\item{p}{A vector of probabilities.}
 }
 \value{
 A list containing the probabilities and corresponding quantile evaluations.

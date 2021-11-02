@@ -1,27 +1,27 @@
 #' Regression Method for ph Class
 #'
-#' @param x an object of class \linkS4class{ph}.
-#' @param y vector or data.
-#' @param X model matrix (no intercept needed).
-#' @param B0 initial regression coefficients (optional).
-#' @param weight vector of weights.
-#' @param rcen vector of right-censored observations
-#' @param rcenweight vector of weights for right-censored observations.
-#' @param stepsEM number of EM steps to be performed.
-#' @param methods methods to use for matrix exponential calculation: RM, UNI or PADE
+#' @param x An object of class \linkS4class{ph}.
+#' @param y Vector or data.
+#' @param X Model matrix (no intercept needed).
+#' @param B0 Initial regression coefficients (optional).
+#' @param weight Vector of weights.
+#' @param rcen Vector of right-censored observations.
+#' @param rcenweight Vector of weights for right-censored observations.
+#' @param stepsEM Number of EM steps to be performed.
+#' @param methods Methods to use for matrix exponential calculation: RM, UNI or PADE.
 #' @param rkstep Runge-Kutta step size (optional)
-#' @param uni_epsilon epsilon parameter for uniformization method
-#' @param optim_method method to use in gradient optimization
-#' @param maxit maximum number of iterations when optimizing g function.
-#' @param reltol relative tolerance when optimizing g function.
-#' @param every number of iterations between likelihood display updates.
+#' @param uni_epsilon Epsilon parameter for uniformization method.
+#' @param optim_method Method to use in gradient optimization.
+#' @param maxit Maximum number of iterations when optimizing g function.
+#' @param reltol Relative tolerance when optimizing g function.
+#' @param every Number of iterations between likelihood display updates.
 #'
 #' @return An object of class \linkS4class{sph}.
-#' 
+#'
 #' @importFrom methods is new
 #' @importFrom stats optim
 #' @importFrom utils tail
-#' 
+#'
 #' @export
 #'
 setMethod(
@@ -41,13 +41,13 @@ setMethod(
            maxit = 50,
            reltol = 1e-8,
            every = 10) {
-    control <- if(optim_method == "BFGS"){
+    control <- if (optim_method == "BFGS") {
       list(
         maxit = maxit,
         factr = reltol,
         fnscale = -1
       )
-    }else{
+    } else {
       list(
         maxit = maxit,
         reltol = reltol,
@@ -55,32 +55,45 @@ setMethod(
       )
     }
     X <- as.matrix(X)
-    if(methods[2] == "RK") stop("For second method, select UNI or PADE (ordering avoided)")
-    if(any(dim(X) == 0)) stop("input covariate matrix X, or use fit method instead")
+    if (methods[2] == "RK") {
+      stop("For second method, select UNI or PADE (ordering avoided)")
+    }
+    if (any(dim(X) == 0)) {
+      stop("input covariate matrix X, or use fit method instead")
+    }
     is_iph <- is(x, "iph")
     EMstep <- eval(parse(text = paste("EMstep_", methods[1], sep = "")))
-    if(!all(c(y, rcen) > 0)) stop("data should be positive")
-    if(!all(c(weight, rcenweight) >= 0)) stop("weights should be non-negative")
+    if (!all(c(y, rcen) > 0)) {
+      stop("data should be positive")
+    }
+    if (!all(c(weight, rcenweight) >= 0)) {
+      stop("weights should be non-negative")
+    }
     if (!is_iph) {
       par_g <- numeric(0)
-      inv_g <- function(x) x 
+      inv_g <- function(par, x) x
       LL_base <- eval(parse(text = paste("logLikelihoodPH_", methods[2], "s", sep = "")))
       LL <- function(h, alpha, S, theta, obs, weight, rcens, rcweight, X) {
-        ex <- exp(X%*%theta)
+        ex <- exp(X %*% theta)
         scale1 <- ex[1:length(obs)]
         scale2 <- tail(ex, length(rcens))
         return(LL_base(h, alpha, S, obs, weight, rcens, rcweight, scale1, scale2))
       }
-    }else if (is_iph) {
+    } else if (is_iph) {
       name <- x@gfun$name
-      if(name %in% c("loglogistic", "gev")) stop("not yet available for multi-parameter transforms")
+      if (name %in% c("loglogistic", "gev")) {
+        stop("not yet available for multi-parameter transforms")
+      }
       par_g <- x@gfun$pars
       inv_g <- x@gfun$inverse
       LL_base <- eval(parse(text = paste("logLikelihoodM", x@gfun$name, "_", methods[2], "s", sep = "")))
       LL <- function(h, alpha, S, theta, obs, weight, rcens, rcweight, X) {
-        beta <- theta[1]; B <- theta[2:length(theta)]
-        if(beta < 0) return(NA)
-        ex <- exp(X%*%B)
+        beta <- theta[1]
+        B <- theta[2:length(theta)]
+        if (beta < 0) {
+          return(NA)
+        }
+        ex <- exp(X %*% B)
         scale1 <- ex[1:length(obs)]
         scale2 <- tail(ex, length(rcens))
         return(LL_base(h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2))
@@ -91,55 +104,61 @@ setMethod(
     n1 <- length(y)
     n2 <- length(rcen)
     ng <- length(par_g)
-    
-    if(length(weight) == 0) weight <- rep(1, n1)
-    if(length(rcenweight) == 0) rcenweight <- rep(1, n2)
+
+    if (length(weight) == 0) weight <- rep(1, n1)
+    if (length(rcenweight) == 0) rcenweight <- rep(1, n2)
 
     ph_par <- x@pars
     alpha_fit <- clone_vector(ph_par$alpha)
     S_fit <- clone_matrix(ph_par$S)
-    if(length(B0) == 0){B_fit <- rep(0, p)
-    }else{B_fit <- B0}
-    
+    if (length(B0) == 0) {
+      B_fit <- rep(0, p)
+    } else {
+      B_fit <- B0
+    }
+
     for (k in 1:stepsEM) {
-      prop <- exp(X%*%B_fit)
-      
+      prop <- exp(X %*% B_fit)
+
       trans <- prop[1:n1] * inv_g(par_g, y)
       trans_cens <- prop[(n1 + 1):(n1 + n2)] * inv_g(par_g, rcen)
-      
+
       A <- data_aggregation(trans, weight)
       B <- data_aggregation(trans_cens, rcenweight)
-      
-      epsilon1 <- switch(which(methods[1] == c("RK", "UNI","PADE")),
-                         if(!is.na(rkstep)){rkstep} else{default_step_length(S_fit)},
-                         if(!is.na(uni_epsilon)){uni_epsilon} else{1e-4},
-                         0)
-      epsilon2 <- switch(which(methods[2] == c("RK", "UNI","PADE")),
-                         if(!is.na(rkstep)){rkstep} else{default_step_length(S_fit)},
-                         if(!is.na(uni_epsilon)){uni_epsilon} else{1e-4},
-                         0)
+
+      epsilon1 <- switch(which(methods[1] == c("RK", "UNI", "PADE")),
+        if (!is.na(rkstep)) rkstep else default_step_length(S_fit),
+        if (!is.na(uni_epsilon)) uni_epsilon else 1e-4,
+        0
+      )
+      epsilon2 <- switch(which(methods[2] == c("RK", "UNI", "PADE")),
+        if (!is.na(rkstep)) rkstep else default_step_length(S_fit),
+        if (!is.na(uni_epsilon)) uni_epsilon else 1e-4,
+        0
+      )
       EMstep(epsilon1, alpha_fit, S_fit, A$un_obs, A$weights, B$un_obs, B$weights)
       theta <- c(par_g, B_fit)
-      opt <- suppressWarnings(optim(par = theta, fn = LL, 
-                                    h = epsilon2, 
-                                    alpha = alpha_fit, 
-                                    S = S_fit, 
-                                    obs = y,
-                                    weight = weight, 
-                                    rcens = rcen, 
-                                    rcweight = rcenweight,
-                                    X = X,
-                                    hessian = (k == stepsEM),
-                                    method = optim_method,
-                                    control = control
-                                    )
-                              )
+      opt <- suppressWarnings(optim(
+        par = theta, fn = LL,
+        h = epsilon2,
+        alpha = alpha_fit,
+        S = S_fit,
+        obs = y,
+        weight = weight,
+        rcens = rcen,
+        rcweight = rcenweight,
+        X = X,
+        hessian = (k == stepsEM),
+        method = optim_method,
+        control = control
+      ))
       par_g <- head(opt$par, ng)
       B_fit <- tail(opt$par, p)
       if (k %% every == 0) {
         cat("\r", "iteration:", k,
-            ", logLik:", opt$value,
-            sep = " ")
+          ", logLik:", opt$value,
+          sep = " "
+        )
       }
     }
     cat("\n", sep = "")
@@ -218,8 +237,8 @@ setMethod(
 #           theta <- theta + as.vector(h * matrix_inverse(jacobian) %*% score)
 #         }
 #         beta <- theta[1]; B <- theta[2:length(theta)]
-#         
-#         
+#
+#
 #         gf <- inv_g(beta, z)
 #         EZB <- exp(sum(Z*B))
 #         M <- matrix_exponential(EZB * gf * S)
@@ -227,13 +246,13 @@ setMethod(
 #         return(list(par = theta))
 #       }
 #     }
-#     
+#
 #     p <- dim(X)[2]
 #     n1 <- length(y)
 #     ng <- length(par_g)
-#     
+#
 #     if(length(weight) == 0) weight <- rep(1, n1)
-# 
+#
 #     ph_par <- x@pars
 #     alpha_fit <- clone_vector(ph_par$alpha)
 #     S_fit <- clone_matrix(ph_par$S)
@@ -241,16 +260,16 @@ setMethod(
 #     }else{B_fit <- B0}
 #     for (k in 1:stepsEM) {
 #       prop <- exp(X%*%B_fit)
-#       
+#
 #       trans <- prop[1:n1] * inv_g(par_g, y)
-# 
+#
 #       A <- data_aggregation(trans, weight)
-# 
+#
 #       epsilon <- switch(which(method == c("RK", "UNI","PADE")),
-#                          if(!is.na(rkstep)){rkstep} else{default_step_length(S_fit)},
-#                          if(!is.na(uni_epsilon)){uni_epsilon} else{1e-4},
+#                          if(!is.na(rkstep)) rkstep  else default_step_length(S_fit),
+#                          if(!is.na(uni_epsilon)) uni_epsilon  else 1e-4,
 #                          0)
-# 
+#
 #       EMstep(epsilon, alpha_fit, S_fit, A$un_obs, A$weights, numeric(0), numeric(0))
 #       theta <- c(par_g, B_fit)
 #       opt <- Newton_Raphson_update(h = h,alpha_fit,S_fit,theta,y,weight)
@@ -279,7 +298,7 @@ setMethod(
 
 # reg_g_specs <- function(name){
 #   if(name == "Homogeneous"){
-#     inv_g <- function(t, w, beta) return(list(obs = t, weight = w)) 
+#     inv_g <- function(t, w, beta) return(list(obs = t, weight = w))
 #     mLL <- function(h, alpha, S, theta, obs, weight, rcens, rcweight, X) {
 #       ex <- exp(X%*%theta)
 #       scale1 <- ex[1:length(obs)]
@@ -292,7 +311,7 @@ setMethod(
 #     }
 #   }
 #   else if(name == "weibull"){
-#     inv_g <- function(t, w, beta) return(list(obs = t^{beta}, weight = w)) 
+#     inv_g <- function(t, w, beta) return(list(obs = t^beta, weight = w))
 #     mLL <- function(h, alpha, S, theta, obs, weight, rcens, rcweight, X) {
 #       beta <- theta[1]; B <- theta[2:length(theta)]
 #       if(beta < 0) return(NA)
@@ -322,7 +341,7 @@ setMethod(
 #       }
 #   }
 #   else if(name == "lognormal"){
-#     inv_g <- function(t, w, beta) return(list(obs = log(t + 1)^{beta}, weight = w)) 
+#     inv_g <- function(t, w, beta) return(list(obs = log(t + 1)^beta, weight = w))
 #     mLL <- function(h, alpha, S, theta, obs, weight, rcens, rcweight, X) {
 #       beta <- theta[1]; B <- theta[2:length(theta)]
 #       if(beta < 0) return(NA)
@@ -337,7 +356,7 @@ setMethod(
 #     }
 #   }
 #   else if(name == "loglogistic"){
-#     inv_g <- function(t, w, beta) return(list(obs = log((t/beta[1])^{beta[2]} + 1), weight = w))
+#     inv_g <- function(t, w, beta) return(list(obs = log((t/beta[1])^beta[2] + 1), weight = w))
 #     mLL <- function(h, alpha, S, theta, obs, weight, rcens, rcweight, X) {
 #       beta <- theta[1:2]; B <- theta[3:length(theta)]
 #       if(beta[1] < 0 | beta[2] < 0) return(NA)
@@ -372,4 +391,4 @@ setMethod(
 #   }
 #   return(list(inv_g = inv_g, mLL = mLL))
 # }
-# 
+#

@@ -22,5 +22,5 @@ logLikelihoodPH_UNI(h, alpha, S, obs, weight, rcens, rcweight)
 \item{rcweight}{weight of the censored observations}
 }
 \description{
-Loglikelihood for a sample
+Loglikelihood for a sample.
 }

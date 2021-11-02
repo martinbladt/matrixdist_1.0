@@ -2,22 +2,23 @@
 % Please edit documentation in R/RcppExports.R
 \name{mloglogisticden}
 \alias{mloglogisticden}
-\title{Matrix Log-Logistic density}
+\title{Matrix Log-logistic density}
 \usage{
 mloglogisticden(x, alpha, S, beta)
 }
 \arguments{
-\item{x}{non-negative value}
+\item{x}{Non-negative value.}
 
-\item{alpha}{Initial probabilities}
+\item{alpha}{Initial probabilities.}
 
-\item{S}{sub-intensity matrix}
+\item{S}{Sub-intensity matrix.}
 
-\item{beta}{scale parameter}
+\item{beta}{Parameters.}
 }
 \value{
-The density at \code{x}
+The density at \code{x}.
 }
 \description{
-Computes the density of a matrix Log-Logistic distribution with parameters \code{alpha}, \code{S} and \code{beta} at \code{x}
+Computes the density of a matrix Log-Logistic distribution with parameters
+ \code{alpha}, \code{S} and \code{beta} at \code{x}.
 }

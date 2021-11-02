@@ -7,11 +7,12 @@
 default_step_length(S)
 }
 \arguments{
-\item{S}{sub-intensity matrix}
+\item{S}{Sub-intensity matrix.}
 }
 \value{
-The step length for \code{S}
+The step length for \code{S}.
 }
 \description{
-Computes the default step length for a matrix \code{S} to be employed in the RK method
+Computes the default step length for a matrix \code{S} to be employed in the
+ RK method.
 }

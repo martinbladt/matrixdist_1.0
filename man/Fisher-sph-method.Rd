@@ -7,16 +7,16 @@
 \S4method{Fisher}{sph}(x, y, X, w = numeric(0))
 }
 \arguments{
-\item{x}{an object of class \linkS4class{sph}.}
+\item{x}{An object of class \linkS4class{sph}.}
 
-\item{y}{independent variate.}
+\item{y}{Independent variate.}
 
-\item{X}{matrix of covariates.}
+\item{X}{Matrix of covariates.}
 
-\item{w}{weights.}
+\item{w}{Weights.}
 }
 \value{
-a matrix.
+A matrix.
 }
 \description{
 Fisher Information Method for sph Class

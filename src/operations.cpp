@@ -1,32 +1,26 @@
-#include <Rcpp.h>
-using namespace Rcpp;
-#include "matrix_functions.h"
-#include "exp_arm.h"
+# include <RcppArmadillo.h>
+// [[ Rcpp :: depends ( RcppArmadillo )]]
 
 //' Computes the initial distribution and sub-intensity of the sum of PH
 //' 
-//' @param alpha1 initial distribution
-//' @param S1 sub-intensity
-//' @param alpha2 initial distribution
-//' @param S2 sub-intensity
+//' @param alpha1 Initial distribution.
+//' @param S1 Sub-intensity.
+//' @param alpha2 Initial distribution.
+//' @param S2 Sub-intensity.
 //' 
 // [[Rcpp::export]]
-List sumPH(NumericVector alpha1, NumericMatrix S1, NumericVector alpha2, NumericMatrix S2) {
+Rcpp::List sumPH(arma::rowvec alpha1, arma::mat S1, arma::rowvec alpha2, arma::mat S2) {
   
-  long p1{S1.nrow()};
-  long p2{S2.nrow()};
+  unsigned p1{S1.n_cols};
+  unsigned p2{S2.n_cols};
   
-  NumericVector alpha_sum(p1 + p2);
-  NumericMatrix S_sum(p1 + p2, p1 + p2);
+  arma::rowvec alpha_sum(p1 + p2);
+  arma::mat S_sum(p1 + p2, p1 + p2);
   
-  NumericMatrix alpha2_m(1, p2, alpha2.begin());
+  arma::mat e; e.ones(S1.n_cols, 1);
+  arma::mat t = (S1 * (-1)) * e;
   
-  NumericVector m_e(p1, 1);
-  NumericMatrix e(p1, 1, m_e.begin());
-  
-  NumericMatrix t = matrix_product(S1 * (-1), e);
-  
-  NumericMatrix auxmat = matrix_product(t, alpha2_m);
+  arma::mat auxmat = t * alpha2;
   
   
   for (int i{0}; i < p1 + p2; ++i) {
@@ -49,7 +43,7 @@ List sumPH(NumericVector alpha1, NumericMatrix S1, NumericVector alpha2, Numeric
     }
   }
   
-  List L = List::create(Named("alpha") = alpha_sum, _["S"] = S_sum);
+  Rcpp::List L = Rcpp::List::create(Rcpp::Named("alpha") = alpha_sum, Rcpp::Named("S") = S_sum);
   
   return L;
 }

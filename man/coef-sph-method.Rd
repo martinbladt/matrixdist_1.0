@@ -7,10 +7,10 @@
 \S4method{coef}{sph}(object)
 }
 \arguments{
-\item{object}{an object of class \linkS4class{sph}.}
+\item{object}{An object of class \linkS4class{sph}.}
 }
 \value{
-parameters of sph model
+Parameters of sph model.
 }
 \description{
 Coef Method for sph Class
