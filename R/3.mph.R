@@ -1,0 +1,191 @@
+#' Multivariate Phase Type distributions
+#'
+#' Class of objects for multivariate phase type distributions
+#'
+#' @slot name name of the phase type distribution
+#' @slot pars a list comprising of the parameters.
+#'
+#' @return
+#' @export
+#'
+setClass("mph",
+         slots = list(
+           name = "character",
+           pars = "list",
+           fit = "list"
+         )
+)
+
+#' Constructor Function for multivariate phase type distributions
+#'
+#' @param alpha a probability vector.
+#' @param S a list of sub-intensity matrices.
+#' @param structure a vector of valid ph structures
+#' @param dimension the dimension of the ph structure (if provided)
+#'
+#' @return An object of class \linkS4class{mph}.
+#' @export
+#'
+mph <- function(alpha = NULL, S = NULL, structure = NULL, dimension = 3, variables = NULL) {
+  if (any(is.null(alpha)) & any(is.null(S)) & is.null(structure)) {
+    stop("input a vector and matrix, or a structure")
+  }
+  if(is.null(variables)){variables <- length(structure)}
+  if (!any(is.null(structure))) {
+    rs <- random_structure(dimension, structure = structure[1])
+    alpha <- rs[[1]]
+    S <- list()
+    S[[1]] <- rs[[2]]
+    for(i in 2:variables){S[[i]] <- random_structure(dimension, structure = structure[i])[[2]]}
+    name <- structure
+  } else {
+    name <- "custom"
+  }
+  methods::new("mph",
+               name = paste(name, " mph(", length(alpha), ")", sep = " "),
+               pars = list(alpha = alpha, S = S)
+  )
+}
+
+#' Show Method for multivariate phase type distributions
+#'
+#' @param x an object of class \linkS4class{mph}.
+#' @export
+#'
+#' @examples
+#'
+setMethod("show", "mph", function(object) {
+  cat("object class: ", methods::is(object)[[1]], "\n", sep = "")
+  cat("name: ", object@name, "\n", sep = "")
+  cat("parameters: ", "\n", sep = "")
+  methods::show(object@pars)
+  cat("number of variables: ", length(object@pars$S), "\n", sep = "")
+})
+
+#' Simulation Method for multivariate phase type distributions
+#'
+#' @param x an object of class \linkS4class{mph}.
+#' @param n length of realization.
+#'
+#' @return A realization of a phase type data
+#' @export
+#'
+#' @examples
+#'
+setMethod("sim", c(x = "mph"), function(x, n = 1000) {
+  p <- length(x@pars$alpha)
+  d <- length(x@pars$S)
+  states <- 1:p
+  result <- matrix(NA, n, d)
+  for(i in 1:n){
+    state <- sample(states,1)
+    in_vect <- rep(0,p); in_vect[state] <- 1
+    for(j in 1:d){
+      result[i,j] <- rphasetype(1, in_vect, x@pars$S[[j]])
+    }
+  }
+  return(result)
+})
+
+
+#' Density Method for multivariate phase type distributions
+#'
+#' @param x an object of class \linkS4class{mph}.
+#' @param y a matrix of observations
+#'
+#' @return A list containing the locations and corresponding density evaluations.
+#' @export
+#'
+setMethod("dens", c(x = "mph"), function(x, y) {
+  p <- length(x@pars$alpha)
+  alpha <- x@pars$alpha
+  d <- length(x@pars$S)  
+  n <- nrow(y)
+  res <- numeric(n)
+  for(j in 1:p){
+    in_vect <- rep(0,p); in_vect[j] <- 1
+    aux <- matrix(NA,n,d)
+    for(i in 1:d){
+      aux[,i] <- matrixdist:::phdensity(y[,i], in_vect, x@pars$S[[i]])
+    }
+    res <- res + alpha[j] * apply(aux, 1, prod)
+  }
+  return(res)
+})
+
+#' Distribution Method for multivariate phase type distributions
+#'
+#' @param x an object of class \linkS4class{mph}.
+#' @param q a vector of locations.
+#' @param lower.tail logical parameter specifying whether lower tail (cdf) or upper tail is computed.
+#'
+#' @return A list containing the locations and corresponding CDF evaluations.
+#' @export
+#'
+setMethod("cdf", c(x = "mph"), function(x,
+                                       q,
+                                       lower.tail = TRUE) {
+  q_inf <- (q == Inf)
+  cdf <- q
+  cdf[!q_inf] <- phcdf(q[!q_inf], x@pars$alpha, x@pars$S, lower.tail)
+  cdf[q_inf] <- as.numeric(1 * lower.tail)
+  return(cdf)
+})
+
+#' Fit Method for mph Class
+#'
+#' @param x an object of class \linkS4class{mph}.
+#' @param y matrix of data.
+#' @param stepsEM number of EM steps to be performed.
+#' @param uni_epsilon epsilon parameter for uniformization method.
+#' 
+#' @export
+#'
+setMethod(
+  "fit", c(x = "mph", y = "ANY"),
+  function(x,y,
+           stepsEM = 1000,
+           uni_epsilon = 1e-30) {
+    d <- length(x@pars$S)
+    p <- length(x@pars$alpha)
+    n <- nrow(y)
+    marginal <- list()
+    for(m in 1:d){marginal[[m]] <- ph(alpha=x@pars$alpha,S=x@pars$S[[m]])}
+    for(k in 1:stepsEM){
+      alpha_global <- rep(0,p)
+      for(m in 1:d){
+        log <- capture.output({
+          marginal[[m]] <- fit(marginal[[m]], y[,m], stepsEM = 1,uni_epsilon=uni_epsilon)}
+          )
+      }
+      for(m in 1:d){alpha_global <- alpha_global + marginal[[m]]@pars$alpha}
+      for(m in 1:d){marginal[[m]]@pars$alpha <- alpha_global/d}
+      
+      res <- numeric(n)
+      for(j in 1:p){
+        in_vect <- rep(0,p); in_vect[j] <- 1
+        aux <- matrix(0,n,d)
+        for(m in 1:d){
+          aux[,m] <-  matrixdist:::phdensity(y[,m], in_vect, marginal[[m]]@pars$S)
+        }
+        res <- res + alpha_global[j]/d * apply(aux, 1, prod)
+      }
+      LL <- sum(log(res))
+      LL
+      cat("\r", "iteration:", k,
+          ", logLik:", LL,
+          sep = " "
+      )
+    }
+    cat("\n", sep = "")
+    for(m in 1:d){
+      x@pars$S[[m]] <- marginal[[m]]@pars$S
+    }
+    x@pars$alpha <- alpha_global/d
+    x@fit$logLik <- LL
+    return(x)
+  }
+)
+## NOW MAKE MUCH FASTER WITH EXPLICIT EM FUNCTION CALLING,
+#TO AVOID DEALING WITH SO MANY CLASSES
+
