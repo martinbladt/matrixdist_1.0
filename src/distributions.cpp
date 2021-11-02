@@ -1,5 +1,5 @@
 # include <RcppArmadillo.h>
-#include "auxilliary.h"
+#include "m_exp.h"
 // [[ Rcpp :: depends ( RcppArmadillo )]]
 
 // Distributions

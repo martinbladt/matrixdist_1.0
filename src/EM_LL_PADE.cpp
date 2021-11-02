@@ -1,4 +1,4 @@
-#include "auxilliary.h"
+#include "m_exp.h"
 # include <RcppArmadillo.h>
 // [[ Rcpp :: depends ( RcppArmadillo )]]
 
@@ -14,7 +14,7 @@
 //' @param sizevect Size of vector.
 //' 
 // [[Rcpp::export]]
-void vectorOfMatrices_arma2(std::vector<arma::mat> & theVector, const arma::mat & S, int sizevect) {
+void vector_of_matrices_2(std::vector<arma::mat> & theVector, const arma::mat & S, int sizevect) {
   
   arma::mat I;
   I.eye(size(S));
@@ -68,7 +68,7 @@ void EMstep_PADE(double h, arma::vec & alpha,  arma::mat & S, const Rcpp::Numeri
   
   std::vector<arma::mat> theVector;
   
-  vectorOfMatrices_arma2(theVector, J, 6);
+  vector_of_matrices_2(theVector, J, 6);
   
   
   arma::mat X(2 * p,2 * p);
@@ -148,7 +148,7 @@ void EMstep_PADE(double h, arma::vec & alpha,  arma::mat & S, const Rcpp::Numeri
     J = matrix_VanLoan(S, S, tProductPi);
     JNorm = inf_norm(J);
     theVector.clear();
-    vectorOfMatrices_arma2(theVector, J, 6);
+    vector_of_matrices_2(theVector, J, 6);
   }
   for (int k{0}; k < rcens.size(); ++k) {
     SumOfCensored += rcweight[k];
@@ -255,7 +255,7 @@ double logLikelihoodPH_PADE(double h, arma::vec & alpha, arma::mat & S, const Rc
   
   std::vector<arma::mat> theVector;
   
-  vectorOfMatrices_arma2(theVector, S, 6);
+  vector_of_matrices_2(theVector, S, 6);
   
   
   arma::mat X(p,p);
@@ -375,7 +375,7 @@ double logLikelihoodMweibull_PADE(double h, arma::vec & alpha, arma::mat & S, do
   
   std::vector<arma::mat> theVector;
   
-  vectorOfMatrices_arma2(theVector, S, 6);
+  vector_of_matrices_2(theVector, S, 6);
   
   
   arma::mat X(p,p);
@@ -496,7 +496,7 @@ double logLikelihoodMpareto_PADE(double h, arma::vec & alpha, arma::mat & S, dou
   
   std::vector<arma::mat> theVector;
   
-  vectorOfMatrices_arma2(theVector, S, 6);
+  vector_of_matrices_2(theVector, S, 6);
   
   
   arma::mat X(p,p);
@@ -617,7 +617,7 @@ double logLikelihoodMlognormal_PADE(double h, arma::vec & alpha, arma::mat & S, 
   
   std::vector<arma::mat> theVector;
   
-  vectorOfMatrices_arma2(theVector, S, 6);
+  vector_of_matrices_2(theVector, S, 6);
   
   
   arma::mat X(p,p);
@@ -737,7 +737,7 @@ double logLikelihoodMloglogistic_PADE(double h, arma::vec & alpha, arma::mat & S
   
   std::vector<arma::mat> theVector;
   
-  vectorOfMatrices_arma2(theVector, S, 6);
+  vector_of_matrices_2(theVector, S, 6);
   
   
   arma::mat X(p,p);
@@ -857,7 +857,7 @@ double logLikelihoodMgompertz_PADE(double h, arma::vec & alpha, arma::mat & S, d
   
   std::vector<arma::mat> theVector;
   
-  vectorOfMatrices_arma2(theVector, S, 6);
+  vector_of_matrices_2(theVector, S, 6);
   
   
   arma::mat X(p,p);
@@ -975,7 +975,7 @@ double logLikelihoodMgev_PADE(double h, arma::vec & alpha, arma::mat & S, Rcpp::
   
   std::vector<arma::mat> theVector;
   
-  vectorOfMatrices_arma2(theVector, S, 6);
+  vector_of_matrices_2(theVector, S, 6);
   
   
   arma::mat X(p,p);
@@ -1170,7 +1170,7 @@ double logLikelihoodPH_PADEs(double h, arma::vec & alpha, arma::mat & S, const R
   
   std::vector<arma::mat> theVector;
   
-  vectorOfMatrices_arma2(theVector, S, 6);
+  vector_of_matrices_2(theVector, S, 6);
   
   
   arma::mat X(p,p);
@@ -1292,7 +1292,7 @@ double logLikelihoodMweibull_PADEs(double h, arma::vec & alpha, arma::mat & S, d
   
   std::vector<arma::mat> theVector;
   
-  vectorOfMatrices_arma2(theVector, S, 6);
+  vector_of_matrices_2(theVector, S, 6);
   
   
   arma::mat X(p,p);
@@ -1415,7 +1415,7 @@ double logLikelihoodMpareto_PADEs(double h, arma::vec & alpha, arma::mat & S, do
   
   std::vector<arma::mat> theVector;
   
-  vectorOfMatrices_arma2(theVector, S, 6);
+  vector_of_matrices_2(theVector, S, 6);
   
   
   arma::mat X(p,p);
@@ -1537,7 +1537,7 @@ double logLikelihoodMlognormal_PADEs(double h, arma::vec & alpha, arma::mat & S,
   
   std::vector<arma::mat> theVector;
   
-  vectorOfMatrices_arma2(theVector, S, 6);
+  vector_of_matrices_2(theVector, S, 6);
   
   
   arma::mat X(p,p);
@@ -1659,7 +1659,7 @@ double logLikelihoodMloglogistic_PADEs(double h, arma::vec & alpha, arma::mat & 
   
   std::vector<arma::mat> theVector;
   
-  vectorOfMatrices_arma2(theVector, S, 6);
+  vector_of_matrices_2(theVector, S, 6);
   
   
   arma::mat X(p,p);
@@ -1781,7 +1781,7 @@ double logLikelihoodMgompertz_PADEs(double h, arma::vec & alpha, arma::mat & S, 
   
   std::vector<arma::mat> theVector;
   
-  vectorOfMatrices_arma2(theVector, S, 6);
+  vector_of_matrices_2(theVector, S, 6);
   
   
   arma::mat X(p,p);

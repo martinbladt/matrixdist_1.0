@@ -1,5 +1,4 @@
 # include <RcppArmadillo.h>
-#include "auxilliary.h"
 // [[ Rcpp :: depends ( RcppArmadillo )]]
 
 

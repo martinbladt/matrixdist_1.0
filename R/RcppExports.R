@@ -281,8 +281,8 @@ logLikelihoodMgompertz_RKs <- function(h, alpha, S, beta, obs, weight, rcens, rc
 #' @param S Sub-intensity matrix.
 #' @param sizevect Size of vector.
 #' 
-vectorOfMatrices_arma2 <- function(theVector, S, sizevect) {
-    invisible(.Call(`_matrixdist_vectorOfMatrices_arma2`, theVector, S, sizevect))
+vector_of_matrices_2 <- function(theVector, S, sizevect) {
+    invisible(.Call(`_matrixdist_vector_of_matrices_2`, theVector, S, sizevect))
 }
 
 #' EM using Matlab algorithm for matrix exponential in combination with Armadillo
@@ -531,36 +531,56 @@ logLikelihoodMgompertz_PADEs <- function(h, alpha, S, beta, obs, weight, rcens, 
 }
 
 #' Computes elements S^n / n! until the value size
-#' @param theVector a vector
-#' @param S sub-untensity matrix
-#' @param a a number
-#' @param sizevect size of vector
-vectorOfMatrices_arma <- function(theVector, S, a, sizevect) {
-    invisible(.Call(`_matrixdist_vectorOfMatrices_arma`, theVector, S, a, sizevect))
+#' 
+#' @param theVector A vector.
+#' @param S Sub-untensity matrix.
+#' @param a A number.
+#' @param sizevect Size of vector.
+#' 
+vector_of_matrices <- function(theVector, S, a, sizevect) {
+    invisible(.Call(`_matrixdist_vector_of_matrices`, theVector, S, a, sizevect))
 }
 
 #' Computes e^(Sx) base on the values on powerVector
-#' @param x a number
-#' @param n an integer
-#' @param powerVector a vector
-#' @param a a number
-matrixExpSum_arma <- function(x, n, powerVector, a) {
-    .Call(`_matrixdist_matrixExpSum_arma`, x, n, powerVector, a)
+#' 
+#' @param x A number.
+#' @param n An integer.
+#' @param powerVector A vector.
+#' @param a A number.
+#' 
+m_exp_sum <- function(x, n, powerVector, a) {
+    .Call(`_matrixdist_m_exp_sum`, x, n, powerVector, a)
 }
 
-pow2Matrix_arma <- function(n, A) {
-    invisible(.Call(`_matrixdist_pow2Matrix_arma`, n, A))
+#' Computes A^(2^n)
+#' 
+#' @param n An integer.
+#' @param A A matrix.
+#' @return A^(2^n).
+#' 
+pow2_matrix <- function(n, A) {
+    invisible(.Call(`_matrixdist_pow2_matrix`, n, A))
+}
+
+#' Find n such that P(N > n) = h with N Poisson distributed
+#'
+#' @param h Probability.
+#' @param lambda Mean of Poisson random variable.
+#' @return Integer satisfying condition.
+#'
+findN <- function(h, lambda) {
+    .Call(`_matrixdist_findN`, h, lambda)
 }
 
 #' EM using Uniformization for matrix exponential
 #' 
-#' @param h positive parameter
-#' @param alpha initial probalities
-#' @param S sub-intensity
-#' @param obs the observations
-#' @param weight the weights for the observations
-#' @param rcens censored observations
-#' @param rcweight the weights for the censored observations
+#' @param h Positive parameter.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity.
+#' @param obs The observations.
+#' @param weight The weights for the observations.
+#' @param rcens Censored observations.
+#' @param rcweight The weights for the censored observations.
 #' 
 EMstep_UNI <- function(h, alpha, S, obs, weight, rcens, rcweight) {
     invisible(.Call(`_matrixdist_EMstep_UNI`, h, alpha, S, obs, weight, rcens, rcweight))
@@ -568,7 +588,8 @@ EMstep_UNI <- function(h, alpha, S, obs, weight, rcens, rcweight) {
 
 #' Loglikelihood using Uniformization
 #' 
-#' Loglikelihood for a sample 
+#' Loglikelihood for a sample.
+#' 
 #' @param h positive parameter
 #' @param alpha initial probabilities
 #' @param S sub-intensity
@@ -886,46 +907,22 @@ rmatrixgev <- function(n, alpha, S, mu, sigma, xi = 0) {
     .Call(`_matrixdist_rmatrixgev`, n, alpha, S, mu, sigma, xi)
 }
 
-#' L inf norm of a matrix
-#' 
-#' Computes the L inf norm of a matrix \code{A}, which is defined as:
-#' L_inf A =  max ( 1 <= I <= M ) sum ( 1 <= J <= N ) abs ( A(I,J) ).
-#' 
-#' @param A A matrix.
-#' @return The L inf norm.
-#' 
-inf_norm <- function(A) {
-    .Call(`_matrixdist_inf_norm`, A)
-}
-
-#' Creates the matrix  (A1, B1 ; 0, A2)
+#' Product of two matrices
 #' 
 #' @param A1 Matrix.
 #' @param A2 Matrix.
-#' @param B1 Matrix.
-#' @return Computes (A1, B1 ; 0, A2).
+#' @return Computes C = A1 * A2.
 #' 
-matrix_VanLoan <- function(A1, A2, B1) {
-    .Call(`_matrixdist_matrix_VanLoan`, A1, A2, B1)
+matrix_product <- function(A1, A2) {
+    .Call(`_matrixdist_matrix_product`, A1, A2)
 }
 
-#' Maximum diagonal element of a matrix
-#' 
-#' @param A Matrix.
-#' @return The maximum value in the diagonal.
-#' 
-max_diagonal <- function(A) {
-    .Call(`_matrixdist_max_diagonal`, A)
-}
-
-#' Matrix exponential algorithm
-#' 
-#' MATLAB's built-in algorithm - Pade approximation.
+#' Inverse of a matrix
 #' 
 #' @param A A matrix.
 #' 
-matrix_exponential <- function(A) {
-    .Call(`_matrixdist_matrix_exponential`, A)
+matrix_inverse <- function(A) {
+    .Call(`_matrixdist_matrix_inverse`, A)
 }
 
 #' Phase-type density
@@ -1132,22 +1129,46 @@ mgevcdf <- function(x, alpha, S, beta, lower_tail = TRUE) {
     .Call(`_matrixdist_mgevcdf`, x, alpha, S, beta, lower_tail)
 }
 
-#' Product of two matrices
+#' L inf norm of a matrix
+#' 
+#' Computes the L inf norm of a matrix \code{A}, which is defined as:
+#' L_inf A =  max ( 1 <= I <= M ) sum ( 1 <= J <= N ) abs ( A(I,J) ).
+#' 
+#' @param A A matrix.
+#' @return The L inf norm.
+#' 
+inf_norm <- function(A) {
+    .Call(`_matrixdist_inf_norm`, A)
+}
+
+#' Creates the matrix  (A1, B1 ; 0, A2)
 #' 
 #' @param A1 Matrix.
 #' @param A2 Matrix.
-#' @return Computes C = A1 * A2.
+#' @param B1 Matrix.
+#' @return Computes (A1, B1 ; 0, A2).
 #' 
-matrix_product <- function(A1, A2) {
-    .Call(`_matrixdist_matrix_product`, A1, A2)
+matrix_VanLoan <- function(A1, A2, B1) {
+    .Call(`_matrixdist_matrix_VanLoan`, A1, A2, B1)
 }
 
-#' Inverse of a matrix
+#' Maximum diagonal element of a matrix
+#' 
+#' @param A Matrix.
+#' @return The maximum value in the diagonal.
+#' 
+max_diagonal <- function(A) {
+    .Call(`_matrixdist_max_diagonal`, A)
+}
+
+#' Matrix exponential algorithm
+#' 
+#' MATLAB's built-in algorithm - Pade approximation.
 #' 
 #' @param A A matrix.
 #' 
-matrix_inverse <- function(A) {
-    .Call(`_matrixdist_matrix_inverse`, A)
+matrix_exponential <- function(A) {
+    .Call(`_matrixdist_matrix_exponential`, A)
 }
 
 #' Default size of the steps in the RK

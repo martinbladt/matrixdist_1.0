@@ -300,15 +300,15 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// vectorOfMatrices_arma2
-void vectorOfMatrices_arma2(std::vector<arma::mat>& theVector, const arma::mat& S, int sizevect);
-RcppExport SEXP _matrixdist_vectorOfMatrices_arma2(SEXP theVectorSEXP, SEXP SSEXP, SEXP sizevectSEXP) {
+// vector_of_matrices_2
+void vector_of_matrices_2(std::vector<arma::mat>& theVector, const arma::mat& S, int sizevect);
+RcppExport SEXP _matrixdist_vector_of_matrices_2(SEXP theVectorSEXP, SEXP SSEXP, SEXP sizevectSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< std::vector<arma::mat>& >::type theVector(theVectorSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type S(SSEXP);
     Rcpp::traits::input_parameter< int >::type sizevect(sizevectSEXP);
-    vectorOfMatrices_arma2(theVector, S, sizevect);
+    vector_of_matrices_2(theVector, S, sizevect);
     return R_NilValue;
 END_RCPP
 }
@@ -572,22 +572,22 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// vectorOfMatrices_arma
-void vectorOfMatrices_arma(std::vector<arma::mat>& theVector, const arma::mat& S, double a, int sizevect);
-RcppExport SEXP _matrixdist_vectorOfMatrices_arma(SEXP theVectorSEXP, SEXP SSEXP, SEXP aSEXP, SEXP sizevectSEXP) {
+// vector_of_matrices
+void vector_of_matrices(std::vector<arma::mat>& theVector, const arma::mat& S, double a, int sizevect);
+RcppExport SEXP _matrixdist_vector_of_matrices(SEXP theVectorSEXP, SEXP SSEXP, SEXP aSEXP, SEXP sizevectSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< std::vector<arma::mat>& >::type theVector(theVectorSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type S(SSEXP);
     Rcpp::traits::input_parameter< double >::type a(aSEXP);
     Rcpp::traits::input_parameter< int >::type sizevect(sizevectSEXP);
-    vectorOfMatrices_arma(theVector, S, a, sizevect);
+    vector_of_matrices(theVector, S, a, sizevect);
     return R_NilValue;
 END_RCPP
 }
-// matrixExpSum_arma
-arma::mat matrixExpSum_arma(double x, int n, const std::vector<arma::mat>& powerVector, double a);
-RcppExport SEXP _matrixdist_matrixExpSum_arma(SEXP xSEXP, SEXP nSEXP, SEXP powerVectorSEXP, SEXP aSEXP) {
+// m_exp_sum
+arma::mat m_exp_sum(double x, int n, const std::vector<arma::mat>& powerVector, double a);
+RcppExport SEXP _matrixdist_m_exp_sum(SEXP xSEXP, SEXP nSEXP, SEXP powerVectorSEXP, SEXP aSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -595,19 +595,31 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type n(nSEXP);
     Rcpp::traits::input_parameter< const std::vector<arma::mat>& >::type powerVector(powerVectorSEXP);
     Rcpp::traits::input_parameter< double >::type a(aSEXP);
-    rcpp_result_gen = Rcpp::wrap(matrixExpSum_arma(x, n, powerVector, a));
+    rcpp_result_gen = Rcpp::wrap(m_exp_sum(x, n, powerVector, a));
     return rcpp_result_gen;
 END_RCPP
 }
-// pow2Matrix_arma
-void pow2Matrix_arma(int n, arma::mat& A);
-RcppExport SEXP _matrixdist_pow2Matrix_arma(SEXP nSEXP, SEXP ASEXP) {
+// pow2_matrix
+void pow2_matrix(int n, arma::mat& A);
+RcppExport SEXP _matrixdist_pow2_matrix(SEXP nSEXP, SEXP ASEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< int >::type n(nSEXP);
     Rcpp::traits::input_parameter< arma::mat& >::type A(ASEXP);
-    pow2Matrix_arma(n, A);
+    pow2_matrix(n, A);
     return R_NilValue;
+END_RCPP
+}
+// findN
+int findN(double h, double lambda);
+RcppExport SEXP _matrixdist_findN(SEXP hSEXP, SEXP lambdaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type h(hSEXP);
+    Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP);
+    rcpp_result_gen = Rcpp::wrap(findN(h, lambda));
+    return rcpp_result_gen;
 END_RCPP
 }
 // EMstep_UNI
@@ -972,49 +984,26 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// inf_norm
-double inf_norm(arma::mat A);
-RcppExport SEXP _matrixdist_inf_norm(SEXP ASEXP) {
+// matrix_product
+Rcpp::NumericMatrix matrix_product(Rcpp::NumericMatrix A1, Rcpp::NumericMatrix A2);
+RcppExport SEXP _matrixdist_matrix_product(SEXP A1SEXP, SEXP A2SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::mat >::type A(ASEXP);
-    rcpp_result_gen = Rcpp::wrap(inf_norm(A));
+    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type A1(A1SEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type A2(A2SEXP);
+    rcpp_result_gen = Rcpp::wrap(matrix_product(A1, A2));
     return rcpp_result_gen;
 END_RCPP
 }
-// matrix_VanLoan
-arma::mat matrix_VanLoan(arma::mat A1, arma::mat A2, arma::mat B1);
-RcppExport SEXP _matrixdist_matrix_VanLoan(SEXP A1SEXP, SEXP A2SEXP, SEXP B1SEXP) {
+// matrix_inverse
+Rcpp::NumericMatrix matrix_inverse(Rcpp::NumericMatrix A);
+RcppExport SEXP _matrixdist_matrix_inverse(SEXP ASEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::mat >::type A1(A1SEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type A2(A2SEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type B1(B1SEXP);
-    rcpp_result_gen = Rcpp::wrap(matrix_VanLoan(A1, A2, B1));
-    return rcpp_result_gen;
-END_RCPP
-}
-// max_diagonal
-double max_diagonal(const arma::mat& A);
-RcppExport SEXP _matrixdist_max_diagonal(SEXP ASEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const arma::mat& >::type A(ASEXP);
-    rcpp_result_gen = Rcpp::wrap(max_diagonal(A));
-    return rcpp_result_gen;
-END_RCPP
-}
-// matrix_exponential
-arma::mat matrix_exponential(arma::mat A);
-RcppExport SEXP _matrixdist_matrix_exponential(SEXP ASEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::mat >::type A(ASEXP);
-    rcpp_result_gen = Rcpp::wrap(matrix_exponential(A));
+    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type A(ASEXP);
+    rcpp_result_gen = Rcpp::wrap(matrix_inverse(A));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1219,26 +1208,49 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// matrix_product
-Rcpp::NumericMatrix matrix_product(Rcpp::NumericMatrix A1, Rcpp::NumericMatrix A2);
-RcppExport SEXP _matrixdist_matrix_product(SEXP A1SEXP, SEXP A2SEXP) {
+// inf_norm
+double inf_norm(arma::mat A);
+RcppExport SEXP _matrixdist_inf_norm(SEXP ASEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type A1(A1SEXP);
-    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type A2(A2SEXP);
-    rcpp_result_gen = Rcpp::wrap(matrix_product(A1, A2));
+    Rcpp::traits::input_parameter< arma::mat >::type A(ASEXP);
+    rcpp_result_gen = Rcpp::wrap(inf_norm(A));
     return rcpp_result_gen;
 END_RCPP
 }
-// matrix_inverse
-Rcpp::NumericMatrix matrix_inverse(Rcpp::NumericMatrix A);
-RcppExport SEXP _matrixdist_matrix_inverse(SEXP ASEXP) {
+// matrix_VanLoan
+arma::mat matrix_VanLoan(arma::mat A1, arma::mat A2, arma::mat B1);
+RcppExport SEXP _matrixdist_matrix_VanLoan(SEXP A1SEXP, SEXP A2SEXP, SEXP B1SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type A(ASEXP);
-    rcpp_result_gen = Rcpp::wrap(matrix_inverse(A));
+    Rcpp::traits::input_parameter< arma::mat >::type A1(A1SEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type A2(A2SEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type B1(B1SEXP);
+    rcpp_result_gen = Rcpp::wrap(matrix_VanLoan(A1, A2, B1));
+    return rcpp_result_gen;
+END_RCPP
+}
+// max_diagonal
+double max_diagonal(const arma::mat& A);
+RcppExport SEXP _matrixdist_max_diagonal(SEXP ASEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type A(ASEXP);
+    rcpp_result_gen = Rcpp::wrap(max_diagonal(A));
+    return rcpp_result_gen;
+END_RCPP
+}
+// matrix_exponential
+arma::mat matrix_exponential(arma::mat A);
+RcppExport SEXP _matrixdist_matrix_exponential(SEXP ASEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type A(ASEXP);
+    rcpp_result_gen = Rcpp::wrap(matrix_exponential(A));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1333,7 +1345,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_logLikelihoodMlognormal_RKs", (DL_FUNC) &_matrixdist_logLikelihoodMlognormal_RKs, 10},
     {"_matrixdist_logLikelihoodMloglogistic_RKs", (DL_FUNC) &_matrixdist_logLikelihoodMloglogistic_RKs, 10},
     {"_matrixdist_logLikelihoodMgompertz_RKs", (DL_FUNC) &_matrixdist_logLikelihoodMgompertz_RKs, 10},
-    {"_matrixdist_vectorOfMatrices_arma2", (DL_FUNC) &_matrixdist_vectorOfMatrices_arma2, 3},
+    {"_matrixdist_vector_of_matrices_2", (DL_FUNC) &_matrixdist_vector_of_matrices_2, 3},
     {"_matrixdist_EMstep_PADE", (DL_FUNC) &_matrixdist_EMstep_PADE, 7},
     {"_matrixdist_logLikelihoodPH_PADE", (DL_FUNC) &_matrixdist_logLikelihoodPH_PADE, 7},
     {"_matrixdist_logLikelihoodMweibull_PADE", (DL_FUNC) &_matrixdist_logLikelihoodMweibull_PADE, 8},
@@ -1348,9 +1360,10 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_logLikelihoodMlognormal_PADEs", (DL_FUNC) &_matrixdist_logLikelihoodMlognormal_PADEs, 10},
     {"_matrixdist_logLikelihoodMloglogistic_PADEs", (DL_FUNC) &_matrixdist_logLikelihoodMloglogistic_PADEs, 10},
     {"_matrixdist_logLikelihoodMgompertz_PADEs", (DL_FUNC) &_matrixdist_logLikelihoodMgompertz_PADEs, 10},
-    {"_matrixdist_vectorOfMatrices_arma", (DL_FUNC) &_matrixdist_vectorOfMatrices_arma, 4},
-    {"_matrixdist_matrixExpSum_arma", (DL_FUNC) &_matrixdist_matrixExpSum_arma, 4},
-    {"_matrixdist_pow2Matrix_arma", (DL_FUNC) &_matrixdist_pow2Matrix_arma, 2},
+    {"_matrixdist_vector_of_matrices", (DL_FUNC) &_matrixdist_vector_of_matrices, 4},
+    {"_matrixdist_m_exp_sum", (DL_FUNC) &_matrixdist_m_exp_sum, 4},
+    {"_matrixdist_pow2_matrix", (DL_FUNC) &_matrixdist_pow2_matrix, 2},
+    {"_matrixdist_findN", (DL_FUNC) &_matrixdist_findN, 2},
     {"_matrixdist_EMstep_UNI", (DL_FUNC) &_matrixdist_EMstep_UNI, 7},
     {"_matrixdist_logLikelihoodPH_UNI", (DL_FUNC) &_matrixdist_logLikelihoodPH_UNI, 7},
     {"_matrixdist_logLikelihoodMweibull_UNI", (DL_FUNC) &_matrixdist_logLikelihoodMweibull_UNI, 8},
@@ -1373,10 +1386,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_rphasetype", (DL_FUNC) &_matrixdist_rphasetype, 3},
     {"_matrixdist_riph", (DL_FUNC) &_matrixdist_riph, 5},
     {"_matrixdist_rmatrixgev", (DL_FUNC) &_matrixdist_rmatrixgev, 6},
-    {"_matrixdist_inf_norm", (DL_FUNC) &_matrixdist_inf_norm, 1},
-    {"_matrixdist_matrix_VanLoan", (DL_FUNC) &_matrixdist_matrix_VanLoan, 3},
-    {"_matrixdist_max_diagonal", (DL_FUNC) &_matrixdist_max_diagonal, 1},
-    {"_matrixdist_matrix_exponential", (DL_FUNC) &_matrixdist_matrix_exponential, 1},
+    {"_matrixdist_matrix_product", (DL_FUNC) &_matrixdist_matrix_product, 2},
+    {"_matrixdist_matrix_inverse", (DL_FUNC) &_matrixdist_matrix_inverse, 1},
     {"_matrixdist_phdensity", (DL_FUNC) &_matrixdist_phdensity, 3},
     {"_matrixdist_phcdf", (DL_FUNC) &_matrixdist_phcdf, 4},
     {"_matrixdist_mweibullden", (DL_FUNC) &_matrixdist_mweibullden, 4},
@@ -1391,8 +1402,10 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_mgompertzcdf", (DL_FUNC) &_matrixdist_mgompertzcdf, 5},
     {"_matrixdist_mgevden", (DL_FUNC) &_matrixdist_mgevden, 4},
     {"_matrixdist_mgevcdf", (DL_FUNC) &_matrixdist_mgevcdf, 5},
-    {"_matrixdist_matrix_product", (DL_FUNC) &_matrixdist_matrix_product, 2},
-    {"_matrixdist_matrix_inverse", (DL_FUNC) &_matrixdist_matrix_inverse, 1},
+    {"_matrixdist_inf_norm", (DL_FUNC) &_matrixdist_inf_norm, 1},
+    {"_matrixdist_matrix_VanLoan", (DL_FUNC) &_matrixdist_matrix_VanLoan, 3},
+    {"_matrixdist_max_diagonal", (DL_FUNC) &_matrixdist_max_diagonal, 1},
+    {"_matrixdist_matrix_exponential", (DL_FUNC) &_matrixdist_matrix_exponential, 1},
     {"_matrixdist_default_step_length", (DL_FUNC) &_matrixdist_default_step_length, 1},
     {"_matrixdist_reversTransformData", (DL_FUNC) &_matrixdist_reversTransformData, 3},
     {"_matrixdist_clone_vector", (DL_FUNC) &_matrixdist_clone_vector, 1},
