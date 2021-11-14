@@ -480,16 +480,10 @@ data_aggregation <- function(y, w) {
   observations <- cbind(y, w)
   mat <- data.frame(observations)
   names(mat) <- c("obs", "weight")
-  y <- sort(as.numeric(y))
-  un_obs <- unique(y)
-  if (length(w) == 0) {
-    w <- rep(1, length(y))
-  }
-  cum_weight <- numeric(0)
-  for (i in un_obs) {
-    cum_weight <- c(cum_weight, sum(mat$weight[which(mat$obs == i)]))
-  }
-  return(list(un_obs = un_obs, weights = cum_weight))
+  agg = aggregate(mat$weight,
+                  by = list(un_obs = mat$obs),
+                  FUN = sum)
+  return(list(un_obs = agg$un_obs, weights = agg$x))
 }
 
 #' logLik Method for ph Class
