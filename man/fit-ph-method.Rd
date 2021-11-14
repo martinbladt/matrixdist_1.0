@@ -17,7 +17,7 @@
   maxit = 100,
   reltol = 1e-08,
   every = 100,
-  plot = FALSE
+  r = 1
 )
 }
 \arguments{
@@ -45,7 +45,7 @@
 
 \item{every}{Number of iterations between likelihood display updates.}
 
-\item{plot}{Logical indicating whether to plot the fit at each iteration.}
+\item{r}{subsampling proportion for stochastic EM, defaults to 1}
 }
 \value{
 An object of class \linkS4class{ph}.
