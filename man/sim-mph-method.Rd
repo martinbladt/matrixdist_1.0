@@ -4,12 +4,15 @@
 \alias{sim,mph-method}
 \title{Simulation Method for multivariate phase type distributions}
 \usage{
-\S4method{sim}{mph}(x, n = 1000)
+\S4method{sim}{mph}(x, n = 1000, equal_marginals = 0)
 }
 \arguments{
 \item{x}{an object of class \linkS4class{mph}.}
 
 \item{n}{length of realization.}
+
+\item{equal_marginals}{non-negative integer. If positive, it specifies
+the number of marginals to simulate from, all from the fist matrix.}
 }
 \value{
 A realization of a phase type data

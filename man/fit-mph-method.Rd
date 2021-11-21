@@ -4,7 +4,7 @@
 \alias{fit,mph-method}
 \title{Fit Method for mph Class}
 \usage{
-\S4method{fit}{mph}(x, y, stepsEM = 1000)
+\S4method{fit}{mph}(x, y, stepsEM = 1000, equal_marginals = FALSE)
 }
 \arguments{
 \item{x}{an object of class \linkS4class{mph}.}
@@ -12,6 +12,8 @@
 \item{y}{matrix of data.}
 
 \item{stepsEM}{number of EM steps to be performed.}
+
+\item{equal_marginals}{logical. If TRUE, all marginals are fitted to be equal.}
 
 \item{uni_epsilon}{epsilon parameter for uniformization method.}
 }
