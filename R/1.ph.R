@@ -292,7 +292,7 @@ setMethod("quan", c(x = "ph"), function(x,
 #' @param maxit Maximum number of iterations when optimizing g function.
 #' @param reltol Relative tolerance when optimizing g function.
 #' @param every Number of iterations between likelihood display updates.
-#' @param r subsampling proportion for stochastic EM, defaults to 1
+#' @param r sub-sampling proportion for stochastic EM, defaults to 1
 #'
 #' @return An object of class \linkS4class{ph}.
 #'
@@ -327,6 +327,9 @@ setMethod(
     }
     if (!all(c(weight, rcenweight) >= 0)) {
       stop("weights should be non-negative")
+    }
+    if (r < 1 && any(methods == "RK")) {
+      stop("sub-sampling available for UNI and PADE methods")
     }
     is_iph <- methods::is(x, "iph")
     if (is_iph) {

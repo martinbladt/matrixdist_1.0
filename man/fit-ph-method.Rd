@@ -45,7 +45,7 @@
 
 \item{every}{Number of iterations between likelihood display updates.}
 
-\item{r}{subsampling proportion for stochastic EM, defaults to 1}
+\item{r}{sub-sampling proportion for stochastic EM, defaults to 1}
 }
 \value{
 An object of class \linkS4class{ph}.
