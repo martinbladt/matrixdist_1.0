@@ -39,25 +39,25 @@ arma::mat matrix_VanLoan(arma::mat A1, arma::mat A2, arma::mat B1) {
   unsigned p2{A2.n_rows};
   unsigned p{p1 + p2};
   
-  arma::mat auxiliarMatrix(p, p);
+  arma::mat aux_mat(p, p);
   
   for (int i{0}; i < p; ++i) {
     for (int j{0}; j < p; ++j) {
       if ( i < p1 && j < p1) {
-        auxiliarMatrix(i,j) = A1(i,j);
+        aux_mat(i,j) = A1(i,j);
       }
       else if (i >= p1 && j < p1) {
-        auxiliarMatrix(i,j) = 0;
+        aux_mat(i,j) = 0;
       }
       else if (i < p1 && j >= p1) {
-        auxiliarMatrix(i,j) = B1(i,j - p1);
+        aux_mat(i,j) = B1(i,j - p1);
       }
       else {
-        auxiliarMatrix(i,j) = A2(i - p1,j - p1);
+        aux_mat(i,j) = A2(i - p1,j - p1);
       }
     }
   }
-  return auxiliarMatrix;
+  return aux_mat;
 }
 
 
@@ -88,12 +88,11 @@ double max_diagonal(const arma::mat & A) {
 arma::mat matrix_exponential(arma::mat A) {
   const int q{6};
   
-  arma::mat matrixAuxiliar(A.n_rows,A.n_cols);
-  arma::mat ExpM(A.n_rows,A.n_cols);
+  arma::mat expm(A.n_rows,A.n_cols);
   
-  double aNorm{inf_norm(A)};
+  double a_norm{inf_norm(A)};
   
-  int ee{static_cast<int>(log2(aNorm)) + 1};
+  int ee{static_cast<int>(log2(a_norm)) + 1};
   
   int s{std::max(0, ee + 1)};
   
@@ -104,11 +103,11 @@ arma::mat matrix_exponential(arma::mat A) {
   
   double c{0.5};
   
-  ExpM.eye( size(A) );
+  expm.eye(size(A));
   
-  ExpM = ExpM + (a2 * c);
+  expm = expm + (a2 * c);
   
-  arma::mat d; d.eye( size(A) );
+  arma::mat d; d.eye(size(A));
   
   d = (d + a2 * (-c));
   
@@ -119,7 +118,7 @@ arma::mat matrix_exponential(arma::mat A) {
     
     x = (a2 * x);
     
-    ExpM = (x * c) + ExpM;
+    expm = (x * c) + expm;
     
     if (p) {
       d = (x * c) + d;
@@ -130,11 +129,11 @@ arma::mat matrix_exponential(arma::mat A) {
     p = !p;
   }
   //  E -> inverse(D) * E
-  ExpM = inv(d) * ExpM;
+  expm = inv(d) * expm;
   //  E -> E^(2*S)
   for (int k = 1; k <= s; ++k) {
-    ExpM = ExpM * ExpM;
+    expm = expm * expm;
   }
-  return(ExpM);
+  return(expm);
 }
 

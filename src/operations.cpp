@@ -11,7 +11,6 @@
 //' 
 // [[Rcpp::export]]
 Rcpp::List sumPH(arma::rowvec alpha1, arma::mat S1, arma::rowvec alpha2, arma::mat S2) {
-  
   unsigned p1{S1.n_cols};
   unsigned p2{S2.n_cols};
   
@@ -19,10 +18,9 @@ Rcpp::List sumPH(arma::rowvec alpha1, arma::mat S1, arma::rowvec alpha2, arma::m
   arma::mat S_sum(p1 + p2, p1 + p2);
   
   arma::mat e; e.ones(S1.n_cols, 1);
-  arma::mat t = (S1 * (-1)) * e;
+  arma::mat exit_vect = (S1 * (-1)) * e;
   
-  arma::mat auxmat = t * alpha2;
-  
+  arma::mat aux_mat = exit_vect * alpha2;
   
   for (int i{0}; i < p1 + p2; ++i) {
     if (i < p1) {
@@ -35,7 +33,7 @@ Rcpp::List sumPH(arma::rowvec alpha1, arma::mat S1, arma::rowvec alpha2, arma::m
           S_sum(i,j) = S1(i,j);
         }
         else {
-          S_sum(i,j) = auxmat(i,j - p1);
+          S_sum(i,j) = aux_mat(i,j - p1);
         }
       }
       else if (i >= p1 && j>= p1) {

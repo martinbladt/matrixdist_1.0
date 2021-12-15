@@ -15,7 +15,7 @@ arma::mat embedded_mc(arma::mat S) {
   arma::mat Q(p + 1, p + 1);
   
   arma::mat e; e.ones(S.n_cols, 1);
-  arma::mat t = (S * (-1)) * e;
+  arma::mat exit_vect = (S * (-1)) * e;
   
   for (int i = 0; i < p; ++i) {
     for (int j = 0; j < p + 1; ++j) {
@@ -23,7 +23,7 @@ arma::mat embedded_mc(arma::mat S) {
         Q(i,j) = -1.0 * S(i,j) / S(i,i);
       }
       else if(j == p) {
-        Q(i,j) = -1.0 * t(i,0) / S(i,i);
+        Q(i,j) = -1.0 * exit_vect(i,0) / S(i,i);
       }
     }
   }
@@ -130,7 +130,6 @@ long new_state(long prev_state, arma::mat cum_embedded_mc, double u) {
       return i;
     }
   }
-  
   return 0;
 }
 
@@ -187,9 +186,9 @@ Rcpp::NumericVector riph(int n, Rcpp::String dist_type, arma::vec alpha, arma::m
   arma::vec cum_alpha = cumulate_vector(alpha);
   
   int p = alpha.size();
-  long state = 0;
+  long state{0};
   for (int i = 0; i < n; ++i) {
-    double time = 0.0;
+    double time{0.0};
     state = initial_state(cum_alpha, Rcpp::runif(1)[0]);
     while (state != p) {
       time += log(1.0 - Rcpp::runif(1)[0]) / S(state,state);
@@ -237,9 +236,9 @@ Rcpp::NumericVector rmatrixgev(int n, arma::vec alpha, arma::mat S, double mu, d
   arma::vec cum_alpha = cumulate_vector(alpha);
   
   int p = alpha.size();
-  long state = 0;
+  long state{0};
   for (int i = 0; i < n; ++i) {
-    double time = 0.0;
+    double time{0.0};
     state = initial_state(cum_alpha, Rcpp::runif(1)[0]);
     while (state != p) {
       time += log(1.0 - Rcpp::runif(1)[0]) / S(state,state);

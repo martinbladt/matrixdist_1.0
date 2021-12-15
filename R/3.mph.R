@@ -75,7 +75,6 @@ setMethod("show", "mph", function(object) {
 #' @return A realization of a phase type data.
 #' @export
 #'
-#' @examples
 setMethod("sim", c(x = "mph"), function(x, n = 1000, equal_marginals = 0) {
   p <- length(x@pars$alpha)
   if (equal_marginals == 0) {

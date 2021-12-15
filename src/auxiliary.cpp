@@ -1,6 +1,7 @@
 # include <RcppArmadillo.h>
 // [[ Rcpp :: depends ( RcppArmadillo )]]
 
+
 //' Product of two matrices
 //' 
 //' @param A1 Matrix.
@@ -13,6 +14,7 @@ Rcpp::NumericMatrix matrix_product(Rcpp::NumericMatrix A1, Rcpp::NumericMatrix A
   arma::mat AA2 = Rcpp::as<arma::mat>(A2);
   return(Rcpp::wrap(AA1 * AA2));
 }
+
 
 //' Inverse of a matrix
 //' 

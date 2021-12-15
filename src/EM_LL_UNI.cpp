@@ -7,15 +7,15 @@
 // EM Uniformization 
 ////////////////////////////////////////////
 
-//' Computes elements S^n / n! until the value size
+//' Computes elements S^n / n! until the a given size
 //' 
 //' @param theVector A vector.
-//' @param S Sub-untensity matrix.
+//' @param S Sub-intensity matrix.
 //' @param a A number.
-//' @param sizevect Size of vector.
+//' @param vect_size Size of vector.
 //' 
 // [[Rcpp::export]]
-void vector_of_matrices(std::vector<arma::mat> & theVector, const arma::mat & S, double a, int sizevect) {
+void vector_of_matrices(std::vector<arma::mat> & theVector, const arma::mat & S, double a, int vect_size) {
   arma::mat I;
   I.eye(size(S));
   
@@ -23,29 +23,29 @@ void vector_of_matrices(std::vector<arma::mat> & theVector, const arma::mat & S,
   
   theVector.push_back(I);
   
-  for (int k{1}; k <= sizevect; ++k) {
+  for (int k{1}; k <= vect_size; ++k) {
     theVector.push_back( (P * (1.0 / k) ) * theVector[k - 1]);
   }
 }
 
 
-//' Computes exp(Sx) base on the values on powerVector
+//' Computes exp(Sx) base on the values on pow_vector
 //' 
 //' @param x A number.
 //' @param n An integer.
-//' @param powerVector A vector.
+//' @param pow_vector A vector.
 //' @param a A number.
 //' 
 // [[Rcpp::export]]
-arma::mat m_exp_sum(double x, int n, const std::vector<arma::mat> & powerVector, double a) {
-  arma::mat resultmatrix = powerVector[0];
+arma::mat m_exp_sum(double x, int n, const std::vector<arma::mat> & pow_vector, double a) {
+  arma::mat res_mat = pow_vector[0];
   
   for (int i{1}; i <= n; ++i) {
-    resultmatrix = resultmatrix + powerVector[i] * exp(i * std::log(a * x));
+    res_mat = res_mat + pow_vector[i] * exp(i * std::log(a * x));
   }
-  resultmatrix = resultmatrix * exp(-a * x);
+  res_mat = res_mat * exp(-a * x);
   
-  return resultmatrix;
+  return res_mat;
 }
 
 
@@ -57,11 +57,11 @@ arma::mat m_exp_sum(double x, int n, const std::vector<arma::mat> & powerVector,
 //' 
 // [[Rcpp::export]]
 void pow2_matrix(int n , arma::mat & A) {
-  arma::mat auxMat(size(A));
+  arma::mat aux_mat(size(A));
   
   for (int i{1}; i <= n; ++i) {
-    auxMat = A * A;
-    A = auxMat;
+    aux_mat = A * A;
+    A = aux_mat;
   }
 }
 
@@ -75,12 +75,12 @@ void pow2_matrix(int n , arma::mat & A) {
 // [[Rcpp::export]] 
 int findN(double h, double lambda) {
   int n{0};
-  double cumProb{0.0};
+  double cum_prob{0.0};
   
   do {
-    cumProb += R::dpois(n, lambda, false);
+    cum_prob += R::dpois(n, lambda, false);
     ++n;
-  } while (cumProb < 1.0 - h);
+  } while (cum_prob < 1.0 - h);
   
   return (n - 1);
 }

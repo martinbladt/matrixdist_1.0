@@ -4,10 +4,10 @@
 \alias{reversTransformData}
 \title{Applies the inverse of the GEV but giving back the vector in reverse order}
 \usage{
-reversTransformData(observations, weights, beta)
+reversTransformData(obs, weights, beta)
 }
 \arguments{
-\item{observations}{The observations.}
+\item{obs}{The observations.}
 
 \item{weights}{Weights of the observations.}
 

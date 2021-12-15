@@ -27,29 +27,29 @@ double default_step_length(const NumericMatrix & S) {
 //' 
 //' Used for EM step.
 //' 
-//' @param observations The observations.
+//' @param obs The observations.
 //' @param weights Weights of the observations.
 //' @param beta Parameters of the GEV.
 //' 
 // [[Rcpp::export]]
-List reversTransformData(const NumericVector & observations, const NumericVector & weights, const NumericVector & beta) {
-  int N = static_cast<int>(observations.size());
-  NumericVector SransformObs(N);
-  NumericVector SransWeights(N);
+List reversTransformData(const NumericVector & obs, const NumericVector & weights, const NumericVector & beta) {
+  int N = static_cast<int>(obs.size());
+  NumericVector trans_obs(N);
+  NumericVector trans_weights(N);
   if (beta[2] == 0) { // Gumbel
     for (int i{0}; i < N; ++i) {
-      SransformObs[i] = exp( -(observations[N - i - 1] - beta[0]) / beta[1]) ;
-      SransWeights[i] = weights[N - i - 1];
+      trans_obs[i] = exp( -(obs[N - i - 1] - beta[0]) / beta[1]) ;
+      trans_weights[i] = weights[N - i - 1];
     }
   }
   else { // GEVD
     for (int i{0}; i < N; ++i) {
-      SransformObs[i] = pow( 1 + beta[2] * (observations[N - i - 1] - beta[0]) / beta[1] , -1 / beta[2]);
-      SransWeights[i] = weights[N - i - 1];
+      trans_obs[i] = pow( 1 + beta[2] * (obs[N - i - 1] - beta[0]) / beta[1] , -1 / beta[2]);
+      trans_weights[i] = weights[N - i - 1];
     }
   }
   
-  List L = List::create(Named("obs") = SransformObs, _["weight"] = SransWeights);
+  List L = List::create(Named("obs") = trans_obs, _["weight"] = trans_weights);
   
   return L;
 }

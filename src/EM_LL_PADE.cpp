@@ -11,17 +11,16 @@
 //' 
 //' @param theVector A vector.
 //' @param S Sub-intensity matrix.
-//' @param sizevect Size of vector.
+//' @param vect_size Size of vector.
 //' 
 // [[Rcpp::export]]
-void vector_of_matrices_2(std::vector<arma::mat> & theVector, const arma::mat & S, int sizevect) {
-  
+void vector_of_matrices_2(std::vector<arma::mat> & theVector, const arma::mat & S, int vect_size) {
   arma::mat I;
   I.eye(size(S));
   
   theVector.push_back(I);
   
-  for (int k{1}; k <= sizevect; ++k) {
+  for (int k{1}; k <= vect_size; ++k) {
     theVector.push_back( S * theVector[k - 1]);
   }
 }

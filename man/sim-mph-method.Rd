@@ -20,6 +20,3 @@ A realization of a phase type data.
 \description{
 Simulation Method for multivariate phase type distributions
 }
-\examples{
-
-}

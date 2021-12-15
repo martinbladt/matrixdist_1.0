@@ -15,7 +15,6 @@
 //' 
 // [[Rcpp::export]]
 Rcpp::NumericVector phdensity(Rcpp::NumericVector x, arma::vec alpha, arma::mat S) {
-  
   Rcpp::NumericVector density(x.size());
   
   arma::mat e; e.ones(S.n_cols, 1);
@@ -86,7 +85,6 @@ Rcpp::NumericVector phcdf(Rcpp::NumericVector x, arma::vec alpha, arma::mat S, b
 //' 
 // [[Rcpp::export]]
 Rcpp::NumericVector mweibullden(Rcpp::NumericVector x, arma::vec alpha, arma::mat S, double beta) {
-  
   Rcpp::NumericVector density(x.size());
   
   arma::mat e; e.ones(S.n_cols, 1);
@@ -158,7 +156,6 @@ Rcpp::NumericVector mweibullcdf(Rcpp::NumericVector x, arma::vec alpha, arma::ma
 //' 
 // [[Rcpp::export]]
 Rcpp::NumericVector mparetoden(Rcpp::NumericVector x, arma::vec alpha, arma::mat S, double beta) {
-  
   Rcpp::NumericVector density(x.size());
   
   arma::mat e; e.ones(S.n_cols, 1);
@@ -230,7 +227,6 @@ Rcpp::NumericVector mparetocdf(Rcpp::NumericVector x, arma::vec alpha, arma::mat
 //' 
 // [[Rcpp::export]]
 Rcpp::NumericVector mlognormalden(Rcpp::NumericVector x, arma::vec alpha, arma::mat S, double beta) {
-  
   Rcpp::NumericVector density(x.size());
   
   arma::mat e; e.ones(S.n_cols, 1);
@@ -302,7 +298,6 @@ Rcpp::NumericVector mlognormalcdf(Rcpp::NumericVector x, arma::vec alpha, arma::
 //' 
 // [[Rcpp::export]]
 Rcpp::NumericVector mloglogisticden(Rcpp::NumericVector x, arma::vec alpha, arma::mat S, Rcpp::NumericVector beta) {
-  
   Rcpp::NumericVector density(x.size());
   
   arma::mat e; e.ones(S.n_cols, 1);
@@ -374,7 +369,6 @@ Rcpp::NumericVector mloglogisticcdf(Rcpp::NumericVector x, arma::vec alpha, arma
 //' 
 // [[Rcpp::export]]
 Rcpp::NumericVector mgompertzden(Rcpp::NumericVector x, arma::vec alpha, arma::mat S, double beta) {
-  
   Rcpp::NumericVector density(x.size());
   
   arma::mat e; e.ones(S.n_cols, 1);

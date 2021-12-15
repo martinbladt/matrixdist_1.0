@@ -2,19 +2,19 @@
 % Please edit documentation in R/RcppExports.R
 \name{m_exp_sum}
 \alias{m_exp_sum}
-\title{Computes exp(Sx) base on the values on powerVector}
+\title{Computes exp(Sx) base on the values on pow_vector}
 \usage{
-m_exp_sum(x, n, powerVector, a)
+m_exp_sum(x, n, pow_vector, a)
 }
 \arguments{
 \item{x}{A number.}
 
 \item{n}{An integer.}
 
-\item{powerVector}{A vector.}
+\item{pow_vector}{A vector.}
 
 \item{a}{A number.}
 }
 \description{
-Computes exp(Sx) base on the values on powerVector
+Computes exp(Sx) base on the values on pow_vector
 }

@@ -2,19 +2,19 @@
 % Please edit documentation in R/RcppExports.R
 \name{vector_of_matrices}
 \alias{vector_of_matrices}
-\title{Computes elements S^n / n! until the value size}
+\title{Computes elements S^n / n! until the a given size}
 \usage{
-vector_of_matrices(theVector, S, a, sizevect)
+vector_of_matrices(theVector, S, a, vect_size)
 }
 \arguments{
 \item{theVector}{A vector.}
 
-\item{S}{Sub-untensity matrix.}
+\item{S}{Sub-intensity matrix.}
 
 \item{a}{A number.}
 
-\item{sizevect}{Size of vector.}
+\item{vect_size}{Size of vector.}
 }
 \description{
-Computes elements S^n / n! until the value size
+Computes elements S^n / n! until the a given size
 }
