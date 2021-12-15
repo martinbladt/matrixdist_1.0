@@ -9,11 +9,11 @@
 #' @export
 #'
 setClass("mph",
-         slots = list(
-           name = "character",
-           pars = "list",
-           fit = "list"
-         )
+  slots = list(
+    name = "character",
+    pars = "list",
+    fit = "list"
+  )
 )
 
 #' Constructor Function for multivariate phase type distributions
@@ -30,20 +30,24 @@ mph <- function(alpha = NULL, S = NULL, structure = NULL, dimension = 3, variabl
   if (any(is.null(alpha)) & any(is.null(S)) & is.null(structure)) {
     stop("input a vector and matrix, or a structure")
   }
-  if(is.null(variables)){variables <- length(structure)}
+  if (is.null(variables)) {
+    variables <- length(structure)
+  }
   if (!any(is.null(structure))) {
     rs <- random_structure(dimension, structure = structure[1])
     alpha <- rs[[1]]
     S <- list()
     S[[1]] <- rs[[2]]
-    for(i in 2:variables){S[[i]] <- random_structure(dimension, structure = structure[i])[[2]]}
+    for (i in 2:variables) {
+      S[[i]] <- random_structure(dimension, structure = structure[i])[[2]]
+    }
     name <- structure
   } else {
     name <- "custom"
   }
   methods::new("mph",
-               name = paste(name, " mph(", length(alpha), ")", sep = " "),
-               pars = list(alpha = alpha, S = S)
+    name = paste(name, " mph(", length(alpha), ")", sep = " "),
+    pars = list(alpha = alpha, S = S)
   )
 }
 
@@ -72,29 +76,30 @@ setMethod("show", "mph", function(object) {
 #' @export
 #'
 #' @examples
-#'
 setMethod("sim", c(x = "mph"), function(x, n = 1000, equal_marginals = 0) {
   p <- length(x@pars$alpha)
-  if(equal_marginals == 0){
+  if (equal_marginals == 0) {
     d <- length(x@pars$S)
     states <- 1:p
     result <- matrix(NA, n, d)
-    for(i in 1:n){
-      state <- sample(states,1)
-      in_vect <- rep(0,p); in_vect[state] <- 1
-      for(j in 1:d){
-        result[i,j] <- rphasetype(1, in_vect, x@pars$S[[j]])
+    for (i in 1:n) {
+      state <- sample(states, 1)
+      in_vect <- rep(0, p)
+      in_vect[state] <- 1
+      for (j in 1:d) {
+        result[i, j] <- rphasetype(1, in_vect, x@pars$S[[j]])
       }
     }
-  }else{
+  } else {
     d <- equal_marginals
     states <- 1:p
     result <- matrix(NA, n, d)
-    for(i in 1:n){
-      state <- sample(states,1)
-      in_vect <- rep(0,p); in_vect[state] <- 1
-      for(j in 1:d){
-        result[i,j] <- rphasetype(1, in_vect, x@pars$S[[1]])
+    for (i in 1:n) {
+      state <- sample(states, 1)
+      in_vect <- rep(0, p)
+      in_vect[state] <- 1
+      for (j in 1:d) {
+        result[i, j] <- rphasetype(1, in_vect, x@pars$S[[1]])
       }
     }
   }
@@ -112,14 +117,15 @@ setMethod("sim", c(x = "mph"), function(x, n = 1000, equal_marginals = 0) {
 setMethod("dens", c(x = "mph"), function(x, y) {
   p <- length(x@pars$alpha)
   alpha <- x@pars$alpha
-  d <- length(x@pars$S)  
+  d <- length(x@pars$S)
   n <- nrow(y)
   res <- numeric(n)
-  for(j in 1:p){
-    in_vect <- rep(0,p); in_vect[j] <- 1
-    aux <- matrix(NA,n,d)
-    for(i in 1:d){
-      aux[,i] <- matrixdist:::phdensity(y[,i], in_vect, x@pars$S[[i]])
+  for (j in 1:p) {
+    in_vect <- rep(0, p)
+    in_vect[j] <- 1
+    aux <- matrix(NA, n, d)
+    for (i in 1:d) {
+      aux[, i] <- matrixdist:::phdensity(y[, i], in_vect, x@pars$S[[i]])
     }
     res <- res + alpha[j] * apply(aux, 1, prod)
   }
@@ -136,8 +142,8 @@ setMethod("dens", c(x = "mph"), function(x, y) {
 #' @export
 #'
 setMethod("cdf", c(x = "mph"), function(x,
-                                       q,
-                                       lower.tail = TRUE) {
+                                        q,
+                                        lower.tail = TRUE) {
   q_inf <- (q == Inf)
   cdf <- q
   cdf[!q_inf] <- phcdf(q[!q_inf], x@pars$alpha, x@pars$S, lower.tail)
@@ -152,33 +158,42 @@ setMethod("cdf", c(x = "mph"), function(x,
 #' @param stepsEM Number of EM steps to be performed.
 #' @param uni_epsilon Epsilon parameter for uniformization method.
 #' @param equal_marginals Logical. If TRUE, all marginals are fitted to be equal.
-#' 
+#'
 #' @export
 #'
 setMethod(
   "fit", c(x = "mph", y = "ANY"),
-  function(x,y,
+  function(x, y,
            stepsEM = 1000,
            equal_marginals = FALSE) {
     alpha_fit <- x@pars$alpha
-    if(!equal_marginals){
+    if (!equal_marginals) {
       S_fit <- x@pars$S
-      fnn <- EM_step_mph}else{
-        for(i in 1:ncol(y)){
-          S_fit <- x@pars$S[[1]]
-          fnn <- EM_step_mph_0
-        }
+      fnn <- EM_step_mph
+    } else {
+      for (i in 1:ncol(y)) {
+        S_fit <- x@pars$S[[1]]
+        fnn <- EM_step_mph_0
       }
-    for(k in 1:stepsEM){
-      aux <- fnn(alpha_fit,S_fit,y)
+    }
+    for (k in 1:stepsEM) {
+      aux <- fnn(alpha_fit, S_fit, y)
       alpha_fit <- aux$alpha
       S_fit <- aux$S
       cat("\r", "iteration:", k,
-          ", logLik:", aux$logLik,
-          sep = " "
+        ", logLik:", aux$logLik,
+        sep = " "
       )
     }
-    x@pars$S <- if(!equal_marginals){S_fit}else{ls <- list();for(i in 1:ncol(y)){ls[[i]] <- S_fit};ls}
+    x@pars$S <- if (!equal_marginals) {
+      S_fit
+    } else {
+      ls <- list()
+      for (i in 1:ncol(y)) {
+        ls[[i]] <- S_fit
+      }
+      ls
+    }
     cat("\n", sep = "")
     x@pars$alpha <- alpha_fit
     x@fit$logLik <- aux$logLik
@@ -186,94 +201,101 @@ setMethod(
   }
 )
 
-EM_step_mph <- function(alpha, S_list, y){
+EM_step_mph <- function(alpha, S_list, y) {
   p <- length(alpha)
   n <- nrow(y)
   d <- ncol(y)
   matrix_integrals <- list()
-  for(i in 1:d){    
+  for (i in 1:d) {
     s <- -rowSums(S_list[[i]])
     marg <- list()
-    for(j in 1:p){
-      e <- rep(0,p); e[j] <- 1
-      big_mat <- rbind(cbind(S_list[[i]], outer(s,e)),
-                       cbind(matrix(0,p,p), S_list[[i]]))
-      marg[[j]] <- vapply(X = y[,i], FUN = function(yy){matrix_exponential(yy * big_mat)},
-                          FUN.VALUE = matrix(1,2*p,2*p))
+    for (j in 1:p) {
+      e <- rep(0, p)
+      e[j] <- 1
+      big_mat <- rbind(
+        cbind(S_list[[i]], outer(s, e)),
+        cbind(matrix(0, p, p), S_list[[i]])
+      )
+      marg[[j]] <- vapply(
+        X = y[, i], FUN = function(yy) {
+          matrix_exponential(yy * big_mat)
+        },
+        FUN.VALUE = matrix(1, 2 * p, 2 * p)
+      )
     }
     matrix_integrals[[i]] <- marg
   }
   ###
-  a_kij <- array(NA,c(n,p,d,p))
-  for(k in 1:p){
-    for(j in 1:p){
-      for(i in 1:d){
-        for(m in 1:n){
-          a_kij[m,k,i,j] <- matrix_integrals[[i]][[1]][k,j,m]
+  a_kij <- array(NA, c(n, p, d, p))
+  for (k in 1:p) {
+    for (j in 1:p) {
+      for (i in 1:d) {
+        for (m in 1:n) {
+          a_kij[m, k, i, j] <- matrix_integrals[[i]][[1]][k, j, m]
         }
       }
     }
   }
   ###
-  a_ki <- array(NA,c(n,p,d))
-  for(k in 1:p){
-    for(i in 1:d){
+  a_ki <- array(NA, c(n, p, d))
+  for (k in 1:p) {
+    for (i in 1:d) {
       ti <- -rowSums(S_list[[i]])
-      for(m in 1:n){
-        a_ki[m,k,i] <- sum(ti * a_kij[m,k,i,])
+      for (m in 1:n) {
+        a_ki[m, k, i] <- sum(ti * a_kij[m, k, i, ])
       }
     }
   }
   ###
-  a_k_minus_i <- array(NA,c(n,p,d))
-  for(k in 1:p){
-    for(i in 1:d){
-      for(m in 1:n){
-        a_k_minus_i[m,k,i] <- prod(a_ki[m,k,-i])
+  a_k_minus_i <- array(NA, c(n, p, d))
+  for (k in 1:p) {
+    for (i in 1:d) {
+      for (m in 1:n) {
+        a_k_minus_i[m, k, i] <- prod(a_ki[m, k, -i])
       }
     }
   }
   ###
-  a_k <- array(NA,c(n,p))
-  for(k in 1:p){
-    for(m in 1:n){
-      a_k[m,k] <- prod(a_ki[m,k,])
+  a_k <- array(NA, c(n, p))
+  for (k in 1:p) {
+    for (m in 1:n) {
+      a_k[m, k] <- prod(a_ki[m, k, ])
     }
   }
   ###
-  a_tilde_ki <- array(NA,c(n,p,d))
-  for(k in 1:p){
-    for(i in 1:d){
-      for(m in 1:n){
-        a_tilde_ki[m,k,i] <- sum(alpha * a_kij[m,,i,k] * a_k_minus_i[m,,i])
+  a_tilde_ki <- array(NA, c(n, p, d))
+  for (k in 1:p) {
+    for (i in 1:d) {
+      for (m in 1:n) {
+        a_tilde_ki[m, k, i] <- sum(alpha * a_kij[m, , i, k] * a_k_minus_i[m, , i])
       }
     }
   }
   ###
-  a <- array(NA,c(n))
-  for(m in 1:n){
-    a[m] <- sum(alpha * a_k[m,])
+  a <- array(NA, c(n))
+  for (m in 1:n) {
+    a[m] <- sum(alpha * a_k[m, ])
   }
   ###
-  b_skij <- array(NA,c(n,p,p,d,p))
-  for(s in 1:p){
-    for(k in 1:p){
-      for(j in 1:p){
-        for(i in 1:d){
-          for(m in 1:n){
-            b_skij[m,s,k,i,j] <- matrix_integrals[[i]][[j]][s,k + p,m]
+  b_skij <- array(NA, c(n, p, p, d, p))
+  for (s in 1:p) {
+    for (k in 1:p) {
+      for (j in 1:p) {
+        for (i in 1:d) {
+          for (m in 1:n) {
+            b_skij[m, s, k, i, j] <- matrix_integrals[[i]][[j]][s, k + p, m]
           }
         }
       }
     }
   }
   ###
-  b_ski <- array(NA,c(n,p,p,d))
-  for(s in 1:p){
-    for(k in 1:p){
-      for(i in 1:d){
-        for(m in 1:n){
-          b_ski[m,s,k,i] <- sum(alpha * a_k_minus_i[m,,i] * b_skij[m,s,k,i,])
+  b_ski <- array(NA, c(n, p, p, d))
+  for (s in 1:p) {
+    for (k in 1:p) {
+      for (i in 1:d) {
+        for (m in 1:n) {
+          b_ski[m, s, k, i] <- sum(alpha * a_k_minus_i[m, , i] * b_skij[m, s, k, i, ])
         }
       }
     }
@@ -282,151 +304,158 @@ EM_step_mph <- function(alpha, S_list, y){
   # E STEP
   ###
   EB_k <- numeric(p)
-  for(k in 1:p){
-    EB_k[k] <- alpha[k] * sum(a_k[,k]/a)
+  for (k in 1:p) {
+    EB_k[k] <- alpha[k] * sum(a_k[, k] / a)
   }
-  EZ_ki <- array(NA,c(p,d))
-  for(k in 1:p){
-    for(i in 1:d){
-      EZ_ki[k,i] <- sum(b_ski[,k,k,i]/a)
+  EZ_ki <- array(NA, c(p, d))
+  for (k in 1:p) {
+    for (i in 1:d) {
+      EZ_ki[k, i] <- sum(b_ski[, k, k, i] / a)
     }
   }
-  EN_ksi <- array(NA,c(p,p,d))
-  for(i in 1:d){
-    for(s in 1:p){
-      for(k in 1:p){
-        t_ksi <- S_list[[i]][k,s]
-        EN_ksi[k,s,i] <- t_ksi * sum(b_ski[,s,k,i]/a)
+  EN_ksi <- array(NA, c(p, p, d))
+  for (i in 1:d) {
+    for (s in 1:p) {
+      for (k in 1:p) {
+        t_ksi <- S_list[[i]][k, s]
+        EN_ksi[k, s, i] <- t_ksi * sum(b_ski[, s, k, i] / a)
       }
     }
   }
-  EN_ki <- array(NA,c(p,d))
-  for(i in 1:d){
-    for(k in 1:p){
+  EN_ki <- array(NA, c(p, d))
+  for (i in 1:d) {
+    for (k in 1:p) {
       t_ki <- -rowSums(S_list[[i]])[k]
-      EN_ki[k,i] <- t_ki * sum(a_tilde_ki[,k,i]/a)
+      EN_ki[k, i] <- t_ki * sum(a_tilde_ki[, k, i] / a)
     }
   }
   ###
   # M STEP
   ###
   alpha <- numeric(p)
-  for(k in 1:p){
-    alpha[k] <- EB_k[k]/n
+  for (k in 1:p) {
+    alpha[k] <- EB_k[k] / n
   }
-  S <- array(NA,c(p,p,d))
-  for(i in 1:d){
-    for(s in 1:p){
-      for(k in 1:p){
-        S[k,s,i] <- EN_ksi[k,s,i]/EZ_ki[k,i]
+  S <- array(NA, c(p, p, d))
+  for (i in 1:d) {
+    for (s in 1:p) {
+      for (k in 1:p) {
+        S[k, s, i] <- EN_ksi[k, s, i] / EZ_ki[k, i]
       }
     }
   }
-  s <- array(NA,c(p,d))
-  for(i in 1:d){
-    for(k in 1:p){
-      s[k,i] <- EN_ki[k,i]/EZ_ki[k,i]
+  s <- array(NA, c(p, d))
+  for (i in 1:d) {
+    for (k in 1:p) {
+      s[k, i] <- EN_ki[k, i] / EZ_ki[k, i]
     }
   }
-  for(k in 1:p){
-    for(i in 1:d){
-      S[k,k,i] <- - sum(S[k,-k,i]) - s[k,i]
+  for (k in 1:p) {
+    for (i in 1:d) {
+      S[k, k, i] <- -sum(S[k, -k, i]) - s[k, i]
     }
   }
   ll <- list()
-  for(i in 1:d){
-    ll[[i]] <- S[,,i]
+  for (i in 1:d) {
+    ll[[i]] <- S[, , i]
   }
   return(list(alpha = alpha, S = ll, logLik = sum(log(a))))
 }
 
-EM_step_mph_0 <- function(alpha, S, y){
+EM_step_mph_0 <- function(alpha, S, y) {
   p <- length(alpha)
   n <- nrow(y)
   d <- ncol(y)
   matrix_integrals <- list()
   s <- -rowSums(S)
-  for(i in 1:d){    
+  for (i in 1:d) {
     marg <- list()
-    for(j in 1:p){
-      e <- rep(0,p); e[j] <- 1
-      big_mat <- rbind(cbind(S, outer(s,e)),
-                       cbind(matrix(0,p,p), S))
-      marg[[j]] <- vapply(X = y[,i], FUN = function(yy){matrix_exponential(yy * big_mat)},
-                          FUN.VALUE = matrix(1,2*p,2*p))
+    for (j in 1:p) {
+      e <- rep(0, p)
+      e[j] <- 1
+      big_mat <- rbind(
+        cbind(S, outer(s, e)),
+        cbind(matrix(0, p, p), S)
+      )
+      marg[[j]] <- vapply(
+        X = y[, i], FUN = function(yy) {
+          matrix_exponential(yy * big_mat)
+        },
+        FUN.VALUE = matrix(1, 2 * p, 2 * p)
+      )
     }
     matrix_integrals[[i]] <- marg
   }
   ###
-  a_kij <- array(NA,c(n,p,d,p))
-  for(k in 1:p){
-    for(j in 1:p){
-      for(i in 1:d){
-        for(m in 1:n){
-          a_kij[m,k,i,j] <- matrix_integrals[[i]][[1]][k,j,m]
+  a_kij <- array(NA, c(n, p, d, p))
+  for (k in 1:p) {
+    for (j in 1:p) {
+      for (i in 1:d) {
+        for (m in 1:n) {
+          a_kij[m, k, i, j] <- matrix_integrals[[i]][[1]][k, j, m]
         }
       }
     }
   }
   ###
-  a_ki <- array(NA,c(n,p,d))
-  for(k in 1:p){
-    for(i in 1:d){
-      for(m in 1:n){
-        a_ki[m,k,i] <- sum(s * a_kij[m,k,i,])
+  a_ki <- array(NA, c(n, p, d))
+  for (k in 1:p) {
+    for (i in 1:d) {
+      for (m in 1:n) {
+        a_ki[m, k, i] <- sum(s * a_kij[m, k, i, ])
       }
     }
   }
   ###
-  a_k_minus_i <- array(NA,c(n,p,d))
-  for(k in 1:p){
-    for(i in 1:d){
-      for(m in 1:n){
-        a_k_minus_i[m,k,i] <- prod(a_ki[m,k,-i])
+  a_k_minus_i <- array(NA, c(n, p, d))
+  for (k in 1:p) {
+    for (i in 1:d) {
+      for (m in 1:n) {
+        a_k_minus_i[m, k, i] <- prod(a_ki[m, k, -i])
       }
     }
   }
   ###
-  a_k <- array(NA,c(n,p))
-  for(k in 1:p){
-    for(m in 1:n){
-      a_k[m,k] <- prod(a_ki[m,k,])
+  a_k <- array(NA, c(n, p))
+  for (k in 1:p) {
+    for (m in 1:n) {
+      a_k[m, k] <- prod(a_ki[m, k, ])
     }
   }
   ###
-  a_tilde_ki <- array(NA,c(n,p,d))
-  for(k in 1:p){
-    for(i in 1:d){
-      for(m in 1:n){
-        a_tilde_ki[m,k,i] <- sum(alpha * a_kij[m,,i,k] * a_k_minus_i[m,,i])
+  a_tilde_ki <- array(NA, c(n, p, d))
+  for (k in 1:p) {
+    for (i in 1:d) {
+      for (m in 1:n) {
+        a_tilde_ki[m, k, i] <- sum(alpha * a_kij[m, , i, k] * a_k_minus_i[m, , i])
       }
     }
   }
   ###
-  a <- array(NA,c(n))
-  for(m in 1:n){
-    a[m] <- sum(alpha * a_k[m,])
+  a <- array(NA, c(n))
+  for (m in 1:n) {
+    a[m] <- sum(alpha * a_k[m, ])
   }
   ###
-  b_skij <- array(NA,c(n,p,p,d,p))
-  for(s in 1:p){
-    for(k in 1:p){
-      for(j in 1:p){
-        for(i in 1:d){
-          for(m in 1:n){
-            b_skij[m,s,k,i,j] <- matrix_integrals[[i]][[j]][s,k + p,m]
+  b_skij <- array(NA, c(n, p, p, d, p))
+  for (s in 1:p) {
+    for (k in 1:p) {
+      for (j in 1:p) {
+        for (i in 1:d) {
+          for (m in 1:n) {
+            b_skij[m, s, k, i, j] <- matrix_integrals[[i]][[j]][s, k + p, m]
           }
         }
       }
     }
   }
   ###
-  b_ski <- array(NA,c(n,p,p,d))
-  for(s in 1:p){
-    for(k in 1:p){
-      for(i in 1:d){
-        for(m in 1:n){
-          b_ski[m,s,k,i] <- sum(alpha * a_k_minus_i[m,,i] * b_skij[m,s,k,i,])
+  b_ski <- array(NA, c(n, p, p, d))
+  for (s in 1:p) {
+    for (k in 1:p) {
+      for (i in 1:d) {
+        for (m in 1:n) {
+          b_ski[m, s, k, i] <- sum(alpha * a_k_minus_i[m, , i] * b_skij[m, s, k, i, ])
         }
       }
     }
@@ -435,31 +464,31 @@ EM_step_mph_0 <- function(alpha, S, y){
   # E STEP
   ###
   EB_k <- numeric(p)
-  for(k in 1:p){
-    EB_k[k] <- alpha[k] * sum(a_k[,k]/a)
+  for (k in 1:p) {
+    EB_k[k] <- alpha[k] * sum(a_k[, k] / a)
   }
-  EZ_ki <- array(NA,c(p,d))
-  for(k in 1:p){
-    for(i in 1:d){
-      EZ_ki[k,i] <- sum(b_ski[,k,k,i]/a)
+  EZ_ki <- array(NA, c(p, d))
+  for (k in 1:p) {
+    for (i in 1:d) {
+      EZ_ki[k, i] <- sum(b_ski[, k, k, i] / a)
     }
   }
   EZ_k <- rowSums(EZ_ki, dims = 1)
-  EN_ksi <- array(NA,c(p,p,d))
-  for(i in 1:d){
-    for(s in 1:p){
-      for(k in 1:p){
-        t_ksi <- S[k,s]
-        EN_ksi[k,s,i] <- t_ksi * sum(b_ski[,s,k,i]/a)
+  EN_ksi <- array(NA, c(p, p, d))
+  for (i in 1:d) {
+    for (s in 1:p) {
+      for (k in 1:p) {
+        t_ksi <- S[k, s]
+        EN_ksi[k, s, i] <- t_ksi * sum(b_ski[, s, k, i] / a)
       }
     }
   }
   EN_ks <- rowSums(EN_ksi, dims = 2)
-  EN_ki <- array(NA,c(p,d))
-  for(i in 1:d){
-    for(k in 1:p){
+  EN_ki <- array(NA, c(p, d))
+  for (i in 1:d) {
+    for (k in 1:p) {
       t_ki <- -rowSums(S)[k]
-      EN_ki[k,i] <- t_ki * sum(a_tilde_ki[,k,i]/a)
+      EN_ki[k, i] <- t_ki * sum(a_tilde_ki[, k, i] / a)
     }
   }
   EN_k <- rowSums(EN_ki, dims = 1)
@@ -467,21 +496,21 @@ EM_step_mph_0 <- function(alpha, S, y){
   # M STEP
   ###
   alpha <- numeric(p)
-  for(k in 1:p){
-    alpha[k] <- EB_k[k]/n
+  for (k in 1:p) {
+    alpha[k] <- EB_k[k] / n
   }
-  S <- matrix(NA,p,p)
-  for(s in 1:p){
-    for(k in 1:p){
-      S[k,s] <- EN_ks[k,s]/EZ_k[k]
+  S <- matrix(NA, p, p)
+  for (s in 1:p) {
+    for (k in 1:p) {
+      S[k, s] <- EN_ks[k, s] / EZ_k[k]
     }
   }
   s <- numeric(p)
-  for(k in 1:p){
-    s[k] <- EN_k[k]/EZ_k[k]
+  for (k in 1:p) {
+    s[k] <- EN_k[k] / EZ_k[k]
   }
-  for(k in 1:p){
-    S[k,k] <- - sum(S[k,-k]) - s[k]
+  for (k in 1:p) {
+    S[k, k] <- -sum(S[k, -k]) - s[k]
   }
   return(list(alpha = alpha, S = S, logLik = sum(log(a))))
 }

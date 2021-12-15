@@ -354,25 +354,29 @@ setMethod(
     alpha_fit <- clone_vector(ph_par$alpha)
     S_fit <- clone_matrix(ph_par$S)
 
-    if(r < 1){y_full <- y;weight_full <- weight;rcen_full <- rcen;rcenweight_full <- rcenweight}
-    
+    if (r < 1) {
+      y_full <- y
+      weight_full <- weight
+      rcen_full <- rcen
+      rcenweight_full <- rcenweight
+    }
+
     options(digits.secs = 4)
-    cat(format(Sys.time(),format = "%H:%M:%OS"), ": EM started",sep = "")
+    cat(format(Sys.time(), format = "%H:%M:%OS"), ": EM started", sep = "")
     cat("\n", sep = "")
-    
+
     if (!is_iph) {
       for (k in 1:stepsEM) {
-        
-        if(r < 1){
-          indices <- sample(1:length(y_full),size = floor(r*length(y_full)))
+        if (r < 1) {
+          indices <- sample(1:length(y_full), size = floor(r * length(y_full)))
           y <- y_full[indices]
           weight <- weight_full[indices]
-          if(length(rcen_full)>0){
-             rcen <- rcen_full[indices]
-             rcenweight <- rcenweight_full[indices]
+          if (length(rcen_full) > 0) {
+            rcen <- rcen_full[indices]
+            rcenweight <- rcenweight_full[indices]
           }
-          }
-        
+        }
+
         epsilon1 <- switch(which(methods[1] == c("RK", "UNI", "PADE")),
           if (!is.na(rkstep)) rkstep else default_step_length(S_fit),
           if (!is.na(uni_epsilon)) uni_epsilon else 1e-4,
@@ -402,17 +406,16 @@ setMethod(
       trans_weight <- weight
       trans_rcenweight <- rcenweight
       for (k in 1:stepsEM) {
-        
-        if(r < 1){
-          indices <- sample(1:length(y_full),size = floor(r*length(y_full)))
+        if (r < 1) {
+          indices <- sample(1:length(y_full), size = floor(r * length(y_full)))
           y <- y_full[indices]
           weight <- weight_full[indices]
-          if(length(rcen_full)>0){
+          if (length(rcen_full) > 0) {
             rcen <- rcen_full[indices]
             rcenweight <- rcenweight_full[indices]
           }
         }
-        
+
         if (x@gfun$name != "gev") {
           trans <- inv_g(par_g, y)
           trans_cens <- inv_g(par_g, rcen)
@@ -470,10 +473,10 @@ setMethod(
       )
       x <- iph(x, gfun = x@gfun$name, gfun_pars = par_g)
     }
-    
-    cat("\n",format(Sys.time(),format = "%H:%M:%OS"), ": EM finalized",sep = "")
+
+    cat("\n", format(Sys.time(), format = "%H:%M:%OS"), ": EM finalized", sep = "")
     cat("\n", sep = "")
-    
+
     return(x)
   }
 )
@@ -483,9 +486,10 @@ data_aggregation <- function(y, w) {
   observations <- cbind(y, w)
   mat <- data.frame(observations)
   names(mat) <- c("obs", "weight")
-  agg = aggregate(mat$weight,
-                  by = list(un_obs = mat$obs),
-                  FUN = sum)
+  agg <- aggregate(mat$weight,
+    by = list(un_obs = mat$obs),
+    FUN = sum
+  )
   return(list(un_obs = agg$un_obs, weights = agg$x))
 }
 
