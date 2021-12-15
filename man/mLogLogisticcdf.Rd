@@ -13,7 +13,7 @@ mloglogisticcdf(x, alpha, S, beta, lower_tail = TRUE)
 
 \item{S}{Sub-intensity matrix.}
 
-\item{beta}{Parameters.}
+\item{beta}{Transformation parameters.}
 
 \item{lower_tail}{Cdf or tail.}
 }

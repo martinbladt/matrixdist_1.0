@@ -204,7 +204,7 @@ setMethod("sim", c(x = "ph"), function(x, n = 1000) {
 #' @param x An object of class \linkS4class{ph}.
 #' @param y A vector of locations.
 #'
-#' @return A list containing the locations and corresponding density evaluations.
+#' @return A vector containing the density evaluations at the given locations.
 #' @export
 #'
 #' @examples
@@ -225,7 +225,7 @@ setMethod("dens", c(x = "ph"), function(x, y) {
 #' @param lower.tail Logical parameter specifying whether lower tail (cdf) or
 #' upper tail is computed.
 #'
-#' @return A list containing the locations and corresponding CDF evaluations.
+#' @return A vector containing the CDF evaluations at the given locations.
 #' @export
 #'
 #' @examples
@@ -246,7 +246,7 @@ setMethod("cdf", c(x = "ph"), function(x,
 #' @param x An object of class \linkS4class{ph}.
 #' @param y A vector of locations.
 #'
-#' @return A list containing the locations and corresponding hazard rate evaluations.
+#' @return A vector containing the hazard rate evaluations at the given locations.
 #' @export
 #'
 #' @examples
@@ -263,7 +263,7 @@ setMethod("haz", c(x = "ph"), function(x, y) {
 #' @param x An object of class \linkS4class{ph}.
 #' @param p A vector of probabilities.
 #'
-#' @return A list containing the probabilities and corresponding quantile evaluations.
+#' @return A vector containing the quantile evaluations at the given locations.
 #' @export
 #'
 #' @examples

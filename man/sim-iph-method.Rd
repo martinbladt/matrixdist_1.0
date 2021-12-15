@@ -13,7 +13,7 @@
 }
 \value{
 A realization of independent and identically distributed inhomogeneous
-phase-type variables.
+ phase-type variables.
 }
 \description{
 Simulation Method for inhomogeneous phase type distributions

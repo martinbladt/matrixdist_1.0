@@ -13,7 +13,7 @@ mgompertzden(x, alpha, S, beta)
 
 \item{S}{Sub-intensity matrix.}
 
-\item{beta}{Parameter.}
+\item{beta}{Shape parameter.}
 }
 \value{
 The density at \code{x}.

@@ -27,7 +27,6 @@ void vector_of_matrices_2(std::vector<arma::mat> & theVector, const arma::mat & 
 }
 
 
-
 //' EM using Matlab algorithm for matrix exponential in combination with Armadillo
 //' 
 //' @param h Nuisance parameter.
@@ -60,16 +59,13 @@ void EMstep_PADE(double h, arma::vec & alpha,  arma::mat & S, const Rcpp::Numeri
   arma::mat tProductPi(p,p);
   tProductPi = t * alpha.t();
   
-  
   J = matrix_VanLoan(S, S, tProductPi);
-  
   
   double JNorm{inf_norm(J)};
   
   std::vector<arma::mat> theVector;
   
   vector_of_matrices_2(theVector, J, 6);
-  
   
   arma::mat X(2 * p,2 * p);
   arma::mat D(2 * p,2 * p);
@@ -78,8 +74,6 @@ void EMstep_PADE(double h, arma::vec & alpha,  arma::mat & S, const Rcpp::Numeri
   int s{};
   double xmod{};
   double c{};
-  
-  
   
   double SumOfWeights{0.0};
   double density{0.0};
@@ -118,7 +112,6 @@ void EMstep_PADE(double h, arma::vec & alpha,  arma::mat & S, const Rcpp::Numeri
     }
     
     // Separate matrix
-    
     for (int i{0}; i < p; ++i) {
       for (int j{0}; j < p; ++j) {
         aux_exp(i,j) = J(i,j);
@@ -226,10 +219,10 @@ void EMstep_PADE(double h, arma::vec & alpha,  arma::mat & S, const Rcpp::Numeri
   }
 }
 
+
 ////////////////////////////////////////////
 // Loglikelihoods
 ////////////////////////////////////////////
-
 
 //' Loglikelihood of PH using Pade
 //' 
@@ -257,7 +250,6 @@ double logLikelihoodPH_PADE(double h, arma::vec & alpha, arma::mat & S, const Rc
   
   vector_of_matrices_2(theVector, S, 6);
   
-  
   arma::mat X(p,p);
   arma::mat D(p,p);
   
@@ -274,7 +266,6 @@ double logLikelihoodPH_PADE(double h, arma::vec & alpha, arma::mat & S, const Rc
   
   // Non censored data
   for (int k{0}; k < obs.size(); ++k) {
-    
     // Matrix exponential
     int pind{1};
     int ee{static_cast<int>(log2(JNorm  * obs[k])) + 1};
@@ -309,7 +300,6 @@ double logLikelihoodPH_PADE(double h, arma::vec & alpha, arma::mat & S, const Rc
   }
   //Right censored data
   for (int k{0}; k < rcens.size(); ++k) {
-    
     // Matrix exponential
     int pind{1};
     int ee{static_cast<int>(log2(JNorm  * rcens[k])) + 1};
@@ -342,10 +332,8 @@ double logLikelihoodPH_PADE(double h, arma::vec & alpha, arma::mat & S, const Rc
     density = aux_mat(0,0);
     logLh += rcweight[k] * std::log(density);
   }
-  
   return logLh;
 }
-
 
 
 //' Loglikelihood of matrix-Weibull using Pade
@@ -377,7 +365,6 @@ double logLikelihoodMweibull_PADE(double h, arma::vec & alpha, arma::mat & S, do
   
   vector_of_matrices_2(theVector, S, 6);
   
-  
   arma::mat X(p,p);
   arma::mat D(p,p);
   
@@ -394,7 +381,6 @@ double logLikelihoodMweibull_PADE(double h, arma::vec & alpha, arma::mat & S, do
   
   // Non censored data
   for (int k{0}; k < obs.size(); ++k) {
-    
     // Matrix exponential
     int pind{1};
     int ee{static_cast<int>(log2(JNorm  * pow(obs[k], beta))) + 1};
@@ -429,7 +415,6 @@ double logLikelihoodMweibull_PADE(double h, arma::vec & alpha, arma::mat & S, do
   }
   //Right censored data
   for (int k{0}; k < rcens.size(); ++k) {
-    
     // Matrix exponential
     int pind{1};
     int ee{static_cast<int>(log2(JNorm  * pow(rcens[k], beta))) + 1};
@@ -462,11 +447,8 @@ double logLikelihoodMweibull_PADE(double h, arma::vec & alpha, arma::mat & S, do
     density = aux_mat(0,0);
     logLh += rcweight[k] * std::log(density);
   }
-  
   return logLh;
 }
-
-
 
 
 //' Loglikelihood of matrix-Pareto using Pade
@@ -498,7 +480,6 @@ double logLikelihoodMpareto_PADE(double h, arma::vec & alpha, arma::mat & S, dou
   
   vector_of_matrices_2(theVector, S, 6);
   
-  
   arma::mat X(p,p);
   arma::mat D(p,p);
   
@@ -515,7 +496,6 @@ double logLikelihoodMpareto_PADE(double h, arma::vec & alpha, arma::mat & S, dou
   
   // Non censored data
   for (int k{0}; k < obs.size(); ++k) {
-    
     // Matrix exponential
     int pind{1};
     int ee{static_cast<int>(log2(JNorm  * std::log(obs[k] / beta + 1))) + 1};
@@ -550,7 +530,6 @@ double logLikelihoodMpareto_PADE(double h, arma::vec & alpha, arma::mat & S, dou
   }
   //Right censored data
   for (int k{0}; k < rcens.size(); ++k) {
-    
     // Matrix exponential
     int pind{1};
     int ee{static_cast<int>(log2(JNorm  * std::log(rcens[k] / beta + 1))) + 1};
@@ -588,8 +567,6 @@ double logLikelihoodMpareto_PADE(double h, arma::vec & alpha, arma::mat & S, dou
 }
 
 
-
-
 //' Loglikelihood of matrix-lognormal using Pade
 //' 
 //' Loglikelihood for a sample.
@@ -619,7 +596,6 @@ double logLikelihoodMlognormal_PADE(double h, arma::vec & alpha, arma::mat & S, 
   
   vector_of_matrices_2(theVector, S, 6);
   
-  
   arma::mat X(p,p);
   arma::mat D(p,p);
   
@@ -636,7 +612,6 @@ double logLikelihoodMlognormal_PADE(double h, arma::vec & alpha, arma::mat & S, 
   
   // Non censored data
   for (int k{0}; k < obs.size(); ++k) {
-    
     // Matrix exponential
     int pind{1};
     int ee{static_cast<int>(log2(JNorm  * pow(std::log(obs[k] + 1), beta))) + 1};
@@ -671,7 +646,6 @@ double logLikelihoodMlognormal_PADE(double h, arma::vec & alpha, arma::mat & S, 
   }
   //Right censored data
   for (int k{0}; k < rcens.size(); ++k) {
-    
     // Matrix exponential
     int pind{1};
     int ee{static_cast<int>(log2(JNorm  * pow(std::log(rcens[k] + 1), beta))) + 1};
@@ -709,7 +683,6 @@ double logLikelihoodMlognormal_PADE(double h, arma::vec & alpha, arma::mat & S, 
 }
 
 
-
 //' Loglikelihood of matrix-loglogistic using Pade
 //' 
 //' Loglikelihood for a sample 
@@ -739,7 +712,6 @@ double logLikelihoodMloglogistic_PADE(double h, arma::vec & alpha, arma::mat & S
   
   vector_of_matrices_2(theVector, S, 6);
   
-  
   arma::mat X(p,p);
   arma::mat D(p,p);
   
@@ -756,7 +728,6 @@ double logLikelihoodMloglogistic_PADE(double h, arma::vec & alpha, arma::mat & S
   
   // Non censored data
   for (int k{0}; k < obs.size(); ++k) {
-    
     // Matrix exponential
     int pind{1};
     int ee{static_cast<int>(log2(JNorm  * std::log(pow(obs[k] / beta[0], beta[1]) + 1))) + 1};
@@ -791,7 +762,6 @@ double logLikelihoodMloglogistic_PADE(double h, arma::vec & alpha, arma::mat & S
   }
   //Right censored data
   for (int k{0}; k < rcens.size(); ++k) {
-    
     // Matrix exponential
     int pind{1};
     int ee{static_cast<int>(log2(JNorm  * std::log(pow(rcens[k] / beta[0], beta[1]) + 1))) + 1};
@@ -829,7 +799,6 @@ double logLikelihoodMloglogistic_PADE(double h, arma::vec & alpha, arma::mat & S
 }
 
 
-
 //' Loglikelihood of matrix-Gompertz using Pade
 //' 
 //' Loglikelihood for a sample.
@@ -859,7 +828,6 @@ double logLikelihoodMgompertz_PADE(double h, arma::vec & alpha, arma::mat & S, d
   
   vector_of_matrices_2(theVector, S, 6);
   
-  
   arma::mat X(p,p);
   arma::mat D(p,p);
   
@@ -876,7 +844,6 @@ double logLikelihoodMgompertz_PADE(double h, arma::vec & alpha, arma::mat & S, d
   
   // Non censored data
   for (int k{0}; k < obs.size(); ++k) {
-    
     // Matrix exponential
     int pind{1};
     int ee{static_cast<int>(log2(JNorm  * (exp(obs[k] * beta) - 1) / beta)) + 1};
@@ -911,7 +878,6 @@ double logLikelihoodMgompertz_PADE(double h, arma::vec & alpha, arma::mat & S, d
   }
   //Right censored data
   for (int k{0}; k < rcens.size(); ++k) {
-    
     // Matrix exponential
     int pind{1};
     int ee{static_cast<int>(log2(JNorm  * (exp(rcens[k] * beta) - 1) / beta)) + 1};
@@ -948,6 +914,7 @@ double logLikelihoodMgompertz_PADE(double h, arma::vec & alpha, arma::mat & S, d
   return logLh;
 }
 
+
 //' Loglikelihood of matrix-GEV using Pade
 //' 
 //' Loglikelihood for a sample 
@@ -977,7 +944,6 @@ double logLikelihoodMgev_PADE(double h, arma::vec & alpha, arma::mat & S, Rcpp::
   
   vector_of_matrices_2(theVector, S, 6);
   
-  
   arma::mat X(p,p);
   arma::mat D(p,p);
   
@@ -994,7 +960,6 @@ double logLikelihoodMgev_PADE(double h, arma::vec & alpha, arma::mat & S, Rcpp::
   if (beta[2] == 0) {
     // Non censored data
     for (int k{0}; k < obs.size(); ++k) {
-      
       // Matrix exponential
       int pind{1};
       int ee{static_cast<int>(log2(JNorm  * exp(-(obs[k] - beta[0]) / beta[1]))) + 1};
@@ -1029,7 +994,6 @@ double logLikelihoodMgev_PADE(double h, arma::vec & alpha, arma::mat & S, Rcpp::
     }
     //Right censored data
     for (int k{0}; k < rcens.size(); ++k) {
-      
       // Matrix exponential
       int pind{1};
       int ee{static_cast<int>(log2(JNorm  * exp(-(rcens[k] - beta[0]) / beta[1]))) + 1};
@@ -1066,7 +1030,6 @@ double logLikelihoodMgev_PADE(double h, arma::vec & alpha, arma::mat & S, Rcpp::
   else{
     // Non censored data
     for (int k{0}; k < obs.size(); ++k) {
-      
       // Matrix exponential
       int pind{1};
       int ee{static_cast<int>(log2(JNorm  * pow(1 + (beta[2] / beta[1]) * (obs[k] - beta[0]) , - 1 / beta[2]))) + 1};
@@ -1101,7 +1064,6 @@ double logLikelihoodMgev_PADE(double h, arma::vec & alpha, arma::mat & S, Rcpp::
     }
     //Right censored data
     for (int k{0}; k < rcens.size(); ++k) {
-      
       // Matrix exponential
       int pind{1};
       int ee{static_cast<int>(log2(JNorm  * pow(1 + (beta[2] / beta[1]) * (rcens[k] - beta[0]) , - 1 / beta[2]))) + 1};
@@ -1143,7 +1105,6 @@ double logLikelihoodMgev_PADE(double h, arma::vec & alpha, arma::mat & S, Rcpp::
 // Scaled versions of loglikelihoods (for regression):
 ////////////////////////////////////////////
 
-
 //' Loglikelihood of PH using Pade
 //' 
 //' Loglikelihood for a sample 
@@ -1172,7 +1133,6 @@ double logLikelihoodPH_PADEs(double h, arma::vec & alpha, arma::mat & S, const R
   
   vector_of_matrices_2(theVector, S, 6);
   
-  
   arma::mat X(p,p);
   arma::mat D(p,p);
   
@@ -1189,7 +1149,6 @@ double logLikelihoodPH_PADEs(double h, arma::vec & alpha, arma::mat & S, const R
   
   // Non censored data
   for (int k{0}; k < obs.size(); ++k) {
-    
     // Matrix exponential
     int pind{1};
     int ee{static_cast<int>(log2(JNorm  * scale1[k] * obs[k])) + 1};
@@ -1224,7 +1183,6 @@ double logLikelihoodPH_PADEs(double h, arma::vec & alpha, arma::mat & S, const R
   }
   //Right censored data
   for (int k{0}; k < rcens.size(); ++k) {
-    
     // Matrix exponential
     int pind{1};
     int ee{static_cast<int>(log2(JNorm  * scale2[k] * rcens[k])) + 1};
@@ -1262,7 +1220,6 @@ double logLikelihoodPH_PADEs(double h, arma::vec & alpha, arma::mat & S, const R
 }
 
 
-
 //' Loglikelihood of matrix-Weibull using Pade
 //' 
 //' Loglikelihood for a sample.
@@ -1294,7 +1251,6 @@ double logLikelihoodMweibull_PADEs(double h, arma::vec & alpha, arma::mat & S, d
   
   vector_of_matrices_2(theVector, S, 6);
   
-  
   arma::mat X(p,p);
   arma::mat D(p,p);
   
@@ -1311,7 +1267,6 @@ double logLikelihoodMweibull_PADEs(double h, arma::vec & alpha, arma::mat & S, d
   
   // Non censored data
   for (int k{0}; k < obs.size(); ++k) {
-    
     // Matrix exponential
     int pind{1};
     int ee{static_cast<int>(log2(JNorm  * scale1[k] * pow(obs[k], beta))) + 1};
@@ -1346,7 +1301,6 @@ double logLikelihoodMweibull_PADEs(double h, arma::vec & alpha, arma::mat & S, d
   }
   //Right censored data
   for (int k{0}; k < rcens.size(); ++k) {
-    
     // Matrix exponential
     int pind{1};
     int ee{static_cast<int>(log2(JNorm  * scale2[k] * pow(rcens[k], beta))) + 1};
@@ -1384,8 +1338,6 @@ double logLikelihoodMweibull_PADEs(double h, arma::vec & alpha, arma::mat & S, d
 }
 
 
-
-
 //' Loglikelihood of matrix-Pareto using Pade
 //' 
 //' Loglikelihood for a sample.
@@ -1417,7 +1369,6 @@ double logLikelihoodMpareto_PADEs(double h, arma::vec & alpha, arma::mat & S, do
   
   vector_of_matrices_2(theVector, S, 6);
   
-  
   arma::mat X(p,p);
   arma::mat D(p,p);
   
@@ -1434,7 +1385,6 @@ double logLikelihoodMpareto_PADEs(double h, arma::vec & alpha, arma::mat & S, do
   
   // Non censored data
   for (int k{0}; k < obs.size(); ++k) {
-    
     // Matrix exponential
     int pind{1};
     int ee{static_cast<int>(log2(JNorm  * scale1[k] * std::log(obs[k] / beta + 1))) + 1};
@@ -1469,7 +1419,6 @@ double logLikelihoodMpareto_PADEs(double h, arma::vec & alpha, arma::mat & S, do
   }
   //Right censored data
   for (int k{0}; k < rcens.size(); ++k) {
-    
     // Matrix exponential
     int pind{1};
     int ee{static_cast<int>(log2(JNorm  * scale2[k] * std::log(rcens[k] / beta + 1))) + 1};
@@ -1507,7 +1456,6 @@ double logLikelihoodMpareto_PADEs(double h, arma::vec & alpha, arma::mat & S, do
 }
 
 
-
 //' Loglikelihood of matrix-lognormal using Pade
 //' 
 //' Loglikelihood for a sample.
@@ -1539,7 +1487,6 @@ double logLikelihoodMlognormal_PADEs(double h, arma::vec & alpha, arma::mat & S,
   
   vector_of_matrices_2(theVector, S, 6);
   
-  
   arma::mat X(p,p);
   arma::mat D(p,p);
   
@@ -1556,7 +1503,6 @@ double logLikelihoodMlognormal_PADEs(double h, arma::vec & alpha, arma::mat & S,
   
   // Non censored data
   for (int k{0}; k < obs.size(); ++k) {
-    
     // Matrix exponential
     int pind{1};
     int ee{static_cast<int>(log2(JNorm  * scale1[k] * pow(std::log(obs[k] + 1), beta))) + 1};
@@ -1591,7 +1537,6 @@ double logLikelihoodMlognormal_PADEs(double h, arma::vec & alpha, arma::mat & S,
   }
   //Right censored data
   for (int k{0}; k < rcens.size(); ++k) {
-    
     // Matrix exponential
     int pind{1};
     int ee{static_cast<int>(log2(JNorm  * scale2[k] * pow(std::log(rcens[k] + 1), beta))) + 1};
@@ -1629,7 +1574,6 @@ double logLikelihoodMlognormal_PADEs(double h, arma::vec & alpha, arma::mat & S,
 }
 
 
-
 //' Loglikelihood of matrix-loglogistic using Pade
 //' 
 //' Loglikelihood for a sample.
@@ -1661,7 +1605,6 @@ double logLikelihoodMloglogistic_PADEs(double h, arma::vec & alpha, arma::mat & 
   
   vector_of_matrices_2(theVector, S, 6);
   
-  
   arma::mat X(p,p);
   arma::mat D(p,p);
   
@@ -1678,7 +1621,6 @@ double logLikelihoodMloglogistic_PADEs(double h, arma::vec & alpha, arma::mat & 
   
   // Non censored data
   for (int k{0}; k < obs.size(); ++k) {
-    
     // Matrix exponential
     int pind{1};
     int ee{static_cast<int>(log2(JNorm  * scale1[k] * std::log(pow(obs[k] / beta[0], beta[1]) + 1))) + 1};
@@ -1713,7 +1655,6 @@ double logLikelihoodMloglogistic_PADEs(double h, arma::vec & alpha, arma::mat & 
   }
   //Right censored data
   for (int k{0}; k < rcens.size(); ++k) {
-    
     // Matrix exponential
     int pind{1};
     int ee{static_cast<int>(log2(JNorm  * scale2[k] * std::log(pow(rcens[k] / beta[0], beta[1]) + 1))) + 1};
@@ -1751,7 +1692,6 @@ double logLikelihoodMloglogistic_PADEs(double h, arma::vec & alpha, arma::mat & 
 }
 
 
-
 //' Loglikelihood of matrix-Gompertz using Pade
 //' 
 //' Loglikelihood for a sample.
@@ -1783,7 +1723,6 @@ double logLikelihoodMgompertz_PADEs(double h, arma::vec & alpha, arma::mat & S, 
   
   vector_of_matrices_2(theVector, S, 6);
   
-  
   arma::mat X(p,p);
   arma::mat D(p,p);
   
@@ -1800,7 +1739,6 @@ double logLikelihoodMgompertz_PADEs(double h, arma::vec & alpha, arma::mat & S, 
   
   // Non censored data
   for (int k{0}; k < obs.size(); ++k) {
-    
     // Matrix exponential
     int pind{1};
     int ee{static_cast<int>(log2(JNorm  * scale1[k] * (exp(obs[k] * beta) - 1) / beta)) + 1};
@@ -1835,7 +1773,6 @@ double logLikelihoodMgompertz_PADEs(double h, arma::vec & alpha, arma::mat & S, 
   }
   //Right censored data
   for (int k{0}; k < rcens.size(); ++k) {
-    
     // Matrix exponential
     int pind{1};
     int ee{static_cast<int>(log2(JNorm  * scale2[k] * (exp(rcens[k] * beta) - 1) / beta)) + 1};
@@ -1871,4 +1808,3 @@ double logLikelihoodMgompertz_PADEs(double h, arma::vec & alpha, arma::mat & S, 
   
   return logLh;
 }
-

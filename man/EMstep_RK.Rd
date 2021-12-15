@@ -22,5 +22,5 @@ EMstep_RK(h, alpha, S, obs, weight, rcens, rcweight)
 \item{rcweight}{The weights for the censored observations.}
 }
 \description{
-Computes one step of the EM algorithm by using a Runge-Kutta method of 4th order
+Computes one step of the EM algorithm by using a Runge-Kutta method of 4th order.
 }

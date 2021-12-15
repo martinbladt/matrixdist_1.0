@@ -1,6 +1,7 @@
 # include <RcppArmadillo.h>
 // [[ Rcpp :: depends ( RcppArmadillo )]]
 
+
 //' Computes the initial distribution and sub-intensity of the sum of PH
 //' 
 //' @param alpha1 Initial distribution.

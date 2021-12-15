@@ -37,15 +37,15 @@ Rcpp::NumericVector phdensity(Rcpp::NumericVector x, arma::vec alpha, arma::mat 
 }
 
 
-//' Phase-type cdf or tail
+//' Phase-type cdf
 //' 
-//' Computes the cdf of phase-type distribution with parameters \code{alpha} and
+//' Computes the cdf (tail) of phase-type distribution with parameters \code{alpha} and
 //'  \code{S} at \code{x}.
 //' @param x Non-negative value.
 //' @param alpha Initial probabilities.
 //' @param S Sub-intensity matrix.
 //' @param lower_tail Cdf or tail.
-//' @return The cdf (tail) at \code{x}
+//' @return The cdf (tail) at \code{x}.
 //' 
 // [[Rcpp::export]]
 Rcpp::NumericVector phcdf(Rcpp::NumericVector x, arma::vec alpha, arma::mat S, bool lower_tail = true) {
@@ -187,7 +187,7 @@ Rcpp::NumericVector mparetoden(Rcpp::NumericVector x, arma::vec alpha, arma::mat
 //' @param x Non-negative value.
 //' @param alpha Initial probabilities.
 //' @param S Sub-intensity matrix.
-//' @param beta Shape parameter.
+//' @param beta Scale parameter.
 //' @param lower_tail Cdf or tail.
 //' @return The cdf (tail) at \code{x}.
 //' 
@@ -297,7 +297,7 @@ Rcpp::NumericVector mlognormalcdf(Rcpp::NumericVector x, arma::vec alpha, arma::
 //' @param x Non-negative value.
 //' @param alpha Initial probabilities.
 //' @param S Sub-intensity matrix.
-//' @param beta Parameters.
+//' @param beta Transformation parameters.
 //' @return The density at \code{x}.
 //' 
 // [[Rcpp::export]]
@@ -331,7 +331,7 @@ Rcpp::NumericVector mloglogisticden(Rcpp::NumericVector x, arma::vec alpha, arma
 //' @param x Non-negative value.
 //' @param alpha Initial probabilities.
 //' @param S Sub-intensity matrix.
-//' @param beta Parameters.
+//' @param beta Transformation parameters.
 //' @param lower_tail Cdf or tail.
 //' @return The cdf (tail) at \code{x}.
 //' 
@@ -369,7 +369,7 @@ Rcpp::NumericVector mloglogisticcdf(Rcpp::NumericVector x, arma::vec alpha, arma
 //' @param x Non-negative value.
 //' @param alpha Initial probabilities.
 //' @param S Sub-intensity matrix.
-//' @param beta Parameter.
+//' @param beta Shape parameter.
 //' @return The density at \code{x}.
 //' 
 // [[Rcpp::export]]
@@ -438,12 +438,12 @@ Rcpp::NumericVector mgompertzcdf(Rcpp::NumericVector x, arma::vec alpha, arma::m
 //' 
 //' Computes the density of a matrix GEV distribution with parameters
 //'  \code{alpha}, \code{S} and \code{beta} at \code{x}.
-//' Dont allow for atoms in zero
+//' Don not allow for atoms in zero
 //' 
 //' @param x Non-negative value.
 //' @param alpha Initial probabilities.
 //' @param S Sub-intensity matrix.
-//' @param beta Parameters.
+//' @param beta Transformation parameters.
 //' @return The density at \code{x}.
 //' 
 // [[Rcpp::export]]
@@ -481,7 +481,7 @@ Rcpp::NumericVector mgevden(Rcpp::NumericVector x, arma::vec alpha, arma::mat S,
 //' @param x Non-negative value.
 //' @param alpha Initial probabilities.
 //' @param S Sub-intensity matrix.
-//' @param beta Parameters. 
+//' @param beta Transformation parameters. 
 //' @param lower_tail Cdf or tail.
 //' @return The cdf (tail) at \code{x}.
 //' 

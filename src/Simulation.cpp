@@ -1,6 +1,7 @@
 #include <RcppArmadillo.h>
 // [[Rcpp::depends(RcppArmadillo)]]
 
+
 //' Embedded Markov chain of a sub-intensity matrix
 //' 
 //' Returns the transition probabilities of the embedded Markov chain determined
@@ -31,6 +32,7 @@ arma::mat embedded_mc(arma::mat S) {
   return (Q);
 }
 
+
 //' Cumulate matrix
 //'
 //' Creates a new matrix with entries the cumulated rows of \code{A}.
@@ -56,6 +58,7 @@ arma::mat cumulate_matrix(arma::mat A) {
   }
   return cumulated;
 }
+
 
 //' Cumulate vector
 //'
@@ -84,8 +87,9 @@ arma::vec cumulate_vector(arma::vec A) {
 //' Initial state of Markov jump process
 //'
 //' Given the accumulated values of the initial probabilities \code{Pi} and a
-//' uniform value \code{u}, it returns the initial state of a Markov jump process.
+//'  uniform value \code{u}, it returns the initial state of a Markov jump process.
 //' This corresponds to the states satisfying cum_pi_(k-1)<u<cum_pi_(k).
+//' 
 //' @param cum_alpha A vector.
 //' @param u Random value in (0,1).
 //' @return Initial state of the Markov jump process.
@@ -104,10 +108,12 @@ long initial_state(arma::vec cum_alpha, double u) {
   return 0;
 }
 
+
 //' New state in a Markov jump process
 //'
 //' Given a transition matrix \code{Q}, a uniform value \code{u}, and a previous
-//' state \code{k}, it returns the new state of a Markov jump process.
+//'  state \code{k}, it returns the new state of a Markov jump process.
+//'  
 //' @param prev_state Previous state of the Markov jump process.
 //' @param cum_embedded_mc Transition matrix.
 //' @param u Random value in (0,1).
@@ -133,11 +139,11 @@ long new_state(long prev_state, arma::mat cum_embedded_mc, double u) {
 //'
 //' Generates a sample of size \code{n} from a phase-type distribution with
 //' parameters \code{alpha} and \code{S}.
+//' 
 //' @param n Sample size.
 //' @param alpha Vector of initial probabilities.
 //' @param S Sub-intensity matrix.
 //' @return Simulated sample.
-//' @export
 //'
 // [[Rcpp::export]]
 Rcpp::NumericVector rphasetype(int n, arma::vec alpha, arma::mat S) {
@@ -161,11 +167,11 @@ Rcpp::NumericVector rphasetype(int n, arma::vec alpha, arma::mat S) {
 }
 
 
-
 //' Random inhomogeneous phase-type
 //' 
 //' Generates a sample of size \code{n} from an inhomogeneous phase-type 
 //' distribution with parameters \code{alpha}, \code{S} and \code{beta}.
+//' 
 //' @param n Sample size.
 //' @param dist_type Type of IPH.
 //' @param alpha Initial probabilities.
@@ -214,6 +220,7 @@ Rcpp::NumericVector riph(int n, Rcpp::String dist_type, arma::vec alpha, arma::m
 //' 
 //' Generates a sample of size \code{n} from an inhomogeneous phase-type 
 //' distribution with parameters \code{alpha}, \code{S} and \code{beta}.
+//' 
 //' @param n Sample size.
 //' @param alpha Initial probabilities.
 //' @param S Sub-intensity matrix.

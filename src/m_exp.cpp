@@ -26,7 +26,6 @@ double inf_norm(arma::mat A) {
 }
 
 
-
 //' Creates the matrix  (A1, B1 ; 0, A2)
 //' 
 //' @param A1 Matrix.
@@ -61,6 +60,7 @@ arma::mat matrix_VanLoan(arma::mat A1, arma::mat A2, arma::mat B1) {
   return auxiliarMatrix;
 }
 
+
 //' Maximum diagonal element of a matrix
 //' 
 //' @param A Matrix.
@@ -76,7 +76,6 @@ double max_diagonal(const arma::mat & A) {
   }
   return maximum;
 }
-
 
 
 //' Matrix exponential algorithm
@@ -100,10 +99,8 @@ arma::mat matrix_exponential(arma::mat A) {
   
   double t{1.0 / pow(2.0, s)};
   
-  
   arma::mat a2 = A * t;
   arma::mat x = a2;
-  
   
   double c{0.5};
   

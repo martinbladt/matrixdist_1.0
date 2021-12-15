@@ -17,6 +17,7 @@ Rcpp::NumericMatrix matrix_product(Rcpp::NumericMatrix A1, Rcpp::NumericMatrix A
 //' Inverse of a matrix
 //' 
 //' @param A A matrix.
+//' @return Inverse of A. 
 //' 
 // [[Rcpp::export]]
 Rcpp::NumericMatrix matrix_inverse(Rcpp::NumericMatrix A) {

@@ -3,7 +3,7 @@
 
 #' Runge Kutta for the calculation of the a,b and c vectors in a EM step
 #' 
-#' Performs the RK of forth order
+#' Performs the RK of forth order.
 #' 
 #' @param avector The a vector.
 #' @param bvector The b vector.
@@ -19,7 +19,7 @@ runge_kutta <- function(avector, bvector, cmatrix, dt, h, S, s) {
 
 #' EM step using Runge Kutta
 #' 
-#' Computes one step of the EM algorithm by using a Runge-Kutta method of 4th order
+#' Computes one step of the EM algorithm by using a Runge-Kutta method of 4th order.
 #' 
 #' @param h Step-length.
 #' @param alpha Initial probabilities.
@@ -541,7 +541,7 @@ vector_of_matrices <- function(theVector, S, a, sizevect) {
     invisible(.Call(`_matrixdist_vector_of_matrices`, theVector, S, a, sizevect))
 }
 
-#' Computes e^(Sx) base on the values on powerVector
+#' Computes exp(Sx) base on the values on powerVector
 #' 
 #' @param x A number.
 #' @param n An integer.
@@ -586,202 +586,213 @@ EMstep_UNI <- function(h, alpha, S, obs, weight, rcens, rcweight) {
     invisible(.Call(`_matrixdist_EMstep_UNI`, h, alpha, S, obs, weight, rcens, rcweight))
 }
 
-#' Loglikelihood using Uniformization
+#' Loglikelihood using uniformization
 #' 
 #' Loglikelihood for a sample.
 #' 
-#' @param h positive parameter
-#' @param alpha initial probabilities
-#' @param S sub-intensity
-#' @param obs the observations
-#' @param weight weight of the observations
-#' @param rcens censored observations
-#' @param rcweight weight of the censored observations
+#' @param h Positive parameter.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity.
+#' @param obs The observations.
+#' @param weight Weight of the observations.
+#' @param rcens Censored observations.
+#' @param rcweight Weight of the censored observations.
 #' 
 logLikelihoodPH_UNI <- function(h, alpha, S, obs, weight, rcens, rcweight) {
     .Call(`_matrixdist_logLikelihoodPH_UNI`, h, alpha, S, obs, weight, rcens, rcweight)
 }
 
-#' Loglikelihood of matrix-Weibull using Uniformization
+#' Loglikelihood of matrix-Weibull using uniformization
 #' 
-#' Loglikelihood for a sample 
-#' @param h positive parameter
-#' @param alpha initial probabilities
-#' @param S sub-intensity
-#' @param beta parameter of transformation
-#' @param obs the observations
-#' @param weight weight of the observations
-#' @param rcens censored observations
-#' @param rcweight weight of the censored observations
+#' Loglikelihood for a sample.
+#' 
+#' @param h Positive parameter.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity.
+#' @param beta Parameter of transformation.
+#' @param obs The observations.
+#' @param weight Weight of the observations.
+#' @param rcens censored observations.
+#' @param rcweight Weight of the censored observations.
 #' 
 logLikelihoodMweibull_UNI <- function(h, alpha, S, beta, obs, weight, rcens, rcweight) {
     .Call(`_matrixdist_logLikelihoodMweibull_UNI`, h, alpha, S, beta, obs, weight, rcens, rcweight)
 }
 
-#' Loglikelihood of matrix-Pareto using Uniformization
+#' Loglikelihood of matrix-Pareto using uniformization
 #' 
-#' Loglikelihood for a sample 
-#' @param h positive parameter
-#' @param alpha initial probabilities
-#' @param S sub-intensity
-#' @param beta parameter of transformation
-#' @param obs the observations
-#' @param weight weight of the observations
-#' @param rcens censored observations
-#' @param rcweight weight of the censored observations
+#' Loglikelihood for a sample.
+#' 
+#' @param h Positive parameter.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity.
+#' @param beta Parameter of transformation.
+#' @param obs The observations.
+#' @param weight Weight of the observations.
+#' @param rcens censored observations.
+#' @param rcweight Weight of the censored observations.
 #' 
 logLikelihoodMpareto_UNI <- function(h, alpha, S, beta, obs, weight, rcens, rcweight) {
     .Call(`_matrixdist_logLikelihoodMpareto_UNI`, h, alpha, S, beta, obs, weight, rcens, rcweight)
 }
 
-#' Loglikelihood of matrix-lognormal using Uniformization
+#' Loglikelihood of matrix-lognormal using uniformization
 #' 
-#' Loglikelihood for a sample 
-#' @param h positive parameter
-#' @param alpha initial probabilities
-#' @param S sub-intensity
-#' @param beta parameter of transformation
-#' @param obs the observations
-#' @param weight weight of the observations
-#' @param rcens censored observations
-#' @param rcweight weight of the censored observations
+#' Loglikelihood for a sample.
+#' 
+#' @param h Positive parameter.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity.
+#' @param beta Parameter of transformation.
+#' @param obs The observations.
+#' @param weight Weight of the observations.
+#' @param rcens censored observations.
+#' @param rcweight Weight of the censored observations.
 #' 
 logLikelihoodMlognormal_UNI <- function(h, alpha, S, beta, obs, weight, rcens, rcweight) {
     .Call(`_matrixdist_logLikelihoodMlognormal_UNI`, h, alpha, S, beta, obs, weight, rcens, rcweight)
 }
 
-#' Loglikelihood of matrix-loglogistic using Uniformization
+#' Loglikelihood of matrix-loglogistic using uniformization
 #' 
-#' Loglikelihood for a sample 
-#' @param h positive parameter
-#' @param alpha initial probabilities
-#' @param S sub-intensity
-#' @param beta parameter of transformation
-#' @param obs the observations
-#' @param weight weight of the observations
-#' @param rcens censored observations
-#' @param rcweight weight of the censored observations
+#' Loglikelihood for a sample.
+#' 
+#' @param h Positive parameter.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity.
+#' @param beta Parameter of transformation.
+#' @param obs The observations.
+#' @param weight Weight of the observations.
+#' @param rcens censored observations.
+#' @param rcweight Weight of the censored observations.
 #' 
 logLikelihoodMloglogistic_UNI <- function(h, alpha, S, beta, obs, weight, rcens, rcweight) {
     .Call(`_matrixdist_logLikelihoodMloglogistic_UNI`, h, alpha, S, beta, obs, weight, rcens, rcweight)
 }
 
-#' Loglikelihood of matrix-Gompertz using Uniformization
+#' Loglikelihood of matrix-Gompertz using uniformization
 #' 
-#' Loglikelihood for a sample 
-#' @param h positive parameter
-#' @param alpha initial probabilities
-#' @param S sub-intensity
-#' @param beta parameter of transformation
-#' @param obs the observations
-#' @param weight weight of the observations
-#' @param rcens censored observations
-#' @param rcweight weight of the censored observations
+#' Loglikelihood for a sample.
+#' 
+#' @param h Positive parameter.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity.
+#' @param beta Parameter of transformation.
+#' @param obs The observations.
+#' @param weight Weight of the observations.
+#' @param rcens censored observations.
+#' @param rcweight Weight of the censored observations.
 #' 
 logLikelihoodMgompertz_UNI <- function(h, alpha, S, beta, obs, weight, rcens, rcweight) {
     .Call(`_matrixdist_logLikelihoodMgompertz_UNI`, h, alpha, S, beta, obs, weight, rcens, rcweight)
 }
 
-#' Loglikelihood of matrix-GEV using Uniformization
+#' Loglikelihood of matrix-GEV using uniformization
 #' 
-#' Loglikelihood for a sample 
-#' @param h positive parameter
-#' @param alpha initial probabilities
-#' @param S sub-intensity
-#' @param beta parameter of transformation
-#' @param obs the observations
-#' @param weight weight of the observations
-#' @param rcens censored observations
-#' @param rcweight weight of the censored observations
+#' Loglikelihood for a sample.
+#' 
+#' @param h Positive parameter.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity.
+#' @param beta Parameter of transformation.
+#' @param obs The observations.
+#' @param weight Weight of the observations.
+#' @param rcens censored observations.
+#' @param rcweight Weight of the censored observations.
 #' 
 logLikelihoodMgev_UNI <- function(h, alpha, S, beta, obs, weight, rcens, rcweight) {
     .Call(`_matrixdist_logLikelihoodMgev_UNI`, h, alpha, S, beta, obs, weight, rcens, rcweight)
 }
 
-#' Loglikelihood of PH using Uniformization
+#' Loglikelihood of PH using uniformization
 #' 
-#' Loglikelihood for a sample 
-#' @param h positive parameter
-#' @param alpha initial probabilities
-#' @param S sub-intensity
-#' @param obs the observations
-#' @param weight weight of the observations
-#' @param rcens censored observations
-#' @param rcweight weight of the censored observations
-#' @param scale1 scale for observations
-#' @param scale2 scale for censored observations
+#' Loglikelihood for a sample.
+#' 
+#' @param h Positive parameter.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity.
+#' @param obs The observations.
+#' @param weight Weight of the observations.
+#' @param rcens Censored observations.
+#' @param rcweight Weight of the censored observations.
+#' @param scale1 Scale for observations.
+#' @param scale2 Scale for censored observations.
 #' 
 logLikelihoodPH_UNIs <- function(h, alpha, S, obs, weight, rcens, rcweight, scale1, scale2) {
     .Call(`_matrixdist_logLikelihoodPH_UNIs`, h, alpha, S, obs, weight, rcens, rcweight, scale1, scale2)
 }
 
-#' Loglikelihood of matrix-Weibull using Uniformization
+#' Loglikelihood of matrix-Weibull using uniformization
 #' 
-#' Loglikelihood for a sample 
-#' @param h positive parameter
-#' @param alpha initial probabilities
-#' @param S sub-intensity
-#' @param beta parameter of transformation
-#' @param obs the observations
-#' @param weight weight of the observations
-#' @param rcens censored observations
-#' @param rcweight weight of the censored observations
-#' @param scale1 scale for observations
-#' @param scale2 scale for censored observations
+#' Loglikelihood for a sample.
+#' 
+#' @param h Positive parameter.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity.
+#' @param beta Parameter of transformation.
+#' @param obs The observations.
+#' @param weight Weight of the observations.
+#' @param rcens Censored observations.
+#' @param rcweight Weight of the censored observations.
+#' @param scale1 Scale for observations.
+#' @param scale2 Scale for censored observations.
 #' 
 logLikelihoodMweibull_UNIs <- function(h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2) {
     .Call(`_matrixdist_logLikelihoodMweibull_UNIs`, h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2)
 }
 
-#' Loglikelihood of matrix-Pareto using Uniformization
+#' Loglikelihood of matrix-Pareto using uniformization
 #' 
-#' Loglikelihood for a sample 
-#' @param h positive parameter
-#' @param alpha initial probabilities
-#' @param S sub-intensity
-#' @param beta parameter of transformation
-#' @param obs the observations
-#' @param weight weight of the observations
-#' @param rcens censored observations
-#' @param rcweight weight of the censored observations
-#' @param scale1 scale for observations
-#' @param scale2 scale for censored observations
+#' Loglikelihood for a sample.
+#' 
+#' @param h Positive parameter.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity.
+#' @param beta Parameter of transformation.
+#' @param obs The observations.
+#' @param weight Weight of the observations.
+#' @param rcens Censored observations.
+#' @param rcweight Weight of the censored observations.
+#' @param scale1 Scale for observations.
+#' @param scale2 Scale for censored observations.
 #' 
 logLikelihoodMpareto_UNIs <- function(h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2) {
     .Call(`_matrixdist_logLikelihoodMpareto_UNIs`, h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2)
 }
 
-#' Loglikelihood of matrix-lognormal using Uniformization
+#' Loglikelihood of matrix-lognormal using uniformization
 #' 
-#' Loglikelihood for a sample 
-#' @param h positive parameter
-#' @param alpha initial probabilities
-#' @param S sub-intensity
-#' @param beta parameter of transformation
-#' @param obs the observations
-#' @param weight weight of the observations
-#' @param rcens censored observations
-#' @param rcweight weight of the censored observations
-#' @param scale1 scale for observations
-#' @param scale2 scale for censored observations
+#' Loglikelihood for a sample.
+#' 
+#' @param h Positive parameter.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity.
+#' @param beta Parameter of transformation.
+#' @param obs The observations.
+#' @param weight Weight of the observations.
+#' @param rcens Censored observations.
+#' @param rcweight Weight of the censored observations.
+#' @param scale1 Scale for observations.
+#' @param scale2 Scale for censored observations.
 #' 
 logLikelihoodMlognormal_UNIs <- function(h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2) {
     .Call(`_matrixdist_logLikelihoodMlognormal_UNIs`, h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2)
 }
 
-#' Loglikelihood of matrix-loglogistic using Uniformization
+#' Loglikelihood of matrix-loglogistic using uniformization
 #' 
-#' Loglikelihood for a sample 
-#' @param h positive parameter
-#' @param alpha initial probabilities
-#' @param S sub-intensity
-#' @param beta parameter of transformation
-#' @param obs the observations
-#' @param weight weight of the observations
-#' @param rcens censored observations
-#' @param rcweight weight of the censored observations
-#' @param scale1 scale for observations
-#' @param scale2 scale for censored observations
+#' Loglikelihood for a sample.
+#' 
+#' @param h Positive parameter.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity.
+#' @param beta Parameter of transformation.
+#' @param obs The observations.
+#' @param weight Weight of the observations.
+#' @param rcens Censored observations.
+#' @param rcweight Weight of the censored observations.
+#' @param scale1 Scale for observations.
+#' @param scale2 Scale for censored observations.
 #' 
 logLikelihoodMloglogistic_UNIs <- function(h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2) {
     .Call(`_matrixdist_logLikelihoodMloglogistic_UNIs`, h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2)
@@ -789,17 +800,18 @@ logLikelihoodMloglogistic_UNIs <- function(h, alpha, S, beta, obs, weight, rcens
 
 #' Loglikelihood of matrix-Gompertz using Uniformization
 #' 
-#' Loglikelihood for a sample 
-#' @param h positive parameter
-#' @param alpha initial probabilities
-#' @param S sub-intensity
-#' @param beta parameter of transformation
-#' @param obs the observations
-#' @param weight weight of the observations
-#' @param rcens censored observations
-#' @param rcweight weight of the censored observations
-#' @param scale1 scale for observations
-#' @param scale2 scale for censored observations
+#' Loglikelihood for a sample.
+#' 
+#' @param h Positive parameter.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity.
+#' @param beta Parameter of transformation.
+#' @param obs The observations.
+#' @param weight Weight of the observations.
+#' @param rcens Censored observations.
+#' @param rcweight Weight of the censored observations.
+#' @param scale1 Scale for observations.
+#' @param scale2 Scale for censored observations.
 #' 
 logLikelihoodMgompertz_UNIs <- function(h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2) {
     .Call(`_matrixdist_logLikelihoodMgompertz_UNIs`, h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2)
@@ -839,8 +851,9 @@ cumulate_vector <- function(A) {
 #' Initial state of Markov jump process
 #'
 #' Given the accumulated values of the initial probabilities \code{Pi} and a
-#' uniform value \code{u}, it returns the initial state of a Markov jump process.
+#'  uniform value \code{u}, it returns the initial state of a Markov jump process.
 #' This corresponds to the states satisfying cum_pi_(k-1)<u<cum_pi_(k).
+#' 
 #' @param cum_alpha A vector.
 #' @param u Random value in (0,1).
 #' @return Initial state of the Markov jump process.
@@ -852,7 +865,8 @@ initial_state <- function(cum_alpha, u) {
 #' New state in a Markov jump process
 #'
 #' Given a transition matrix \code{Q}, a uniform value \code{u}, and a previous
-#' state \code{k}, it returns the new state of a Markov jump process.
+#'  state \code{k}, it returns the new state of a Markov jump process.
+#'  
 #' @param prev_state Previous state of the Markov jump process.
 #' @param cum_embedded_mc Transition matrix.
 #' @param u Random value in (0,1).
@@ -866,11 +880,11 @@ new_state <- function(prev_state, cum_embedded_mc, u) {
 #'
 #' Generates a sample of size \code{n} from a phase-type distribution with
 #' parameters \code{alpha} and \code{S}.
+#' 
 #' @param n Sample size.
 #' @param alpha Vector of initial probabilities.
 #' @param S Sub-intensity matrix.
 #' @return Simulated sample.
-#' @export
 #'
 rphasetype <- function(n, alpha, S) {
     .Call(`_matrixdist_rphasetype`, n, alpha, S)
@@ -880,6 +894,7 @@ rphasetype <- function(n, alpha, S) {
 #' 
 #' Generates a sample of size \code{n} from an inhomogeneous phase-type 
 #' distribution with parameters \code{alpha}, \code{S} and \code{beta}.
+#' 
 #' @param n Sample size.
 #' @param dist_type Type of IPH.
 #' @param alpha Initial probabilities.
@@ -895,6 +910,7 @@ riph <- function(n, dist_type, alpha, S, beta) {
 #' 
 #' Generates a sample of size \code{n} from an inhomogeneous phase-type 
 #' distribution with parameters \code{alpha}, \code{S} and \code{beta}.
+#' 
 #' @param n Sample size.
 #' @param alpha Initial probabilities.
 #' @param S Sub-intensity matrix.
@@ -920,6 +936,7 @@ matrix_product <- function(A1, A2) {
 #' Inverse of a matrix
 #' 
 #' @param A A matrix.
+#' @return Inverse of A. 
 #' 
 matrix_inverse <- function(A) {
     .Call(`_matrixdist_matrix_inverse`, A)
@@ -938,15 +955,15 @@ phdensity <- function(x, alpha, S) {
     .Call(`_matrixdist_phdensity`, x, alpha, S)
 }
 
-#' Phase-type cdf or tail
+#' Phase-type cdf
 #' 
-#' Computes the cdf of phase-type distribution with parameters \code{alpha} and
+#' Computes the cdf (tail) of phase-type distribution with parameters \code{alpha} and
 #'  \code{S} at \code{x}.
 #' @param x Non-negative value.
 #' @param alpha Initial probabilities.
 #' @param S Sub-intensity matrix.
 #' @param lower_tail Cdf or tail.
-#' @return The cdf (tail) at \code{x}
+#' @return The cdf (tail) at \code{x}.
 #' 
 phcdf <- function(x, alpha, S, lower_tail = TRUE) {
     .Call(`_matrixdist_phcdf`, x, alpha, S, lower_tail)
@@ -1002,7 +1019,7 @@ mparetoden <- function(x, alpha, S, beta) {
 #' @param x Non-negative value.
 #' @param alpha Initial probabilities.
 #' @param S Sub-intensity matrix.
-#' @param beta Shape parameter.
+#' @param beta Scale parameter.
 #' @param lower_tail Cdf or tail.
 #' @return The cdf (tail) at \code{x}.
 #' 
@@ -1046,7 +1063,7 @@ mlognormalcdf <- function(x, alpha, S, beta, lower_tail = TRUE) {
 #' @param x Non-negative value.
 #' @param alpha Initial probabilities.
 #' @param S Sub-intensity matrix.
-#' @param beta Parameters.
+#' @param beta Transformation parameters.
 #' @return The density at \code{x}.
 #' 
 mloglogisticden <- function(x, alpha, S, beta) {
@@ -1060,7 +1077,7 @@ mloglogisticden <- function(x, alpha, S, beta) {
 #' @param x Non-negative value.
 #' @param alpha Initial probabilities.
 #' @param S Sub-intensity matrix.
-#' @param beta Parameters.
+#' @param beta Transformation parameters.
 #' @param lower_tail Cdf or tail.
 #' @return The cdf (tail) at \code{x}.
 #' 
@@ -1075,7 +1092,7 @@ mloglogisticcdf <- function(x, alpha, S, beta, lower_tail = TRUE) {
 #' @param x Non-negative value.
 #' @param alpha Initial probabilities.
 #' @param S Sub-intensity matrix.
-#' @param beta Parameter.
+#' @param beta Shape parameter.
 #' @return The density at \code{x}.
 #' 
 mgompertzden <- function(x, alpha, S, beta) {
@@ -1101,12 +1118,12 @@ mgompertzcdf <- function(x, alpha, S, beta, lower_tail = TRUE) {
 #' 
 #' Computes the density of a matrix GEV distribution with parameters
 #'  \code{alpha}, \code{S} and \code{beta} at \code{x}.
-#' Dont allow for atoms in zero
+#' Don not allow for atoms in zero
 #' 
 #' @param x Non-negative value.
 #' @param alpha Initial probabilities.
 #' @param S Sub-intensity matrix.
-#' @param beta Parameters.
+#' @param beta Transformation parameters.
 #' @return The density at \code{x}.
 #' 
 mgevden <- function(x, alpha, S, beta) {
@@ -1121,7 +1138,7 @@ mgevden <- function(x, alpha, S, beta) {
 #' @param x Non-negative value.
 #' @param alpha Initial probabilities.
 #' @param S Sub-intensity matrix.
-#' @param beta Parameters. 
+#' @param beta Transformation parameters. 
 #' @param lower_tail Cdf or tail.
 #' @return The cdf (tail) at \code{x}.
 #' 
@@ -1198,6 +1215,7 @@ reversTransformData <- function(observations, weights, beta) {
 #' Clone a vector 
 #' 
 #' @param v A vector.
+#' @return A clone of the vector.
 #' 
 clone_vector <- function(v) {
     .Call(`_matrixdist_clone_vector`, v)
@@ -1206,6 +1224,7 @@ clone_vector <- function(v) {
 #' Clone a matrix 
 #' 
 #' @param m A matrix.
+#' @return A clone of the matrix.
 #' 
 clone_matrix <- function(m) {
     .Call(`_matrixdist_clone_matrix`, m)
@@ -1225,10 +1244,11 @@ sumPH <- function(alpha1, S1, alpha2, S2) {
 #' Random structure of a phase-type
 #' 
 #' Generates random parameters \code{alpha} and \code{S} of a phase-type 
-#' distribution of dimension \code{p} with chosen structure.
+#'  distribution of dimension \code{p} with chosen structure.
+#'  
 #' @param p Dimension of the phase-type.
 #' @param structure Type of structure: "general", "hyperexponential", "gerlang",
-#' "coxian" or "gcoxian".
+#'  "coxian" or "gcoxian".
 #' @param scale_factor A factor that multiplies the sub-intensity matrix.
 #' @return Random parameters \code{alpha} and \code{S} of a phase-type.
 #' 

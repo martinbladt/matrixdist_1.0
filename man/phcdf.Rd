@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{phcdf}
 \alias{phcdf}
-\title{Phase-type cdf or tail}
+\title{Phase-type cdf}
 \usage{
 phcdf(x, alpha, S, lower_tail = TRUE)
 }
@@ -16,9 +16,9 @@ phcdf(x, alpha, S, lower_tail = TRUE)
 \item{lower_tail}{Cdf or tail.}
 }
 \value{
-The cdf (tail) at \code{x}
+The cdf (tail) at \code{x}.
 }
 \description{
-Computes the cdf of phase-type distribution with parameters \code{alpha} and
+Computes the cdf (tail) of phase-type distribution with parameters \code{alpha} and
  \code{S} at \code{x}.
 }

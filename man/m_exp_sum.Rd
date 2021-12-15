@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{m_exp_sum}
 \alias{m_exp_sum}
-\title{Computes e^(Sx) base on the values on powerVector}
+\title{Computes exp(Sx) base on the values on powerVector}
 \usage{
 m_exp_sum(x, n, powerVector, a)
 }
@@ -16,5 +16,5 @@ m_exp_sum(x, n, powerVector, a)
 \item{a}{A number.}
 }
 \description{
-Computes e^(Sx) base on the values on powerVector
+Computes exp(Sx) base on the values on powerVector
 }

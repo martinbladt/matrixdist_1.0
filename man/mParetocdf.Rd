@@ -13,7 +13,7 @@ mparetocdf(x, alpha, S, beta, lower_tail = TRUE)
 
 \item{S}{Sub-intensity matrix.}
 
-\item{beta}{Shape parameter.}
+\item{beta}{Scale parameter.}
 
 \item{lower_tail}{Cdf or tail.}
 }

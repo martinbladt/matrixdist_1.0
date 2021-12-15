@@ -9,6 +9,9 @@ clone_vector(v)
 \arguments{
 \item{v}{A vector.}
 }
+\value{
+A clone of the vector.
+}
 \description{
 Clone a vector
 }

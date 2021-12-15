@@ -1,9 +1,9 @@
 #' Multivariate Phase Type distributions
 #'
-#' Class of objects for multivariate phase type distributions
+#' Class of objects for multivariate phase type distributions.
 #'
-#' @slot name name of the phase type distribution
-#' @slot pars a list comprising of the parameters.
+#' @slot name Name of the phase type distribution.
+#' @slot pars A list comprising of the parameters.
 #'
 #' @return
 #' @export
@@ -18,10 +18,10 @@ setClass("mph",
 
 #' Constructor Function for multivariate phase type distributions
 #'
-#' @param alpha a probability vector.
-#' @param S a list of sub-intensity matrices.
-#' @param structure a vector of valid ph structures
-#' @param dimension the dimension of the ph structure (if provided)
+#' @param alpha A probability vector.
+#' @param S A list of sub-intensity matrices.
+#' @param structure A vector of valid ph structures.
+#' @param dimension The dimension of the ph structure (if provided).
 #'
 #' @return An object of class \linkS4class{mph}.
 #' @export
@@ -49,10 +49,9 @@ mph <- function(alpha = NULL, S = NULL, structure = NULL, dimension = 3, variabl
 
 #' Show Method for multivariate phase type distributions
 #'
-#' @param x an object of class \linkS4class{mph}.
+#' @param x An object of class \linkS4class{mph}.
+#' @importFrom methods show
 #' @export
-#'
-#' @examples
 #'
 setMethod("show", "mph", function(object) {
   cat("object class: ", methods::is(object)[[1]], "\n", sep = "")
@@ -64,12 +63,12 @@ setMethod("show", "mph", function(object) {
 
 #' Simulation Method for multivariate phase type distributions
 #'
-#' @param x an object of class \linkS4class{mph}.
-#' @param n length of realization.
-#' @param equal_marginals non-negative integer. If positive, it specifies
-#' the number of marginals to simulate from, all from the fist matrix.
+#' @param x An object of class \linkS4class{mph}.
+#' @param n Length of realization.
+#' @param equal_marginals Non-negative integer. If positive, it specifies
+#' nthe number of marginals to simulate from, all from the fist matrix.
 #'
-#' @return A realization of a phase type data
+#' @return A realization of a phase type data.
 #' @export
 #'
 #' @examples
@@ -102,11 +101,10 @@ setMethod("sim", c(x = "mph"), function(x, n = 1000, equal_marginals = 0) {
   return(result)
 })
 
-
 #' Density Method for multivariate phase type distributions
 #'
-#' @param x an object of class \linkS4class{mph}.
-#' @param y a matrix of observations
+#' @param x An object of class \linkS4class{mph}.
+#' @param y A matrix of observations.
 #'
 #' @return A list containing the locations and corresponding density evaluations.
 #' @export
@@ -130,9 +128,9 @@ setMethod("dens", c(x = "mph"), function(x, y) {
 
 #' Distribution Method for multivariate phase type distributions
 #'
-#' @param x an object of class \linkS4class{mph}.
-#' @param q a vector of locations.
-#' @param lower.tail logical parameter specifying whether lower tail (cdf) or upper tail is computed.
+#' @param x An object of class \linkS4class{mph}.
+#' @param q A vector of locations.
+#' @param lower.tail Logical parameter specifying whether lower tail (cdf) or upper tail is computed.
 #'
 #' @return A list containing the locations and corresponding CDF evaluations.
 #' @export
@@ -149,11 +147,11 @@ setMethod("cdf", c(x = "mph"), function(x,
 
 #' Fit Method for mph Class
 #'
-#' @param x an object of class \linkS4class{mph}.
-#' @param y matrix of data.
-#' @param stepsEM number of EM steps to be performed.
-#' @param uni_epsilon epsilon parameter for uniformization method.
-#' @param equal_marginals logical. If TRUE, all marginals are fitted to be equal.
+#' @param x An object of class \linkS4class{mph}.
+#' @param y Matrix of data.
+#' @param stepsEM Number of EM steps to be performed.
+#' @param uni_epsilon Epsilon parameter for uniformization method.
+#' @param equal_marginals Logical. If TRUE, all marginals are fitted to be equal.
 #' 
 #' @export
 #'

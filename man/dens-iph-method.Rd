@@ -12,7 +12,7 @@
 \item{y}{A vector of locations.}
 }
 \value{
-A list containing the locations and corresponding density evaluations.
+A vector containing the density evaluations at the given locations.
 }
 \description{
 Density Method for inhomogeneous phase type distributions

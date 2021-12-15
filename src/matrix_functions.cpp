@@ -22,6 +22,7 @@ double default_step_length(const NumericMatrix & S) {
   return h;
 }
 
+
 //' Applies the inverse of the GEV but giving back the vector in reverse order
 //' 
 //' Used for EM step.
@@ -57,6 +58,7 @@ List reversTransformData(const NumericVector & observations, const NumericVector
 //' Clone a vector 
 //' 
 //' @param v A vector.
+//' @return A clone of the vector.
 //' 
 // [[Rcpp::export]]
 NumericVector clone_vector(NumericVector v) {
@@ -64,16 +66,16 @@ NumericVector clone_vector(NumericVector v) {
   return new_v;
 }
 
+
 //' Clone a matrix 
 //' 
 //' @param m A matrix.
+//' @return A clone of the matrix.
 //' 
 // [[Rcpp::export]]
 NumericMatrix clone_matrix(NumericMatrix m) {
   NumericMatrix new_m = clone(m);
   return new_m;
 }
-
-
 
 

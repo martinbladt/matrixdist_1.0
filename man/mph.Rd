@@ -7,13 +7,13 @@
 mph(alpha = NULL, S = NULL, structure = NULL, dimension = 3, variables = NULL)
 }
 \arguments{
-\item{alpha}{a probability vector.}
+\item{alpha}{A probability vector.}
 
-\item{S}{a list of sub-intensity matrices.}
+\item{S}{A list of sub-intensity matrices.}
 
-\item{structure}{a vector of valid ph structures}
+\item{structure}{A vector of valid ph structures.}
 
-\item{dimension}{the dimension of the ph structure (if provided)}
+\item{dimension}{The dimension of the ph structure (if provided).}
 }
 \value{
 An object of class \linkS4class{mph}.

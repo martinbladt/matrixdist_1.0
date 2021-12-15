@@ -12,7 +12,7 @@
 \item{y}{A vector of locations.}
 }
 \value{
-A list containing the locations and corresponding hazard rate evaluations.
+A vector containing the hazard rate evaluations at the given locations.
 }
 \description{
 Hazard rate Method for phase type distributions

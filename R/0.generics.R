@@ -127,6 +127,7 @@ setGeneric("quan", function(x, ...) {
 setGeneric("fit", function(x, y, ...) {
   standardGeneric("fit")
 })
+
 #' New Generic for Regression with Matrix Distributions
 #'
 #' Methods are available for objects of class \linkS4class{ph}.
@@ -142,6 +143,7 @@ setGeneric("fit", function(x, y, ...) {
 setGeneric("reg", function(x, y, ...) {
   standardGeneric("reg")
 })
+
 #' New Generic for Evaluating Survival Matrix Distributions
 #'
 #' Methods are available for objects of class \linkS4class{sph}.
@@ -155,6 +157,7 @@ setGeneric("reg", function(x, y, ...) {
 setGeneric("evaluate", function(x, subject, ...) {
   standardGeneric("evaluate")
 })
+
 #' New Generic for doing a likelihood ratio test between two Matrix Distribution models
 #'
 #' Methods are available for objects of class \linkS4class{ph}.
@@ -169,6 +172,7 @@ setGeneric("evaluate", function(x, subject, ...) {
 setGeneric("LRT", function(x, y, ...) {
   standardGeneric("LRT")
 })
+
 #' New Generic for obtaining the Fisher Information of Survival Matrix Distributions
 #'
 #' Methods are available for objects of class \linkS4class{sph}.

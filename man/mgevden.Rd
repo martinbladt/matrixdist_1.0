@@ -13,7 +13,7 @@ mgevden(x, alpha, S, beta)
 
 \item{S}{Sub-intensity matrix.}
 
-\item{beta}{Parameters.}
+\item{beta}{Transformation parameters.}
 }
 \value{
 The density at \code{x}.
@@ -21,5 +21,5 @@ The density at \code{x}.
 \description{
 Computes the density of a matrix GEV distribution with parameters
  \code{alpha}, \code{S} and \code{beta} at \code{x}.
-Dont allow for atoms in zero
+Don not allow for atoms in zero
 }

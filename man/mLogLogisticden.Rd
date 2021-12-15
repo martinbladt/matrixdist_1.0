@@ -13,7 +13,7 @@ mloglogisticden(x, alpha, S, beta)
 
 \item{S}{Sub-intensity matrix.}
 
-\item{beta}{Parameters.}
+\item{beta}{Transformation parameters.}
 }
 \value{
 The density at \code{x}.

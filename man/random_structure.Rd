@@ -19,5 +19,5 @@ Random parameters \code{alpha} and \code{S} of a phase-type.
 }
 \description{
 Generates random parameters \code{alpha} and \code{S} of a phase-type 
-distribution of dimension \code{p} with chosen structure.
+ distribution of dimension \code{p} with chosen structure.
 }

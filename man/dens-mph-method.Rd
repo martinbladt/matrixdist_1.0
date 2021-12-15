@@ -7,9 +7,9 @@
 \S4method{dens}{mph}(x, y)
 }
 \arguments{
-\item{x}{an object of class \linkS4class{mph}.}
+\item{x}{An object of class \linkS4class{mph}.}
 
-\item{y}{a matrix of observations}
+\item{y}{A matrix of observations.}
 }
 \value{
 A list containing the locations and corresponding density evaluations.

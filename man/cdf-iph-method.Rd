@@ -15,7 +15,7 @@
 upper tail is computed.}
 }
 \value{
-A list containing the locations and corresponding CDF evaluations.
+A vector containing the CDF evaluations at the given locations.
 }
 \description{
 Distribution Method for inhomogeneous phase type distributions

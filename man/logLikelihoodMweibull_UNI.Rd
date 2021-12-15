@@ -2,27 +2,27 @@
 % Please edit documentation in R/RcppExports.R
 \name{logLikelihoodMweibull_UNI}
 \alias{logLikelihoodMweibull_UNI}
-\title{Loglikelihood of matrix-Weibull using Uniformization}
+\title{Loglikelihood of matrix-Weibull using uniformization}
 \usage{
 logLikelihoodMweibull_UNI(h, alpha, S, beta, obs, weight, rcens, rcweight)
 }
 \arguments{
-\item{h}{positive parameter}
+\item{h}{Positive parameter.}
 
-\item{alpha}{initial probabilities}
+\item{alpha}{Initial probabilities.}
 
-\item{S}{sub-intensity}
+\item{S}{Sub-intensity.}
 
-\item{beta}{parameter of transformation}
+\item{beta}{Parameter of transformation.}
 
-\item{obs}{the observations}
+\item{obs}{The observations.}
 
-\item{weight}{weight of the observations}
+\item{weight}{Weight of the observations.}
 
-\item{rcens}{censored observations}
+\item{rcens}{censored observations.}
 
-\item{rcweight}{weight of the censored observations}
+\item{rcweight}{Weight of the censored observations.}
 }
 \description{
-Loglikelihood for a sample
+Loglikelihood for a sample.
 }

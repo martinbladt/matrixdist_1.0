@@ -4,7 +4,7 @@
 
 //' Runge Kutta for the calculation of the a,b and c vectors in a EM step
 //' 
-//' Performs the RK of forth order
+//' Performs the RK of forth order.
 //' 
 //' @param avector The a vector.
 //' @param bvector The b vector.
@@ -143,9 +143,10 @@ void runge_kutta(arma::vec & avector, arma::mat & bvector, arma::mat & cmatrix, 
   }
 }
 
+
 //' EM step using Runge Kutta
 //' 
-//' Computes one step of the EM algorithm by using a Runge-Kutta method of 4th order
+//' Computes one step of the EM algorithm by using a Runge-Kutta method of 4th order.
 //' 
 //' @param h Step-length.
 //' @param alpha Initial probabilities.
@@ -188,7 +189,6 @@ void EMstep_RK(double h, arma::vec & alpha, arma::mat & S, const Rcpp::NumericVe
   // E step
   //  Uncensored data
   for (int k{0}; k < obs.size(); ++k) {
-    
     SumOfWeights += weight[k];
     
     runge_kutta(avector, bvector, cmatrix, dt, h, S, t);
@@ -218,7 +218,6 @@ void EMstep_RK(double h, arma::vec & alpha, arma::mat & S, const Rcpp::NumericVe
     bvector = e;
   }
   for (int k{0}; k < rcens.size(); ++k) {
-    
     SumOfCensored += rcweight[k];
     
     runge_kutta(avector, bvector, cmatrix, dt, h, S, e);
@@ -344,8 +343,7 @@ double logLikelihoodPH_RK(double h, arma::vec & alpha, arma::mat & S, const Rcpp
   
   arma::mat aux_mat(1,1);
   
-  // Uncensored data
-  //   initial condition
+  // Initial condition
   avector = alpha;
   
   double dt{0.0};
@@ -408,8 +406,7 @@ double logLikelihoodMweibull_RK(double h, arma::vec & alpha, arma::mat & S, doub
   
   arma::mat aux_mat(1,1);
   
-  // Uncensored data
-  //   initial condition
+  // Initial condition
   avector = alpha;
   
   double dt{0.0};
@@ -471,9 +468,8 @@ double logLikelihoodMpareto_RK(double h, arma::vec & alpha, arma::mat & S, doubl
   arma::mat t = (S * (-1)) * e;
   
   arma::mat aux_mat(1,1);
-  
-  // Uncensored data
-  //   initial condition
+
+  // Initial condition
   avector = alpha;
   
   double dt{0.0};
@@ -536,8 +532,7 @@ double logLikelihoodMlognormal_RK(double h, arma::vec & alpha, arma::mat & S, do
   
   arma::mat aux_mat(1,1);
   
-  // Uncensored data
-  //   initial condition
+  // Initial condition
   avector = alpha;
   
   double dt{0.0};
@@ -600,8 +595,7 @@ double logLikelihoodMloglogistic_RK(double h, arma::vec & alpha, arma::mat & S, 
   
   arma::mat aux_mat(1,1);
   
-  // Uncensored data
-  //   initial condition
+  // Initial condition
   avector = alpha;
   
   double dt{0.0};
@@ -664,8 +658,7 @@ double logLikelihoodMgompertz_RK(double h, arma::vec & alpha, arma::mat & S, dou
   
   arma::mat aux_mat(1,1);
   
-  // Uncensored data
-  //   initial condition
+  // Initial condition
   avector = alpha;
   
   double dt{0.0};
@@ -717,7 +710,6 @@ double logLikelihoodMgompertz_RK(double h, arma::vec & alpha, arma::mat & S, dou
 //' 
 // [[Rcpp::export]]
 double logLikelihoodMgev_RK(double h, arma::vec  & alpha, arma::mat & S, Rcpp::NumericVector beta, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight) {
-  
   if(beta[1] < 0) return NA_REAL;
   
   unsigned p{S.n_rows};
@@ -729,8 +721,7 @@ double logLikelihoodMgev_RK(double h, arma::vec  & alpha, arma::mat & S, Rcpp::N
   
   arma::mat aux_mat(1,1);
   
-  // Uncensored data
-  //   initial condition
+  // Initial condition
   avector = alpha;
   
   double dt{0.0};
@@ -827,8 +818,7 @@ double logLikelihoodPH_RKs(double h, arma::vec & alpha, arma::mat & S, const Rcp
   
   arma::mat aux_mat(1,1);
   
-  // Uncensored data
-  //   initial condition
+  // Initial condition
   avector = alpha;
   
   double dt{0.0};
@@ -891,8 +881,7 @@ double logLikelihoodMweibull_RKs(double h, arma::vec & alpha, arma::mat & S, dou
   
   arma::mat aux_mat(1,1);
   
-  // Uncensored data
-  //   initial condition
+  // Initial condition
   avector = alpha;
   
   double dt{0.0};
@@ -955,8 +944,7 @@ double logLikelihoodMpareto_RKs(double h, arma::vec & alpha, arma::mat & S, doub
   
   arma::mat aux_mat(1,1);
   
-  // Uncensored data
-  //   initial condition
+  // Initial condition
   avector = alpha;
   
   double dt{0.0};
@@ -1019,8 +1007,7 @@ double logLikelihoodMlognormal_RKs(double h, arma::vec & alpha, arma::mat & S, d
   
   arma::mat aux_mat(1,1);
   
-  // Uncensored data
-  //   initial condition
+  // Initial condition
   avector = alpha;
   
   double dt{0.0};
@@ -1083,8 +1070,7 @@ double logLikelihoodMloglogistic_RKs(double h, arma::vec & alpha, arma::mat & S,
   
   arma::mat aux_mat(1,1);
   
-  // Uncensored data
-  //   initial condition
+  // Initial condition
   avector = alpha;
   
   double dt{0.0};
@@ -1147,8 +1133,7 @@ double logLikelihoodMgompertz_RKs(double h, arma::vec & alpha, arma::mat & S, do
   
   arma::mat aux_mat(1,1);
   
-  // Uncensored data
-  //   initial condition
+  // Initial condition
   avector = alpha;
   
   double dt{0.0};

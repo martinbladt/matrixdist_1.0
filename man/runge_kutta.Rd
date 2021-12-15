@@ -22,5 +22,5 @@ runge_kutta(avector, bvector, cmatrix, dt, h, S, s)
 \item{s}{Exit rates.}
 }
 \description{
-Performs the RK of forth order
+Performs the RK of forth order.
 }

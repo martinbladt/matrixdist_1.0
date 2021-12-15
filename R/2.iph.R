@@ -142,7 +142,6 @@ setMethod(
   }
 )
 
-
 #' Maximum Method for inhomogeneous phase type distributions
 #'
 #' @param x1 An object of class \linkS4class{iph}.
@@ -190,7 +189,7 @@ setMethod("show", "iph", function(object) {
 #' @param n An integer of length of realization.
 #'
 #' @return A realization of independent and identically distributed inhomogeneous
-#' phase-type variables.
+#'  phase-type variables.
 #' @export
 #'
 #' @examples
@@ -214,7 +213,7 @@ setMethod("sim", c(x = "iph"), function(x, n = 1000) {
 #' @param x An object of class \linkS4class{iph}.
 #' @param y A vector of locations.
 #'
-#' @return A list containing the locations and corresponding density evaluations.
+#' @return A vector containing the density evaluations at the given locations.
 #' @export
 #'
 #' @examples
@@ -237,7 +236,7 @@ setMethod("dens", c(x = "iph"), function(x, y) {
 #' @param lower.tail Logical parameter specifying whether lower tail (cdf) or
 #' upper tail is computed.
 #'
-#' @return A list containing the locations and corresponding CDF evaluations.
+#' @return A vector containing the CDF evaluations at the given locations.
 #' @export
 #'
 #' @examples

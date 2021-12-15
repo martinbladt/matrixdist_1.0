@@ -7,11 +7,11 @@
 \S4method{cdf}{mph}(x, q, lower.tail = TRUE)
 }
 \arguments{
-\item{x}{an object of class \linkS4class{mph}.}
+\item{x}{An object of class \linkS4class{mph}.}
 
-\item{q}{a vector of locations.}
+\item{q}{A vector of locations.}
 
-\item{lower.tail}{logical parameter specifying whether lower tail (cdf) or upper tail is computed.}
+\item{lower.tail}{Logical parameter specifying whether lower tail (cdf) or upper tail is computed.}
 }
 \value{
 A list containing the locations and corresponding CDF evaluations.

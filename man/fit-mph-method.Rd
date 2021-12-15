@@ -7,15 +7,15 @@
 \S4method{fit}{mph}(x, y, stepsEM = 1000, equal_marginals = FALSE)
 }
 \arguments{
-\item{x}{an object of class \linkS4class{mph}.}
+\item{x}{An object of class \linkS4class{mph}.}
 
-\item{y}{matrix of data.}
+\item{y}{Matrix of data.}
 
-\item{stepsEM}{number of EM steps to be performed.}
+\item{stepsEM}{Number of EM steps to be performed.}
 
-\item{equal_marginals}{logical. If TRUE, all marginals are fitted to be equal.}
+\item{equal_marginals}{Logical. If TRUE, all marginals are fitted to be equal.}
 
-\item{uni_epsilon}{epsilon parameter for uniformization method.}
+\item{uni_epsilon}{Epsilon parameter for uniformization method.}
 }
 \description{
 Fit Method for mph Class

@@ -9,6 +9,9 @@ matrix_inverse(A)
 \arguments{
 \item{A}{A matrix.}
 }
+\value{
+Inverse of A.
+}
 \description{
 Inverse of a matrix
 }
