@@ -14,8 +14,6 @@
 \item{stepsEM}{Number of EM steps to be performed.}
 
 \item{equal_marginals}{Logical. If TRUE, all marginals are fitted to be equal.}
-
-\item{uni_epsilon}{Epsilon parameter for uniformization method.}
 }
 \description{
 Fit Method for mph Class

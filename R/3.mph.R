@@ -4,8 +4,9 @@
 #'
 #' @slot name Name of the phase type distribution.
 #' @slot pars A list comprising of the parameters.
+#' @slot fit A list containing estimation information.
 #'
-#' @return
+#' @return Class object.
 #' @export
 #'
 setClass("mph",
@@ -22,6 +23,7 @@ setClass("mph",
 #' @param S A list of sub-intensity matrices.
 #' @param structure A vector of valid ph structures.
 #' @param dimension The dimension of the ph structure (if provided).
+#' @param variables The dimension of the multivariate phase type.
 #'
 #' @return An object of class \linkS4class{mph}.
 #' @export
@@ -53,7 +55,7 @@ mph <- function(alpha = NULL, S = NULL, structure = NULL, dimension = 3, variabl
 
 #' Show Method for multivariate phase type distributions
 #'
-#' @param x An object of class \linkS4class{mph}.
+#' @param object An object of class \linkS4class{mph}.
 #' @importFrom methods show
 #' @export
 #'
@@ -155,7 +157,6 @@ setMethod("cdf", c(x = "mph"), function(x,
 #' @param x An object of class \linkS4class{mph}.
 #' @param y Matrix of data.
 #' @param stepsEM Number of EM steps to be performed.
-#' @param uni_epsilon Epsilon parameter for uniformization method.
 #' @param equal_marginals Logical. If TRUE, all marginals are fitted to be equal.
 #'
 #' @export

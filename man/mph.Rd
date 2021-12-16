@@ -14,6 +14,8 @@ mph(alpha = NULL, S = NULL, structure = NULL, dimension = 3, variables = NULL)
 \item{structure}{A vector of valid ph structures.}
 
 \item{dimension}{The dimension of the ph structure (if provided).}
+
+\item{variables}{The dimension of the multivariate phase type.}
 }
 \value{
 An object of class \linkS4class{mph}.

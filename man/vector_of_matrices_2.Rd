@@ -4,10 +4,10 @@
 \alias{vector_of_matrices_2}
 \title{Computes elements S^n / n! until the value size}
 \usage{
-vector_of_matrices_2(theVector, S, vect_size)
+vector_of_matrices_2(vect, S, vect_size)
 }
 \arguments{
-\item{theVector}{A vector.}
+\item{vect}{A vector.}
 
 \item{S}{Sub-intensity matrix.}
 

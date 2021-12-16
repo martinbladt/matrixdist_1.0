@@ -7,7 +7,7 @@
 \S4method{show}{mph}(object)
 }
 \arguments{
-\item{x}{An object of class \linkS4class{mph}.}
+\item{object}{An object of class \linkS4class{mph}.}
 }
 \description{
 Show Method for multivariate phase type distributions

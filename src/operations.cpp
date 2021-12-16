@@ -10,7 +10,7 @@
 //' @param S2 Sub-intensity.
 //' 
 // [[Rcpp::export]]
-Rcpp::List sumPH(arma::rowvec alpha1, arma::mat S1, arma::rowvec alpha2, arma::mat S2) {
+Rcpp::List sum_ph(arma::rowvec alpha1, arma::mat S1, arma::rowvec alpha2, arma::mat S2) {
   unsigned p1{S1.n_cols};
   unsigned p2{S2.n_cols};
   

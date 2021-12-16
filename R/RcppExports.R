@@ -277,12 +277,12 @@ logLikelihoodMgompertz_RKs <- function(h, alpha, S, beta, obs, weight, rcens, rc
 
 #' Computes elements S^n / n! until the value size
 #' 
-#' @param theVector A vector.
+#' @param vect A vector.
 #' @param S Sub-intensity matrix.
 #' @param vect_size Size of vector.
 #' 
-vector_of_matrices_2 <- function(theVector, S, vect_size) {
-    invisible(.Call(`_matrixdist_vector_of_matrices_2`, theVector, S, vect_size))
+vector_of_matrices_2 <- function(vect, S, vect_size) {
+    invisible(.Call(`_matrixdist_vector_of_matrices_2`, vect, S, vect_size))
 }
 
 #' EM using Matlab algorithm for matrix exponential in combination with Armadillo
@@ -532,13 +532,13 @@ logLikelihoodMgompertz_PADEs <- function(h, alpha, S, beta, obs, weight, rcens, 
 
 #' Computes elements S^n / n! until the a given size
 #' 
-#' @param theVector A vector.
+#' @param vect A vector.
 #' @param S Sub-intensity matrix.
 #' @param a A number.
 #' @param vect_size Size of vector.
 #' 
-vector_of_matrices <- function(theVector, S, a, vect_size) {
-    invisible(.Call(`_matrixdist_vector_of_matrices`, theVector, S, a, vect_size))
+vector_of_matrices <- function(vect, S, a, vect_size) {
+    invisible(.Call(`_matrixdist_vector_of_matrices`, vect, S, a, vect_size))
 }
 
 #' Computes exp(Sx) base on the values on pow_vector
@@ -568,8 +568,8 @@ pow2_matrix <- function(n, A) {
 #' @param lambda Mean of Poisson random variable.
 #' @return Integer satisfying condition.
 #'
-findN <- function(h, lambda) {
-    .Call(`_matrixdist_findN`, h, lambda)
+find_n <- function(h, lambda) {
+    .Call(`_matrixdist_find_n`, h, lambda)
 }
 
 #' EM using Uniformization for matrix exponential
@@ -1131,8 +1131,8 @@ clone_matrix <- function(m) {
 #' @param alpha2 Initial distribution.
 #' @param S2 Sub-intensity.
 #' 
-sumPH <- function(alpha1, S1, alpha2, S2) {
-    .Call(`_matrixdist_sumPH`, alpha1, S1, alpha2, S2)
+sum_ph <- function(alpha1, S1, alpha2, S2) {
+    .Call(`_matrixdist_sum_ph`, alpha1, S1, alpha2, S2)
 }
 
 #' Embedded Markov chain of a sub-intensity matrix

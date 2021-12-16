@@ -104,22 +104,18 @@ arma::mat matrix_exponential(arma::mat A) {
   double c{0.5};
   
   expm.eye(size(A));
-  
   expm = expm + (a2 * c);
   
-  arma::mat d; d.eye(size(A));
-  
+  arma::mat d; 
+  d.eye(size(A));
   d = (d + a2 * (-c));
   
   int p{1};
   
   for (int k{2}; k <= q; ++k) {
     c = c * static_cast<double>(q - k + 1) / static_cast<double>(k * (2 * q - k + 1));
-    
     x = (a2 * x);
-    
     expm = (x * c) + expm;
-    
     if (p) {
       d = (x * c) + d;
     }
@@ -130,7 +126,7 @@ arma::mat matrix_exponential(arma::mat A) {
   }
   //  E -> inverse(D) * E
   expm = inv(d) * expm;
-  //  E -> E^(2*S)
+  //  E -> E^(2*s)
   for (int k = 1; k <= s; ++k) {
     expm = expm * expm;
   }

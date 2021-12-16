@@ -9,19 +9,19 @@
 
 //' Computes elements S^n / n! until the value size
 //' 
-//' @param theVector A vector.
+//' @param vect A vector.
 //' @param S Sub-intensity matrix.
 //' @param vect_size Size of vector.
 //' 
 // [[Rcpp::export]]
-void vector_of_matrices_2(std::vector<arma::mat> & theVector, const arma::mat & S, int vect_size) {
+void vector_of_matrices_2(std::vector<arma::mat> & vect, const arma::mat & S, int vect_size) {
   arma::mat I;
   I.eye(size(S));
   
-  theVector.push_back(I);
+  vect.push_back(I);
   
   for (int k{1}; k <= vect_size; ++k) {
-    theVector.push_back( S * theVector[k - 1]);
+    vect.push_back(S * vect[k - 1]);
   }
 }
 
@@ -41,7 +41,7 @@ void EMstep_PADE(double h, arma::vec & alpha,  arma::mat & S, const Rcpp::Numeri
   unsigned p{S.n_rows};
   
   arma::mat e; e.ones(S.n_cols, 1);
-  arma::mat t = (S * (-1)) * e;
+  arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat Bmean = arma::zeros(p,1);
   arma::mat Zmean = arma::zeros(p,1);
@@ -55,16 +55,16 @@ void EMstep_PADE(double h, arma::vec & alpha,  arma::mat & S, const Rcpp::Numeri
   arma::mat aux_mat(1,1);
   
   arma::mat J(2 * p,2 * p);
-  arma::mat tProductPi(p,p);
-  tProductPi = t * alpha.t();
+  arma::mat s_prod_alpha(p,p);
+  s_prod_alpha = exit_vect * alpha.t();
   
-  J = matrix_VanLoan(S, S, tProductPi);
+  J = matrix_VanLoan(S, S, s_prod_alpha);
   
   double JNorm{inf_norm(J)};
   
-  std::vector<arma::mat> theVector;
+  std::vector<arma::mat> aux_vect;
   
-  vector_of_matrices_2(theVector, J, 6);
+  vector_of_matrices_2(aux_vect, J, 6);
   
   arma::mat X(2 * p,2 * p);
   arma::mat D(2 * p,2 * p);
@@ -74,13 +74,13 @@ void EMstep_PADE(double h, arma::vec & alpha,  arma::mat & S, const Rcpp::Numeri
   double xmod{};
   double c{};
   
-  double SumOfWeights{0.0};
+  double sum_weights{0.0};
   double density{0.0};
   
   //E-step
   //  Unccensored data
   for (int k{0}; k < obs.size(); ++k) {
-    SumOfWeights += weight[k];
+    sum_weights += weight[k];
     
     // Matrix exponential
     int pind{1};
@@ -88,14 +88,14 @@ void EMstep_PADE(double h, arma::vec & alpha,  arma::mat & S, const Rcpp::Numeri
     s = std::max(0, ee + 1);
     xmod = obs[k] / pow(2.0, s);
     c = 0.5;
-    X = theVector[1] * (c * xmod);
+    X = aux_vect[1] * (c * xmod);
     
-    J = theVector[0] + X;
-    D = theVector[0] - X;
+    J = aux_vect[0] + X;
+    D = aux_vect[0] - X;
     
     for (int l{2}; l <= q; ++l) {
       c = c * static_cast<double>(q - l + 1) / static_cast<double>(l * (2 * q - l + 1));
-      X = theVector[l] * (c * pow(xmod,l));
+      X = aux_vect[l] * (c * pow(xmod,l));
       J = J + X;
       if (pind) {
         D =  D + X;
@@ -119,14 +119,14 @@ void EMstep_PADE(double h, arma::vec & alpha,  arma::mat & S, const Rcpp::Numeri
     }
     
     avector = alpha.t() * aux_exp;
-    bvector = aux_exp * t;
+    bvector = aux_exp * exit_vect;
     aux_mat = alpha.t() * bvector;
     density = aux_mat(0,0);
     
     //E-step
     for (int i{0}; i < p; ++i) {
       Bmean(i,0) += alpha[i] * bvector(i,0) * weight[k] / density;
-      Nmean(i,p) += avector(0,i) * t(i,0) * weight[k] / density;
+      Nmean(i,p) += avector(0,i) * exit_vect(i,0) * weight[k] / density;
       Zmean(i,0) += cmatrix(i,i) * weight[k] / density;
       for (int j{0}; j < p; ++j) {
         Nmean(i,j) += S(i,j) * cmatrix(j,i) * weight[k] / density;
@@ -134,16 +134,16 @@ void EMstep_PADE(double h, arma::vec & alpha,  arma::mat & S, const Rcpp::Numeri
     }
   }
   //  Right-Censored Data
-  double SumOfCensored{0.0};
+  double sum_censored{0.0};
   if (rcens.size() > 0) {
-    tProductPi = e * alpha.t();
-    J = matrix_VanLoan(S, S, tProductPi);
+    s_prod_alpha = e * alpha.t();
+    J = matrix_VanLoan(S, S, s_prod_alpha);
     JNorm = inf_norm(J);
-    theVector.clear();
-    vector_of_matrices_2(theVector, J, 6);
+    aux_vect.clear();
+    vector_of_matrices_2(aux_vect, J, 6);
   }
   for (int k{0}; k < rcens.size(); ++k) {
-    SumOfCensored += rcweight[k];
+    sum_censored += rcweight[k];
     
     // Matrix exponential
     int pind{1};
@@ -151,14 +151,14 @@ void EMstep_PADE(double h, arma::vec & alpha,  arma::mat & S, const Rcpp::Numeri
     s = std::max(0, ee + 1);
     xmod = rcens[k] / pow(2.0, s);
     c = 0.5;
-    X = theVector[1] * (c * xmod);
+    X = aux_vect[1] * (c * xmod);
     
-    J = theVector[0] + X;
-    D = theVector[0] - X;
+    J = aux_vect[0] + X;
+    D = aux_vect[0] - X;
     
     for (int l{2}; l <= q; ++l) {
       c = c * static_cast<double>(q - l + 1) / static_cast<double>(l * (2 * q - l + 1));
-      X = theVector[l] * (c * pow(xmod,l));
+      X = aux_vect[l] * (c * pow(xmod,l));
       J = J + X;
       if (pind) {
         D =  D + X;
@@ -197,15 +197,15 @@ void EMstep_PADE(double h, arma::vec & alpha,  arma::mat & S, const Rcpp::Numeri
   
   // M step
   for (int i{0}; i < p; ++i) {
-    alpha[i] = Bmean(i,0) / (SumOfWeights + SumOfCensored);
+    alpha[i] = Bmean(i,0) / (sum_weights + sum_censored);
     if (alpha[i] < 0) {
       alpha[i] = 0;
     }
-    t(i,0) = Nmean(i,p) / Zmean(i,0);
-    if (t(i,0) < 0) {
-      t(i,0) = 0;
+    exit_vect(i,0) = Nmean(i,p) / Zmean(i,0);
+    if (exit_vect(i,0) < 0) {
+      exit_vect(i,0) = 0;
     }
-    S(i,i) = -t(i,0);
+    S(i,i) = -exit_vect(i,0);
     for (int j{0}; j < p; ++j) {
       if (i != j) {
         S(i,j) = Nmean(i,j) / Zmean(i,0);
@@ -239,15 +239,15 @@ void EMstep_PADE(double h, arma::vec & alpha,  arma::mat & S, const Rcpp::Numeri
 double logLikelihoodPH_PADE(double h, arma::vec & alpha, arma::mat & S, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight) {
   unsigned p{S.n_rows};
   arma::mat e; e.ones(S.n_cols, 1);
-  arma::mat t = (S * (-1)) * e;
+  arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat E(size(S));
   
   double JNorm{inf_norm(S)};
   
-  std::vector<arma::mat> theVector;
+  std::vector<arma::mat> aux_vect;
   
-  vector_of_matrices_2(theVector, S, 6);
+  vector_of_matrices_2(aux_vect, S, 6);
   
   arma::mat X(p,p);
   arma::mat D(p,p);
@@ -271,14 +271,14 @@ double logLikelihoodPH_PADE(double h, arma::vec & alpha, arma::mat & S, const Rc
     s = std::max(0, ee + 1);
     xmod = obs[k] / pow(2.0, s);
     c = 0.5;
-    X = theVector[1] * (c * xmod);
+    X = aux_vect[1] * (c * xmod);
     
-    E = theVector[0] + X;
-    D = theVector[0] - X;
+    E = aux_vect[0] + X;
+    D = aux_vect[0] - X;
     
     for (int l{2}; l <= q; ++l) {
       c = c * static_cast<double>(q - l + 1) / static_cast<double>(l * (2 * q - l + 1));
-      X = theVector[l] * (c * pow(xmod,l));
+      X = aux_vect[l] * (c * pow(xmod,l));
       E = E + X;
       if (pind) {
         D =  D + X;
@@ -293,7 +293,7 @@ double logLikelihoodPH_PADE(double h, arma::vec & alpha, arma::mat & S, const Rc
       E = E * E;
     }
     
-    aux_mat = alpha.t() * E * t;
+    aux_mat = alpha.t() * E * exit_vect;
     density = aux_mat(0,0);
     logLh += weight[k] * std::log(density);
   }
@@ -305,14 +305,14 @@ double logLikelihoodPH_PADE(double h, arma::vec & alpha, arma::mat & S, const Rc
     s = std::max(0, ee + 1);
     xmod = rcens[k] / pow(2.0, s);
     c = 0.5;
-    X = theVector[1] * (c * xmod);
+    X = aux_vect[1] * (c * xmod);
     
-    E = theVector[0] + X;
-    D = theVector[0] - X;
+    E = aux_vect[0] + X;
+    D = aux_vect[0] - X;
     
     for (int l{2}; l <= q; ++l) {
       c = c * static_cast<double>(q - l + 1) / static_cast<double>(l * (2 * q - l + 1));
-      X = theVector[l] * (c * pow(xmod,l));
+      X = aux_vect[l] * (c * pow(xmod,l));
       E = E + X;
       if (pind) {
         D =  D + X;
@@ -354,15 +354,15 @@ double logLikelihoodMweibull_PADE(double h, arma::vec & alpha, arma::mat & S, do
   
   unsigned p{S.n_rows};
   arma::mat e; e.ones(S.n_cols, 1);
-  arma::mat t = (S * (-1)) * e;
+  arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat E(size(S));
   
   double JNorm{inf_norm(S)};
   
-  std::vector<arma::mat> theVector;
+  std::vector<arma::mat> aux_vect;
   
-  vector_of_matrices_2(theVector, S, 6);
+  vector_of_matrices_2(aux_vect, S, 6);
   
   arma::mat X(p,p);
   arma::mat D(p,p);
@@ -386,14 +386,14 @@ double logLikelihoodMweibull_PADE(double h, arma::vec & alpha, arma::mat & S, do
     s = std::max(0, ee + 1);
     xmod = pow(obs[k], beta) / pow(2.0, s);
     c = 0.5;
-    X = theVector[1] * (c * xmod);
+    X = aux_vect[1] * (c * xmod);
     
-    E = theVector[0] + X;
-    D = theVector[0] - X;
+    E = aux_vect[0] + X;
+    D = aux_vect[0] - X;
     
     for (int l{2}; l <= q; ++l) {
       c = c * static_cast<double>(q - l + 1) / static_cast<double>(l * (2 * q - l + 1));
-      X = theVector[l] * (c * pow(xmod,l));
+      X = aux_vect[l] * (c * pow(xmod,l));
       E = E + X;
       if (pind) {
         D =  D + X;
@@ -408,7 +408,7 @@ double logLikelihoodMweibull_PADE(double h, arma::vec & alpha, arma::mat & S, do
       E = E * E;
     }
     
-    aux_mat = alpha.t() * E * t;
+    aux_mat = alpha.t() * E * exit_vect;
     density = aux_mat(0,0);
     logLh += weight[k] * (std::log(density) + std::log(beta) + (beta - 1) * std::log(obs[k]));
   }
@@ -420,14 +420,14 @@ double logLikelihoodMweibull_PADE(double h, arma::vec & alpha, arma::mat & S, do
     s = std::max(0, ee + 1);
     xmod = pow(rcens[k], beta) / pow(2.0, s);
     c = 0.5;
-    X = theVector[1] * (c * xmod);
+    X = aux_vect[1] * (c * xmod);
     
-    E = theVector[0] + X;
-    D = theVector[0] - X;
+    E = aux_vect[0] + X;
+    D = aux_vect[0] - X;
     
     for (int l{2}; l <= q; ++l) {
       c = c * static_cast<double>(q - l + 1) / static_cast<double>(l * (2 * q - l + 1));
-      X = theVector[l] * (c * pow(xmod,l));
+      X = aux_vect[l] * (c * pow(xmod,l));
       E = E + X;
       if (pind) {
         D =  D + X;
@@ -469,15 +469,15 @@ double logLikelihoodMpareto_PADE(double h, arma::vec & alpha, arma::mat & S, dou
   
   unsigned p{S.n_rows};
   arma::mat e; e.ones(S.n_cols, 1);
-  arma::mat t = (S * (-1)) * e;
+  arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat E(size(S));
   
   double JNorm{inf_norm(S)};
   
-  std::vector<arma::mat> theVector;
+  std::vector<arma::mat> aux_vect;
   
-  vector_of_matrices_2(theVector, S, 6);
+  vector_of_matrices_2(aux_vect, S, 6);
   
   arma::mat X(p,p);
   arma::mat D(p,p);
@@ -501,14 +501,14 @@ double logLikelihoodMpareto_PADE(double h, arma::vec & alpha, arma::mat & S, dou
     s = std::max(0, ee + 1);
     xmod = std::log(obs[k] / beta + 1) / pow(2.0, s);
     c = 0.5;
-    X = theVector[1] * (c * xmod);
+    X = aux_vect[1] * (c * xmod);
     
-    E = theVector[0] + X;
-    D = theVector[0] - X;
+    E = aux_vect[0] + X;
+    D = aux_vect[0] - X;
     
     for (int l{2}; l <= q; ++l) {
       c = c * static_cast<double>(q - l + 1) / static_cast<double>(l * (2 * q - l + 1));
-      X = theVector[l] * (c * pow(xmod,l));
+      X = aux_vect[l] * (c * pow(xmod,l));
       E = E + X;
       if (pind) {
         D =  D + X;
@@ -523,7 +523,7 @@ double logLikelihoodMpareto_PADE(double h, arma::vec & alpha, arma::mat & S, dou
       E = E * E;
     }
     
-    aux_mat = alpha.t() * E * t;
+    aux_mat = alpha.t() * E * exit_vect;
     density = aux_mat(0,0);
     logLh += weight[k] * (std::log(density) - std::log(obs[k] + beta));
   }
@@ -535,14 +535,14 @@ double logLikelihoodMpareto_PADE(double h, arma::vec & alpha, arma::mat & S, dou
     s = std::max(0, ee + 1);
     xmod = std::log(rcens[k] / beta + 1) / pow(2.0, s);
     c = 0.5;
-    X = theVector[1] * (c * xmod);
+    X = aux_vect[1] * (c * xmod);
     
-    E = theVector[0] + X;
-    D = theVector[0] - X;
+    E = aux_vect[0] + X;
+    D = aux_vect[0] - X;
     
     for (int l{2}; l <= q; ++l) {
       c = c * static_cast<double>(q - l + 1) / static_cast<double>(l * (2 * q - l + 1));
-      X = theVector[l] * (c * pow(xmod,l));
+      X = aux_vect[l] * (c * pow(xmod,l));
       E = E + X;
       if (pind) {
         D =  D + X;
@@ -585,15 +585,15 @@ double logLikelihoodMlognormal_PADE(double h, arma::vec & alpha, arma::mat & S, 
   
   unsigned p{S.n_rows};
   arma::mat e; e.ones(S.n_cols, 1);
-  arma::mat t = (S * (-1)) * e;
+  arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat E(size(S));
   
   double JNorm{inf_norm(S)};
   
-  std::vector<arma::mat> theVector;
+  std::vector<arma::mat> aux_vect;
   
-  vector_of_matrices_2(theVector, S, 6);
+  vector_of_matrices_2(aux_vect, S, 6);
   
   arma::mat X(p,p);
   arma::mat D(p,p);
@@ -617,14 +617,14 @@ double logLikelihoodMlognormal_PADE(double h, arma::vec & alpha, arma::mat & S, 
     s = std::max(0, ee + 1);
     xmod = pow(std::log(obs[k] + 1), beta) / pow(2.0, s);
     c = 0.5;
-    X = theVector[1] * (c * xmod);
+    X = aux_vect[1] * (c * xmod);
     
-    E = theVector[0] + X;
-    D = theVector[0] - X;
+    E = aux_vect[0] + X;
+    D = aux_vect[0] - X;
     
     for (int l{2}; l <= q; ++l) {
       c = c * static_cast<double>(q - l + 1) / static_cast<double>(l * (2 * q - l + 1));
-      X = theVector[l] * (c * pow(xmod,l));
+      X = aux_vect[l] * (c * pow(xmod,l));
       E = E + X;
       if (pind) {
         D =  D + X;
@@ -639,7 +639,7 @@ double logLikelihoodMlognormal_PADE(double h, arma::vec & alpha, arma::mat & S, 
       E = E * E;
     }
     
-    aux_mat = alpha.t() * E * t;
+    aux_mat = alpha.t() * E * exit_vect;
     density = aux_mat(0,0);
     logLh += weight[k] * (std::log(density) + std::log(beta) + (beta -1) * std::log(std::log(obs[k] + 1)) - std::log(obs[k] + 1));
   }
@@ -651,14 +651,14 @@ double logLikelihoodMlognormal_PADE(double h, arma::vec & alpha, arma::mat & S, 
     s = std::max(0, ee + 1);
     xmod = pow(std::log(rcens[k] + 1), beta) / pow(2.0, s);
     c = 0.5;
-    X = theVector[1] * (c * xmod);
+    X = aux_vect[1] * (c * xmod);
     
-    E = theVector[0] + X;
-    D = theVector[0] - X;
+    E = aux_vect[0] + X;
+    D = aux_vect[0] - X;
     
     for (int l{2}; l <= q; ++l) {
       c = c * static_cast<double>(q - l + 1) / static_cast<double>(l * (2 * q - l + 1));
-      X = theVector[l] * (c * pow(xmod,l));
+      X = aux_vect[l] * (c * pow(xmod,l));
       E = E + X;
       if (pind) {
         D =  D + X;
@@ -701,15 +701,15 @@ double logLikelihoodMloglogistic_PADE(double h, arma::vec & alpha, arma::mat & S
   
   unsigned p{S.n_rows};
   arma::mat e; e.ones(S.n_cols, 1);
-  arma::mat t = (S * (-1)) * e;
+  arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat E(size(S));
   
   double JNorm{inf_norm(S)};
   
-  std::vector<arma::mat> theVector;
+  std::vector<arma::mat> aux_vect;
   
-  vector_of_matrices_2(theVector, S, 6);
+  vector_of_matrices_2(aux_vect, S, 6);
   
   arma::mat X(p,p);
   arma::mat D(p,p);
@@ -733,14 +733,14 @@ double logLikelihoodMloglogistic_PADE(double h, arma::vec & alpha, arma::mat & S
     s = std::max(0, ee + 1);
     xmod = std::log(pow(obs[k] / beta[0], beta[1]) + 1) / pow(2.0, s);
     c = 0.5;
-    X = theVector[1] * (c * xmod);
+    X = aux_vect[1] * (c * xmod);
     
-    E = theVector[0] + X;
-    D = theVector[0] - X;
+    E = aux_vect[0] + X;
+    D = aux_vect[0] - X;
     
     for (int l{2}; l <= q; ++l) {
       c = c * static_cast<double>(q - l + 1) / static_cast<double>(l * (2 * q - l + 1));
-      X = theVector[l] * (c * pow(xmod,l));
+      X = aux_vect[l] * (c * pow(xmod,l));
       E = E + X;
       if (pind) {
         D =  D + X;
@@ -755,7 +755,7 @@ double logLikelihoodMloglogistic_PADE(double h, arma::vec & alpha, arma::mat & S
       E = E * E;
     }
     
-    aux_mat = alpha.t() * E * t;
+    aux_mat = alpha.t() * E * exit_vect;
     density = aux_mat(0,0);
     logLh += weight[k] * (std::log(density) + std::log(beta[1]) - std::log(beta[0]) + (beta[1] - 1) * (std::log(obs[k]) - std::log(beta[0])) - std::log(pow(obs[k] / beta[0], beta[1]) + 1));
   }
@@ -767,14 +767,14 @@ double logLikelihoodMloglogistic_PADE(double h, arma::vec & alpha, arma::mat & S
     s = std::max(0, ee + 1);
     xmod = std::log(pow(rcens[k] / beta[0], beta[1]) + 1) / pow(2.0, s);
     c = 0.5;
-    X = theVector[1] * (c * xmod);
+    X = aux_vect[1] * (c * xmod);
     
-    E = theVector[0] + X;
-    D = theVector[0] - X;
+    E = aux_vect[0] + X;
+    D = aux_vect[0] - X;
     
     for (int l{2}; l <= q; ++l) {
       c = c * static_cast<double>(q - l + 1) / static_cast<double>(l * (2 * q - l + 1));
-      X = theVector[l] * (c * pow(xmod,l));
+      X = aux_vect[l] * (c * pow(xmod,l));
       E = E + X;
       if (pind) {
         D =  D + X;
@@ -817,15 +817,15 @@ double logLikelihoodMgompertz_PADE(double h, arma::vec & alpha, arma::mat & S, d
   
   unsigned p{S.n_rows};
   arma::mat e; e.ones(S.n_cols, 1);
-  arma::mat t = (S * (-1)) * e;
+  arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat E(size(S));
   
   double JNorm{inf_norm(S)};
   
-  std::vector<arma::mat> theVector;
+  std::vector<arma::mat> aux_vect;
   
-  vector_of_matrices_2(theVector, S, 6);
+  vector_of_matrices_2(aux_vect, S, 6);
   
   arma::mat X(p,p);
   arma::mat D(p,p);
@@ -849,14 +849,14 @@ double logLikelihoodMgompertz_PADE(double h, arma::vec & alpha, arma::mat & S, d
     s = std::max(0, ee + 1);
     xmod = (exp(obs[k] * beta) - 1) / beta / pow(2.0, s);
     c = 0.5;
-    X = theVector[1] * (c * xmod);
+    X = aux_vect[1] * (c * xmod);
     
-    E = theVector[0] + X;
-    D = theVector[0] - X;
+    E = aux_vect[0] + X;
+    D = aux_vect[0] - X;
     
     for (int l{2}; l <= q; ++l) {
       c = c * static_cast<double>(q - l + 1) / static_cast<double>(l * (2 * q - l + 1));
-      X = theVector[l] * (c * pow(xmod,l));
+      X = aux_vect[l] * (c * pow(xmod,l));
       E = E + X;
       if (pind) {
         D =  D + X;
@@ -871,7 +871,7 @@ double logLikelihoodMgompertz_PADE(double h, arma::vec & alpha, arma::mat & S, d
       E = E * E;
     }
     
-    aux_mat = alpha.t() * E * t;
+    aux_mat = alpha.t() * E * exit_vect;
     density = aux_mat(0,0);
     logLh += weight[k] * (std::log(density) + obs[k] * beta);
   }
@@ -883,14 +883,14 @@ double logLikelihoodMgompertz_PADE(double h, arma::vec & alpha, arma::mat & S, d
     s = std::max(0, ee + 1);
     xmod = (exp(rcens[k] * beta) - 1) / beta / pow(2.0, s);
     c = 0.5;
-    X = theVector[1] * (c * xmod);
+    X = aux_vect[1] * (c * xmod);
     
-    E = theVector[0] + X;
-    D = theVector[0] - X;
+    E = aux_vect[0] + X;
+    D = aux_vect[0] - X;
     
     for (int l{2}; l <= q; ++l) {
       c = c * static_cast<double>(q - l + 1) / static_cast<double>(l * (2 * q - l + 1));
-      X = theVector[l] * (c * pow(xmod,l));
+      X = aux_vect[l] * (c * pow(xmod,l));
       E = E + X;
       if (pind) {
         D =  D + X;
@@ -933,15 +933,15 @@ double logLikelihoodMgev_PADE(double h, arma::vec & alpha, arma::mat & S, Rcpp::
   
   unsigned p{S.n_rows};
   arma::mat e; e.ones(S.n_cols, 1);
-  arma::mat t = (S * (-1)) * e;
+  arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat E(size(S));
   
   double JNorm{inf_norm(S)};
   
-  std::vector<arma::mat> theVector;
+  std::vector<arma::mat> aux_vect;
   
-  vector_of_matrices_2(theVector, S, 6);
+  vector_of_matrices_2(aux_vect, S, 6);
   
   arma::mat X(p,p);
   arma::mat D(p,p);
@@ -965,14 +965,14 @@ double logLikelihoodMgev_PADE(double h, arma::vec & alpha, arma::mat & S, Rcpp::
       s = std::max(0, ee + 1);
       xmod = exp(-(obs[k] - beta[0]) / beta[1])/ pow(2.0, s);
       c = 0.5;
-      X = theVector[1] * (c * xmod);
+      X = aux_vect[1] * (c * xmod);
       
-      E = theVector[0] + X;
-      D = theVector[0] - X;
+      E = aux_vect[0] + X;
+      D = aux_vect[0] - X;
       
       for (int l{2}; l <= q; ++l) {
         c = c * static_cast<double>(q - l + 1) / static_cast<double>(l * (2 * q - l + 1));
-        X = theVector[l] * (c * pow(xmod,l));
+        X = aux_vect[l] * (c * pow(xmod,l));
         E = E + X;
         if (pind) {
           D =  D + X;
@@ -987,7 +987,7 @@ double logLikelihoodMgev_PADE(double h, arma::vec & alpha, arma::mat & S, Rcpp::
         E = E * E;
       }
       
-      aux_mat = alpha.t() * E * t;
+      aux_mat = alpha.t() * E * exit_vect;
       density = aux_mat(0,0);
       logLh += weight[k] * (std::log(density) - std::log(beta[1]) - (obs[k] - beta[0]) / beta[1]);
     }
@@ -999,14 +999,14 @@ double logLikelihoodMgev_PADE(double h, arma::vec & alpha, arma::mat & S, Rcpp::
       s = std::max(0, ee + 1);
       xmod = exp(-(rcens[k] - beta[0]) / beta[1]) / pow(2.0, s);
       c = 0.5;
-      X = theVector[1] * (c * xmod);
+      X = aux_vect[1] * (c * xmod);
       
-      E = theVector[0] + X;
-      D = theVector[0] - X;
+      E = aux_vect[0] + X;
+      D = aux_vect[0] - X;
       
       for (int l{2}; l <= q; ++l) {
         c = c * static_cast<double>(q - l + 1) / static_cast<double>(l * (2 * q - l + 1));
-        X = theVector[l] * (c * pow(xmod,l));
+        X = aux_vect[l] * (c * pow(xmod,l));
         E = E + X;
         if (pind) {
           D =  D + X;
@@ -1035,14 +1035,14 @@ double logLikelihoodMgev_PADE(double h, arma::vec & alpha, arma::mat & S, Rcpp::
       s = std::max(0, ee + 1);
       xmod = pow(1 + (beta[2] / beta[1]) * (obs[k] - beta[0]) , - 1 / beta[2]) / pow(2.0, s);
       c = 0.5;
-      X = theVector[1] * (c * xmod);
+      X = aux_vect[1] * (c * xmod);
       
-      E = theVector[0] + X;
-      D = theVector[0] - X;
+      E = aux_vect[0] + X;
+      D = aux_vect[0] - X;
       
       for (int l{2}; l <= q; ++l) {
         c = c * static_cast<double>(q - l + 1) / static_cast<double>(l * (2 * q - l + 1));
-        X = theVector[l] * (c * pow(xmod,l));
+        X = aux_vect[l] * (c * pow(xmod,l));
         E = E + X;
         if (pind) {
           D =  D + X;
@@ -1057,7 +1057,7 @@ double logLikelihoodMgev_PADE(double h, arma::vec & alpha, arma::mat & S, Rcpp::
         E = E * E;
       }
       
-      aux_mat = alpha.t() * E * t;
+      aux_mat = alpha.t() * E * exit_vect;
       density = aux_mat(0,0);
       logLh += weight[k] * (std::log(density) - std::log(beta[1]) - (1 + 1 / beta[2]) * std::log(1 + (beta[2] / beta[1]) * (obs[k] - beta[0])));
     }
@@ -1069,14 +1069,14 @@ double logLikelihoodMgev_PADE(double h, arma::vec & alpha, arma::mat & S, Rcpp::
       s = std::max(0, ee + 1);
       xmod = pow(1 + (beta[2] / beta[1]) * (rcens[k] - beta[0]) , - 1 / beta[2]) / pow(2.0, s);
       c = 0.5;
-      X = theVector[1] * (c * xmod);
+      X = aux_vect[1] * (c * xmod);
       
-      E = theVector[0] + X;
-      D = theVector[0] - X;
+      E = aux_vect[0] + X;
+      D = aux_vect[0] - X;
       
       for (int l{2}; l <= q; ++l) {
         c = c * static_cast<double>(q - l + 1) / static_cast<double>(l * (2 * q - l + 1));
-        X = theVector[l] * (c * pow(xmod,l));
+        X = aux_vect[l] * (c * pow(xmod,l));
         E = E + X;
         if (pind) {
           D =  D + X;
@@ -1122,15 +1122,15 @@ double logLikelihoodMgev_PADE(double h, arma::vec & alpha, arma::mat & S, Rcpp::
 double logLikelihoodPH_PADEs(double h, arma::vec & alpha, arma::mat & S, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight, const Rcpp::NumericVector & scale1, const Rcpp::NumericVector & scale2) {
   unsigned p{S.n_rows};
   arma::mat e; e.ones(S.n_cols, 1);
-  arma::mat t = (S * (-1)) * e;
+  arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat E(size(S));
   
   double JNorm{inf_norm(S)};
   
-  std::vector<arma::mat> theVector;
+  std::vector<arma::mat> aux_vect;
   
-  vector_of_matrices_2(theVector, S, 6);
+  vector_of_matrices_2(aux_vect, S, 6);
   
   arma::mat X(p,p);
   arma::mat D(p,p);
@@ -1154,14 +1154,14 @@ double logLikelihoodPH_PADEs(double h, arma::vec & alpha, arma::mat & S, const R
     s = std::max(0, ee + 1);
     xmod = scale1[k] * obs[k] / pow(2.0, s);
     c = 0.5;
-    X = theVector[1] * (c * xmod);
+    X = aux_vect[1] * (c * xmod);
     
-    E = theVector[0] + X;
-    D = theVector[0] - X;
+    E = aux_vect[0] + X;
+    D = aux_vect[0] - X;
     
     for (int l{2}; l <= q; ++l) {
       c = c * static_cast<double>(q - l + 1) / static_cast<double>(l * (2 * q - l + 1));
-      X = theVector[l] * (c * pow(xmod,l));
+      X = aux_vect[l] * (c * pow(xmod,l));
       E = E + X;
       if (pind) {
         D =  D + X;
@@ -1176,7 +1176,7 @@ double logLikelihoodPH_PADEs(double h, arma::vec & alpha, arma::mat & S, const R
       E = E * E;
     }
     
-    aux_mat = alpha.t() * E * t;
+    aux_mat = alpha.t() * E * exit_vect;
     density = aux_mat(0,0);
     logLh += weight[k] * (std::log(density) + std::log(scale1[k]));
   }
@@ -1188,14 +1188,14 @@ double logLikelihoodPH_PADEs(double h, arma::vec & alpha, arma::mat & S, const R
     s = std::max(0, ee + 1);
     xmod = scale2[k] * rcens[k] / pow(2.0, s);
     c = 0.5;
-    X = theVector[1] * (c * xmod);
+    X = aux_vect[1] * (c * xmod);
     
-    E = theVector[0] + X;
-    D = theVector[0] - X;
+    E = aux_vect[0] + X;
+    D = aux_vect[0] - X;
     
     for (int l{2}; l <= q; ++l) {
       c = c * static_cast<double>(q - l + 1) / static_cast<double>(l * (2 * q - l + 1));
-      X = theVector[l] * (c * pow(xmod,l));
+      X = aux_vect[l] * (c * pow(xmod,l));
       E = E + X;
       if (pind) {
         D =  D + X;
@@ -1240,15 +1240,15 @@ double logLikelihoodMweibull_PADEs(double h, arma::vec & alpha, arma::mat & S, d
   
   unsigned p{S.n_rows};
   arma::mat e; e.ones(S.n_cols, 1);
-  arma::mat t = (S * (-1)) * e;
+  arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat E(size(S));
   
   double JNorm{inf_norm(S)};
   
-  std::vector<arma::mat> theVector;
+  std::vector<arma::mat> aux_vect;
   
-  vector_of_matrices_2(theVector, S, 6);
+  vector_of_matrices_2(aux_vect, S, 6);
   
   arma::mat X(p,p);
   arma::mat D(p,p);
@@ -1272,14 +1272,14 @@ double logLikelihoodMweibull_PADEs(double h, arma::vec & alpha, arma::mat & S, d
     s = std::max(0, ee + 1);
     xmod = scale1[k] * pow(obs[k], beta) / pow(2.0, s);
     c = 0.5;
-    X = theVector[1] * (c * xmod);
+    X = aux_vect[1] * (c * xmod);
     
-    E = theVector[0] + X;
-    D = theVector[0] - X;
+    E = aux_vect[0] + X;
+    D = aux_vect[0] - X;
     
     for (int l{2}; l <= q; ++l) {
       c = c * static_cast<double>(q - l + 1) / static_cast<double>(l * (2 * q - l + 1));
-      X = theVector[l] * (c * pow(xmod,l));
+      X = aux_vect[l] * (c * pow(xmod,l));
       E = E + X;
       if (pind) {
         D =  D + X;
@@ -1294,7 +1294,7 @@ double logLikelihoodMweibull_PADEs(double h, arma::vec & alpha, arma::mat & S, d
       E = E * E;
     }
     
-    aux_mat = alpha.t() * E * t;
+    aux_mat = alpha.t() * E * exit_vect;
     density = aux_mat(0,0);
     logLh += weight[k] * (std::log(density) + std::log(scale1[k]) + std::log(beta) + (beta - 1) * std::log(obs[k]));
   }
@@ -1306,14 +1306,14 @@ double logLikelihoodMweibull_PADEs(double h, arma::vec & alpha, arma::mat & S, d
     s = std::max(0, ee + 1);
     xmod = scale2[k] * pow(rcens[k], beta) / pow(2.0, s);
     c = 0.5;
-    X = theVector[1] * (c * xmod);
+    X = aux_vect[1] * (c * xmod);
     
-    E = theVector[0] + X;
-    D = theVector[0] - X;
+    E = aux_vect[0] + X;
+    D = aux_vect[0] - X;
     
     for (int l{2}; l <= q; ++l) {
       c = c * static_cast<double>(q - l + 1) / static_cast<double>(l * (2 * q - l + 1));
-      X = theVector[l] * (c * pow(xmod,l));
+      X = aux_vect[l] * (c * pow(xmod,l));
       E = E + X;
       if (pind) {
         D =  D + X;
@@ -1358,15 +1358,15 @@ double logLikelihoodMpareto_PADEs(double h, arma::vec & alpha, arma::mat & S, do
   
   unsigned p{S.n_rows};
   arma::mat e; e.ones(S.n_cols, 1);
-  arma::mat t = (S * (-1)) * e;
+  arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat E(size(S));
   
   double JNorm{inf_norm(S)};
   
-  std::vector<arma::mat> theVector;
+  std::vector<arma::mat> aux_vect;
   
-  vector_of_matrices_2(theVector, S, 6);
+  vector_of_matrices_2(aux_vect, S, 6);
   
   arma::mat X(p,p);
   arma::mat D(p,p);
@@ -1390,14 +1390,14 @@ double logLikelihoodMpareto_PADEs(double h, arma::vec & alpha, arma::mat & S, do
     s = std::max(0, ee + 1);
     xmod = scale1[k] * std::log(obs[k] / beta + 1) / pow(2.0, s);
     c = 0.5;
-    X = theVector[1] * (c * xmod);
+    X = aux_vect[1] * (c * xmod);
     
-    E = theVector[0] + X;
-    D = theVector[0] - X;
+    E = aux_vect[0] + X;
+    D = aux_vect[0] - X;
     
     for (int l{2}; l <= q; ++l) {
       c = c * static_cast<double>(q - l + 1) / static_cast<double>(l * (2 * q - l + 1));
-      X = theVector[l] * (c * pow(xmod,l));
+      X = aux_vect[l] * (c * pow(xmod,l));
       E = E + X;
       if (pind) {
         D =  D + X;
@@ -1412,7 +1412,7 @@ double logLikelihoodMpareto_PADEs(double h, arma::vec & alpha, arma::mat & S, do
       E = E * E;
     }
     
-    aux_mat = alpha.t() * E * t;
+    aux_mat = alpha.t() * E * exit_vect;
     density = aux_mat(0,0);
     logLh += weight[k] * (std::log(density) + std::log(scale1[k]) - std::log(obs[k] + beta));
   }
@@ -1424,14 +1424,14 @@ double logLikelihoodMpareto_PADEs(double h, arma::vec & alpha, arma::mat & S, do
     s = std::max(0, ee + 1);
     xmod = scale2[k] * std::log(rcens[k] / beta + 1) / pow(2.0, s);
     c = 0.5;
-    X = theVector[1] * (c * xmod);
+    X = aux_vect[1] * (c * xmod);
     
-    E = theVector[0] + X;
-    D = theVector[0] - X;
+    E = aux_vect[0] + X;
+    D = aux_vect[0] - X;
     
     for (int l{2}; l <= q; ++l) {
       c = c * static_cast<double>(q - l + 1) / static_cast<double>(l * (2 * q - l + 1));
-      X = theVector[l] * (c * pow(xmod,l));
+      X = aux_vect[l] * (c * pow(xmod,l));
       E = E + X;
       if (pind) {
         D =  D + X;
@@ -1476,15 +1476,15 @@ double logLikelihoodMlognormal_PADEs(double h, arma::vec & alpha, arma::mat & S,
   
   unsigned p{S.n_rows};
   arma::mat e; e.ones(S.n_cols, 1);
-  arma::mat t = (S * (-1)) * e;
+  arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat E(size(S));
   
   double JNorm{inf_norm(S)};
   
-  std::vector<arma::mat> theVector;
+  std::vector<arma::mat> aux_vect;
   
-  vector_of_matrices_2(theVector, S, 6);
+  vector_of_matrices_2(aux_vect, S, 6);
   
   arma::mat X(p,p);
   arma::mat D(p,p);
@@ -1508,14 +1508,14 @@ double logLikelihoodMlognormal_PADEs(double h, arma::vec & alpha, arma::mat & S,
     s = std::max(0, ee + 1);
     xmod = scale1[k] * pow(std::log(obs[k] + 1), beta) / pow(2.0, s);
     c = 0.5;
-    X = theVector[1] * (c * xmod);
+    X = aux_vect[1] * (c * xmod);
     
-    E = theVector[0] + X;
-    D = theVector[0] - X;
+    E = aux_vect[0] + X;
+    D = aux_vect[0] - X;
     
     for (int l{2}; l <= q; ++l) {
       c = c * static_cast<double>(q - l + 1) / static_cast<double>(l * (2 * q - l + 1));
-      X = theVector[l] * (c * pow(xmod,l));
+      X = aux_vect[l] * (c * pow(xmod,l));
       E = E + X;
       if (pind) {
         D =  D + X;
@@ -1530,7 +1530,7 @@ double logLikelihoodMlognormal_PADEs(double h, arma::vec & alpha, arma::mat & S,
       E = E * E;
     }
     
-    aux_mat = alpha.t() * E * t;
+    aux_mat = alpha.t() * E * exit_vect;
     density = aux_mat(0,0);
     logLh += weight[k] * (std::log(density) + std::log(scale1[k]) + std::log(beta) + (beta -1) * std::log(std::log(obs[k] + 1)) - std::log(obs[k] + 1));
   }
@@ -1542,14 +1542,14 @@ double logLikelihoodMlognormal_PADEs(double h, arma::vec & alpha, arma::mat & S,
     s = std::max(0, ee + 1);
     xmod = scale2[k] * pow(std::log(rcens[k] + 1), beta) / pow(2.0, s);
     c = 0.5;
-    X = theVector[1] * (c * xmod);
+    X = aux_vect[1] * (c * xmod);
     
-    E = theVector[0] + X;
-    D = theVector[0] - X;
+    E = aux_vect[0] + X;
+    D = aux_vect[0] - X;
     
     for (int l{2}; l <= q; ++l) {
       c = c * static_cast<double>(q - l + 1) / static_cast<double>(l * (2 * q - l + 1));
-      X = theVector[l] * (c * pow(xmod,l));
+      X = aux_vect[l] * (c * pow(xmod,l));
       E = E + X;
       if (pind) {
         D =  D + X;
@@ -1594,15 +1594,15 @@ double logLikelihoodMloglogistic_PADEs(double h, arma::vec & alpha, arma::mat & 
   
   unsigned p{S.n_rows};
   arma::mat e; e.ones(S.n_cols, 1);
-  arma::mat t = (S * (-1)) * e;
+  arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat E(size(S));
   
   double JNorm{inf_norm(S)};
   
-  std::vector<arma::mat> theVector;
+  std::vector<arma::mat> aux_vect;
   
-  vector_of_matrices_2(theVector, S, 6);
+  vector_of_matrices_2(aux_vect, S, 6);
   
   arma::mat X(p,p);
   arma::mat D(p,p);
@@ -1626,14 +1626,14 @@ double logLikelihoodMloglogistic_PADEs(double h, arma::vec & alpha, arma::mat & 
     s = std::max(0, ee + 1);
     xmod = scale1[k] * std::log(pow(obs[k] / beta[0], beta[1]) + 1) / pow(2.0, s);
     c = 0.5;
-    X = theVector[1] * (c * xmod);
+    X = aux_vect[1] * (c * xmod);
     
-    E = theVector[0] + X;
-    D = theVector[0] - X;
+    E = aux_vect[0] + X;
+    D = aux_vect[0] - X;
     
     for (int l{2}; l <= q; ++l) {
       c = c * static_cast<double>(q - l + 1) / static_cast<double>(l * (2 * q - l + 1));
-      X = theVector[l] * (c * pow(xmod,l));
+      X = aux_vect[l] * (c * pow(xmod,l));
       E = E + X;
       if (pind) {
         D =  D + X;
@@ -1648,7 +1648,7 @@ double logLikelihoodMloglogistic_PADEs(double h, arma::vec & alpha, arma::mat & 
       E = E * E;
     }
     
-    aux_mat = alpha.t() * E * t;
+    aux_mat = alpha.t() * E * exit_vect;
     density = aux_mat(0,0);
     logLh += weight[k] * (std::log(density) + std::log(scale1[k]) + std::log(beta[1]) - std::log(beta[0]) + (beta[1] - 1) * (std::log(obs[k]) - std::log(beta[0])) - std::log(pow(obs[k] / beta[0], beta[1]) + 1));
   }
@@ -1660,14 +1660,14 @@ double logLikelihoodMloglogistic_PADEs(double h, arma::vec & alpha, arma::mat & 
     s = std::max(0, ee + 1);
     xmod = scale2[k] * std::log(pow(rcens[k] / beta[0], beta[1]) + 1) / pow(2.0, s);
     c = 0.5;
-    X = theVector[1] * (c * xmod);
+    X = aux_vect[1] * (c * xmod);
     
-    E = theVector[0] + X;
-    D = theVector[0] - X;
+    E = aux_vect[0] + X;
+    D = aux_vect[0] - X;
     
     for (int l{2}; l <= q; ++l) {
       c = c * static_cast<double>(q - l + 1) / static_cast<double>(l * (2 * q - l + 1));
-      X = theVector[l] * (c * pow(xmod,l));
+      X = aux_vect[l] * (c * pow(xmod,l));
       E = E + X;
       if (pind) {
         D =  D + X;
@@ -1712,15 +1712,15 @@ double logLikelihoodMgompertz_PADEs(double h, arma::vec & alpha, arma::mat & S, 
   
   unsigned p{S.n_rows};
   arma::mat e; e.ones(S.n_cols, 1);
-  arma::mat t = (S * (-1)) * e;
+  arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat E(size(S));
   
   double JNorm{inf_norm(S)};
   
-  std::vector<arma::mat> theVector;
+  std::vector<arma::mat> aux_vect;
   
-  vector_of_matrices_2(theVector, S, 6);
+  vector_of_matrices_2(aux_vect, S, 6);
   
   arma::mat X(p,p);
   arma::mat D(p,p);
@@ -1744,14 +1744,14 @@ double logLikelihoodMgompertz_PADEs(double h, arma::vec & alpha, arma::mat & S, 
     s = std::max(0, ee + 1);
     xmod = scale1[k] * (exp(obs[k] * beta) - 1) / beta / pow(2.0, s);
     c = 0.5;
-    X = theVector[1] * (c * xmod);
+    X = aux_vect[1] * (c * xmod);
     
-    E = theVector[0] + X;
-    D = theVector[0] - X;
+    E = aux_vect[0] + X;
+    D = aux_vect[0] - X;
     
     for (int l{2}; l <= q; ++l) {
       c = c * static_cast<double>(q - l + 1) / static_cast<double>(l * (2 * q - l + 1));
-      X = theVector[l] * (c * pow(xmod,l));
+      X = aux_vect[l] * (c * pow(xmod,l));
       E = E + X;
       if (pind) {
         D =  D + X;
@@ -1766,7 +1766,7 @@ double logLikelihoodMgompertz_PADEs(double h, arma::vec & alpha, arma::mat & S, 
       E = E * E;
     }
     
-    aux_mat = alpha.t() * E * t;
+    aux_mat = alpha.t() * E * exit_vect;
     density = aux_mat(0,0);
     logLh += weight[k] * (std::log(density) + std::log(scale1[k]) + obs[k] * beta);
   }
@@ -1778,14 +1778,14 @@ double logLikelihoodMgompertz_PADEs(double h, arma::vec & alpha, arma::mat & S, 
     s = std::max(0, ee + 1);
     xmod = scale2[k] * (exp(rcens[k] * beta) - 1) / beta / pow(2.0, s);
     c = 0.5;
-    X = theVector[1] * (c * xmod);
+    X = aux_vect[1] * (c * xmod);
     
-    E = theVector[0] + X;
-    D = theVector[0] - X;
+    E = aux_vect[0] + X;
+    D = aux_vect[0] - X;
     
     for (int l{2}; l <= q; ++l) {
       c = c * static_cast<double>(q - l + 1) / static_cast<double>(l * (2 * q - l + 1));
-      X = theVector[l] * (c * pow(xmod,l));
+      X = aux_vect[l] * (c * pow(xmod,l));
       E = E + X;
       if (pind) {
         D =  D + X;

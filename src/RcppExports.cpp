@@ -301,14 +301,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // vector_of_matrices_2
-void vector_of_matrices_2(std::vector<arma::mat>& theVector, const arma::mat& S, int vect_size);
-RcppExport SEXP _matrixdist_vector_of_matrices_2(SEXP theVectorSEXP, SEXP SSEXP, SEXP vect_sizeSEXP) {
+void vector_of_matrices_2(std::vector<arma::mat>& vect, const arma::mat& S, int vect_size);
+RcppExport SEXP _matrixdist_vector_of_matrices_2(SEXP vectSEXP, SEXP SSEXP, SEXP vect_sizeSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< std::vector<arma::mat>& >::type theVector(theVectorSEXP);
+    Rcpp::traits::input_parameter< std::vector<arma::mat>& >::type vect(vectSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type S(SSEXP);
     Rcpp::traits::input_parameter< int >::type vect_size(vect_sizeSEXP);
-    vector_of_matrices_2(theVector, S, vect_size);
+    vector_of_matrices_2(vect, S, vect_size);
     return R_NilValue;
 END_RCPP
 }
@@ -573,15 +573,15 @@ BEGIN_RCPP
 END_RCPP
 }
 // vector_of_matrices
-void vector_of_matrices(std::vector<arma::mat>& theVector, const arma::mat& S, double a, int vect_size);
-RcppExport SEXP _matrixdist_vector_of_matrices(SEXP theVectorSEXP, SEXP SSEXP, SEXP aSEXP, SEXP vect_sizeSEXP) {
+void vector_of_matrices(std::vector<arma::mat>& vect, const arma::mat& S, double a, int vect_size);
+RcppExport SEXP _matrixdist_vector_of_matrices(SEXP vectSEXP, SEXP SSEXP, SEXP aSEXP, SEXP vect_sizeSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< std::vector<arma::mat>& >::type theVector(theVectorSEXP);
+    Rcpp::traits::input_parameter< std::vector<arma::mat>& >::type vect(vectSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type S(SSEXP);
     Rcpp::traits::input_parameter< double >::type a(aSEXP);
     Rcpp::traits::input_parameter< int >::type vect_size(vect_sizeSEXP);
-    vector_of_matrices(theVector, S, a, vect_size);
+    vector_of_matrices(vect, S, a, vect_size);
     return R_NilValue;
 END_RCPP
 }
@@ -610,15 +610,15 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
-// findN
-int findN(double h, double lambda);
-RcppExport SEXP _matrixdist_findN(SEXP hSEXP, SEXP lambdaSEXP) {
+// find_n
+int find_n(double h, double lambda);
+RcppExport SEXP _matrixdist_find_n(SEXP hSEXP, SEXP lambdaSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< double >::type h(hSEXP);
     Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP);
-    rcpp_result_gen = Rcpp::wrap(findN(h, lambda));
+    rcpp_result_gen = Rcpp::wrap(find_n(h, lambda));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1198,9 +1198,9 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// sumPH
-Rcpp::List sumPH(arma::rowvec alpha1, arma::mat S1, arma::rowvec alpha2, arma::mat S2);
-RcppExport SEXP _matrixdist_sumPH(SEXP alpha1SEXP, SEXP S1SEXP, SEXP alpha2SEXP, SEXP S2SEXP) {
+// sum_ph
+Rcpp::List sum_ph(arma::rowvec alpha1, arma::mat S1, arma::rowvec alpha2, arma::mat S2);
+RcppExport SEXP _matrixdist_sum_ph(SEXP alpha1SEXP, SEXP S1SEXP, SEXP alpha2SEXP, SEXP S2SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -1208,7 +1208,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< arma::mat >::type S1(S1SEXP);
     Rcpp::traits::input_parameter< arma::rowvec >::type alpha2(alpha2SEXP);
     Rcpp::traits::input_parameter< arma::mat >::type S2(S2SEXP);
-    rcpp_result_gen = Rcpp::wrap(sumPH(alpha1, S1, alpha2, S2));
+    rcpp_result_gen = Rcpp::wrap(sum_ph(alpha1, S1, alpha2, S2));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1363,7 +1363,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_vector_of_matrices", (DL_FUNC) &_matrixdist_vector_of_matrices, 4},
     {"_matrixdist_m_exp_sum", (DL_FUNC) &_matrixdist_m_exp_sum, 4},
     {"_matrixdist_pow2_matrix", (DL_FUNC) &_matrixdist_pow2_matrix, 2},
-    {"_matrixdist_findN", (DL_FUNC) &_matrixdist_findN, 2},
+    {"_matrixdist_find_n", (DL_FUNC) &_matrixdist_find_n, 2},
     {"_matrixdist_EMstep_UNI", (DL_FUNC) &_matrixdist_EMstep_UNI, 7},
     {"_matrixdist_logLikelihoodPH_UNI", (DL_FUNC) &_matrixdist_logLikelihoodPH_UNI, 7},
     {"_matrixdist_logLikelihoodMweibull_UNI", (DL_FUNC) &_matrixdist_logLikelihoodMweibull_UNI, 8},
@@ -1402,7 +1402,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_reversTransformData", (DL_FUNC) &_matrixdist_reversTransformData, 3},
     {"_matrixdist_clone_vector", (DL_FUNC) &_matrixdist_clone_vector, 1},
     {"_matrixdist_clone_matrix", (DL_FUNC) &_matrixdist_clone_matrix, 1},
-    {"_matrixdist_sumPH", (DL_FUNC) &_matrixdist_sumPH, 4},
+    {"_matrixdist_sum_ph", (DL_FUNC) &_matrixdist_sum_ph, 4},
     {"_matrixdist_embedded_mc", (DL_FUNC) &_matrixdist_embedded_mc, 1},
     {"_matrixdist_cumulate_matrix", (DL_FUNC) &_matrixdist_cumulate_matrix, 1},
     {"_matrixdist_cumulate_vector", (DL_FUNC) &_matrixdist_cumulate_vector, 1},

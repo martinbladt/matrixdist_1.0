@@ -5,7 +5,7 @@
 \alias{mph-class}
 \title{Multivariate Phase Type distributions}
 \value{
-
+Class object.
 }
 \description{
 Class of objects for multivariate phase type distributions.
@@ -16,5 +16,7 @@ Class of objects for multivariate phase type distributions.
 \item{\code{name}}{Name of the phase type distribution.}
 
 \item{\code{pars}}{A list comprising of the parameters.}
+
+\item{\code{fit}}{A list containing estimation information.}
 }}
 

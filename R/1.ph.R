@@ -78,7 +78,7 @@ setMethod(
     if (methods::is(e1, "iph") | methods::is(e2, "iph")) {
       stop("objects to be added should be ph")
     }
-    L <- sumPH(e1@pars$alpha, e1@pars$S, e2@pars$alpha, e2@pars$S)
+    L <- sum_ph(e1@pars$alpha, e1@pars$S, e2@pars$alpha, e2@pars$S)
     return(ph(alpha = L$alpha, S = L$S))
   }
 )
@@ -486,7 +486,7 @@ data_aggregation <- function(y, w) {
   observations <- cbind(y, w)
   mat <- data.frame(observations)
   names(mat) <- c("obs", "weight")
-  agg <- aggregate(mat$weight,
+  agg <- stats::aggregate(mat$weight,
     by = list(un_obs = mat$obs),
     FUN = sum
   )

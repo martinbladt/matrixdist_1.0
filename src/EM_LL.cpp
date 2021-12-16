@@ -161,7 +161,7 @@ void EMstep_RK(double h, arma::vec & alpha, arma::mat & S, const Rcpp::NumericVe
   unsigned p{S.n_rows};
   
   arma::mat e; e.ones(S.n_cols, 1);
-  arma::mat t = (S * (-1)) * e;
+  arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat Bmean = arma::zeros(p,1);
   arma::mat Zmean = arma::zeros(p,1);
@@ -176,29 +176,29 @@ void EMstep_RK(double h, arma::vec & alpha, arma::mat & S, const Rcpp::NumericVe
   
   // initial conditions
   avector = alpha;
-  bvector = t;
+  bvector = exit_vect;
   
   double dt{0.0};
   if (obs.size() > 0) {
     dt = obs[0];
   }
   
-  double SumOfWeights{0.0};
+  double sum_weights{0.0};
   double density{0.0};
   
   // E step
   //  Uncensored data
   for (int k{0}; k < obs.size(); ++k) {
-    SumOfWeights += weight[k];
+    sum_weights += weight[k];
     
-    runge_kutta(avector, bvector, cmatrix, dt, h, S, t);
+    runge_kutta(avector, bvector, cmatrix, dt, h, S, exit_vect);
     aux_mat = alpha.t() * bvector;
     density = aux_mat(0,0);
     
     // E-step
     for (int i{0}; i < p; ++i) {
       Bmean(i,0) += alpha[i] * bvector(i,0) * weight[k] / density;
-      Nmean(i,p) += avector[i] * t(i,0) * weight[k] / density;
+      Nmean(i,p) += avector[i] * exit_vect(i,0) * weight[k] / density;
       Zmean(i,0) += cmatrix(i,i) * weight[k] / density;
       for (int j{0}; j < p; ++j) {
         Nmean(i,j) += S(i,j) * cmatrix(j,i) * weight[k] / density;
@@ -210,7 +210,7 @@ void EMstep_RK(double h, arma::vec & alpha, arma::mat & S, const Rcpp::NumericVe
   }
   
   //  Right-Censored Data
-  double SumOfCensored{0.0};
+  double sum_censored{0.0};
   if (rcens.size() > 0) {
     dt = rcens[0];
     cmatrix = cmatrix * 0;
@@ -218,7 +218,7 @@ void EMstep_RK(double h, arma::vec & alpha, arma::mat & S, const Rcpp::NumericVe
     bvector = e;
   }
   for (int k{0}; k < rcens.size(); ++k) {
-    SumOfCensored += rcweight[k];
+    sum_censored += rcweight[k];
     
     runge_kutta(avector, bvector, cmatrix, dt, h, S, e);
     aux_mat = alpha.t() * bvector;
@@ -239,15 +239,15 @@ void EMstep_RK(double h, arma::vec & alpha, arma::mat & S, const Rcpp::NumericVe
   
   // M step
   for (int i{0}; i < p; ++i) {
-    alpha[i] = Bmean(i,0) / (SumOfWeights + SumOfCensored);
+    alpha[i] = Bmean(i,0) / (sum_weights + sum_censored);
     if (alpha[i] < 0) {
       alpha[i] = 0;
     }
-    t(i,0) = Nmean(i,p) / Zmean(i,0);
-    if (t(i,0) < 0) {
-      t(i,0) = 0;
+    exit_vect(i,0) = Nmean(i,p) / Zmean(i,0);
+    if (exit_vect(i,0) < 0) {
+      exit_vect(i,0) = 0;
     }
-    S(i,i) = -t(i,0);
+    S(i,i) = -exit_vect(i,0);
     for (int j{0}; j < p; ++j) {
       if (i != j) {
         S(i,j) = Nmean(i,j) / Zmean(i,0);
@@ -339,7 +339,7 @@ double logLikelihoodPH_RK(double h, arma::vec & alpha, arma::mat & S, const Rcpp
   arma::vec avector(p);
   
   arma::mat e; e.ones(S.n_cols, 1);
-  arma::mat t = (S * (-1)) * e;
+  arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat aux_mat(1,1);
   
@@ -358,7 +358,7 @@ double logLikelihoodPH_RK(double h, arma::vec & alpha, arma::mat & S, const Rcpp
   }
   for (int k{0}; k < obs.size(); ++k) {
     a_rungekutta(avector, dt, h, S);
-    aux_mat = avector.t() * t;
+    aux_mat = avector.t() * exit_vect;
     density = aux_mat(0,0);
     logLh += weight[k] * std::log(density);
     if (k < obs.size() - 1) {dt = obs[k + 1] - obs[k]; }
@@ -402,7 +402,7 @@ double logLikelihoodMweibull_RK(double h, arma::vec & alpha, arma::mat & S, doub
   arma::vec avector(p);
   
   arma::mat e; e.ones(S.n_cols, 1);
-  arma::mat t = (S * (-1)) * e;
+  arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat aux_mat(1,1);
   
@@ -421,7 +421,7 @@ double logLikelihoodMweibull_RK(double h, arma::vec & alpha, arma::mat & S, doub
   }
   for (int k{0}; k < obs.size(); ++k) {
     a_rungekutta(avector, dt, h, S);
-    aux_mat = avector.t() * t;
+    aux_mat = avector.t() * exit_vect;
     density = aux_mat(0,0);
     logLh += weight[k] * (std::log(density) + std::log(beta) + (beta -1) * std::log(obs[k]));
     if (k < obs.size() - 1) {dt = pow(obs[k + 1], beta) - pow(obs[k], beta);}
@@ -465,7 +465,7 @@ double logLikelihoodMpareto_RK(double h, arma::vec & alpha, arma::mat & S, doubl
   arma::vec avector(p);
   
   arma::mat e; e.ones(S.n_cols, 1);
-  arma::mat t = (S * (-1)) * e;
+  arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat aux_mat(1,1);
 
@@ -484,7 +484,7 @@ double logLikelihoodMpareto_RK(double h, arma::vec & alpha, arma::mat & S, doubl
   }
   for (int k{0}; k < obs.size(); ++k) {
     a_rungekutta(avector, dt, h, S);
-    aux_mat = avector.t() * t;
+    aux_mat = avector.t() * exit_vect;
     density = aux_mat(0,0);
     logLh += weight[k] * (std::log(density) - std::log(obs[k] + beta));
     if (k < obs.size() - 1) {dt = std::log(obs[k + 1] / beta + 1) - std::log(obs[k] / beta + 1);}
@@ -528,7 +528,7 @@ double logLikelihoodMlognormal_RK(double h, arma::vec & alpha, arma::mat & S, do
   arma::vec avector(p);
   
   arma::mat e; e.ones(S.n_cols, 1);
-  arma::mat t = (S * (-1)) * e;
+  arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat aux_mat(1,1);
   
@@ -547,7 +547,7 @@ double logLikelihoodMlognormal_RK(double h, arma::vec & alpha, arma::mat & S, do
   }
   for (int k{0}; k < obs.size(); ++k) {
     a_rungekutta(avector, dt, h, S);
-    aux_mat = avector.t() * t;
+    aux_mat = avector.t() * exit_vect;
     density = aux_mat(0,0);
     logLh += weight[k] * (std::log(density) + std::log(beta) + (beta -1) * std::log(std::log(obs[k] + 1)) - std::log(obs[k] + 1));
     if (k < obs.size() - 1) {dt = pow(std::log(obs[k + 1] + 1), beta) - pow(std::log(obs[k] + 1), beta);}
@@ -591,7 +591,7 @@ double logLikelihoodMloglogistic_RK(double h, arma::vec & alpha, arma::mat & S, 
   arma::vec avector(p);
   
   arma::mat e; e.ones(S.n_cols, 1);
-  arma::mat t = (S * (-1)) * e;
+  arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat aux_mat(1,1);
   
@@ -610,7 +610,7 @@ double logLikelihoodMloglogistic_RK(double h, arma::vec & alpha, arma::mat & S, 
   }
   for (int k{0}; k < obs.size(); ++k) {
     a_rungekutta(avector, dt, h, S);
-    aux_mat = avector.t() * t;
+    aux_mat = avector.t() * exit_vect;
     density = aux_mat(0,0);
     logLh += weight[k] * (std::log(density) + std::log(beta[1]) - std::log(beta[0]) + (beta[1] - 1) * (std::log(obs[k]) - std::log(beta[0])) - std::log(pow(obs[k] / beta[0], beta[1]) + 1));
     if (k < obs.size() - 1) {dt = std::log(pow(obs[k + 1] / beta[0], beta[1]) + 1) - std::log(pow(obs[k] / beta[0], beta[1]) + 1);}
@@ -654,7 +654,7 @@ double logLikelihoodMgompertz_RK(double h, arma::vec & alpha, arma::mat & S, dou
   arma::vec avector(p);
   
   arma::mat e; e.ones(S.n_cols, 1);
-  arma::mat t = (S * (-1)) * e;
+  arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat aux_mat(1,1);
   
@@ -673,7 +673,7 @@ double logLikelihoodMgompertz_RK(double h, arma::vec & alpha, arma::mat & S, dou
   }
   for (int k{0}; k < obs.size(); ++k) {
     a_rungekutta(avector, dt, h, S);
-    aux_mat = avector.t() * t;
+    aux_mat = avector.t() * exit_vect;
     density = aux_mat(0,0);
     logLh += weight[k] * (std::log(density) + obs[k] * beta);
     if (k < obs.size() - 1) {dt = (exp(obs[k + 1] * beta) - 1) / beta - (exp(obs[k] * beta) - 1) / beta;}
@@ -717,7 +717,7 @@ double logLikelihoodMgev_RK(double h, arma::vec  & alpha, arma::mat & S, Rcpp::N
   arma::vec avector(p);
   
   arma::mat e; e.ones(S.n_cols, 1);
-  arma::mat t = (S * (-1)) * e;
+  arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat aux_mat(1,1);
   
@@ -739,7 +739,7 @@ double logLikelihoodMgev_RK(double h, arma::vec  & alpha, arma::mat & S, Rcpp::N
     }
     for (int k{1}; k <= N; ++k) {
       a_rungekutta(avector, dt, h, S);
-      aux_mat = avector.t() * t;
+      aux_mat = avector.t() * exit_vect;
       density = aux_mat(0,0);
       logLh += weight[N - k] * (std::log(density) - std::log(beta[1]) - (obs[N - k] - beta[0]) / beta[1]);
       if (k < N) {dt = exp(-(obs[N - k - 1] - beta[0]) / beta[1]) - exp(-(obs[N - k] - beta[0]) / beta[1]);}
@@ -765,7 +765,7 @@ double logLikelihoodMgev_RK(double h, arma::vec  & alpha, arma::mat & S, Rcpp::N
     }
     for (int k{1}; k <= N; ++k) {
       a_rungekutta(avector, dt, h, S);
-      aux_mat = avector.t() * t;
+      aux_mat = avector.t() * exit_vect;
       density = aux_mat(0,0);
       logLh += weight[N - k] * (std::log(density) - std::log(beta[1]) - (1 + 1 / beta[2]) * std::log(1 + (beta[2] / beta[1]) * (obs[N - k] - beta[0])));
       if (k < N) {dt = pow(1 + (beta[2] / beta[1]) * (obs[N - k - 1] - beta[0]) , - 1 / beta[2]) - pow(1 + (beta[2] / beta[1]) * (obs[N - k] - beta[0]) , - 1 / beta[2]);}
@@ -814,7 +814,7 @@ double logLikelihoodPH_RKs(double h, arma::vec & alpha, arma::mat & S, const Rcp
   arma::vec avector(p);
   
   arma::mat e; e.ones(S.n_cols, 1);
-  arma::mat t = (S * (-1)) * e;
+  arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat aux_mat(1,1);
   
@@ -833,7 +833,7 @@ double logLikelihoodPH_RKs(double h, arma::vec & alpha, arma::mat & S, const Rcp
   }
   for (int k{0}; k < obs.size(); ++k) {
     if(dt > 0) a_rungekutta(avector, dt, h, S);
-    aux_mat = avector.t() * t;
+    aux_mat = avector.t() * exit_vect;
     density = aux_mat(0,0);
     logLh += weight[k] * (std::log(density) + std::log(scale1[k]));
     if (k < obs.size() - 1){dt = scale1[k + 1] * obs[k + 1] - scale1[k] * obs[k];}
@@ -877,7 +877,7 @@ double logLikelihoodMweibull_RKs(double h, arma::vec & alpha, arma::mat & S, dou
   arma::vec avector(p);
   
   arma::mat e; e.ones(S.n_cols, 1);
-  arma::mat t = (S * (-1)) * e;
+  arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat aux_mat(1,1);
   
@@ -896,7 +896,7 @@ double logLikelihoodMweibull_RKs(double h, arma::vec & alpha, arma::mat & S, dou
   }
   for (int k{0}; k < obs.size(); ++k) {
     if(dt > 0) a_rungekutta(avector, dt, h, S);
-    aux_mat = avector.t() * t;
+    aux_mat = avector.t() * exit_vect;
     density = aux_mat(0,0);
     logLh += weight[k] * (std::log(density) + std::log(scale1[k]) + std::log(beta) + (beta -1) * std::log(obs[k]));
     if (k < obs.size() - 1){dt = scale1[k + 1] * pow(obs[k + 1], beta) - scale1[k] * pow(obs[k], beta);}
@@ -940,7 +940,7 @@ double logLikelihoodMpareto_RKs(double h, arma::vec & alpha, arma::mat & S, doub
   arma::vec avector(p);
   
   arma::mat e; e.ones(S.n_cols, 1);
-  arma::mat t = (S * (-1)) * e;
+  arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat aux_mat(1,1);
   
@@ -959,7 +959,7 @@ double logLikelihoodMpareto_RKs(double h, arma::vec & alpha, arma::mat & S, doub
   }
   for (int k{0}; k < obs.size(); ++k) {
     if(dt > 0) a_rungekutta(avector, dt, h, S);
-    aux_mat = avector.t() * t;
+    aux_mat = avector.t() * exit_vect;
     density = aux_mat(0,0);
     logLh += weight[k] * (std::log(density) + std::log(scale1[k]) - std::log(obs[k] + beta));
     if (k < obs.size() - 1){dt = scale1[k + 1] * std::log(obs[k + 1] / beta + 1) - scale1[k] * std::log(obs[k] / beta + 1);}
@@ -1003,7 +1003,7 @@ double logLikelihoodMlognormal_RKs(double h, arma::vec & alpha, arma::mat & S, d
   arma::vec avector(p);
   
   arma::mat e; e.ones(S.n_cols, 1);
-  arma::mat t = (S * (-1)) * e;
+  arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat aux_mat(1,1);
   
@@ -1022,7 +1022,7 @@ double logLikelihoodMlognormal_RKs(double h, arma::vec & alpha, arma::mat & S, d
   }
   for (int k{0}; k < obs.size(); ++k) {
     if(dt > 0) a_rungekutta(avector, dt, h, S);
-    aux_mat = avector.t() * t;
+    aux_mat = avector.t() * exit_vect;
     density = aux_mat(0,0);
     logLh += weight[k] * (std::log(density) + std::log(scale1[k]) + std::log(beta) + (beta -1) * std::log(std::log(obs[k] + 1)) - std::log(obs[k] + 1));
     if (k < obs.size() - 1){dt = scale1[k + 1] * pow(std::log(obs[k + 1] + 1), beta) - scale1[k] * pow(std::log(obs[k] + 1), beta);}
@@ -1066,7 +1066,7 @@ double logLikelihoodMloglogistic_RKs(double h, arma::vec & alpha, arma::mat & S,
   arma::vec avector(p);
   
   arma::mat e; e.ones(S.n_cols, 1);
-  arma::mat t = (S * (-1)) * e;
+  arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat aux_mat(1,1);
   
@@ -1085,7 +1085,7 @@ double logLikelihoodMloglogistic_RKs(double h, arma::vec & alpha, arma::mat & S,
   }
   for (int k{0}; k < obs.size(); ++k) {
     if(dt > 0) a_rungekutta(avector, dt, h, S);
-    aux_mat = avector.t() * t;
+    aux_mat = avector.t() * exit_vect;
     density = aux_mat(0,0);
     logLh += weight[k] * (std::log(density) + std::log(scale1[k]) + std::log(beta[1]) - std::log(beta[0]) + (beta[1] - 1) * (std::log(obs[k]) - std::log(beta[0])) - std::log(pow(obs[k] / beta[0], beta[1]) + 1));
     if (k < obs.size() - 1){dt = scale1[k + 1] * std::log(pow(obs[k + 1] / beta[0], beta[1]) + 1) - scale1[k] * std::log(pow(obs[k] / beta[0], beta[1]) + 1);}
@@ -1129,7 +1129,7 @@ double logLikelihoodMgompertz_RKs(double h, arma::vec & alpha, arma::mat & S, do
   arma::vec avector(p);
   
   arma::mat e; e.ones(S.n_cols, 1);
-  arma::mat t = (S * (-1)) * e;
+  arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat aux_mat(1,1);
   
@@ -1148,7 +1148,7 @@ double logLikelihoodMgompertz_RKs(double h, arma::vec & alpha, arma::mat & S, do
   }
   for (int k{0}; k < obs.size(); ++k) {
     if(dt > 0) a_rungekutta(avector, dt, h, S);
-    aux_mat = avector.t() * t;
+    aux_mat = avector.t() * exit_vect;
     density = aux_mat(0,0);
     logLh += weight[k] * (std::log(density) + std::log(scale1[k]) + obs[k] * beta);
     if (k < obs.size() - 1){dt = scale1[k + 1] * (exp(obs[k + 1] * beta) - 1) / beta - scale1[k] * (exp(obs[k] * beta) - 1) / beta;}
