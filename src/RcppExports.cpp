@@ -1117,16 +1117,16 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// matrix_VanLoan
-arma::mat matrix_VanLoan(arma::mat A1, arma::mat A2, arma::mat B1);
-RcppExport SEXP _matrixdist_matrix_VanLoan(SEXP A1SEXP, SEXP A2SEXP, SEXP B1SEXP) {
+// matrix_vanloan
+arma::mat matrix_vanloan(arma::mat A1, arma::mat A2, arma::mat B1);
+RcppExport SEXP _matrixdist_matrix_vanloan(SEXP A1SEXP, SEXP A2SEXP, SEXP B1SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< arma::mat >::type A1(A1SEXP);
     Rcpp::traits::input_parameter< arma::mat >::type A2(A2SEXP);
     Rcpp::traits::input_parameter< arma::mat >::type B1(B1SEXP);
-    rcpp_result_gen = Rcpp::wrap(matrix_VanLoan(A1, A2, B1));
+    rcpp_result_gen = Rcpp::wrap(matrix_vanloan(A1, A2, B1));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1163,16 +1163,16 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// reversTransformData
-List reversTransformData(const NumericVector& obs, const NumericVector& weights, const NumericVector& beta);
-RcppExport SEXP _matrixdist_reversTransformData(SEXP obsSEXP, SEXP weightsSEXP, SEXP betaSEXP) {
+// revers_data_trans
+List revers_data_trans(const NumericVector& obs, const NumericVector& weights, const NumericVector& beta);
+RcppExport SEXP _matrixdist_revers_data_trans(SEXP obsSEXP, SEXP weightsSEXP, SEXP betaSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const NumericVector& >::type obs(obsSEXP);
     Rcpp::traits::input_parameter< const NumericVector& >::type weights(weightsSEXP);
     Rcpp::traits::input_parameter< const NumericVector& >::type beta(betaSEXP);
-    rcpp_result_gen = Rcpp::wrap(reversTransformData(obs, weights, beta));
+    rcpp_result_gen = Rcpp::wrap(revers_data_trans(obs, weights, beta));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1395,11 +1395,11 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_mgevden", (DL_FUNC) &_matrixdist_mgevden, 4},
     {"_matrixdist_mgevcdf", (DL_FUNC) &_matrixdist_mgevcdf, 5},
     {"_matrixdist_inf_norm", (DL_FUNC) &_matrixdist_inf_norm, 1},
-    {"_matrixdist_matrix_VanLoan", (DL_FUNC) &_matrixdist_matrix_VanLoan, 3},
+    {"_matrixdist_matrix_vanloan", (DL_FUNC) &_matrixdist_matrix_vanloan, 3},
     {"_matrixdist_max_diagonal", (DL_FUNC) &_matrixdist_max_diagonal, 1},
     {"_matrixdist_matrix_exponential", (DL_FUNC) &_matrixdist_matrix_exponential, 1},
     {"_matrixdist_default_step_length", (DL_FUNC) &_matrixdist_default_step_length, 1},
-    {"_matrixdist_reversTransformData", (DL_FUNC) &_matrixdist_reversTransformData, 3},
+    {"_matrixdist_revers_data_trans", (DL_FUNC) &_matrixdist_revers_data_trans, 3},
     {"_matrixdist_clone_vector", (DL_FUNC) &_matrixdist_clone_vector, 1},
     {"_matrixdist_clone_matrix", (DL_FUNC) &_matrixdist_clone_matrix, 1},
     {"_matrixdist_sum_ph", (DL_FUNC) &_matrixdist_sum_ph, 4},

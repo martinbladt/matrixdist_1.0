@@ -32,20 +32,20 @@ double default_step_length(const NumericMatrix & S) {
 //' @param beta Parameters of the GEV.
 //' 
 // [[Rcpp::export]]
-List reversTransformData(const NumericVector & obs, const NumericVector & weights, const NumericVector & beta) {
-  int N = static_cast<int>(obs.size());
-  NumericVector trans_obs(N);
-  NumericVector trans_weights(N);
+List revers_data_trans(const NumericVector & obs, const NumericVector & weights, const NumericVector & beta) {
+  int n = static_cast<int>(obs.size());
+  NumericVector trans_obs(n);
+  NumericVector trans_weights(n);
   if (beta[2] == 0) { // Gumbel
-    for (int i{0}; i < N; ++i) {
-      trans_obs[i] = exp( -(obs[N - i - 1] - beta[0]) / beta[1]) ;
-      trans_weights[i] = weights[N - i - 1];
+    for (int i{0}; i < n; ++i) {
+      trans_obs[i] = exp(-(obs[n - i - 1] - beta[0]) / beta[1]) ;
+      trans_weights[i] = weights[n - i - 1];
     }
   }
   else { // GEVD
-    for (int i{0}; i < N; ++i) {
-      trans_obs[i] = pow( 1 + beta[2] * (obs[N - i - 1] - beta[0]) / beta[1] , -1 / beta[2]);
-      trans_weights[i] = weights[N - i - 1];
+    for (int i{0}; i < n; ++i) {
+      trans_obs[i] = pow(1 + beta[2] * (obs[n - i - 1] - beta[0]) / beta[1], -1 / beta[2]);
+      trans_weights[i] = weights[n - i - 1];
     }
   }
   

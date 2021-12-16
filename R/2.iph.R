@@ -72,7 +72,7 @@ iph <- function(ph = NULL, gfun = NULL, gfun_pars = NULL, alpha = NULL, S = NULL
   f3 <- function(beta, t) log(t + 1)^(beta)
   f4 <- function(beta, t) log((t / beta[1])^(beta[2]) + 1)
   f5 <- function(beta, t) (exp(t * beta) - 1) / beta
-  f6 <- function(beta, t, w) reversTransformData(t, w, beta)
+  f6 <- function(beta, t, w) revers_data_trans(t, w, beta)
   nb <- which(gfun == c("weibull", "pareto", "lognormal", "loglogistic", "gompertz", "gev"))
   ginv <- base::eval(parse(text = paste("f", nb, sep = "")))
 

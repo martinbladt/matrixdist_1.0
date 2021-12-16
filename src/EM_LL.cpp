@@ -57,7 +57,7 @@ void runge_kutta(arma::vec & avector, arma::mat & bvector, arma::mat & cmatrix, 
       }
       ka(2,i) = h2 * sum;
     }
-    for (i=0; i < p; ++i) {
+    for (i = 0; i < p; ++i) {
       sum = 0;
       for (j = 0; j < p; ++j)
       {
@@ -174,7 +174,7 @@ void EMstep_RK(double h, arma::vec & alpha, arma::mat & S, const Rcpp::NumericVe
   
   arma::mat aux_mat(1,1);
   
-  // initial conditions
+  // Initial conditions
   avector = alpha;
   bvector = exit_vect;
   
@@ -363,7 +363,7 @@ double logLikelihoodPH_RK(double h, arma::vec & alpha, arma::mat & S, const Rcpp
     logLh += weight[k] * std::log(density);
     if (k < obs.size() - 1) {dt = obs[k + 1] - obs[k]; }
   }
-  //Right censored data
+  // Right censored data
   if (rcens.size() > 0) {
     dt = rcens[0];
     avector = alpha;
@@ -426,7 +426,7 @@ double logLikelihoodMweibull_RK(double h, arma::vec & alpha, arma::mat & S, doub
     logLh += weight[k] * (std::log(density) + std::log(beta) + (beta -1) * std::log(obs[k]));
     if (k < obs.size() - 1) {dt = pow(obs[k + 1], beta) - pow(obs[k], beta);}
   }
-  //Right censored data
+  // Right censored data
   if (rcens.size() > 0) {
     dt = pow(rcens[0], beta);
     avector = alpha;
@@ -489,7 +489,7 @@ double logLikelihoodMpareto_RK(double h, arma::vec & alpha, arma::mat & S, doubl
     logLh += weight[k] * (std::log(density) - std::log(obs[k] + beta));
     if (k < obs.size() - 1) {dt = std::log(obs[k + 1] / beta + 1) - std::log(obs[k] / beta + 1);}
   }
-  //Right censored data
+  // Right censored data
   if (rcens.size() > 0) {
     dt = std::log(rcens[0] / beta + 1);
     avector = alpha;
@@ -552,7 +552,7 @@ double logLikelihoodMlognormal_RK(double h, arma::vec & alpha, arma::mat & S, do
     logLh += weight[k] * (std::log(density) + std::log(beta) + (beta -1) * std::log(std::log(obs[k] + 1)) - std::log(obs[k] + 1));
     if (k < obs.size() - 1) {dt = pow(std::log(obs[k + 1] + 1), beta) - pow(std::log(obs[k] + 1), beta);}
   }
-  //Right censored data
+  // Right censored data
   if (rcens.size() > 0) {
     dt = pow(std::log(rcens[0] + 1), beta);
     avector = alpha;
@@ -615,7 +615,7 @@ double logLikelihoodMloglogistic_RK(double h, arma::vec & alpha, arma::mat & S, 
     logLh += weight[k] * (std::log(density) + std::log(beta[1]) - std::log(beta[0]) + (beta[1] - 1) * (std::log(obs[k]) - std::log(beta[0])) - std::log(pow(obs[k] / beta[0], beta[1]) + 1));
     if (k < obs.size() - 1) {dt = std::log(pow(obs[k + 1] / beta[0], beta[1]) + 1) - std::log(pow(obs[k] / beta[0], beta[1]) + 1);}
   }
-  //Right censored data
+  // Right censored data
   if (rcens.size() > 0) {
     dt = std::log(pow(rcens[0] / beta[0], beta[1]) + 1);
     avector = alpha;
@@ -678,7 +678,7 @@ double logLikelihoodMgompertz_RK(double h, arma::vec & alpha, arma::mat & S, dou
     logLh += weight[k] * (std::log(density) + obs[k] * beta);
     if (k < obs.size() - 1) {dt = (exp(obs[k + 1] * beta) - 1) / beta - (exp(obs[k] * beta) - 1) / beta;}
   }
-  //Right censored data
+  // Right censored data
   if (rcens.size() > 0) {
     dt = (exp(rcens[0] * beta) - 1) / beta;
     avector = alpha;
@@ -744,7 +744,7 @@ double logLikelihoodMgev_RK(double h, arma::vec  & alpha, arma::mat & S, Rcpp::N
       logLh += weight[N - k] * (std::log(density) - std::log(beta[1]) - (obs[N - k] - beta[0]) / beta[1]);
       if (k < N) {dt = exp(-(obs[N - k - 1] - beta[0]) / beta[1]) - exp(-(obs[N - k] - beta[0]) / beta[1]);}
     }
-    //Right censored data
+    // Right censored data
     N = rcens.size();
     if (N > 0) {
       dt = exp(-(rcens[N - 1] - beta[0]) / beta[1]);
@@ -771,7 +771,7 @@ double logLikelihoodMgev_RK(double h, arma::vec  & alpha, arma::mat & S, Rcpp::N
       if (k < N) {dt = pow(1 + (beta[2] / beta[1]) * (obs[N - k - 1] - beta[0]) , - 1 / beta[2]) - pow(1 + (beta[2] / beta[1]) * (obs[N - k] - beta[0]) , - 1 / beta[2]);}
       
     }
-    //Right censored data
+    // Right censored data
     N = rcens.size();
     if (N > 0) {
       dt = pow(1 + (beta[2] / beta[1]) * (rcens[N - 1] - beta[0]) , - 1 / beta[2]);
@@ -838,7 +838,7 @@ double logLikelihoodPH_RKs(double h, arma::vec & alpha, arma::mat & S, const Rcp
     logLh += weight[k] * (std::log(density) + std::log(scale1[k]));
     if (k < obs.size() - 1){dt = scale1[k + 1] * obs[k + 1] - scale1[k] * obs[k];}
   }
-  //Right censored data
+  // Right censored data
   if (rcens.size() > 0) {
     dt = scale2[0] * rcens[0];
     avector = alpha;
@@ -901,7 +901,7 @@ double logLikelihoodMweibull_RKs(double h, arma::vec & alpha, arma::mat & S, dou
     logLh += weight[k] * (std::log(density) + std::log(scale1[k]) + std::log(beta) + (beta -1) * std::log(obs[k]));
     if (k < obs.size() - 1){dt = scale1[k + 1] * pow(obs[k + 1], beta) - scale1[k] * pow(obs[k], beta);}
   }
-  //Right censored data
+  // Right censored data
   if (rcens.size() > 0) {
     dt = scale2[0] * pow(rcens[0], beta);
     avector = alpha;
@@ -964,7 +964,7 @@ double logLikelihoodMpareto_RKs(double h, arma::vec & alpha, arma::mat & S, doub
     logLh += weight[k] * (std::log(density) + std::log(scale1[k]) - std::log(obs[k] + beta));
     if (k < obs.size() - 1){dt = scale1[k + 1] * std::log(obs[k + 1] / beta + 1) - scale1[k] * std::log(obs[k] / beta + 1);}
   }
-  //Right censored data
+  // Right censored data
   if (rcens.size() > 0) {
     dt = scale2[0] * std::log(rcens[0] / beta + 1);
     avector = alpha;
@@ -1027,7 +1027,7 @@ double logLikelihoodMlognormal_RKs(double h, arma::vec & alpha, arma::mat & S, d
     logLh += weight[k] * (std::log(density) + std::log(scale1[k]) + std::log(beta) + (beta -1) * std::log(std::log(obs[k] + 1)) - std::log(obs[k] + 1));
     if (k < obs.size() - 1){dt = scale1[k + 1] * pow(std::log(obs[k + 1] + 1), beta) - scale1[k] * pow(std::log(obs[k] + 1), beta);}
   }
-  //Right censored data
+  // Right censored data
   if (rcens.size() > 0) {
     dt = scale2[0] * pow(std::log(rcens[0] + 1), beta);
     avector = alpha;
@@ -1090,7 +1090,7 @@ double logLikelihoodMloglogistic_RKs(double h, arma::vec & alpha, arma::mat & S,
     logLh += weight[k] * (std::log(density) + std::log(scale1[k]) + std::log(beta[1]) - std::log(beta[0]) + (beta[1] - 1) * (std::log(obs[k]) - std::log(beta[0])) - std::log(pow(obs[k] / beta[0], beta[1]) + 1));
     if (k < obs.size() - 1){dt = scale1[k + 1] * std::log(pow(obs[k + 1] / beta[0], beta[1]) + 1) - scale1[k] * std::log(pow(obs[k] / beta[0], beta[1]) + 1);}
   }
-  //Right censored data
+  // Right censored data
   if (rcens.size() > 0) {
     dt = scale2[0] * std::log(pow(rcens[0] / beta[0], beta[1]) + 1);
     avector = alpha;
@@ -1153,7 +1153,7 @@ double logLikelihoodMgompertz_RKs(double h, arma::vec & alpha, arma::mat & S, do
     logLh += weight[k] * (std::log(density) + std::log(scale1[k]) + obs[k] * beta);
     if (k < obs.size() - 1){dt = scale1[k + 1] * (exp(obs[k + 1] * beta) - 1) / beta - scale1[k] * (exp(obs[k] * beta) - 1) / beta;}
   }
-  //Right censored data
+  // Right censored data
   if (rcens.size() > 0) {
     dt = scale2[0] * (exp(rcens[0] * beta) - 1) / beta;
     avector = alpha;

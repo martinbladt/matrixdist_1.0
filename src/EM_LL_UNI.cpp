@@ -19,12 +19,12 @@ void vector_of_matrices(std::vector<arma::mat> & vect, const arma::mat & S, doub
   arma::mat I;
   I.eye(size(S));
   
-  arma::mat P = I + S *(1/ a);
+  arma::mat P = I + S * (1 / a);
   
   vect.push_back(I);
   
   for (int k{1}; k <= vect_size; ++k) {
-    vect.push_back( (P * (1.0 / k) ) * vect[k - 1]);
+    vect.push_back((P * (1.0 / k) ) * vect[k - 1]);
   }
 }
 
@@ -118,35 +118,35 @@ void EMstep_UNI(double h, arma::vec & alpha, arma::mat & S, const Rcpp::NumericV
   arma::mat s_prod_alpha(p,p);
   s_prod_alpha = exit_vect * alpha.t();
   
-  J = matrix_VanLoan(S, S, s_prod_alpha);
+  J = matrix_vanloan(S, S, s_prod_alpha);
   
   double a = max_diagonal(J * (-1));
   
-  int N{find_n(h, 1)};
+  int m{find_n(h, 1)};
   
   std::vector<arma::mat> aux_vect;
   
-  vector_of_matrices(aux_vect, J, a, N);
+  vector_of_matrices(aux_vect, J, a, m);
   
   double sum_weights{0.0};
   double density{0.0};
   
-  //E-step
-  //  Unccensored data
+  // E-step
+  //  Uncensored data
   for (int k{0}; k < obs.size(); ++k) {
     sum_weights += weight[k];
     
     double x{obs[k]};
     
     if (x * a <= 1.0) {
-      J = m_exp_sum(x, N, aux_vect, a);
+      J = m_exp_sum(x, m, aux_vect, a);
     }
     else {
       int n{};
       n = std::log(a * x) / std::log(2.0);
       ++n;
       
-      J = m_exp_sum(x / pow(2.0, n), N, aux_vect, a);
+      J = m_exp_sum(x / pow(2.0, n), m, aux_vect, a);
       
       pow2_matrix(n, J);
     }
@@ -163,7 +163,7 @@ void EMstep_UNI(double h, arma::vec & alpha, arma::mat & S, const Rcpp::NumericV
     aux_mat = alpha.t() * bvector;
     density = aux_mat(0,0);
     
-    //E-step
+    // E-step
     for (int i{0}; i < p; ++i) {
       Bmean(i,0) += alpha[i] * bvector(i,0) * weight[k] / density;
       Nmean(i,p) += avector(0,i) * exit_vect(i,0) * weight[k] / density;
@@ -173,13 +173,13 @@ void EMstep_UNI(double h, arma::vec & alpha, arma::mat & S, const Rcpp::NumericV
       }
     }
   }
-  //  Right-Censored Data
+  // Right-Censored Data
   double sum_censored{0.0};
   if (rcens.size() > 0) {
     s_prod_alpha = e * alpha.t();
-    J = matrix_VanLoan(S, S, s_prod_alpha);
+    J = matrix_vanloan(S, S, s_prod_alpha);
     aux_vect.clear();
-    vector_of_matrices(aux_vect, J, a, N);
+    vector_of_matrices(aux_vect, J, a, m);
   }
   for (int k{0}; k < rcens.size(); ++k) {
     sum_censored += rcweight[k];
@@ -187,14 +187,14 @@ void EMstep_UNI(double h, arma::vec & alpha, arma::mat & S, const Rcpp::NumericV
     double x{rcens[k]};
     
     if (x * a <= 1.0) {
-      J = m_exp_sum(x, N, aux_vect, a);
+      J = m_exp_sum(x, m, aux_vect, a);
     }
     else {
       int n{};
       n = std::log(a * x) / std::log(2.0);
       ++n;
       
-      J = m_exp_sum(x / pow(2.0, n), N, aux_vect, a);
+      J = m_exp_sum(x / pow(2.0, n), m, aux_vect, a);
       
       pow2_matrix(n, J);
     }
@@ -210,7 +210,7 @@ void EMstep_UNI(double h, arma::vec & alpha, arma::mat & S, const Rcpp::NumericV
     aux_mat = alpha.t() * bvector;
     density = aux_mat(0,0);
     
-    //E-step
+    // E-step
     for (int i{0}; i < p; ++i) {
       Bmean(i,0) += alpha[i] * bvector(i,0) * rcweight[k] / density;
       Zmean(i,0) += cmatrix(i,i) * rcweight[k] / density;
@@ -263,17 +263,17 @@ void EMstep_UNI(double h, arma::vec & alpha, arma::mat & S, const Rcpp::NumericV
 // [[Rcpp::export]]
 double logLikelihoodPH_UNI(double h, arma::vec & alpha, arma::mat & S, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight) {
   arma::mat e; e.ones(S.n_cols, 1);
-  arma::mat s = (S * (-1)) * e;
+  arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat expm(size(S));
   
   double a = max_diagonal(S * (-1));
   
-  int N{find_n(h, 1)};
+  int m{find_n(h, 1)};
   
   std::vector<arma::mat> aux_vect;
   
-  vector_of_matrices(aux_vect, S, a, N);
+  vector_of_matrices(aux_vect, S, a, m);
   
   arma::mat aux_mat(1,1);
   
@@ -286,18 +286,18 @@ double logLikelihoodPH_UNI(double h, arma::vec & alpha, arma::mat & S, const Rcp
     double x{obs[k]};
     
     if (x * a <= 1.0) {
-      expm = m_exp_sum(x, N, aux_vect, a);
+      expm = m_exp_sum(x, m, aux_vect, a);
     }
     else {
       int n{};
       n = std::log(a * x) / std::log(2.0);
       ++n;
       
-      expm = m_exp_sum(x / pow(2.0, n), N, aux_vect, a);
+      expm = m_exp_sum(x / pow(2.0, n), m, aux_vect, a);
       
       pow2_matrix(n, expm);
     }
-    aux_mat = alpha.t() * expm * s;
+    aux_mat = alpha.t() * expm * exit_vect;
     density = aux_mat(0,0);
     logLh += weight[k] * std::log(density);
   }
@@ -306,14 +306,14 @@ double logLikelihoodPH_UNI(double h, arma::vec & alpha, arma::mat & S, const Rcp
     double x{rcens[k]};
     
     if (x * a <= 1.0) {
-      expm = m_exp_sum(x, N, aux_vect, a);
+      expm = m_exp_sum(x, m, aux_vect, a);
     }
     else {
       int n{};
       n = std::log(a * x) / std::log(2.0);
       ++n;
       
-      expm = m_exp_sum(x / pow(2.0, n), N, aux_vect, a);
+      expm = m_exp_sum(x / pow(2.0, n), m, aux_vect, a);
       
       pow2_matrix(n, expm);
     }
@@ -344,17 +344,17 @@ double logLikelihoodMweibull_UNI(double h, arma::vec & alpha, arma::mat & S, dou
   if(beta < 0) return NA_REAL;
   
   arma::mat e; e.ones(S.n_cols, 1);
-  arma::mat s = (S * (-1)) * e;
+  arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat expm(size(S));
   
   double a = max_diagonal(S * (-1));
   
-  int N{find_n(h, 1)};
+  int m{find_n(h, 1)};
   
   std::vector<arma::mat> aux_vect;
   
-  vector_of_matrices(aux_vect, S, a, N);
+  vector_of_matrices(aux_vect, S, a, m);
   
   arma::mat aux_mat(1,1);
   
@@ -367,34 +367,34 @@ double logLikelihoodMweibull_UNI(double h, arma::vec & alpha, arma::mat & S, dou
     double x{pow(obs[k], beta)};
     
     if (x * a <= 1.0) {
-      expm = m_exp_sum(x, N, aux_vect, a);
+      expm = m_exp_sum(x, m, aux_vect, a);
     }
     else {
       int n{};
       n = std::log(a * x) / std::log(2.0);
       ++n;
       
-      expm = m_exp_sum(x / pow(2.0, n), N, aux_vect, a);
+      expm = m_exp_sum(x / pow(2.0, n), m, aux_vect, a);
       
       pow2_matrix(n, expm);
     }
-    aux_mat = alpha.t() * expm * s;
+    aux_mat = alpha.t() * expm * exit_vect;
     density = aux_mat(0,0);
     logLh += weight[k] * (std::log(density) + std::log(beta) + (beta - 1) * std::log(obs[k]));
   }
-  //Right censored data
+  // Right censored data
   for (int k{0}; k < rcens.size(); ++k) {
     double x{pow(rcens[k], beta)};
     
     if (x * a <= 1.0) {
-      expm = m_exp_sum(x, N, aux_vect, a);
+      expm = m_exp_sum(x, m, aux_vect, a);
     }
     else {
       int n{};
       n = std::log(a * x) / std::log(2.0);
       ++n;
       
-      expm = m_exp_sum(x / pow(2.0, n), N, aux_vect, a);
+      expm = m_exp_sum(x / pow(2.0, n), m, aux_vect, a);
       
       pow2_matrix(n, expm);
     }
@@ -425,17 +425,17 @@ double logLikelihoodMpareto_UNI(double h, arma::vec & alpha, arma::mat & S, doub
   if(beta < 0) return NA_REAL;
   
   arma::mat e; e.ones(S.n_cols, 1);
-  arma::mat s = (S * (-1)) * e;
+  arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat expm(size(S));
   
   double a = max_diagonal(S * (-1));
   
-  int N{find_n(h, 1)};
+  int m{find_n(h, 1)};
   
   std::vector<arma::mat> aux_vect;
   
-  vector_of_matrices(aux_vect, S, a, N);
+  vector_of_matrices(aux_vect, S, a, m);
   
   arma::mat aux_mat(1,1);
   
@@ -448,34 +448,34 @@ double logLikelihoodMpareto_UNI(double h, arma::vec & alpha, arma::mat & S, doub
     double x{std::log(obs[k] / beta + 1)};
     
     if (x * a <= 1.0) {
-      expm = m_exp_sum(x, N, aux_vect, a);
+      expm = m_exp_sum(x, m, aux_vect, a);
     }
     else {
       int n{};
       n = std::log(a * x) / std::log(2.0);
       ++n;
       
-      expm = m_exp_sum(x / pow(2.0, n), N, aux_vect, a);
+      expm = m_exp_sum(x / pow(2.0, n), m, aux_vect, a);
       
       pow2_matrix(n, expm);
     }
-    aux_mat = alpha.t() * expm * s;
+    aux_mat = alpha.t() * expm * exit_vect;
     density = aux_mat(0,0);
     logLh += weight[k] * (std::log(density) - std::log(obs[k] + beta));
   }
-  //Right censored data
+  // Right censored data
   for (int k{0}; k < rcens.size(); ++k) {
     double x{std::log(rcens[k] / beta + 1)};
     
     if (x * a <= 1.0) {
-      expm = m_exp_sum(x, N, aux_vect, a);
+      expm = m_exp_sum(x, m, aux_vect, a);
     }
     else {
       int n{};
       n = std::log(a * x) / std::log(2.0);
       ++n;
       
-      expm = m_exp_sum(x / pow(2.0, n), N, aux_vect, a);
+      expm = m_exp_sum(x / pow(2.0, n), m, aux_vect, a);
       
       pow2_matrix(n, expm);
     }
@@ -506,17 +506,17 @@ double logLikelihoodMlognormal_UNI(double h, arma::vec & alpha, arma::mat & S, d
   if(beta < 0) return NA_REAL;
   
   arma::mat e; e.ones(S.n_cols, 1);
-  arma::mat s = (S * (-1)) * e;
+  arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat expm(size(S));
   
   double a = max_diagonal(S * (-1));
   
-  int N{find_n(h, 1)};
+  int m{find_n(h, 1)};
   
   std::vector<arma::mat> aux_vect;
   
-  vector_of_matrices(aux_vect, S, a, N);
+  vector_of_matrices(aux_vect, S, a, m);
   
   arma::mat aux_mat(1,1);
   
@@ -529,34 +529,34 @@ double logLikelihoodMlognormal_UNI(double h, arma::vec & alpha, arma::mat & S, d
     double x{pow(std::log(obs[k] + 1), beta)};
     
     if (x * a <= 1.0) {
-      expm = m_exp_sum(x, N, aux_vect, a);
+      expm = m_exp_sum(x, m, aux_vect, a);
     }
     else {
       int n{};
       n = std::log(a * x) / std::log(2.0);
       ++n;
       
-      expm = m_exp_sum(x / pow(2.0, n), N, aux_vect, a);
+      expm = m_exp_sum(x / pow(2.0, n), m, aux_vect, a);
       
       pow2_matrix(n, expm);
     }
-    aux_mat = alpha.t() * expm * s;
+    aux_mat = alpha.t() * expm * exit_vect;
     density = aux_mat(0,0);
     logLh += weight[k] * (std::log(density) + std::log(beta) + (beta -1) * std::log(std::log(obs[k] + 1)) - std::log(obs[k] + 1));
   }
-  //Right censored data
+  // Right censored data
   for (int k{0}; k < rcens.size(); ++k) {
     double x{pow(std::log(rcens[k] + 1), beta)};
     
     if (x * a <= 1.0) {
-      expm = m_exp_sum(x, N, aux_vect, a);
+      expm = m_exp_sum(x, m, aux_vect, a);
     }
     else {
       int n{};
       n = std::log(a * x) / std::log(2.0);
       ++n;
       
-      expm = m_exp_sum(x / pow(2.0, n), N, aux_vect, a);
+      expm = m_exp_sum(x / pow(2.0, n), m, aux_vect, a);
       
       pow2_matrix(n, expm);
     }
@@ -587,17 +587,17 @@ double logLikelihoodMloglogistic_UNI(double h, arma::vec & alpha, arma::mat & S,
   if(beta[0] < 0 || beta[1] < 0) return NA_REAL;
   
   arma::mat e; e.ones(S.n_cols, 1);
-  arma::mat s = (S * (-1)) * e;
+  arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat expm(size(S));
   
   double a = max_diagonal(S * (-1));
   
-  int N{find_n(h, 1)};
+  int m{find_n(h, 1)};
   
   std::vector<arma::mat> aux_vect;
   
-  vector_of_matrices(aux_vect, S, a, N);
+  vector_of_matrices(aux_vect, S, a, m);
   
   arma::mat aux_mat(1,1);
   
@@ -610,34 +610,34 @@ double logLikelihoodMloglogistic_UNI(double h, arma::vec & alpha, arma::mat & S,
     double x{std::log(pow(obs[k] / beta[0], beta[1]) + 1)};
     
     if (x * a <= 1.0) {
-      expm = m_exp_sum(x, N, aux_vect, a);
+      expm = m_exp_sum(x, m, aux_vect, a);
     }
     else {
       int n{};
       n = std::log(a * x) / std::log(2.0);
       ++n;
       
-      expm = m_exp_sum(x / pow(2.0, n), N, aux_vect, a);
+      expm = m_exp_sum(x / pow(2.0, n), m, aux_vect, a);
       
       pow2_matrix(n, expm);
     }
-    aux_mat = alpha.t() * expm * s;
+    aux_mat = alpha.t() * expm * exit_vect;
     density = aux_mat(0,0);
     logLh += weight[k] * (std::log(density) + std::log(beta[1]) - std::log(beta[0]) + (beta[1] - 1) * (std::log(obs[k]) - std::log(beta[0])) - std::log(pow(obs[k] / beta[0], beta[1]) + 1));
   }
-  //Right censored data
+  // Right censored data
   for (int k{0}; k < rcens.size(); ++k) {
     double x{std::log(pow(rcens[k] / beta[0], beta[1]) + 1)};
     
     if (x * a <= 1.0) {
-      expm = m_exp_sum(x, N, aux_vect, a);
+      expm = m_exp_sum(x, m, aux_vect, a);
     }
     else {
       int n{};
       n = std::log(a * x) / std::log(2.0);
       ++n;
       
-      expm = m_exp_sum(x / pow(2.0, n), N, aux_vect, a);
+      expm = m_exp_sum(x / pow(2.0, n), m, aux_vect, a);
       
       pow2_matrix(n, expm);
     }
@@ -668,17 +668,17 @@ double logLikelihoodMgompertz_UNI(double h, arma::vec & alpha, arma::mat & S, do
   if(beta < 0) return NA_REAL;
   
   arma::mat e; e.ones(S.n_cols, 1);
-  arma::mat s = (S * (-1)) * e;
+  arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat expm(size(S));
   
   double a = max_diagonal(S * (-1));
   
-  int N{find_n(h, 1)};
+  int m{find_n(h, 1)};
   
   std::vector<arma::mat> aux_vect;
   
-  vector_of_matrices(aux_vect, S, a, N);
+  vector_of_matrices(aux_vect, S, a, m);
   
   arma::mat aux_mat(1,1);
   
@@ -691,34 +691,34 @@ double logLikelihoodMgompertz_UNI(double h, arma::vec & alpha, arma::mat & S, do
     double x{(exp(obs[k] * beta) - 1) / beta};
     
     if (x * a <= 1.0) {
-      expm = m_exp_sum(x, N, aux_vect, a);
+      expm = m_exp_sum(x, m, aux_vect, a);
     }
     else {
       int n{};
       n = std::log(a * x) / std::log(2.0);
       ++n;
       
-      expm = m_exp_sum(x / pow(2.0, n), N, aux_vect, a);
+      expm = m_exp_sum(x / pow(2.0, n), m, aux_vect, a);
       
       pow2_matrix(n, expm);
     }
-    aux_mat = alpha.t() * expm * s;
+    aux_mat = alpha.t() * expm * exit_vect;
     density = aux_mat(0,0);
     logLh += weight[k] * (std::log(density) + obs[k] * beta);
   }
-  //Right censored data
+  // Right censored data
   for (int k{0}; k < rcens.size(); ++k) {
     double x{(exp(rcens[k] * beta) - 1) / beta};
     
     if (x * a <= 1.0) {
-      expm = m_exp_sum(x, N, aux_vect, a);
+      expm = m_exp_sum(x, m, aux_vect, a);
     }
     else {
       int n{};
       n = std::log(a * x) / std::log(2.0);
       ++n;
       
-      expm = m_exp_sum(x / pow(2.0, n), N, aux_vect, a);
+      expm = m_exp_sum(x / pow(2.0, n), m, aux_vect, a);
       
       pow2_matrix(n, expm);
     }
@@ -749,17 +749,17 @@ double logLikelihoodMgev_UNI(double h, arma::vec & alpha, arma::mat & S, Rcpp::N
   if(beta[1] < 0) return NA_REAL;
   
   arma::mat e; e.ones(S.n_cols, 1);
-  arma::mat s = (S * (-1)) * e;
+  arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat expm(size(S));
   
   double a = max_diagonal(S * (-1));
   
-  int N{find_n(h, 1)};
+  int m{find_n(h, 1)};
   
   std::vector<arma::mat> aux_vect;
   
-  vector_of_matrices(aux_vect, S, a, N);
+  vector_of_matrices(aux_vect, S, a, m);
   
   arma::mat aux_mat(1,1);
   
@@ -773,34 +773,34 @@ double logLikelihoodMgev_UNI(double h, arma::vec & alpha, arma::mat & S, Rcpp::N
       double x{exp(-(obs[k] - beta[0]) / beta[1])};
       
       if (x * a <= 1.0) {
-        expm = m_exp_sum(x, N, aux_vect, a);
+        expm = m_exp_sum(x, m, aux_vect, a);
       }
       else {
         int n{};
         n = std::log(a * x) / std::log(2.0);
         ++n;
         
-        expm = m_exp_sum(x / pow(2.0, n), N, aux_vect, a);
+        expm = m_exp_sum(x / pow(2.0, n), m, aux_vect, a);
         
         pow2_matrix(n, expm);
       }
-      aux_mat = alpha.t() * expm * s;
+      aux_mat = alpha.t() * expm * exit_vect;
       density = aux_mat(0,0);
       logLh += weight[k] * (std::log(density) - std::log(beta[1]) - (obs[k] - beta[0]) / beta[1]);
     }
-    //Right censored data
+    // Right censored data
     for (int k{0}; k < rcens.size(); ++k) {
       double x{exp(-(rcens[k] - beta[0]) / beta[1])};
       
       if (x * a <= 1.0) {
-        expm = m_exp_sum(x, N, aux_vect, a);
+        expm = m_exp_sum(x, m, aux_vect, a);
       }
       else {
         int n{};
         n = std::log(a * x) / std::log(2.0);
         ++n;
         
-        expm = m_exp_sum(x / pow(2.0, n), N, aux_vect, a);
+        expm = m_exp_sum(x / pow(2.0, n), m, aux_vect, a);
         
         pow2_matrix(n, expm);
       }
@@ -815,34 +815,34 @@ double logLikelihoodMgev_UNI(double h, arma::vec & alpha, arma::mat & S, Rcpp::N
       double x{pow(1 + (beta[2] / beta[1]) * (obs[k] - beta[0]) , - 1 / beta[2])};
       
       if (x * a <= 1.0) {
-        expm = m_exp_sum(x, N, aux_vect, a);
+        expm = m_exp_sum(x, m, aux_vect, a);
       }
       else {
         int n{};
         n = std::log(a * x) / std::log(2.0);
         ++n;
         
-        expm = m_exp_sum(x / pow(2.0, n), N, aux_vect, a);
+        expm = m_exp_sum(x / pow(2.0, n), m, aux_vect, a);
         
         pow2_matrix(n, expm);
       }
-      aux_mat = alpha.t() * expm * s;
+      aux_mat = alpha.t() * expm * exit_vect;
       density = aux_mat(0,0);
       logLh += weight[k] * (std::log(density) - std::log(beta[1]) - (1 + 1 / beta[2]) * std::log(1 + (beta[2] / beta[1]) * (obs[k] - beta[0])));
     }
-    //Right censored data
+    // Right censored data
     for (int k{0}; k < rcens.size(); ++k) {
       double x{pow(1 + (beta[2] / beta[1]) * (rcens[k] - beta[0]) , - 1 / beta[2])};
       
       if (x * a <= 1.0) {
-        expm = m_exp_sum(x, N, aux_vect, a);
+        expm = m_exp_sum(x, m, aux_vect, a);
       }
       else {
         int n{};
         n = std::log(a * x) / std::log(2.0);
         ++n;
         
-        expm = m_exp_sum(x / pow(2.0, n), N, aux_vect, a);
+        expm = m_exp_sum(x / pow(2.0, n), m, aux_vect, a);
         
         pow2_matrix(n, expm);
       }
@@ -876,17 +876,17 @@ double logLikelihoodMgev_UNI(double h, arma::vec & alpha, arma::mat & S, Rcpp::N
 // [[Rcpp::export]]
 double logLikelihoodPH_UNIs(double h, arma::vec & alpha, arma::mat & S, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight, const Rcpp::NumericVector & scale1, const Rcpp::NumericVector & scale2) {
   arma::mat e; e.ones(S.n_cols, 1);
-  arma::mat s = (S * (-1)) * e;
+  arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat expm(size(S));
   
   double a = max_diagonal(S * (-1));
   
-  int N{find_n(h, 1)};
+  int m{find_n(h, 1)};
   
   std::vector<arma::mat> aux_vect;
   
-  vector_of_matrices(aux_vect, S, a, N);
+  vector_of_matrices(aux_vect, S, a, m);
   
   arma::mat aux_mat(1,1);
   
@@ -899,34 +899,34 @@ double logLikelihoodPH_UNIs(double h, arma::vec & alpha, arma::mat & S, const Rc
     double x{scale1[k] * obs[k]};
     
     if (x * a <= 1.0) {
-      expm = m_exp_sum(x, N, aux_vect, a);
+      expm = m_exp_sum(x, m, aux_vect, a);
     }
     else {
       int n{};
       n = std::log(a * x) / std::log(2.0);
       ++n;
       
-      expm = m_exp_sum(x / pow(2.0, n), N, aux_vect, a);
+      expm = m_exp_sum(x / pow(2.0, n), m, aux_vect, a);
       
       pow2_matrix(n, expm);
     }
-    aux_mat = alpha.t() * expm * s;
+    aux_mat = alpha.t() * expm * exit_vect;
     density = aux_mat(0,0);
     logLh += weight[k] * (std::log(density) + std::log(scale1[k]));
   }
-  //Right censored data
+  // Right censored data
   for (int k{0}; k < rcens.size(); ++k) {
     double x{scale2[k] * rcens[k]};
     
     if (x * a <= 1.0) {
-      expm = m_exp_sum(x, N, aux_vect, a);
+      expm = m_exp_sum(x, m, aux_vect, a);
     }
     else {
       int n{};
       n = std::log(a * x) / std::log(2.0);
       ++n;
       
-      expm = m_exp_sum(x / pow(2.0, n), N, aux_vect, a);
+      expm = m_exp_sum(x / pow(2.0, n), m, aux_vect, a);
       
       pow2_matrix(n, expm);
     }
@@ -959,17 +959,17 @@ double logLikelihoodMweibull_UNIs(double h, arma::vec & alpha, arma::mat & S, do
   if(beta < 0) return NA_REAL;
   
   arma::mat e; e.ones(S.n_cols, 1);
-  arma::mat s = (S * (-1)) * e;
+  arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat expm(size(S));
   
   double a = max_diagonal(S * (-1));
   
-  int N{find_n(h, 1)};
+  int m{find_n(h, 1)};
   
   std::vector<arma::mat> aux_vect;
   
-  vector_of_matrices(aux_vect, S, a, N);
+  vector_of_matrices(aux_vect, S, a, m);
   
   arma::mat aux_mat(1,1);
   
@@ -982,34 +982,34 @@ double logLikelihoodMweibull_UNIs(double h, arma::vec & alpha, arma::mat & S, do
     double x{scale1[k] * pow(obs[k], beta)};
     
     if (x * a <= 1.0) {
-      expm = m_exp_sum(x, N, aux_vect, a);
+      expm = m_exp_sum(x, m, aux_vect, a);
     }
     else {
       int n{};
       n = std::log(a * x) / std::log(2.0);
       ++n;
       
-      expm = m_exp_sum(x / pow(2.0, n), N, aux_vect, a);
+      expm = m_exp_sum(x / pow(2.0, n), m, aux_vect, a);
       
       pow2_matrix(n, expm);
     }
-    aux_mat = alpha.t() * expm * s;
+    aux_mat = alpha.t() * expm * exit_vect;
     density = aux_mat(0,0);
     logLh += weight[k] * (std::log(density) + std::log(scale1[k]) + std::log(beta) + (beta -1) * std::log(obs[k]));
   }
-  //Right censored data
+  // Right censored data
   for (int k{0}; k < rcens.size(); ++k) {
     double x{scale2[k] * pow(rcens[k], beta)};
     
     if (x * a <= 1.0) {
-      expm = m_exp_sum(x, N, aux_vect, a);
+      expm = m_exp_sum(x, m, aux_vect, a);
     }
     else {
       int n{};
       n = std::log(a * x) / std::log(2.0);
       ++n;
       
-      expm = m_exp_sum(x / pow(2.0, n), N, aux_vect, a);
+      expm = m_exp_sum(x / pow(2.0, n), m, aux_vect, a);
       
       pow2_matrix(n, expm);
     }
@@ -1042,17 +1042,17 @@ double logLikelihoodMpareto_UNIs(double h, arma::vec & alpha, arma::mat & S, dou
   if(beta < 0) return NA_REAL;
   
   arma::mat e; e.ones(S.n_cols, 1);
-  arma::mat s = (S * (-1)) * e;
+  arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat expm(size(S));
   
   double a = max_diagonal(S * (-1));
   
-  int N{find_n(h, 1)};
+  int m{find_n(h, 1)};
   
   std::vector<arma::mat> aux_vect;
   
-  vector_of_matrices(aux_vect, S, a, N);
+  vector_of_matrices(aux_vect, S, a, m);
   
   arma::mat aux_mat(1,1);
   
@@ -1065,34 +1065,34 @@ double logLikelihoodMpareto_UNIs(double h, arma::vec & alpha, arma::mat & S, dou
     double x{scale1[k] * std::log(obs[k] / beta + 1)};
     
     if (x * a <= 1.0) {
-      expm = m_exp_sum(x, N, aux_vect, a);
+      expm = m_exp_sum(x, m, aux_vect, a);
     }
     else {
       int n{};
       n = std::log(a * x) / std::log(2.0);
       ++n;
       
-      expm = m_exp_sum(x / pow(2.0, n), N, aux_vect, a);
+      expm = m_exp_sum(x / pow(2.0, n), m, aux_vect, a);
       
       pow2_matrix(n, expm);
     }
-    aux_mat = alpha.t() * expm * s;
+    aux_mat = alpha.t() * expm * exit_vect;
     density = aux_mat(0,0);
     logLh += weight[k] * (std::log(density) + std::log(scale1[k]) - std::log(obs[k] + beta));
   }
-  //Right censored data
+  // Right censored data
   for (int k{0}; k < rcens.size(); ++k) {
     double x{scale2[k] * std::log(rcens[k] / beta + 1)};
     
     if (x * a <= 1.0) {
-      expm = m_exp_sum(x, N, aux_vect, a);
+      expm = m_exp_sum(x, m, aux_vect, a);
     }
     else {
       int n{};
       n = std::log(a * x) / std::log(2.0);
       ++n;
       
-      expm = m_exp_sum(x / pow(2.0, n), N, aux_vect, a);
+      expm = m_exp_sum(x / pow(2.0, n), m, aux_vect, a);
       
       pow2_matrix(n, expm);
     }
@@ -1125,17 +1125,17 @@ double logLikelihoodMlognormal_UNIs(double h, arma::vec & alpha, arma::mat & S, 
   if(beta < 0) return NA_REAL;
   
   arma::mat e; e.ones(S.n_cols, 1);
-  arma::mat s = (S * (-1)) * e;
+  arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat expm(size(S));
   
   double a = max_diagonal(S * (-1));
   
-  int N{find_n(h, 1)};
+  int m{find_n(h, 1)};
   
   std::vector<arma::mat> aux_vect;
   
-  vector_of_matrices(aux_vect, S, a, N);
+  vector_of_matrices(aux_vect, S, a, m);
   
   arma::mat aux_mat(1,1);
   
@@ -1148,34 +1148,34 @@ double logLikelihoodMlognormal_UNIs(double h, arma::vec & alpha, arma::mat & S, 
     double x{scale1[k] * pow(std::log(obs[k] + 1), beta)};
     
     if (x * a <= 1.0) {
-      expm = m_exp_sum(x, N, aux_vect, a);
+      expm = m_exp_sum(x, m, aux_vect, a);
     }
     else {
       int n{};
       n = std::log(a * x) / std::log(2.0);
       ++n;
       
-      expm = m_exp_sum(x / pow(2.0, n), N, aux_vect, a);
+      expm = m_exp_sum(x / pow(2.0, n), m, aux_vect, a);
       
       pow2_matrix(n, expm);
     }
-    aux_mat = alpha.t() * expm * s;
+    aux_mat = alpha.t() * expm * exit_vect;
     density = aux_mat(0,0);
     logLh += weight[k] * (std::log(density) + std::log(scale1[k]) + std::log(beta) + (beta - 1) * std::log(std::log(obs[k] + 1)) - std::log(obs[k] + 1));
   }
-  //Right censored data
+  // Right censored data
   for (int k{0}; k < rcens.size(); ++k) {
     double x{scale2[k] * pow(std::log(rcens[k] + 1), beta)};
     
     if (x * a <= 1.0) {
-      expm = m_exp_sum(x, N, aux_vect, a);
+      expm = m_exp_sum(x, m, aux_vect, a);
     }
     else {
       int n{};
       n = std::log(a * x) / std::log(2.0);
       ++n;
       
-      expm = m_exp_sum(x / pow(2.0, n), N, aux_vect, a);
+      expm = m_exp_sum(x / pow(2.0, n), m, aux_vect, a);
       
       pow2_matrix(n, expm);
     }
@@ -1208,17 +1208,17 @@ double logLikelihoodMloglogistic_UNIs(double h, arma::vec & alpha, arma::mat & S
   if(beta[0] < 0 || beta[1] < 0) return NA_REAL;
   
   arma::mat e; e.ones(S.n_cols, 1);
-  arma::mat s = (S * (-1)) * e;
+  arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat expm(size(S));
   
   double a = max_diagonal(S * (-1));
   
-  int N{find_n(h, 1)};
+  int m{find_n(h, 1)};
   
   std::vector<arma::mat> aux_vect;
   
-  vector_of_matrices(aux_vect, S, a, N);
+  vector_of_matrices(aux_vect, S, a, m);
   
   arma::mat aux_mat(1,1);
   
@@ -1231,34 +1231,34 @@ double logLikelihoodMloglogistic_UNIs(double h, arma::vec & alpha, arma::mat & S
     double x{scale1[k] * std::log(pow(obs[k] / beta[0], beta[1]) + 1)};
     
     if (x * a <= 1.0) {
-      expm = m_exp_sum(x, N, aux_vect, a);
+      expm = m_exp_sum(x, m, aux_vect, a);
     }
     else {
       int n{};
       n = std::log(a * x) / std::log(2.0);
       ++n;
       
-      expm = m_exp_sum(x / pow(2.0, n), N, aux_vect, a);
+      expm = m_exp_sum(x / pow(2.0, n), m, aux_vect, a);
       
       pow2_matrix(n, expm);
     }
-    aux_mat = alpha.t() * expm * s;
+    aux_mat = alpha.t() * expm * exit_vect;
     density = aux_mat(0,0);
     logLh += weight[k] * (std::log(density) + std::log(scale1[k]) + std::log(beta[1]) - std::log(beta[0]) + (beta[1] - 1) * (std::log(obs[k]) - std::log(beta[0])) - std::log(pow(obs[k] / beta[0], beta[1]) + 1));
   }
-  //Right censored data
+  // Right censored data
   for (int k{0}; k < rcens.size(); ++k) {
     double x{scale2[k] * std::log(pow(rcens[k] / beta[0], beta[1]) + 1)};
     
     if (x * a <= 1.0) {
-      expm = m_exp_sum(x, N, aux_vect, a);
+      expm = m_exp_sum(x, m, aux_vect, a);
     }
     else {
       int n{};
       n = std::log(a * x) / std::log(2.0);
       ++n;
       
-      expm = m_exp_sum(x / pow(2.0, n), N, aux_vect, a);
+      expm = m_exp_sum(x / pow(2.0, n), m, aux_vect, a);
       
       pow2_matrix(n, expm);
     }
@@ -1291,17 +1291,17 @@ double logLikelihoodMgompertz_UNIs(double h, arma::vec & alpha, arma::mat & S, d
   if(beta < 0) return NA_REAL;
   
   arma::mat e; e.ones(S.n_cols, 1);
-  arma::mat s = (S * (-1)) * e;
+  arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat expm(size(S));
   
   double a = max_diagonal(S * (-1));
   
-  int N{find_n(h, 1)};
+  int m{find_n(h, 1)};
   
   std::vector<arma::mat> aux_vect;
   
-  vector_of_matrices(aux_vect, S, a, N);
+  vector_of_matrices(aux_vect, S, a, m);
   
   arma::mat aux_mat(1,1);
   
@@ -1314,34 +1314,34 @@ double logLikelihoodMgompertz_UNIs(double h, arma::vec & alpha, arma::mat & S, d
     double x{scale1[k] * (exp(obs[k] * beta) - 1) / beta};
     
     if (x * a <= 1.0) {
-      expm = m_exp_sum(x, N, aux_vect, a);
+      expm = m_exp_sum(x, m, aux_vect, a);
     }
     else {
       int n{};
       n = std::log(a * x) / std::log(2.0);
       ++n;
       
-      expm = m_exp_sum(x / pow(2.0, n), N, aux_vect, a);
+      expm = m_exp_sum(x / pow(2.0, n), m, aux_vect, a);
       
       pow2_matrix(n, expm);
     }
-    aux_mat = alpha.t() * expm * s;
+    aux_mat = alpha.t() * expm * exit_vect;
     density = aux_mat(0,0);
     logLh += weight[k] * (std::log(density) + std::log(scale1[k]) + obs[k] * beta);
   }
-  //Right censored data
+  // Right censored data
   for (int k{0}; k < rcens.size(); ++k) {
     double x{scale2[k] * (exp(rcens[k] * beta) - 1) / beta};
     
     if (x * a <= 1.0) {
-      expm = m_exp_sum(x, N, aux_vect, a);
+      expm = m_exp_sum(x, m, aux_vect, a);
     }
     else {
       int n{};
       n = std::log(a * x) / std::log(2.0);
       ++n;
       
-      expm = m_exp_sum(x / pow(2.0, n), N, aux_vect, a);
+      expm = m_exp_sum(x / pow(2.0, n), m, aux_vect, a);
       
       pow2_matrix(n, expm);
     }

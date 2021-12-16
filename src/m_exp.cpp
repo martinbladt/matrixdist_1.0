@@ -34,7 +34,7 @@ double inf_norm(arma::mat A) {
 //' @return Computes (A1, B1 ; 0, A2).
 //' 
 // [[Rcpp::export]]
-arma::mat matrix_VanLoan(arma::mat A1, arma::mat A2, arma::mat B1) {
+arma::mat matrix_vanloan(arma::mat A1, arma::mat A2, arma::mat B1) {
   unsigned p1{A1.n_rows};
   unsigned p2{A2.n_rows};
   unsigned p{p1 + p2};

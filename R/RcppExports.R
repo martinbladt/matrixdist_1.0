@@ -1059,8 +1059,8 @@ inf_norm <- function(A) {
 #' @param B1 Matrix.
 #' @return Computes (A1, B1 ; 0, A2).
 #' 
-matrix_VanLoan <- function(A1, A2, B1) {
-    .Call(`_matrixdist_matrix_VanLoan`, A1, A2, B1)
+matrix_vanloan <- function(A1, A2, B1) {
+    .Call(`_matrixdist_matrix_vanloan`, A1, A2, B1)
 }
 
 #' Maximum diagonal element of a matrix
@@ -1102,8 +1102,8 @@ default_step_length <- function(S) {
 #' @param weights Weights of the observations.
 #' @param beta Parameters of the GEV.
 #' 
-reversTransformData <- function(obs, weights, beta) {
-    .Call(`_matrixdist_reversTransformData`, obs, weights, beta)
+revers_data_trans <- function(obs, weights, beta) {
+    .Call(`_matrixdist_revers_data_trans`, obs, weights, beta)
 }
 
 #' Clone a vector 
