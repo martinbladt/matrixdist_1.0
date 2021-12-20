@@ -1,10 +1,13 @@
 # include <RcppArmadillo.h>
 // [[ Rcpp :: depends ( RcppArmadillo )]]
 
+////////////////////////////////////////////
+/// EM using Runge-Kutta of fourth order ///
+////////////////////////////////////////////
 
-//' Runge Kutta for the calculation of the a,b and c vectors in a EM step
+//' Runge-Kutta for the calculation of the a,b and c vectors in a EM step
 //' 
-//' Performs the RK of forth order.
+//' Performs the Runge-Kutta of fourth order.
 //' 
 //' @param avector The a vector.
 //' @param bvector The b vector.
@@ -144,9 +147,9 @@ void runge_kutta(arma::vec & avector, arma::mat & bvector, arma::mat & cmatrix, 
 }
 
 
-//' EM step using Runge Kutta
+//' EM step using Runge-Kutta
 //' 
-//' Computes one step of the EM algorithm by using a Runge-Kutta method of 4th order.
+//' Computes one step of the EM algorithm by using a Runge-Kutta method of fourth order.
 //' 
 //' @param h Step-length.
 //' @param alpha Initial probabilities.
@@ -160,7 +163,8 @@ void runge_kutta(arma::vec & avector, arma::mat & bvector, arma::mat & cmatrix, 
 void EMstep_RK(double h, arma::vec & alpha, arma::mat & S, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight) {
   unsigned p{S.n_rows};
   
-  arma::mat e; e.ones(S.n_cols, 1);
+  arma::mat e;
+  e.ones(S.n_cols, 1);
   arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat Bmean = arma::zeros(p,1);
@@ -261,7 +265,7 @@ void EMstep_RK(double h, arma::vec & alpha, arma::mat & S, const Rcpp::NumericVe
 }
 
 
-//' Runge Kutta for the calculation of the a vectors in a EM step 
+//' Runge-Kutta for the calculation of the a vector in a EM step 
 //' 
 //' @param avector The a vector.
 //' @param dt Increment.
@@ -320,7 +324,7 @@ void a_rungekutta(arma::vec & avector, double dt, double h, const arma::mat & S)
 }
 
 
-//' Loglikelihood using RK
+//' Loglikelihood of phase-type using Runge-Kutta
 //' 
 //' Loglikelihood for a sample.
 //' 
@@ -338,7 +342,8 @@ double logLikelihoodPH_RK(double h, arma::vec & alpha, arma::mat & S, const Rcpp
  
   arma::vec avector(p);
   
-  arma::mat e; e.ones(S.n_cols, 1);
+  arma::mat e;
+  e.ones(S.n_cols, 1);
   arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat aux_mat(1,1);
@@ -380,7 +385,7 @@ double logLikelihoodPH_RK(double h, arma::vec & alpha, arma::mat & S, const Rcpp
 }
 
 
-//' Loglikelihood of matrix Weibull using RK
+//' Loglikelihood of matrix-Weibull using Runge-Kutta
 //' 
 //' Loglikelihood for a sample.
 //' 
@@ -401,7 +406,8 @@ double logLikelihoodMweibull_RK(double h, arma::vec & alpha, arma::mat & S, doub
   
   arma::vec avector(p);
   
-  arma::mat e; e.ones(S.n_cols, 1);
+  arma::mat e;
+  e.ones(S.n_cols, 1);
   arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat aux_mat(1,1);
@@ -443,7 +449,7 @@ double logLikelihoodMweibull_RK(double h, arma::vec & alpha, arma::mat & S, doub
 }
 
 
-//' Loglikelihood of matrix Pareto using RK
+//' Loglikelihood of matrix-Pareto using Runge-Kutta
 //' 
 //' Loglikelihood for a sample.
 //' 
@@ -464,7 +470,8 @@ double logLikelihoodMpareto_RK(double h, arma::vec & alpha, arma::mat & S, doubl
   
   arma::vec avector(p);
   
-  arma::mat e; e.ones(S.n_cols, 1);
+  arma::mat e;
+  e.ones(S.n_cols, 1);
   arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat aux_mat(1,1);
@@ -506,7 +513,7 @@ double logLikelihoodMpareto_RK(double h, arma::vec & alpha, arma::mat & S, doubl
 }
 
 
-//' Loglikelihood of matrix Lognormal using RK
+//' Loglikelihood of matrix-lognormal using Runge-Kutta
 //' 
 //' Loglikelihood for a sample.
 //' 
@@ -527,7 +534,8 @@ double logLikelihoodMlognormal_RK(double h, arma::vec & alpha, arma::mat & S, do
   
   arma::vec avector(p);
   
-  arma::mat e; e.ones(S.n_cols, 1);
+  arma::mat e;
+  e.ones(S.n_cols, 1);
   arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat aux_mat(1,1);
@@ -569,7 +577,7 @@ double logLikelihoodMlognormal_RK(double h, arma::vec & alpha, arma::mat & S, do
 }
 
 
-//' Loglikelihood of matrix Log-logistic using RK
+//' Loglikelihood of matrix-loglogistic using Runge-Kutta
 //' 
 //' Loglikelihood for a sample.
 //' 
@@ -590,7 +598,8 @@ double logLikelihoodMloglogistic_RK(double h, arma::vec & alpha, arma::mat & S, 
   
   arma::vec avector(p);
   
-  arma::mat e; e.ones(S.n_cols, 1);
+  arma::mat e;
+  e.ones(S.n_cols, 1);
   arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat aux_mat(1,1);
@@ -632,7 +641,7 @@ double logLikelihoodMloglogistic_RK(double h, arma::vec & alpha, arma::mat & S, 
 }
 
 
-//' Loglikelihood of matrix Gompertz using RK
+//' Loglikelihood of matrix-Gompertz using Runge-Kutta
 //' 
 //' Loglikelihood for a sample.
 //' 
@@ -653,7 +662,8 @@ double logLikelihoodMgompertz_RK(double h, arma::vec & alpha, arma::mat & S, dou
   
   arma::vec avector(p);
   
-  arma::mat e; e.ones(S.n_cols, 1);
+  arma::mat e;
+  e.ones(S.n_cols, 1);
   arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat aux_mat(1,1);
@@ -695,7 +705,7 @@ double logLikelihoodMgompertz_RK(double h, arma::vec & alpha, arma::mat & S, dou
 }
 
 
-//' Loglikelihood of matrix GEV using RK
+//' Loglikelihood of matrix-GEV using Runge-Kutta
 //' 
 //' Loglikelihood for a sample.
 //' 
@@ -716,7 +726,8 @@ double logLikelihoodMgev_RK(double h, arma::vec  & alpha, arma::mat & S, Rcpp::N
   
   arma::vec avector(p);
   
-  arma::mat e; e.ones(S.n_cols, 1);
+  arma::mat e;
+  e.ones(S.n_cols, 1);
   arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat aux_mat(1,1);
@@ -793,7 +804,7 @@ double logLikelihoodMgev_RK(double h, arma::vec  & alpha, arma::mat & S, Rcpp::N
 // Scaled versions of loglikelihoods (for regression)://
 ///////////////////////////////////////////////////////
 
-//' Loglikelihood of PH using RK
+//' Loglikelihood of phase-type using Runge-Kutta
 //' 
 //' Loglikelihood for a sample.
 //' 
@@ -813,7 +824,8 @@ double logLikelihoodPH_RKs(double h, arma::vec & alpha, arma::mat & S, const Rcp
   
   arma::vec avector(p);
   
-  arma::mat e; e.ones(S.n_cols, 1);
+  arma::mat e;
+  e.ones(S.n_cols, 1);
   arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat aux_mat(1,1);
@@ -855,7 +867,7 @@ double logLikelihoodPH_RKs(double h, arma::vec & alpha, arma::mat & S, const Rcp
 }
 
 
-//' Loglikelihood of matrix-Weibull using RK
+//' Loglikelihood of matrix-Weibull using Runge-Kutta
 //' 
 //' Loglikelihood for a sample.
 //' 
@@ -876,7 +888,8 @@ double logLikelihoodMweibull_RKs(double h, arma::vec & alpha, arma::mat & S, dou
   
   arma::vec avector(p);
   
-  arma::mat e; e.ones(S.n_cols, 1);
+  arma::mat e;
+  e.ones(S.n_cols, 1);
   arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat aux_mat(1,1);
@@ -918,7 +931,7 @@ double logLikelihoodMweibull_RKs(double h, arma::vec & alpha, arma::mat & S, dou
 }
 
 
-//' Loglikelihood of matrix-Pareto using RK
+//' Loglikelihood of matrix-Pareto using Runge-Kutta
 //' 
 //' Loglikelihood for a sample.
 //' 
@@ -939,7 +952,8 @@ double logLikelihoodMpareto_RKs(double h, arma::vec & alpha, arma::mat & S, doub
   
   arma::vec avector(p);
   
-  arma::mat e; e.ones(S.n_cols, 1);
+  arma::mat e;
+  e.ones(S.n_cols, 1);
   arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat aux_mat(1,1);
@@ -981,7 +995,7 @@ double logLikelihoodMpareto_RKs(double h, arma::vec & alpha, arma::mat & S, doub
 }
 
 
-//' Loglikelihood of matrix Lognormal using RK
+//' Loglikelihood of matrix-lognormal using Runge-Kutta
 //' 
 //' Loglikelihood for a sample.
 //' 
@@ -1002,7 +1016,8 @@ double logLikelihoodMlognormal_RKs(double h, arma::vec & alpha, arma::mat & S, d
   
   arma::vec avector(p);
   
-  arma::mat e; e.ones(S.n_cols, 1);
+  arma::mat e;
+  e.ones(S.n_cols, 1);
   arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat aux_mat(1,1);
@@ -1044,7 +1059,7 @@ double logLikelihoodMlognormal_RKs(double h, arma::vec & alpha, arma::mat & S, d
 }
 
 
-//' Loglikelihood of matrix-loglogistic using RK
+//' Loglikelihood of matrix-loglogistic using Runge-Kutta
 //' 
 //' Loglikelihood for a sample.
 //' 
@@ -1065,7 +1080,8 @@ double logLikelihoodMloglogistic_RKs(double h, arma::vec & alpha, arma::mat & S,
   
   arma::vec avector(p);
   
-  arma::mat e; e.ones(S.n_cols, 1);
+  arma::mat e;
+  e.ones(S.n_cols, 1);
   arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat aux_mat(1,1);
@@ -1107,7 +1123,7 @@ double logLikelihoodMloglogistic_RKs(double h, arma::vec & alpha, arma::mat & S,
 }
 
 
-//' Loglikelihood of matrix Gompertz using RK
+//' Loglikelihood of matrix-Gompertz using Runge-Kutta
 //' 
 //' Loglikelihood for a sample.
 //' 
@@ -1128,7 +1144,8 @@ double logLikelihoodMgompertz_RKs(double h, arma::vec & alpha, arma::mat & S, do
   
   arma::vec avector(p);
   
-  arma::mat e; e.ones(S.n_cols, 1);
+  arma::mat e;
+  e.ones(S.n_cols, 1);
   arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat aux_mat(1,1);

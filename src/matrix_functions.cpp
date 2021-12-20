@@ -23,7 +23,7 @@ double default_step_length(const NumericMatrix & S) {
 }
 
 
-//' Applies the inverse of the GEV but giving back the vector in reverse order
+//' Applies the inverse of the GEV transformation but giving back the resulting vector in reverse order
 //' 
 //' Used for EM step.
 //' 
@@ -50,7 +50,6 @@ List revers_data_trans(const NumericVector & obs, const NumericVector & weights,
   }
   
   List L = List::create(Named("obs") = trans_obs, _["weight"] = trans_weights);
-  
   return L;
 }
 
@@ -77,5 +76,4 @@ NumericMatrix clone_matrix(NumericMatrix m) {
   NumericMatrix new_m = clone(m);
   return new_m;
 }
-
 

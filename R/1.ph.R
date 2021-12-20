@@ -1,8 +1,8 @@
 #' Phase Type distributions
 #'
-#' Class of objects for phase type distributions.
+#' Class of objects for phase-type distributions.
 #'
-#' @slot name Name of the phase type distribution.
+#' @slot name Name of the phase-type distribution.
 #' @slot pars A list comprising of the parameters.
 #' @slot fit A list containing estimation information.
 #'
@@ -22,7 +22,7 @@ setClass("ph",
   )
 )
 
-#' Constructor Function for phase type distributions
+#' Constructor Function for phase-type distributions
 #'
 #' @param alpha A probability vector.
 #' @param S A sub-intensity matrix.
@@ -59,7 +59,7 @@ ph <- function(alpha = NULL, S = NULL, structure = NULL, dimension = 3) {
   )
 }
 
-#' Sum Method for phase type distributions
+#' Sum Method for phase-type distributions
 #'
 #' @param e1 An object of class \linkS4class{ph}.
 #' @param e2 An object of class \linkS4class{ph}.
@@ -89,7 +89,7 @@ kronecker_sum <- function(A, B) {
   kronecker(A, diag(m)) + kronecker(diag(n), B)
 }
 
-#' Minimum Method for phase type distributions
+#' Minimum Method for phase-type distributions
 #'
 #' @param x1 An object of class \linkS4class{ph}.
 #' @param x2 An object of class \linkS4class{ph}.
@@ -111,7 +111,7 @@ setMethod(
   }
 )
 
-#' Maximum Method for phase type distributions
+#' Maximum Method for phase-type distributions
 #'
 #' @param x1 An object of class \linkS4class{ph}.
 #' @param x2 An object of class \linkS4class{ph}.
@@ -137,7 +137,7 @@ setMethod(
   }
 )
 
-#' Moment Method for phase type distributions
+#' Moment Method for phase-type distributions
 #'
 #' @param x An object of class \linkS4class{ph}.
 #' @param k A positive integer (moment order).
@@ -170,7 +170,7 @@ setMethod(
   }
 )
 
-#' Show Method for phase type distributions
+#' Show Method for phase-type distributions
 #'
 #' @param object An object of class \linkS4class{ph}.
 #' @importFrom methods show
@@ -183,7 +183,7 @@ setMethod("show", "ph", function(object) {
   methods::show(object@pars)
 })
 
-#' Simulation Method for phase type distributions
+#' Simulation Method for phase-type distributions
 #'
 #' @param x An object of class \linkS4class{ph}.
 #' @param n An integer of length of realization.
@@ -199,7 +199,7 @@ setMethod("sim", c(x = "ph"), function(x, n = 1000) {
   return(U)
 })
 
-#' Density Method for phase type distributions
+#' Density Method for phase-type distributions
 #'
 #' @param x An object of class \linkS4class{ph}.
 #' @param y A vector of locations.
@@ -218,7 +218,7 @@ setMethod("dens", c(x = "ph"), function(x, y) {
   return(dens)
 })
 
-#' Distribution Method for phase type distributions
+#' Distribution Method for phase-type distributions
 #'
 #' @param x An object of class \linkS4class{ph}.
 #' @param q A vector of locations.
@@ -241,7 +241,7 @@ setMethod("cdf", c(x = "ph"), function(x,
   return(cdf)
 })
 
-#' Hazard rate Method for phase type distributions
+#' Hazard rate Method for phase-type distributions
 #'
 #' @param x An object of class \linkS4class{ph}.
 #' @param y A vector of locations.
@@ -258,7 +258,7 @@ setMethod("haz", c(x = "ph"), function(x, y) {
   return(d / s)
 })
 
-#' Quantile Method for phase type distributions
+#' Quantile Method for phase-type distributions
 #'
 #' @param x An object of class \linkS4class{ph}.
 #' @param p A vector of probabilities.

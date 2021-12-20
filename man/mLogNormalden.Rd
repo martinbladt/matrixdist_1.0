@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{mlognormalden}
 \alias{mlognormalden}
-\title{Matrix Lognormal density}
+\title{Matrix-lognormal density}
 \usage{
 mlognormalden(x, alpha, S, beta)
 }
@@ -19,6 +19,6 @@ mlognormalden(x, alpha, S, beta)
 The density at \code{x}.
 }
 \description{
-Computes the density of a matrix LogNormal distribution with parameters
+Computes the density of a matrix-lognormal distribution with parameters
  \code{alpha}, \code{S} and \code{beta} at \code{x}.
 }

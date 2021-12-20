@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{mparetocdf}
 \alias{mparetocdf}
-\title{Matrix Pareto cdf}
+\title{Matrix-Pareto cdf}
 \usage{
 mparetocdf(x, alpha, S, beta, lower_tail = TRUE)
 }
@@ -21,6 +21,6 @@ mparetocdf(x, alpha, S, beta, lower_tail = TRUE)
 The cdf (tail) at \code{x}.
 }
 \description{
-Computes the cdf (tail) of a matrix Pareto distribution with parameters
+Computes the cdf (tail) of a matrix-Pareto distribution with parameters
  \code{alpha}, \code{S} and \code{beta} at \code{x}.
 }

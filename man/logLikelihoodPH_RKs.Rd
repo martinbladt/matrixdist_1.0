@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{logLikelihoodPH_RKs}
 \alias{logLikelihoodPH_RKs}
-\title{Loglikelihood of PH using RK}
+\title{Loglikelihood of phase-type using Runge-Kutta}
 \usage{
 logLikelihoodPH_RKs(h, alpha, S, obs, weight, rcens, rcweight, scale1, scale2)
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{mweibullcdf}
 \alias{mweibullcdf}
-\title{Matrix Weibull cdf}
+\title{Matrix-Weibull cdf}
 \usage{
 mweibullcdf(x, alpha, S, beta, lower_tail = TRUE)
 }
@@ -21,6 +21,6 @@ mweibullcdf(x, alpha, S, beta, lower_tail = TRUE)
 The cdf (tail) at \code{x}.
 }
 \description{
-Computes the cdf (tail) of a matrix Weibull distribution with parameters
+Computes the cdf (tail) of a matrix-Weibull distribution with parameters
  \code{alpha}, \code{S} and \code{beta} at \code{x}.
 }

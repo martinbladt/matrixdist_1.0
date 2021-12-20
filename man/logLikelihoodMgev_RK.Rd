@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{logLikelihoodMgev_RK}
 \alias{logLikelihoodMgev_RK}
-\title{Loglikelihood of matrix GEV using RK}
+\title{Loglikelihood of matrix-GEV using Runge-Kutta}
 \usage{
 logLikelihoodMgev_RK(h, alpha, S, beta, obs, weight, rcens, rcweight)
 }

@@ -2,7 +2,7 @@
 // [[ Rcpp :: depends ( RcppArmadillo )]]
 
 
-//' Computes the initial distribution and sub-intensity of the sum of PH
+//' Computes the initial distribution and sub-intensity of the sum of two phase-type
 //' 
 //' @param alpha1 Initial distribution.
 //' @param S1 Sub-intensity.
@@ -17,7 +17,8 @@ Rcpp::List sum_ph(arma::rowvec alpha1, arma::mat S1, arma::rowvec alpha2, arma::
   arma::rowvec alpha_sum(p1 + p2);
   arma::mat S_sum(p1 + p2, p1 + p2);
   
-  arma::mat e; e.ones(S1.n_cols, 1);
+  arma::mat e;
+  e.ones(S1.n_cols, 1);
   arma::mat exit_vect = (S1 * (-1)) * e;
   
   arma::mat aux_mat = exit_vect * alpha2;
@@ -43,6 +44,5 @@ Rcpp::List sum_ph(arma::rowvec alpha1, arma::mat S1, arma::rowvec alpha2, arma::
   }
   
   Rcpp::List L = Rcpp::List::create(Rcpp::Named("alpha") = alpha_sum, Rcpp::Named("S") = S_sum);
-  
   return L;
 }

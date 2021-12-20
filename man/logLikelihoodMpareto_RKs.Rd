@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{logLikelihoodMpareto_RKs}
 \alias{logLikelihoodMpareto_RKs}
-\title{Loglikelihood of matrix-Pareto using RK}
+\title{Loglikelihood of matrix-Pareto using Runge-Kutta}
 \usage{
 logLikelihoodMpareto_RKs(
   h,

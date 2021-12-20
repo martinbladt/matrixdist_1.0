@@ -7,7 +7,7 @@
 initial_state(cum_alpha, u)
 }
 \arguments{
-\item{cum_alpha}{A vector.}
+\item{cum_alpha}{A cummulated vector of initial probabilities.}
 
 \item{u}{Random value in (0,1).}
 }
@@ -15,7 +15,7 @@ initial_state(cum_alpha, u)
 Initial state of the Markov jump process.
 }
 \description{
-Given the accumulated values of the initial probabilities \code{Pi} and a
+Given the accumulated values of the initial probabilities \code{alpha} and a
  uniform value \code{u}, it returns the initial state of a Markov jump process.
-This corresponds to the states satisfying cum_pi_(k-1)<u<cum_pi_(k).
+This corresponds to the states satisfying cum_alpha_(k-1)<u<cum_alpha_(k).
 }

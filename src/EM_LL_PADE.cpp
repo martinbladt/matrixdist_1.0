@@ -2,9 +2,8 @@
 # include <RcppArmadillo.h>
 // [[ Rcpp :: depends ( RcppArmadillo )]]
 
-
 ////////////////////////////////////////////
-// Modified EM with Matlab algorithm
+//    EM using Pade approximation        ///
 ////////////////////////////////////////////
 
 //' Computes elements S^n / n! until the value size
@@ -40,7 +39,8 @@ void vector_of_matrices_2(std::vector<arma::mat> & vect, const arma::mat & S, in
 void EMstep_PADE(double h, arma::vec & alpha,  arma::mat & S, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight) {
   unsigned p{S.n_rows};
   
-  arma::mat e; e.ones(S.n_cols, 1);
+  arma::mat e;
+  e.ones(S.n_cols, 1);
   arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat Bmean = arma::zeros(p,1);
@@ -223,7 +223,7 @@ void EMstep_PADE(double h, arma::vec & alpha,  arma::mat & S, const Rcpp::Numeri
 // Loglikelihoods
 ////////////////////////////////////////////
 
-//' Loglikelihood of PH using Pade
+//' Loglikelihood of phase-type using Pade
 //' 
 //' Loglikelihood for a sample.
 //' 
@@ -238,12 +238,13 @@ void EMstep_PADE(double h, arma::vec & alpha,  arma::mat & S, const Rcpp::Numeri
 // [[Rcpp::export]]
 double logLikelihoodPH_PADE(double h, arma::vec & alpha, arma::mat & S, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight) {
   unsigned p{S.n_rows};
-  arma::mat e; e.ones(S.n_cols, 1);
+  arma::mat e;
+  e.ones(S.n_cols, 1);
   arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat expm(size(S));
   
-  double JNorm{inf_norm(S)};
+  double s_norm{inf_norm(S)};
   
   std::vector<arma::mat> aux_vect;
   
@@ -267,7 +268,7 @@ double logLikelihoodPH_PADE(double h, arma::vec & alpha, arma::mat & S, const Rc
   for (int k{0}; k < obs.size(); ++k) {
     // Matrix exponential
     int pind{1};
-    int ee{static_cast<int>(log2(JNorm  * obs[k])) + 1};
+    int ee{static_cast<int>(log2(s_norm  * obs[k])) + 1};
     s = std::max(0, ee + 1);
     xmod = obs[k] / pow(2.0, s);
     c = 0.5;
@@ -301,7 +302,7 @@ double logLikelihoodPH_PADE(double h, arma::vec & alpha, arma::mat & S, const Rc
   for (int k{0}; k < rcens.size(); ++k) {
     // Matrix exponential
     int pind{1};
-    int ee{static_cast<int>(log2(JNorm  * rcens[k])) + 1};
+    int ee{static_cast<int>(log2(s_norm  * rcens[k])) + 1};
     s = std::max(0, ee + 1);
     xmod = rcens[k] / pow(2.0, s);
     c = 0.5;
@@ -353,12 +354,13 @@ double logLikelihoodMweibull_PADE(double h, arma::vec & alpha, arma::mat & S, do
   if(beta < 0) return NA_REAL;
   
   unsigned p{S.n_rows};
-  arma::mat e; e.ones(S.n_cols, 1);
+  arma::mat e; 
+  e.ones(S.n_cols, 1);
   arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat expm(size(S));
   
-  double JNorm{inf_norm(S)};
+  double s_norm{inf_norm(S)};
   
   std::vector<arma::mat> aux_vect;
   
@@ -382,7 +384,7 @@ double logLikelihoodMweibull_PADE(double h, arma::vec & alpha, arma::mat & S, do
   for (int k{0}; k < obs.size(); ++k) {
     // Matrix exponential
     int pind{1};
-    int ee{static_cast<int>(log2(JNorm  * pow(obs[k], beta))) + 1};
+    int ee{static_cast<int>(log2(s_norm  * pow(obs[k], beta))) + 1};
     s = std::max(0, ee + 1);
     xmod = pow(obs[k], beta) / pow(2.0, s);
     c = 0.5;
@@ -416,7 +418,7 @@ double logLikelihoodMweibull_PADE(double h, arma::vec & alpha, arma::mat & S, do
   for (int k{0}; k < rcens.size(); ++k) {
     // Matrix exponential
     int pind{1};
-    int ee{static_cast<int>(log2(JNorm  * pow(rcens[k], beta))) + 1};
+    int ee{static_cast<int>(log2(s_norm  * pow(rcens[k], beta))) + 1};
     s = std::max(0, ee + 1);
     xmod = pow(rcens[k], beta) / pow(2.0, s);
     c = 0.5;
@@ -468,12 +470,13 @@ double logLikelihoodMpareto_PADE(double h, arma::vec & alpha, arma::mat & S, dou
   if(beta < 0) return NA_REAL;
   
   unsigned p{S.n_rows};
-  arma::mat e; e.ones(S.n_cols, 1);
+  arma::mat e;
+  e.ones(S.n_cols, 1);
   arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat expm(size(S));
   
-  double JNorm{inf_norm(S)};
+  double s_norm{inf_norm(S)};
   
   std::vector<arma::mat> aux_vect;
   
@@ -497,7 +500,7 @@ double logLikelihoodMpareto_PADE(double h, arma::vec & alpha, arma::mat & S, dou
   for (int k{0}; k < obs.size(); ++k) {
     // Matrix exponential
     int pind{1};
-    int ee{static_cast<int>(log2(JNorm  * std::log(obs[k] / beta + 1))) + 1};
+    int ee{static_cast<int>(log2(s_norm  * std::log(obs[k] / beta + 1))) + 1};
     s = std::max(0, ee + 1);
     xmod = std::log(obs[k] / beta + 1) / pow(2.0, s);
     c = 0.5;
@@ -531,7 +534,7 @@ double logLikelihoodMpareto_PADE(double h, arma::vec & alpha, arma::mat & S, dou
   for (int k{0}; k < rcens.size(); ++k) {
     // Matrix exponential
     int pind{1};
-    int ee{static_cast<int>(log2(JNorm  * std::log(rcens[k] / beta + 1))) + 1};
+    int ee{static_cast<int>(log2(s_norm  * std::log(rcens[k] / beta + 1))) + 1};
     s = std::max(0, ee + 1);
     xmod = std::log(rcens[k] / beta + 1) / pow(2.0, s);
     c = 0.5;
@@ -584,12 +587,13 @@ double logLikelihoodMlognormal_PADE(double h, arma::vec & alpha, arma::mat & S, 
   if(beta < 0) return NA_REAL;
   
   unsigned p{S.n_rows};
-  arma::mat e; e.ones(S.n_cols, 1);
+  arma::mat e;
+  e.ones(S.n_cols, 1);
   arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat expm(size(S));
   
-  double JNorm{inf_norm(S)};
+  double s_norm{inf_norm(S)};
   
   std::vector<arma::mat> aux_vect;
   
@@ -613,7 +617,7 @@ double logLikelihoodMlognormal_PADE(double h, arma::vec & alpha, arma::mat & S, 
   for (int k{0}; k < obs.size(); ++k) {
     // Matrix exponential
     int pind{1};
-    int ee{static_cast<int>(log2(JNorm  * pow(std::log(obs[k] + 1), beta))) + 1};
+    int ee{static_cast<int>(log2(s_norm  * pow(std::log(obs[k] + 1), beta))) + 1};
     s = std::max(0, ee + 1);
     xmod = pow(std::log(obs[k] + 1), beta) / pow(2.0, s);
     c = 0.5;
@@ -647,7 +651,7 @@ double logLikelihoodMlognormal_PADE(double h, arma::vec & alpha, arma::mat & S, 
   for (int k{0}; k < rcens.size(); ++k) {
     // Matrix exponential
     int pind{1};
-    int ee{static_cast<int>(log2(JNorm  * pow(std::log(rcens[k] + 1), beta))) + 1};
+    int ee{static_cast<int>(log2(s_norm  * pow(std::log(rcens[k] + 1), beta))) + 1};
     s = std::max(0, ee + 1);
     xmod = pow(std::log(rcens[k] + 1), beta) / pow(2.0, s);
     c = 0.5;
@@ -700,12 +704,13 @@ double logLikelihoodMloglogistic_PADE(double h, arma::vec & alpha, arma::mat & S
   if(beta[0] < 0 || beta[1] < 0) return NA_REAL;
   
   unsigned p{S.n_rows};
-  arma::mat e; e.ones(S.n_cols, 1);
+  arma::mat e;
+  e.ones(S.n_cols, 1);
   arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat expm(size(S));
   
-  double JNorm{inf_norm(S)};
+  double s_norm{inf_norm(S)};
   
   std::vector<arma::mat> aux_vect;
   
@@ -729,7 +734,7 @@ double logLikelihoodMloglogistic_PADE(double h, arma::vec & alpha, arma::mat & S
   for (int k{0}; k < obs.size(); ++k) {
     // Matrix exponential
     int pind{1};
-    int ee{static_cast<int>(log2(JNorm  * std::log(pow(obs[k] / beta[0], beta[1]) + 1))) + 1};
+    int ee{static_cast<int>(log2(s_norm  * std::log(pow(obs[k] / beta[0], beta[1]) + 1))) + 1};
     s = std::max(0, ee + 1);
     xmod = std::log(pow(obs[k] / beta[0], beta[1]) + 1) / pow(2.0, s);
     c = 0.5;
@@ -763,7 +768,7 @@ double logLikelihoodMloglogistic_PADE(double h, arma::vec & alpha, arma::mat & S
   for (int k{0}; k < rcens.size(); ++k) {
     // Matrix exponential
     int pind{1};
-    int ee{static_cast<int>(log2(JNorm  * std::log(pow(rcens[k] / beta[0], beta[1]) + 1))) + 1};
+    int ee{static_cast<int>(log2(s_norm  * std::log(pow(rcens[k] / beta[0], beta[1]) + 1))) + 1};
     s = std::max(0, ee + 1);
     xmod = std::log(pow(rcens[k] / beta[0], beta[1]) + 1) / pow(2.0, s);
     c = 0.5;
@@ -816,12 +821,13 @@ double logLikelihoodMgompertz_PADE(double h, arma::vec & alpha, arma::mat & S, d
   if(beta < 0) return NA_REAL;
   
   unsigned p{S.n_rows};
-  arma::mat e; e.ones(S.n_cols, 1);
+  arma::mat e;
+  e.ones(S.n_cols, 1);
   arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat expm(size(S));
   
-  double JNorm{inf_norm(S)};
+  double s_norm{inf_norm(S)};
   
   std::vector<arma::mat> aux_vect;
   
@@ -845,7 +851,7 @@ double logLikelihoodMgompertz_PADE(double h, arma::vec & alpha, arma::mat & S, d
   for (int k{0}; k < obs.size(); ++k) {
     // Matrix exponential
     int pind{1};
-    int ee{static_cast<int>(log2(JNorm  * (exp(obs[k] * beta) - 1) / beta)) + 1};
+    int ee{static_cast<int>(log2(s_norm  * (exp(obs[k] * beta) - 1) / beta)) + 1};
     s = std::max(0, ee + 1);
     xmod = (exp(obs[k] * beta) - 1) / beta / pow(2.0, s);
     c = 0.5;
@@ -879,7 +885,7 @@ double logLikelihoodMgompertz_PADE(double h, arma::vec & alpha, arma::mat & S, d
   for (int k{0}; k < rcens.size(); ++k) {
     // Matrix exponential
     int pind{1};
-    int ee{static_cast<int>(log2(JNorm  * (exp(rcens[k] * beta) - 1) / beta)) + 1};
+    int ee{static_cast<int>(log2(s_norm  * (exp(rcens[k] * beta) - 1) / beta)) + 1};
     s = std::max(0, ee + 1);
     xmod = (exp(rcens[k] * beta) - 1) / beta / pow(2.0, s);
     c = 0.5;
@@ -932,12 +938,13 @@ double logLikelihoodMgev_PADE(double h, arma::vec & alpha, arma::mat & S, Rcpp::
   if(beta[1] < 0) return NA_REAL;
   
   unsigned p{S.n_rows};
-  arma::mat e; e.ones(S.n_cols, 1);
+  arma::mat e;
+  e.ones(S.n_cols, 1);
   arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat expm(size(S));
   
-  double JNorm{inf_norm(S)};
+  double s_norm{inf_norm(S)};
   
   std::vector<arma::mat> aux_vect;
   
@@ -961,7 +968,7 @@ double logLikelihoodMgev_PADE(double h, arma::vec & alpha, arma::mat & S, Rcpp::
     for (int k{0}; k < obs.size(); ++k) {
       // Matrix exponential
       int pind{1};
-      int ee{static_cast<int>(log2(JNorm  * exp(-(obs[k] - beta[0]) / beta[1]))) + 1};
+      int ee{static_cast<int>(log2(s_norm  * exp(-(obs[k] - beta[0]) / beta[1]))) + 1};
       s = std::max(0, ee + 1);
       xmod = exp(-(obs[k] - beta[0]) / beta[1])/ pow(2.0, s);
       c = 0.5;
@@ -995,7 +1002,7 @@ double logLikelihoodMgev_PADE(double h, arma::vec & alpha, arma::mat & S, Rcpp::
     for (int k{0}; k < rcens.size(); ++k) {
       // Matrix exponential
       int pind{1};
-      int ee{static_cast<int>(log2(JNorm  * exp(-(rcens[k] - beta[0]) / beta[1]))) + 1};
+      int ee{static_cast<int>(log2(s_norm  * exp(-(rcens[k] - beta[0]) / beta[1]))) + 1};
       s = std::max(0, ee + 1);
       xmod = exp(-(rcens[k] - beta[0]) / beta[1]) / pow(2.0, s);
       c = 0.5;
@@ -1031,7 +1038,7 @@ double logLikelihoodMgev_PADE(double h, arma::vec & alpha, arma::mat & S, Rcpp::
     for (int k{0}; k < obs.size(); ++k) {
       // Matrix exponential
       int pind{1};
-      int ee{static_cast<int>(log2(JNorm  * pow(1 + (beta[2] / beta[1]) * (obs[k] - beta[0]) , - 1 / beta[2]))) + 1};
+      int ee{static_cast<int>(log2(s_norm  * pow(1 + (beta[2] / beta[1]) * (obs[k] - beta[0]) , - 1 / beta[2]))) + 1};
       s = std::max(0, ee + 1);
       xmod = pow(1 + (beta[2] / beta[1]) * (obs[k] - beta[0]) , - 1 / beta[2]) / pow(2.0, s);
       c = 0.5;
@@ -1065,7 +1072,7 @@ double logLikelihoodMgev_PADE(double h, arma::vec & alpha, arma::mat & S, Rcpp::
     for (int k{0}; k < rcens.size(); ++k) {
       // Matrix exponential
       int pind{1};
-      int ee{static_cast<int>(log2(JNorm  * pow(1 + (beta[2] / beta[1]) * (rcens[k] - beta[0]) , - 1 / beta[2]))) + 1};
+      int ee{static_cast<int>(log2(s_norm  * pow(1 + (beta[2] / beta[1]) * (rcens[k] - beta[0]) , - 1 / beta[2]))) + 1};
       s = std::max(0, ee + 1);
       xmod = pow(1 + (beta[2] / beta[1]) * (rcens[k] - beta[0]) , - 1 / beta[2]) / pow(2.0, s);
       c = 0.5;
@@ -1104,7 +1111,7 @@ double logLikelihoodMgev_PADE(double h, arma::vec & alpha, arma::mat & S, Rcpp::
 // Scaled versions of loglikelihoods (for regression):
 ////////////////////////////////////////////
 
-//' Loglikelihood of PH using Pade
+//' Loglikelihood of phase-type using Pade
 //' 
 //' Loglikelihood for a sample 
 //' 
@@ -1121,12 +1128,13 @@ double logLikelihoodMgev_PADE(double h, arma::vec & alpha, arma::mat & S, Rcpp::
 // [[Rcpp::export]]
 double logLikelihoodPH_PADEs(double h, arma::vec & alpha, arma::mat & S, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight, const Rcpp::NumericVector & scale1, const Rcpp::NumericVector & scale2) {
   unsigned p{S.n_rows};
-  arma::mat e; e.ones(S.n_cols, 1);
+  arma::mat e;
+  e.ones(S.n_cols, 1);
   arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat expm(size(S));
   
-  double JNorm{inf_norm(S)};
+  double s_norm{inf_norm(S)};
   
   std::vector<arma::mat> aux_vect;
   
@@ -1150,7 +1158,7 @@ double logLikelihoodPH_PADEs(double h, arma::vec & alpha, arma::mat & S, const R
   for (int k{0}; k < obs.size(); ++k) {
     // Matrix exponential
     int pind{1};
-    int ee{static_cast<int>(log2(JNorm  * scale1[k] * obs[k])) + 1};
+    int ee{static_cast<int>(log2(s_norm  * scale1[k] * obs[k])) + 1};
     s = std::max(0, ee + 1);
     xmod = scale1[k] * obs[k] / pow(2.0, s);
     c = 0.5;
@@ -1184,7 +1192,7 @@ double logLikelihoodPH_PADEs(double h, arma::vec & alpha, arma::mat & S, const R
   for (int k{0}; k < rcens.size(); ++k) {
     // Matrix exponential
     int pind{1};
-    int ee{static_cast<int>(log2(JNorm  * scale2[k] * rcens[k])) + 1};
+    int ee{static_cast<int>(log2(s_norm  * scale2[k] * rcens[k])) + 1};
     s = std::max(0, ee + 1);
     xmod = scale2[k] * rcens[k] / pow(2.0, s);
     c = 0.5;
@@ -1239,12 +1247,13 @@ double logLikelihoodMweibull_PADEs(double h, arma::vec & alpha, arma::mat & S, d
   if(beta < 0) return NA_REAL;
   
   unsigned p{S.n_rows};
-  arma::mat e; e.ones(S.n_cols, 1);
+  arma::mat e;
+  e.ones(S.n_cols, 1);
   arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat expm(size(S));
   
-  double JNorm{inf_norm(S)};
+  double s_norm{inf_norm(S)};
   
   std::vector<arma::mat> aux_vect;
   
@@ -1268,7 +1277,7 @@ double logLikelihoodMweibull_PADEs(double h, arma::vec & alpha, arma::mat & S, d
   for (int k{0}; k < obs.size(); ++k) {
     // Matrix exponential
     int pind{1};
-    int ee{static_cast<int>(log2(JNorm  * scale1[k] * pow(obs[k], beta))) + 1};
+    int ee{static_cast<int>(log2(s_norm  * scale1[k] * pow(obs[k], beta))) + 1};
     s = std::max(0, ee + 1);
     xmod = scale1[k] * pow(obs[k], beta) / pow(2.0, s);
     c = 0.5;
@@ -1302,7 +1311,7 @@ double logLikelihoodMweibull_PADEs(double h, arma::vec & alpha, arma::mat & S, d
   for (int k{0}; k < rcens.size(); ++k) {
     // Matrix exponential
     int pind{1};
-    int ee{static_cast<int>(log2(JNorm  * scale2[k] * pow(rcens[k], beta))) + 1};
+    int ee{static_cast<int>(log2(s_norm  * scale2[k] * pow(rcens[k], beta))) + 1};
     s = std::max(0, ee + 1);
     xmod = scale2[k] * pow(rcens[k], beta) / pow(2.0, s);
     c = 0.5;
@@ -1357,12 +1366,13 @@ double logLikelihoodMpareto_PADEs(double h, arma::vec & alpha, arma::mat & S, do
   if(beta < 0) return NA_REAL;
   
   unsigned p{S.n_rows};
-  arma::mat e; e.ones(S.n_cols, 1);
+  arma::mat e;
+  e.ones(S.n_cols, 1);
   arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat expm(size(S));
   
-  double JNorm{inf_norm(S)};
+  double s_norm{inf_norm(S)};
   
   std::vector<arma::mat> aux_vect;
   
@@ -1386,7 +1396,7 @@ double logLikelihoodMpareto_PADEs(double h, arma::vec & alpha, arma::mat & S, do
   for (int k{0}; k < obs.size(); ++k) {
     // Matrix exponential
     int pind{1};
-    int ee{static_cast<int>(log2(JNorm  * scale1[k] * std::log(obs[k] / beta + 1))) + 1};
+    int ee{static_cast<int>(log2(s_norm  * scale1[k] * std::log(obs[k] / beta + 1))) + 1};
     s = std::max(0, ee + 1);
     xmod = scale1[k] * std::log(obs[k] / beta + 1) / pow(2.0, s);
     c = 0.5;
@@ -1420,7 +1430,7 @@ double logLikelihoodMpareto_PADEs(double h, arma::vec & alpha, arma::mat & S, do
   for (int k{0}; k < rcens.size(); ++k) {
     // Matrix exponential
     int pind{1};
-    int ee{static_cast<int>(log2(JNorm  * scale2[k] * std::log(rcens[k] / beta + 1))) + 1};
+    int ee{static_cast<int>(log2(s_norm  * scale2[k] * std::log(rcens[k] / beta + 1))) + 1};
     s = std::max(0, ee + 1);
     xmod = scale2[k] * std::log(rcens[k] / beta + 1) / pow(2.0, s);
     c = 0.5;
@@ -1475,12 +1485,13 @@ double logLikelihoodMlognormal_PADEs(double h, arma::vec & alpha, arma::mat & S,
   if(beta < 0) return NA_REAL;
   
   unsigned p{S.n_rows};
-  arma::mat e; e.ones(S.n_cols, 1);
+  arma::mat e;
+  e.ones(S.n_cols, 1);
   arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat expm(size(S));
   
-  double JNorm{inf_norm(S)};
+  double s_norm{inf_norm(S)};
   
   std::vector<arma::mat> aux_vect;
   
@@ -1504,7 +1515,7 @@ double logLikelihoodMlognormal_PADEs(double h, arma::vec & alpha, arma::mat & S,
   for (int k{0}; k < obs.size(); ++k) {
     // Matrix exponential
     int pind{1};
-    int ee{static_cast<int>(log2(JNorm  * scale1[k] * pow(std::log(obs[k] + 1), beta))) + 1};
+    int ee{static_cast<int>(log2(s_norm  * scale1[k] * pow(std::log(obs[k] + 1), beta))) + 1};
     s = std::max(0, ee + 1);
     xmod = scale1[k] * pow(std::log(obs[k] + 1), beta) / pow(2.0, s);
     c = 0.5;
@@ -1538,7 +1549,7 @@ double logLikelihoodMlognormal_PADEs(double h, arma::vec & alpha, arma::mat & S,
   for (int k{0}; k < rcens.size(); ++k) {
     // Matrix exponential
     int pind{1};
-    int ee{static_cast<int>(log2(JNorm  * scale2[k] * pow(std::log(rcens[k] + 1), beta))) + 1};
+    int ee{static_cast<int>(log2(s_norm  * scale2[k] * pow(std::log(rcens[k] + 1), beta))) + 1};
     s = std::max(0, ee + 1);
     xmod = scale2[k] * pow(std::log(rcens[k] + 1), beta) / pow(2.0, s);
     c = 0.5;
@@ -1593,12 +1604,13 @@ double logLikelihoodMloglogistic_PADEs(double h, arma::vec & alpha, arma::mat & 
   if(beta[0] < 0 || beta[1] < 0) return NA_REAL;
   
   unsigned p{S.n_rows};
-  arma::mat e; e.ones(S.n_cols, 1);
+  arma::mat e;
+  e.ones(S.n_cols, 1);
   arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat expm(size(S));
   
-  double JNorm{inf_norm(S)};
+  double s_norm{inf_norm(S)};
   
   std::vector<arma::mat> aux_vect;
   
@@ -1622,7 +1634,7 @@ double logLikelihoodMloglogistic_PADEs(double h, arma::vec & alpha, arma::mat & 
   for (int k{0}; k < obs.size(); ++k) {
     // Matrix exponential
     int pind{1};
-    int ee{static_cast<int>(log2(JNorm  * scale1[k] * std::log(pow(obs[k] / beta[0], beta[1]) + 1))) + 1};
+    int ee{static_cast<int>(log2(s_norm  * scale1[k] * std::log(pow(obs[k] / beta[0], beta[1]) + 1))) + 1};
     s = std::max(0, ee + 1);
     xmod = scale1[k] * std::log(pow(obs[k] / beta[0], beta[1]) + 1) / pow(2.0, s);
     c = 0.5;
@@ -1656,7 +1668,7 @@ double logLikelihoodMloglogistic_PADEs(double h, arma::vec & alpha, arma::mat & 
   for (int k{0}; k < rcens.size(); ++k) {
     // Matrix exponential
     int pind{1};
-    int ee{static_cast<int>(log2(JNorm  * scale2[k] * std::log(pow(rcens[k] / beta[0], beta[1]) + 1))) + 1};
+    int ee{static_cast<int>(log2(s_norm  * scale2[k] * std::log(pow(rcens[k] / beta[0], beta[1]) + 1))) + 1};
     s = std::max(0, ee + 1);
     xmod = scale2[k] * std::log(pow(rcens[k] / beta[0], beta[1]) + 1) / pow(2.0, s);
     c = 0.5;
@@ -1711,12 +1723,13 @@ double logLikelihoodMgompertz_PADEs(double h, arma::vec & alpha, arma::mat & S, 
   if(beta < 0) return NA_REAL;
   
   unsigned p{S.n_rows};
-  arma::mat e; e.ones(S.n_cols, 1);
+  arma::mat e;
+  e.ones(S.n_cols, 1);
   arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat expm(size(S));
   
-  double JNorm{inf_norm(S)};
+  double s_norm{inf_norm(S)};
   
   std::vector<arma::mat> aux_vect;
   
@@ -1740,7 +1753,7 @@ double logLikelihoodMgompertz_PADEs(double h, arma::vec & alpha, arma::mat & S, 
   for (int k{0}; k < obs.size(); ++k) {
     // Matrix exponential
     int pind{1};
-    int ee{static_cast<int>(log2(JNorm  * scale1[k] * (exp(obs[k] * beta) - 1) / beta)) + 1};
+    int ee{static_cast<int>(log2(s_norm  * scale1[k] * (exp(obs[k] * beta) - 1) / beta)) + 1};
     s = std::max(0, ee + 1);
     xmod = scale1[k] * (exp(obs[k] * beta) - 1) / beta / pow(2.0, s);
     c = 0.5;
@@ -1774,7 +1787,7 @@ double logLikelihoodMgompertz_PADEs(double h, arma::vec & alpha, arma::mat & S, 
   for (int k{0}; k < rcens.size(); ++k) {
     // Matrix exponential
     int pind{1};
-    int ee{static_cast<int>(log2(JNorm  * scale2[k] * (exp(rcens[k] * beta) - 1) / beta)) + 1};
+    int ee{static_cast<int>(log2(s_norm  * scale2[k] * (exp(rcens[k] * beta) - 1) / beta)) + 1};
     s = std::max(0, ee + 1);
     xmod = scale2[k] * (exp(rcens[k] * beta) - 1) / beta / pow(2.0, s);
     c = 0.5;

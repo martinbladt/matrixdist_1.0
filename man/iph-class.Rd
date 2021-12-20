@@ -8,12 +8,12 @@
 Class object.
 }
 \description{
-Class of objects for inhomogeneous phase type distributions.
+Class of objects for inhomogeneous phase-type distributions.
 }
 \section{Slots}{
 
 \describe{
-\item{\code{name}}{Name of the phase type distribution.}
+\item{\code{name}}{Name of the phase-type distribution.}
 
 \item{\code{gfun}}{A list comprising of the parameters.}
 

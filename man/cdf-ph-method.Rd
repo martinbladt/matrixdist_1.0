@@ -2,7 +2,7 @@
 % Please edit documentation in R/1.ph.R
 \name{cdf,ph-method}
 \alias{cdf,ph-method}
-\title{Distribution Method for phase type distributions}
+\title{Distribution Method for phase-type distributions}
 \usage{
 \S4method{cdf}{ph}(x, q, lower.tail = TRUE)
 }
@@ -18,7 +18,7 @@ upper tail is computed.}
 A vector containing the CDF evaluations at the given locations.
 }
 \description{
-Distribution Method for phase type distributions
+Distribution Method for phase-type distributions
 }
 \examples{
 obj <- ph(structure = "general")

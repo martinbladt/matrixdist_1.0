@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{logLikelihoodPH_UNIs}
 \alias{logLikelihoodPH_UNIs}
-\title{Loglikelihood of PH using uniformization}
+\title{Loglikelihood of phase-type using uniformization}
 \usage{
 logLikelihoodPH_UNIs(h, alpha, S, obs, weight, rcens, rcweight, scale1, scale2)
 }

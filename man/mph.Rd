@@ -2,7 +2,7 @@
 % Please edit documentation in R/3.mph.R
 \name{mph}
 \alias{mph}
-\title{Constructor Function for multivariate phase type distributions}
+\title{Constructor Function for multivariate phase-type distributions}
 \usage{
 mph(alpha = NULL, S = NULL, structure = NULL, dimension = 3, variables = NULL)
 }
@@ -15,11 +15,11 @@ mph(alpha = NULL, S = NULL, structure = NULL, dimension = 3, variables = NULL)
 
 \item{dimension}{The dimension of the ph structure (if provided).}
 
-\item{variables}{The dimension of the multivariate phase type.}
+\item{variables}{The dimension of the multivariate phase-type.}
 }
 \value{
 An object of class \linkS4class{mph}.
 }
 \description{
-Constructor Function for multivariate phase type distributions
+Constructor Function for multivariate phase-type distributions
 }

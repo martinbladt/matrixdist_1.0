@@ -882,6 +882,108 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// embedded_mc
+arma::mat embedded_mc(arma::mat S);
+RcppExport SEXP _matrixdist_embedded_mc(SEXP SSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type S(SSEXP);
+    rcpp_result_gen = Rcpp::wrap(embedded_mc(S));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cumulate_matrix
+arma::mat cumulate_matrix(arma::mat A);
+RcppExport SEXP _matrixdist_cumulate_matrix(SEXP ASEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type A(ASEXP);
+    rcpp_result_gen = Rcpp::wrap(cumulate_matrix(A));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cumulate_vector
+arma::vec cumulate_vector(arma::vec A);
+RcppExport SEXP _matrixdist_cumulate_vector(SEXP ASEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec >::type A(ASEXP);
+    rcpp_result_gen = Rcpp::wrap(cumulate_vector(A));
+    return rcpp_result_gen;
+END_RCPP
+}
+// initial_state
+long initial_state(arma::vec cum_alpha, double u);
+RcppExport SEXP _matrixdist_initial_state(SEXP cum_alphaSEXP, SEXP uSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec >::type cum_alpha(cum_alphaSEXP);
+    Rcpp::traits::input_parameter< double >::type u(uSEXP);
+    rcpp_result_gen = Rcpp::wrap(initial_state(cum_alpha, u));
+    return rcpp_result_gen;
+END_RCPP
+}
+// new_state
+long new_state(long prev_state, arma::mat cum_embedded_mc, double u);
+RcppExport SEXP _matrixdist_new_state(SEXP prev_stateSEXP, SEXP cum_embedded_mcSEXP, SEXP uSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< long >::type prev_state(prev_stateSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type cum_embedded_mc(cum_embedded_mcSEXP);
+    Rcpp::traits::input_parameter< double >::type u(uSEXP);
+    rcpp_result_gen = Rcpp::wrap(new_state(prev_state, cum_embedded_mc, u));
+    return rcpp_result_gen;
+END_RCPP
+}
+// rphasetype
+Rcpp::NumericVector rphasetype(int n, arma::vec alpha, arma::mat S);
+RcppExport SEXP _matrixdist_rphasetype(SEXP nSEXP, SEXP alphaSEXP, SEXP SSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type S(SSEXP);
+    rcpp_result_gen = Rcpp::wrap(rphasetype(n, alpha, S));
+    return rcpp_result_gen;
+END_RCPP
+}
+// riph
+Rcpp::NumericVector riph(int n, Rcpp::String dist_type, arma::vec alpha, arma::mat S, Rcpp::NumericVector beta);
+RcppExport SEXP _matrixdist_riph(SEXP nSEXP, SEXP dist_typeSEXP, SEXP alphaSEXP, SEXP SSEXP, SEXP betaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< Rcpp::String >::type dist_type(dist_typeSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type S(SSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type beta(betaSEXP);
+    rcpp_result_gen = Rcpp::wrap(riph(n, dist_type, alpha, S, beta));
+    return rcpp_result_gen;
+END_RCPP
+}
+// rmatrixgev
+Rcpp::NumericVector rmatrixgev(int n, arma::vec alpha, arma::mat S, double mu, double sigma, double xi);
+RcppExport SEXP _matrixdist_rmatrixgev(SEXP nSEXP, SEXP alphaSEXP, SEXP SSEXP, SEXP muSEXP, SEXP sigmaSEXP, SEXP xiSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type S(SSEXP);
+    Rcpp::traits::input_parameter< double >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< double >::type sigma(sigmaSEXP);
+    Rcpp::traits::input_parameter< double >::type xi(xiSEXP);
+    rcpp_result_gen = Rcpp::wrap(rmatrixgev(n, alpha, S, mu, sigma, xi));
+    return rcpp_result_gen;
+END_RCPP
+}
 // matrix_product
 Rcpp::NumericMatrix matrix_product(Rcpp::NumericMatrix A1, Rcpp::NumericMatrix A2);
 RcppExport SEXP _matrixdist_matrix_product(SEXP A1SEXP, SEXP A2SEXP) {
@@ -1212,108 +1314,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// embedded_mc
-arma::mat embedded_mc(arma::mat S);
-RcppExport SEXP _matrixdist_embedded_mc(SEXP SSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::mat >::type S(SSEXP);
-    rcpp_result_gen = Rcpp::wrap(embedded_mc(S));
-    return rcpp_result_gen;
-END_RCPP
-}
-// cumulate_matrix
-arma::mat cumulate_matrix(arma::mat A);
-RcppExport SEXP _matrixdist_cumulate_matrix(SEXP ASEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::mat >::type A(ASEXP);
-    rcpp_result_gen = Rcpp::wrap(cumulate_matrix(A));
-    return rcpp_result_gen;
-END_RCPP
-}
-// cumulate_vector
-arma::vec cumulate_vector(arma::vec A);
-RcppExport SEXP _matrixdist_cumulate_vector(SEXP ASEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::vec >::type A(ASEXP);
-    rcpp_result_gen = Rcpp::wrap(cumulate_vector(A));
-    return rcpp_result_gen;
-END_RCPP
-}
-// initial_state
-long initial_state(arma::vec cum_alpha, double u);
-RcppExport SEXP _matrixdist_initial_state(SEXP cum_alphaSEXP, SEXP uSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::vec >::type cum_alpha(cum_alphaSEXP);
-    Rcpp::traits::input_parameter< double >::type u(uSEXP);
-    rcpp_result_gen = Rcpp::wrap(initial_state(cum_alpha, u));
-    return rcpp_result_gen;
-END_RCPP
-}
-// new_state
-long new_state(long prev_state, arma::mat cum_embedded_mc, double u);
-RcppExport SEXP _matrixdist_new_state(SEXP prev_stateSEXP, SEXP cum_embedded_mcSEXP, SEXP uSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< long >::type prev_state(prev_stateSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type cum_embedded_mc(cum_embedded_mcSEXP);
-    Rcpp::traits::input_parameter< double >::type u(uSEXP);
-    rcpp_result_gen = Rcpp::wrap(new_state(prev_state, cum_embedded_mc, u));
-    return rcpp_result_gen;
-END_RCPP
-}
-// rphasetype
-Rcpp::NumericVector rphasetype(int n, arma::vec alpha, arma::mat S);
-RcppExport SEXP _matrixdist_rphasetype(SEXP nSEXP, SEXP alphaSEXP, SEXP SSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< int >::type n(nSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type alpha(alphaSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type S(SSEXP);
-    rcpp_result_gen = Rcpp::wrap(rphasetype(n, alpha, S));
-    return rcpp_result_gen;
-END_RCPP
-}
-// riph
-Rcpp::NumericVector riph(int n, Rcpp::String dist_type, arma::vec alpha, arma::mat S, Rcpp::NumericVector beta);
-RcppExport SEXP _matrixdist_riph(SEXP nSEXP, SEXP dist_typeSEXP, SEXP alphaSEXP, SEXP SSEXP, SEXP betaSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< int >::type n(nSEXP);
-    Rcpp::traits::input_parameter< Rcpp::String >::type dist_type(dist_typeSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type alpha(alphaSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type S(SSEXP);
-    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type beta(betaSEXP);
-    rcpp_result_gen = Rcpp::wrap(riph(n, dist_type, alpha, S, beta));
-    return rcpp_result_gen;
-END_RCPP
-}
-// rmatrixgev
-Rcpp::NumericVector rmatrixgev(int n, arma::vec alpha, arma::mat S, double mu, double sigma, double xi);
-RcppExport SEXP _matrixdist_rmatrixgev(SEXP nSEXP, SEXP alphaSEXP, SEXP SSEXP, SEXP muSEXP, SEXP sigmaSEXP, SEXP xiSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< int >::type n(nSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type alpha(alphaSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type S(SSEXP);
-    Rcpp::traits::input_parameter< double >::type mu(muSEXP);
-    Rcpp::traits::input_parameter< double >::type sigma(sigmaSEXP);
-    Rcpp::traits::input_parameter< double >::type xi(xiSEXP);
-    rcpp_result_gen = Rcpp::wrap(rmatrixgev(n, alpha, S, mu, sigma, xi));
-    return rcpp_result_gen;
-END_RCPP
-}
 // random_structure
 List random_structure(int p, String structure, double scale_factor);
 RcppExport SEXP _matrixdist_random_structure(SEXP pSEXP, SEXP structureSEXP, SEXP scale_factorSEXP) {
@@ -1378,6 +1378,14 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_logLikelihoodMlognormal_UNIs", (DL_FUNC) &_matrixdist_logLikelihoodMlognormal_UNIs, 10},
     {"_matrixdist_logLikelihoodMloglogistic_UNIs", (DL_FUNC) &_matrixdist_logLikelihoodMloglogistic_UNIs, 10},
     {"_matrixdist_logLikelihoodMgompertz_UNIs", (DL_FUNC) &_matrixdist_logLikelihoodMgompertz_UNIs, 10},
+    {"_matrixdist_embedded_mc", (DL_FUNC) &_matrixdist_embedded_mc, 1},
+    {"_matrixdist_cumulate_matrix", (DL_FUNC) &_matrixdist_cumulate_matrix, 1},
+    {"_matrixdist_cumulate_vector", (DL_FUNC) &_matrixdist_cumulate_vector, 1},
+    {"_matrixdist_initial_state", (DL_FUNC) &_matrixdist_initial_state, 2},
+    {"_matrixdist_new_state", (DL_FUNC) &_matrixdist_new_state, 3},
+    {"_matrixdist_rphasetype", (DL_FUNC) &_matrixdist_rphasetype, 3},
+    {"_matrixdist_riph", (DL_FUNC) &_matrixdist_riph, 5},
+    {"_matrixdist_rmatrixgev", (DL_FUNC) &_matrixdist_rmatrixgev, 6},
     {"_matrixdist_matrix_product", (DL_FUNC) &_matrixdist_matrix_product, 2},
     {"_matrixdist_matrix_inverse", (DL_FUNC) &_matrixdist_matrix_inverse, 1},
     {"_matrixdist_phdensity", (DL_FUNC) &_matrixdist_phdensity, 3},
@@ -1403,14 +1411,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_clone_vector", (DL_FUNC) &_matrixdist_clone_vector, 1},
     {"_matrixdist_clone_matrix", (DL_FUNC) &_matrixdist_clone_matrix, 1},
     {"_matrixdist_sum_ph", (DL_FUNC) &_matrixdist_sum_ph, 4},
-    {"_matrixdist_embedded_mc", (DL_FUNC) &_matrixdist_embedded_mc, 1},
-    {"_matrixdist_cumulate_matrix", (DL_FUNC) &_matrixdist_cumulate_matrix, 1},
-    {"_matrixdist_cumulate_vector", (DL_FUNC) &_matrixdist_cumulate_vector, 1},
-    {"_matrixdist_initial_state", (DL_FUNC) &_matrixdist_initial_state, 2},
-    {"_matrixdist_new_state", (DL_FUNC) &_matrixdist_new_state, 3},
-    {"_matrixdist_rphasetype", (DL_FUNC) &_matrixdist_rphasetype, 3},
-    {"_matrixdist_riph", (DL_FUNC) &_matrixdist_riph, 5},
-    {"_matrixdist_rmatrixgev", (DL_FUNC) &_matrixdist_rmatrixgev, 6},
     {"_matrixdist_random_structure", (DL_FUNC) &_matrixdist_random_structure, 3},
     {NULL, NULL, 0}
 };

@@ -8,12 +8,12 @@
 Class object.
 }
 \description{
-Class of objects for phase type distributions.
+Class of objects for phase-type distributions.
 }
 \section{Slots}{
 
 \describe{
-\item{\code{name}}{Name of the phase type distribution.}
+\item{\code{name}}{Name of the phase-type distribution.}
 
 \item{\code{pars}}{A list comprising of the parameters.}
 

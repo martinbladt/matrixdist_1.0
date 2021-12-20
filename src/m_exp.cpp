@@ -6,7 +6,7 @@
 //' L inf norm of a matrix
 //' 
 //' Computes the L inf norm of a matrix \code{A}, which is defined as:
-//' L_inf A =  max ( 1 <= I <= M ) sum ( 1 <= J <= N ) abs ( A(I,J) ).
+//' L_inf(A) =  max(1 <= i <= M) sum(1 <= j <= N) abs(A(i,j)).
 //' 
 //' @param A A matrix.
 //' @return The L inf norm.
@@ -78,11 +78,12 @@ double max_diagonal(const arma::mat & A) {
 }
 
 
-//' Matrix exponential algorithm
+//' Matrix exponential
 //' 
-//' MATLAB's built-in algorithm - Pade approximation.
+//' MATLAB's built-in algorithm for matrix exponential - Pade approximation.
 //' 
 //' @param A A matrix.
+//' @return exp(A).
 //' 
 // [[Rcpp::export]]
 arma::mat matrix_exponential(arma::mat A) {

@@ -1,8 +1,8 @@
 #' Inhomogeneous Phase Type distributions
 #'
-#' Class of objects for inhomogeneous phase type distributions.
+#' Class of objects for inhomogeneous phase-type distributions.
 #'
-#' @slot name Name of the phase type distribution.
+#' @slot name Name of the phase-type distribution.
 #' @slot gfun A list comprising of the parameters.
 #' @slot scale Scale.
 #'
@@ -17,7 +17,7 @@ setClass("iph",
   )
 )
 
-#' Constructor Function for inhomogeneous phase type distributions
+#' Constructor Function for inhomogeneous phase-type distributions
 #'
 #' @param ph An object of class \linkS4class{ph}.
 #' @param alpha A probability vector.
@@ -117,7 +117,7 @@ iph <- function(ph = NULL, gfun = NULL, gfun_pars = NULL, alpha = NULL, S = NULL
   )
 }
 
-#' Minimum Method for inhomogeneous phase type distributions
+#' Minimum Method for inhomogeneous phase-type distributions
 #'
 #' @param x1 An object of class \linkS4class{iph}.
 #' @param x2 An object of class \linkS4class{iph}.
@@ -142,7 +142,7 @@ setMethod(
   }
 )
 
-#' Maximum Method for inhomogeneous phase type distributions
+#' Maximum Method for inhomogeneous phase-type distributions
 #'
 #' @param x1 An object of class \linkS4class{iph}.
 #' @param x2 An object of class \linkS4class{iph}.
@@ -167,7 +167,7 @@ setMethod(
   }
 )
 
-#' Show Method for inhomogeneous phase type distributions
+#' Show Method for inhomogeneous phase-type distributions
 #'
 #' @param object An object of class \linkS4class{iph}.
 #' @importFrom methods show
@@ -183,7 +183,7 @@ setMethod("show", "iph", function(object) {
   methods::show(object@gfun$pars)
 })
 
-#' Simulation Method for inhomogeneous phase type distributions
+#' Simulation Method for inhomogeneous phase-type distributions
 #'
 #' @param x An object of class \linkS4class{iph}.
 #' @param n An integer of length of realization.
@@ -208,7 +208,7 @@ setMethod("sim", c(x = "iph"), function(x, n = 1000) {
   return(U)
 })
 
-#' Density Method for inhomogeneous phase type distributions
+#' Density Method for inhomogeneous phase-type distributions
 #'
 #' @param x An object of class \linkS4class{iph}.
 #' @param y A vector of locations.
@@ -229,7 +229,7 @@ setMethod("dens", c(x = "iph"), function(x, y) {
   return(dens)
 })
 
-#' Distribution Method for inhomogeneous phase type distributions
+#' Distribution Method for inhomogeneous phase-type distributions
 #'
 #' @param x An object of class \linkS4class{iph}.
 #' @param q A vector of locations.

@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{logLikelihoodMweibull_RKs}
 \alias{logLikelihoodMweibull_RKs}
-\title{Loglikelihood of matrix-Weibull using RK}
+\title{Loglikelihood of matrix-Weibull using Runge-Kutta}
 \usage{
 logLikelihoodMweibull_RKs(
   h,

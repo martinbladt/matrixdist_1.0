@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{mlognormalcdf}
 \alias{mlognormalcdf}
-\title{Matrix Lognormal cdf}
+\title{Matrix-lognormal cdf}
 \usage{
 mlognormalcdf(x, alpha, S, beta, lower_tail = TRUE)
 }
@@ -21,6 +21,6 @@ mlognormalcdf(x, alpha, S, beta, lower_tail = TRUE)
 The cdf (tail) at \code{x}.
 }
 \description{
-Computes the cdf (tail) of a matrix LogNormal distribution with parameters
+Computes the cdf (tail) of a matrix-lognormal distribution with parameters
  \code{alpha}, \code{S} and \code{beta} at \code{x}.
 }

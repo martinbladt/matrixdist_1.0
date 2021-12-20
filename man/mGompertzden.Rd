@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{mgompertzden}
 \alias{mgompertzden}
-\title{Matrix Gompertz density}
+\title{Matrix-Gompertz density}
 \usage{
 mgompertzden(x, alpha, S, beta)
 }
@@ -19,6 +19,6 @@ mgompertzden(x, alpha, S, beta)
 The density at \code{x}.
 }
 \description{
-Computes the density of a matrix Gompertz distribution with parameters
+Computes the density of a matrix-Gompertz distribution with parameters
  \code{alpha}, \code{S} and \code{beta} at \code{x}.
 }

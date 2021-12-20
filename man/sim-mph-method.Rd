@@ -2,7 +2,7 @@
 % Please edit documentation in R/3.mph.R
 \name{sim,mph-method}
 \alias{sim,mph-method}
-\title{Simulation Method for multivariate phase type distributions}
+\title{Simulation Method for multivariate phase-type distributions}
 \usage{
 \S4method{sim}{mph}(x, n = 1000, equal_marginals = 0)
 }
@@ -12,11 +12,11 @@
 \item{n}{Length of realization.}
 
 \item{equal_marginals}{Non-negative integer. If positive, it specifies
-nthe number of marginals to simulate from, all from the fist matrix.}
+the number of marginals to simulate from, all from the first matrix.}
 }
 \value{
-A realization of a phase type data.
+A realization of a phase-type data.
 }
 \description{
-Simulation Method for multivariate phase type distributions
+Simulation Method for multivariate phase-type distributions
 }

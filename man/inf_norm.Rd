@@ -14,5 +14,5 @@ The L inf norm.
 }
 \description{
 Computes the L inf norm of a matrix \code{A}, which is defined as:
-L_inf A =  max ( 1 <= I <= M ) sum ( 1 <= J <= N ) abs ( A(I,J) ).
+L_inf(A) =  max(1 <= i <= M) sum(1 <= j <= N) abs(A(i,j)).
 }

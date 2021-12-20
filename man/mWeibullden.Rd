@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{mweibullden}
 \alias{mweibullden}
-\title{Matrix Weibull density}
+\title{Matrix-Weibull density}
 \usage{
 mweibullden(x, alpha, S, beta)
 }
@@ -19,6 +19,6 @@ mweibullden(x, alpha, S, beta)
 The density at \code{x}.
 }
 \description{
-Computes the density of a matrix Weibull distribution with parameters
+Computes the density of a matrix-Weibull distribution with parameters
  \code{alpha}, \code{S} and \code{beta} at \code{x}.
 }

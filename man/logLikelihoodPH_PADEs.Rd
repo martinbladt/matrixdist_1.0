@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{logLikelihoodPH_PADEs}
 \alias{logLikelihoodPH_PADEs}
-\title{Loglikelihood of PH using Pade}
+\title{Loglikelihood of phase-type using Pade}
 \usage{
 logLikelihoodPH_PADEs(
   h,

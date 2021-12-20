@@ -12,7 +12,7 @@ moment(x, ...)
 \item{...}{Further parameters to be passed on.}
 }
 \value{
-A realization from the matrix distribution.
+Moment of the matrix distribution.
 }
 \description{
 Methods are available for objects of class \linkS4class{ph}.

@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{logLikelihoodMloglogistic_RK}
 \alias{logLikelihoodMloglogistic_RK}
-\title{Loglikelihood of matrix Log-logistic using RK}
+\title{Loglikelihood of matrix-loglogistic using Runge-Kutta}
 \usage{
 logLikelihoodMloglogistic_RK(h, alpha, S, beta, obs, weight, rcens, rcweight)
 }

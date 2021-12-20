@@ -1,6 +1,6 @@
 #' Multivariate Phase Type distributions
 #'
-#' Class of objects for multivariate phase type distributions.
+#' Class of objects for multivariate phase-type distributions.
 #'
 #' @slot name Name of the phase type distribution.
 #' @slot pars A list comprising of the parameters.
@@ -17,13 +17,13 @@ setClass("mph",
   )
 )
 
-#' Constructor Function for multivariate phase type distributions
+#' Constructor Function for multivariate phase-type distributions
 #'
 #' @param alpha A probability vector.
 #' @param S A list of sub-intensity matrices.
 #' @param structure A vector of valid ph structures.
 #' @param dimension The dimension of the ph structure (if provided).
-#' @param variables The dimension of the multivariate phase type.
+#' @param variables The dimension of the multivariate phase-type.
 #'
 #' @return An object of class \linkS4class{mph}.
 #' @export
@@ -53,7 +53,7 @@ mph <- function(alpha = NULL, S = NULL, structure = NULL, dimension = 3, variabl
   )
 }
 
-#' Show Method for multivariate phase type distributions
+#' Show Method for multivariate phase-type distributions
 #'
 #' @param object An object of class \linkS4class{mph}.
 #' @importFrom methods show
@@ -67,14 +67,14 @@ setMethod("show", "mph", function(object) {
   cat("number of variables: ", length(object@pars$S), "\n", sep = "")
 })
 
-#' Simulation Method for multivariate phase type distributions
+#' Simulation Method for multivariate phase-type distributions
 #'
 #' @param x An object of class \linkS4class{mph}.
 #' @param n Length of realization.
 #' @param equal_marginals Non-negative integer. If positive, it specifies
-#' nthe number of marginals to simulate from, all from the fist matrix.
+#' the number of marginals to simulate from, all from the first matrix.
 #'
-#' @return A realization of a phase type data.
+#' @return A realization of a phase-type data.
 #' @export
 #'
 setMethod("sim", c(x = "mph"), function(x, n = 1000, equal_marginals = 0) {
@@ -107,7 +107,7 @@ setMethod("sim", c(x = "mph"), function(x, n = 1000, equal_marginals = 0) {
   return(result)
 })
 
-#' Density Method for multivariate phase type distributions
+#' Density Method for multivariate phase-type distributions
 #'
 #' @param x An object of class \linkS4class{mph}.
 #' @param y A matrix of observations.
@@ -133,7 +133,7 @@ setMethod("dens", c(x = "mph"), function(x, y) {
   return(res)
 })
 
-#' Distribution Method for multivariate phase type distributions
+#' Distribution Method for multivariate phase-type distributions
 #'
 #' @param x An object of class \linkS4class{mph}.
 #' @param q A vector of locations.

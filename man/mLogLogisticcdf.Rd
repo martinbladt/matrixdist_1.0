@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{mloglogisticcdf}
 \alias{mloglogisticcdf}
-\title{Matrix Log-Logistic cdf}
+\title{Matrix-loglogistic cdf}
 \usage{
 mloglogisticcdf(x, alpha, S, beta, lower_tail = TRUE)
 }
@@ -21,6 +21,6 @@ mloglogisticcdf(x, alpha, S, beta, lower_tail = TRUE)
 The cdf (tail) at \code{x}.
 }
 \description{
-Computes the cdf (tail) of a matrix Log-Logistic distribution with parameters
- \code{alpha}, \code{S} and \code{beta} at \code{x}
+Computes the cdf (tail) of a matrix-loglogistic distribution with parameters
+ \code{alpha}, \code{S} and \code{beta} at \code{x}.
 }

@@ -8,6 +8,7 @@
 //' 
 //' Computes the density of phase-type distribution with parameters \code{alpha}
 //'  and \code{S} at \code{x}.
+//' 
 //' @param x Non-negative value.
 //' @param alpha Initial probabilities.
 //' @param S Sub-intensity matrix.
@@ -17,12 +18,13 @@
 Rcpp::NumericVector phdensity(Rcpp::NumericVector x, arma::vec alpha, arma::mat S) {
   Rcpp::NumericVector density(x.size());
   
-  arma::mat e; e.ones(S.n_cols, 1);
+  arma::mat e;
+  e.ones(S.n_cols, 1);
   arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat aux_mat(1,1);
   
-  for (int k = 0; k < x.size(); ++k){
+  for (int k{0}; k < x.size(); ++k){
     if (x[k] == 0) {
       aux_mat = alpha.t() * e;
       density[k] = 1.0 - aux_mat(0,0);
@@ -40,6 +42,7 @@ Rcpp::NumericVector phdensity(Rcpp::NumericVector x, arma::vec alpha, arma::mat 
 //' 
 //' Computes the cdf (tail) of phase-type distribution with parameters \code{alpha} and
 //'  \code{S} at \code{x}.
+//' 
 //' @param x Non-negative value.
 //' @param alpha Initial probabilities.
 //' @param S Sub-intensity matrix.
@@ -50,11 +53,12 @@ Rcpp::NumericVector phdensity(Rcpp::NumericVector x, arma::vec alpha, arma::mat 
 Rcpp::NumericVector phcdf(Rcpp::NumericVector x, arma::vec alpha, arma::mat S, bool lower_tail = true) {
   Rcpp::NumericVector cdf(x.size());
   
-  arma::mat e; e.ones(S.n_cols, 1);
+  arma::mat e;
+  e.ones(S.n_cols, 1);
   
   arma::mat aux_mat(1,1);
   
-  for (int k = 0; k < x.size(); ++k){
+  for (int k{0}; k < x.size(); ++k){
     if (x[k] == 0) {
       aux_mat = alpha.t() * e;
       cdf[k] = 1.0 - aux_mat(0,0);
@@ -73,10 +77,11 @@ Rcpp::NumericVector phcdf(Rcpp::NumericVector x, arma::vec alpha, arma::mat S, b
 }
 
 
-//' Matrix Weibull density
+//' Matrix-Weibull density
 //' 
-//' Computes the density of a matrix Weibull distribution with parameters
+//' Computes the density of a matrix-Weibull distribution with parameters
 //'  \code{alpha}, \code{S} and \code{beta} at \code{x}.
+//' 
 //' @param x Non-negative value.
 //' @param alpha Initial probabilities.
 //' @param S Sub-intensity matrix.
@@ -87,12 +92,13 @@ Rcpp::NumericVector phcdf(Rcpp::NumericVector x, arma::vec alpha, arma::mat S, b
 Rcpp::NumericVector mweibullden(Rcpp::NumericVector x, arma::vec alpha, arma::mat S, double beta) {
   Rcpp::NumericVector density(x.size());
   
-  arma::mat e; e.ones(S.n_cols, 1);
+  arma::mat e;
+  e.ones(S.n_cols, 1);
   arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat aux_mat(1,1);
   
-  for (int k = 0; k < x.size(); ++k){
+  for (int k{0}; k < x.size(); ++k){
     if (x[k] == 0) {
       aux_mat = alpha.t() * e;
       density[k] = 1.0 - aux_mat(0,0);
@@ -106,10 +112,11 @@ Rcpp::NumericVector mweibullden(Rcpp::NumericVector x, arma::vec alpha, arma::ma
 }
 
 
-//' Matrix Weibull cdf
+//' Matrix-Weibull cdf
 //' 
-//' Computes the cdf (tail) of a matrix Weibull distribution with parameters
+//' Computes the cdf (tail) of a matrix-Weibull distribution with parameters
 //'  \code{alpha}, \code{S} and \code{beta} at \code{x}.
+//' 
 //' @param x Non-negative value.
 //' @param alpha Initial probabilities.
 //' @param S Sub-intensity matrix.
@@ -121,11 +128,12 @@ Rcpp::NumericVector mweibullden(Rcpp::NumericVector x, arma::vec alpha, arma::ma
 Rcpp::NumericVector mweibullcdf(Rcpp::NumericVector x, arma::vec alpha, arma::mat S, double beta, bool lower_tail = true) {
   Rcpp::NumericVector cdf(x.size());
   
-  arma::mat e; e.ones(S.n_cols, 1);
+  arma::mat e; 
+  e.ones(S.n_cols, 1);
   
   arma::mat aux_mat(1,1);
   
-  for (int k = 0; k < x.size(); ++k){
+  for (int k{0}; k < x.size(); ++k){
     if (x[k] == 0) {
       aux_mat = alpha.t() * e;
       cdf[k] = 1.0 - aux_mat(0,0);
@@ -144,10 +152,11 @@ Rcpp::NumericVector mweibullcdf(Rcpp::NumericVector x, arma::vec alpha, arma::ma
 }
 
 
-//' Matrix Pareto density
+//' Matrix-Pareto density
 //' 
-//' Computes the density of a matrix Pareto distribution with parameters
+//' Computes the density of a matrix-Pareto distribution with parameters
 //'  \code{alpha}, \code{S} and \code{beta} at \code{x}.
+//' 
 //' @param x Non-negative value.
 //' @param alpha Initial probabilities.
 //' @param S Sub-intensity matrix.
@@ -158,12 +167,13 @@ Rcpp::NumericVector mweibullcdf(Rcpp::NumericVector x, arma::vec alpha, arma::ma
 Rcpp::NumericVector mparetoden(Rcpp::NumericVector x, arma::vec alpha, arma::mat S, double beta) {
   Rcpp::NumericVector density(x.size());
   
-  arma::mat e; e.ones(S.n_cols, 1);
+  arma::mat e;
+  e.ones(S.n_cols, 1);
   arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat aux_mat(1,1);
   
-  for (int k = 0; k < x.size(); ++k){
+  for (int k{0}; k < x.size(); ++k){
     if (x[k] == 0) {
       aux_mat = alpha.t() * e;
       density[k] = 1.0 - aux_mat(0,0);
@@ -177,10 +187,11 @@ Rcpp::NumericVector mparetoden(Rcpp::NumericVector x, arma::vec alpha, arma::mat
 }
 
 
-//' Matrix Pareto cdf
+//' Matrix-Pareto cdf
 //' 
-//' Computes the cdf (tail) of a matrix Pareto distribution with parameters
+//' Computes the cdf (tail) of a matrix-Pareto distribution with parameters
 //'  \code{alpha}, \code{S} and \code{beta} at \code{x}.
+//' 
 //' @param x Non-negative value.
 //' @param alpha Initial probabilities.
 //' @param S Sub-intensity matrix.
@@ -192,11 +203,12 @@ Rcpp::NumericVector mparetoden(Rcpp::NumericVector x, arma::vec alpha, arma::mat
 Rcpp::NumericVector mparetocdf(Rcpp::NumericVector x, arma::vec alpha, arma::mat S, double beta, bool lower_tail = true) {
   Rcpp::NumericVector cdf(x.size());
   
-  arma::mat e; e.ones(S.n_cols, 1);
+  arma::mat e; 
+  e.ones(S.n_cols, 1);
   
   arma::mat aux_mat(1,1);
   
-  for (int k = 0; k < x.size(); ++k){
+  for (int k{0}; k < x.size(); ++k){
     if (x[k] == 0) {
       aux_mat = alpha.t() * e;
       cdf[k] = 1.0 - aux_mat(0,0);
@@ -215,10 +227,11 @@ Rcpp::NumericVector mparetocdf(Rcpp::NumericVector x, arma::vec alpha, arma::mat
 }
 
 
-//' Matrix Lognormal density
+//' Matrix-lognormal density
 //' 
-//' Computes the density of a matrix LogNormal distribution with parameters
+//' Computes the density of a matrix-lognormal distribution with parameters
 //'  \code{alpha}, \code{S} and \code{beta} at \code{x}.
+//' 
 //' @param x Non-negative value.
 //' @param alpha Initial probabilities.
 //' @param S Sub-intensity matrix.
@@ -229,12 +242,13 @@ Rcpp::NumericVector mparetocdf(Rcpp::NumericVector x, arma::vec alpha, arma::mat
 Rcpp::NumericVector mlognormalden(Rcpp::NumericVector x, arma::vec alpha, arma::mat S, double beta) {
   Rcpp::NumericVector density(x.size());
   
-  arma::mat e; e.ones(S.n_cols, 1);
+  arma::mat e;
+  e.ones(S.n_cols, 1);
   arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat aux_mat(1,1);
   
-  for (int k = 0; k < x.size(); ++k){
+  for (int k{0}; k < x.size(); ++k){
     if (x[k] == 0) {
       aux_mat = alpha.t() * e;
       density[k] = 1.0 - aux_mat(0,0);
@@ -248,10 +262,11 @@ Rcpp::NumericVector mlognormalden(Rcpp::NumericVector x, arma::vec alpha, arma::
 }
 
 
-//' Matrix Lognormal cdf
+//' Matrix-lognormal cdf
 //' 
-//' Computes the cdf (tail) of a matrix LogNormal distribution with parameters
+//' Computes the cdf (tail) of a matrix-lognormal distribution with parameters
 //'  \code{alpha}, \code{S} and \code{beta} at \code{x}.
+//' 
 //' @param x Non-negative value.
 //' @param alpha Initial probabilities.
 //' @param S Sub-intensity matrix.
@@ -263,11 +278,12 @@ Rcpp::NumericVector mlognormalden(Rcpp::NumericVector x, arma::vec alpha, arma::
 Rcpp::NumericVector mlognormalcdf(Rcpp::NumericVector x, arma::vec alpha, arma::mat S, double beta, bool lower_tail = true) {
   Rcpp::NumericVector cdf(x.size());
   
-  arma::mat e; e.ones(S.n_cols, 1);
+  arma::mat e; 
+  e.ones(S.n_cols, 1);
   
   arma::mat aux_mat(1,1);
   
-  for (int k = 0; k < x.size(); ++k){
+  for (int k{0}; k < x.size(); ++k){
     if (x[k] == 0) {
       aux_mat = alpha.t() * e;
       cdf[k] = 1.0 - aux_mat(0,0);
@@ -286,10 +302,11 @@ Rcpp::NumericVector mlognormalcdf(Rcpp::NumericVector x, arma::vec alpha, arma::
 }
 
 
-//' Matrix Log-logistic density
+//' Matrix-loglogistic density
 //' 
-//' Computes the density of a matrix Log-Logistic distribution with parameters
+//' Computes the density of a matrix-loglogistic distribution with parameters
 //'  \code{alpha}, \code{S} and \code{beta} at \code{x}.
+//' 
 //' @param x Non-negative value.
 //' @param alpha Initial probabilities.
 //' @param S Sub-intensity matrix.
@@ -300,12 +317,13 @@ Rcpp::NumericVector mlognormalcdf(Rcpp::NumericVector x, arma::vec alpha, arma::
 Rcpp::NumericVector mloglogisticden(Rcpp::NumericVector x, arma::vec alpha, arma::mat S, Rcpp::NumericVector beta) {
   Rcpp::NumericVector density(x.size());
   
-  arma::mat e; e.ones(S.n_cols, 1);
+  arma::mat e;
+  e.ones(S.n_cols, 1);
   arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat aux_mat(1,1);
   
-  for (int k = 0; k < x.size(); ++k){
+  for (int k{0}; k < x.size(); ++k){
     if (x[k] == 0) {
       aux_mat = alpha.t() * e;
       density[k] = 1.0 - aux_mat(0,0);
@@ -319,10 +337,11 @@ Rcpp::NumericVector mloglogisticden(Rcpp::NumericVector x, arma::vec alpha, arma
 }
 
 
-//' Matrix Log-Logistic cdf
+//' Matrix-loglogistic cdf
 //' 
-//' Computes the cdf (tail) of a matrix Log-Logistic distribution with parameters
-//'  \code{alpha}, \code{S} and \code{beta} at \code{x}
+//' Computes the cdf (tail) of a matrix-loglogistic distribution with parameters
+//'  \code{alpha}, \code{S} and \code{beta} at \code{x}.
+//' 
 //' @param x Non-negative value.
 //' @param alpha Initial probabilities.
 //' @param S Sub-intensity matrix.
@@ -334,11 +353,12 @@ Rcpp::NumericVector mloglogisticden(Rcpp::NumericVector x, arma::vec alpha, arma
 Rcpp::NumericVector mloglogisticcdf(Rcpp::NumericVector x, arma::vec alpha, arma::mat S, Rcpp::NumericVector beta, bool lower_tail = true) {
   Rcpp::NumericVector cdf(x.size());
   
-  arma::mat e; e.ones(S.n_cols, 1);
+  arma::mat e; 
+  e.ones(S.n_cols, 1);
   
   arma::mat aux_mat(1,1);
   
-  for (int k = 0; k < x.size(); ++k){
+  for (int k{0}; k < x.size(); ++k){
     if (x[k] == 0) {
       aux_mat = alpha.t() * e;
       cdf[k] = 1.0 - aux_mat(0,0);
@@ -357,10 +377,11 @@ Rcpp::NumericVector mloglogisticcdf(Rcpp::NumericVector x, arma::vec alpha, arma
 }
 
 
-//' Matrix Gompertz density
+//' Matrix-Gompertz density
 //' 
-//' Computes the density of a matrix Gompertz distribution with parameters
+//' Computes the density of a matrix-Gompertz distribution with parameters
 //'  \code{alpha}, \code{S} and \code{beta} at \code{x}.
+//' 
 //' @param x Non-negative value.
 //' @param alpha Initial probabilities.
 //' @param S Sub-intensity matrix.
@@ -371,12 +392,13 @@ Rcpp::NumericVector mloglogisticcdf(Rcpp::NumericVector x, arma::vec alpha, arma
 Rcpp::NumericVector mgompertzden(Rcpp::NumericVector x, arma::vec alpha, arma::mat S, double beta) {
   Rcpp::NumericVector density(x.size());
   
-  arma::mat e; e.ones(S.n_cols, 1);
+  arma::mat e;
+  e.ones(S.n_cols, 1);
   arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat aux_mat(1,1);
   
-  for (int k = 0; k < x.size(); ++k){
+  for (int k{0}; k < x.size(); ++k){
     if (x[k] == 0) {
       aux_mat = alpha.t() * e;
       density[k] = 1.0 - aux_mat(0,0);
@@ -390,10 +412,11 @@ Rcpp::NumericVector mgompertzden(Rcpp::NumericVector x, arma::vec alpha, arma::m
 }
 
 
-//' Matrix Gompertz cdf
+//' Matrix-Gompertz cdf
 //' 
-//' Computes the cdf (tail) of a matrix Gompertz distribution with parameters
+//' Computes the cdf (tail) of a matrix-Gompertz distribution with parameters
 //'  \code{alpha}, \code{S} and \code{beta} at \code{x}.
+//' 
 //' @param x Non-negative value.
 //' @param alpha Initial probabilities.
 //' @param S Sub-intensity matrix.
@@ -405,11 +428,12 @@ Rcpp::NumericVector mgompertzden(Rcpp::NumericVector x, arma::vec alpha, arma::m
 Rcpp::NumericVector mgompertzcdf(Rcpp::NumericVector x, arma::vec alpha, arma::mat S, double beta, bool lower_tail = true) {
   Rcpp::NumericVector cdf(x.size());
   
-  arma::mat e; e.ones(S.n_cols, 1);
+  arma::mat e;
+  e.ones(S.n_cols, 1);
   
   arma::mat aux_mat(1,1);
   
-  for (int k = 0; k < x.size(); ++k){
+  for (int k{0}; k < x.size(); ++k){
     if (x[k] == 0) {
       aux_mat = alpha.t() * e;
       cdf[k] = 1.0 - aux_mat(0,0);
@@ -428,11 +452,11 @@ Rcpp::NumericVector mgompertzcdf(Rcpp::NumericVector x, arma::vec alpha, arma::m
 }
 
 
-//' Matrix GEV density
+//' Matrix-GEV density
 //' 
-//' Computes the density of a matrix GEV distribution with parameters
+//' Computes the density of a matrix-GEV distribution with parameters
 //'  \code{alpha}, \code{S} and \code{beta} at \code{x}.
-//' Don not allow for atoms in zero
+//' Don not allow for atoms in zero.
 //' 
 //' @param x Non-negative value.
 //' @param alpha Initial probabilities.
@@ -448,12 +472,13 @@ Rcpp::NumericVector mgevden(Rcpp::NumericVector x, arma::vec alpha, arma::mat S,
   
   Rcpp::NumericVector density(x.size());
   
-  arma::mat e; e.ones(S.n_cols, 1);
+  arma::mat e;
+  e.ones(S.n_cols, 1);
   arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat aux_mat(1,1);
   
-  for (int k = 0; k < x.size(); ++k){
+  for (int k{0}; k < x.size(); ++k){
     if (xi == 0) {
       aux_mat = alpha.t() * matrix_exponential(S * exp(-(x[k] - mu) / sigma)) * exit_vect;
       density[k] = aux_mat(0,0) * exp(-(x[k] - mu) / sigma) / sigma;
@@ -467,9 +492,9 @@ Rcpp::NumericVector mgevden(Rcpp::NumericVector x, arma::vec alpha, arma::mat S,
 }
 
 
-//' Matrix GEV cdf
+//' Matrix-GEV cdf
 //' 
-//' Computes the cdf (tail) of a matrix GEV distribution with parameters
+//' Computes the cdf (tail) of a matrix-GEV distribution with parameters
 //'  \code{alpha}, \code{S} and \code{beta} at \code{x}.
 //' 
 //' @param x Non-negative value.
@@ -487,11 +512,12 @@ Rcpp::NumericVector mgevcdf(Rcpp::NumericVector x, arma::vec alpha, arma::mat S,
   
   Rcpp::NumericVector cdf(x.size());
   
-  arma::mat e; e.ones(S.n_cols, 1);
+  arma::mat e;
+  e.ones(S.n_cols, 1);
   
   arma::mat aux_mat(1,1);
   
-  for (int k = 0; k < x.size(); ++k){
+  for (int k{0}; k < x.size(); ++k){
     if (xi == 0) {
       aux_mat = alpha.t() * matrix_exponential(S * exp(-(x[k] - mu) / sigma)) * e;
       cdf[k] = 1.0 - aux_mat(0,0);

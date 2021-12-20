@@ -20,7 +20,7 @@ List random_structure(int p, String structure = "general", double scale_factor =
   NumericMatrix S_legal(p, p);
   
   if (structure == "general") {
-    for (int i = 0; i < p; ++i) {
+    for (int i{0}; i < p; ++i) {
       alpha_legal[i] = 1;
       for (int j = 0; j < p; ++j) {
         S_legal(i, j) = 1;
@@ -28,28 +28,28 @@ List random_structure(int p, String structure = "general", double scale_factor =
     }
   }
   else if (structure == "hyperexponential") {
-    for (int i = 0; i < p; i++) {  
+    for (int i{0}; i < p; i++) {  
       alpha_legal[i] = 1;
       S_legal(i, i) = 1;
     }
   }
   else if (structure == "gerlang") {
     alpha_legal[0] = 1;
-    for (int i = 0; i < p - 1; ++i) {
+    for (int i{0}; i < p - 1; ++i) {
       S_legal(i, i + 1) = 1;
     } 
     S_legal(p - 1, p - 1) = 1;
   }
   else if (structure == "coxian") {
     alpha_legal[0] = 1;
-    for (int i = 0; i < p - 1; ++i) { 
+    for (int i{0}; i < p - 1; ++i) { 
       S_legal(i, i) = 1;
       S_legal(i, i + 1) = 1;
     }
     S_legal(p - 1, p - 1) = 1; 
   }
   else if (structure == "gcoxian") {
-    for (int i = 0; i < p - 1; ++i) { 
+    for (int i{0}; i < p - 1; ++i) { 
       alpha_legal[i] = 1;
       S_legal(i, i) = 1;
       S_legal(i, i + 1) = 1;

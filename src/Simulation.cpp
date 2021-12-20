@@ -5,7 +5,8 @@
 //' Embedded Markov chain of a sub-intensity matrix
 //' 
 //' Returns the transition probabilities of the embedded Markov chain determined
-//'  the sub-intensity matrix 
+//'  the sub-intensity matrix.
+//'  
 //' @param S A sub-intensity matrix.
 //' @return The embedded Markov chain.
 //' 
@@ -14,11 +15,12 @@ arma::mat embedded_mc(arma::mat S) {
   unsigned p{S.n_rows};
   arma::mat Q(p + 1, p + 1);
   
-  arma::mat e; e.ones(S.n_cols, 1);
+  arma::mat e;
+  e.ones(S.n_cols, 1);
   arma::mat exit_vect = (S * (-1)) * e;
   
-  for (int i = 0; i < p; ++i) {
-    for (int j = 0; j < p + 1; ++j) {
+  for (int i{0}; i < p; ++i) {
+    for (int j{0}; j < p + 1; ++j) {
       if (j != i && j < p) {
         Q(i,j) = -1.0 * S(i,j) / S(i,i);
       }
@@ -36,6 +38,7 @@ arma::mat embedded_mc(arma::mat S) {
 //' Cumulate matrix
 //'
 //' Creates a new matrix with entries the cumulated rows of \code{A}.
+//' 
 //' @param A A matrix.
 //' @return The cumulated matrix.
 //'
@@ -63,6 +66,7 @@ arma::mat cumulate_matrix(arma::mat A) {
 //' Cumulate vector
 //'
 //' Creates a new vector with entries the cumulated entries of \code{A}.
+//' 
 //' @param A A vector.
 //' @return The cumulated vector.
 //'
@@ -86,11 +90,11 @@ arma::vec cumulate_vector(arma::vec A) {
 
 //' Initial state of Markov jump process
 //'
-//' Given the accumulated values of the initial probabilities \code{Pi} and a
+//' Given the accumulated values of the initial probabilities \code{alpha} and a
 //'  uniform value \code{u}, it returns the initial state of a Markov jump process.
-//' This corresponds to the states satisfying cum_pi_(k-1)<u<cum_pi_(k).
+//' This corresponds to the states satisfying cum_alpha_(k-1)<u<cum_alpha_(k).
 //' 
-//' @param cum_alpha A vector.
+//' @param cum_alpha A cummulated vector of initial probabilities.
 //' @param u Random value in (0,1).
 //' @return Initial state of the Markov jump process.
 //'
@@ -187,7 +191,7 @@ Rcpp::NumericVector riph(int n, Rcpp::String dist_type, arma::vec alpha, arma::m
   
   int p = alpha.size();
   long state{0};
-  for (int i = 0; i < n; ++i) {
+  for (int i{0}; i < n; ++i) {
     double time{0.0};
     state = initial_state(cum_alpha, Rcpp::runif(1)[0]);
     while (state != p) {
@@ -237,7 +241,7 @@ Rcpp::NumericVector rmatrixgev(int n, arma::vec alpha, arma::mat S, double mu, d
   
   int p = alpha.size();
   long state{0};
-  for (int i = 0; i < n; ++i) {
+  for (int i{0}; i < n; ++i) {
     double time{0.0};
     state = initial_state(cum_alpha, Rcpp::runif(1)[0]);
     while (state != p) {

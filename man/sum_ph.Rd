@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{sum_ph}
 \alias{sum_ph}
-\title{Computes the initial distribution and sub-intensity of the sum of PH}
+\title{Computes the initial distribution and sub-intensity of the sum of two phase-type}
 \usage{
 sum_ph(alpha1, S1, alpha2, S2)
 }
@@ -16,5 +16,5 @@ sum_ph(alpha1, S1, alpha2, S2)
 \item{S2}{Sub-intensity.}
 }
 \description{
-Computes the initial distribution and sub-intensity of the sum of PH
+Computes the initial distribution and sub-intensity of the sum of two phase-type
 }

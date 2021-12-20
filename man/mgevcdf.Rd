@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{mgevcdf}
 \alias{mgevcdf}
-\title{Matrix GEV cdf}
+\title{Matrix-GEV cdf}
 \usage{
 mgevcdf(x, alpha, S, beta, lower_tail = TRUE)
 }
@@ -21,6 +21,6 @@ mgevcdf(x, alpha, S, beta, lower_tail = TRUE)
 The cdf (tail) at \code{x}.
 }
 \description{
-Computes the cdf (tail) of a matrix GEV distribution with parameters
+Computes the cdf (tail) of a matrix-GEV distribution with parameters
  \code{alpha}, \code{S} and \code{beta} at \code{x}.
 }

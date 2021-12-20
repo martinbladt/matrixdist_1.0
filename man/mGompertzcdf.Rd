@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{mgompertzcdf}
 \alias{mgompertzcdf}
-\title{Matrix Gompertz cdf}
+\title{Matrix-Gompertz cdf}
 \usage{
 mgompertzcdf(x, alpha, S, beta, lower_tail = TRUE)
 }
@@ -21,6 +21,6 @@ mgompertzcdf(x, alpha, S, beta, lower_tail = TRUE)
 The cdf (tail) at \code{x}.
 }
 \description{
-Computes the cdf (tail) of a matrix Gompertz distribution with parameters
+Computes the cdf (tail) of a matrix-Gompertz distribution with parameters
  \code{alpha}, \code{S} and \code{beta} at \code{x}.
 }

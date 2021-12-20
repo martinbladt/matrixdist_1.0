@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{EMstep_UNI}
 \alias{EMstep_UNI}
-\title{EM using Uniformization for matrix exponential}
+\title{EM using uniformization for matrix exponential}
 \usage{
 EMstep_UNI(h, alpha, S, obs, weight, rcens, rcweight)
 }
@@ -22,5 +22,5 @@ EMstep_UNI(h, alpha, S, obs, weight, rcens, rcweight)
 \item{rcweight}{The weights for the censored observations.}
 }
 \description{
-EM using Uniformization for matrix exponential
+EM using uniformization for matrix exponential
 }

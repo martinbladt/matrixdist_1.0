@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{logLikelihoodMgompertz_RKs}
 \alias{logLikelihoodMgompertz_RKs}
-\title{Loglikelihood of matrix Gompertz using RK}
+\title{Loglikelihood of matrix-Gompertz using Runge-Kutta}
 \usage{
 logLikelihoodMgompertz_RKs(
   h,

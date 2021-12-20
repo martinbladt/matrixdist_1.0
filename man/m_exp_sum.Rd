@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{m_exp_sum}
 \alias{m_exp_sum}
-\title{Computes exp(Sx) base on the values on pow_vector}
+\title{Computes exp(Sx) via series representation}
 \usage{
 m_exp_sum(x, n, pow_vector, a)
 }
@@ -16,5 +16,5 @@ m_exp_sum(x, n, pow_vector, a)
 \item{a}{A number.}
 }
 \description{
-Computes exp(Sx) base on the values on pow_vector
+Computes exp(Sx) via series representation
 }

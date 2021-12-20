@@ -2,9 +2,8 @@
 # include <RcppArmadillo.h>
 // [[ Rcpp :: depends ( RcppArmadillo )]]
 
-
 ////////////////////////////////////////////
-// EM Uniformization 
+//    EM using uniformization            ///
 ////////////////////////////////////////////
 
 //' Computes elements S^n / n! until the a given size
@@ -29,7 +28,7 @@ void vector_of_matrices(std::vector<arma::mat> & vect, const arma::mat & S, doub
 }
 
 
-//' Computes exp(Sx) base on the values on pow_vector
+//' Computes exp(Sx) via series representation
 //' 
 //' @param x A number.
 //' @param n An integer.
@@ -86,7 +85,7 @@ int find_n(double h, double lambda) {
 }
 
 
-//' EM using Uniformization for matrix exponential
+//' EM using uniformization for matrix exponential
 //' 
 //' @param h Positive parameter.
 //' @param alpha Initial probabilities.
@@ -100,7 +99,8 @@ int find_n(double h, double lambda) {
 void EMstep_UNI(double h, arma::vec & alpha, arma::mat & S, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight) {
   unsigned p{S.n_rows};
   
-  arma::mat e; e.ones(S.n_cols, 1);
+  arma::mat e;
+  e.ones(S.n_cols, 1);
   arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat Bmean = arma::zeros(p,1);
@@ -248,7 +248,7 @@ void EMstep_UNI(double h, arma::vec & alpha, arma::mat & S, const Rcpp::NumericV
 // Log-likelihoods
 ////////////////////////////////////////////
 
-//' Loglikelihood using uniformization
+//' Loglikelihood of phase-type using uniformization
 //' 
 //' Loglikelihood for a sample.
 //' 
@@ -262,7 +262,8 @@ void EMstep_UNI(double h, arma::vec & alpha, arma::mat & S, const Rcpp::NumericV
 //' 
 // [[Rcpp::export]]
 double logLikelihoodPH_UNI(double h, arma::vec & alpha, arma::mat & S, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight) {
-  arma::mat e; e.ones(S.n_cols, 1);
+  arma::mat e;
+  e.ones(S.n_cols, 1);
   arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat expm(size(S));
@@ -343,7 +344,8 @@ double logLikelihoodPH_UNI(double h, arma::vec & alpha, arma::mat & S, const Rcp
 double logLikelihoodMweibull_UNI(double h, arma::vec & alpha, arma::mat & S, double beta , const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight) {
   if(beta < 0) return NA_REAL;
   
-  arma::mat e; e.ones(S.n_cols, 1);
+  arma::mat e;
+  e.ones(S.n_cols, 1);
   arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat expm(size(S));
@@ -424,7 +426,8 @@ double logLikelihoodMweibull_UNI(double h, arma::vec & alpha, arma::mat & S, dou
 double logLikelihoodMpareto_UNI(double h, arma::vec & alpha, arma::mat & S, double beta , const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight) {
   if(beta < 0) return NA_REAL;
   
-  arma::mat e; e.ones(S.n_cols, 1);
+  arma::mat e;
+  e.ones(S.n_cols, 1);
   arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat expm(size(S));
@@ -505,7 +508,8 @@ double logLikelihoodMpareto_UNI(double h, arma::vec & alpha, arma::mat & S, doub
 double logLikelihoodMlognormal_UNI(double h, arma::vec & alpha, arma::mat & S, double beta , const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight) {
   if(beta < 0) return NA_REAL;
   
-  arma::mat e; e.ones(S.n_cols, 1);
+  arma::mat e;
+  e.ones(S.n_cols, 1);
   arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat expm(size(S));
@@ -586,7 +590,8 @@ double logLikelihoodMlognormal_UNI(double h, arma::vec & alpha, arma::mat & S, d
 double logLikelihoodMloglogistic_UNI(double h, arma::vec & alpha, arma::mat & S, Rcpp::NumericVector beta , const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight) {
   if(beta[0] < 0 || beta[1] < 0) return NA_REAL;
   
-  arma::mat e; e.ones(S.n_cols, 1);
+  arma::mat e;
+  e.ones(S.n_cols, 1);
   arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat expm(size(S));
@@ -667,7 +672,8 @@ double logLikelihoodMloglogistic_UNI(double h, arma::vec & alpha, arma::mat & S,
 double logLikelihoodMgompertz_UNI(double h, arma::vec & alpha, arma::mat & S, double beta , const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight) {
   if(beta < 0) return NA_REAL;
   
-  arma::mat e; e.ones(S.n_cols, 1);
+  arma::mat e;
+  e.ones(S.n_cols, 1);
   arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat expm(size(S));
@@ -748,7 +754,8 @@ double logLikelihoodMgompertz_UNI(double h, arma::vec & alpha, arma::mat & S, do
 double logLikelihoodMgev_UNI(double h, arma::vec & alpha, arma::mat & S, Rcpp::NumericVector beta , const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight) {
   if(beta[1] < 0) return NA_REAL;
   
-  arma::mat e; e.ones(S.n_cols, 1);
+  arma::mat e;
+  e.ones(S.n_cols, 1);
   arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat expm(size(S));
@@ -859,7 +866,7 @@ double logLikelihoodMgev_UNI(double h, arma::vec & alpha, arma::mat & S, Rcpp::N
 // Scaled versions of loglikelihoods (for regression)  //
 /////////////////////////////////////////////////////////
 
-//' Loglikelihood of PH using uniformization
+//' Loglikelihood of phase-type using uniformization
 //' 
 //' Loglikelihood for a sample.
 //' 
@@ -875,7 +882,8 @@ double logLikelihoodMgev_UNI(double h, arma::vec & alpha, arma::mat & S, Rcpp::N
 //' 
 // [[Rcpp::export]]
 double logLikelihoodPH_UNIs(double h, arma::vec & alpha, arma::mat & S, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight, const Rcpp::NumericVector & scale1, const Rcpp::NumericVector & scale2) {
-  arma::mat e; e.ones(S.n_cols, 1);
+  arma::mat e;
+  e.ones(S.n_cols, 1);
   arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat expm(size(S));
@@ -958,7 +966,8 @@ double logLikelihoodPH_UNIs(double h, arma::vec & alpha, arma::mat & S, const Rc
 double logLikelihoodMweibull_UNIs(double h, arma::vec & alpha, arma::mat & S, double beta , const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight, const Rcpp::NumericVector & scale1, const Rcpp::NumericVector & scale2) {
   if(beta < 0) return NA_REAL;
   
-  arma::mat e; e.ones(S.n_cols, 1);
+  arma::mat e;
+  e.ones(S.n_cols, 1);
   arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat expm(size(S));
@@ -1041,7 +1050,8 @@ double logLikelihoodMweibull_UNIs(double h, arma::vec & alpha, arma::mat & S, do
 double logLikelihoodMpareto_UNIs(double h, arma::vec & alpha, arma::mat & S, double beta , const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight, const Rcpp::NumericVector & scale1, const Rcpp::NumericVector & scale2) {
   if(beta < 0) return NA_REAL;
   
-  arma::mat e; e.ones(S.n_cols, 1);
+  arma::mat e;
+  e.ones(S.n_cols, 1);
   arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat expm(size(S));
@@ -1124,7 +1134,8 @@ double logLikelihoodMpareto_UNIs(double h, arma::vec & alpha, arma::mat & S, dou
 double logLikelihoodMlognormal_UNIs(double h, arma::vec & alpha, arma::mat & S, double beta , const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight, const Rcpp::NumericVector & scale1, const Rcpp::NumericVector & scale2) {
   if(beta < 0) return NA_REAL;
   
-  arma::mat e; e.ones(S.n_cols, 1);
+  arma::mat e;
+  e.ones(S.n_cols, 1);
   arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat expm(size(S));
@@ -1207,7 +1218,8 @@ double logLikelihoodMlognormal_UNIs(double h, arma::vec & alpha, arma::mat & S, 
 double logLikelihoodMloglogistic_UNIs(double h, arma::vec & alpha, arma::mat & S, Rcpp::NumericVector beta , const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight, const Rcpp::NumericVector & scale1, const Rcpp::NumericVector & scale2) {
   if(beta[0] < 0 || beta[1] < 0) return NA_REAL;
   
-  arma::mat e; e.ones(S.n_cols, 1);
+  arma::mat e;
+  e.ones(S.n_cols, 1);
   arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat expm(size(S));
@@ -1290,7 +1302,8 @@ double logLikelihoodMloglogistic_UNIs(double h, arma::vec & alpha, arma::mat & S
 double logLikelihoodMgompertz_UNIs(double h, arma::vec & alpha, arma::mat & S, double beta , const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight, const Rcpp::NumericVector & scale1, const Rcpp::NumericVector & scale2) {
   if(beta < 0) return NA_REAL;
   
-  arma::mat e; e.ones(S.n_cols, 1);
+  arma::mat e;
+  e.ones(S.n_cols, 1);
   arma::mat exit_vect = (S * (-1)) * e;
   
   arma::mat expm(size(S));

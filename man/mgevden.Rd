@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{mgevden}
 \alias{mgevden}
-\title{Matrix GEV density}
+\title{Matrix-GEV density}
 \usage{
 mgevden(x, alpha, S, beta)
 }
@@ -19,7 +19,7 @@ mgevden(x, alpha, S, beta)
 The density at \code{x}.
 }
 \description{
-Computes the density of a matrix GEV distribution with parameters
+Computes the density of a matrix-GEV distribution with parameters
  \code{alpha}, \code{S} and \code{beta} at \code{x}.
-Don not allow for atoms in zero
+Don not allow for atoms in zero.
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/2.iph.R
 \name{cdf,iph-method}
 \alias{cdf,iph-method}
-\title{Distribution Method for inhomogeneous phase type distributions}
+\title{Distribution Method for inhomogeneous phase-type distributions}
 \usage{
 \S4method{cdf}{iph}(x, q, lower.tail = TRUE)
 }
@@ -18,7 +18,7 @@ upper tail is computed.}
 A vector containing the CDF evaluations at the given locations.
 }
 \description{
-Distribution Method for inhomogeneous phase type distributions
+Distribution Method for inhomogeneous phase-type distributions
 }
 \examples{
 obj <- iph(ph(structure = "general"), gfun = "weibull", gfun_pars = 2)

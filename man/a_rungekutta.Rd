@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{a_rungekutta}
 \alias{a_rungekutta}
-\title{Runge Kutta for the calculation of the a vectors in a EM step}
+\title{Runge-Kutta for the calculation of the a vector in a EM step}
 \usage{
 a_rungekutta(avector, dt, h, S)
 }
@@ -16,5 +16,5 @@ a_rungekutta(avector, dt, h, S)
 \item{S}{Sub-intensity.}
 }
 \description{
-Runge Kutta for the calculation of the a vectors in a EM step
+Runge-Kutta for the calculation of the a vector in a EM step
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/1.ph.R
 \name{ph}
 \alias{ph}
-\title{Constructor Function for phase type distributions}
+\title{Constructor Function for phase-type distributions}
 \usage{
 ph(alpha = NULL, S = NULL, structure = NULL, dimension = 3)
 }
@@ -19,7 +19,7 @@ ph(alpha = NULL, S = NULL, structure = NULL, dimension = 3)
 An object of class \linkS4class{ph}.
 }
 \description{
-Constructor Function for phase type distributions
+Constructor Function for phase-type distributions
 }
 \examples{
 ph(structure = "gcoxian", dim = 5)

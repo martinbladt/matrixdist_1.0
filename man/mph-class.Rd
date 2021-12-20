@@ -8,7 +8,7 @@
 Class object.
 }
 \description{
-Class of objects for multivariate phase type distributions.
+Class of objects for multivariate phase-type distributions.
 }
 \section{Slots}{
 

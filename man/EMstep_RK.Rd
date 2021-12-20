@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{EMstep_RK}
 \alias{EMstep_RK}
-\title{EM step using Runge Kutta}
+\title{EM step using Runge-Kutta}
 \usage{
 EMstep_RK(h, alpha, S, obs, weight, rcens, rcweight)
 }
@@ -22,5 +22,5 @@ EMstep_RK(h, alpha, S, obs, weight, rcens, rcweight)
 \item{rcweight}{The weights for the censored observations.}
 }
 \description{
-Computes one step of the EM algorithm by using a Runge-Kutta method of 4th order.
+Computes one step of the EM algorithm by using a Runge-Kutta method of fourth order.
 }

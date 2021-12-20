@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{mparetoden}
 \alias{mparetoden}
-\title{Matrix Pareto density}
+\title{Matrix-Pareto density}
 \usage{
 mparetoden(x, alpha, S, beta)
 }
@@ -19,6 +19,6 @@ mparetoden(x, alpha, S, beta)
 The density at \code{x}.
 }
 \description{
-Computes the density of a matrix Pareto distribution with parameters
+Computes the density of a matrix-Pareto distribution with parameters
  \code{alpha}, \code{S} and \code{beta} at \code{x}.
 }

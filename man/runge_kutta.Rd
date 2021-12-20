@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{runge_kutta}
 \alias{runge_kutta}
-\title{Runge Kutta for the calculation of the a,b and c vectors in a EM step}
+\title{Runge-Kutta for the calculation of the a,b and c vectors in a EM step}
 \usage{
 runge_kutta(avector, bvector, cmatrix, dt, h, S, s)
 }
@@ -22,5 +22,5 @@ runge_kutta(avector, bvector, cmatrix, dt, h, S, s)
 \item{s}{Exit rates.}
 }
 \description{
-Performs the RK of forth order.
+Performs the Runge-Kutta of fourth order.
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/3.mph.R
 \name{cdf,mph-method}
 \alias{cdf,mph-method}
-\title{Distribution Method for multivariate phase type distributions}
+\title{Distribution Method for multivariate phase-type distributions}
 \usage{
 \S4method{cdf}{mph}(x, q, lower.tail = TRUE)
 }
@@ -17,5 +17,5 @@
 A list containing the locations and corresponding CDF evaluations.
 }
 \description{
-Distribution Method for multivariate phase type distributions
+Distribution Method for multivariate phase-type distributions
 }

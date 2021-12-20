@@ -4,9 +4,9 @@
 
 //' Product of two matrices
 //' 
-//' @param A1 Matrix.
-//' @param A2 Matrix.
-//' @return Computes C = A1 * A2.
+//' @param A1 A matrix.
+//' @param A2 A matrix.
+//' @return Computes A1 * A2.
 //' 
 // [[Rcpp::export]]
 Rcpp::NumericMatrix matrix_product(Rcpp::NumericMatrix A1, Rcpp::NumericMatrix A2) {

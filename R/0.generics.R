@@ -19,7 +19,7 @@ setGeneric("sim", function(x, ...) {
 #' @param x An object of the model class.
 #' @param ... Further parameters to be passed on.
 #'
-#' @return A realization from the matrix distribution.
+#' @return Moment of the matrix distribution.
 #'
 #'
 setGeneric("moment", function(x, ...) {
@@ -35,7 +35,7 @@ setGeneric("moment", function(x, ...) {
 #' @param x2 An object of the model class.
 #' @param ... Further parameters to be passed on.
 #'
-#' @return A realization from the matrix distribution.
+#' @return An object of the model class.
 #'
 #'
 setGeneric("minimum", function(x1, x2, ...) {
@@ -50,7 +50,7 @@ setGeneric("minimum", function(x1, x2, ...) {
 #' @param x2 An object of the model class.
 #' @param ... Further parameters to be passed on.
 #'
-#' @return A realization from the matrix distribution.
+#' @return An object of the model class.
 #'
 #'
 setGeneric("maximum", function(x1, x2, ...) {

@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{mloglogisticden}
 \alias{mloglogisticden}
-\title{Matrix Log-logistic density}
+\title{Matrix-loglogistic density}
 \usage{
 mloglogisticden(x, alpha, S, beta)
 }
@@ -19,6 +19,6 @@ mloglogisticden(x, alpha, S, beta)
 The density at \code{x}.
 }
 \description{
-Computes the density of a matrix Log-Logistic distribution with parameters
+Computes the density of a matrix-loglogistic distribution with parameters
  \code{alpha}, \code{S} and \code{beta} at \code{x}.
 }

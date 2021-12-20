@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{logLikelihoodMlognormal_RKs}
 \alias{logLikelihoodMlognormal_RKs}
-\title{Loglikelihood of matrix Lognormal using RK}
+\title{Loglikelihood of matrix-lognormal using Runge-Kutta}
 \usage{
 logLikelihoodMlognormal_RKs(
   h,
