@@ -1,6 +1,6 @@
 #' Survival Analysis for Phase Type distributions
 #'
-#' Class of objects for inhomogeneous phase type distributions
+#' Class of objects for inhomogeneous phase-type distributions
 #'
 #' @slot coefs Coefficients of the survival regression object.
 #' @slot type Type of survival object.
@@ -16,7 +16,7 @@ setClass("sph",
   )
 )
 
-#' Constructor Function for Survival phase type objects
+#' Constructor Function for Survival phase-type objects
 #'
 #' @param x An object of class \linkS4class{ph}
 #' @param coefs Coefficients of the survival regression object.
@@ -48,7 +48,7 @@ sph <- function(x = NULL, coefs = list(B = numeric(0), C = numeric(0)), type = "
   )
 }
 
-#' Show Method for survival phase type objects
+#' Show Method for survival phase-type objects
 #'
 #' @param object An object of class \linkS4class{sph}.
 #' @export
