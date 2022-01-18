@@ -817,6 +817,77 @@ logLikelihoodMgompertz_UNIs <- function(h, alpha, S, beta, obs, weight, rcens, r
     .Call(`_matrixdist_logLikelihoodMgompertz_UNIs`, h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2)
 }
 
+#' Random multivariate phase-type via rewards
+#'
+#' Generates samples of size \code{n} from a multivariate phase-type distribution with parameters \code{alpha} and \code{S}.
+#' @param n Sample size for each marginal.
+#' @param alpha Initial probabilities.
+#' @param S sub-intensity matrix.
+#' @param R reward matrix.
+#'
+#' @return The simulated samples, each column corresponds to a marginal.
+#'
+rMPHstar <- function(n, alpha, S, R) {
+    .Call(`_matrixdist_rMPHstar`, n, alpha, S, R)
+}
+
+#' Random reward matrix
+#'
+#' Generates a random reward matrix for a multivariate phase-type distribution with p states and d marginals
+#'
+#' @param p  the number of transient states in the sub-intensity matrix
+#' @param d  the number of marginals
+#'
+#' @return The random reward matrix
+#'
+random_reward <- function(p, d) {
+    .Call(`_matrixdist_random_reward`, p, d)
+}
+
+#' Transform a reward matrix with very small rewards to avoid numerical problems
+#'
+#' @param R Reward matrix
+#' @param Rtol Lower bound considered for a reward
+#'
+#' @return A reward matrix that does not cause issues with uniformization
+#'
+rew_sanity_check <- function(R, tol) {
+    invisible(.Call(`_matrixdist_rew_sanity_check`, R, tol))
+}
+
+#' Marginal conditional expectations
+#'
+#' @param rew Column of the reward matrix corresponding to its marginal.
+#' @param pos Vector that indicates which state is associated to a positive reward.
+#' @param N Uniformization parameter.
+#' @param obs Marginal observations.
+#' @param w Marginal weights.
+#' @param rcens Marginal right-censored values.
+#' @param rcweight Marginal weights for rc values.
+#' @param alpha Marginal initial distribution vector.
+#' @param S Marginal sub-intensity matrix.
+#' 
+#' @return A vector with the expected time spent in each state by the marginal, conditional on the observations.
+#'
+#' @export
+marginal_expectation <- function(rew, pos, N, alpha, S, obs, weight, rcens, rcweight) {
+    .Call(`_matrixdist_marginal_expectation`, rew, pos, N, alpha, S, obs, weight, rcens, rcweight)
+}
+
+#' EM step using Uniformization for MPHstar class
+#'
+#' @param h positive parameter for precision of uniformization method.
+#' @param Rtol The smallest value that a reward can take.
+#' @param alpha Vector of initial probabilities of the originating distribution.
+#' @param S The sub-intensity matrix of the originating distribution.
+#' @param R The reward matrix.
+#' @param mph_obs The list of summed, marginal observations (uncensored and right censored) with associated weights.
+#'
+#' @export
+MPHstar_EMstep_UNI <- function(h, Rtol, alpha, S, R, mph_obs) {
+    invisible(.Call(`_matrixdist_MPHstar_EMstep_UNI`, h, Rtol, alpha, S, R, mph_obs))
+}
+
 #' Embedded Markov chain of a sub-intensity matrix
 #' 
 #' Returns the transition probabilities of the embedded Markov chain determined
@@ -924,6 +995,207 @@ riph <- function(n, dist_type, alpha, S, beta) {
 #' 
 rmatrixgev <- function(n, alpha, S, mu, sigma, xi = 0) {
     .Call(`_matrixdist_rmatrixgev`, n, alpha, S, mu, sigma, xi)
+}
+
+#' Find how many states have positive reward
+#'
+#' @param R reward vector
+#'
+#' @return The number of states with positive rewards
+#'
+n_pos <- function(R) {
+    .Call(`_matrixdist_n_pos`, R)
+}
+
+#' Find how many states have null reward
+#'
+#' @param R reward vector
+#'
+#' @return The number of states with null rewards
+#'
+n_null <- function(R) {
+    .Call(`_matrixdist_n_null`, R)
+}
+
+#' Find which states have positive reward
+#'
+#' @param R reward vector
+#'
+#' @return A vector with the states (number) that are associated with positive rewards
+#'
+plus_states <- function(R) {
+    .Call(`_matrixdist_plus_states`, R)
+}
+
+#' Find which states have null reward
+#'
+#' @param R reward vector
+#'
+#' @return A vector with the states (number) that are associated with null rewards
+#'
+null_states <- function(R) {
+    .Call(`_matrixdist_null_states`, R)
+}
+
+#' Obtain Q++
+#'
+#' @param R reward vector
+#' @param Qtilda transition-matrix of the Embedded MC
+#'
+#' @return The matrix Q++ where we have transition probabilities from/to states associated with positive rewards
+#'
+Q_pos_pos <- function(R, Qtilda) {
+    .Call(`_matrixdist_Q_pos_pos`, R, Qtilda)
+}
+
+#' Obtain Q00
+#'
+#' @param R reward vector
+#' @param Qtilda transition-matrix of the Embedded MC
+#'
+#' @return the matrix Q00 where we have transition probabilities from/to states associated with null rewards
+#'
+Q_null_null <- function(R, Qtilda) {
+    .Call(`_matrixdist_Q_null_null`, R, Qtilda)
+}
+
+#' Obtain Qtilda+0
+#'
+#'
+#' @param R reward vector
+#' @param Qtilda transition-matrix of the Embedded MC
+#'
+#' @return the matrix Qtilda+0 where we have transition probabilities from states associated with positive rewards to ones associated with null rewards
+#'
+Q_pos_null <- function(R, Qtilda) {
+    .Call(`_matrixdist_Q_pos_null`, R, Qtilda)
+}
+
+#' Obtain Q0+
+#'
+#'
+#' @param R reward vector
+#' @param Qtilda transition-matrix of the Embedded MC
+#'
+#' @return the matrix Q0+ where we have transition probabilities from states associated with null rewards  to ones associated with positive rewards
+#'
+Q_null_pos <- function(R, Qtilda) {
+    .Call(`_matrixdist_Q_null_pos`, R, Qtilda)
+}
+
+#' Obtain q+
+#'
+#' @param R reward vector
+#' @param Qtilda transition-matrix of the Embedded MC
+#'
+#' @return Creates the vector with transition probabilities from states associated with positive rewards to the absorption state
+#'
+q_pos <- function(R, Qtilda) {
+    .Call(`_matrixdist_q_pos`, R, Qtilda)
+}
+
+#' Obtain q0
+#'
+#' @param R reward vector
+#' @param Qtilda transition-matrix of the Embedded MC
+#'
+#' @return Creates the vector with transition probabilities from states associated with null rewards to the absorption state
+#'
+q_null <- function(R, Qtilda) {
+    .Call(`_matrixdist_q_null`, R, Qtilda)
+}
+
+#' Obtain new sub-transition matrix for the new embedded MC
+#'
+#' @param R reward vector
+#' @param Qtilda transition-matrix of the Embedded MC
+#'
+#' @return The sub-transition matrix of the new embedded Markov Chain
+#'
+new_trans_mat <- function(R, Qtilda) {
+    .Call(`_matrixdist_new_trans_mat`, R, Qtilda)
+}
+
+#' Obtain new sub-transition exit vector for the new embedded MC
+#'
+#' @param R reward vector
+#' @param Qtilda transition-matrix of the Embedded MC
+#'
+#' @return The exit rates for the new embedded Markov Chain
+#'
+new_trans_exit <- function(R, Qtilda) {
+    .Call(`_matrixdist_new_trans_exit`, R, Qtilda)
+}
+
+#' Get pi+
+#'
+#' @param R reward vector
+#' @param alpha initial distribution vector of the original MJP
+#'
+#' @return The initial distribution vector for states associated with positive rewards
+#'
+pi_pos <- function(R, alpha) {
+    .Call(`_matrixdist_pi_pos`, R, alpha)
+}
+
+#' Get pi0
+#'
+#' @param R reward vector
+#' @param alpha initial distribution vector of the original MJP
+#'
+#' @return The initial distribution vector for states associated with null rewards
+#'
+pi_null <- function(R, alpha) {
+    .Call(`_matrixdist_pi_null`, R, alpha)
+}
+
+#' Obtain new sub-transition matrix for the new embedded MC
+#'
+#' @param R reward vector
+#' @param Qtilda transition-matrix of the Embedded MC
+#' @param alpha the original initial distribution vector
+#'
+#'@return The initial distribution vector for the new Markov Jump Process
+#'
+new_pi <- function(R, Qtilda, alpha) {
+    .Call(`_matrixdist_new_pi`, R, Qtilda, alpha)
+}
+
+#' Obtain new exit rate vector for the new embedded MC
+#'
+#' @param R reward vector
+#' @param Qtilda transition-matrix of the Embedded MC
+#' @param S original sub-intensity matrix
+#'
+#' @return The exit rate vector for the new Markov Jump Process
+#'
+new_exit_vec <- function(R, Qtilda, S) {
+    .Call(`_matrixdist_new_exit_vec`, R, Qtilda, S)
+}
+
+#' Obtain new sub-intensity matrix for the new MJP
+#'
+#' @param R reward vector
+#' @param Qtilda transition-matrix of the Embedded MC
+#' @param S original sub-intensity matrix
+#'
+#' @return The sub-intensity matrix for the new Markov Jump Process
+#'
+new_subint_mat <- function(R, Qtilda, S) {
+    .Call(`_matrixdist_new_subint_mat`, R, Qtilda, S)
+}
+
+#' Performs the TVR
+#'
+#' @param R reward vector
+#' @param Qtilda transition-matrix of the Embedded MC
+#' @param alpha initial distribution vector
+#' @param S original sub-intensity matrix
+#'
+#' @return A list of transformed PH distributions
+#'
+transf_via_rew <- function(R, Qtilda, alpha, S) {
+    .Call(`_matrixdist_transf_via_rew`, R, Qtilda, alpha, S)
 }
 
 #' Product of two matrices
@@ -1159,6 +1431,17 @@ mgevden <- function(x, alpha, S, beta) {
 #' 
 mgevcdf <- function(x, alpha, S, beta, lower_tail = TRUE) {
     .Call(`_matrixdist_mgevcdf`, x, alpha, S, beta, lower_tail)
+}
+
+#' EM step for the mPH class with right-censoring, for different marginal sub-intensity matrices
+#'
+#' @param alpha Common initial distribution vector
+#' @param S_list List of marginal sub-intensity matrices
+#' @param y Matrix of marginal observations
+#' @param h Tolerance of uniformization
+#'
+EM_step_mPH_rc <- function(alpha, S_list, y, delta, h) {
+    invisible(.Call(`_matrixdist_EM_step_mPH_rc`, alpha, S_list, y, delta, h))
 }
 
 #' L inf norm of a matrix

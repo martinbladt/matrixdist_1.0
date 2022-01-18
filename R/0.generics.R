@@ -185,3 +185,17 @@ setGeneric("LRT", function(x, y, ...) {
 setGeneric("Fisher", function(x, ...) {
   standardGeneric("Fisher")
 })
+
+#' New Generic for the transformation via rewards of a multivariate phase-type distribution
+#'
+#' Methods are available for objects of class \linkS4class{MPHstar}
+#'
+#' @param x an object of the model class.
+#' @param ... further parameters to be passed on
+#'
+#' @return A realization from the mph distribution.
+#'
+#'
+setGeneric("TVR", function(x, ...) {
+  standardGeneric("TVR")
+})

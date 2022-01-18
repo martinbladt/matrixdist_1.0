@@ -156,6 +156,8 @@ setMethod("cdf", c(x = "mph"), function(x,
 #'
 #' @param x An object of class \linkS4class{mph}.
 #' @param y Matrix of data.
+#' @param delta Matrix with right-censoring indicators. (1 uncensored, 0 right censored)
+#' @param h Uniformization parameter, defaults to 1e-4.
 #' @param stepsEM Number of EM steps to be performed.
 #' @param equal_marginals Logical. If TRUE, all marginals are fitted to be equal.
 #'
@@ -164,39 +166,52 @@ setMethod("cdf", c(x = "mph"), function(x,
 setMethod(
   "fit", c(x = "mph", y = "ANY"),
   function(x, y,
+           delta=numeric(0),
+           h=1e-4,
            stepsEM = 1000,
            equal_marginals = FALSE) {
+    
+    if(length(delta)==0){
+      delta<-matrix (rep(1,nrow(y)*ncol(y)),nrow(y),ncol(y))
+    }
     alpha_fit <- x@pars$alpha
-    if (!equal_marginals) {
-      S_fit <- x@pars$S
-      fnn <- EM_step_mph
-    } else {
-      for (i in 1:ncol(y)) {
-        S_fit <- x@pars$S[[1]]
-        fnn <- EM_step_mph_0
-      }
-    }
+    S_fit <-x@pars$S
+    
+    # if (!equal_marginals) {
+    #   S_fit <- x@pars$S
+    #   fnn <- EM_step_mph
+    # } else {
+    #   for (i in 1:ncol(y)) {
+    #     S_fit <- x@pars$S[[1]]
+    #     fnn <- EM_step_mph_0
+    #   }
+    # }
+    
     for (k in 1:stepsEM) {
-      aux <- fnn(alpha_fit, S_fit, y)
-      alpha_fit <- aux$alpha
-      S_fit <- aux$S
-      cat("\r", "iteration:", k,
-        ", logLik:", aux$logLik,
-        sep = " "
-      )
+      EM_step_mPH_rc(alpha_fit, S_fit, y ,delta, h)
+      #aux <- fnn(alpha_fit, S_fit, y )
+      # 
+      # alpha_fit <- aux$alpha
+      # S_fit <- aux$S
+      # cat("\r", "iteration:", k,
+      #   ", logLik:", aux$logLik,
+      #   sep = " "
+      # )
     }
-    x@pars$S <- if (!equal_marginals) {
-      S_fit
-    } else {
-      ls <- list()
-      for (i in 1:ncol(y)) {
-        ls[[i]] <- S_fit
-      }
-      ls
-    }
-    cat("\n", sep = "")
+
     x@pars$alpha <- alpha_fit
-    x@fit$logLik <- aux$logLik
+    x@pars$S <- S_fit
+    # x@pars$S <- if (!equal_marginals) {
+    #   S_fit
+    # } else {
+    #   ls <- list()
+    #   for (i in 1:ncol(y)) {
+    #     ls[[i]] <- S_fit
+    #   }
+    #   ls
+    # }
+    cat("\n", sep = "")
+    #x@fit$logLik <- aux$logLik
     return(x)
   }
 )
