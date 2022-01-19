@@ -172,7 +172,7 @@ setMethod(
            stepsEM = 1000,
            equal_marginals = FALSE,
            r=1) {
-    if(!all(y)>0){stop("data should be positive")}
+    if(any(y<0)){stop("data should be positive")}
     if(h<=0){stop("uniformization parameter h should be positive")}
     if(stepsEM<=0){stop("the number of steps should be positive")}
     if(r<=0 && r>1)stop("sub-sampling proportion is invalid, please input a r in (0,1]")
@@ -187,15 +187,17 @@ setMethod(
       y_full <- y
       delta_full <- delta
     }
-    # if (!equal_marginals) {
-    #   S_fit <- x@pars$S
-    #   fnn <- EM_step_mph
-    # } else {
-    #   for (i in 1:ncol(y)) {
-    #     S_fit <- x@pars$S[[1]]
-    #     fnn <- EM_step_mph_0
-    #   }
-    # }
+    
+    if (!equal_marginals) {
+      S_fit <- x@pars$S
+      fnn <- EM_step_mph
+    } else {
+      for (i in 1:ncol(y)) {
+        S_fit <- x@pars$S[[1]]
+         }
+      fnn <- EM_step_mph_0
+    }
+    
     options(digits.secs = 4)
     cat(format(Sys.time(), format = "%H:%M:%OS"), ": EM started", sep = "")
     cat("\n", sep = "")
@@ -208,30 +210,31 @@ setMethod(
         delta <- as.matrix(delta_full[index,])
       }
       
-      EM_step_mPH_rc(alpha_fit, S_fit, y ,delta, h)
-      #aux <- fnn(alpha_fit, S_fit, y )
-      # 
-      # alpha_fit <- aux$alpha
-      # S_fit <- aux$S
-      # cat("\r", "iteration:", k,
-      #   ", logLik:", aux$logLik,
-      #   sep = " "
-      # )
+      #EM_step_mPH_rc(alpha_fit, S_fit, y ,delta, h) # C++
+      aux <- fnn(alpha_fit, S_fit, y )
+
+      alpha_fit <- aux$alpha
+      S_fit <- aux$S
+      cat("\r", "iteration:", k,
+        ", logLik:", aux$logLik,
+        sep = " "
+      )
     }
 
-    x@pars$alpha <- alpha_fit
-    x@pars$S <- S_fit
-    # x@pars$S <- if (!equal_marginals) {
-    #   S_fit
-    # } else {
-    #   ls <- list()
-    #   for (i in 1:ncol(y)) {
-    #     ls[[i]] <- S_fit
-    #   }
-    #   ls
-    # }
-    #cat("\n", sep = "")
-    #x@fit$logLik <- aux$logLik
+    # x@pars$alpha <- alpha_fit #C++
+    # x@pars$S <- S_fit #C++
+    
+    x@pars$S <- if (!equal_marginals) {
+      S_fit
+    } else {
+      ls <- list()
+      for (i in 1:ncol(y)) {
+        ls[[i]] <- S_fit
+      }
+      ls
+    }
+    cat("\n", sep = "")
+    x@fit$logLik <- aux$logLik
     
     cat("\n", format(Sys.time(), format = "%H:%M:%OS"), ": EM finalized", sep = "")
     cat("\n", sep = "")
@@ -239,7 +242,7 @@ setMethod(
   }
 )
 
-EM_step_mph <- function(alpha, S_list, y) {
+EM_step_mph <- function(alpha, S_list, y, delta) {
   p <- length(alpha)
   n <- nrow(y)
   d <- ncol(y)
@@ -254,13 +257,26 @@ EM_step_mph <- function(alpha, S_list, y) {
         cbind(S_list[[i]], outer(s, e)),
         cbind(matrix(0, p, p), S_list[[i]])
       )
+      
+      big_mat_rc <- rbind(
+        cbind(S_list[[i]], outer(rep(1,p), e)),
+        cbind(matrix(0, p, p), S_list[[i]])
+      )
+      
       marg[[j]] <- vapply(
         X = y[, i], FUN = function(yy) {
           matrix_exponential(yy * big_mat)
         },
         FUN.VALUE = matrix(1, 2 * p, 2 * p)
       )
+      if(any(delta==0)){
+        rc <- which(delta[,i]==0)
+        for( m in rc){
+          marg[[j]][,,m]=matrix_exponential(y[m,i]*big_mat_rc)
+        }
+      }
     }
+    
     matrix_integrals[[i]] <- marg
   }
   ###
@@ -280,7 +296,11 @@ EM_step_mph <- function(alpha, S_list, y) {
     for (i in 1:d) {
       ti <- -rowSums(S_list[[i]])
       for (m in 1:n) {
-        a_ki[m, k, i] <- sum(ti * a_kij[m, k, i, ])
+        
+        if(delta[m,i]==1){
+          a_ki[m, k, i] <- sum(ti * a_kij[m, k, i, ])
+        }else{
+          a_ki[m, k, i] <- sum( a_kij[m, k, i, ]) }
       }
     }
   }
@@ -305,7 +325,11 @@ EM_step_mph <- function(alpha, S_list, y) {
   for (k in 1:p) {
     for (i in 1:d) {
       for (m in 1:n) {
-        a_tilde_ki[m, k, i] <- sum(alpha * a_kij[m, , i, k] * a_k_minus_i[m, , i])
+        
+        if(delta[m,i]==1){
+          a_tilde_ki[m, k, i] <- sum(alpha * a_kij[m, , i, k] * a_k_minus_i[m, , i])
+        }else{
+          a_tilde_ki[m, k, i] <- 0}
       }
     }
   }
@@ -400,7 +424,7 @@ EM_step_mph <- function(alpha, S_list, y) {
   return(list(alpha = alpha, S = ll, logLik = sum(log(a))))
 }
 
-EM_step_mph_0 <- function(alpha, S, y) {
+EM_step_mph_0 <- function(alpha, S, y, delta) {
   p <- length(alpha)
   n <- nrow(y)
   d <- ncol(y)
@@ -415,12 +439,23 @@ EM_step_mph_0 <- function(alpha, S, y) {
         cbind(S, outer(s, e)),
         cbind(matrix(0, p, p), S)
       )
+      big_mat_rc <- rbind(
+        cbind(S_list[[i]], outer(rep(1,p), e)),
+        cbind(matrix(0, p, p), S_list[[i]])
+      )
+      
       marg[[j]] <- vapply(
         X = y[, i], FUN = function(yy) {
           matrix_exponential(yy * big_mat)
         },
         FUN.VALUE = matrix(1, 2 * p, 2 * p)
       )
+      if(any(delta==0)){
+        rc <- which(delta[,i]==0)
+        for( m in rc){
+          marg[[j]][,,m]=matrix_exponential(y[m,i]*big_mat_rc)
+        }
+      }
     }
     matrix_integrals[[i]] <- marg
   }
@@ -439,8 +474,12 @@ EM_step_mph_0 <- function(alpha, S, y) {
   a_ki <- array(NA, c(n, p, d))
   for (k in 1:p) {
     for (i in 1:d) {
+      ti <- -rowSums(S_list[[i]])
       for (m in 1:n) {
-        a_ki[m, k, i] <- sum(s * a_kij[m, k, i, ])
+        if(delta[m,i]==1){
+          a_ki[m, k, i] <- sum(ti * a_kij[m, k, i, ])
+        }else{ 
+          a_ki[m, k, i] <- sum( a_kij[m, k, i, ]) }
       }
     }
   }
@@ -465,7 +504,11 @@ EM_step_mph_0 <- function(alpha, S, y) {
   for (k in 1:p) {
     for (i in 1:d) {
       for (m in 1:n) {
-        a_tilde_ki[m, k, i] <- sum(alpha * a_kij[m, , i, k] * a_k_minus_i[m, , i])
+        
+        if(delta[m,i]==1){
+          a_tilde_ki[m, k, i] <- sum(alpha * a_kij[m, , i, k] * a_k_minus_i[m, , i])
+        }else{
+          a_tilde_ki[m, k, i] <- 0}
       }
     }
   }
