@@ -10,7 +10,8 @@
   delta = numeric(0),
   h = 1e-04,
   stepsEM = 1000,
-  equal_marginals = FALSE
+  equal_marginals = FALSE,
+  r = 1
 )
 }
 \arguments{
@@ -25,6 +26,8 @@
 \item{stepsEM}{Number of EM steps to be performed.}
 
 \item{equal_marginals}{Logical. If TRUE, all marginals are fitted to be equal.}
+
+\item{r}{Sub-sampling parameter, defaults to 1.}
 }
 \description{
 Fit Method for mph Class

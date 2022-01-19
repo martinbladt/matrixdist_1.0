@@ -11,6 +11,7 @@ using namespace arma;
 //' @param alpha Common initial distribution vector
 //' @param S_list List of marginal sub-intensity matrices
 //' @param y Matrix of marginal observations
+//' @param delta Matrix with right-censoring indications (1 uncensored, 0 right-censored).
 //' @param h Tolerance of uniformization
 //'
 // [[Rcpp::export]]

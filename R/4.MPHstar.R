@@ -254,6 +254,10 @@ setMethod(
     log_check=rep(0,stepsEM/every)
     
     if (is_mph) {
+      options(digits.secs = 4)
+      cat(format(Sys.time(), format = "%H:%M:%OS"), ": EM started", sep = "")
+      cat("\n", sep = "")
+      
       for (k in 1:stepsEM) {
         
         
@@ -303,6 +307,9 @@ setMethod(
     x@pars$alpha <- alpha_fit
     x@pars$S <- S_fit
     x@pars$R <- R_fit
+    
+    cat("\n", format(Sys.time(), format = "%H:%M:%OS"), ": EM finalized", sep = "")
+    cat("\n", sep = "")
     
     return(x)
   }

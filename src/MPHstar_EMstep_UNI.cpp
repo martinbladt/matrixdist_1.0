@@ -69,7 +69,7 @@ arma::mat random_reward(long int p, long int d){
 //' Transform a reward matrix with very small rewards to avoid numerical problems
 //'
 //' @param R Reward matrix
-//' @param Rtol Lower bound considered for a reward
+//' @param tol Lower bound considered for a reward
 //'
 //' @return A reward matrix that does not cause issues with uniformization
 //'
@@ -122,7 +122,7 @@ void rew_sanity_check (arma::mat & R,double tol){
 //' @param pos Vector that indicates which state is associated to a positive reward.
 //' @param N Uniformization parameter.
 //' @param obs Marginal observations.
-//' @param w Marginal weights.
+//' @param weight Marginal weights.
 //' @param rcens Marginal right-censored values.
 //' @param rcweight Marginal weights for rc values.
 //' @param alpha Marginal initial distribution vector.

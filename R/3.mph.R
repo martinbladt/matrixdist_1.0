@@ -160,6 +160,7 @@ setMethod("cdf", c(x = "mph"), function(x,
 #' @param h Uniformization parameter, defaults to 1e-4.
 #' @param stepsEM Number of EM steps to be performed.
 #' @param equal_marginals Logical. If TRUE, all marginals are fitted to be equal.
+#' @param r Sub-sampling parameter, defaults to 1.
 #'
 #' @export
 #'
@@ -169,7 +170,12 @@ setMethod(
            delta=numeric(0),
            h=1e-4,
            stepsEM = 1000,
-           equal_marginals = FALSE) {
+           equal_marginals = FALSE,
+           r=1) {
+    if(!all(y)>0){stop("data should be positive")}
+    if(h<=0){stop("uniformization parameter h should be positive")}
+    if(stepsEM<=0){stop("the number of steps should be positive")}
+    if(r<=0 && r>1)stop("sub-sampling proportion is invalid, please input a r in (0,1]")
     
     if(length(delta)==0){
       delta<-matrix (rep(1,nrow(y)*ncol(y)),nrow(y),ncol(y))
@@ -177,6 +183,10 @@ setMethod(
     alpha_fit <- x@pars$alpha
     S_fit <-x@pars$S
     
+    if(r<1){
+      y_full <- y
+      delta_full <- delta
+    }
     # if (!equal_marginals) {
     #   S_fit <- x@pars$S
     #   fnn <- EM_step_mph
@@ -186,8 +196,18 @@ setMethod(
     #     fnn <- EM_step_mph_0
     #   }
     # }
+    options(digits.secs = 4)
+    cat(format(Sys.time(), format = "%H:%M:%OS"), ": EM started", sep = "")
+    cat("\n", sep = "")
     
     for (k in 1:stepsEM) {
+      if(r<1){
+        index <- sample(1:nrow(y_full),size = floor(r*nrow(y_full)))
+        
+        y <- as.matrix(y_full[index,])
+        delta <- as.matrix(delta_full[index,])
+      }
+      
       EM_step_mPH_rc(alpha_fit, S_fit, y ,delta, h)
       #aux <- fnn(alpha_fit, S_fit, y )
       # 
@@ -210,8 +230,11 @@ setMethod(
     #   }
     #   ls
     # }
-    cat("\n", sep = "")
+    #cat("\n", sep = "")
     #x@fit$logLik <- aux$logLik
+    
+    cat("\n", format(Sys.time(), format = "%H:%M:%OS"), ": EM finalized", sep = "")
+    cat("\n", sep = "")
     return(x)
   }
 )

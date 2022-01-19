@@ -847,7 +847,7 @@ random_reward <- function(p, d) {
 #' Transform a reward matrix with very small rewards to avoid numerical problems
 #'
 #' @param R Reward matrix
-#' @param Rtol Lower bound considered for a reward
+#' @param tol Lower bound considered for a reward
 #'
 #' @return A reward matrix that does not cause issues with uniformization
 #'
@@ -861,7 +861,7 @@ rew_sanity_check <- function(R, tol) {
 #' @param pos Vector that indicates which state is associated to a positive reward.
 #' @param N Uniformization parameter.
 #' @param obs Marginal observations.
-#' @param w Marginal weights.
+#' @param weight Marginal weights.
 #' @param rcens Marginal right-censored values.
 #' @param rcweight Marginal weights for rc values.
 #' @param alpha Marginal initial distribution vector.
@@ -1438,6 +1438,7 @@ mgevcdf <- function(x, alpha, S, beta, lower_tail = TRUE) {
 #' @param alpha Common initial distribution vector
 #' @param S_list List of marginal sub-intensity matrices
 #' @param y Matrix of marginal observations
+#' @param delta Matrix with right-censoring indications (1 uncensored, 0 right-censored).
 #' @param h Tolerance of uniformization
 #'
 EM_step_mPH_rc <- function(alpha, S_list, y, delta, h) {
