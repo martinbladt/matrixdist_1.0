@@ -9,7 +9,7 @@ rew_sanity_check(R, tol)
 \arguments{
 \item{R}{Reward matrix}
 
-\item{Rtol}{Lower bound considered for a reward}
+\item{tol}{Lower bound considered for a reward}
 }
 \value{
 A reward matrix that does not cause issues with uniformization

@@ -211,7 +211,7 @@ setMethod(
       }
       
       #EM_step_mPH_rc(alpha_fit, S_fit, y ,delta, h) # C++
-      aux <- fnn(alpha_fit, S_fit, y )
+      aux <- fnn(alpha_fit, S_fit, y ,delta)
 
       alpha_fit <- aux$alpha
       S_fit <- aux$S

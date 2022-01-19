@@ -13,6 +13,8 @@ EM_step_mPH_rc(alpha, S_list, y, delta, h)
 
 \item{y}{Matrix of marginal observations}
 
+\item{delta}{Matrix with right-censoring indications (1 uncensored, 0 right-censored).}
+
 \item{h}{Tolerance of uniformization}
 }
 \description{

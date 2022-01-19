@@ -19,11 +19,11 @@ marginal_expectation(rew, pos, N, alpha, S, obs, weight, rcens, rcweight)
 
 \item{obs}{Marginal observations.}
 
+\item{weight}{Marginal weights.}
+
 \item{rcens}{Marginal right-censored values.}
 
 \item{rcweight}{Marginal weights for rc values.}
-
-\item{w}{Marginal weights.}
 }
 \value{
 A vector with the expected time spent in each state by the marginal, conditional on the observations.
