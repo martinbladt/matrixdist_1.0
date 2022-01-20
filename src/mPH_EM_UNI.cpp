@@ -17,10 +17,10 @@ using namespace arma;
 // [[Rcpp::export]]
 void EM_step_mPH_rc (arma::vec & alpha, Rcpp::List & S_list, const arma::mat y, const arma::mat delta, double h){
   
-  int p{alpha.size()}; // dimension of the distribution
-  int n{y.n_rows}; // number of observaions
+  unsigned p{alpha.size()}; // dimension of the distribution
+  unsigned n{y.n_rows}; // number of observaions
   
-  int d{y.n_cols}; // number of uncensored marginals
+  unsigned d{y.n_cols}; // number of uncensored marginals
   
   arma::vec e(p); e.ones(); // vector of ones
   
@@ -53,7 +53,7 @@ void EM_step_mPH_rc (arma::vec & alpha, Rcpp::List & S_list, const arma::mat y, 
       for(int m{0}; m<n; ++m){
         
         
-        int rc{delta(m,i)};
+        int rc{static_cast<int>(delta(m,i))};
         if(rc==1){
           J=matrix_vanloan(S,S,s*e_k); //Van Loan for uncensored case
         }else{
@@ -131,7 +131,7 @@ void EM_step_mPH_rc (arma::vec & alpha, Rcpp::List & S_list, const arma::mat y, 
         for(int j{0}; j<p; ++j){
           step_vec(j)=a_kij[m][k][i][j];
         }
-        int rc{delta(m,i)};
+        int rc{static_cast<int>(delta(m,i))};
         
         if(rc==1){a_ki(m,k,i)= arma::sum(ti % step_vec);
         }else{a_ki(m,k,i)= arma::sum(step_vec);}
@@ -186,7 +186,7 @@ void EM_step_mPH_rc (arma::vec & alpha, Rcpp::List & S_list, const arma::mat y, 
         for(int j{0}; j<p; ++j){
           step_vec(j)=a_kij[m][j][i][k];
         }
-        int rc{delta(m,i)};
+        int rc{static_cast<int>(delta(m,i))};
         if(rc==1){
           a_tilde_ki(m,k,i)=arma::sum(alpha % step_vec % step_rowvec.t());
         }else{

@@ -22,7 +22,7 @@ using namespace arma;
 // [[Rcpp::export]]
 arma::mat rMPHstar(int n, arma::vec alpha, arma::mat S, arma::mat R) {
   
-  int d{R.n_cols}; //number of marginals
+  unsigned d{R.n_cols}; //number of marginals
   
   List Marginal=transf_via_rew(R, embedded_mc(S), alpha, S);
   List marginalJ;
@@ -75,8 +75,8 @@ arma::mat random_reward(long int p, long int d){
 //'
 // [[Rcpp::export]]
 void rew_sanity_check (arma::mat & R,double tol){
-  int p{R.n_rows};
-  int d{R.n_cols};
+  unsigned p{R.n_rows};
+  unsigned d{R.n_cols};
   
   for(int i{0}; i<p; ++i){
     for(int j{0}; j<d; ++j){
@@ -101,8 +101,7 @@ void rew_sanity_check (arma::mat & R,double tol){
       double miss{1-check(i)};
       
       for(int k{0};k<rew.size();++k){
-        int j{rew(k)-1};
-        
+        int j{static_cast<int>(rew(k))-1};
         double w{R(i,j)/check(i)};
         R(i,j)+=miss*w;
       }
@@ -429,7 +428,7 @@ void MPHstar_EMstep_UNI(double h, double Rtol, arma::vec & alpha, arma::mat & S,
     arma::vec rew=R.col(m);
     arma::vec pos=plus_states(rew);
     
-    int pj{pos.size()};
+    unsigned pj{pos.size()};
     
     if(pj==0){continue;
     }else if(pj==1){

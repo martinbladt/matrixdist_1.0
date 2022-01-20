@@ -226,7 +226,7 @@ arma::mat Q_null_pos(arma::vec R, arma::mat Qtilda){
 // [[Rcpp::export]]
 arma::vec q_pos(arma::vec R, arma::mat Qtilda){
   
-  int p{Qtilda.n_rows};
+  unsigned p{Qtilda.n_rows};
   int d=n_pos(R);
   
   arma::vec q(p);
@@ -255,7 +255,7 @@ arma::vec q_pos(arma::vec R, arma::mat Qtilda){
 // [[Rcpp::export]]
 arma::vec q_null(arma::vec R, arma::mat Qtilda){
   
-  int p{Qtilda.n_rows};
+  unsigned p{Qtilda.n_rows};
   int l=n_null(R);
   
   arma::vec q(p);
