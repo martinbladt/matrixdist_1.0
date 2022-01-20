@@ -5,13 +5,13 @@
 \alias{MPHstar-class}
 \title{Multivariate Phase Type distributions obtained by transformation via rewards}
 \description{
-Class of objects for multivariate phase type distributions
+Class of objects for multivariate phase type distributions.
 }
 \section{Slots}{
 
 \describe{
-\item{\code{name}}{name of the phase type distribution}
+\item{\code{name}}{Name of the phase type distribution.}
 
-\item{\code{pars}}{a list comprising of the parameters.}
+\item{\code{pars}}{A list comprising of the parameters.}
 }}
 

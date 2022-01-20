@@ -187,9 +187,9 @@ arma::vec marginal_expectation (arma::vec & rew, arma::vec & pos,int N, arma::ve
           cmatrix(i,j) = J(i,j + p);
         }
       }
-      if(aux_exp.is_zero()==TRUE){aux_exp.print("exp(Sx):"); std::cout<< "exp(Sx):"<< endl; stop("Issue with uniformization for marg uncensored data-> exp(Sx) is a matrix of zeros");}
-      if(aux_exp.has_nan()==TRUE){aux_exp.print("exp(Sx):"); std::cout<< "exp(Sx):"<< endl; stop("At least one NaN element in exp(Sx) in marg un data");}
-      if(cmatrix.has_nan()==TRUE){cmatrix.print("G(x;alpha,S):"); std::cout<< "G(x;alpha,S):" << endl; stop("At least one NaN element in G(x;alpha,S) in marg un data");}
+      if(aux_exp.is_zero()==TRUE){aux_exp.print("exp(Sx):"); Rcout<< "exp(Sx):"<< endl; stop("Issue with uniformization for marg uncensored data-> exp(Sx) is a matrix of zeros");}
+      if(aux_exp.has_nan()==TRUE){aux_exp.print("exp(Sx):"); Rcout<< "exp(Sx):"<< endl; stop("At least one NaN element in exp(Sx) in marg un data");}
+      if(cmatrix.has_nan()==TRUE){cmatrix.print("G(x;alpha,S):"); Rcout<< "G(x;alpha,S):" << endl; stop("At least one NaN element in G(x;alpha,S) in marg un data");}
       
       bvector = aux_exp * t;
       aux_mat = alpha.t() * bvector;
@@ -236,9 +236,9 @@ arma::vec marginal_expectation (arma::vec & rew, arma::vec & pos,int N, arma::ve
           cmatrix(i,j) = J(i,j + p);
         }
       }
-      if(aux_exp.is_zero()==TRUE){aux_exp.print("exp(Sx):"); std::cout<< "exp(Sx):"<< endl; stop("Issue with uniformization for marg rc data-> exp(Sx) is a matrix of zeros");}
-      if(aux_exp.has_nan()==TRUE){aux_exp.print("exp(Sx):"); std::cout<< "exp(Sx):"<< endl; stop("At least one NaN element in exp(Sx) for marg rc data");}
-      if(cmatrix.has_nan()==TRUE){cmatrix.print("G(x;alpha,S):"); std::cout<< "G(x;alpha,S):" << endl; stop("At least one NaN element in G(x;alpha,S) for marg rc");}
+      if(aux_exp.is_zero()==TRUE){aux_exp.print("exp(Sx):"); Rcout<< "exp(Sx):"<< endl; stop("Issue with uniformization for marg rc data-> exp(Sx) is a matrix of zeros");}
+      if(aux_exp.has_nan()==TRUE){aux_exp.print("exp(Sx):"); Rcout<< "exp(Sx):"<< endl; stop("At least one NaN element in exp(Sx) for marg rc data");}
+      if(cmatrix.has_nan()==TRUE){cmatrix.print("G(x;alpha,S):"); Rcout<< "G(x;alpha,S):" << endl; stop("At least one NaN element in G(x;alpha,S) for marg rc");}
       
       bvector = aux_exp * e;
       aux_mat = alpha.t() * bvector;
