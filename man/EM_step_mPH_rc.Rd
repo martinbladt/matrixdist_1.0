@@ -7,15 +7,15 @@
 EM_step_mPH_rc(alpha, S_list, y, delta, h)
 }
 \arguments{
-\item{alpha}{Common initial distribution vector}
+\item{alpha}{Common initial distribution vector.}
 
-\item{S_list}{List of marginal sub-intensity matrices}
+\item{S_list}{List of marginal sub-intensity matrices.}
 
-\item{y}{Matrix of marginal observations}
+\item{y}{Matrix of marginal observations.}
 
 \item{delta}{Matrix with right-censoring indications (1 uncensored, 0 right-censored).}
 
-\item{h}{Tolerance of uniformization}
+\item{h}{Tolerance of uniformization.}
 }
 \description{
 EM step for the mPH class with right-censoring, for different marginal sub-intensity matrices

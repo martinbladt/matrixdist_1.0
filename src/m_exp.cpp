@@ -43,7 +43,7 @@ arma::mat matrix_vanloan(arma::mat A1, arma::mat A2, arma::mat B1) {
   
   for (int i{0}; i < p; ++i) {
     for (int j{0}; j < p; ++j) {
-      if ( i < p1 && j < p1) {
+      if (i < p1 && j < p1) {
         aux_mat(i,j) = A1(i,j);
       }
       else if (i >= p1 && j < p1) {

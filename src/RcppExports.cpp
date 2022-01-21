@@ -897,13 +897,13 @@ BEGIN_RCPP
 END_RCPP
 }
 // random_reward
-arma::mat random_reward(long int p, long int d);
+arma::mat random_reward(int p, int d);
 RcppExport SEXP _matrixdist_random_reward(SEXP pSEXP, SEXP dSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< long int >::type p(pSEXP);
-    Rcpp::traits::input_parameter< long int >::type d(dSEXP);
+    Rcpp::traits::input_parameter< int >::type p(pSEXP);
+    Rcpp::traits::input_parameter< int >::type d(dSEXP);
     rcpp_result_gen = Rcpp::wrap(random_reward(p, d));
     return rcpp_result_gen;
 END_RCPP

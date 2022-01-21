@@ -19,5 +19,6 @@ rMPHstar(n, alpha, S, R)
 The simulated samples, each column corresponds to a marginal.
 }
 \description{
-Generates samples of size \code{n} from a multivariate phase-type distribution with parameters \code{alpha} and \code{S}.
+Generates samples of size \code{n} from a multivariate phase-type distribution
+ with parameters \code{alpha} and \code{S}.
 }

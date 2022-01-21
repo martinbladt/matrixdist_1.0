@@ -819,7 +819,8 @@ logLikelihoodMgompertz_UNIs <- function(h, alpha, S, beta, obs, weight, rcens, r
 
 #' Random multivariate phase-type via rewards
 #'
-#' Generates samples of size \code{n} from a multivariate phase-type distribution with parameters \code{alpha} and \code{S}.
+#' Generates samples of size \code{n} from a multivariate phase-type distribution
+#'  with parameters \code{alpha} and \code{S}.
 #' @param n Sample size for each marginal.
 #' @param alpha Initial probabilities.
 #' @param S sub-intensity matrix.
@@ -833,13 +834,14 @@ rMPHstar <- function(n, alpha, S, R) {
 
 #' Random reward matrix
 #'
-#' Generates a random reward matrix for a multivariate phase-type distribution with p states and d marginals
+#' Generates a random reward matrix for a multivariate phase-type distribution 
+#' with p states and d marginals.
 #'
-#' @param p  the number of transient states in the sub-intensity matrix
-#' @param d  the number of marginals
+#' @param p Number of transient states in the sub-intensity matrix.
+#' @param d Number of marginals.
 #'
-#' @return The random reward matrix
-#'
+#' @return A random reward matrix.
+#' @export
 random_reward <- function(p, d) {
     .Call(`_matrixdist_random_reward`, p, d)
 }
@@ -1435,11 +1437,11 @@ mgevcdf <- function(x, alpha, S, beta, lower_tail = TRUE) {
 
 #' EM step for the mPH class with right-censoring, for different marginal sub-intensity matrices
 #'
-#' @param alpha Common initial distribution vector
-#' @param S_list List of marginal sub-intensity matrices
-#' @param y Matrix of marginal observations
+#' @param alpha Common initial distribution vector.
+#' @param S_list List of marginal sub-intensity matrices.
+#' @param y Matrix of marginal observations.
 #' @param delta Matrix with right-censoring indications (1 uncensored, 0 right-censored).
-#' @param h Tolerance of uniformization
+#' @param h Tolerance of uniformization.
 #'
 EM_step_mPH_rc <- function(alpha, S_list, y, delta, h) {
     invisible(.Call(`_matrixdist_EM_step_mPH_rc`, alpha, S_list, y, delta, h))

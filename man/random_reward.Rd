@@ -7,13 +7,14 @@
 random_reward(p, d)
 }
 \arguments{
-\item{p}{the number of transient states in the sub-intensity matrix}
+\item{p}{Number of transient states in the sub-intensity matrix.}
 
-\item{d}{the number of marginals}
+\item{d}{Number of marginals.}
 }
 \value{
-The random reward matrix
+A random reward matrix.
 }
 \description{
-Generates a random reward matrix for a multivariate phase-type distribution with p states and d marginals
+Generates a random reward matrix for a multivariate phase-type distribution 
+with p states and d marginals.
 }

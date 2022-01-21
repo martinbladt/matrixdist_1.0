@@ -2,7 +2,6 @@
 #define TVR   //   #define this so the compiler knows it has been included
 
 #include <RcppArmadillo.h>
-using namespace Rcpp;
 
 int n_pos (const arma::vec R);
 
@@ -38,5 +37,5 @@ arma::vec new_exit_vec (const arma::vec R, const arma::mat Qtilda, const arma::m
 
 arma::mat new_subint_mat (const arma::vec R, const arma::mat Qtilda, const arma::mat S);
 
-List transf_via_rew(arma::mat R,arma::mat Qtilda, arma::vec alpha, arma::mat S );
+Rcpp::List transf_via_rew(arma::mat R,arma::mat Qtilda, arma::vec alpha, arma::mat S );
 #endif
