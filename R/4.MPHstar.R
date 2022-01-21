@@ -164,15 +164,15 @@ MPHstar_data_aggregation <- function(y, w = numeric(0), rc = numeric(0)) {
     if (n1 > 1 & n2 > 1) {
       mat[[1]] <- list(un = find_weight(sumData[un_obs]), rc = find_weight(sumData[rc_obs]))
     } else if (n1 == 1 & n2 > 1) {
-      mat[[1]] <- list(un = find_weight(sum(y[, un_obs])), rc = find_weight(sumData[rc_obs]))
+      mat[[1]] <- list(un = find_weight(sum(y[un_obs,])), rc = find_weight(sumData[rc_obs]))
     } else if (n1 == 0 & n2 > 1) {
       mat[[1]] <- list(un = find_weight(NULL), rc = find_weight(sumData[rc_obs]))
     } else if (n1 > 1 & n2 == 1) {
-      mat[[1]] <- list(un = find_weight(sumData[un_obs]), rc = find_weight(sum(y[, rc_obs])))
+      mat[[1]] <- list(un = find_weight(sumData[un_obs]), rc = find_weight(sum(y[ rc_obs,])))
     } else if (n1 > 1 & n2 == 0) {
       mat[[1]] <- list(un = find_weight(sumData[un_obs]), rc = find_weight(NULL))
     } else if (n1 == 1 & n2 == 1) {
-      mat[[1]] <- list(un = find_weight(sum(y[, un_obs])), rc = find_weight(sum(y[, rc_obs])))
+      mat[[1]] <- list(un = find_weight(sum(y[ un_obs,])), rc = find_weight(sum(y[ rc_obs,])))
     }
   } else if (is.matrix(y) & length(y) == 1) {
     stop("Please input a matrix of observations")
@@ -301,9 +301,9 @@ setMethod(
         MPHstar_EMstep_UNI(epsilon, zero_tol, alpha_fit, S_fit, R_fit, B) # performs a EM step, changes alpha, S and R
 
         if (length(B[[1]]$rc) > 0) {
-          log_lik <- matrixdist:::logLikelihoodPH_UNI(epsilon, alpha_fit, S_fit, C[[1]]$un[1, ], C[[1]]$un[2, ], C[[1]]$rc[1, ], C[[1]]$rc[2, ])
+          log_lik <- matrixdist:::logLikelihoodPH_UNI(epsilon, alpha_fit, S_fit, C[[1]]$un[,1 ], C[[1]]$un[, 2], C[[1]]$rc[, 1], C[[1]]$rc[,2 ])
         } else {
-          log_lik <- matrixdist:::logLikelihoodPH_UNI(epsilon, alpha_fit, S_fit, C[[1]]$un[1, ], C[[1]]$un[2, ], numeric(0), numeric(0))
+          log_lik <- matrixdist:::logLikelihoodPH_UNI(epsilon, alpha_fit, S_fit, C[[1]]$un[,1 ], C[[1]]$un[, 2], numeric(0), numeric(0))
         }
 
         log_check[k] <- log_lik

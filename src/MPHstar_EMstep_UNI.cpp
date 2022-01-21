@@ -350,7 +350,9 @@ void MPHstar_EMstep_UNI(double h, double Rtol, arma::vec & alpha, arma::mat & S,
         cmatrix(i,j) = J(i,j + p); // cmatrix=G(x;pi,S)
       }
     }
-    if(aux_exp.is_zero()==TRUE){stop("Issue with uniformization for uncensored summed data-> exp(Sx) is a matrix of zeros");}
+    if(aux_exp.is_zero()==TRUE){aux_exp.print("exp(Sx):"); Rcout<< "exp(Sx):"<< endl; stop("Issue with uniformization for summed unc. data-> exp(Sx) is a matrix of zeros");}
+    if(aux_exp.has_nan()==TRUE){aux_exp.print("exp(Sx):"); Rcout<< "exp(Sx):"<< endl; stop("At least one NaN element in exp(Sx) for summed unc. data");}
+    if(cmatrix.has_nan()==TRUE){cmatrix.print("G(x;alpha,S):"); Rcout<< "G(x;alpha,S):" << endl; stop("At least one NaN element in G(x;alpha,S) for summed unc.");}
     
     
     avector = alpha.t() * aux_exp; // avector= pi%*%exp(Sx)
@@ -403,7 +405,9 @@ void MPHstar_EMstep_UNI(double h, double Rtol, arma::vec & alpha, arma::mat & S,
         cmatrix(i,j) = J(i,j + p);
       }
     }
-    if(aux_exp.is_zero()==TRUE){stop("Issue with uniformization of rc summed data-> exp(Sx) is a matrix of zeros");}
+    if(aux_exp.is_zero()==TRUE){aux_exp.print("exp(Sx):"); Rcout<< "exp(Sx):"<< endl; stop("Issue with uniformization for summed rc data-> exp(Sx) is a matrix of zeros");}
+    if(aux_exp.has_nan()==TRUE){aux_exp.print("exp(Sx):"); Rcout<< "exp(Sx):"<< endl; stop("At least one NaN element in exp(Sx) for summed rc data");}
+    if(cmatrix.has_nan()==TRUE){cmatrix.print("G(x;alpha,S):"); Rcout<< "G(x;alpha,S):" << endl; stop("At least one NaN element in G(x;alpha,S) for summed rc data");}
     
     
     bvector = aux_exp * e; //bvector=exp(Sx)%*%e
