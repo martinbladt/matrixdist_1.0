@@ -22,7 +22,7 @@ using namespace arma;
 // [[Rcpp::export]]
 arma::mat rMPHstar(int n, arma::vec alpha, arma::mat S, arma::mat R) {
   
-  unsigned d{R.n_cols}; //number of marginals
+  int d{R.n_cols}; //number of marginals
   
   List Marginal=transf_via_rew(R, embedded_mc(S), alpha, S);
   List marginalJ;
@@ -75,8 +75,8 @@ arma::mat random_reward(long int p, long int d){
 //'
 // [[Rcpp::export]]
 void rew_sanity_check (arma::mat & R,double tol){
-  unsigned p{R.n_rows};
-  unsigned d{R.n_cols};
+  int p{R.n_rows};
+  int d{R.n_cols};
   
   for(int i{0}; i<p; ++i){
     for(int j{0}; j<d; ++j){
@@ -135,7 +135,7 @@ arma::vec marginal_expectation (arma::vec & rew, arma::vec & pos,int N, arma::ve
   
   arma::vec Zmeanj(rew.size()); Zmeanj.zeros();
   
-  unsigned p{S.n_cols};  //the dimension of the mth marginal (can be smaller than p if some rewards are null)
+  int p{S.n_cols};  //the dimension of the mth marginal (can be smaller than p if some rewards are null)
   
   double density{0.0};
   
@@ -271,8 +271,8 @@ void MPHstar_EMstep_UNI(double h, double Rtol, arma::vec & alpha, arma::mat & S,
   
   rew_sanity_check(R, Rtol); // to avoid numerical instability we consider a reward 0 if it is smaller than Rtol
   
-  unsigned p{S.n_cols}; //dimension of original PH distribution
-  unsigned d{R.n_cols}; //number of marginal distributions
+  int p{S.n_cols}; //dimension of original PH distribution
+  int d{R.n_cols}; //number of marginal distributions
   
   Rcpp::List preobs=mph_obs[0]; //List of observations and weights for summed data
   arma::mat un_sum=preobs["un"];
@@ -428,7 +428,7 @@ void MPHstar_EMstep_UNI(double h, double Rtol, arma::vec & alpha, arma::mat & S,
     arma::vec rew=R.col(m);
     arma::vec pos=plus_states(rew);
     
-    unsigned pj{pos.size()};
+    int pj{pos.size()};
     
     if(pj==0){continue;
     }else if(pj==1){
