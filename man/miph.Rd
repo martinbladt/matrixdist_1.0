@@ -12,7 +12,7 @@ miph(
   S = NULL,
   structure = NULL,
   dimension = 3,
-  variables = 2,
+  variables = NULL,
   scale = 1
 )
 }

@@ -115,18 +115,26 @@ setMethod("sim", c(x = "mph"), function(x, n = 1000, equal_marginals = 0) {
 #' @return A list containing the locations and corresponding density evaluations.
 #' @export
 #'
-setMethod("dens", c(x = "mph"), function(x, y) {
+setMethod("dens", c(x = "mph"), function(x, y, delta=NULL) {
   p <- length(x@pars$alpha)
   alpha <- x@pars$alpha
   d <- length(x@pars$S)
-  n <- nrow(y)
+  if(is.matrix(y)){n <- nrow(y)}
+  if(is.vector(y)){n <- 1
+  y <- t(y)}  
+  
+  if(length(delta)==0){delta=matrix(1,nrow=n,ncol=d)}
+  
   res <- numeric(n)
   for (j in 1:p) {
     in_vect <- rep(0, p)
     in_vect[j] <- 1
     aux <- matrix(NA, n, d)
-    for (i in 1:d) {
-      aux[, i] <- matrixdist:::phdensity(y[, i], in_vect, x@pars$S[[i]])
+    for (i in 1:d){
+      for(m in 1:n){    
+        if(delta[m,i]==1){aux[m, i] <- matrixdist:::phdensity(y[m, i], in_vect, x@pars$S[[i]])
+        }else{aux[m, i] <-1 - matrixdist:::phcdf(y[m, i], in_vect, x@pars$S[[i]])}
+      }
     }
     res <- res + alpha[j] * apply(aux, 1, prod)
   }
@@ -136,20 +144,36 @@ setMethod("dens", c(x = "mph"), function(x, y) {
 #' Distribution Method for multivariate phase-type distributions
 #'
 #' @param x An object of class \linkS4class{mph}.
-#' @param q A vector of locations.
+#' @param delta A matrix with right censoring values
+#' @param y A matrix of observations.
 #' @param lower.tail Logical parameter specifying whether lower tail (cdf) or upper tail is computed.
 #'
 #' @return A list containing the locations and corresponding CDF evaluations.
 #' @export
 #'
-setMethod("cdf", c(x = "mph"), function(x,
-                                        q,
+setMethod("cdf", c(x = "mph"), function(x, 
+                                        y,
                                         lower.tail = TRUE) {
-  q_inf <- (q == Inf)
-  cdf <- q
-  cdf[!q_inf] <- phcdf(q[!q_inf], x@pars$alpha, x@pars$S, lower.tail)
-  cdf[q_inf] <- as.numeric(1 * lower.tail)
-  return(cdf)
+  p <- length(x@pars$alpha)
+  alpha <- x@pars$alpha
+  d <- length(x@pars$S)
+  if(is.matrix(y)){n <- nrow(y)}
+  if(is.vector(y)){n <- 1
+  y <- t(y)}  
+  
+  if(length(delta)==0){delta=matrix(1,nrow=n,ncol=d)}
+  
+  res <- numeric(n)
+  for (j in 1:p) {
+    in_vect <- rep(0, p)
+    in_vect[j] <- 1
+    aux <- matrix(NA, n, d)
+    for (i in 1:d) {
+      aux[, i] <- matrixdist:::phcdf(y[, i], in_vect, x@pars$S[[i]],lower.tail)
+    }
+    res <- res + alpha[j] * apply(aux, 1, prod)
+  }
+  return(res)
 })
 
 #' Fit Method for mph Class
@@ -161,6 +185,8 @@ setMethod("cdf", c(x = "mph"), function(x,
 #' @param stepsEM Number of EM steps to be performed.
 #' @param equal_marginals Logical. If TRUE, all marginals are fitted to be equal.
 #' @param r Sub-sampling parameter, defaults to 1.
+#' @param maxit Maximum number of iterations when optimizing g function.
+#' @param reltol Relative tolerance when optimizing g function.
 #'
 #' @export
 #'
@@ -171,7 +197,9 @@ setMethod(
            h = 1e-4,
            stepsEM = 1000,
            equal_marginals = FALSE,
-           r = 1) {
+           r = 1,
+           maxit=100,
+           reltol=1e-8) {
     if (any(y < 0)) {
       stop("data should be positive")
     }
@@ -183,10 +211,21 @@ setMethod(
     }
     if (r <= 0 && r > 1) {
       stop("sub-sampling proportion is invalid, please input a r in (0,1]")
+    }   
+    d <- length(x@pars$S)
+
+    is_miph <- methods::is(x,"miph")
+    if (is_miph) {
+      par_g <- x@gfun$pars
+      inv_g <- x@gfun$inverse 
+      LL <- list()
+      for(i in 1:d){
+        LL[[i]] <-eval(parse(text = paste("logLikelihoodM", x@gfun$name[i], "_UNI", sep = "")))
+      } 
     }
 
     if (length(delta) == 0) {
-      delta <- matrix(rep(1, nrow(y) * ncol(y)), nrow(y), ncol(y))
+      delta <- matrix(1, nrow(y), ncol(y))
     }
     alpha_fit <- x@pars$alpha
     S_fit <- x@pars$S
@@ -209,43 +248,111 @@ setMethod(
     options(digits.secs = 4)
     cat(format(Sys.time(), format = "%H:%M:%OS"), ": EM started", sep = "")
     cat("\n", sep = "")
+    #EM step
+    if(!is_miph){
 
-    for (k in 1:stepsEM) {
+      for (k in 1:stepsEM) {
+        if (r < 1) {
+          index <- sample(1:nrow(y_full), size = floor(r * nrow(y_full)))
+  
+          y <- as.matrix(y_full[index, ])
+          delta <- as.matrix(delta_full[index, ])
+        }
+  
+        # EM_step_mPH_rc(alpha_fit, S_fit, y ,delta, h) # C++
+        aux <- fnn(alpha_fit, S_fit, y, delta)
+  
+        alpha_fit <- aux$alpha
+        S_fit <- aux$S
+        cat("\r", "iteration:", k,
+          ", logLik:", aux$logLik,
+          sep = " "
+        )
+      }
+      x@pars$alpha <- alpha_fit #C++
+      x@pars$S <- S_fit #C++
+      x@fit <- list(
+        logLik = sum(log(dens(x, y, delta))),
+        nobs = nrow(n)
+      )
+      
+      x@pars$S <- if (equal_marginals) {
+        ls <- list()
+        for (i in 1:ncol(y)) {
+          ls[[i]] <- S_fit
+        }
+        ls
+      }
+  
+    }
+    if(is_miph){
+      for(k in 1:stepsEM){
       if (r < 1) {
         index <- sample(1:nrow(y_full), size = floor(r * nrow(y_full)))
-
+        
         y <- as.matrix(y_full[index, ])
         delta <- as.matrix(delta_full[index, ])
       }
+      
+      trans <- clone_matrix(y)
+      for(i in 1:d){
+        if(x@gfun$name[i]!="gev"){
+          trans[,i]<- inv_g[[i]](par_g[[i]],y[,i])
+        }else{
+          t <- inv_g[[i]](par_g[[i]],y[,i],rep(1,nrow(y)))
+          trans[,i]<- t$obs
+        }
+      }
+      
+     aux<- fnn( alpha_fit, S_fit, trans, delta) 
+     for(i in 1:d){
+       opt <- suppressWarnings(
+         stats::optim(
+           par = par_g[[i]],
+           fn = LL[[i]],
+           h = h,
+           alpha = alpha_fit,
+           S = S_fit[[i]],
+           obs = y[which(delta[,i]==1),i],
+           weight = rep(1,nrow(y)),
+           rcens = y[which(delta[,i]==0,i)],
+           rcweight = rep(1,nrow(y)),
+           hessian = FALSE,
+           control = list(
+             maxit = maxit,
+             reltol = reltol,
+             fnscale = -1
+           )
+         )
+       )
+       
+       par_g[[i]] <- opt$par
 
-      # EM_step_mPH_rc(alpha_fit, S_fit, y ,delta, h) # C++
-      aux <- fnn(alpha_fit, S_fit, y, delta)
+       
+     }
+    cat("\r",", iteration:", k,
+       ", logLik:", opt$value,
+         sep = " "
+         )
+    
+    alpha_fit <- aux$alpha
+     S_fit <- aux$S
 
-      alpha_fit <- aux$alpha
-      S_fit <- aux$S
-      cat("\r", "iteration:", k,
-        ", logLik:", aux$logLik,
-        sep = " "
+  }
+      x@pars$alpha <- alpha_fit
+      x@pars$S <- S_fit
+      x <- miph(mph=x, gfun = x@gfun$name, gfun_pars= par_g)  
+      
+      x@fit <- list(
+        logLik = sum(log(dens(x, y, delta))),
+        nobs = nrow(y)
       )
     }
-
-    # x@pars$alpha <- alpha_fit #C++
-    # x@pars$S <- S_fit #C++
-
-    x@pars$S <- if (!equal_marginals) {
-      S_fit
-    } else {
-      ls <- list()
-      for (i in 1:ncol(y)) {
-        ls[[i]] <- S_fit
-      }
-      ls
-    }
     cat("\n", sep = "")
-    x@fit$logLik <- aux$logLik
 
     cat("\n", format(Sys.time(), format = "%H:%M:%OS"), ": EM finalized", sep = "")
     cat("\n", sep = "")
+    
     return(x)
   }
 )

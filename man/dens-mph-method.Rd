@@ -4,7 +4,7 @@
 \alias{dens,mph-method}
 \title{Density Method for multivariate phase-type distributions}
 \usage{
-\S4method{dens}{mph}(x, y)
+\S4method{dens}{mph}(x, y, delta = NULL)
 }
 \arguments{
 \item{x}{An object of class \linkS4class{mph}.}

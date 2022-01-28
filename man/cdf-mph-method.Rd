@@ -4,14 +4,16 @@
 \alias{cdf,mph-method}
 \title{Distribution Method for multivariate phase-type distributions}
 \usage{
-\S4method{cdf}{mph}(x, q, lower.tail = TRUE)
+\S4method{cdf}{mph}(x, y, lower.tail = TRUE)
 }
 \arguments{
 \item{x}{An object of class \linkS4class{mph}.}
 
-\item{q}{A vector of locations.}
+\item{y}{A matrix of observations.}
 
 \item{lower.tail}{Logical parameter specifying whether lower tail (cdf) or upper tail is computed.}
+
+\item{delta}{A matrix with right censoring values}
 }
 \value{
 A list containing the locations and corresponding CDF evaluations.

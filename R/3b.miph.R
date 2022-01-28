@@ -52,7 +52,7 @@ miph<-function(mph=NULL, #object of class mPH
   }
   
   if(!all(gfun %in% c("pareto", "weibull", "lognormal", "loglogistic", "gompertz", "gev", "identity"))){
-    stop("invalid gfun for",which(gfun_check==F))
+    stop("invalid gfun for at least one marginal")
   }
   
   if (all(gfun %in%  c("pareto", "weibull", "lognormal", "gompertz"))){
@@ -146,9 +146,25 @@ miph<-function(mph=NULL, #object of class mPH
                  intensity = lambda, #a list
                  intensity_prime = lambda_prime #a list
                ),
-               scale = scale,
+               scale = scale
   )
 } 
+
+#' Show Method for multivariate inhomogeneous phase-type distributions
+#'
+#' @param object An object of class \linkS4class{miph}.
+#' @importFrom methods show
+#' @export
+#'
+setMethod("show", "miph", function(object) {
+  cat("object class: ", methods::is(object)[[1]], "\n", sep = "")
+  cat("name: ", object@name, "\n", sep = "")
+  cat("parameters: ", "\n", sep = "")
+  print(object@pars)
+  cat("g-function name:", object@gfun$name, "\n")
+  cat("parameters: ", "\n", sep = "")
+  methods::show(object@gfun$pars)
+})
 
 #' Simulation Method for inhomogeneous multivariate phase-type distributions
 #'
@@ -174,4 +190,74 @@ setMethod("sim", c(x = "miph"), function(x, n = 1000) {
     }
   }
   return(U)
+})
+
+#' Density Method for multivariate inhomogeneous phase-type distributions
+#'
+#' @param x An object of class \linkS4class{miph}.
+#' @param y A matrix of observations.
+#'
+#' @return A list containing the locations and corresponding density evaluations.
+#' @export
+#'
+setMethod("dens", c(x = "miph"), function(x, y, delta=NULL) {
+  p <- length(x@pars$alpha)
+  alpha <- x@pars$alpha
+  d <- length(x@pars$S)
+  
+  if(is.matrix(y)){n <- nrow(y)}
+  if(is.vector(y)){n <- 1
+  y <- t(y)}
+  
+  if(length(delta)==0){delta <- matrix(1,nrow=n,ncol=d)}
+  res <- numeric(n)
+  
+
+  for (j in 1:p) {
+    in_vect <- rep(0, p)
+    in_vect[j] <- 1
+    aux <- matrix(NA, n, d)
+    for (i in 1:d) {
+      y_inv <- x@gfun$inverse[[i]](x@gfun$pars[[i]],y[,i])
+      for(m in 1:n){
+        if(delta[m,i]==1){aux[m, i] <- matrixdist:::phdensity(y_inv[m], in_vect, x@pars$S[[i]])
+        }else{aux[m,i]<-1 - matrixdist:::phcdf(y_inv[m], in_vect, x@pars$S[[i]])}
+      }
+    }
+    res <- res + alpha[j] * apply(aux, 1, prod)
+  }
+  return(res)
+})
+
+#' Distribution Method for multivariate inhomogeneous phase-type distributions
+#'
+#' @param x An object of class \linkS4class{miph}.
+#' @param y A matrix of observations.
+#' @param lower.tail Logical parameter specifying whether lower tail (cdf) or upper tail is computed.
+#'
+#' @return A list containing the locations and corresponding CDF evaluations.
+#' @export
+#'
+setMethod("cdf", c(x = "miph"), function(x,
+                                        y,
+                                        lower.tail = TRUE) {
+  p <- length(x@pars$alpha)
+  alpha <- x@pars$alpha
+  d <- length(x@pars$S)
+  if(is.matrix(y)){n <- nrow(y)}
+  if(is.vector(y)){n <- 1
+  y <- t(y)}
+ 
+  res <- numeric(n)
+  for (j in 1:p) {
+    in_vect <- rep(0, p)
+    in_vect[j] <- 1
+    aux <- matrix(NA, n, d)
+    for (i in 1:d) {
+      y_inv <- x@gfun$inverse[[i]](x@gfun$pars[[i]],y[,i])
+      aux[, i] <- matrixdist:::phcdf(y_inv, in_vect, x@pars$S[[i]], lower.tail)
+    }
+    res <- res + alpha[j] * apply(aux, 1, prod)
+  }
+  return(res)
 })

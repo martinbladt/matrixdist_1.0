@@ -11,7 +11,9 @@
   h = 1e-04,
   stepsEM = 1000,
   equal_marginals = FALSE,
-  r = 1
+  r = 1,
+  maxit = 100,
+  reltol = 1e-08
 )
 }
 \arguments{
@@ -28,6 +30,10 @@
 \item{equal_marginals}{Logical. If TRUE, all marginals are fitted to be equal.}
 
 \item{r}{Sub-sampling parameter, defaults to 1.}
+
+\item{maxit}{Maximum number of iterations when optimizing g function.}
+
+\item{reltol}{Relative tolerance when optimizing g function.}
 }
 \description{
 Fit Method for mph Class
