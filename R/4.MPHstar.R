@@ -38,7 +38,7 @@ MPHstar <- function(alpha = NULL,
   }
 
   if (!all(is.null(R))) {
-    if (R %*% rep(1, ncol(R)) != rep(1, ncol(R))) stop("Rows of the reward matrix must sum to 1")
+    if (!all(R %*% rep(1, ncol(R)) ==1)) stop("Rows of the reward matrix must sum to 1")
     Rname <- "custom"
   }
 
@@ -141,63 +141,40 @@ find_weight <- function(x) {
 #'
 #' @param y A matrix with marginal observations, each column corresponds to a marginal.
 #' @param w A matrix of weights, each column corresponds to a marginal.
-#' @param rc A matrix with indication if an observation is right-censored (0 if right-censored ).
 #'
 #' @return For summed and marginal observations we have a list with matrices of unique observations and their associated weights, separated by uncensored and right-censored data.
 #' @export
 #'
-MPHstar_data_aggregation <- function(y, w = numeric(0), rc = numeric(0)) {
+MPHstar_data_aggregation <- function(y, w = numeric(0)) {
   mat <- list()
 
   if (is.matrix(y) & length(y) > 1) {
-    if (length(rc) == 0) {
-      rc <- matrix(rep(1, nrow(y) * ncol(y)), nrow(y), ncol(y))
-    } # no right censoring
 
     sumData <- rowSums(y)
     un_obs <- which(rowSums(rc) == ncol(y)) # all summed observations that are uncensored
-    rc_obs <- which(rowSums(rc) < ncol(y)) # all summed observations that right-censored
 
     n1 <- length(un_obs)
-    n2 <- length(rc_obs)
 
     if (n1 > 1 & n2 > 1) {
-      mat[[1]] <- list(un = find_weight(sumData[un_obs]), rc = find_weight(sumData[rc_obs]))
-    } else if (n1 == 1 & n2 > 1) {
-      mat[[1]] <- list(un = find_weight(sum(y[un_obs,])), rc = find_weight(sumData[rc_obs]))
-    } else if (n1 == 0 & n2 > 1) {
-      mat[[1]] <- list(un = find_weight(NULL), rc = find_weight(sumData[rc_obs]))
-    } else if (n1 > 1 & n2 == 1) {
-      mat[[1]] <- list(un = find_weight(sumData[un_obs]), rc = find_weight(sum(y[ rc_obs,])))
-    } else if (n1 > 1 & n2 == 0) {
-      mat[[1]] <- list(un = find_weight(sumData[un_obs]), rc = find_weight(NULL))
-    } else if (n1 == 1 & n2 == 1) {
-      mat[[1]] <- list(un = find_weight(sum(y[ un_obs,])), rc = find_weight(sum(y[ rc_obs,])))
-    }
-  } else if (is.matrix(y) & length(y) == 1) {
+      mat[[1]] <- list(un = find_weight(sumData[un_obs]))
+    } else if (is.matrix(y) & length(y) == 1) {
     stop("Please input a matrix of observations")
   }
 
   for (i in 1:ncol(y)) {
     m <- 1 + i
     m_y <- y[, i]
-    m_rc <- rc[, i]
 
     if (length(w) == 0) {
-      mat[[m]] <- list(
-        un = find_weight(m_y[which(m_rc == 1)]),
-        rc = find_weight(m_y[which(m_rc == 0)])
-      )
+      mat[[m]] <- list( un = find_weight(m_y))     
     }
     if (length(w) > 0) {
       m_w <- w[, i]
 
       mat[[m]] <- list(
-        un = cbind(m_y[which(m_rc == 1)], m_w[which(m_rc == 1)]),
-        rc = cbind(m_y[which(m_rc == 0)], m_w[which(m_rc == 0)])
-      )
+        un = cbind(m_y, m_w))
     }
-  }
+  
 
   return(mat)
 }
@@ -206,7 +183,6 @@ MPHstar_data_aggregation <- function(y, w = numeric(0), rc = numeric(0)) {
 #'
 #' @param x An object of class \linkS4class{MPHstar}.
 #' @param y A matrix of marginal data.
-#' @param rc A matrix with indication about right-censoring of an observation. 0 for uncensored and 1 for right-censored.
 #' @param weight A matrix of marginal weights.
 #' @param stepsEM The number of EM steps to be performed, defaults to 1000.
 #' @param uni_epsilon The epsilon parameter for the uniformization method, defaults to 1e-4.
@@ -228,7 +204,6 @@ setMethod(
   "fit", c(x = "MPHstar", y = "ANY"),
   function(x,
            y,
-           rc = numeric(0),
            weight = numeric(0),
            stepsEM = 1000,
            uni_epsilon = 1e-4,
@@ -258,7 +233,7 @@ setMethod(
 
     is_mph <- methods::is(x, "MPHstar")
 
-    A <- MPHstar_data_aggregation(y, weight, rc)
+    A <- MPHstar_data_aggregation(y, weight)
     B <- A
     C <- A
 
@@ -276,20 +251,16 @@ setMethod(
 
       for (k in 1:stepsEM) {
         if (r < 1) {
-          r_rc <- numeric(0)
           r_weight <- numeric(0)
 
           indices <- sample(1:nrow(y), size = floor(r * nrow(y)), replace = replace)
           r_y <- y[indices, ]
 
-          if (length(rc) > 0) {
-            r_rc <- rc[indices, ]
-          }
           if (length(weight) > 0) {
             r_weight <- weight[indices, ]
           }
 
-          B <- MPHstar_data_aggregation(r_y, r_weight, r_rc)
+          B <- MPHstar_data_aggregation(r_y, r_weight)
         }
 
         epsilon <- if (!is.na(uni_epsilon)) {
@@ -300,26 +271,19 @@ setMethod(
 
         MPHstar_EMstep_UNI(epsilon, zero_tol, alpha_fit, S_fit, R_fit, B) # performs a EM step, changes alpha, S and R
 
-        if (length(B[[1]]$rc) > 0) {
-          log_lik <- matrixdist:::logLikelihoodPH_UNI(epsilon, alpha_fit, S_fit, C[[1]]$un[,1 ], C[[1]]$un[, 2], C[[1]]$rc[, 1], C[[1]]$rc[,2 ])
-        } else {
-          log_lik <- matrixdist:::logLikelihoodPH_UNI(epsilon, alpha_fit, S_fit, C[[1]]$un[,1 ], C[[1]]$un[, 2], numeric(0), numeric(0))
-        }
+        
+        log_lik <- matrixdist:::logLikelihoodPH_UNI(epsilon, alpha_fit, S_fit, C[[1]]$un[,1 ], C[[1]]$un[, 2], numeric(0), numeric(0))
+        
 
         log_check[k] <- log_lik
 
         if (k %% every == 0) {
-          if (length(B[[1]]$rc) > 0) {
+         
             cat("\r", "iteration:", k,
               ", logLik:", log_lik,
               sep = " "
             )
-          } else {
-            cat("\r", "iteration:", k,
-              ", logLik:", log_lik,
-              sep = " "
-            )
-          }
+          
         }
       }
     }
