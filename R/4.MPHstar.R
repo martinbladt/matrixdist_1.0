@@ -148,34 +148,24 @@ find_weight <- function(x) {
 MPHstar_data_aggregation <- function(y, w = numeric(0)) {
   mat <- list()
 
-  if (is.matrix(y) & length(y) > 1) {
-
     sumData <- rowSums(y)
-    un_obs <- which(rowSums(rc) == ncol(y)) # all summed observations that are uncensored
 
-    n1 <- length(un_obs)
-
-    if (n1 > 1 & n2 > 1) {
-      mat[[1]] <- list(un = find_weight(sumData[un_obs]))
-    } else if (is.matrix(y) & length(y) == 1) {
-    stop("Please input a matrix of observations")
-  }
+    mat[[1]] <- find_weight(sumData)
 
   for (i in 1:ncol(y)) {
     m <- 1 + i
     m_y <- y[, i]
 
     if (length(w) == 0) {
-      mat[[m]] <- list( un = find_weight(m_y))     
+      mat[[m]] <- find_weight(m_y)     
     }
     if (length(w) > 0) {
       m_w <- w[, i]
 
-      mat[[m]] <- list(
-        un = cbind(m_y, m_w))
+      mat[[m]] <-  cbind(m_y, m_w)
     }
-  
-
+  }
+    
   return(mat)
 }
 
@@ -272,7 +262,7 @@ setMethod(
         MPHstar_EMstep_UNI(epsilon, zero_tol, alpha_fit, S_fit, R_fit, B) # performs a EM step, changes alpha, S and R
 
         
-        log_lik <- matrixdist:::logLikelihoodPH_UNI(epsilon, alpha_fit, S_fit, C[[1]]$un[,1 ], C[[1]]$un[, 2], numeric(0), numeric(0))
+        log_lik <- matrixdist:::logLikelihoodPH_UNI(epsilon, alpha_fit, S_fit, C[[1]][,1 ], C[[1]][, 2], numeric(0), numeric(0))
         
 
         log_check[k] <- log_lik

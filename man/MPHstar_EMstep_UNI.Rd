@@ -17,7 +17,7 @@ MPHstar_EMstep_UNI(h, Rtol, alpha, S, R, mph_obs)
 
 \item{R}{The reward matrix.}
 
-\item{mph_obs}{The list of summed, marginal observations (uncensored and right censored) with associated weights.}
+\item{mph_obs}{The list of summed, marginal observations  with associated weights.}
 }
 \description{
 EM step using Uniformization for MPHstar class

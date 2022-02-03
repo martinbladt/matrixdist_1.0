@@ -4,14 +4,12 @@
 \alias{MPHstar_data_aggregation}
 \title{Prepare data for the MPHstar_EMstep_UNI}
 \usage{
-MPHstar_data_aggregation(y, w = numeric(0), rc = numeric(0))
+MPHstar_data_aggregation(y, w = numeric(0))
 }
 \arguments{
 \item{y}{A matrix with marginal observations, each column corresponds to a marginal.}
 
 \item{w}{A matrix of weights, each column corresponds to a marginal.}
-
-\item{rc}{A matrix with indication if an observation is right-censored (0 if right-censored ).}
 }
 \value{
 For summed and marginal observations we have a list with matrices of unique observations and their associated weights, separated by uncensored and right-censored data.

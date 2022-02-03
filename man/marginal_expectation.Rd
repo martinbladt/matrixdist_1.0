@@ -4,7 +4,7 @@
 \alias{marginal_expectation}
 \title{Marginal conditional expectations}
 \usage{
-marginal_expectation(rew, pos, N, alpha, S, obs, weight, rcens, rcweight)
+marginal_expectation(rew, pos, N, alpha, S, obs, weight)
 }
 \arguments{
 \item{rew}{Column of the reward matrix corresponding to its marginal.}
@@ -20,10 +20,6 @@ marginal_expectation(rew, pos, N, alpha, S, obs, weight, rcens, rcweight)
 \item{obs}{Marginal observations.}
 
 \item{weight}{Marginal weights.}
-
-\item{rcens}{Marginal right-censored values.}
-
-\item{rcweight}{Marginal weights for rc values.}
 }
 \value{
 A vector with the expected time spent in each state by the marginal, conditional on the observations.

@@ -7,7 +7,6 @@
 \S4method{fit}{MPHstar}(
   x,
   y,
-  rc = numeric(0),
   weight = numeric(0),
   stepsEM = 1000,
   uni_epsilon = 1e-04,
@@ -22,8 +21,6 @@
 \item{x}{An object of class \linkS4class{MPHstar}.}
 
 \item{y}{A matrix of marginal data.}
-
-\item{rc}{A matrix with indication about right-censoring of an observation. 0 for uncensored and 1 for right-censored.}
 
 \item{weight}{A matrix of marginal weights.}
 

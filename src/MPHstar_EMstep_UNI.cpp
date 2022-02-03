@@ -114,8 +114,6 @@ void rew_sanity_check (arma::mat & R,double tol) {
 //' @param N Uniformization parameter.
 //' @param obs Marginal observations.
 //' @param weight Marginal weights.
-//' @param rcens Marginal right-censored values.
-//' @param rcweight Marginal weights for rc values.
 //' @param alpha Marginal initial distribution vector.
 //' @param S Marginal sub-intensity matrix.
 //' 
@@ -123,7 +121,7 @@ void rew_sanity_check (arma::mat & R,double tol) {
 //'
 //' @export
 // [[Rcpp::export]]
-arma::vec marginal_expectation (arma::vec & rew, arma::vec & pos,int N, arma::vec & alpha, arma::mat & S,arma::vec & obs, arma::vec & weight, arma::vec & rcens, arma::vec & rcweight ) {
+arma::vec marginal_expectation (arma::vec & rew, arma::vec & pos,int N, arma::vec & alpha, arma::mat & S,arma::vec & obs, arma::vec & weight ) {
   arma::vec Zmeanj(rew.size()); 
   Zmeanj.zeros();
   
@@ -207,65 +205,7 @@ arma::vec marginal_expectation (arma::vec & rew, arma::vec & pos,int N, arma::ve
     }
   }
   
-  //  Right-Censored Data for jth marginal
-  if (rcens.size() > 0) {
-    tProductPi = e * alpha.t();
-    J = matrix_vanloan(S, S, tProductPi);
-    aux_vect.clear();
-    vector_of_matrices(aux_vect, J, a, N);
-    
-    for (int k{0}; k < rcens.size(); ++k) {
-      
-      double x{rcens[k]};
-      
-      if (x * a <= 1.0) {
-        J = m_exp_sum(x, N, aux_vect, a);
-      }
-      else {
-        int n{};
-        n = std::log(a * x) / std::log(2.0);
-        ++n;
-        
-        J = m_exp_sum(x / pow(2.0, n), N, aux_vect, a);
-        
-        pow2_matrix(n, J);
-      }
-      
-      for (int i{0}; i < p; ++i) {
-        for (int j{0}; j < p; ++j) {
-          aux_exp(i,j) = J(i,j);
-          cmatrix(i,j) = J(i,j + p);
-        }
-      }
-      if (aux_exp.is_zero() == TRUE) {
-        aux_exp.print("exp(Sx):"); 
-        Rcpp::Rcout<< "exp(Sx):"<< std::endl; 
-        Rcpp::stop("Issue with uniformization for marg rc data-> exp(Sx) is a matrix of zeros");
-      }
-      if (aux_exp.has_nan() == TRUE) {
-        aux_exp.print("exp(Sx):"); 
-        Rcpp::Rcout<< "exp(Sx):"<< std::endl; 
-        Rcpp::stop("At least one NaN element in exp(Sx) for marg rc data");
-      }
-      if (cmatrix.has_nan() == TRUE) {
-        cmatrix.print("G(x;alpha,S):"); 
-        Rcpp::Rcout<< "G(x;alpha,S):" << std::endl; 
-        Rcpp::stop("At least one NaN element in G(x;alpha,S) for marg rc");
-      }
-      
-      bvector = aux_exp * e;
-      aux_mat = alpha.t() * bvector;
-      density = aux_mat(0,0);
-      
-      //E-step
-      int j{0};
-      for (int i{0}; i < p; ++i) {
-        j = pos(i) - 1;
-        Zmeanj(j) += cmatrix(i,i) * rcweight[k] / density;
-      }
-    }
-  }
-  
+
   return(Zmeanj);
 }
 
@@ -276,7 +216,7 @@ arma::vec marginal_expectation (arma::vec & rew, arma::vec & pos,int N, arma::ve
 //' @param alpha Vector of initial probabilities of the originating distribution.
 //' @param S The sub-intensity matrix of the originating distribution.
 //' @param R The reward matrix.
-//' @param mph_obs The list of summed, marginal observations (uncensored and right censored) with associated weights.
+//' @param mph_obs The list of summed, marginal observations  with associated weights.
 //'
 //' @export
 // [[Rcpp::export]]
@@ -286,15 +226,10 @@ void MPHstar_EMstep_UNI(double h, double Rtol, arma::vec & alpha, arma::mat & S,
   unsigned p{S.n_cols}; //dimension of original PH distribution
   unsigned d{R.n_cols}; //number of marginal distributions
   
-  Rcpp::List preobs = mph_obs[0]; //List of observations and weights for summed data
-  arma::mat un_sum = preobs["un"];
-  arma::mat rc_sum = preobs["rc"];
-  
+  arma::mat un_sum = mph_obs[0];
+
   arma::vec un_obsSum = un_sum.col(0); // vector of unique sum of observations (uncensored)
   arma::vec unWeightSum = un_sum.col(1); // vector of weights for unique observations (uncensored)
-  
-  arma::vec rcensSum = rc_sum.col(0); // vector of unique right censoring values
-  arma::vec rcweightSum = rc_sum.col(1); // vector of weights for censoring values
   
   arma::mat Qtilda = embedded_mc(S); // probability matrix of the embedded MC
   
@@ -382,59 +317,6 @@ void MPHstar_EMstep_UNI(double h, double Rtol, arma::vec & alpha, arma::mat & S,
     }
   }
   
-  //  Right-Censored Data
-  double SumOfCensored{0.0};
-  
-  if (rcensSum.size() > 0) {
-    tProductPi = e * alpha.t(); // for rc data we have e%*%pi instead of t%*%pi
-    J = matrix_vanloan(S, S, tProductPi);
-    aux_vect.clear();
-    vector_of_matrices(aux_vect, J, a, N);
-  }
-  for (int k{0}; k < rcensSum.size(); ++k) {
-    SumOfCensored += rcweightSum(k);
-    
-    double x{rcensSum(k)}; //observation is now the right censoring value
-    
-    //Uniformization same as for Uncensored observations
-    if (x * a <= 1.0) {
-      J = m_exp_sum(x, N, aux_vect, a);
-    }
-    else {
-      int n{};
-      n = std::log(a * x) / std::log(2.0);
-      ++n;
-      
-      J = m_exp_sum(x / pow(2.0, n), N, aux_vect, a);
-      
-      pow2_matrix(n, J);
-    }
-    
-    for (int i{0}; i < p; ++i) {
-      for (int j{0}; j < p; ++j) {
-        aux_exp(i,j) = J(i,j);
-        cmatrix(i,j) = J(i,j + p);
-      }
-    }
-    if (aux_exp.is_zero() == TRUE) {
-      Rcpp::stop("Issue with uniformization of rc summed data-> exp(Sx) is a matrix of zeros");
-    }
-    
-    bvector = aux_exp * e; //bvector=exp(Sx)%*%e
-    aux_mat = alpha.t() * bvector; // aux_mat=pi%*%exp(Sx)%*%e -> P(tau>x)
-    density = aux_mat(0,0); //
-    
-    //E-step
-    //No expectation for N_k since we consider that absorption did not occur yet
-    for (int i{0}; i < p; ++i) {
-      Bmean(i,0) += alpha(i) * bvector(i,0) * rcweightSum(k) / density;
-      Zmean(i,0) += cmatrix(i,i) * rcweightSum(k) / density;
-      for (int j{0}; j < p; ++j) {
-        Nmean(i,j) += S(i,j) * cmatrix(j,i) * rcweightSum(k) / density;
-      }
-    }
-  }
-  
   // E-step for marginals
   for (int m{0}; m < d; ++m) {
     arma::vec rew = R.col(m);
@@ -457,17 +339,12 @@ void MPHstar_EMstep_UNI(double h, double Rtol, arma::vec & alpha, arma::mat & S,
       arma::vec alphaj = new_pi(rew, Qtilda, alpha); // initial distribution vector of mth marginal
       arma::mat Sj = new_subint_mat(rew, Qtilda, S); // sub-intensity matrix of mth marginal
       
-      preobs = mph_obs[m + 1];
-      arma::mat un_marg = preobs["un"];
-      arma::mat rc_marg = preobs["rc"];
-      
+      arma::mat un_marg = mph_obs[m + 1];
+
       arma::vec obs = un_marg.col(0); // uncensored obs
       arma::vec weight = un_marg.col(1); // uncensored weights
       
-      arma::vec rcens = rc_marg.col(0); // right censored obs
-      arma::vec rcweight = rc_marg.col(1); // right-censored weights
-      
-      Zmeanj.col(m) = marginal_expectation(rew, pos, N, alphaj, Sj, obs, weight, rcens, rcweight);
+      Zmeanj.col(m) = marginal_expectation(rew, pos, N, alphaj, Sj, obs, weight);
     }
   }
   
@@ -476,7 +353,7 @@ void MPHstar_EMstep_UNI(double h, double Rtol, arma::vec & alpha, arma::mat & S,
   
   // // M step
   for (int i{0}; i < p; ++i) {
-    alpha(i) = Bmean(i,0) / (SumOfWeights + SumOfCensored);
+    alpha(i) = Bmean(i,0) / SumOfWeights ;
     if (alpha(i) < 0) {
       alpha(i) = 0;
     }

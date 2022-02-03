@@ -864,16 +864,14 @@ rew_sanity_check <- function(R, tol) {
 #' @param N Uniformization parameter.
 #' @param obs Marginal observations.
 #' @param weight Marginal weights.
-#' @param rcens Marginal right-censored values.
-#' @param rcweight Marginal weights for rc values.
 #' @param alpha Marginal initial distribution vector.
 #' @param S Marginal sub-intensity matrix.
 #' 
 #' @return A vector with the expected time spent in each state by the marginal, conditional on the observations.
 #'
 #' @export
-marginal_expectation <- function(rew, pos, N, alpha, S, obs, weight, rcens, rcweight) {
-    .Call(`_matrixdist_marginal_expectation`, rew, pos, N, alpha, S, obs, weight, rcens, rcweight)
+marginal_expectation <- function(rew, pos, N, alpha, S, obs, weight) {
+    .Call(`_matrixdist_marginal_expectation`, rew, pos, N, alpha, S, obs, weight)
 }
 
 #' EM step using Uniformization for MPHstar class
@@ -883,7 +881,7 @@ marginal_expectation <- function(rew, pos, N, alpha, S, obs, weight, rcens, rcwe
 #' @param alpha Vector of initial probabilities of the originating distribution.
 #' @param S The sub-intensity matrix of the originating distribution.
 #' @param R The reward matrix.
-#' @param mph_obs The list of summed, marginal observations (uncensored and right censored) with associated weights.
+#' @param mph_obs The list of summed, marginal observations  with associated weights.
 #'
 #' @export
 MPHstar_EMstep_UNI <- function(h, Rtol, alpha, S, R, mph_obs) {

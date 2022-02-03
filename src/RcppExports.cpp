@@ -920,8 +920,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // marginal_expectation
-arma::vec marginal_expectation(arma::vec& rew, arma::vec& pos, int N, arma::vec& alpha, arma::mat& S, arma::vec& obs, arma::vec& weight, arma::vec& rcens, arma::vec& rcweight);
-RcppExport SEXP _matrixdist_marginal_expectation(SEXP rewSEXP, SEXP posSEXP, SEXP NSEXP, SEXP alphaSEXP, SEXP SSEXP, SEXP obsSEXP, SEXP weightSEXP, SEXP rcensSEXP, SEXP rcweightSEXP) {
+arma::vec marginal_expectation(arma::vec& rew, arma::vec& pos, int N, arma::vec& alpha, arma::mat& S, arma::vec& obs, arma::vec& weight);
+RcppExport SEXP _matrixdist_marginal_expectation(SEXP rewSEXP, SEXP posSEXP, SEXP NSEXP, SEXP alphaSEXP, SEXP SSEXP, SEXP obsSEXP, SEXP weightSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -932,9 +932,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< arma::mat& >::type S(SSEXP);
     Rcpp::traits::input_parameter< arma::vec& >::type obs(obsSEXP);
     Rcpp::traits::input_parameter< arma::vec& >::type weight(weightSEXP);
-    Rcpp::traits::input_parameter< arma::vec& >::type rcens(rcensSEXP);
-    Rcpp::traits::input_parameter< arma::vec& >::type rcweight(rcweightSEXP);
-    rcpp_result_gen = Rcpp::wrap(marginal_expectation(rew, pos, N, alpha, S, obs, weight, rcens, rcweight));
+    rcpp_result_gen = Rcpp::wrap(marginal_expectation(rew, pos, N, alpha, S, obs, weight));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1683,7 +1681,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_rMPHstar", (DL_FUNC) &_matrixdist_rMPHstar, 4},
     {"_matrixdist_random_reward", (DL_FUNC) &_matrixdist_random_reward, 2},
     {"_matrixdist_rew_sanity_check", (DL_FUNC) &_matrixdist_rew_sanity_check, 2},
-    {"_matrixdist_marginal_expectation", (DL_FUNC) &_matrixdist_marginal_expectation, 9},
+    {"_matrixdist_marginal_expectation", (DL_FUNC) &_matrixdist_marginal_expectation, 7},
     {"_matrixdist_MPHstar_EMstep_UNI", (DL_FUNC) &_matrixdist_MPHstar_EMstep_UNI, 6},
     {"_matrixdist_embedded_mc", (DL_FUNC) &_matrixdist_embedded_mc, 1},
     {"_matrixdist_cumulate_matrix", (DL_FUNC) &_matrixdist_cumulate_matrix, 1},
