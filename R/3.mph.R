@@ -271,18 +271,17 @@ setMethod(
       }
       x@pars$alpha <- alpha_fit #C++
       x@pars$S <- S_fit #C++
-      x<- mph(alpha = x@pars$alpha, S=x@pars$S )
       x@fit <- list(
         logLik = sum(log(dens(x, y, delta))),
         nobs = nrow(y)
       )
       
-      x@pars$S <- if (!equal_marginals) {
+      if (equal_marginals) {
         ls <- list()
         for (i in 1:ncol(y)) {
           ls[[i]] <- S_fit
         }
-        ls
+        x@pars$S <- ls
       }
   
     }
