@@ -273,7 +273,7 @@ setMethod(
       x@pars$S <- S_fit #C++
       x@fit <- list(
         logLik = sum(log(dens(x, y, delta))),
-        nobs = nrow(n)
+        nobs = nrow(y)
       )
       
       x@pars$S <- if (equal_marginals) {
