@@ -124,6 +124,7 @@ setMethod("dens", c(x = "mph"), function(x, y, delta=NULL) {
   y <- t(y)}  
   
   if(length(delta)==0){delta=matrix(1,nrow=n,ncol=d)}
+  if(is.vector(delta)){delta <-as.matrix(t(delta))}
   
   res <- numeric(n)
   for (j in 1:p) {
@@ -181,7 +182,6 @@ setMethod("cdf", c(x = "mph"), function(x,
 #' @param x An object of class \linkS4class{mph}.
 #' @param y Matrix of data.
 #' @param delta Matrix with right-censoring indicators. (1 uncensored, 0 right censored)
-#' @param h Uniformization parameter, defaults to 1e-4.
 #' @param stepsEM Number of EM steps to be performed.
 #' @param equal_marginals Logical. If TRUE, all marginals are fitted to be equal.
 #' @param r Sub-sampling parameter, defaults to 1.
@@ -194,7 +194,6 @@ setMethod(
   "fit", c(x = "mph", y = "ANY"),
   function(x, y,
            delta = numeric(0),
-           h = 1e-4,
            stepsEM = 1000,
            equal_marginals = FALSE,
            r = 1,
@@ -202,9 +201,6 @@ setMethod(
            reltol=1e-8) {
     if (any(y < 0)) {
       stop("data should be positive")
-    }
-    if (h <= 0) {
-      stop("uniformization parameter h should be positive")
     }
     if (stepsEM <= 0) {
       stop("the number of steps should be positive")
@@ -216,12 +212,12 @@ setMethod(
 
     is_miph <- methods::is(x,"miph")
     if (is_miph) {
+      par_name <- x@gfun$name
       par_g <- x@gfun$pars
       inv_g <- x@gfun$inverse 
-      LL <- list()
-      for(i in 1:d){
-        LL[[i]] <-eval(parse(text = paste("logLikelihoodM", x@gfun$name[i], "_UNI", sep = "")))
-      } 
+      
+      opt_fun <- miph_LL
+
     }
 
     if (length(delta) == 0) {
@@ -287,13 +283,15 @@ setMethod(
     }
     if(is_miph){
       for(k in 1:stepsEM){
+      #sub-sampling
       if (r < 1) {
         index <- sample(1:nrow(y_full), size = floor(r * nrow(y_full)))
         
         y <- as.matrix(y_full[index, ])
         delta <- as.matrix(delta_full[index, ])
       }
-      
+        
+      #transform to time-homogeneous
       trans <- clone_matrix(y)
       for(i in 1:d){
         if(x@gfun$name[i]!="gev"){
@@ -305,19 +303,17 @@ setMethod(
       }
       
      aux<- fnn( alpha_fit, S_fit, trans, delta) 
-     for(i in 1:d){
+     
        opt <- suppressWarnings(
          stats::optim(
-           par = par_g[[i]],
-           fn = LL[[i]],
-           h = h,
-           alpha = alpha_fit,
-           S = S_fit[[i]],
-           obs = y[which(delta[,i]==1),i],
-           weight = rep(1,nrow(y)),
-           rcens = y[which(delta[,i]==0,i)],
-           rcweight = rep(1,nrow(y)),
-           hessian = FALSE,
+           par=par_g,
+           fn=opt_fun,
+           obs=y,
+           delta=delta,
+           gfun_name=par_name,
+           alpha_fit=aux$alpha,
+           S_fit=aux$S,
+           hessian = F,
            control = list(
              maxit = maxit,
              reltol = reltol,
@@ -326,22 +322,21 @@ setMethod(
          )
        )
        
-       par_g[[i]] <- opt$par
-
-       
-     }
+       par_g <- as.list(opt$par)
+    
     cat("\r",", iteration:", k,
        ", logLik:", opt$value,
          sep = " "
          )
     
     alpha_fit <- aux$alpha
-     S_fit <- aux$S
+    S_fit <- aux$S
 
   }
       x@pars$alpha <- alpha_fit
       x@pars$S <- S_fit
-      x <- miph(mph=x, gfun = x@gfun$name, gfun_pars= par_g)  
+      x@gfun$pars <- par_g
+      #x <- miph(mph=x, gfun = par_name, gfun_pars= par_g)  
       
       x@fit <- list(
         logLik = sum(log(dens(x, y, delta))),
@@ -357,6 +352,51 @@ setMethod(
   }
 )
 
+#multivariate loglikelihood to be optimized
+miph_LL<-function(obs,
+                  delta,
+                  gfun_pars,
+                  gfun_name,
+                  alpha_fit,
+                  S_fit
+){
+  x<-miph(gfun=gfun_name,gfun_pars = gfun_pars, alpha = alpha_fit, S=S_fit)
+  
+  p <- length(alpha_fit)
+  alpha <- alpha_fit
+  d <- length(S_fit)
+  
+  if(is.matrix(obs)){n <- nrow(obs)}
+  if(is.vector(obs)){n <- 1
+  obs <- t(obs)}
+  
+  if(length(delta)==0){delta <- matrix(1,nrow=n,ncol=d)}
+  if(is.vector(delta)){delta <-as.matrix(t(delta))}
+  res <- numeric(n)
+  
+  
+  for (j in 1:p) {
+    in_vect <- rep(0, p)
+    in_vect[j] <- 1
+    aux <- matrix(NA, n, d)
+    for (i in 1:d) {
+      y_inv <- x@gfun$inverse[[i]](x@gfun$pars[[i]],obs[,i])
+      y_int <- x@gfun$intensity[[i]](x@gfun$pars[[i]],obs[,i])
+      for(m in 1:n){
+        if(delta[m,i]==1){aux[m, i] <- matrixdist:::phdensity(y_inv[m], in_vect, x@pars$S[[i]])*y_int[m]
+        }else{aux[m,i]<-1 - matrixdist:::phcdf(y_inv[m], in_vect, x@pars$S[[i]])}
+      }
+    }
+    res <- res + alpha[j] * apply(aux, 1, prod)
+  }
+  
+  
+  ll <- sum(log(res))
+  
+  return(ll)
+}
+
+# EM step for mPH class
 EM_step_mph <- function(alpha, S_list, y, delta) {
   p <- length(alpha)
   n <- nrow(y)

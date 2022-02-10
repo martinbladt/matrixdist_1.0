@@ -210,6 +210,7 @@ setMethod("dens", c(x = "miph"), function(x, y, delta=NULL) {
   y <- t(y)}
   
   if(length(delta)==0){delta <- matrix(1,nrow=n,ncol=d)}
+  if(is.vector(delta)){delta <-as.matrix(t(delta))}
   res <- numeric(n)
   
 
@@ -219,9 +220,10 @@ setMethod("dens", c(x = "miph"), function(x, y, delta=NULL) {
     aux <- matrix(NA, n, d)
     for (i in 1:d) {
       y_inv <- x@gfun$inverse[[i]](x@gfun$pars[[i]],y[,i])
+      y_int <- x@gfun$intensity[[i]](x@gfun$pars[[i]],y[,i])
       for(m in 1:n){
-        if(delta[m,i]==1){aux[m, i] <- matrixdist:::phdensity(y_inv[m], in_vect, x@pars$S[[i]])
-        }else{aux[m,i]<-1 - matrixdist:::phcdf(y_inv[m], in_vect, x@pars$S[[i]])}
+        if(delta[m,i]==1){aux[m, i] <- matrixdist:::phdensity(y_inv[m], in_vect, x@pars$S[[i]])*y_int[m]
+        }else{aux[m,i]<-1 - matrixdist:::phcdf(y_inv[m], in_vect, as.matrix(x@pars$S[[i]]))}
       }
     }
     res <- res + alpha[j] * apply(aux, 1, prod)

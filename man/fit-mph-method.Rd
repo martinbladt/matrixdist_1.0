@@ -8,7 +8,6 @@
   x,
   y,
   delta = numeric(0),
-  h = 1e-04,
   stepsEM = 1000,
   equal_marginals = FALSE,
   r = 1,
@@ -22,8 +21,6 @@
 \item{y}{Matrix of data.}
 
 \item{delta}{Matrix with right-censoring indicators. (1 uncensored, 0 right censored)}
-
-\item{h}{Uniformization parameter, defaults to 1e-4.}
 
 \item{stepsEM}{Number of EM steps to be performed.}
 
