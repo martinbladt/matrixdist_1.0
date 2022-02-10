@@ -162,8 +162,6 @@ setMethod("cdf", c(x = "mph"), function(x,
   if(is.vector(y)){n <- 1
   y <- t(y)}  
   
-  if(length(delta)==0){delta=matrix(1,nrow=n,ncol=d)}
-  
   res <- numeric(n)
   for (j in 1:p) {
     in_vect <- rep(0, p)
