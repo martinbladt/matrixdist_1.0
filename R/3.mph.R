@@ -302,15 +302,16 @@ setMethod(
       
      aux<- fnn( alpha_fit, S_fit, trans, delta) 
      
+     x@pars$alpha <- alpha_fit
+     x@pars$S <- S_fit
+
        opt <- suppressWarnings(
          stats::optim(
            par=par_g,
            fn=opt_fun,
+           x=x,
            obs=y,
            delta=delta,
-           gfun_name=par_name,
-           alpha_fit=aux$alpha,
-           S_fit=aux$S,
            hessian = F,
            control = list(
              maxit = maxit,
@@ -351,18 +352,17 @@ setMethod(
 )
 
 #multivariate loglikelihood to be optimized
-miph_LL<-function(obs,
+miph_LL<-function(x,
+                  obs,
                   delta,
-                  gfun_pars,
-                  gfun_name,
-                  alpha_fit,
-                  S_fit
-){
-  x<-miph(gfun=gfun_name,gfun_pars = gfun_pars, alpha = alpha_fit, S=S_fit)
+                  gfun_pars
+                  ){
+  x@gfun$pars<-gfun_pars
   
-  p <- length(alpha_fit)
-  alpha <- alpha_fit
-  d <- length(S_fit)
+  alpha<- x@pars$alpha
+  S<-x@pars$S
+  p <- length(alpha)
+  d <- length(S)
   
   if(is.matrix(obs)){n <- nrow(obs)}
   if(is.vector(obs)){n <- 1
@@ -381,8 +381,11 @@ miph_LL<-function(obs,
       y_inv <- x@gfun$inverse[[i]](x@gfun$pars[[i]],obs[,i])
       y_int <- x@gfun$intensity[[i]](x@gfun$pars[[i]],obs[,i])
       for(m in 1:n){
-        if(delta[m,i]==1){aux[m, i] <- matrixdist:::phdensity(y_inv[m], in_vect, x@pars$S[[i]])*y_int[m]
-        }else{aux[m,i]<-1 - matrixdist:::phcdf(y_inv[m], in_vect, x@pars$S[[i]])}
+        if(delta[m,i]==1){
+          aux[m, i] <- matrixdist:::phdensity(y_inv[m], in_vect, S[[i]])*y_int[m]
+        }else{
+          aux[m,i]<- matrixdist:::phcdf(y_inv[m], in_vect, S[[i]],lower_tail = F)
+        }
       }
     }
     res <- res + alpha[j] * apply(aux, 1, prod)
