@@ -439,7 +439,7 @@ nnet_EM_step_mph <- function(alpha_mat, S_list, y, delta ) {
   EB_k <- matrix(NA,n,p)
   for(m in 1:n){
     for (k in 1:p) {
-      EB_k[m,k] <- alpha_mat[m,k] * a_k[m, k] / a[m]
+      EB_k[m,k] <- d*alpha_mat[m,k] * a_k[m, k] / a[m]
     }
   }
   
