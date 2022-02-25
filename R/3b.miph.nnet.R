@@ -167,6 +167,8 @@ setMethod(
         x@pars$alpha <- alpha_mat
         x@pars$S <- S_fit
         
+
+        
         opt <- suppressWarnings(
           stats::optim(
             par=par_g,
@@ -261,6 +263,7 @@ nnet_miph_LL<-function(x,
                        delta,
                        gfun_pars
 ){
+  
   x@gfun$pars<-gfun_pars
   
   alpha_mat<- x@pars$alpha
@@ -274,22 +277,24 @@ nnet_miph_LL<-function(x,
   
   if(length(delta)==0){delta <- matrix(1,nrow=n,ncol=d)}
   if(is.vector(delta)){delta <-as.matrix(t(delta))}
-  inter_res <- matrix(NA, n, p)
+  
+  inter_res <- matrix(0, n, p)
   res <- numeric(n)
   
-  
+   
+  aux <- array(NA, c(n,d,p)) 
   for (j in 1:p) {
     in_vect <- rep(0, p)
     in_vect[j] <- 1
-    aux <- matrix(NA, n, d)
+    
     for (i in 1:d) {
       y_inv <- x@gfun$inverse[[i]](x@gfun$pars[[i]],obs[,i])
-      y_int <- x@gfun$intensity[[i]](x@gfun$pars[[i]],obs[,i])
+      y_int <- x@gfun$intensity[[i]](x@gfun$pars[[i]],obs[,i])  
       for(m in 1:n){
         if(delta[m,i]==1){
-          aux[m, i] <- matrixdist:::phdensity(y_inv[m], in_vect, S[[i]])*y_int[m]
+          aux[m, i, j] <- matrixdist:::phdensity(y_inv[m], in_vect, S[[i]])*y_int[m]
         }else{
-          aux[m,i]<- matrixdist:::phcdf(y_inv[m], in_vect, S[[i]],lower_tail = F)
+          aux[m, i, j]<- matrixdist:::phcdf(y_inv[m], in_vect, S[[i]],lower_tail = F)
         }
       }
     }
@@ -297,10 +302,14 @@ nnet_miph_LL<-function(x,
   
   for(m in 1:n){
     for(j in 1:p){
-      inter_res[m,j]<-alpha_mat[m,j]*prod(aux[m,])
+      inter_res[m,j]<-alpha_mat[m,j]*prod(aux[m,,j])
     }
-    res[m] <- sum(inter_res[m,])
+    
   }
+  
+  for(m in 1:n){
+    res[m] <- sum(inter_res[m,])
+    }
   
   ll <- sum(log(res))
   
@@ -366,7 +375,7 @@ nnet_EM_step_mph <- function(alpha_mat, S_list, y, delta ) {
       ti <- -rowSums(S_list[[i]])
       for (m in 1:n) {
         if (delta[m, i] == 1) {
-          a_ki[m, k, i] <- sum(ti * a_kij[m, k, i, ])
+          a_ki[m, k, i] <- sum(ti * a_kij[m, k, i, ]) 
         } else {
           a_ki[m, k, i] <- sum(a_kij[m, k, i, ])
         }
@@ -449,6 +458,7 @@ nnet_EM_step_mph <- function(alpha_mat, S_list, y, delta ) {
       EZ_ki[k, i] <- sum(b_ski[, k, k, i] / a)
     }
   }
+  
   EN_ksi <- array(NA, c(p, p, d))
   for (i in 1:d) {
     for (s in 1:p) {
@@ -458,6 +468,7 @@ nnet_EM_step_mph <- function(alpha_mat, S_list, y, delta ) {
       }
     }
   }
+  
   EN_ki <- array(NA, c(p, d))
   for (i in 1:d) {
     for (k in 1:p) {
