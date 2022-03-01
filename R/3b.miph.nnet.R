@@ -66,7 +66,7 @@ setMethod(
     if(is.null(alpha_mat)) alpha_mat <- matrix(alpha_fit,ncol = p, nrow = n, byrow = TRUE) #repeats alpha n times
     c <- c(); for(i in 1:p) c <- c(c,rep(i,n))
     
-    extended_x <- matrix(t(as.matrix(frame[,-1])),nrow = n*p,ncol = d,byrow = TRUE) # extended form of covariates
+    extended_x <- matrix(t(as.matrix(frame[,-1])),nrow = n*p,ncol = d2,byrow = TRUE) # extended form of covariates
     dm <- data.frame(Class = c, extended_x) #data frame with all classes and covariates
     names(dm)[-1] <- names(frame)[-1]
     ndm <- data.frame(dm[dm$Class==1,-1]); 
@@ -120,9 +120,11 @@ setMethod(
       }
       x@pars$alpha <- alpha_mat #C++
       x@pars$S <- S_fit #C++
+
       x@fit <- list(
         logLik = nnet_mph_LL(x,y,delta),
-        nobs = nrow(y)
+        nobs = nrow(y),
+        nnet <- multinom_model
       )
       
     }
@@ -199,7 +201,9 @@ setMethod(
 
       x@fit <- list(
         logLik = nnet_miph_LL(x,y,delta,x@gfun$pars),
-        nobs = nrow(y)
+        nobs = nrow(y),
+        nnet <- multinom_model
+        
       )
     }
     cat("\n", sep = "")
