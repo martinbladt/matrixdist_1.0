@@ -124,7 +124,7 @@ setMethod(
       x@fit <- list(
         logLik = nnet_mph_LL(x,y,delta),
         nobs = nrow(y),
-        nnet <- multinom_model
+        nnet = multinom_model
       )
       
     }
@@ -202,7 +202,7 @@ setMethod(
       x@fit <- list(
         logLik = nnet_miph_LL(x,y,delta,x@gfun$pars),
         nobs = nrow(y),
-        nnet <- multinom_model
+        nnet = multinom_model
         
       )
     }
