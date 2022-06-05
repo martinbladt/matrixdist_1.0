@@ -882,6 +882,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// expm_terms
+Rcpp::List expm_terms(double h, arma::mat& S, const Rcpp::NumericVector& obs);
+RcppExport SEXP _matrixdist_expm_terms(SEXP hSEXP, SEXP SSEXP, SEXP obsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type h(hSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type S(SSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type obs(obsSEXP);
+    rcpp_result_gen = Rcpp::wrap(expm_terms(h, S, obs));
+    return rcpp_result_gen;
+END_RCPP
+}
 // rMPHstar
 arma::mat rMPHstar(int n, arma::vec alpha, arma::mat S, arma::mat R);
 RcppExport SEXP _matrixdist_rMPHstar(SEXP nSEXP, SEXP alphaSEXP, SEXP SSEXP, SEXP RSEXP) {
@@ -1678,6 +1691,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_logLikelihoodMlognormal_UNIs", (DL_FUNC) &_matrixdist_logLikelihoodMlognormal_UNIs, 10},
     {"_matrixdist_logLikelihoodMloglogistic_UNIs", (DL_FUNC) &_matrixdist_logLikelihoodMloglogistic_UNIs, 10},
     {"_matrixdist_logLikelihoodMgompertz_UNIs", (DL_FUNC) &_matrixdist_logLikelihoodMgompertz_UNIs, 10},
+    {"_matrixdist_expm_terms", (DL_FUNC) &_matrixdist_expm_terms, 3},
     {"_matrixdist_rMPHstar", (DL_FUNC) &_matrixdist_rMPHstar, 4},
     {"_matrixdist_random_reward", (DL_FUNC) &_matrixdist_random_reward, 2},
     {"_matrixdist_rew_sanity_check", (DL_FUNC) &_matrixdist_rew_sanity_check, 2},

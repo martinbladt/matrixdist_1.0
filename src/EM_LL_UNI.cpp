@@ -1365,3 +1365,39 @@ double logLikelihoodMgompertz_UNIs(double h, arma::vec & alpha, arma::mat & S, d
   
   return logLh;
 }
+
+////////////////// Additional function for speed:
+
+//' expm terms of phase-type likelihood using uniformization
+//' 
+//' Loglikelihood for a sample.
+//' 
+//' @param h Positive parameter.
+//' @param S Sub-intensity.
+//' @param obs The observations.
+//' 
+// [[Rcpp::export]]
+Rcpp::List expm_terms(double h, arma::mat & S, const Rcpp::NumericVector & obs) {
+  Rcpp::List out(obs.size());
+  arma::mat expm(size(S));
+  double a = max_diagonal(S * (-1));
+  int m{find_n(h, 1)};
+  std::vector<arma::mat> aux_vect;
+  vector_of_matrices(aux_vect, S, a, m);
+  // Loop begins
+  for (int k{0}; k < obs.size(); ++k) {
+    double x{obs[k]};
+    if (x * a <= 1.0) {
+      expm = m_exp_sum(x, m, aux_vect, a);
+    }
+    else {
+      int n{};
+      n = std::log(a * x) / std::log(2.0);
+      ++n;
+      expm = m_exp_sum(x / pow(2.0, n), m, aux_vect, a);
+      pow2_matrix(n, expm);
+    }
+    out[k] = expm;
+  }
+  return out;
+}

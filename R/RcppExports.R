@@ -817,6 +817,18 @@ logLikelihoodMgompertz_UNIs <- function(h, alpha, S, beta, obs, weight, rcens, r
     .Call(`_matrixdist_logLikelihoodMgompertz_UNIs`, h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2)
 }
 
+#' expm terms of phase-type likelihood using uniformization
+#' 
+#' Loglikelihood for a sample.
+#' 
+#' @param h Positive parameter.
+#' @param S Sub-intensity.
+#' @param obs The observations.
+#' 
+expm_terms <- function(h, S, obs) {
+    .Call(`_matrixdist_expm_terms`, h, S, obs)
+}
+
 #' Random multivariate phase-type via rewards
 #'
 #' Generates samples of size \code{n} from a multivariate phase-type distribution
