@@ -1567,6 +1567,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// expmat
+arma::mat expmat(arma::mat A);
+RcppExport SEXP _matrixdist_expmat(SEXP ASEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type A(ASEXP);
+    rcpp_result_gen = Rcpp::wrap(expmat(A));
+    return rcpp_result_gen;
+END_RCPP
+}
 // default_step_length
 double default_step_length(const NumericMatrix& S);
 RcppExport SEXP _matrixdist_default_step_length(SEXP SSEXP) {
@@ -1744,6 +1755,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_matrix_vanloan", (DL_FUNC) &_matrixdist_matrix_vanloan, 3},
     {"_matrixdist_max_diagonal", (DL_FUNC) &_matrixdist_max_diagonal, 1},
     {"_matrixdist_matrix_exponential", (DL_FUNC) &_matrixdist_matrix_exponential, 1},
+    {"_matrixdist_expmat", (DL_FUNC) &_matrixdist_expmat, 1},
     {"_matrixdist_default_step_length", (DL_FUNC) &_matrixdist_default_step_length, 1},
     {"_matrixdist_revers_data_trans", (DL_FUNC) &_matrixdist_revers_data_trans, 3},
     {"_matrixdist_clone_vector", (DL_FUNC) &_matrixdist_clone_vector, 1},

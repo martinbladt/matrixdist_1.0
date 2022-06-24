@@ -1500,6 +1500,17 @@ matrix_exponential <- function(A) {
     .Call(`_matrixdist_matrix_exponential`, A)
 }
 
+#' Matrix exponential
+#' 
+#' Armadillo matrix exponential implementation.
+#' 
+#' @param A A matrix.
+#' @return exp(A).
+#' 
+expmat <- function(A) {
+    .Call(`_matrixdist_expmat`, A)
+}
+
 #' Default size of the steps in the RK
 #' 
 #' Computes the default step length for a matrix \code{S} to be employed in the

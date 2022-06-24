@@ -134,3 +134,16 @@ arma::mat matrix_exponential(arma::mat A) {
   return(expm);
 }
 
+//' Matrix exponential
+//' 
+//' Armadillo matrix exponential implementation.
+//' 
+//' @param A A matrix.
+//' @return exp(A).
+//' 
+// [[Rcpp::export]]
+arma::mat expmat(arma::mat A) {
+  arma::mat B = arma::expmat(A);  
+  return(B);
+}
+
