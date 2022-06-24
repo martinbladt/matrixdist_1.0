@@ -100,7 +100,7 @@ setMethod(
         aux <- fnn(alpha_mat, S_fit, y, delta )
         
         B_matrix <- aux$Bmatrix
-        wt <- reshape2::melt(B_matrix)[,3]; wt[wt<1e-22] <- wt[wt<1e-22]+1e-22
+        wt <- reshape2::melt(B_matrix)[,3];  wt[wt<1e-22] <- wt[wt<1e-22]+1e-22 
         
         if(k == 1|rand_init == TRUE){
           multinom_model <- nnet::multinom(Class ~ .,data = dm,weights = wt,trace = F)
@@ -155,7 +155,8 @@ setMethod(
         
         S_fit<- aux$S
         B_matrix <- aux$Bmatrix
-        wt <- reshape2::melt(B_matrix)[,3]; wt[wt<1e-22] <- wt[wt<1e-22]+1e-22
+        wt <- reshape2::melt(B_matrix)[,3]; wt[wt<1e-22] <- wt[wt<1e-22]+1e-22 
+
         if(k == 1|rand_init == TRUE){
           multinom_model <- nnet::multinom(Class ~ .,data = dm,weights = wt,trace = F)
           #Class is the response and dm columns are used as predictors
