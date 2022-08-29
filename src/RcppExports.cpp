@@ -1671,6 +1671,20 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// sum_dph
+Rcpp::List sum_dph(arma::rowvec alpha1, arma::mat S1, arma::rowvec alpha2, arma::mat S2);
+RcppExport SEXP _matrixdist_sum_dph(SEXP alpha1SEXP, SEXP S1SEXP, SEXP alpha2SEXP, SEXP S2SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::rowvec >::type alpha1(alpha1SEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type S1(S1SEXP);
+    Rcpp::traits::input_parameter< arma::rowvec >::type alpha2(alpha2SEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type S2(S2SEXP);
+    rcpp_result_gen = Rcpp::wrap(sum_dph(alpha1, S1, alpha2, S2));
+    return rcpp_result_gen;
+END_RCPP
+}
 // random_structure
 List random_structure(int p, String structure, double scale_factor);
 RcppExport SEXP _matrixdist_random_structure(SEXP pSEXP, SEXP structureSEXP, SEXP scale_factorSEXP) {
@@ -1796,6 +1810,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_clone_vector", (DL_FUNC) &_matrixdist_clone_vector, 1},
     {"_matrixdist_clone_matrix", (DL_FUNC) &_matrixdist_clone_matrix, 1},
     {"_matrixdist_sum_ph", (DL_FUNC) &_matrixdist_sum_ph, 4},
+    {"_matrixdist_sum_dph", (DL_FUNC) &_matrixdist_sum_dph, 4},
     {"_matrixdist_random_structure", (DL_FUNC) &_matrixdist_random_structure, 3},
     {NULL, NULL, 0}
 };

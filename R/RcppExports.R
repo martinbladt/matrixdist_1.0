@@ -1593,6 +1593,17 @@ sum_ph <- function(alpha1, S1, alpha2, S2) {
     .Call(`_matrixdist_sum_ph`, alpha1, S1, alpha2, S2)
 }
 
+#' Computes the initial distribution and sub-intensity of the sum of two discrete phase-type
+#' 
+#' @param alpha1 Initial distribution.
+#' @param S1 Sub-transition.
+#' @param alpha2 Initial distribution.
+#' @param S2 Sub-transition.
+#' 
+sum_dph <- function(alpha1, S1, alpha2, S2) {
+    .Call(`_matrixdist_sum_dph`, alpha1, S1, alpha2, S2)
+}
+
 #' Random structure of a phase-type
 #' 
 #' Generates random parameters \code{alpha} and \code{S} of a phase-type 

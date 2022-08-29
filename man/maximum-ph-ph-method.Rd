@@ -20,6 +20,6 @@ Maximum Method for phase-type distributions
 \examples{
 ph1 <- ph(structure = "general", dimension = 3)
 ph2 <- ph(structure = "gcoxian", dimension = 5)
-ph_min <- minimum(ph1, ph2)
-ph_min
+ph_max <- maximum(ph1, ph2)
+ph_max
 }
