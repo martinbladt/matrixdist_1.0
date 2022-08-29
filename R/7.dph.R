@@ -152,3 +152,24 @@ setMethod("coef", c(object = "dph"), function(object) {
   object@pars
 })
 
+#' Simulation Method for phase-type distributions
+#'
+#' @param x An object of class \linkS4class{dph}.
+#' @param n An integer of length of realization.
+#'
+#' @return A realization of independent and identically distributed discrete phase-type variables.
+#' @export
+#'
+#' @examples
+#' obj <- dph(structure = "general")
+#' sim(obj, n = 100)
+setMethod("sim", c(x = "dph"), function(x, n = 1000) {
+  d <- length(x@pars$alpha)
+  exit_vec <- 1 - rowSums(x@pars$S)
+  trans_mat <- cbind(x@pars$S, exit_vec)
+  aux_vec <- rep(0, d + 1)
+  aux_vec[d + 1] <- 1
+  trans_mat <- rbind(trans_mat, aux_vec)
+  U <- rdphasetype(n, x@pars$alpha, trans_mat)
+  return(U)
+})

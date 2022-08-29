@@ -1038,6 +1038,20 @@ rmatrixgev <- function(n, alpha, S, mu, sigma, xi = 0) {
     .Call(`_matrixdist_rmatrixgev`, n, alpha, S, mu, sigma, xi)
 }
 
+#' Simulate discrete phase-type
+#'
+#' Generates a sample of size \code{n} from a discrete phase-type distribution with
+#' parameters \code{alpha} and \code{S}.
+#' 
+#' @param n Sample size.
+#' @param alpha Vector of initial probabilities.
+#' @param S transition matrix.
+#' @return Simulated sample.
+#'
+rdphasetype <- function(n, alpha, S) {
+    .Call(`_matrixdist_rdphasetype`, n, alpha, S)
+}
+
 #' Find how many states have positive reward
 #'
 #' @param R reward vector

@@ -258,3 +258,36 @@ Rcpp::NumericVector rmatrixgev(int n, arma::vec alpha, arma::mat S, double mu, d
   }
   return (sample);
 }
+
+
+//' Simulate discrete phase-type
+//'
+//' Generates a sample of size \code{n} from a discrete phase-type distribution with
+//' parameters \code{alpha} and \code{S}.
+//' 
+//' @param n Sample size.
+//' @param alpha Vector of initial probabilities.
+//' @param S transition matrix.
+//' @return Simulated sample.
+//'
+// [[Rcpp::export]]
+Rcpp::NumericVector rdphasetype(int n, arma::vec alpha, arma::mat S) {
+  Rcpp::NumericVector sample(n);
+  
+  arma::mat cum_trans = cumulate_matrix(S);
+  arma::vec cum_alpha = cumulate_vector(alpha);
+  
+  unsigned p{alpha.size()};
+  long state{0};
+  for (int i{0}; i < n; ++i) {
+    double time{0.0};
+    state = initial_state(cum_alpha, Rcpp::runif(1)[0]);
+    while (state != p) {
+      time += 1;
+      state = new_state(state, cum_trans, Rcpp::runif(1)[0]);
+    }
+    sample[i] = time;
+  }
+  return sample;
+}
+
