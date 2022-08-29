@@ -1488,6 +1488,20 @@ mgevcdf <- function(x, alpha, S, beta, lower_tail = TRUE) {
     .Call(`_matrixdist_mgevcdf`, x, alpha, S, beta, lower_tail)
 }
 
+#' Discrete Phase-type density
+#' 
+#' Computes the density of discrete phase-type distribution with parameters \code{alpha}
+#'  and \code{S} at \code{x}.
+#' 
+#' @param x Non-negative value.
+#' @param alpha Initial probabilities.
+#' @param S Sub-transition matrix.
+#' @return The density at \code{x}.
+#' 
+dphdensity <- function(x, alpha, S) {
+    .Call(`_matrixdist_dphdensity`, x, alpha, S)
+}
+
 #' EM step for the mPH class with right-censoring, for different marginal sub-intensity matrices
 #'
 #' @param alpha Common initial distribution vector.
@@ -1552,6 +1566,25 @@ matrix_exponential <- function(A) {
 #' 
 expmat <- function(A) {
     .Call(`_matrixdist_expmat`, A)
+}
+
+#' Computes A^n
+#'
+#' @param A A matrix.
+#' @param n An integer.
+#' @return A^n.
+#' @export
+matrix_power <- function(n, A) {
+    .Call(`_matrixdist_matrix_power`, n, A)
+}
+
+#' Computes elements A^n until the given size
+#'
+#' @param A A matrix.
+#' @param vect_size Size of vector.
+#'
+vector_of_powers <- function(A, vect_size) {
+    .Call(`_matrixdist_vector_of_powers`, A, vect_size)
 }
 
 #' Default size of the steps in the RK

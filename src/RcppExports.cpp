@@ -1553,6 +1553,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// dphdensity
+Rcpp::NumericVector dphdensity(Rcpp::NumericVector x, arma::vec alpha, arma::mat S);
+RcppExport SEXP _matrixdist_dphdensity(SEXP xSEXP, SEXP alphaSEXP, SEXP SSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type S(SSEXP);
+    rcpp_result_gen = Rcpp::wrap(dphdensity(x, alpha, S));
+    return rcpp_result_gen;
+END_RCPP
+}
 // EM_step_mPH_rc
 void EM_step_mPH_rc(arma::vec& alpha, Rcpp::List& S_list, const arma::mat y, const arma::mat delta, double h);
 RcppExport SEXP _matrixdist_EM_step_mPH_rc(SEXP alphaSEXP, SEXP S_listSEXP, SEXP ySEXP, SEXP deltaSEXP, SEXP hSEXP) {
@@ -1621,6 +1634,30 @@ BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< arma::mat >::type A(ASEXP);
     rcpp_result_gen = Rcpp::wrap(expmat(A));
+    return rcpp_result_gen;
+END_RCPP
+}
+// matrix_power
+arma::mat matrix_power(int n, arma::mat A);
+RcppExport SEXP _matrixdist_matrix_power(SEXP nSEXP, SEXP ASEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type A(ASEXP);
+    rcpp_result_gen = Rcpp::wrap(matrix_power(n, A));
+    return rcpp_result_gen;
+END_RCPP
+}
+// vector_of_powers
+std::vector<arma::mat> vector_of_powers(const arma::mat& A, int vect_size);
+RcppExport SEXP _matrixdist_vector_of_powers(SEXP ASEXP, SEXP vect_sizeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type A(ASEXP);
+    Rcpp::traits::input_parameter< int >::type vect_size(vect_sizeSEXP);
+    rcpp_result_gen = Rcpp::wrap(vector_of_powers(A, vect_size));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1813,12 +1850,15 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_mgompertzcdf", (DL_FUNC) &_matrixdist_mgompertzcdf, 5},
     {"_matrixdist_mgevden", (DL_FUNC) &_matrixdist_mgevden, 4},
     {"_matrixdist_mgevcdf", (DL_FUNC) &_matrixdist_mgevcdf, 5},
+    {"_matrixdist_dphdensity", (DL_FUNC) &_matrixdist_dphdensity, 3},
     {"_matrixdist_EM_step_mPH_rc", (DL_FUNC) &_matrixdist_EM_step_mPH_rc, 5},
     {"_matrixdist_inf_norm", (DL_FUNC) &_matrixdist_inf_norm, 1},
     {"_matrixdist_matrix_vanloan", (DL_FUNC) &_matrixdist_matrix_vanloan, 3},
     {"_matrixdist_max_diagonal", (DL_FUNC) &_matrixdist_max_diagonal, 1},
     {"_matrixdist_matrix_exponential", (DL_FUNC) &_matrixdist_matrix_exponential, 1},
     {"_matrixdist_expmat", (DL_FUNC) &_matrixdist_expmat, 1},
+    {"_matrixdist_matrix_power", (DL_FUNC) &_matrixdist_matrix_power, 2},
+    {"_matrixdist_vector_of_powers", (DL_FUNC) &_matrixdist_vector_of_powers, 2},
     {"_matrixdist_default_step_length", (DL_FUNC) &_matrixdist_default_step_length, 1},
     {"_matrixdist_revers_data_trans", (DL_FUNC) &_matrixdist_revers_data_trans, 3},
     {"_matrixdist_clone_vector", (DL_FUNC) &_matrixdist_clone_vector, 1},

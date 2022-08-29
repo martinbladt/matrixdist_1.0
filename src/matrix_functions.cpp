@@ -76,4 +76,3 @@ NumericMatrix clone_matrix(NumericMatrix m) {
   NumericMatrix new_m = clone(m);
   return new_m;
 }
-

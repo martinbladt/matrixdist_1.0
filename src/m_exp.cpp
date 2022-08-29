@@ -134,6 +134,7 @@ arma::mat matrix_exponential(arma::mat A) {
   return(expm);
 }
 
+
 //' Matrix exponential
 //' 
 //' Armadillo matrix exponential implementation.
@@ -145,5 +146,55 @@ arma::mat matrix_exponential(arma::mat A) {
 arma::mat expmat(arma::mat A) {
   arma::mat B = arma::expmat(A);  
   return(B);
+}
+
+
+//' Computes A^n
+//'
+//' @param A A matrix.
+//' @param n An integer.
+//' @return A^n.
+//' @export
+// [[Rcpp::export]]
+arma::mat matrix_power(int n, arma::mat A) {
+  if (n == 0) {
+    arma::mat d;
+    d.eye(size(A));
+    return(d);
+  }
+  else if (n == 1) {
+    return A;
+  }
+  else if (n == 2) {
+    return A * A;
+  }
+  arma::mat previous_matrix = A * A;
+  arma::mat new_matrix = A * previous_matrix;
+  for (int i{4}; i <= n; ++i) {
+    previous_matrix = new_matrix;
+    new_matrix = A * previous_matrix;
+  }
+  return new_matrix;
+}
+
+
+//' Computes elements A^n until the given size
+//'
+//' @param A A matrix.
+//' @param vect_size Size of vector.
+//'
+// [[Rcpp::export]]
+std::vector<arma::mat> vector_of_powers(const arma::mat & A, int vect_size) {
+  arma::mat Id;
+  Id.eye(size(A));
+  
+  std::vector<arma::mat> vect;
+  
+  vect.push_back(Id);
+  
+  for (int k{1}; k <= vect_size; ++k) {
+    vect.push_back(A * vect[k - 1]);
+  }
+  return vect;
 }
 

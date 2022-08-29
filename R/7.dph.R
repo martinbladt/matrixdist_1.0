@@ -152,6 +152,33 @@ setMethod("coef", c(object = "dph"), function(object) {
   object@pars
 })
 
+#' Moment Method for discrete phase-type distributions
+#'
+#' @param x An object of class \linkS4class{dph}.
+#' @param k A positive integer (moment order).
+#'
+#' @return The factional moment of the \linkS4class{dph} object.
+#' @export
+#'
+#' @examples
+#' set.seed(123)
+#' dph1 <- dph(structure = "general", dimension = 3)
+#' moment(dph1, 2)
+setMethod(
+  "moment", signature(x = "dph"),
+  function(x, k = 1) {
+    if (k <= 0) {
+      return("k should be positive")
+    }
+    if ((k %% 1) != 0) {
+      return("k should be an integer")
+    }
+    m1 <- matrix_power(k - 1, x@pars$S)
+    m2 <- matrix_power(k, solve(diag(nrow(x@pars$S)) - x@pars$S))
+    return(factorial(k) * sum(x@pars$alpha %*% m1 %*% m2))
+  }
+)
+
 #' Simulation Method for phase-type distributions
 #'
 #' @param x An object of class \linkS4class{dph}.
