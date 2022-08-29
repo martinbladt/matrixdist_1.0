@@ -110,6 +110,7 @@ setMethod("sim", c(x = "mph"), function(x, n = 1000, equal_marginals = 0) {
 #' Density Method for multivariate phase-type distributions
 #'
 #' @param x An object of class \linkS4class{mph}.
+#' @param delta Matrix with right-censoring indicators (1 uncensored, 0 right censored).
 #' @param y A matrix of observations.
 #'
 #' @return A list containing the locations and corresponding density evaluations.
@@ -145,7 +146,6 @@ setMethod("dens", c(x = "mph"), function(x, y, delta=NULL) {
 #' Distribution Method for multivariate phase-type distributions
 #'
 #' @param x An object of class \linkS4class{mph}.
-#' @param delta A matrix with right censoring values
 #' @param y A matrix of observations.
 #' @param lower.tail Logical parameter specifying whether lower tail (cdf) or upper tail is computed.
 #'

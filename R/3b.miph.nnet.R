@@ -59,7 +59,7 @@ setMethod(
     
     alpha_fit <- x@pars$alpha
     p<- length(alpha_fit)
-    frame<- model.frame(formula, data=data)
+    frame<- stats::model.frame(formula, data=data)
     n<-nrow(frame)
     d2<-ncol(frame)-1 #number of covariates
     
@@ -109,7 +109,7 @@ setMethod(
         }else{
           multinom_model <- nnet::multinom(Class ~ .,data = dm,weights = wt,trace = F, Wts = multinom_model$wts)
         }
-        alpha_mat <- predict(multinom_model,type = "probs", newdata = ndm) #these are the new estimates for initial distribution vectors
+        alpha_mat <- stats::predict(multinom_model,type = "probs", newdata = ndm) #these are the new estimates for initial distribution vectors
         
         
         S_fit <- aux$S
@@ -164,7 +164,7 @@ setMethod(
         }else{
           multinom_model <- nnet::multinom(Class ~ .,data = dm,weights = wt,trace = F, Wts = multinom_model$wts)
         }
-        alpha_mat <- predict(multinom_model,type = "probs", newdata = ndm) #these are the new estimates for initial distribution vectors
+        alpha_mat <- stats::predict(multinom_model,type = "probs", newdata = ndm) #these are the new estimates for initial distribution vectors
         
         
         x@pars$alpha <- alpha_mat

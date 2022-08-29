@@ -10,6 +10,8 @@
 \item{x}{An object of class \linkS4class{mph}.}
 
 \item{y}{A matrix of observations.}
+
+\item{delta}{Matrix with right-censoring indicators (1 uncensored, 0 right censored).}
 }
 \value{
 A list containing the locations and corresponding density evaluations.

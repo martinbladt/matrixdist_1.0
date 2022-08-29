@@ -214,3 +214,19 @@ setGeneric("Fisher", function(x, ...) {
 setGeneric("TVR", function(x, ...) {
   standardGeneric("TVR")
 })
+
+#' New Generic for Regression with Matrix Distributions
+#'
+#' Methods are available for objects of class \linkS4class{ph}
+#'
+#' @param x an object of the model class.
+#' @param y a vector of data.
+#' @param ... further parameters to be passed on
+#'
+#' @return An object of the fitted model class.
+#' @export
+#'
+#'
+setGeneric("MoE", function(x, y, ...) {
+  standardGeneric("MoE")
+})

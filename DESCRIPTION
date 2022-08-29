@@ -27,4 +27,4 @@ Imports:
 LinkingTo: Rcpp, RcppArmadillo
 SystemRequirements: C++11
 Encoding: UTF-8
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.1

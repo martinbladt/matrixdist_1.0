@@ -219,9 +219,176 @@ void EMstep_PADE(double h, arma::vec & alpha,  arma::mat & S, const Rcpp::Numeri
 }
 
 
+
+//' EM using for PH-MoE
+//' 
+//' No recycling of information
+//' 
+//' @param alpha Initial probabilities.
+//' @param S Sub-intensity.
+//' @param obs The observations.
+//' @param weight The weights for the observations.
+//' @param rcens Censored observations.
+//' @param rcweight The weights for the censored observations.
+//' 
+// [[Rcpp::export]]
+Rcpp::List EMstep_MoE_PADE(arma::mat & alpha,  arma::mat & S, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight) {
+  long p{S.n_rows}; 
+  
+  arma::mat Bmatrix(obs.size(), p);
+  arma::mat Bmatrix_cens;
+  
+  arma::mat e; 
+  e.ones(S.n_cols, 1);
+  arma::mat exit_vect = (S * (-1)) * e;
+  
+  arma::rowvec alpha_aux(alpha.row(0));
+  
+  arma::mat Zmean = arma::zeros(p,1);
+  arma::mat Nmean = arma::zeros(p,p + 1);
+  
+  arma::mat avector(1,p);
+  arma::mat bvector(p,1);
+  arma::mat cmatrix(p,p);
+  arma::mat aux_exp(p,p);
+  
+  arma::mat aux_mat(1,1);
+  
+  arma::mat J(2 * p,2 * p);
+  arma::mat s_prod_alpha(p,p);
+  
+  
+  double density{0.0};
+  
+  //E-step
+  //  Unccensored data
+  for (int k{0}; k < obs.size(); ++k) {
+    alpha_aux = alpha.row(k);
+    s_prod_alpha = exit_vect * alpha_aux;
+    J = matrix_exponential(matrix_vanloan(S, S, s_prod_alpha) * obs[k]);
+    
+    for (int i{0}; i < p; ++i) {
+      for (int j{0}; j < p; ++j) {
+        aux_exp(i,j) = J(i,j);
+        cmatrix(i,j) = J(i,j + p);
+      }
+    }
+    
+    avector = alpha_aux * aux_exp;
+    bvector = aux_exp * exit_vect;
+    aux_mat = alpha_aux * bvector;
+    density = aux_mat(0,0);
+    
+    //E-step
+    for (int i{0}; i < p; ++i) {
+      Bmatrix(k,i) = alpha_aux[i] * bvector(i,0) * weight[k] / density;
+      Nmean(i,p) += avector(0,i) * exit_vect(i,0) * weight[k] / density;
+      Zmean(i,0) += cmatrix(i,i) * weight[k] / density;
+      for (int j{0}; j < p; ++j) {
+        Nmean(i,j) += S(i,j) * cmatrix(j,i) * weight[k] / density;
+      }
+    }
+  }
+  
+  //  Right-Censored Data
+  if (rcens.size() > 0) {
+    Bmatrix_cens.set_size(rcens.size(), p);
+  }
+  for (int k{0}; k < rcens.size(); ++k) {
+    alpha_aux = alpha.row(k + obs.size());
+    s_prod_alpha = e * alpha_aux;
+    J = matrix_exponential(matrix_vanloan(S, S, s_prod_alpha) * rcens[k]);
+    
+    for (int i{0}; i < p; ++i) {
+      for (int j{0}; j < p; ++j) {
+        aux_exp(i,j) = J(i,j);
+        cmatrix(i,j) = J(i,j + p);
+      }
+    }
+    
+    bvector = aux_exp * e;
+    aux_mat = alpha_aux * bvector;
+    density = aux_mat(0,0);
+    
+    //E-step
+    for (int i{0}; i < p; ++i) {
+      Bmatrix_cens(k,i) = alpha_aux[i] * bvector(i,0) * rcweight[k] / density;
+      Zmean(i,0) += cmatrix(i,i) * rcweight[k] / density;
+      for (int j{0}; j < p; ++j) {
+        Nmean(i,j) += S(i,j) * cmatrix(j,i) * rcweight[k] / density;
+      }
+    }
+  }
+  
+  // M step
+  for (int i{0}; i < p; ++i) {
+    exit_vect(i,0) = Nmean(i,p) / Zmean(i,0);
+    if (exit_vect(i,0) < 0) {
+      exit_vect(i,0) = 0;
+    }
+    S(i,i) = -exit_vect(i,0);
+    for (int j{0}; j < p; ++j) {
+      if (i != j) {
+        S(i,j) = Nmean(i,j) / Zmean(i,0);
+        if (S(i,j) < 0) {
+          S(i,j) = 0;
+        }
+        S(i,i) -= S(i,j);
+      }
+    }
+  }
+  return Rcpp::List::create(
+    Rcpp::Named("obs") = Bmatrix,
+    Rcpp::Named("rcens") = Bmatrix_cens
+  );
+}
+
+
+
 ////////////////////////////////////////////
 // Loglikelihoods
 ////////////////////////////////////////////
+
+//' Loglikelihood for a sample 
+//' 
+//' @param alpha1 initial probabilities non-censored data
+//' @param alpha2 initial probabilities censored data
+//' @param S sub-intensity
+//' @param obs the observations
+//' @param weight weight of the observations
+//' @param rcens censored observations
+//' @param rcweight weight of the censored observations
+//' 
+// [[Rcpp::export]]
+double logLikelihoodPH_MoE(arma::mat & alpha1, arma::mat & alpha2, arma::mat & S, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight) {
+  arma::mat e; 
+  e.ones(S.n_cols, 1);
+  arma::mat exit_vect = (S * (-1)) * e;
+  
+  arma::mat aux_mat(1,1);
+  
+  double density{0.0};
+  
+  double logLh{0.0};
+  
+  // Non censored data
+  for (int k{0}; k < obs.size(); ++k) {
+    arma::rowvec alpha_aux(alpha1.row(k));
+    aux_mat = alpha_aux * matrix_exponential(S * obs[k]) * exit_vect;
+    density = aux_mat(0,0);
+    logLh += weight[k] * std::log(density);
+  }
+  //Right censored data
+  for (int k{0}; k < rcens.size(); ++k) {
+    arma::rowvec alpha_aux(alpha2.row(k));
+    aux_mat = alpha_aux * matrix_exponential(S * rcens[k])  * e;
+    density = aux_mat(0,0);
+    logLh += rcweight[k] * std::log(density);
+  }
+  
+  return logLh;
+}
+
 
 //' Loglikelihood of phase-type using Pade
 //' 

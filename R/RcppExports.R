@@ -299,6 +299,35 @@ EMstep_PADE <- function(h, alpha, S, obs, weight, rcens, rcweight) {
     invisible(.Call(`_matrixdist_EMstep_PADE`, h, alpha, S, obs, weight, rcens, rcweight))
 }
 
+#' EM using for PH-MoE
+#' 
+#' No recycling of information
+#' 
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity.
+#' @param obs The observations.
+#' @param weight The weights for the observations.
+#' @param rcens Censored observations.
+#' @param rcweight The weights for the censored observations.
+#' 
+EMstep_MoE_PADE <- function(alpha, S, obs, weight, rcens, rcweight) {
+    .Call(`_matrixdist_EMstep_MoE_PADE`, alpha, S, obs, weight, rcens, rcweight)
+}
+
+#' Loglikelihood for a sample 
+#' 
+#' @param alpha1 initial probabilities non-censored data
+#' @param alpha2 initial probabilities censored data
+#' @param S sub-intensity
+#' @param obs the observations
+#' @param weight weight of the observations
+#' @param rcens censored observations
+#' @param rcweight weight of the censored observations
+#' 
+logLikelihoodPH_MoE <- function(alpha1, alpha2, S, obs, weight, rcens, rcweight) {
+    .Call(`_matrixdist_logLikelihoodPH_MoE`, alpha1, alpha2, S, obs, weight, rcens, rcweight)
+}
+
 #' Loglikelihood of phase-type using Pade
 #' 
 #' Loglikelihood for a sample.

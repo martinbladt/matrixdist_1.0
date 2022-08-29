@@ -195,6 +195,7 @@ setMethod("sim", c(x = "miph"), function(x, n = 1000) {
 #' Density Method for multivariate inhomogeneous phase-type distributions
 #'
 #' @param x An object of class \linkS4class{miph}.
+#' @param delta Matrix with right-censoring indicators (1 uncensored, 0 right censored).
 #' @param y A matrix of observations.
 #'
 #' @return A list containing the locations and corresponding density evaluations.

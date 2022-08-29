@@ -12,8 +12,6 @@
 \item{y}{A matrix of observations.}
 
 \item{lower.tail}{Logical parameter specifying whether lower tail (cdf) or upper tail is computed.}
-
-\item{delta}{A matrix with right censoring values}
 }
 \value{
 A list containing the locations and corresponding CDF evaluations.
