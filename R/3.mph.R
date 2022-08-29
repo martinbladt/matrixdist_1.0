@@ -116,26 +116,37 @@ setMethod("sim", c(x = "mph"), function(x, n = 1000, equal_marginals = 0) {
 #' @return A list containing the locations and corresponding density evaluations.
 #' @export
 #'
-setMethod("dens", c(x = "mph"), function(x, y, delta=NULL) {
+setMethod("dens", c(x = "mph"), function(x, y, delta = NULL) {
   p <- length(x@pars$alpha)
   alpha <- x@pars$alpha
   d <- length(x@pars$S)
-  if(is.matrix(y)){n <- nrow(y)}
-  if(is.vector(y)){n <- 1
-  y <- t(y)}  
-  
-  if(length(delta)==0){delta=matrix(1,nrow=n,ncol=d)}
-  if(is.vector(delta)){delta <-as.matrix(t(delta))}
-  
+  if (is.matrix(y)) {
+    n <- nrow(y)
+  }
+  if (is.vector(y)) {
+    n <- 1
+    y <- t(y)
+  }
+
+  if (length(delta) == 0) {
+    delta <- matrix(1, nrow = n, ncol = d)
+  }
+  if (is.vector(delta)) {
+    delta <- as.matrix(t(delta))
+  }
+
   res <- numeric(n)
   for (j in 1:p) {
     in_vect <- rep(0, p)
     in_vect[j] <- 1
     aux <- matrix(NA, n, d)
-    for (i in 1:d){
-      for(m in 1:n){    
-        if(delta[m,i]==1){aux[m, i] <- matrixdist:::phdensity(y[m, i], in_vect, x@pars$S[[i]])
-        }else{aux[m, i] <-1 - matrixdist:::phcdf(y[m, i], in_vect, x@pars$S[[i]])}
+    for (i in 1:d) {
+      for (m in 1:n) {
+        if (delta[m, i] == 1) {
+          aux[m, i] <- phdensity(y[m, i], in_vect, x@pars$S[[i]])
+        } else {
+          aux[m, i] <- 1 - phcdf(y[m, i], in_vect, x@pars$S[[i]])
+        }
       }
     }
     res <- res + alpha[j] * apply(aux, 1, prod)
@@ -152,23 +163,27 @@ setMethod("dens", c(x = "mph"), function(x, y, delta=NULL) {
 #' @return A list containing the locations and corresponding CDF evaluations.
 #' @export
 #'
-setMethod("cdf", c(x = "mph"), function(x, 
+setMethod("cdf", c(x = "mph"), function(x,
                                         y,
                                         lower.tail = TRUE) {
   p <- length(x@pars$alpha)
   alpha <- x@pars$alpha
   d <- length(x@pars$S)
-  if(is.matrix(y)){n <- nrow(y)}
-  if(is.vector(y)){n <- 1
-  y <- t(y)}  
-  
+  if (is.matrix(y)) {
+    n <- nrow(y)
+  }
+  if (is.vector(y)) {
+    n <- 1
+    y <- t(y)
+  }
+
   res <- numeric(n)
   for (j in 1:p) {
     in_vect <- rep(0, p)
     in_vect[j] <- 1
     aux <- matrix(NA, n, d)
     for (i in 1:d) {
-      aux[, i] <- matrixdist:::phcdf(y[, i], in_vect, x@pars$S[[i]],lower.tail)
+      aux[, i] <- phcdf(y[, i], in_vect, x@pars$S[[i]], lower.tail)
     }
     res <- res + alpha[j] * apply(aux, 1, prod)
   }
@@ -195,8 +210,8 @@ setMethod(
            stepsEM = 1000,
            equal_marginals = FALSE,
            r = 1,
-           maxit=100,
-           reltol=1e-8) {
+           maxit = 100,
+           reltol = 1e-8) {
     if (any(y < 0)) {
       stop("data should be positive")
     }
@@ -205,17 +220,16 @@ setMethod(
     }
     if (r <= 0 && r > 1) {
       stop("sub-sampling proportion is invalid, please input a r in (0,1]")
-    }   
+    }
     d <- length(x@pars$S)
 
-    is_miph <- methods::is(x,"miph")
+    is_miph <- methods::is(x, "miph")
     if (is_miph) {
       par_name <- x@gfun$name
       par_g <- x@gfun$pars
-      inv_g <- x@gfun$inverse 
-      
-      opt_fun <- miph_LL
+      inv_g <- x@gfun$inverse
 
+      opt_fun <- miph_LL
     }
 
     if (length(delta) == 0) {
@@ -242,20 +256,19 @@ setMethod(
     options(digits.secs = 4)
     cat(format(Sys.time(), format = "%H:%M:%OS"), ": EM started", sep = "")
     cat("\n", sep = "")
-    #EM step
-    if(!is_miph){
-
+    # EM step
+    if (!is_miph) {
       for (k in 1:stepsEM) {
         if (r < 1) {
           index <- sample(1:nrow(y_full), size = floor(r * nrow(y_full)))
-  
+
           y <- as.matrix(y_full[index, ])
           delta <- as.matrix(delta_full[index, ])
         }
-  
+
         # EM_step_mPH_rc(alpha_fit, S_fit, y ,delta, h) # C++
         aux <- fnn(alpha_fit, S_fit, y, delta)
-  
+
         alpha_fit <- aux$alpha
         S_fit <- aux$S
         cat("\r", "iteration:", k,
@@ -263,13 +276,13 @@ setMethod(
           sep = " "
         )
       }
-      x@pars$alpha <- alpha_fit #C++
-      x@pars$S <- S_fit #C++
+      x@pars$alpha <- alpha_fit # C++
+      x@pars$S <- S_fit # C++
       x@fit <- list(
         logLik = sum(log(dens(x, y, delta))),
         nobs = nrow(y)
       )
-      
+
       if (equal_marginals) {
         ls <- list()
         for (i in 1:ncol(y)) {
@@ -277,66 +290,64 @@ setMethod(
         }
         x@pars$S <- ls
       }
-  
     }
-    if(is_miph){
-      for(k in 1:stepsEM){
-      #sub-sampling
-      if (r < 1) {
-        index <- sample(1:nrow(y_full), size = floor(r * nrow(y_full)))
-        
-        y <- as.matrix(y_full[index, ])
-        delta <- as.matrix(delta_full[index, ])
-      }
-        
-      #transform to time-homogeneous
-      trans <- clone_matrix(y)
-      for(i in 1:d){
-        if(x@gfun$name[i]!="gev"){
-          trans[,i]<- inv_g[[i]](par_g[[i]],y[,i])
-        }else{
-          t <- inv_g[[i]](par_g[[i]],y[,i],rep(1,nrow(y)))
-          trans[,i]<- t$obs
+    if (is_miph) {
+      for (k in 1:stepsEM) {
+        # sub-sampling
+        if (r < 1) {
+          index <- sample(1:nrow(y_full), size = floor(r * nrow(y_full)))
+
+          y <- as.matrix(y_full[index, ])
+          delta <- as.matrix(delta_full[index, ])
         }
+
+        # transform to time-homogeneous
+        trans <- clone_matrix(y)
+        for (i in 1:d) {
+          if (x@gfun$name[i] != "gev") {
+            trans[, i] <- inv_g[[i]](par_g[[i]], y[, i])
+          } else {
+            t <- inv_g[[i]](par_g[[i]], y[, i], rep(1, nrow(y)))
+            trans[, i] <- t$obs
+          }
+        }
+
+        aux <- fnn(alpha_fit, S_fit, trans, delta)
+
+        x@pars$alpha <- alpha_fit
+        x@pars$S <- S_fit
+
+        opt <- suppressWarnings(
+          stats::optim(
+            par = par_g,
+            fn = opt_fun,
+            x = x,
+            obs = y,
+            delta = delta,
+            hessian = F,
+            control = list(
+              maxit = maxit,
+              reltol = reltol,
+              fnscale = -1
+            )
+          )
+        )
+
+        par_g <- as.list(opt$par)
+
+        cat("\r", ", iteration:", k,
+          ", logLik:", opt$value,
+          sep = " "
+        )
+
+        alpha_fit <- aux$alpha
+        S_fit <- aux$S
       }
-      
-     aux<- fnn( alpha_fit, S_fit, trans, delta) 
-     
-     x@pars$alpha <- alpha_fit
-     x@pars$S <- S_fit
-
-       opt <- suppressWarnings(
-         stats::optim(
-           par=par_g,
-           fn=opt_fun,
-           x=x,
-           obs=y,
-           delta=delta,
-           hessian = F,
-           control = list(
-             maxit = maxit,
-             reltol = reltol,
-             fnscale = -1
-           )
-         )
-       )
-       
-       par_g <- as.list(opt$par)
-    
-    cat("\r",", iteration:", k,
-       ", logLik:", opt$value,
-         sep = " "
-         )
-    
-    alpha_fit <- aux$alpha
-    S_fit <- aux$S
-
-  }
       x@pars$alpha <- alpha_fit
       x@pars$S <- S_fit
       x@gfun$pars <- par_g
-      #x <- miph(mph=x, gfun = par_name, gfun_pars= par_g)  
-      
+      # x <- miph(mph=x, gfun = par_name, gfun_pars= par_g)
+
       x@fit <- list(
         logLik = sum(log(dens(x, y, delta))),
         nobs = nrow(y)
@@ -346,54 +357,61 @@ setMethod(
 
     cat("\n", format(Sys.time(), format = "%H:%M:%OS"), ": EM finalized", sep = "")
     cat("\n", sep = "")
-    
+
     return(x)
   }
 )
 
-#multivariate loglikelihood to be optimized
-miph_LL<-function(x,
-                  obs,
-                  delta,
-                  gfun_pars
-                  ){
-  x@gfun$pars<-gfun_pars
-  
-  alpha<- x@pars$alpha
-  S<-x@pars$S
+# multivariate loglikelihood to be optimized
+miph_LL <- function(x,
+                    obs,
+                    delta,
+                    gfun_pars) {
+  x@gfun$pars <- gfun_pars
+
+  alpha <- x@pars$alpha
+  S <- x@pars$S
   p <- length(alpha)
   d <- length(S)
-  
-  if(is.matrix(obs)){n <- nrow(obs)}
-  if(is.vector(obs)){n <- 1
-  obs <- t(obs)}
-  
-  if(length(delta)==0){delta <- matrix(1,nrow=n,ncol=d)}
-  if(is.vector(delta)){delta <-as.matrix(t(delta))}
+
+  if (is.matrix(obs)) {
+    n <- nrow(obs)
+  }
+  if (is.vector(obs)) {
+    n <- 1
+    obs <- t(obs)
+  }
+
+  if (length(delta) == 0) {
+    delta <- matrix(1, nrow = n, ncol = d)
+  }
+  if (is.vector(delta)) {
+    delta <- as.matrix(t(delta))
+  }
   res <- numeric(n)
-  
-  
+
+
   for (j in 1:p) {
     in_vect <- rep(0, p)
     in_vect[j] <- 1
     aux <- matrix(NA, n, d)
     for (i in 1:d) {
-      y_inv <- x@gfun$inverse[[i]](x@gfun$pars[[i]],obs[,i])
-      y_int <- x@gfun$intensity[[i]](x@gfun$pars[[i]],obs[,i])
-      for(m in 1:n){
-        if(delta[m,i]==1){
-          aux[m, i] <- matrixdist:::phdensity(y_inv[m], in_vect, S[[i]])*y_int[m]
-        }else{
-          aux[m,i]<- matrixdist:::phcdf(y_inv[m], in_vect, S[[i]],lower_tail = F)
+      y_inv <- x@gfun$inverse[[i]](x@gfun$pars[[i]], obs[, i])
+      y_int <- x@gfun$intensity[[i]](x@gfun$pars[[i]], obs[, i])
+      for (m in 1:n) {
+        if (delta[m, i] == 1) {
+          aux[m, i] <- phdensity(y_inv[m], in_vect, S[[i]]) * y_int[m]
+        } else {
+          aux[m, i] <- phcdf(y_inv[m], in_vect, S[[i]], lower_tail = F)
         }
       }
     }
     res <- res + alpha[j] * apply(aux, 1, prod)
   }
-  
-  
+
+
   ll <- sum(log(res))
-  
+
   return(ll)
 }
 

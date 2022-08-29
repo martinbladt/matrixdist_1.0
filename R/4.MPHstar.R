@@ -38,7 +38,7 @@ MPHstar <- function(alpha = NULL,
   }
 
   if (!all(is.null(R))) {
-    if (!all(R %*% rep(1, ncol(R)) ==1)) stop("Rows of the reward matrix must sum to 1")
+    if (!all(R %*% rep(1, ncol(R)) == 1)) stop("Rows of the reward matrix must sum to 1")
     Rname <- "custom"
   }
 
@@ -66,7 +66,6 @@ MPHstar <- function(alpha = NULL,
       Rname <- "custom"
     }
   }
-
 
   methods::new("MPHstar",
     name = paste("mph based on a ", name, " ph and a ", Rname, " reward matrix", sep = ""),
@@ -148,24 +147,24 @@ find_weight <- function(x) {
 MPHstar_data_aggregation <- function(y, w = numeric(0)) {
   mat <- list()
 
-    sumData <- rowSums(y)
+  sumData <- rowSums(y)
 
-    mat[[1]] <- find_weight(sumData)
+  mat[[1]] <- find_weight(sumData)
 
   for (i in 1:ncol(y)) {
     m <- 1 + i
     m_y <- y[, i]
 
     if (length(w) == 0) {
-      mat[[m]] <- find_weight(m_y)     
+      mat[[m]] <- find_weight(m_y)
     }
     if (length(w) > 0) {
       m_w <- w[, i]
 
-      mat[[m]] <-  cbind(m_y, m_w)
+      mat[[m]] <- cbind(m_y, m_w)
     }
   }
-    
+
   return(mat)
 }
 
@@ -261,19 +260,15 @@ setMethod(
 
         MPHstar_EMstep_UNI(epsilon, zero_tol, alpha_fit, S_fit, R_fit, B) # performs a EM step, changes alpha, S and R
 
-        
-        log_lik <- matrixdist:::logLikelihoodPH_UNI(epsilon, alpha_fit, S_fit, C[[1]][,1 ], C[[1]][, 2], numeric(0), numeric(0))
-        
+        log_lik <- logLikelihoodPH_UNI(epsilon, alpha_fit, S_fit, C[[1]][, 1], C[[1]][, 2], numeric(0), numeric(0))
 
         log_check[k] <- log_lik
 
         if (k %% every == 0) {
-         
-            cat("\r", "iteration:", k,
-              ", logLik:", log_lik,
-              sep = " "
-            )
-          
+          cat("\r", "iteration:", k,
+            ", logLik:", log_lik,
+            sep = " "
+          )
         }
       }
     }
