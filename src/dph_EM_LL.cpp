@@ -19,8 +19,7 @@ void EMstep_dph(arma::vec & alpha,  arma::mat & S, const Rcpp::NumericVector & o
   
   arma::mat Bmean = arma::zeros(p,1);
   arma::mat Nmean = arma::zeros(p,p + 1);
-  arma::mat Ncum = arma::zeros(p,1);
-  
+
   arma::mat avector(1,p);
   arma::mat bvector(p,1);
   arma::mat cmatrix(p,p);
@@ -65,21 +64,21 @@ void EMstep_dph(arma::vec & alpha,  arma::mat & S, const Rcpp::NumericVector & o
     for (int i{0}; i < p; ++i) {
       Bmean(i,0) += alpha[i] * bvector(i,0) * weight[k] / density;
       Nmean(i,p) += avector(0,i) * exit_vect(i,0) * weight[k] / density;
-      Ncum(i,0) += Nmean(i,p);
       if (obs[k] > 1) {
         for (int j{0}; j < p; ++j) {
           Nmean(i,j) += S(i,j) * cmatrix(j,i) * weight[k] / density;
-          Ncum(i,0) += Nmean(i,j);
         }
       }
     }
   }
   
+  arma::colvec Ncum = arma::sum(Nmean, 1);
+  
   // M step
   for (int i{0}; i < p; ++i) {
     alpha[i] = Bmean(i,0) / (sum_weights);
     for (int j{0}; j < p; ++j) {
-      S(i,j) = Nmean(i,j) / Ncum(i,0);
+      S(i,j) = Nmean(i,j) / Ncum[i];
     }
   }
 }

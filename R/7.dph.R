@@ -249,7 +249,6 @@ setMethod("cdf", c(x = "dph"), function(x,
 #' @param y Vector or data.
 #' @param weight Vector of weights.
 #' @param stepsEM Number of EM steps to be performed.
-#' @param maxit Maximum number of iterations when optimizing g function.
 #' @param every Number of iterations between likelihood display updates.
 #'
 #' @return An object of class \linkS4class{ph}.
