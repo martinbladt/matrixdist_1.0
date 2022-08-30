@@ -234,11 +234,81 @@ setMethod("dens", c(x = "dph"), function(x, y) {
 #' obj <- dph(structure = "general")
 #' cdf(obj, c(1, 2, 3))
 setMethod("cdf", c(x = "dph"), function(x,
-                                       q,
-                                       lower.tail = TRUE) {
+                                        q,
+                                        lower.tail = TRUE) {
   q_inf <- (q == Inf)
   cdf <- q
   cdf[!q_inf] <- dphcdf(q[!q_inf], x@pars$alpha, x@pars$S, lower.tail)
   cdf[q_inf] <- as.numeric(1 * lower.tail)
   return(cdf)
 })
+
+#' Fit Method for ph Class
+#'
+#' @param x An object of class \linkS4class{ph}.
+#' @param y Vector or data.
+#' @param weight Vector of weights.
+#' @param stepsEM Number of EM steps to be performed.
+#' @param maxit Maximum number of iterations when optimizing g function.
+#' @param every Number of iterations between likelihood display updates.
+#'
+#' @return An object of class \linkS4class{ph}.
+#'
+#' @importFrom grDevices dev.off
+#' @importFrom graphics hist legend lines
+#' @importFrom utils head
+#'
+#' @export
+#'
+#' @examples
+#' obj <- dph(structure = "general", dimension = 2)
+#' data <- sim(obj, n = 100)
+#' fit(obj, data, stepsEM = 1000, every = 200)
+setMethod(
+  "fit", c(x = "dph", y = "ANY"),
+  function(x,
+           y,
+           weight = numeric(0),
+           stepsEM = 1000,
+           every = 100) {
+    if (!all(y > 0)) {
+      stop("data should be positive")
+    }
+    if (!all(weight >= 0)) {
+      stop("weights should be non-negative")
+    }
+
+    A <- data_aggregation(y, weight)
+    y <- A$un_obs
+    weight <- A$weights
+    
+    dph_par <- x@pars
+    alpha_fit <- clone_vector(dph_par$alpha)
+    S_fit <- clone_matrix(dph_par$S)
+
+    options(digits.secs = 4)
+    cat(format(Sys.time(), format = "%H:%M:%OS"), ": EM started", sep = "")
+    cat("\n", sep = "")
+
+    for (k in 1:stepsEM) {
+      EMstep_dph(alpha_fit, S_fit, y, weight)
+      if (k %% every == 0) {
+        cat("\r", "iteration:", k,
+          ", logLik:", logLikelihoodDPH(alpha_fit, S_fit, y, weight),
+          sep = " "
+        )
+      }
+    }
+    x@pars$alpha <- alpha_fit
+    x@pars$S <- S_fit
+    x@fit <- list(
+      logLik = logLikelihoodDPH(alpha_fit, S_fit, y, weight),
+      nobs = sum(A$weights)
+    )
+
+    cat("\n", format(Sys.time(), format = "%H:%M:%OS"), ": EM finalized", sep = "")
+    cat("\n", sep = "")
+
+    return(x)
+  }
+)
