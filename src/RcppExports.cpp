@@ -1566,6 +1566,20 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// dphcdf
+Rcpp::NumericVector dphcdf(Rcpp::NumericVector x, arma::vec alpha, arma::mat S, bool lower_tail);
+RcppExport SEXP _matrixdist_dphcdf(SEXP xSEXP, SEXP alphaSEXP, SEXP SSEXP, SEXP lower_tailSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type S(SSEXP);
+    Rcpp::traits::input_parameter< bool >::type lower_tail(lower_tailSEXP);
+    rcpp_result_gen = Rcpp::wrap(dphcdf(x, alpha, S, lower_tail));
+    return rcpp_result_gen;
+END_RCPP
+}
 // EM_step_mPH_rc
 void EM_step_mPH_rc(arma::vec& alpha, Rcpp::List& S_list, const arma::mat y, const arma::mat delta, double h);
 RcppExport SEXP _matrixdist_EM_step_mPH_rc(SEXP alphaSEXP, SEXP S_listSEXP, SEXP ySEXP, SEXP deltaSEXP, SEXP hSEXP) {
@@ -1851,6 +1865,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_mgevden", (DL_FUNC) &_matrixdist_mgevden, 4},
     {"_matrixdist_mgevcdf", (DL_FUNC) &_matrixdist_mgevcdf, 5},
     {"_matrixdist_dphdensity", (DL_FUNC) &_matrixdist_dphdensity, 3},
+    {"_matrixdist_dphcdf", (DL_FUNC) &_matrixdist_dphcdf, 4},
     {"_matrixdist_EM_step_mPH_rc", (DL_FUNC) &_matrixdist_EM_step_mPH_rc, 5},
     {"_matrixdist_inf_norm", (DL_FUNC) &_matrixdist_inf_norm, 1},
     {"_matrixdist_matrix_vanloan", (DL_FUNC) &_matrixdist_matrix_vanloan, 3},

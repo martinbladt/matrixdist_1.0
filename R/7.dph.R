@@ -200,3 +200,45 @@ setMethod("sim", c(x = "dph"), function(x, n = 1000) {
   U <- rdphasetype(n, x@pars$alpha, trans_mat)
   return(U)
 })
+
+#' Density Method for discrete phase-type distributions
+#'
+#' @param x An object of class \linkS4class{dph}.
+#' @param y A vector of locations.
+#'
+#' @return A vector containing the density evaluations at the given locations.
+#' @export
+#'
+#' @examples
+#' obj <- dph(structure = "general")
+#' dens(obj, c(1, 2, 3))
+setMethod("dens", c(x = "dph"), function(x, y) {
+  y_inf <- (y == Inf)
+  dens <- y
+  dens[!y_inf] <- dphdensity(y, x@pars$alpha, x@pars$S)
+  dens[y_inf] <- 0
+  return(dens)
+})
+
+#' Distribution Method for discrete phase-type distributions
+#'
+#' @param x An object of class \linkS4class{dph}.
+#' @param q A vector of locations.
+#' @param lower.tail Logical parameter specifying whether lower tail (cdf) or
+#' upper tail is computed.
+#'
+#' @return A vector containing the CDF evaluations at the given locations.
+#' @export
+#'
+#' @examples
+#' obj <- dph(structure = "general")
+#' cdf(obj, c(1, 2, 3))
+setMethod("cdf", c(x = "dph"), function(x,
+                                       q,
+                                       lower.tail = TRUE) {
+  q_inf <- (q == Inf)
+  cdf <- q
+  cdf[!q_inf] <- dphcdf(q[!q_inf], x@pars$alpha, x@pars$S, lower.tail)
+  cdf[q_inf] <- as.numeric(1 * lower.tail)
+  return(cdf)
+})

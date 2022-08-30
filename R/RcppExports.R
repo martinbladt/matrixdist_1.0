@@ -1274,7 +1274,7 @@ matrix_inverse <- function(A) {
 
 #' Phase-type density
 #' 
-#' Computes the density of phase-type distribution with parameters \code{alpha}
+#' Computes the density of a phase-type distribution with parameters \code{alpha}
 #'  and \code{S} at \code{x}.
 #' 
 #' @param x Non-negative value.
@@ -1288,7 +1288,7 @@ phdensity <- function(x, alpha, S) {
 
 #' Phase-type cdf
 #' 
-#' Computes the cdf (tail) of phase-type distribution with parameters \code{alpha} and
+#' Computes the cdf (tail) of a phase-type distribution with parameters \code{alpha} and
 #'  \code{S} at \code{x}.
 #' 
 #' @param x Non-negative value.
@@ -1488,7 +1488,7 @@ mgevcdf <- function(x, alpha, S, beta, lower_tail = TRUE) {
     .Call(`_matrixdist_mgevcdf`, x, alpha, S, beta, lower_tail)
 }
 
-#' Discrete Phase-type density
+#' Discrete phase-type density
 #' 
 #' Computes the density of discrete phase-type distribution with parameters \code{alpha}
 #'  and \code{S} at \code{x}.
@@ -1500,6 +1500,21 @@ mgevcdf <- function(x, alpha, S, beta, lower_tail = TRUE) {
 #' 
 dphdensity <- function(x, alpha, S) {
     .Call(`_matrixdist_dphdensity`, x, alpha, S)
+}
+
+#' Discrete phase-type cdf
+#' 
+#' Computes the cdf (tail) of a discrete phase-type distribution with parameters \code{alpha} and
+#'  \code{S} at \code{x}.
+#' 
+#' @param x Non-negative value.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity matrix.
+#' @param lower_tail Cdf or tail.
+#' @return The cdf (tail) at \code{x}.
+#' 
+dphcdf <- function(x, alpha, S, lower_tail = TRUE) {
+    .Call(`_matrixdist_dphcdf`, x, alpha, S, lower_tail)
 }
 
 #' EM step for the mPH class with right-censoring, for different marginal sub-intensity matrices

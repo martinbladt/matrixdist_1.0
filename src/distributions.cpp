@@ -6,7 +6,7 @@
 
 //' Phase-type density
 //' 
-//' Computes the density of phase-type distribution with parameters \code{alpha}
+//' Computes the density of a phase-type distribution with parameters \code{alpha}
 //'  and \code{S} at \code{x}.
 //' 
 //' @param x Non-negative value.
@@ -40,7 +40,7 @@ Rcpp::NumericVector phdensity(Rcpp::NumericVector x, arma::vec alpha, arma::mat 
 
 //' Phase-type cdf
 //' 
-//' Computes the cdf (tail) of phase-type distribution with parameters \code{alpha} and
+//' Computes the cdf (tail) of a phase-type distribution with parameters \code{alpha} and
 //'  \code{S} at \code{x}.
 //' 
 //' @param x Non-negative value.
@@ -536,7 +536,7 @@ Rcpp::NumericVector mgevcdf(Rcpp::NumericVector x, arma::vec alpha, arma::mat S,
 }
 
 
-//' Discrete Phase-type density
+//' Discrete phase-type density
 //' 
 //' Computes the density of discrete phase-type distribution with parameters \code{alpha}
 //'  and \code{S} at \code{x}.
@@ -552,7 +552,7 @@ Rcpp::NumericVector dphdensity(Rcpp::NumericVector x, arma::vec alpha, arma::mat
   
   arma::mat e;
   e.ones(S.n_cols, 1);
-  arma::mat exit_vect = (S * (-1)) * e;
+  arma::mat exit_vect = e - (S * e);
   
   double max_val{max(x)};
   
@@ -565,4 +565,41 @@ Rcpp::NumericVector dphdensity(Rcpp::NumericVector x, arma::vec alpha, arma::mat
     density[k] = aux_mat(0,0);
   }
   return density;
+}
+
+
+//' Discrete phase-type cdf
+//' 
+//' Computes the cdf (tail) of a discrete phase-type distribution with parameters \code{alpha} and
+//'  \code{S} at \code{x}.
+//' 
+//' @param x Non-negative value.
+//' @param alpha Initial probabilities.
+//' @param S Sub-intensity matrix.
+//' @param lower_tail Cdf or tail.
+//' @return The cdf (tail) at \code{x}.
+//' 
+// [[Rcpp::export]]
+Rcpp::NumericVector dphcdf(Rcpp::NumericVector x, arma::vec alpha, arma::mat S, bool lower_tail = true) {
+  Rcpp::NumericVector cdf(x.size());
+  
+  arma::mat e;
+  e.ones(S.n_cols, 1);
+  
+  double max_val{max(x)};
+  
+  std::vector<arma::mat> vect = vector_of_powers(S, max_val);
+  
+  arma::mat aux_mat(1,1);
+  
+  for (int k{0}; k < x.size(); ++k){
+    aux_mat = alpha.t() * vect[x[k]] * e;
+    cdf[k] = 1.0 - aux_mat(0,0);
+  }
+  if (lower_tail == true) {
+    return cdf;
+  }
+  else {
+    return (1 - cdf);
+  }
 }

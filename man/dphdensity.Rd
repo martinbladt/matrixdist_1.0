@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{dphdensity}
 \alias{dphdensity}
-\title{Discrete Phase-type density}
+\title{Discrete phase-type density}
 \usage{
 dphdensity(x, alpha, S)
 }
