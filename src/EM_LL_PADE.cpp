@@ -257,7 +257,6 @@ Rcpp::List EMstep_MoE_PADE(arma::mat & alpha,  arma::mat & S, const Rcpp::Numeri
   arma::mat J(2 * p,2 * p);
   arma::mat s_prod_alpha(p,p);
   
-  
   double density{0.0};
   
   //E-step

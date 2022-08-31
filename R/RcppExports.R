@@ -1528,6 +1528,17 @@ EMstep_dph <- function(alpha, S, obs, weight) {
     invisible(.Call(`_matrixdist_EMstep_dph`, alpha, S, obs, weight))
 }
 
+#' EM for discrete phase type MoE
+#' 
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity.
+#' @param obs The observations.
+#' @param weight The weights for the observations.
+#' 
+EMstep_dph_MoE <- function(alpha, S, obs, weight) {
+    .Call(`_matrixdist_EMstep_dph_MoE`, alpha, S, obs, weight)
+}
+
 #' Loglikelihood for a sample 
 #' 
 #' @param alpha initial probabilities
@@ -1537,6 +1548,17 @@ EMstep_dph <- function(alpha, S, obs, weight) {
 #' 
 logLikelihoodDPH <- function(alpha, S, obs, weight) {
     .Call(`_matrixdist_logLikelihoodDPH`, alpha, S, obs, weight)
+}
+
+#' Loglikelihood for discrete phase type MoE
+#' 
+#' @param alpha initial probabilities
+#' @param S sub-intensity
+#' @param obs the observations
+#' @param weight weight of the observations
+#' 
+logLikelihoodDPH_MoE <- function(alpha, S, obs, weight) {
+    .Call(`_matrixdist_logLikelihoodDPH_MoE`, alpha, S, obs, weight)
 }
 
 #' EM step for the mPH class with right-censoring, for different marginal sub-intensity matrices

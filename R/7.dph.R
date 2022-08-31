@@ -280,7 +280,7 @@ setMethod(
     A <- data_aggregation(y, weight)
     y <- A$un_obs
     weight <- A$weights
-    
+
     dph_par <- x@pars
     alpha_fit <- clone_vector(dph_par$alpha)
     S_fit <- clone_matrix(dph_par$S)
@@ -309,5 +309,68 @@ setMethod(
     cat("\n", sep = "")
 
     return(x)
+  }
+)
+
+#' MoE Method for dph Class
+#'
+#' @param x an object of class \linkS4class{dph}.
+#' @param formula a regression formula.
+#' @param data a data frame.
+#' @param alpha_vecs matrix of initial probabilities.s
+#' @param weight vector of weights.
+#' @param stepsEM number of EM steps to be performed.
+#' @param every number of iterations between likelihood display updates.
+#' @param rand_init random initiation in the R-step.
+#'
+#' @return An object of class \linkS4class{sph}.
+#'
+#' @importFrom methods is new
+#' @importFrom stats optim
+#' @importFrom utils tail
+#'
+#' @export
+#'
+setMethod(
+  "MoE", c(x = "dph"),
+  function(x,
+           formula,
+           data,
+           alpha_vecs = NULL,
+           weight = numeric(0),
+           stepsEM = 1000,
+           every = 10,
+           rand_init = TRUE) {
+    p <- length(x@pars$alpha)
+    frame <- stats::model.frame(formula, data = data)
+    n <- nrow(frame)
+    d <- ncol(frame) - 1
+    if (is.null(alpha_vecs)) alpha_vecs <- matrix(x@pars$alpha, ncol = p, nrow = n, byrow = TRUE)
+    if (length(weight) == 0) weight <- rep(1, n)
+    S_fit <- clone_matrix(x@pars$S)
+    c <- c()
+    for (i in 1:p) c <- c(c, rep(i, n)) # classes for the B matrix observations
+    extended_x <- matrix(t(as.matrix(frame[, -1])), nrow = n * p, ncol = d, byrow = TRUE) # extended form of covariates
+    dm <- data.frame(Class = c, extended_x)
+    names(dm)[-1] <- names(frame)[-1]
+    ndm <- data.frame(dm[dm$Class == 1, -1])
+    names(ndm) <- names(dm)[-1]
+    for (k in 1:stepsEM) {
+      B_matrix <- EMstep_dph_MoE(alpha_vecs, S_fit, frame[, 1], weight)
+      wt <- reshape2::melt(B_matrix)[, 3]
+      wt[wt < 1e-22] <- wt[wt < 1e-22] + 1e-22
+      if (k == 1 | rand_init == TRUE) {
+        multinom_model <- nnet::multinom(Class ~ ., data = dm, weights = wt, trace = F)
+      } else {
+        multinom_model <- nnet::multinom(Class ~ ., data = dm, weights = wt, trace = F, Wts = multinom_model$wts)
+      }
+      alpha_vecs <- stats::predict(multinom_model, type = "probs", newdata = ndm)
+      if (k %% every == 0) {
+        ll <- logLikelihoodDPH_MoE(alpha_vecs, S_fit, frame[, 1], weight)
+        cat("\r", "iteration:", k, ", logLik:", ll, sep = " ")
+      }
+    }
+    cat("\n", sep = "")
+    return(list(alpha = alpha_vecs, S = S_fit, mm = multinom_model))
   }
 )
