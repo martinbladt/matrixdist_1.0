@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{vector_of_matrices_2}
 \alias{vector_of_matrices_2}
-\title{Computes elements S^n / n! until the value size}
+\title{Computes the elements S^n / n! until given value of n}
 \usage{
 vector_of_matrices_2(vect, S, vect_size)
 }
@@ -14,5 +14,5 @@ vector_of_matrices_2(vect, S, vect_size)
 \item{vect_size}{Size of vector.}
 }
 \description{
-Computes elements S^n / n! until the value size
+Computes the elements S^n / n! until given value of n
 }

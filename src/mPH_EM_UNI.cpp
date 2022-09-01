@@ -4,7 +4,8 @@
 // [[Rcpp::depends(RcppArmadillo)]]
 
 
-//' EM step for the mPH class with right-censoring, for different marginal sub-intensity matrices
+//' EM step for the mPH class with right-censoring, for different marginal 
+//'  sub-intensity matrices
 //'
 //' @param alpha Common initial distribution vector.
 //' @param S_list List of marginal sub-intensity matrices.
@@ -14,7 +15,6 @@
 //'
 // [[Rcpp::export]]
 void EM_step_mPH_rc(arma::vec & alpha, Rcpp::List & S_list, const arma::mat y, const arma::mat delta, double h) {
-  
   unsigned p{alpha.size()}; // dimension of the distribution
   unsigned n{y.n_rows}; // number of observaions
   

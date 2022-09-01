@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{EMstep_UNI}
 \alias{EMstep_UNI}
-\title{EM using uniformization for matrix exponential}
+\title{EM for phase-type using uniformization for matrix exponential}
 \usage{
 EMstep_UNI(h, alpha, S, obs, weight, rcens, rcweight)
 }
@@ -11,7 +11,7 @@ EMstep_UNI(h, alpha, S, obs, weight, rcens, rcweight)
 
 \item{alpha}{Initial probabilities.}
 
-\item{S}{Sub-intensity.}
+\item{S}{Sub-intensity matrix.}
 
 \item{obs}{The observations.}
 
@@ -22,5 +22,5 @@ EMstep_UNI(h, alpha, S, obs, weight, rcens, rcweight)
 \item{rcweight}{The weights for the censored observations.}
 }
 \description{
-EM using uniformization for matrix exponential
+EM for phase-type using uniformization for matrix exponential
 }

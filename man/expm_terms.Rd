@@ -9,10 +9,10 @@ expm_terms(h, S, obs)
 \arguments{
 \item{h}{Positive parameter.}
 
-\item{S}{Sub-intensity.}
+\item{S}{Sub-intensity matrix.}
 
 \item{obs}{The observations.}
 }
 \description{
-Loglikelihood for a sample.
+expm terms of phase-type likelihood using uniformization
 }

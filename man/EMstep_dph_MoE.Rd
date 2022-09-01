@@ -2,19 +2,19 @@
 % Please edit documentation in R/RcppExports.R
 \name{EMstep_dph_MoE}
 \alias{EMstep_dph_MoE}
-\title{EM for discrete phase type MoE}
+\title{EM for discrete phase-type MoE}
 \usage{
 EMstep_dph_MoE(alpha, S, obs, weight)
 }
 \arguments{
 \item{alpha}{Initial probabilities.}
 
-\item{S}{Sub-intensity.}
+\item{S}{Sub-transition matrix.}
 
 \item{obs}{The observations.}
 
 \item{weight}{The weights for the observations.}
 }
 \description{
-EM for discrete phase type MoE
+EM for discrete phase-type MoE
 }

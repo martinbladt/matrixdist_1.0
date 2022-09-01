@@ -2,14 +2,14 @@
 % Please edit documentation in R/RcppExports.R
 \name{EMstep_MoE_PADE}
 \alias{EMstep_MoE_PADE}
-\title{EM using for PH-MoE}
+\title{EM for PH-MoE}
 \usage{
 EMstep_MoE_PADE(alpha, S, obs, weight, rcens, rcweight)
 }
 \arguments{
 \item{alpha}{Initial probabilities.}
 
-\item{S}{Sub-intensity.}
+\item{S}{Sub-intensity matrix.}
 
 \item{obs}{The observations.}
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{logLikelihoodMlognormal_PADEs}
 \alias{logLikelihoodMlognormal_PADEs}
-\title{Loglikelihood of matrix-lognormal using Pade}
+\title{Loglikelihood of PI with matrix-lognormal using Pade}
 \usage{
 logLikelihoodMlognormal_PADEs(
   h,
@@ -22,17 +22,17 @@ logLikelihoodMlognormal_PADEs(
 
 \item{alpha}{Initial probabilities.}
 
-\item{S}{Sub-intensity.}
+\item{S}{Sub-intensity matrix.}
 
 \item{beta}{Inhomogeneity parameter.}
 
 \item{obs}{The observations.}
 
-\item{weight}{Weight of the observations.}
+\item{weight}{Weights of the observations.}
 
 \item{rcens}{Censored observations.}
 
-\item{rcweight}{Weight of the censored observations.}
+\item{rcweight}{Weights of the censored observations.}
 
 \item{scale1}{Scale for observations.}
 

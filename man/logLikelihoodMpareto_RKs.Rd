@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{logLikelihoodMpareto_RKs}
 \alias{logLikelihoodMpareto_RKs}
-\title{Loglikelihood of matrix-Pareto using Runge-Kutta}
+\title{Loglikelihood of PI with matrix-Pareto using Runge-Kutta}
 \usage{
 logLikelihoodMpareto_RKs(
   h,
@@ -22,17 +22,17 @@ logLikelihoodMpareto_RKs(
 
 \item{alpha}{Initial probabilities.}
 
-\item{S}{Sub-intensity.}
+\item{S}{Sub-intensity matrix.}
 
 \item{beta}{Parameter of transformation.}
 
 \item{obs}{The observations.}
 
-\item{weight}{Weight of the observations.}
+\item{weight}{Weights of the observations.}
 
 \item{rcens}{Censored observations.}
 
-\item{rcweight}{Weight of the censored observations.}
+\item{rcweight}{Weights of the censored observations.}
 
 \item{scale1}{Scale for observations.}
 

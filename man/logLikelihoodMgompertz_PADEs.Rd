@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{logLikelihoodMgompertz_PADEs}
 \alias{logLikelihoodMgompertz_PADEs}
-\title{Loglikelihood of matrix-Gompertz using Pade}
+\title{Loglikelihood of PI with matrix-Gompertz using Pade}
 \usage{
 logLikelihoodMgompertz_PADEs(
   h,
@@ -28,11 +28,11 @@ logLikelihoodMgompertz_PADEs(
 
 \item{obs}{The observations.}
 
-\item{weight}{Weight of the observations.}
+\item{weight}{Weights of the observations.}
 
 \item{rcens}{Censored observations.}
 
-\item{rcweight}{Weight of the censored observations.}
+\item{rcweight}{Weights of the censored observations.}
 
 \item{scale1}{Scale for observations.}
 

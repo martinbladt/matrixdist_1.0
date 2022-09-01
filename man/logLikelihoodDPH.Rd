@@ -2,19 +2,19 @@
 % Please edit documentation in R/RcppExports.R
 \name{logLikelihoodDPH}
 \alias{logLikelihoodDPH}
-\title{Loglikelihood for a sample}
+\title{Loglikelihood for discrete phase-type}
 \usage{
 logLikelihoodDPH(alpha, S, obs, weight)
 }
 \arguments{
-\item{alpha}{initial probabilities}
+\item{alpha}{Initial probabilities.}
 
-\item{S}{sub-intensity}
+\item{S}{Sub-transition matrix.}
 
-\item{obs}{the observations}
+\item{obs}{The observations.}
 
-\item{weight}{weight of the observations}
+\item{weight}{The weights of the observations.}
 }
 \description{
-Loglikelihood for a sample
+Loglikelihood for discrete phase-type
 }

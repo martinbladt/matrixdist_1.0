@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{logLikelihoodPH_RKs}
 \alias{logLikelihoodPH_RKs}
-\title{Loglikelihood of phase-type using Runge-Kutta}
+\title{Loglikelihood of PI with phase-type using Runge-Kutta}
 \usage{
 logLikelihoodPH_RKs(h, alpha, S, obs, weight, rcens, rcweight, scale1, scale2)
 }
@@ -11,15 +11,15 @@ logLikelihoodPH_RKs(h, alpha, S, obs, weight, rcens, rcweight, scale1, scale2)
 
 \item{alpha}{Initial probabilities.}
 
-\item{S}{Sub-intensity.}
+\item{S}{Sub-intensity matrix.}
 
 \item{obs}{The observations.}
 
-\item{weight}{Weight of the observations.}
+\item{weight}{Weights of the observations.}
 
 \item{rcens}{Censored observations.}
 
-\item{rcweight}{Weight of the censored observations.}
+\item{rcweight}{Weights of the censored observations.}
 
 \item{scale1}{Scale for observations.}
 

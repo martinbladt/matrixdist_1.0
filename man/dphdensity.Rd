@@ -17,6 +17,6 @@ dphdensity(x, alpha, S)
 The density at \code{x}.
 }
 \description{
-Computes the density of discrete phase-type distribution with parameters \code{alpha}
- and \code{S} at \code{x}.
+Computes the density of discrete phase-type distribution with parameters
+ \code{alpha} and \code{S} at \code{x}.
 }

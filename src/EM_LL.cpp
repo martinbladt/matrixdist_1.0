@@ -5,16 +5,16 @@
 /// EM using Runge-Kutta of fourth order ///
 ////////////////////////////////////////////
 
-//' Runge-Kutta for the calculation of the a,b and c vectors in a EM step
+//' Runge-Kutta for the calculation of the a and b vectors and the c matrix in a EM step
 //' 
-//' Performs the Runge-Kutta of fourth order.
+//' Performs the Runge-Kutta method of fourth order.
 //' 
 //' @param avector The a vector.
 //' @param bvector The b vector.
 //' @param cmatrix The c matrix.
 //' @param dt The increment.
 //' @param h Step-length.
-//' @param S Sub-intensity.
+//' @param S Sub-intensity matrix.
 //' @param s Exit rates.
 //' 
 // [[Rcpp::export]]
@@ -62,13 +62,11 @@ void runge_kutta(arma::vec & avector, arma::mat & bvector, arma::mat & cmatrix, 
     }
     for (i = 0; i < p; ++i) {
       sum = 0;
-      for (j = 0; j < p; ++j)
-      {
+      for (j = 0; j < p; ++j) {
         sum += S(j,i) * (avector[j] + ka(2,j));
       }
       ka(3,i) = h2 * sum;
     }
-    
     
     for (i = 0; i < p; ++i) {
       sum = 0;
@@ -147,13 +145,13 @@ void runge_kutta(arma::vec & avector, arma::mat & bvector, arma::mat & cmatrix, 
 }
 
 
-//' EM step using Runge-Kutta
+//' EM step for phase-type using Runge-Kutta
 //' 
 //' Computes one step of the EM algorithm by using a Runge-Kutta method of fourth order.
 //' 
 //' @param h Step-length.
 //' @param alpha Initial probabilities.
-//' @param S Sub-intensity.
+//' @param S Sub-intensity matrix.
 //' @param obs The observations.
 //' @param weight The weights for the observations.
 //' @param rcens Censored observations.
@@ -270,7 +268,7 @@ void EMstep_RK(double h, arma::vec & alpha, arma::mat & S, const Rcpp::NumericVe
 //' @param avector The a vector.
 //' @param dt Increment.
 //' @param h Step-length.
-//' @param S Sub-intensity.
+//' @param S Sub-intensity matrix.
 //' 
 // [[Rcpp::export]]
 void a_rungekutta(arma::vec & avector, double dt, double h, const arma::mat & S) {
@@ -330,11 +328,11 @@ void a_rungekutta(arma::vec & avector, double dt, double h, const arma::mat & S)
 //' 
 //' @param h Step-length.
 //' @param alpha Initial probabilities.
-//' @param S Sub-intensity.
+//' @param S Sub-intensity matrix.
 //' @param obs The observations.
-//' @param weight Weight of the observations.
+//' @param weight Weights of the observations.
 //' @param rcens Censored observations.
-//' @param rcweight Weight of the censored observations.
+//' @param rcweight Weights of the censored observations.
 //' 
 // [[Rcpp::export]]
 double logLikelihoodPH_RK(double h, arma::vec & alpha, arma::mat & S, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight) {
@@ -366,7 +364,9 @@ double logLikelihoodPH_RK(double h, arma::vec & alpha, arma::mat & S, const Rcpp
     aux_mat = avector.t() * exit_vect;
     density = aux_mat(0,0);
     logLh += weight[k] * std::log(density);
-    if (k < obs.size() - 1) {dt = obs[k + 1] - obs[k]; }
+    if (k < obs.size() - 1) {
+      dt = obs[k + 1] - obs[k]; 
+    }
   }
   // Right censored data
   if (rcens.size() > 0) {
@@ -378,7 +378,9 @@ double logLikelihoodPH_RK(double h, arma::vec & alpha, arma::mat & S, const Rcpp
     aux_mat = avector.t() * e;
     density = aux_mat(0,0);
     logLh += rcweight[k] * std::log(density);
-    if (k < rcens.size() - 1) {dt = rcens[k + 1] - rcens[k];}
+    if (k < rcens.size() - 1) {
+      dt = rcens[k + 1] - rcens[k];
+    }
   }
   
   return logLh;
@@ -391,12 +393,12 @@ double logLikelihoodPH_RK(double h, arma::vec & alpha, arma::mat & S, const Rcpp
 //' 
 //' @param h Step-length.
 //' @param alpha Initial probabilities.
-//' @param S Sub-intensity.
+//' @param S Sub-intensity matrix.
 //' @param beta Parameter of transformation.
 //' @param obs The observations.
-//' @param weight Weight of the observations.
+//' @param weight Weights of the observations.
 //' @param rcens Censored observations.
-//' @param rcweight Weight of the censored observations.
+//' @param rcweight Weights of the censored observations.
 //' 
 // [[Rcpp::export]]
 double logLikelihoodMweibull_RK(double h, arma::vec & alpha, arma::mat & S, double beta, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight) {
@@ -429,8 +431,10 @@ double logLikelihoodMweibull_RK(double h, arma::vec & alpha, arma::mat & S, doub
     a_rungekutta(avector, dt, h, S);
     aux_mat = avector.t() * exit_vect;
     density = aux_mat(0,0);
-    logLh += weight[k] * (std::log(density) + std::log(beta) + (beta -1) * std::log(obs[k]));
-    if (k < obs.size() - 1) {dt = pow(obs[k + 1], beta) - pow(obs[k], beta);}
+    logLh += weight[k] * (std::log(density) + std::log(beta) + (beta - 1) * std::log(obs[k]));
+    if (k < obs.size() - 1) {
+      dt = pow(obs[k + 1], beta) - pow(obs[k], beta);
+    }
   }
   // Right censored data
   if (rcens.size() > 0) {
@@ -442,7 +446,9 @@ double logLikelihoodMweibull_RK(double h, arma::vec & alpha, arma::mat & S, doub
     aux_mat = avector.t() * e;
     density = aux_mat(0,0);
     logLh += rcweight[k] * std::log(density);
-    if (k < rcens.size() - 1) {dt = pow(rcens[k + 1], beta) - pow(rcens[k], beta);}
+    if (k < rcens.size() - 1) {
+      dt = pow(rcens[k + 1], beta) - pow(rcens[k], beta);
+    }
   }
   
   return logLh;
@@ -455,12 +461,12 @@ double logLikelihoodMweibull_RK(double h, arma::vec & alpha, arma::mat & S, doub
 //' 
 //' @param h Step-length.
 //' @param alpha Initial probabilities.
-//' @param S Sub-intensity.
+//' @param S Sub-intensity matrix.
 //' @param beta Parameter of transformation.
 //' @param obs The observations.
-//' @param weight Weight of the observations.
+//' @param weight Weights of the observations.
 //' @param rcens Censored observations.
-//' @param rcweight Weight of the censored observations.
+//' @param rcweight Weights of the censored observations.
 //' 
 // [[Rcpp::export]]
 double logLikelihoodMpareto_RK(double h, arma::vec & alpha, arma::mat & S, double beta, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight) {
@@ -494,7 +500,9 @@ double logLikelihoodMpareto_RK(double h, arma::vec & alpha, arma::mat & S, doubl
     aux_mat = avector.t() * exit_vect;
     density = aux_mat(0,0);
     logLh += weight[k] * (std::log(density) - std::log(obs[k] + beta));
-    if (k < obs.size() - 1) {dt = std::log(obs[k + 1] / beta + 1) - std::log(obs[k] / beta + 1);}
+    if (k < obs.size() - 1) {
+      dt = std::log(obs[k + 1] / beta + 1) - std::log(obs[k] / beta + 1);
+    }
   }
   // Right censored data
   if (rcens.size() > 0) {
@@ -506,7 +514,9 @@ double logLikelihoodMpareto_RK(double h, arma::vec & alpha, arma::mat & S, doubl
     aux_mat = avector.t() * e;
     density = aux_mat(0,0);
     logLh += rcweight[k] * std::log(density);
-    if (k < rcens.size() - 1) {dt = std::log(rcens[k + 1] / beta + 1) - std::log(rcens[k] / beta + 1);}
+    if (k < rcens.size() - 1) {
+      dt = std::log(rcens[k + 1] / beta + 1) - std::log(rcens[k] / beta + 1);
+    }
   }
   
   return logLh;
@@ -519,12 +529,12 @@ double logLikelihoodMpareto_RK(double h, arma::vec & alpha, arma::mat & S, doubl
 //' 
 //' @param h Step-length.
 //' @param alpha Initial probabilities.
-//' @param S Sub-intensity.
+//' @param S Sub-intensity matrix.
 //' @param beta Parameter of transformation.
 //' @param obs The observations.
-//' @param weight Weight of the observations.
+//' @param weight Weights of the observations.
 //' @param rcens Censored observations.
-//' @param rcweight Weight of the censored observations.
+//' @param rcweight Weights of the censored observations.
 //' 
 // [[Rcpp::export]]
 double logLikelihoodMlognormal_RK(double h, arma::vec & alpha, arma::mat & S, double beta, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight) {
@@ -558,7 +568,9 @@ double logLikelihoodMlognormal_RK(double h, arma::vec & alpha, arma::mat & S, do
     aux_mat = avector.t() * exit_vect;
     density = aux_mat(0,0);
     logLh += weight[k] * (std::log(density) + std::log(beta) + (beta -1) * std::log(std::log(obs[k] + 1)) - std::log(obs[k] + 1));
-    if (k < obs.size() - 1) {dt = pow(std::log(obs[k + 1] + 1), beta) - pow(std::log(obs[k] + 1), beta);}
+    if (k < obs.size() - 1) {
+      dt = pow(std::log(obs[k + 1] + 1), beta) - pow(std::log(obs[k] + 1), beta);
+    }
   }
   // Right censored data
   if (rcens.size() > 0) {
@@ -570,7 +582,9 @@ double logLikelihoodMlognormal_RK(double h, arma::vec & alpha, arma::mat & S, do
     aux_mat = avector.t() * e;
     density = aux_mat(0,0);
     logLh += rcweight[k] * std::log(density);
-    if (k < rcens.size() - 1) {dt = pow(std::log(rcens[k + 1] + 1), beta) - pow(std::log(rcens[k] + 1), beta);}
+    if (k < rcens.size() - 1) {
+      dt = pow(std::log(rcens[k + 1] + 1), beta) - pow(std::log(rcens[k] + 1), beta);
+    }
   }
   
   return logLh;
@@ -583,12 +597,12 @@ double logLikelihoodMlognormal_RK(double h, arma::vec & alpha, arma::mat & S, do
 //' 
 //' @param h Step-length.
 //' @param alpha Initial probabilities.
-//' @param S Sub-intensity.
+//' @param S Sub-intensity matrix.
 //' @param beta Parameters of transformation.
 //' @param obs The observations.
-//' @param weight Weight of the observations.
+//' @param weight Weights of the observations.
 //' @param rcens Censored observations.
-//' @param rcweight Weight of the censored observations.
+//' @param rcweight Weights of the censored observations.
 //' 
 // [[Rcpp::export]]
 double logLikelihoodMloglogistic_RK(double h, arma::vec & alpha, arma::mat & S, Rcpp::NumericVector beta, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight) {
@@ -622,7 +636,9 @@ double logLikelihoodMloglogistic_RK(double h, arma::vec & alpha, arma::mat & S, 
     aux_mat = avector.t() * exit_vect;
     density = aux_mat(0,0);
     logLh += weight[k] * (std::log(density) + std::log(beta[1]) - std::log(beta[0]) + (beta[1] - 1) * (std::log(obs[k]) - std::log(beta[0])) - std::log(pow(obs[k] / beta[0], beta[1]) + 1));
-    if (k < obs.size() - 1) {dt = std::log(pow(obs[k + 1] / beta[0], beta[1]) + 1) - std::log(pow(obs[k] / beta[0], beta[1]) + 1);}
+    if (k < obs.size() - 1) {
+      dt = std::log(pow(obs[k + 1] / beta[0], beta[1]) + 1) - std::log(pow(obs[k] / beta[0], beta[1]) + 1);
+    }
   }
   // Right censored data
   if (rcens.size() > 0) {
@@ -634,7 +650,9 @@ double logLikelihoodMloglogistic_RK(double h, arma::vec & alpha, arma::mat & S, 
     aux_mat = avector.t() * e;
     density = aux_mat(0,0);
     logLh += rcweight[k] * std::log(density);
-    if (k < rcens.size() - 1) {dt = std::log(pow(rcens[k + 1] / beta[0], beta[1]) + 1) - std::log(pow(rcens[k] / beta[0], beta[1]) + 1);}
+    if (k < rcens.size() - 1) {
+      dt = std::log(pow(rcens[k + 1] / beta[0], beta[1]) + 1) - std::log(pow(rcens[k] / beta[0], beta[1]) + 1);
+    }
   }
   
   return logLh;
@@ -647,12 +665,12 @@ double logLikelihoodMloglogistic_RK(double h, arma::vec & alpha, arma::mat & S, 
 //' 
 //' @param h Step-length.
 //' @param alpha Initial probabilities.
-//' @param S Sub-intensity.
+//' @param S Sub-intensity matrix.
 //' @param beta Parameter of transformation.
 //' @param obs The observations.
-//' @param weight Weight of the observations.
+//' @param weight Weights of the observations.
 //' @param rcens Censored observations.
-//' @param rcweight Weight of the censored observations.
+//' @param rcweight Weights of the censored observations.
 //' 
 // [[Rcpp::export]]
 double logLikelihoodMgompertz_RK(double h, arma::vec & alpha, arma::mat & S, double beta, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight) {
@@ -686,7 +704,9 @@ double logLikelihoodMgompertz_RK(double h, arma::vec & alpha, arma::mat & S, dou
     aux_mat = avector.t() * exit_vect;
     density = aux_mat(0,0);
     logLh += weight[k] * (std::log(density) + obs[k] * beta);
-    if (k < obs.size() - 1) {dt = (exp(obs[k + 1] * beta) - 1) / beta - (exp(obs[k] * beta) - 1) / beta;}
+    if (k < obs.size() - 1) {
+      dt = (exp(obs[k + 1] * beta) - 1) / beta - (exp(obs[k] * beta) - 1) / beta;
+    }
   }
   // Right censored data
   if (rcens.size() > 0) {
@@ -698,7 +718,9 @@ double logLikelihoodMgompertz_RK(double h, arma::vec & alpha, arma::mat & S, dou
     aux_mat = avector.t() * e;
     density = aux_mat(0,0);
     logLh += rcweight[k] * std::log(density);
-    if (k < rcens.size() - 1) {dt = (exp(rcens[k + 1] * beta) - 1) / beta - (exp(rcens[k] * beta) - 1) / beta;}
+    if (k < rcens.size() - 1) {
+      dt = (exp(rcens[k + 1] * beta) - 1) / beta - (exp(rcens[k] * beta) - 1) / beta;
+    }
   }
   
   return logLh;
@@ -711,12 +733,12 @@ double logLikelihoodMgompertz_RK(double h, arma::vec & alpha, arma::mat & S, dou
 //' 
 //' @param h Step-length.
 //' @param alpha Initial probabilities.
-//' @param S Sub-intensity.
+//' @param S Sub-intensity matrix.
 //' @param beta Parameter of transformation
 //' @param obs The observations.
-//' @param weight Weight of the observations.
+//' @param weight Weights of the observations.
 //' @param rcens Censored observations.
-//' @param rcweight Weight of the censored observations.
+//' @param rcweight Weights of the censored observations.
 //' 
 // [[Rcpp::export]]
 double logLikelihoodMgev_RK(double h, arma::vec  & alpha, arma::mat & S, Rcpp::NumericVector beta, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight) {
@@ -753,7 +775,9 @@ double logLikelihoodMgev_RK(double h, arma::vec  & alpha, arma::mat & S, Rcpp::N
       aux_mat = avector.t() * exit_vect;
       density = aux_mat(0,0);
       logLh += weight[N - k] * (std::log(density) - std::log(beta[1]) - (obs[N - k] - beta[0]) / beta[1]);
-      if (k < N) {dt = exp(-(obs[N - k - 1] - beta[0]) / beta[1]) - exp(-(obs[N - k] - beta[0]) / beta[1]);}
+      if (k < N) {
+        dt = exp(-(obs[N - k - 1] - beta[0]) / beta[1]) - exp(-(obs[N - k] - beta[0]) / beta[1]);
+      }
     }
     // Right censored data
     N = rcens.size();
@@ -766,26 +790,30 @@ double logLikelihoodMgev_RK(double h, arma::vec  & alpha, arma::mat & S, Rcpp::N
       aux_mat = avector.t() * e;
       density = aux_mat(0,0);
       logLh += rcweight[N - k] * std::log(density);
-      if (k < N) { dt = exp(-(rcens[N - k - 1] - beta[0]) / beta[1]) - exp(-(rcens[N - k] - beta[0]) / beta[1]);}
+      if (k < N) { 
+        dt = exp(-(rcens[N - k - 1] - beta[0]) / beta[1]) - exp(-(rcens[N - k] - beta[0]) / beta[1]);
+      }
     }
   }
   else {
     // Non censored data
     if (N > 0) {
-      dt = pow(1 + (beta[2] / beta[1]) * (obs[N - 1] - beta[0]) , - 1 / beta[2]);
+      dt = pow(1 + (beta[2] / beta[1]) * (obs[N - 1] - beta[0]), -1 / beta[2]);
     }
     for (int k{1}; k <= N; ++k) {
       a_rungekutta(avector, dt, h, S);
       aux_mat = avector.t() * exit_vect;
       density = aux_mat(0,0);
       logLh += weight[N - k] * (std::log(density) - std::log(beta[1]) - (1 + 1 / beta[2]) * std::log(1 + (beta[2] / beta[1]) * (obs[N - k] - beta[0])));
-      if (k < N) {dt = pow(1 + (beta[2] / beta[1]) * (obs[N - k - 1] - beta[0]) , - 1 / beta[2]) - pow(1 + (beta[2] / beta[1]) * (obs[N - k] - beta[0]) , - 1 / beta[2]);}
+      if (k < N) {
+        dt = pow(1 + (beta[2] / beta[1]) * (obs[N - k - 1] - beta[0]), -1 / beta[2]) - pow(1 + (beta[2] / beta[1]) * (obs[N - k] - beta[0]), -1 / beta[2]);
+      }
       
     }
     // Right censored data
     N = rcens.size();
     if (N > 0) {
-      dt = pow(1 + (beta[2] / beta[1]) * (rcens[N - 1] - beta[0]) , - 1 / beta[2]);
+      dt = pow(1 + (beta[2] / beta[1]) * (rcens[N - 1] - beta[0]), -1 / beta[2]);
       avector = alpha;
     }
     for (int k{1}; k <= N; ++k) {
@@ -793,9 +821,12 @@ double logLikelihoodMgev_RK(double h, arma::vec  & alpha, arma::mat & S, Rcpp::N
       aux_mat = avector.t() * e;
       density = aux_mat(0,0);
       logLh += rcweight[N - k] * std::log(density);
-      if (k < N) {dt = pow(1 + (beta[2] / beta[1]) * (rcens[N - k - 1] - beta[0]) , - 1 / beta[2]) - pow(1 + (beta[2] / beta[1]) * (rcens[N - k] - beta[0]) , - 1 / beta[2]);}
+      if (k < N) {
+        dt = pow(1 + (beta[2] / beta[1]) * (rcens[N - k - 1] - beta[0]), -1 / beta[2]) - pow(1 + (beta[2] / beta[1]) * (rcens[N - k] - beta[0]), -1 / beta[2]);
+      }
     }
   }
+  
   return logLh;
 }
 
@@ -804,17 +835,17 @@ double logLikelihoodMgev_RK(double h, arma::vec  & alpha, arma::mat & S, Rcpp::N
 // Scaled versions of loglikelihoods (for regression)://
 ///////////////////////////////////////////////////////
 
-//' Loglikelihood of phase-type using Runge-Kutta
+//' Loglikelihood of PI with phase-type using Runge-Kutta
 //' 
 //' Loglikelihood for a sample.
 //' 
 //' @param h Step-length.
 //' @param alpha Initial probabilities.
-//' @param S Sub-intensity.
+//' @param S Sub-intensity matrix.
 //' @param obs The observations.
-//' @param weight Weight of the observations.
+//' @param weight Weights of the observations.
 //' @param rcens Censored observations.
-//' @param rcweight Weight of the censored observations.
+//' @param rcweight Weights of the censored observations.
 //' @param scale1 Scale for observations.
 //' @param scale2 Scale for censored observations.
 //' 
@@ -848,7 +879,9 @@ double logLikelihoodPH_RKs(double h, arma::vec & alpha, arma::mat & S, const Rcp
     aux_mat = avector.t() * exit_vect;
     density = aux_mat(0,0);
     logLh += weight[k] * (std::log(density) + std::log(scale1[k]));
-    if (k < obs.size() - 1){dt = scale1[k + 1] * obs[k + 1] - scale1[k] * obs[k];}
+    if (k < obs.size() - 1) {
+      dt = scale1[k + 1] * obs[k + 1] - scale1[k] * obs[k];
+    }
   }
   // Right censored data
   if (rcens.size() > 0) {
@@ -860,25 +893,27 @@ double logLikelihoodPH_RKs(double h, arma::vec & alpha, arma::mat & S, const Rcp
     aux_mat = avector.t() * e;
     density = aux_mat(0,0);
     logLh += rcweight[k] * std::log(density);
-    if (k < rcens.size() - 1){dt = scale2[k + 1] * rcens[k + 1] - scale2[k] * rcens[k];}
+    if (k < rcens.size() - 1) {
+      dt = scale2[k + 1] * rcens[k + 1] - scale2[k] * rcens[k];
+    }
   }
   
   return logLh;
 }
 
 
-//' Loglikelihood of matrix-Weibull using Runge-Kutta
+//' Loglikelihood of PI with matrix-Weibull using Runge-Kutta
 //' 
 //' Loglikelihood for a sample.
 //' 
 //' @param h Step-length.
 //' @param alpha Initial probabilities.
-//' @param S Sub-intensity.
+//' @param S Sub-intensity matrix.
 //' @param beta Parameter of transformation.
 //' @param obs The observations.
-//' @param weight Weight of the observations.
+//' @param weight Weights of the observations.
 //' @param rcens Censored observations.
-//' @param rcweight Weight of the censored observations.
+//' @param rcweight Weights of the censored observations.
 //' @param scale1 Scale for observations.
 //' @param scale2 Scale for censored observations.
 //' 
@@ -911,8 +946,10 @@ double logLikelihoodMweibull_RKs(double h, arma::vec & alpha, arma::mat & S, dou
     if(dt > 0) a_rungekutta(avector, dt, h, S);
     aux_mat = avector.t() * exit_vect;
     density = aux_mat(0,0);
-    logLh += weight[k] * (std::log(density) + std::log(scale1[k]) + std::log(beta) + (beta -1) * std::log(obs[k]));
-    if (k < obs.size() - 1){dt = scale1[k + 1] * pow(obs[k + 1], beta) - scale1[k] * pow(obs[k], beta);}
+    logLh += weight[k] * (std::log(density) + std::log(scale1[k]) + std::log(beta) + (beta - 1) * std::log(obs[k]));
+    if (k < obs.size() - 1) {
+      dt = scale1[k + 1] * pow(obs[k + 1], beta) - scale1[k] * pow(obs[k], beta);
+    }
   }
   // Right censored data
   if (rcens.size() > 0) {
@@ -924,25 +961,27 @@ double logLikelihoodMweibull_RKs(double h, arma::vec & alpha, arma::mat & S, dou
     aux_mat = avector.t() * e;
     density = aux_mat(0,0);
     logLh += rcweight[k] * std::log(density);
-    if (k < rcens.size() - 1){dt = scale2[k + 1] * pow(rcens[k + 1], beta) - scale2[k] * pow(rcens[k], beta);}
+    if (k < rcens.size() - 1) {
+      dt = scale2[k + 1] * pow(rcens[k + 1], beta) - scale2[k] * pow(rcens[k], beta);
+    }
   }
   
   return logLh;
 }
 
 
-//' Loglikelihood of matrix-Pareto using Runge-Kutta
+//' Loglikelihood of PI with matrix-Pareto using Runge-Kutta
 //' 
 //' Loglikelihood for a sample.
 //' 
 //' @param h Step-length.
 //' @param alpha Initial probabilities.
-//' @param S Sub-intensity.
+//' @param S Sub-intensity matrix.
 //' @param beta Parameter of transformation.
 //' @param obs The observations.
-//' @param weight Weight of the observations.
+//' @param weight Weights of the observations.
 //' @param rcens Censored observations.
-//' @param rcweight Weight of the censored observations.
+//' @param rcweight Weights of the censored observations.
 //' @param scale1 Scale for observations.
 //' @param scale2 Scale for censored observations.
 //' 
@@ -976,7 +1015,9 @@ double logLikelihoodMpareto_RKs(double h, arma::vec & alpha, arma::mat & S, doub
     aux_mat = avector.t() * exit_vect;
     density = aux_mat(0,0);
     logLh += weight[k] * (std::log(density) + std::log(scale1[k]) - std::log(obs[k] + beta));
-    if (k < obs.size() - 1){dt = scale1[k + 1] * std::log(obs[k + 1] / beta + 1) - scale1[k] * std::log(obs[k] / beta + 1);}
+    if (k < obs.size() - 1) {
+      dt = scale1[k + 1] * std::log(obs[k + 1] / beta + 1) - scale1[k] * std::log(obs[k] / beta + 1);
+    }
   }
   // Right censored data
   if (rcens.size() > 0) {
@@ -988,25 +1029,27 @@ double logLikelihoodMpareto_RKs(double h, arma::vec & alpha, arma::mat & S, doub
     aux_mat = avector.t() * e;
     density = aux_mat(0,0);
     logLh += rcweight[k] * std::log(density);
-    if (k < rcens.size() - 1){dt = scale2[k + 1] * std::log(rcens[k + 1] / beta + 1) - scale2[k] * std::log(rcens[k] / beta + 1);}
+    if (k < rcens.size() - 1) {
+      dt = scale2[k + 1] * std::log(rcens[k + 1] / beta + 1) - scale2[k] * std::log(rcens[k] / beta + 1);
+    }
   }
   
   return logLh;
 }
 
 
-//' Loglikelihood of matrix-lognormal using Runge-Kutta
+//' Loglikelihood of PI matrix-lognormal using Runge-Kutta
 //' 
 //' Loglikelihood for a sample.
 //' 
 //' @param h Step-length.
 //' @param alpha Initial probabilities.
-//' @param S Sub-intensity.
+//' @param S Sub-intensity matrix.
 //' @param beta Parameter of transformation.
 //' @param obs The observations.
-//' @param weight Weight of the observations.
+//' @param weight Weights of the observations.
 //' @param rcens Censored observations.
-//' @param rcweight Weight of the censored observations.
+//' @param rcweight Weights of the censored observations.
 //' @param scale1 Scale for observations.
 //' @param scale2 Scale for censored observations.
 //' 
@@ -1039,8 +1082,10 @@ double logLikelihoodMlognormal_RKs(double h, arma::vec & alpha, arma::mat & S, d
     if(dt > 0) a_rungekutta(avector, dt, h, S);
     aux_mat = avector.t() * exit_vect;
     density = aux_mat(0,0);
-    logLh += weight[k] * (std::log(density) + std::log(scale1[k]) + std::log(beta) + (beta -1) * std::log(std::log(obs[k] + 1)) - std::log(obs[k] + 1));
-    if (k < obs.size() - 1){dt = scale1[k + 1] * pow(std::log(obs[k + 1] + 1), beta) - scale1[k] * pow(std::log(obs[k] + 1), beta);}
+    logLh += weight[k] * (std::log(density) + std::log(scale1[k]) + std::log(beta) + (beta - 1) * std::log(std::log(obs[k] + 1)) - std::log(obs[k] + 1));
+    if (k < obs.size() - 1) {
+      dt = scale1[k + 1] * pow(std::log(obs[k + 1] + 1), beta) - scale1[k] * pow(std::log(obs[k] + 1), beta);
+    }
   }
   // Right censored data
   if (rcens.size() > 0) {
@@ -1052,25 +1097,27 @@ double logLikelihoodMlognormal_RKs(double h, arma::vec & alpha, arma::mat & S, d
     aux_mat = avector.t() * e;
     density = aux_mat(0,0);
     logLh += rcweight[k] * std::log(density);
-    if (k < rcens.size() - 1){dt = scale2[k + 1] * pow(std::log(rcens[k + 1] + 1), beta) - scale2[k] * pow(std::log(rcens[k] + 1), beta);}
+    if (k < rcens.size() - 1) {
+      dt = scale2[k + 1] * pow(std::log(rcens[k + 1] + 1), beta) - scale2[k] * pow(std::log(rcens[k] + 1), beta);
+    }
   }
   
   return logLh;
 }
 
 
-//' Loglikelihood of matrix-loglogistic using Runge-Kutta
+//' Loglikelihood of PI with matrix-loglogistic using Runge-Kutta
 //' 
 //' Loglikelihood for a sample.
 //' 
 //' @param h Step-length.
 //' @param alpha Initial probabilities.
-//' @param S Sub-intensity.
+//' @param S Sub-intensity matrix.
 //' @param beta Parameters of transformation.
 //' @param obs The observations.
-//' @param weight Weight of the observations.
+//' @param weight Weights of the observations.
 //' @param rcens Censored observations.
-//' @param rcweight Weight of the censored observations.
+//' @param rcweight Weights of the censored observations.
 //' @param scale1 Scale for observations.
 //' @param scale2 Scale for censored observations.
 //' 
@@ -1104,7 +1151,9 @@ double logLikelihoodMloglogistic_RKs(double h, arma::vec & alpha, arma::mat & S,
     aux_mat = avector.t() * exit_vect;
     density = aux_mat(0,0);
     logLh += weight[k] * (std::log(density) + std::log(scale1[k]) + std::log(beta[1]) - std::log(beta[0]) + (beta[1] - 1) * (std::log(obs[k]) - std::log(beta[0])) - std::log(pow(obs[k] / beta[0], beta[1]) + 1));
-    if (k < obs.size() - 1){dt = scale1[k + 1] * std::log(pow(obs[k + 1] / beta[0], beta[1]) + 1) - scale1[k] * std::log(pow(obs[k] / beta[0], beta[1]) + 1);}
+    if (k < obs.size() - 1) {
+      dt = scale1[k + 1] * std::log(pow(obs[k + 1] / beta[0], beta[1]) + 1) - scale1[k] * std::log(pow(obs[k] / beta[0], beta[1]) + 1);
+    }
   }
   // Right censored data
   if (rcens.size() > 0) {
@@ -1116,25 +1165,27 @@ double logLikelihoodMloglogistic_RKs(double h, arma::vec & alpha, arma::mat & S,
     aux_mat = avector.t() * e;
     density = aux_mat(0,0);
     logLh += rcweight[k] * std::log(density);
-    if (k < rcens.size() - 1){dt = scale2[k + 1] * std::log(pow(rcens[k + 1] / beta[0], beta[1]) + 1) - scale2[k] * std::log(pow(rcens[k] / beta[0], beta[1]) + 1);}
+    if (k < rcens.size() - 1) {
+      dt = scale2[k + 1] * std::log(pow(rcens[k + 1] / beta[0], beta[1]) + 1) - scale2[k] * std::log(pow(rcens[k] / beta[0], beta[1]) + 1);
+    }
   }
   
   return logLh;
 }
 
 
-//' Loglikelihood of matrix-Gompertz using Runge-Kutta
+//' Loglikelihood of PI with matrix-Gompertz using Runge-Kutta
 //' 
 //' Loglikelihood for a sample.
 //' 
 //' @param h Step-length.
 //' @param alpha Initial probabilities.
-//' @param S Sub-intensity.
+//' @param S Sub-intensity matrix.
 //' @param beta Parameter of transformation.
 //' @param obs The observations.
-//' @param weight Weight of the observations.
+//' @param weight Weights of the observations.
 //' @param rcens Censored observations.
-//' @param rcweight Weight of the censored observations.
+//' @param rcweight Weights of the censored observations.
 //' @param scale1 Scale for observations.
 //' @param scale2 Scale for censored observations.
 //' 
@@ -1168,7 +1219,9 @@ double logLikelihoodMgompertz_RKs(double h, arma::vec & alpha, arma::mat & S, do
     aux_mat = avector.t() * exit_vect;
     density = aux_mat(0,0);
     logLh += weight[k] * (std::log(density) + std::log(scale1[k]) + obs[k] * beta);
-    if (k < obs.size() - 1){dt = scale1[k + 1] * (exp(obs[k + 1] * beta) - 1) / beta - scale1[k] * (exp(obs[k] * beta) - 1) / beta;}
+    if (k < obs.size() - 1) {
+      dt = scale1[k + 1] * (exp(obs[k + 1] * beta) - 1) / beta - scale1[k] * (exp(obs[k] * beta) - 1) / beta;
+    }
   }
   // Right censored data
   if (rcens.size() > 0) {
@@ -1180,7 +1233,9 @@ double logLikelihoodMgompertz_RKs(double h, arma::vec & alpha, arma::mat & S, do
     aux_mat = avector.t() * e;
     density = aux_mat(0,0);
     logLh += rcweight[k] * std::log(density);
-    if (k < rcens.size() - 1){dt = scale2[k + 1] * (exp(rcens[k + 1] * beta) - 1) / beta - scale2[k] * (exp(rcens[k] * beta) - 1) / beta;}
+    if (k < rcens.size() - 1) {
+      dt = scale2[k + 1] * (exp(rcens[k + 1] * beta) - 1) / beta - scale2[k] * (exp(rcens[k] * beta) - 1) / beta;
+    }
   }
   
   return logLh;

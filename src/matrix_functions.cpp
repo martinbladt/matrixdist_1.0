@@ -23,9 +23,10 @@ double default_step_length(const NumericMatrix & S) {
 }
 
 
-//' Applies the inverse of the GEV transformation but giving back the resulting vector in reverse order
+//' Applies the inverse of the GEV transformation but giving back the resulting 
+//'  vector in reverse order
 //' 
-//' Used for EM step.
+//' Used for EM step in RK.
 //' 
 //' @param obs The observations.
 //' @param weights Weights of the observations.
@@ -33,7 +34,7 @@ double default_step_length(const NumericMatrix & S) {
 //' 
 // [[Rcpp::export]]
 List revers_data_trans(const NumericVector & obs, const NumericVector & weights, const NumericVector & beta) {
-  int n = static_cast<int>(obs.size());
+  int n{static_cast<int>(obs.size())};
   NumericVector trans_obs(n);
   NumericVector trans_weights(n);
   if (beta[2] == 0) { // Gumbel

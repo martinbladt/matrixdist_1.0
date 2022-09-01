@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{logLikelihoodMlognormal_UNIs}
 \alias{logLikelihoodMlognormal_UNIs}
-\title{Loglikelihood of matrix-lognormal using uniformization}
+\title{Loglikelihood of PI with matrix-lognormal using uniformization}
 \usage{
 logLikelihoodMlognormal_UNIs(
   h,
@@ -22,17 +22,17 @@ logLikelihoodMlognormal_UNIs(
 
 \item{alpha}{Initial probabilities.}
 
-\item{S}{Sub-intensity.}
+\item{S}{Sub-intensity matrix.}
 
 \item{beta}{Parameter of transformation.}
 
 \item{obs}{The observations.}
 
-\item{weight}{Weight of the observations.}
+\item{weight}{Weights of the observations.}
 
 \item{rcens}{Censored observations.}
 
-\item{rcweight}{Weight of the censored observations.}
+\item{rcweight}{Weights of the censored observations.}
 
 \item{scale1}{Scale for observations.}
 

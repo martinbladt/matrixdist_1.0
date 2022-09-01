@@ -11,9 +11,9 @@ rMPHstar(n, alpha, S, R)
 
 \item{alpha}{Initial probabilities.}
 
-\item{S}{sub-intensity matrix.}
+\item{S}{Sub-intensity matrix.}
 
-\item{R}{reward matrix.}
+\item{R}{Reward matrix.}
 }
 \value{
 The simulated samples, each column corresponds to a marginal.

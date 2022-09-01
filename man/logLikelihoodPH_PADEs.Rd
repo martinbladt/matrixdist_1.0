@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{logLikelihoodPH_PADEs}
 \alias{logLikelihoodPH_PADEs}
-\title{Loglikelihood of phase-type using Pade}
+\title{Loglikelihood of PI with phase-type using Pade}
 \usage{
 logLikelihoodPH_PADEs(
   h,
@@ -21,20 +21,20 @@ logLikelihoodPH_PADEs(
 
 \item{alpha}{Initial probabilities.}
 
-\item{S}{Sub-intensity.}
+\item{S}{Sub-intensity matrix.}
 
 \item{obs}{The observations.}
 
-\item{weight}{Weight of the observations.}
+\item{weight}{The weights of the observations.}
 
 \item{rcens}{Censored observations.}
 
-\item{rcweight}{Weight of the censored observations.}
+\item{rcweight}{The weights of the censored observations.}
 
 \item{scale1}{Scale for observations.}
 
 \item{scale2}{Scale for censored observations.}
 }
 \description{
-Loglikelihood for a sample
+Loglikelihood for a sample.
 }

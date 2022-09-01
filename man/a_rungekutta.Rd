@@ -13,7 +13,7 @@ a_rungekutta(avector, dt, h, S)
 
 \item{h}{Step-length.}
 
-\item{S}{Sub-intensity.}
+\item{S}{Sub-intensity matrix.}
 }
 \description{
 Runge-Kutta for the calculation of the a vector in a EM step

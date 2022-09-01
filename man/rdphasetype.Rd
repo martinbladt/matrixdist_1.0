@@ -11,7 +11,7 @@ rdphasetype(n, alpha, S)
 
 \item{alpha}{Vector of initial probabilities.}
 
-\item{S}{transition matrix.}
+\item{S}{Sub-transition matrix.}
 }
 \value{
 Simulated sample.

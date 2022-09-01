@@ -2,25 +2,25 @@
 % Please edit documentation in R/RcppExports.R
 \name{logLikelihoodPH_MoE}
 \alias{logLikelihoodPH_MoE}
-\title{Loglikelihood for a sample}
+\title{Loglikelihood for PH-MoE}
 \usage{
 logLikelihoodPH_MoE(alpha1, alpha2, S, obs, weight, rcens, rcweight)
 }
 \arguments{
-\item{alpha1}{initial probabilities non-censored data}
+\item{alpha1}{Initial probabilities for non-censored data.}
 
-\item{alpha2}{initial probabilities censored data}
+\item{alpha2}{Initial probabilities for censored data.}
 
-\item{S}{sub-intensity}
+\item{S}{Sub-intensity matrix.}
 
-\item{obs}{the observations}
+\item{obs}{The observations.}
 
-\item{weight}{weight of the observations}
+\item{weight}{The weights of the observations.}
 
-\item{rcens}{censored observations}
+\item{rcens}{Censored observations.}
 
-\item{rcweight}{weight of the censored observations}
+\item{rcweight}{The weights of the censored observations.}
 }
 \description{
-Loglikelihood for a sample
+Loglikelihood for PH-MoE
 }

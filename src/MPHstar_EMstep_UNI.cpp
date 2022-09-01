@@ -10,10 +10,11 @@
 //'
 //' Generates samples of size \code{n} from a multivariate phase-type distribution
 //'  with parameters \code{alpha} and \code{S}.
+//'  
 //' @param n Sample size for each marginal.
 //' @param alpha Initial probabilities.
-//' @param S sub-intensity matrix.
-//' @param R reward matrix.
+//' @param S Sub-intensity matrix.
+//' @param R Reward matrix.
 //'
 //' @return The simulated samples, each column corresponds to a marginal.
 //'

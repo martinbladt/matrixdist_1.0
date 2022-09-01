@@ -2,15 +2,15 @@
 # include <RcppArmadillo.h>
 // [[ Rcpp :: depends ( RcppArmadillo )]]
 
-//' EM for discrete phase type
+//' EM for discrete phase-type
 //' 
 //' @param alpha Initial probabilities.
-//' @param S Sub-intensity.
+//' @param S Sub-transition matrix.
 //' @param obs The observations.
 //' @param weight The weights for the observations.
 //' 
 // [[Rcpp::export]]
-void EMstep_dph(arma::vec & alpha,  arma::mat & S, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight) {
+void EMstep_dph(arma::vec & alpha, arma::mat & S, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight) {
   unsigned p{S.n_rows};
   
   arma::mat e;
@@ -40,14 +40,13 @@ void EMstep_dph(arma::vec & alpha,  arma::mat & S, const Rcpp::NumericVector & o
   double density{0.0};
   
   //E-step
-  //  Unccensored data
   for (int k{0}; k < obs.size(); ++k) {
     sum_weights += weight[k];
     
-    // Matrix power
+    //Matrix power
     J = vect[obs[k] - 1];
     
-    // Separate matrix
+    //Separate matrix
     for (int i{0}; i < p; ++i) {
       for (int j{0}; j < p; ++j) {
         aux_pow(i,j) = J(i,j);
@@ -84,10 +83,10 @@ void EMstep_dph(arma::vec & alpha,  arma::mat & S, const Rcpp::NumericVector & o
 }
 
 
-//' EM for discrete phase type MoE
+//' EM for discrete phase-type MoE
 //' 
 //' @param alpha Initial probabilities.
-//' @param S Sub-intensity.
+//' @param S Sub-transition matrix.
 //' @param obs The observations.
 //' @param weight The weights for the observations.
 //' 
@@ -120,12 +119,11 @@ arma::mat EMstep_dph_MoE(arma::mat & alpha,  arma::mat & S, const Rcpp::NumericV
   double density{0.0};
   
   //E-step
-  //  Unccensored data
   for (int k{0}; k < obs.size(); ++k) {
     alpha_aux = alpha.row(k);
     s_prod_alpha = exit_vect * alpha_aux;
     
-    // Matrix power
+    //Matrix power
     aux_pow = vect[obs[k] - 1];
     
     avector = alpha_aux * aux_pow;
@@ -161,12 +159,12 @@ arma::mat EMstep_dph_MoE(arma::mat & alpha,  arma::mat & S, const Rcpp::NumericV
 }
 
 
-//' Loglikelihood for a sample 
+//' Loglikelihood for discrete phase-type
 //' 
-//' @param alpha initial probabilities
-//' @param S sub-intensity
-//' @param obs the observations
-//' @param weight weight of the observations
+//' @param alpha Initial probabilities.
+//' @param S Sub-transition matrix.
+//' @param obs The observations.
+//' @param weight The weights of the observations.
 //' 
 // [[Rcpp::export]]
 double logLikelihoodDPH(arma::vec & alpha, arma::mat & S, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight) {
@@ -184,7 +182,6 @@ double logLikelihoodDPH(arma::vec & alpha, arma::mat & S, const Rcpp::NumericVec
   
   double logLh{0.0};
   
-  // Non censored data
   for (int k{0}; k < obs.size(); ++k) {
     aux_mat = alpha.t() * vect[obs[k] - 1] * exit_vect;
     density = aux_mat(0,0);
@@ -195,12 +192,12 @@ double logLikelihoodDPH(arma::vec & alpha, arma::mat & S, const Rcpp::NumericVec
 }
 
 
-//' Loglikelihood for discrete phase type MoE
+//' Loglikelihood for discrete phase-type MoE
 //' 
-//' @param alpha initial probabilities
-//' @param S sub-intensity
-//' @param obs the observations
-//' @param weight weight of the observations
+//' @param alpha Initial probabilities.
+//' @param S Sub-transition matrix.
+//' @param obs The observations.
+//' @param weight The weights of the observations.
 //' 
 // [[Rcpp::export]]
 double logLikelihoodDPH_MoE(arma::mat & alpha, arma::mat & S, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight) {
@@ -218,7 +215,6 @@ double logLikelihoodDPH_MoE(arma::mat & alpha, arma::mat & S, const Rcpp::Numeri
   
   double logLh{0.0};
   
-  // Non censored data
   for (int k{0}; k < obs.size(); ++k) {
     arma::rowvec alpha_aux(alpha.row(k));
     aux_mat = alpha_aux * vect[obs[k] - 1] * exit_vect;

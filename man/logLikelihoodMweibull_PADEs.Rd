@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{logLikelihoodMweibull_PADEs}
 \alias{logLikelihoodMweibull_PADEs}
-\title{Loglikelihood of matrix-Weibull using Pade}
+\title{Loglikelihood of PI with matrix-Weibull using Pade}
 \usage{
 logLikelihoodMweibull_PADEs(
   h,
@@ -22,17 +22,17 @@ logLikelihoodMweibull_PADEs(
 
 \item{alpha}{Initial probabilities.}
 
-\item{S}{Sub-intensity.}
+\item{S}{Sub-intensity matrix.}
 
 \item{beta}{Inhomogeneity parameter.}
 
 \item{obs}{The observations.}
 
-\item{weight}{Weight of the observations.}
+\item{weight}{The weights of the observations.}
 
 \item{rcens}{Censored observations.}
 
-\item{rcweight}{Weight of the censored observations.}
+\item{rcweight}{The weights of the censored observations.}
 
 \item{scale1}{Scale for observations.}
 

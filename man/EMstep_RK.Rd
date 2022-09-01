@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{EMstep_RK}
 \alias{EMstep_RK}
-\title{EM step using Runge-Kutta}
+\title{EM step for phase-type using Runge-Kutta}
 \usage{
 EMstep_RK(h, alpha, S, obs, weight, rcens, rcweight)
 }
@@ -11,7 +11,7 @@ EMstep_RK(h, alpha, S, obs, weight, rcens, rcweight)
 
 \item{alpha}{Initial probabilities.}
 
-\item{S}{Sub-intensity.}
+\item{S}{Sub-intensity matrix.}
 
 \item{obs}{The observations.}
 

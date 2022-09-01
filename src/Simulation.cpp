@@ -92,7 +92,7 @@ arma::vec cumulate_vector(arma::vec A) {
 //'
 //' Given the accumulated values of the initial probabilities \code{alpha} and a
 //'  uniform value \code{u}, it returns the initial state of a Markov jump process.
-//' This corresponds to the states satisfying cum_alpha_(k-1)<u<cum_alpha_(k).
+//' This corresponds to the states satisfying cum_alpha_(k-1) < u < cum_alpha_(k).
 //' 
 //' @param cum_alpha A cummulated vector of initial probabilities.
 //' @param u Random value in (0,1).
@@ -267,7 +267,7 @@ Rcpp::NumericVector rmatrixgev(int n, arma::vec alpha, arma::mat S, double mu, d
 //' 
 //' @param n Sample size.
 //' @param alpha Vector of initial probabilities.
-//' @param S transition matrix.
+//' @param S Sub-transition matrix.
 //' @return Simulated sample.
 //'
 // [[Rcpp::export]]

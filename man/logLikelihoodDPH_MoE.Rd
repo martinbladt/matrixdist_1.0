@@ -2,19 +2,19 @@
 % Please edit documentation in R/RcppExports.R
 \name{logLikelihoodDPH_MoE}
 \alias{logLikelihoodDPH_MoE}
-\title{Loglikelihood for discrete phase type MoE}
+\title{Loglikelihood for discrete phase-type MoE}
 \usage{
 logLikelihoodDPH_MoE(alpha, S, obs, weight)
 }
 \arguments{
-\item{alpha}{initial probabilities}
+\item{alpha}{Initial probabilities.}
 
-\item{S}{sub-intensity}
+\item{S}{Sub-transition matrix.}
 
-\item{obs}{the observations}
+\item{obs}{The observations.}
 
-\item{weight}{weight of the observations}
+\item{weight}{The weights of the observations.}
 }
 \description{
-Loglikelihood for discrete phase type MoE
+Loglikelihood for discrete phase-type MoE
 }

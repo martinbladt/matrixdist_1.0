@@ -6,8 +6,8 @@
 
 //' Phase-type density
 //' 
-//' Computes the density of a phase-type distribution with parameters \code{alpha}
-//'  and \code{S} at \code{x}.
+//' Computes the density of a phase-type distribution with parameters
+//'  \code{alpha} and \code{S} at \code{x}.
 //' 
 //' @param x Non-negative value.
 //' @param alpha Initial probabilities.
@@ -40,8 +40,8 @@ Rcpp::NumericVector phdensity(Rcpp::NumericVector x, arma::vec alpha, arma::mat 
 
 //' Phase-type cdf
 //' 
-//' Computes the cdf (tail) of a phase-type distribution with parameters \code{alpha} and
-//'  \code{S} at \code{x}.
+//' Computes the cdf (tail) of a phase-type distribution with parameters 
+//'  \code{alpha} and \code{S} at \code{x}.
 //' 
 //' @param x Non-negative value.
 //' @param alpha Initial probabilities.
@@ -456,7 +456,7 @@ Rcpp::NumericVector mgompertzcdf(Rcpp::NumericVector x, arma::vec alpha, arma::m
 //' 
 //' Computes the density of a matrix-GEV distribution with parameters
 //'  \code{alpha}, \code{S} and \code{beta} at \code{x}.
-//' Don not allow for atoms in zero.
+//' Does not allow for atoms in zero.
 //' 
 //' @param x Non-negative value.
 //' @param alpha Initial probabilities.
@@ -538,8 +538,8 @@ Rcpp::NumericVector mgevcdf(Rcpp::NumericVector x, arma::vec alpha, arma::mat S,
 
 //' Discrete phase-type density
 //' 
-//' Computes the density of discrete phase-type distribution with parameters \code{alpha}
-//'  and \code{S} at \code{x}.
+//' Computes the density of discrete phase-type distribution with parameters
+//'  \code{alpha} and \code{S} at \code{x}.
 //' 
 //' @param x Non-negative value.
 //' @param alpha Initial probabilities.
@@ -570,8 +570,8 @@ Rcpp::NumericVector dphdensity(Rcpp::NumericVector x, arma::vec alpha, arma::mat
 
 //' Discrete phase-type cdf
 //' 
-//' Computes the cdf (tail) of a discrete phase-type distribution with parameters \code{alpha} and
-//'  \code{S} at \code{x}.
+//' Computes the cdf (tail) of a discrete phase-type distribution with parameters 
+//'  \code{alpha} and \code{S} at \code{x}.
 //' 
 //' @param x Non-negative value.
 //' @param alpha Initial probabilities.

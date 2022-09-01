@@ -2,12 +2,13 @@
 // [[ Rcpp :: depends ( RcppArmadillo )]]
 
 
-//' Computes the initial distribution and sub-intensity of the sum of two phase-type
+//' Computes the initial distribution and sub-intensity of the sum of two 
+//'  phase-type distributed random variables. 
 //' 
 //' @param alpha1 Initial distribution.
-//' @param S1 Sub-intensity.
+//' @param S1 Sub-intensity matrix.
 //' @param alpha2 Initial distribution.
-//' @param S2 Sub-intensity.
+//' @param S2 Sub-intensity matrix.
 //' 
 // [[Rcpp::export]]
 Rcpp::List sum_ph(arma::rowvec alpha1, arma::mat S1, arma::rowvec alpha2, arma::mat S2) {
@@ -48,12 +49,13 @@ Rcpp::List sum_ph(arma::rowvec alpha1, arma::mat S1, arma::rowvec alpha2, arma::
 }
 
 
-//' Computes the initial distribution and sub-intensity of the sum of two discrete phase-type
+//' Computes the initial distribution and sub-intensity of the sum of two 
+//'  discrete phase-type distributed random variables
 //' 
 //' @param alpha1 Initial distribution.
-//' @param S1 Sub-transition.
+//' @param S1 Sub-transition matrix.
 //' @param alpha2 Initial distribution.
-//' @param S2 Sub-transition.
+//' @param S2 Sub-transition matrix.
 //' 
 // [[Rcpp::export]]
 Rcpp::List sum_dph(arma::rowvec alpha1, arma::mat S1, arma::rowvec alpha2, arma::mat S2) {

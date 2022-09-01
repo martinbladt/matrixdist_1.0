@@ -11,17 +11,17 @@ logLikelihoodMlognormal_RK(h, alpha, S, beta, obs, weight, rcens, rcweight)
 
 \item{alpha}{Initial probabilities.}
 
-\item{S}{Sub-intensity.}
+\item{S}{Sub-intensity matrix.}
 
 \item{beta}{Parameter of transformation.}
 
 \item{obs}{The observations.}
 
-\item{weight}{Weight of the observations.}
+\item{weight}{Weights of the observations.}
 
 \item{rcens}{Censored observations.}
 
-\item{rcweight}{Weight of the censored observations.}
+\item{rcweight}{Weights of the censored observations.}
 }
 \description{
 Loglikelihood for a sample.

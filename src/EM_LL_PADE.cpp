@@ -6,7 +6,7 @@
 //    EM using Pade approximation        ///
 ////////////////////////////////////////////
 
-//' Computes elements S^n / n! until the value size
+//' Computes the elements S^n / n! until given value of n
 //' 
 //' @param vect A vector.
 //' @param S Sub-intensity matrix.
@@ -25,11 +25,11 @@ void vector_of_matrices_2(std::vector<arma::mat> & vect, const arma::mat & S, in
 }
 
 
-//' EM using Matlab algorithm for matrix exponential in combination with Armadillo
+//' EM for phase-type distributions using Pade approximation for matrix exponential
 //' 
 //' @param h Nuisance parameter.
 //' @param alpha Initial probabilities.
-//' @param S Sub-intensity.
+//' @param S Sub-intensity matrix.
 //' @param obs The observations.
 //' @param weight The weights for the observations.
 //' @param rcens Censored observations.
@@ -78,7 +78,7 @@ void EMstep_PADE(double h, arma::vec & alpha,  arma::mat & S, const Rcpp::Numeri
   double density{0.0};
   
   //E-step
-  //  Unccensored data
+  //  Uncensored data
   for (int k{0}; k < obs.size(); ++k) {
     sum_weights += weight[k];
     
@@ -219,13 +219,12 @@ void EMstep_PADE(double h, arma::vec & alpha,  arma::mat & S, const Rcpp::Numeri
 }
 
 
-
-//' EM using for PH-MoE
+//' EM for PH-MoE
 //' 
 //' No recycling of information
 //' 
 //' @param alpha Initial probabilities.
-//' @param S Sub-intensity.
+//' @param S Sub-intensity matrix.
 //' @param obs The observations.
 //' @param weight The weights for the observations.
 //' @param rcens Censored observations.
@@ -260,7 +259,7 @@ Rcpp::List EMstep_MoE_PADE(arma::mat & alpha,  arma::mat & S, const Rcpp::Numeri
   double density{0.0};
   
   //E-step
-  //  Unccensored data
+  //  Uncensored data
   for (int k{0}; k < obs.size(); ++k) {
     alpha_aux = alpha.row(k);
     s_prod_alpha = exit_vect * alpha_aux;
@@ -348,15 +347,15 @@ Rcpp::List EMstep_MoE_PADE(arma::mat & alpha,  arma::mat & S, const Rcpp::Numeri
 // Loglikelihoods
 ////////////////////////////////////////////
 
-//' Loglikelihood for a sample 
+//' Loglikelihood for PH-MoE
 //' 
-//' @param alpha1 initial probabilities non-censored data
-//' @param alpha2 initial probabilities censored data
-//' @param S sub-intensity
-//' @param obs the observations
-//' @param weight weight of the observations
-//' @param rcens censored observations
-//' @param rcweight weight of the censored observations
+//' @param alpha1 Initial probabilities for non-censored data.
+//' @param alpha2 Initial probabilities for censored data.
+//' @param S Sub-intensity matrix. 
+//' @param obs The observations.
+//' @param weight The weights of the observations.
+//' @param rcens Censored observations.
+//' @param rcweight The weights of the censored observations.
 //' 
 // [[Rcpp::export]]
 double logLikelihoodPH_MoE(arma::mat & alpha1, arma::mat & alpha2, arma::mat & S, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight) {
@@ -389,17 +388,17 @@ double logLikelihoodPH_MoE(arma::mat & alpha1, arma::mat & alpha2, arma::mat & S
 }
 
 
-//' Loglikelihood of phase-type using Pade
+//' Loglikelihood of phase-type using Pade approximation
 //' 
 //' Loglikelihood for a sample.
 //' 
 //' @param h Nuisance parameter.
 //' @param alpha Initial probabilities.
-//' @param S Sub-intensity.
+//' @param S Sub-intensity matrix.
 //' @param obs The observations.
-//' @param weight Weight of the observations.
+//' @param weight The weights of the observations.
 //' @param rcens Censored observations.
-//' @param rcweight Weight of the censored observations.
+//' @param rcweight The weights of the censored observations.
 //' 
 // [[Rcpp::export]]
 double logLikelihoodPH_PADE(double h, arma::vec & alpha, arma::mat & S, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight) {
@@ -508,12 +507,12 @@ double logLikelihoodPH_PADE(double h, arma::vec & alpha, arma::mat & S, const Rc
 //' 
 //' @param h Nuisance parameter.
 //' @param alpha Initial probabilities.
-//' @param S Sub-intensity.
+//' @param S Sub-intensity matrix.
 //' @param beta Inhomogeneity parameter.
 //' @param obs The observations.
-//' @param weight Weight of the observations.
+//' @param weight The weights of the observations.
 //' @param rcens Censored observations.
-//' @param rcweight Weight of the censored observations.
+//' @param rcweight The weights of the censored observations.
 //' 
 // [[Rcpp::export]]
 double logLikelihoodMweibull_PADE(double h, arma::vec & alpha, arma::mat & S, double beta, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight) {
@@ -624,12 +623,12 @@ double logLikelihoodMweibull_PADE(double h, arma::vec & alpha, arma::mat & S, do
 //' 
 //' @param h Nuisance parameter.
 //' @param alpha Initial probabilities.
-//' @param S Sub-intensity.
+//' @param S Sub-intensity matrix.
 //' @param beta Inhomogeneity parameter.
 //' @param obs The observations.
-//' @param weight Weight of the observations.
+//' @param weight The weights of the observations.
 //' @param rcens Censored observations.
-//' @param rcweight Weight of the censored observations.
+//' @param rcweight The weights of the censored observations.
 //' 
 // [[Rcpp::export]]
 double logLikelihoodMpareto_PADE(double h, arma::vec & alpha, arma::mat & S, double beta, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight) {
@@ -741,12 +740,12 @@ double logLikelihoodMpareto_PADE(double h, arma::vec & alpha, arma::mat & S, dou
 //' 
 //' @param h Nuisance parameter.
 //' @param alpha Initial probabilities.
-//' @param S Sub-intensity.
+//' @param S Sub-intensity matrix.
 //' @param beta Inhomogeneity parameter.
 //' @param obs The observations.
-//' @param weight Weight of the observations.
+//' @param weight The weights of the observations.
 //' @param rcens Censored observations.
-//' @param rcweight Weight of the censored observations.
+//' @param rcweight The weights of the censored observations.
 //' 
 // [[Rcpp::export]]
 double logLikelihoodMlognormal_PADE(double h, arma::vec & alpha, arma::mat & S, double beta, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight) {
@@ -854,16 +853,16 @@ double logLikelihoodMlognormal_PADE(double h, arma::vec & alpha, arma::mat & S, 
 
 //' Loglikelihood of matrix-loglogistic using Pade
 //' 
-//' Loglikelihood for a sample 
+//' Loglikelihood for a sample.
 //' 
 //' @param h Nuisance parameter.
 //' @param alpha Initial probabilities.
-//' @param S Sub-intensity.
+//' @param S Sub-intensity matrix.
 //' @param beta Inhomogeneity parameter.
 //' @param obs The observations.
-//' @param weight Weight of the observations.
+//' @param weight The weights of the observations.
 //' @param rcens Censored observations.
-//' @param rcweight Weight of the censored observations.
+//' @param rcweight The weights of the censored observations.
 //' 
 // [[Rcpp::export]]
 double logLikelihoodMloglogistic_PADE(double h, arma::vec & alpha, arma::mat & S, Rcpp::NumericVector beta, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight) {
@@ -975,12 +974,12 @@ double logLikelihoodMloglogistic_PADE(double h, arma::vec & alpha, arma::mat & S
 //' 
 //' @param h Nuisance parameter.
 //' @param alpha Initial probabilities.
-//' @param S Sub-intensity.
+//' @param S Sub-intensity matrix.
 //' @param beta Inhomogeneity parameter.
 //' @param obs The observations.
-//' @param weight Weight of the observations.
+//' @param weight The weights of the observations.
 //' @param rcens Censored observations.
-//' @param rcweight Weight of the censored observations.
+//' @param rcweight The weights of the censored observations.
 //' 
 // [[Rcpp::export]]
 double logLikelihoodMgompertz_PADE(double h, arma::vec & alpha, arma::mat & S, double beta, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight) {
@@ -1092,12 +1091,12 @@ double logLikelihoodMgompertz_PADE(double h, arma::vec & alpha, arma::mat & S, d
 //' 
 //' @param h Nuisance parameter.
 //' @param alpha Initial probabilities.
-//' @param S sub-intensity.
+//' @param S sub-intensity matrix.
 //' @param beta Inhomogeneity parameter.
 //' @param obs The observations.
-//' @param weight Weight of the observations.
+//' @param weight The weights of the observations.
 //' @param rcens Censored observations.
-//' @param rcweight Weight of the censored observations.
+//' @param rcweight The weights of the censored observations.
 //' 
 // [[Rcpp::export]]
 double logLikelihoodMgev_PADE(double h, arma::vec & alpha, arma::mat & S, Rcpp::NumericVector beta, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight) {
@@ -1277,17 +1276,17 @@ double logLikelihoodMgev_PADE(double h, arma::vec & alpha, arma::mat & S, Rcpp::
 // Scaled versions of loglikelihoods (for regression):
 ////////////////////////////////////////////
 
-//' Loglikelihood of phase-type using Pade
+//' Loglikelihood of PI with phase-type using Pade
 //' 
-//' Loglikelihood for a sample 
+//' Loglikelihood for a sample.
 //' 
 //' @param h Nuisance parameter.
 //' @param alpha Initial probabilities.
-//' @param S Sub-intensity.
+//' @param S Sub-intensity matrix.
 //' @param obs The observations.
-//' @param weight Weight of the observations.
+//' @param weight The weights of the observations.
 //' @param rcens Censored observations.
-//' @param rcweight Weight of the censored observations.
+//' @param rcweight The weights of the censored observations.
 //' @param scale1 Scale for observations.
 //' @param scale2 Scale for censored observations.
 //' 
@@ -1393,18 +1392,18 @@ double logLikelihoodPH_PADEs(double h, arma::vec & alpha, arma::mat & S, const R
 }
 
 
-//' Loglikelihood of matrix-Weibull using Pade
+//' Loglikelihood of PI with matrix-Weibull using Pade
 //' 
 //' Loglikelihood for a sample.
 //' 
 //' @param h Nuisance parameter.
 //' @param alpha Initial probabilities.
-//' @param S Sub-intensity.
+//' @param S Sub-intensity matrix.
 //' @param beta Inhomogeneity parameter.
 //' @param obs The observations.
-//' @param weight Weight of the observations.
+//' @param weight The weights of the observations.
 //' @param rcens Censored observations.
-//' @param rcweight Weight of the censored observations.
+//' @param rcweight The weights of the censored observations.
 //' @param scale1 Scale for observations.
 //' @param scale2 Scale for censored observations.
 //' 
@@ -1512,18 +1511,18 @@ double logLikelihoodMweibull_PADEs(double h, arma::vec & alpha, arma::mat & S, d
 }
 
 
-//' Loglikelihood of matrix-Pareto using Pade
+//' Loglikelihood of PI with matrix-Pareto using Pade
 //' 
 //' Loglikelihood for a sample.
 //' 
 //' @param h Nuisance parameter.
 //' @param alpha Initial probabilities.
-//' @param S Sub-intensity.
+//' @param S Sub-intensity matrix.
 //' @param beta Inhomogeneity parameter.
 //' @param obs The observations.
-//' @param weight Weight of the observations.
+//' @param weight Weights of the observations.
 //' @param rcens Censored observations.
-//' @param rcweight Weight of the censored observations.
+//' @param rcweight Weights of the censored observations.
 //' @param scale1 Scale for observations.
 //' @param scale2 Scale for censored observations.
 //' 
@@ -1631,18 +1630,18 @@ double logLikelihoodMpareto_PADEs(double h, arma::vec & alpha, arma::mat & S, do
 }
 
 
-//' Loglikelihood of matrix-lognormal using Pade
+//' Loglikelihood of PI with matrix-lognormal using Pade
 //' 
 //' Loglikelihood for a sample.
 //' 
 //' @param h Nuisance parameter.
 //' @param alpha Initial probabilities.
-//' @param S Sub-intensity.
+//' @param S Sub-intensity matrix.
 //' @param beta Inhomogeneity parameter.
 //' @param obs The observations.
-//' @param weight Weight of the observations.
+//' @param weight Weights of the observations.
 //' @param rcens Censored observations.
-//' @param rcweight Weight of the censored observations.
+//' @param rcweight Weights of the censored observations.
 //' @param scale1 Scale for observations.
 //' @param scale2 Scale for censored observations.
 //' 
@@ -1750,18 +1749,18 @@ double logLikelihoodMlognormal_PADEs(double h, arma::vec & alpha, arma::mat & S,
 }
 
 
-//' Loglikelihood of matrix-loglogistic using Pade
+//' Loglikelihood of PI with matrix-loglogistic using Pade
 //' 
 //' Loglikelihood for a sample.
 //' 
 //' @param h Nuisance parameter.
 //' @param alpha Initial probabilities.
-//' @param S Sub-intensity.
+//' @param S Sub-intensity matrix.
 //' @param beta Inhomogeneity parameter.
 //' @param obs The observations.
-//' @param weight Weight of the observations.
+//' @param weight Weights of the observations.
 //' @param rcens Censored observations.
-//' @param rcweight Weight of the censored observations.
+//' @param rcweight Weights of the censored observations.
 //' @param scale1 Scale for observations.
 //' @param scale2 Scale for censored observations.
 //' 
@@ -1869,7 +1868,7 @@ double logLikelihoodMloglogistic_PADEs(double h, arma::vec & alpha, arma::mat & 
 }
 
 
-//' Loglikelihood of matrix-Gompertz using Pade
+//' Loglikelihood of PI with matrix-Gompertz using Pade
 //' 
 //' Loglikelihood for a sample.
 //' 
@@ -1878,9 +1877,9 @@ double logLikelihoodMloglogistic_PADEs(double h, arma::vec & alpha, arma::mat & 
 //' @param S Sub-intensity.
 //' @param beta Inhomogeneity parameter.
 //' @param obs The observations.
-//' @param weight Weight of the observations.
+//' @param weight Weights of the observations.
 //' @param rcens Censored observations.
-//' @param rcweight Weight of the censored observations.
+//' @param rcweight Weights of the censored observations.
 //' @param scale1 Scale for observations.
 //' @param scale2 Scale for censored observations.
 //' 
