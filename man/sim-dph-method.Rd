@@ -12,7 +12,8 @@
 \item{n}{An integer of length of realization.}
 }
 \value{
-A realization of independent and identically distributed discrete phase-type variables.
+A realization of independent and identically distributed discrete 
+ phase-type variables.
 }
 \description{
 Simulation Method for phase-type distributions

@@ -1,18 +1,18 @@
 #' MoE Method for ph Class
 #'
-#' @param x an object of class \linkS4class{ph}.
-#' @param formula a regression formula.
-#' @param data a data frame.
-#' @param inhom a list with the inhomogeneity functions.
-#' @param alpha_vecs matrix of initial probabilities.s
-#' @param weight vector of weights.
-#' @param delta right-censoring indicator.
-#' @param stepsEM number of EM steps to be performed.
-#' @param optim_method method to use in gradient optimization
-#' @param maxit maximum number of iterations when optimizing g function.
-#' @param reltol relative tolerance when optimizing g function.
-#' @param every number of iterations between likelihood display updates.
-#' @param rand_init random initiation in the R-step.
+#' @param x An object of class \linkS4class{ph}.
+#' @param formula A regression formula.
+#' @param data A data frame.
+#' @param inhom A list with the inhomogeneity functions.
+#' @param alpha_vecs <atrix of initial probabilities.s
+#' @param weight Vector of weights.
+#' @param delta Right-censoring indicator.
+#' @param stepsEM Number of EM steps to be performed.
+#' @param optim_method Method to use in gradient optimization
+#' @param maxit Maximum number of iterations when optimizing g function.
+#' @param reltol Relative tolerance when optimizing g function.
+#' @param every Number of iterations between likelihood display updates.
+#' @param rand_init Random initiation in the R-step.
 #'
 #' @return An object of class \linkS4class{sph}.
 #'

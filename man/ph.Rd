@@ -22,6 +22,6 @@ An object of class \linkS4class{ph}.
 Constructor Function for phase-type distributions
 }
 \examples{
-ph(structure = "gcoxian", dim = 5)
+ph(structure = "gcoxian", dimension = 5)
 ph(alpha = c(.5, .5), S = matrix(c(-1, .5, .5, -1), 2, 2))
 }

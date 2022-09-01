@@ -8,7 +8,7 @@
 Class object.
 }
 \description{
-Class of objects for phase-type distributions.
+Class of objects for discrete phase-type distributions.
 }
 \section{Slots}{
 

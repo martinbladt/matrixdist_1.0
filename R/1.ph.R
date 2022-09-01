@@ -33,7 +33,7 @@ setClass("ph",
 #' @export
 #'
 #' @examples
-#' ph(structure = "gcoxian", dim = 5)
+#' ph(structure = "gcoxian", dimension = 5)
 #' ph(alpha = c(.5, .5), S = matrix(c(-1, .5, .5, -1), 2, 2))
 ph <- function(alpha = NULL, S = NULL, structure = NULL, dimension = 3) {
   if (any(is.null(alpha)) & any(is.null(S)) & is.null(structure)) {
@@ -292,7 +292,7 @@ setMethod("quan", c(x = "ph"), function(x,
 #' @param maxit Maximum number of iterations when optimizing g function.
 #' @param reltol Relative tolerance when optimizing g function.
 #' @param every Number of iterations between likelihood display updates.
-#' @param r sub-sampling proportion for stochastic EM, defaults to 1
+#' @param r Sub-sampling proportion for stochastic EM, defaults to 1.
 #'
 #' @return An object of class \linkS4class{ph}.
 #'

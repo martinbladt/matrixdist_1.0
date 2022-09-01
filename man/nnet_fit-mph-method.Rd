@@ -39,7 +39,7 @@
 
 \item{reltol}{Relative tolerance when optimizing g function.}
 
-\item{rand_init}{random initiation in the R-step.}
+\item{rand_init}{Random initiation in the R-step.}
 }
 \description{
 Fit Method for mph Class, using nueral network

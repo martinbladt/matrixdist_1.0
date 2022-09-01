@@ -1,6 +1,6 @@
 #' Dicrete Phase Type distributions
 #'
-#' Class of objects for phase-type distributions.
+#' Class of objects for discrete phase-type distributions.
 #'
 #' @slot name Name of the discrete phase-type distribution.
 #' @slot pars A list comprising of the parameters.
@@ -184,7 +184,8 @@ setMethod(
 #' @param x An object of class \linkS4class{dph}.
 #' @param n An integer of length of realization.
 #'
-#' @return A realization of independent and identically distributed discrete phase-type variables.
+#' @return A realization of independent and identically distributed discrete 
+#'  phase-type variables.
 #' @export
 #'
 #' @examples
@@ -314,14 +315,14 @@ setMethod(
 
 #' MoE Method for dph Class
 #'
-#' @param x an object of class \linkS4class{dph}.
-#' @param formula a regression formula.
-#' @param data a data frame.
-#' @param alpha_vecs matrix of initial probabilities.s
-#' @param weight vector of weights.
-#' @param stepsEM number of EM steps to be performed.
-#' @param every number of iterations between likelihood display updates.
-#' @param rand_init random initiation in the R-step.
+#' @param x An object of class \linkS4class{dph}.
+#' @param formula A regression formula.
+#' @param data A data frame.
+#' @param alpha_vecs Matrix of initial probabilities.s
+#' @param weight Vector of weights.
+#' @param stepsEM Number of EM steps to be performed.
+#' @param every Number of iterations between likelihood display updates.
+#' @param rand_init Random initiation in the R-step.
 #'
 #' @return An object of class \linkS4class{sph}.
 #'

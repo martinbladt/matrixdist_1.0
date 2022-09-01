@@ -2,14 +2,15 @@
 % Please edit documentation in R/0.generics.R
 \name{TVR}
 \alias{TVR}
-\title{New Generic for the transformation via rewards of a multivariate phase-type distribution}
+\title{New Generic for the transformation via rewards of a multivariate phase-type 
+ distribution}
 \usage{
 TVR(x, ...)
 }
 \arguments{
-\item{x}{an object of the model class.}
+\item{x}{An object of the model class.}
 
-\item{...}{further parameters to be passed on}
+\item{...}{Further parameters to be passed on.}
 }
 \value{
 A realization from the mph distribution.

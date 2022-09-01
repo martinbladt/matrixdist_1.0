@@ -10,7 +10,7 @@
 #' @param r Sub-sampling parameter, defaults to 1.
 #' @param maxit Maximum number of iterations when optimizing g function.
 #' @param reltol Relative tolerance when optimizing g function.
-#' @param rand_init random initiation in the R-step.
+#' @param rand_init Random initiation in the R-step.
 #'
 #' @export
 #'

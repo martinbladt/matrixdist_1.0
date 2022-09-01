@@ -16,21 +16,21 @@
 )
 }
 \arguments{
-\item{x}{an object of class \linkS4class{dph}.}
+\item{x}{An object of class \linkS4class{dph}.}
 
-\item{formula}{a regression formula.}
+\item{formula}{A regression formula.}
 
-\item{data}{a data frame.}
+\item{data}{A data frame.}
 
-\item{alpha_vecs}{matrix of initial probabilities.s}
+\item{alpha_vecs}{Matrix of initial probabilities.s}
 
-\item{weight}{vector of weights.}
+\item{weight}{Vector of weights.}
 
-\item{stepsEM}{number of EM steps to be performed.}
+\item{stepsEM}{Number of EM steps to be performed.}
 
-\item{every}{number of iterations between likelihood display updates.}
+\item{every}{Number of iterations between likelihood display updates.}
 
-\item{rand_init}{random initiation in the R-step.}
+\item{rand_init}{Random initiation in the R-step.}
 }
 \value{
 An object of class \linkS4class{sph}.

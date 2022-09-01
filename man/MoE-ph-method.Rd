@@ -21,31 +21,31 @@
 )
 }
 \arguments{
-\item{x}{an object of class \linkS4class{ph}.}
+\item{x}{An object of class \linkS4class{ph}.}
 
-\item{formula}{a regression formula.}
+\item{formula}{A regression formula.}
 
-\item{data}{a data frame.}
+\item{data}{A data frame.}
 
-\item{inhom}{a list with the inhomogeneity functions.}
+\item{inhom}{A list with the inhomogeneity functions.}
 
-\item{alpha_vecs}{matrix of initial probabilities.s}
+\item{alpha_vecs}{<atrix of initial probabilities.s}
 
-\item{weight}{vector of weights.}
+\item{weight}{Vector of weights.}
 
-\item{delta}{right-censoring indicator.}
+\item{delta}{Right-censoring indicator.}
 
-\item{stepsEM}{number of EM steps to be performed.}
+\item{stepsEM}{Number of EM steps to be performed.}
 
-\item{optim_method}{method to use in gradient optimization}
+\item{optim_method}{Method to use in gradient optimization}
 
-\item{maxit}{maximum number of iterations when optimizing g function.}
+\item{maxit}{Maximum number of iterations when optimizing g function.}
 
-\item{reltol}{relative tolerance when optimizing g function.}
+\item{reltol}{Relative tolerance when optimizing g function.}
 
-\item{every}{number of iterations between likelihood display updates.}
+\item{every}{Number of iterations between likelihood display updates.}
 
-\item{rand_init}{random initiation in the R-step.}
+\item{rand_init}{Random initiation in the R-step.}
 }
 \value{
 An object of class \linkS4class{sph}.

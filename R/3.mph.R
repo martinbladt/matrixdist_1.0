@@ -158,7 +158,8 @@ setMethod("dens", c(x = "mph"), function(x, y, delta = NULL) {
 #'
 #' @param x An object of class \linkS4class{mph}.
 #' @param y A matrix of observations.
-#' @param lower.tail Logical parameter specifying whether lower tail (cdf) or upper tail is computed.
+#' @param lower.tail Logical parameter specifying whether lower tail (cdf) or 
+#'  upper tail is computed.
 #'
 #' @return A list containing the locations and corresponding CDF evaluations.
 #' @export

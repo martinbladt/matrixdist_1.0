@@ -173,7 +173,8 @@ setGeneric("evaluate", function(x, subject, ...) {
   standardGeneric("evaluate")
 })
 
-#' New Generic for doing a likelihood ratio test between two Matrix Distribution models
+#' New Generic for doing a likelihood ratio test between two Matrix Distribution
+#'  models
 #'
 #' Methods are available for objects of class \linkS4class{ph}.
 #'
@@ -201,12 +202,13 @@ setGeneric("Fisher", function(x, ...) {
   standardGeneric("Fisher")
 })
 
-#' New Generic for the transformation via rewards of a multivariate phase-type distribution
+#' New Generic for the transformation via rewards of a multivariate phase-type 
+#'  distribution
 #'
 #' Methods are available for objects of class \linkS4class{MPHstar}
 #'
-#' @param x an object of the model class.
-#' @param ... further parameters to be passed on
+#' @param x An object of the model class.
+#' @param ... Further parameters to be passed on.
 #'
 #' @return A realization from the mph distribution.
 #'
@@ -219,9 +221,9 @@ setGeneric("TVR", function(x, ...) {
 #'
 #' Methods are available for objects of class \linkS4class{ph}
 #'
-#' @param x an object of the model class.
-#' @param y a vector of data.
-#' @param ... further parameters to be passed on
+#' @param x An object of the model class.
+#' @param y A vector of data.
+#' @param ... Further parameters to be passed on.
 #'
 #' @return An object of the fitted model class.
 #' @export

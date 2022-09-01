@@ -2,7 +2,8 @@
 % Please edit documentation in R/0.generics.R
 \name{LRT}
 \alias{LRT}
-\title{New Generic for doing a likelihood ratio test between two Matrix Distribution models}
+\title{New Generic for doing a likelihood ratio test between two Matrix Distribution
+ models}
 \usage{
 LRT(x, y, ...)
 }
