@@ -6,35 +6,6 @@
 // [[Rcpp::depends(RcppArmadillo)]]
 
 
-//' Random multivariate phase-type via rewards
-//'
-//' Generates samples of size \code{n} from a multivariate phase-type distribution
-//'  with parameters \code{alpha} and \code{S}.
-//'  
-//' @param n Sample size for each marginal.
-//' @param alpha Initial probabilities.
-//' @param S Sub-intensity matrix.
-//' @param R Reward matrix.
-//'
-//' @return The simulated samples, each column corresponds to a marginal.
-//'
-// [[Rcpp::export]]
-arma::mat rMPHstar(int n, arma::vec alpha, arma::mat S, arma::mat R) {
-  unsigned d{R.n_cols}; //number of marginals
-  
-  Rcpp::List Marginal = transf_via_rew(R, embedded_mc(S), alpha, S);
-  Rcpp::List marginalJ;
-  
-  arma::mat mph_sample(n, d);
-  
-  for (int m{0}; m < d; ++m) {
-    marginalJ = Marginal(m);
-    mph_sample.col(m) = Rcpp::as<arma::vec>(rphasetype(n, marginalJ[0], marginalJ[1]));
-  }
-  
-  return (mph_sample);
-}
-
 //' Random reward matrix
 //'
 //' Generates a random reward matrix for a multivariate phase-type distribution 

@@ -2,12 +2,12 @@
 % Please edit documentation in R/RcppExports.R
 \name{rMPHstar}
 \alias{rMPHstar}
-\title{Random multivariate phase-type via rewards}
+\title{Simulate a MPH* random vector}
 \usage{
 rMPHstar(n, alpha, S, R)
 }
 \arguments{
-\item{n}{Sample size for each marginal.}
+\item{n}{Sample size.}
 
 \item{alpha}{Initial probabilities.}
 
@@ -16,9 +16,9 @@ rMPHstar(n, alpha, S, R)
 \item{R}{Reward matrix.}
 }
 \value{
-The simulated samples, each column corresponds to a marginal.
+The simulated sample.
 }
 \description{
-Generates samples of size \code{n} from a multivariate phase-type distribution
- with parameters \code{alpha} and \code{S}.
+Generates a sample of size \code{n} from a MPH* distribution with parameters
+ \code{alpha}, \code{S} and \code{R}.
 }

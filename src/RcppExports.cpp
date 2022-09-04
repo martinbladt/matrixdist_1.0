@@ -344,6 +344,21 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// EMstep_bivph
+void EMstep_bivph(arma::vec& alpha, arma::mat& S11, arma::mat& S12, arma::mat& S22, const Rcpp::NumericMatrix& obs, const Rcpp::NumericVector& weight);
+RcppExport SEXP _matrixdist_EMstep_bivph(SEXP alphaSEXP, SEXP S11SEXP, SEXP S12SEXP, SEXP S22SEXP, SEXP obsSEXP, SEXP weightSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec& >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type S11(S11SEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type S12(S12SEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type S22(S22SEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericMatrix& >::type obs(obsSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type weight(weightSEXP);
+    EMstep_bivph(alpha, S11, S12, S22, obs, weight);
+    return R_NilValue;
+END_RCPP
+}
 // logLikelihoodPH_MoE
 double logLikelihoodPH_MoE(arma::mat& alpha1, arma::mat& alpha2, arma::mat& S, const Rcpp::NumericVector& obs, const Rcpp::NumericVector& weight, const Rcpp::NumericVector& rcens, const Rcpp::NumericVector& rcweight);
 RcppExport SEXP _matrixdist_logLikelihoodPH_MoE(SEXP alpha1SEXP, SEXP alpha2SEXP, SEXP SSEXP, SEXP obsSEXP, SEXP weightSEXP, SEXP rcensSEXP, SEXP rcweightSEXP) {
@@ -928,20 +943,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// rMPHstar
-arma::mat rMPHstar(int n, arma::vec alpha, arma::mat S, arma::mat R);
-RcppExport SEXP _matrixdist_rMPHstar(SEXP nSEXP, SEXP alphaSEXP, SEXP SSEXP, SEXP RSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< int >::type n(nSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type alpha(alphaSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type S(SSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type R(RSEXP);
-    rcpp_result_gen = Rcpp::wrap(rMPHstar(n, alpha, S, R));
-    return rcpp_result_gen;
-END_RCPP
-}
 // random_reward
 arma::mat random_reward(int p, int d);
 RcppExport SEXP _matrixdist_random_reward(SEXP pSEXP, SEXP dSEXP) {
@@ -1109,6 +1110,20 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< arma::vec >::type alpha(alphaSEXP);
     Rcpp::traits::input_parameter< arma::mat >::type S(SSEXP);
     rcpp_result_gen = Rcpp::wrap(rdphasetype(n, alpha, S));
+    return rcpp_result_gen;
+END_RCPP
+}
+// rMPHstar
+Rcpp::NumericMatrix rMPHstar(int n, arma::vec alpha, arma::mat S, arma::mat R);
+RcppExport SEXP _matrixdist_rMPHstar(SEXP nSEXP, SEXP alphaSEXP, SEXP SSEXP, SEXP RSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type S(SSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type R(RSEXP);
+    rcpp_result_gen = Rcpp::wrap(rMPHstar(n, alpha, S, R));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1580,6 +1595,36 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// bivph_density
+Rcpp::NumericVector bivph_density(Rcpp::NumericMatrix x, arma::vec alpha, arma::mat S11, arma::mat S12, arma::mat S22);
+RcppExport SEXP _matrixdist_bivph_density(SEXP xSEXP, SEXP alphaSEXP, SEXP S11SEXP, SEXP S12SEXP, SEXP S22SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type x(xSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type S11(S11SEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type S12(S12SEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type S22(S22SEXP);
+    rcpp_result_gen = Rcpp::wrap(bivph_density(x, alpha, S11, S12, S22));
+    return rcpp_result_gen;
+END_RCPP
+}
+// bivph_tail
+Rcpp::NumericVector bivph_tail(Rcpp::NumericMatrix x, arma::vec alpha, arma::mat S11, arma::mat S12, arma::mat S22);
+RcppExport SEXP _matrixdist_bivph_tail(SEXP xSEXP, SEXP alphaSEXP, SEXP S11SEXP, SEXP S12SEXP, SEXP S22SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type x(xSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type S11(S11SEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type S12(S12SEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type S22(S22SEXP);
+    rcpp_result_gen = Rcpp::wrap(bivph_tail(x, alpha, S11, S12, S22));
+    return rcpp_result_gen;
+END_RCPP
+}
 // EMstep_dph
 void EMstep_dph(arma::vec& alpha, arma::mat& S, const Rcpp::NumericVector& obs, const Rcpp::NumericVector& weight);
 RcppExport SEXP _matrixdist_EMstep_dph(SEXP alphaSEXP, SEXP SSEXP, SEXP obsSEXP, SEXP weightSEXP) {
@@ -1817,6 +1862,32 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// random_structure_bivph
+List random_structure_bivph(int p1, int p2, double scale_factor);
+RcppExport SEXP _matrixdist_random_structure_bivph(SEXP p1SEXP, SEXP p2SEXP, SEXP scale_factorSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type p1(p1SEXP);
+    Rcpp::traits::input_parameter< int >::type p2(p2SEXP);
+    Rcpp::traits::input_parameter< double >::type scale_factor(scale_factorSEXP);
+    rcpp_result_gen = Rcpp::wrap(random_structure_bivph(p1, p2, scale_factor));
+    return rcpp_result_gen;
+END_RCPP
+}
+// merge_matrices
+NumericMatrix merge_matrices(NumericMatrix S11, NumericMatrix S12, NumericMatrix S22);
+RcppExport SEXP _matrixdist_merge_matrices(SEXP S11SEXP, SEXP S12SEXP, SEXP S22SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type S11(S11SEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type S12(S12SEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type S22(S22SEXP);
+    rcpp_result_gen = Rcpp::wrap(merge_matrices(S11, S12, S22));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_runge_kutta", (DL_FUNC) &_matrixdist_runge_kutta, 7},
@@ -1838,6 +1909,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_vector_of_matrices_2", (DL_FUNC) &_matrixdist_vector_of_matrices_2, 3},
     {"_matrixdist_EMstep_PADE", (DL_FUNC) &_matrixdist_EMstep_PADE, 7},
     {"_matrixdist_EMstep_MoE_PADE", (DL_FUNC) &_matrixdist_EMstep_MoE_PADE, 6},
+    {"_matrixdist_EMstep_bivph", (DL_FUNC) &_matrixdist_EMstep_bivph, 6},
     {"_matrixdist_logLikelihoodPH_MoE", (DL_FUNC) &_matrixdist_logLikelihoodPH_MoE, 7},
     {"_matrixdist_logLikelihoodPH_PADE", (DL_FUNC) &_matrixdist_logLikelihoodPH_PADE, 7},
     {"_matrixdist_logLikelihoodMweibull_PADE", (DL_FUNC) &_matrixdist_logLikelihoodMweibull_PADE, 8},
@@ -1871,7 +1943,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_logLikelihoodMloglogistic_UNIs", (DL_FUNC) &_matrixdist_logLikelihoodMloglogistic_UNIs, 10},
     {"_matrixdist_logLikelihoodMgompertz_UNIs", (DL_FUNC) &_matrixdist_logLikelihoodMgompertz_UNIs, 10},
     {"_matrixdist_expm_terms", (DL_FUNC) &_matrixdist_expm_terms, 3},
-    {"_matrixdist_rMPHstar", (DL_FUNC) &_matrixdist_rMPHstar, 4},
     {"_matrixdist_random_reward", (DL_FUNC) &_matrixdist_random_reward, 2},
     {"_matrixdist_rew_sanity_check", (DL_FUNC) &_matrixdist_rew_sanity_check, 2},
     {"_matrixdist_marginal_expectation", (DL_FUNC) &_matrixdist_marginal_expectation, 7},
@@ -1885,6 +1956,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_riph", (DL_FUNC) &_matrixdist_riph, 5},
     {"_matrixdist_rmatrixgev", (DL_FUNC) &_matrixdist_rmatrixgev, 6},
     {"_matrixdist_rdphasetype", (DL_FUNC) &_matrixdist_rdphasetype, 3},
+    {"_matrixdist_rMPHstar", (DL_FUNC) &_matrixdist_rMPHstar, 4},
     {"_matrixdist_n_pos", (DL_FUNC) &_matrixdist_n_pos, 1},
     {"_matrixdist_n_null", (DL_FUNC) &_matrixdist_n_null, 1},
     {"_matrixdist_plus_states", (DL_FUNC) &_matrixdist_plus_states, 1},
@@ -1921,6 +1993,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_mgevcdf", (DL_FUNC) &_matrixdist_mgevcdf, 5},
     {"_matrixdist_dphdensity", (DL_FUNC) &_matrixdist_dphdensity, 3},
     {"_matrixdist_dphcdf", (DL_FUNC) &_matrixdist_dphcdf, 4},
+    {"_matrixdist_bivph_density", (DL_FUNC) &_matrixdist_bivph_density, 5},
+    {"_matrixdist_bivph_tail", (DL_FUNC) &_matrixdist_bivph_tail, 5},
     {"_matrixdist_EMstep_dph", (DL_FUNC) &_matrixdist_EMstep_dph, 4},
     {"_matrixdist_EMstep_dph_MoE", (DL_FUNC) &_matrixdist_EMstep_dph_MoE, 4},
     {"_matrixdist_logLikelihoodDPH", (DL_FUNC) &_matrixdist_logLikelihoodDPH, 4},
@@ -1940,6 +2014,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_sum_ph", (DL_FUNC) &_matrixdist_sum_ph, 4},
     {"_matrixdist_sum_dph", (DL_FUNC) &_matrixdist_sum_dph, 4},
     {"_matrixdist_random_structure", (DL_FUNC) &_matrixdist_random_structure, 3},
+    {"_matrixdist_random_structure_bivph", (DL_FUNC) &_matrixdist_random_structure_bivph, 3},
+    {"_matrixdist_merge_matrices", (DL_FUNC) &_matrixdist_merge_matrices, 3},
     {NULL, NULL, 0}
 };
 

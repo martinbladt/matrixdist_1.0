@@ -603,3 +603,61 @@ Rcpp::NumericVector dphcdf(Rcpp::NumericVector x, arma::vec alpha, arma::mat S, 
     return (1 - cdf);
   }
 }
+
+
+//' Bivariate phase-type joint density of the feed forward type
+//'
+//' @param x Matrix of values.
+//' @param alpha Vector of initial probabilities.
+//' @param S11 Sub-intensity matrix.
+//' @param S12 Matrix.
+//' @param S22 Sub-intensity matrix.
+//' @return Joint density at \code{x}.
+//' 
+// [[Rcpp::export]]
+Rcpp::NumericVector bivph_density(Rcpp::NumericMatrix x, arma::vec alpha, arma::mat S11, arma::mat S12, arma::mat S22) {
+  long n{x.nrow()};
+  
+  Rcpp::NumericVector density(n);
+  
+  arma::mat e;
+  e.ones(S22.n_cols, 1);
+  arma::mat exit_vect = (S22 * (-1)) * e;
+  
+  arma::mat aux_mat(1,1);
+  
+  for (int k{0}; k < n; ++k) {
+    aux_mat = alpha.t() * matrix_exponential(S11 * x(k,0)) * S12 * matrix_exponential(S22 * x(k,1)) * exit_vect;
+    density[k] = aux_mat(0,0);
+  }
+  return density;
+}
+
+
+//' Bivariate phase-type joint tail of the feed forward type
+//'
+//' @param x Matrix of values.
+//' @param alpha Vector of initial probabilities.
+//' @param S11 Sub-intensity matrix.
+//' @param S12 Matrix.
+//' @param S22 Sub-intensity matrix.
+//' @return Joint tail at \code{x}.
+//' 
+// [[Rcpp::export]]
+Rcpp::NumericVector bivph_tail(Rcpp::NumericMatrix x, arma::vec alpha, arma::mat S11, arma::mat S12, arma::mat S22) {
+  long n{x.nrow()};
+  
+  Rcpp::NumericVector tail(n);
+  
+  arma::mat e;
+  e.ones(S22.n_cols, 1);
+  
+  arma::mat aux_mat(1,1);
+  
+  for (int k{0}; k < n; ++k) {
+    aux_mat = alpha.t() * inv(S11 * (-1)) * matrix_exponential(S11 * x(k,0)) * S12 * matrix_exponential(S22 * x(k,1)) * e;
+    tail[k] = aux_mat(0,0);
+  }
+  return tail;
+}
+

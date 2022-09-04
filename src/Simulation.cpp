@@ -291,3 +291,39 @@ Rcpp::NumericVector rdphasetype(int n, arma::vec alpha, arma::mat S) {
   return sample;
 }
 
+
+//' Simulate a MPH* random vector
+//'
+//' Generates a sample of size \code{n} from a MPH* distribution with parameters
+//'  \code{alpha}, \code{S} and \code{R}.
+//'
+//' @param n Sample size.
+//' @param alpha Initial probabilities.
+//' @param S Sub-intensity matrix.
+//' @param R Reward matrix.
+//' @return The simulated sample.
+//' 
+// [[Rcpp::export]]
+Rcpp::NumericMatrix rMPHstar(int n, arma::vec alpha, arma::mat S, arma::mat R) {
+  unsigned dim{R.n_cols};
+  
+  Rcpp::NumericMatrix sample(n, dim);
+  
+  arma::mat cum_embedded_mc = cumulate_matrix(embedded_mc(S));
+  arma::vec cum_alpha = cumulate_vector(alpha);
+  
+  unsigned p{alpha.size()};
+  long state{0};
+  double time{0.0};
+  for (int i = 0; i < n; ++i) {
+    state = initial_state(cum_alpha, Rcpp::runif(1)[0]);
+    while (state != p) {
+      time = log(1.0 - Rcpp::runif(1)[0]) / S(state,state);
+      for (int j{0}; j < dim; ++j) {
+        sample(i,j) += R(state, j) * time;
+      }
+      state = new_state(state, cum_embedded_mc, Rcpp::runif(1)[0]);
+    }
+  }
+  return (sample);
+}

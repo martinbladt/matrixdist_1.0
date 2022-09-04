@@ -314,6 +314,20 @@ EMstep_MoE_PADE <- function(alpha, S, obs, weight, rcens, rcweight) {
     .Call(`_matrixdist_EMstep_MoE_PADE`, alpha, S, obs, weight, rcens, rcweight)
 }
 
+#' EM for bivariate phase-type distributions using Pade for matrix exponential
+#'
+#' @param alpha Initial probabilities.
+#' @param S11 Sub-intensity.
+#' @param S12 A matrix.
+#' @param S22 Sub-intensity.
+#' @param obs The observations.
+#' @param weight The weights for the observations.
+#' @return Fitted alpha, S11, S12 and S22 after one iteration.
+#' 
+EMstep_bivph <- function(alpha, S11, S12, S22, obs, weight) {
+    invisible(.Call(`_matrixdist_EMstep_bivph`, alpha, S11, S12, S22, obs, weight))
+}
+
 #' Loglikelihood for PH-MoE
 #' 
 #' @param alpha1 Initial probabilities for non-censored data.
@@ -856,22 +870,6 @@ expm_terms <- function(h, S, obs) {
     .Call(`_matrixdist_expm_terms`, h, S, obs)
 }
 
-#' Random multivariate phase-type via rewards
-#'
-#' Generates samples of size \code{n} from a multivariate phase-type distribution
-#'  with parameters \code{alpha} and \code{S}.
-#'  
-#' @param n Sample size for each marginal.
-#' @param alpha Initial probabilities.
-#' @param S Sub-intensity matrix.
-#' @param R Reward matrix.
-#'
-#' @return The simulated samples, each column corresponds to a marginal.
-#'
-rMPHstar <- function(n, alpha, S, R) {
-    .Call(`_matrixdist_rMPHstar`, n, alpha, S, R)
-}
-
 #' Random reward matrix
 #'
 #' Generates a random reward matrix for a multivariate phase-type distribution 
@@ -1049,6 +1047,21 @@ rmatrixgev <- function(n, alpha, S, mu, sigma, xi = 0) {
 #'
 rdphasetype <- function(n, alpha, S) {
     .Call(`_matrixdist_rdphasetype`, n, alpha, S)
+}
+
+#' Simulate a MPH* random vector
+#'
+#' Generates a sample of size \code{n} from a MPH* distribution with parameters
+#'  \code{alpha}, \code{S} and \code{R}.
+#'
+#' @param n Sample size.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity matrix.
+#' @param R Reward matrix.
+#' @return The simulated sample.
+#' 
+rMPHstar <- function(n, alpha, S, R) {
+    .Call(`_matrixdist_rMPHstar`, n, alpha, S, R)
 }
 
 #' Find how many states have positive reward
@@ -1516,6 +1529,32 @@ dphcdf <- function(x, alpha, S, lower_tail = TRUE) {
     .Call(`_matrixdist_dphcdf`, x, alpha, S, lower_tail)
 }
 
+#' Bivariate phase-type joint density of the feed forward type
+#'
+#' @param x Matrix of values.
+#' @param alpha Vector of initial probabilities.
+#' @param S11 Sub-intensity matrix.
+#' @param S12 Matrix.
+#' @param S22 Sub-intensity matrix.
+#' @return Joint density at \code{x}.
+#' 
+bivph_density <- function(x, alpha, S11, S12, S22) {
+    .Call(`_matrixdist_bivph_density`, x, alpha, S11, S12, S22)
+}
+
+#' Bivariate phase-type joint tail of the feed forward type
+#'
+#' @param x Matrix of values.
+#' @param alpha Vector of initial probabilities.
+#' @param S11 Sub-intensity matrix.
+#' @param S12 Matrix.
+#' @param S22 Sub-intensity matrix.
+#' @return Joint tail at \code{x}.
+#' 
+bivph_tail <- function(x, alpha, S11, S12, S22) {
+    .Call(`_matrixdist_bivph_tail`, x, alpha, S11, S12, S22)
+}
+
 #' EM for discrete phase-type
 #' 
 #' @param alpha Initial probabilities.
@@ -1726,5 +1765,31 @@ sum_dph <- function(alpha1, S1, alpha2, S2) {
 #' 
 random_structure <- function(p, structure = "general", scale_factor = 1) {
     .Call(`_matrixdist_random_structure`, p, structure, scale_factor)
+}
+
+#' Random structure of a bivariate phase-type
+#'
+#' Generates random parameters \code{alpha}, \code{S11}, \code{S12}, and \code{S22}
+#' of a bivariate phase-type distribution of dimension \code{p  = p1 + p2}.
+#'
+#' @param p1 Dimension of the first block.
+#' @param p2 Dimension of the second block.
+#' @param scale_factor A factor that multiplies the sub-intensity matrix.
+#' @return Random parameters  \code{alpha}, \code{S11}, \code{S12}, and \code{S22}
+#'  of a bivariate phase-type.
+#'
+random_structure_bivph <- function(p1, p2, scale_factor = 1) {
+    .Call(`_matrixdist_random_structure_bivph`, p1, p2, scale_factor)
+}
+
+#' Merges the matrices S11, S12 and S22 into a sub-intensity matrix
+#'
+#' @param S11 A sub-intensity matrix.
+#' @param S12 A matrix.
+#' @param S22 A sub-intensity matrix.
+#' @return A sub-intensity matrix.
+#'
+merge_matrices <- function(S11, S12, S22) {
+    .Call(`_matrixdist_merge_matrices`, S11, S12, S22)
 }
 

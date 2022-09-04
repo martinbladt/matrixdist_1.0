@@ -342,6 +342,151 @@ Rcpp::List EMstep_MoE_PADE(arma::mat & alpha,  arma::mat & S, const Rcpp::Numeri
 }
 
 
+//' EM for bivariate phase-type distributions using Pade for matrix exponential
+//'
+//' @param alpha Initial probabilities.
+//' @param S11 Sub-intensity.
+//' @param S12 A matrix.
+//' @param S22 Sub-intensity.
+//' @param obs The observations.
+//' @param weight The weights for the observations.
+//' @return Fitted alpha, S11, S12 and S22 after one iteration.
+//' 
+// [[Rcpp::export]]
+void EMstep_bivph(arma::vec & alpha, arma::mat & S11, arma::mat & S12, arma::mat & S22, const Rcpp::NumericMatrix & obs, const Rcpp::NumericVector & weight) {
+  unsigned p1{S11.n_rows};
+  unsigned p2{S22.n_rows};
+  unsigned p{p1 + p2};
+  
+  double density{0};
+  double aux;
+  
+  arma::mat Bmean = arma::zeros(p1,1);
+  arma::mat Zmean = arma::zeros(p,1);
+  arma::mat Nmean = arma::zeros(p,p + 1);
+  
+  arma::mat bmatrix1(p1,p1);
+  arma::mat cmatrix1(p1,p1);
+  arma::mat aux_exp1(p1,p1);
+  
+  arma::mat bmatrix2(p2,p2);
+  arma::mat cmatrix2(p2,p2);
+  arma::mat aux_exp2(p2,p2);
+  
+  arma::mat g1(2 * p1,2 * p1);
+  arma::mat g2(2 * p2,2 * p2);
+  
+  arma::mat e;
+  e.ones(p2, 1);
+  arma::mat exit_vec = (S22 * (-1)) * e;
+  
+  arma::mat aux_matrix1(p1,1);
+  arma::mat aux_matrix2(p2,p1);
+  arma::mat aux_matrix3(1,p2);
+  
+  arma::mat aux_mat(1,1);
+  
+  double sum_weights{0.0};
+  //E step
+  for (int k{0}; k < obs.nrow(); ++k) {
+    sum_weights += weight[k];
+    
+    aux_exp2 = matrix_exponential(S22 * obs(k,1));
+    bmatrix1 = S12 * aux_exp2 * exit_vec * alpha.t();
+    
+    g1 = matrix_exponential(matrix_vanloan(S11, S11, bmatrix1) * obs(k,0));
+    
+    for (int i{0}; i < p1; ++i) {
+      for (int j{0}; j < p1; ++j) {
+        aux_exp1(i,j) = g1(i,j);
+        cmatrix1(i,j) = g1(i,j + p1);
+      }
+    }
+    
+    bmatrix2 = exit_vec * alpha.t() * aux_exp1 * S12;
+    
+    g2 = matrix_exponential(matrix_vanloan(S22, S22, bmatrix2) * obs(k,1));
+    
+    for (int i{0}; i < p2; ++i) {
+      for (int j{0}; j < p2; ++j) {
+        cmatrix2(i,j) = g2(i,j + p2);
+      }
+    }
+    
+    aux_mat = alpha.t() * aux_exp1 * S12 * aux_exp2 * exit_vec;
+    density = aux_mat(0,0);
+    
+    //E-step
+    aux_matrix1 = aux_exp1 * S12 * aux_exp2 * exit_vec;
+    aux_matrix2 =  aux_exp2 * exit_vec * alpha.t() * aux_exp1;
+    
+    for (int i{0}; i < p1; ++i) {
+      aux = aux_matrix1(i,0);
+      Bmean(i,0) += alpha[i] * aux * weight[k] / density;
+      Zmean(i,0) += cmatrix1(i,i) * weight[k] / density;
+      for (int j{0}; j < p1; ++j) {
+        Nmean(i,j) += S11(i,j) * cmatrix1(j,i) * weight[k] / density;
+      }
+      for (int j{0}; j < p2; ++j) {
+        aux = aux_matrix2(j,i);
+        Nmean(i,j + p1) += S12(i,j) * aux * weight[k] / density;
+      }
+    }
+    
+    aux_matrix3 = alpha.t() * aux_exp1 * S12 * aux_exp2;
+    
+    for (int i{0}; i < p2; ++i) {
+      Zmean(i + p1,0) += cmatrix2(i,i) * weight[k] / density;
+      aux = aux_matrix3(0,i);
+      Nmean(i + p1,p) += aux * exit_vec(i,0) * weight[k] / density;
+      for (int j{0}; j < p2; ++j){
+        Nmean(i + p1,j + p1) += S22(i,j) * cmatrix2(j,i) * weight[k] / density;
+      }
+    }
+  }
+  
+  // M step
+  for (int i{0}; i < p1; ++i) {
+    alpha[i] = Bmean(i,0) / sum_weights;
+    if (alpha[i] < 0) {
+      alpha[i] = 0;
+    }
+    S11(i,i) = 0;
+    for (int j{0}; j < p1; ++j) {
+      if (i != j) {
+        S11(i,j) = Nmean(i,j) / Zmean(i,0);
+        if (S11(i,j) < 0) {
+          S11(i,j) = 0;
+        }
+        S11(i,i) -= S11(i,j);
+      }
+    }
+    for (int j{0}; j < p2; ++j) {
+      S12(i,j) = Nmean(i,j + p1) / Zmean(i,0);
+      if (S12(i,j) < 0){
+        S12(i,j) = 0;
+      }
+      S11(i,i) -= S12(i,j);
+    }
+  }
+  for (int i{0}; i < p2; ++i) {
+    exit_vec(i,0) = Nmean(i + p1,p) / Zmean(i + p1,0);
+    if (exit_vec(i,0) < 0) {
+      exit_vec(i,0) = 0;
+    }
+    S22(i,i) = -exit_vec(i,0);
+    for (int j{0}; j < p2; ++j) {
+      if (i != j) {
+        S22(i,j) = Nmean(i + p1,j + p1) / Zmean(i + p1,0);
+        if (S22(i,j) < 0){
+          S22(i,j) = 0;
+        }
+        S22(i,i) -= S22(i,j);
+      }
+    }
+  }
+}
+
 
 ////////////////////////////////////////////
 // Loglikelihoods
