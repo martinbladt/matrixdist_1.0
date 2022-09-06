@@ -171,24 +171,59 @@ setMethod("show", "miph", function(object) {
 #' @param n An integer of length of realization.
 #'
 #' @return A realization of independent and identically distributed inhomogeneous
-#'  multivariate phase-type variables.
+#'  multivariate phase-type variables. If x is a M-o-E miph an array of dimension c(n,d,m) is returned, 
+#'  with d the number of marginals and m the number of initial distribution vectors.  
 #' @export
 #'
 setMethod("sim", c(x = "miph"), function(x, n = 1000) {
   name <- x@gfun$name
   pars <- x@gfun$pars
   scale <- x@scale
-
-  U <- numeric(0)
-  for (i in 1:length(name)) {
-    if (name[i] %in% c("pareto", "weibull", "lognormal", "loglogistic", "gompertz")) {
-      U <- cbind(U, scale * riph(n, name[i], x@pars$alpha, x@pars$S[[i]], pars[[i]]))
+  
+  if(is.vector(x@pars$alpha)){
+    U <- numeric(0)
+    for (i in 1:length(name)) {
+      if (name[i] %in% c("pareto", "weibull", "lognormal", "loglogistic", "gompertz")) {
+        U <- cbind(U, scale * riph(n, name[i], x@pars$alpha, x@pars$S[[i]], pars[[i]]))
+      }
+      if (name[i] %in% c("gev")) {
+        U <- cbind(U, scale * rmatrixgev(n, x@pars$alpha, x@pars$S[[i]], pars[[i]][1], pars[[i]][2], pars[[i]][3]))
+      }
     }
-    if (name[i] %in% c("gev")) {
-      U <- cbind(U, scale * rmatrixgev(n, x@pars$alpha, x@pars$S[[i]], pars[[i]][1], pars[[i]][2], pars[[i]][3]))
+  }else if(is.matrix(x@pars$alpha)){
+    
+    U <- array(NA,dim=c(n,length(name),nrow(x@pars$alpha)))
+    xx <- x
+    for(m in 1:nrow(x@pars$alpha)){
+      U2 <- numeric(0)
+      xx@pars$alpha <- x@pars$alpha[m,]
+      
+      for (i in 1:length(name)) {
+        if (name[i] %in% c("pareto", "weibull", "lognormal", "loglogistic", "gompertz")) {
+          U2 <- cbind(U2, scale * riph(n, name[i], xx@pars$alpha, x@pars$S[[i]], pars[[i]]))
+        }
+        if (name[i] %in% c("gev")) {
+          U2 <- cbind(U2, scale * rmatrixgev(n, xx@pars$alpha, x@pars$S[[i]], pars[[i]][1], pars[[i]][2], pars[[i]][3]))
+        }
+      }
+      U[,,m]<-U2  
     }
   }
   return(U)
+  # name <- x@gfun$name
+  # pars <- x@gfun$pars
+  # scale <- x@scale
+  # 
+  # U <- numeric(0)
+  # for (i in 1:length(name)) {
+  #   if (name[i] %in% c("pareto", "weibull", "lognormal", "loglogistic", "gompertz")) {
+  #     U <- cbind(U, scale * riph(n, name[i], x@pars$alpha, x@pars$S[[i]], pars[[i]]))
+  #   }
+  #   if (name[i] %in% c("gev")) {
+  #     U <- cbind(U, scale * rmatrixgev(n, x@pars$alpha, x@pars$S[[i]], pars[[i]][1], pars[[i]][2], pars[[i]][3]))
+  #   }
+  # }
+  # return(U)
 })
 
 #' Density Method for multivariate inhomogeneous phase-type distributions

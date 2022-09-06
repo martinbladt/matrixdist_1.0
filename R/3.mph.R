@@ -78,7 +78,10 @@ setMethod("show", "mph", function(object) {
 #' @export
 #'
 setMethod("sim", c(x = "mph"), function(x, n = 1000, equal_marginals = 0) {
-  p <- length(x@pars$alpha)
+  
+  if(is.vector(x@pars$alpha)) p <- length(x@pars$alpha)
+  if(is.matrix(x@pars$alpha)) p <- ncol(x@pars$alpha)
+  
   if (equal_marginals == 0) {
     d <- length(x@pars$S)
     states <- 1:p
@@ -171,7 +174,8 @@ setMethod("dens", c(x = "mph"), function(x, y, delta = NULL) {
             aux[m, i, j] <- phdensity(y[m,i], in_vect, S[[i]])
           } else {
             aux[m, i, j] <- phcdf(y[m,i], in_vect, S[[i]], lower_tail = F)
-          }        }
+          }        
+        }
       }
     }
     
