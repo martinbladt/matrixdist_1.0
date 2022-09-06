@@ -210,20 +210,6 @@ setMethod("sim", c(x = "miph"), function(x, n = 1000) {
     }
   }
   return(U)
-  # name <- x@gfun$name
-  # pars <- x@gfun$pars
-  # scale <- x@scale
-  # 
-  # U <- numeric(0)
-  # for (i in 1:length(name)) {
-  #   if (name[i] %in% c("pareto", "weibull", "lognormal", "loglogistic", "gompertz")) {
-  #     U <- cbind(U, scale * riph(n, name[i], x@pars$alpha, x@pars$S[[i]], pars[[i]]))
-  #   }
-  #   if (name[i] %in% c("gev")) {
-  #     U <- cbind(U, scale * rmatrixgev(n, x@pars$alpha, x@pars$S[[i]], pars[[i]][1], pars[[i]][2], pars[[i]][3]))
-  #   }
-  # }
-  # return(U)
 })
 
 #' Density Method for multivariate inhomogeneous phase-type distributions
