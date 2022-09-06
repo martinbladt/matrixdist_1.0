@@ -201,10 +201,12 @@ setMethod("sim", c(x = "miph"), function(x, n = 1000) {
 #' @export
 #'
 setMethod("dens", c(x = "miph"), function(x, y, delta = NULL) {
-  p <- length(x@pars$alpha)
+  
   alpha <- x@pars$alpha
+  S <- x@pars$S
+  gfun.pars <- x@gfun$pars
   d <- length(x@pars$S)
-
+  
   if (is.matrix(y)) {
     n <- nrow(y)
   }
@@ -212,32 +214,66 @@ setMethod("dens", c(x = "miph"), function(x, y, delta = NULL) {
     n <- 1
     y <- t(y)
   }
-
+  
   if (length(delta) == 0) {
     delta <- matrix(1, nrow = n, ncol = d)
   }
   if (is.vector(delta)) {
     delta <- as.matrix(t(delta))
   }
+  
   res <- numeric(n)
-
-  for (j in 1:p) {
-    in_vect <- rep(0, p)
-    in_vect[j] <- 1
-    aux <- matrix(NA, n, d)
-    for (i in 1:d) {
-      y_inv <- x@gfun$inverse[[i]](x@gfun$pars[[i]], y[, i])
-      y_int <- x@gfun$intensity[[i]](x@gfun$pars[[i]], y[, i])
-      for (m in 1:n) {
-        if (delta[m, i] == 1) {
-          aux[m, i] <- phdensity(y_inv[m], in_vect, x@pars$S[[i]]) * y_int[m]
-        } else {
-          aux[m, i] <- 1 - phcdf(y_inv[m], in_vect, as.matrix(x@pars$S[[i]]))
+  
+  if(is.vector(alpha)){ # if x regular miph
+    p <- length(x@pars$alpha)
+    
+    for (j in 1:p) {
+      in_vect <- rep(0, p)
+      in_vect[j] <- 1
+      aux <- matrix(NA, n, d)
+      for (i in 1:d) {
+        y_inv <- x@gfun$inverse[[i]](gfun.pars[[i]], y[, i])
+        y_int <- x@gfun$intensity[[i]](gfun.pars[[i]], y[, i])
+        for (m in 1:n) {
+          if (delta[m, i] == 1) {
+            aux[m, i] <- phdensity(y_inv[m], in_vect, S[[i]]) * y_int[m]
+          } else {
+            aux[m, i] <- phcdf(y_inv[m], in_vect, S[[i]], lower_tail = F)
+          }
+        }
+      }
+      res <- res + alpha[j] * apply(aux, 1, prod)
+    }
+  }else if(is.matrix(alpha)){ #if x is a mixture-of-expert miph
+    p<-ncol(alpha)
+    inter_res <- matrix(0, n, p)
+    aux <- array(NA, c(n, d, p))
+    
+    for (j in 1:p) {
+      in_vect <- rep(0, p)
+      in_vect[j] <- 1
+      
+      for (i in 1:d) {
+        y_inv <- x@gfun$inverse[[i]](gfun.pars[[i]], y[, i])
+        y_int <- x@gfun$intensity[[i]](gfun.pars[[i]], y[, i])
+        for (m in 1:n) {
+          if (delta[m, i] == 1) {
+            aux[m, i, j] <- phdensity(y_inv[m], in_vect, S[[i]]) * y_int[m]
+          } else {
+            aux[m, i, j] <- phcdf(y_inv[m], in_vect, S[[i]], lower_tail = F)
+          }        
         }
       }
     }
-    res <- res + alpha[j] * apply(aux, 1, prod)
+    
+    for (m in 1:n) {
+      for (j in 1:p) {
+        inter_res[m, j] <- alpha[m, j] * prod(aux[m, , j])
+      }
+    }
+    res <- rowSums(inter_res)
   }
+  
   return(res)
 })
 
@@ -250,12 +286,12 @@ setMethod("dens", c(x = "miph"), function(x, y, delta = NULL) {
 #' @return A list containing the locations and corresponding CDF evaluations.
 #' @export
 #'
-setMethod("cdf", c(x = "miph"), function(x,
-                                         y,
-                                         lower.tail = TRUE) {
-  p <- length(x@pars$alpha)
+setMethod("cdf", c(x = "miph"), function(x, y, lower.tail = TRUE) {
   alpha <- x@pars$alpha
+  S <- x@pars$S
+  gfun.pars <- x@gfun$pars
   d <- length(x@pars$S)
+  
   if (is.matrix(y)) {
     n <- nrow(y)
   }
@@ -263,17 +299,47 @@ setMethod("cdf", c(x = "miph"), function(x,
     n <- 1
     y <- t(y)
   }
-
+  
   res <- numeric(n)
-  for (j in 1:p) {
-    in_vect <- rep(0, p)
-    in_vect[j] <- 1
-    aux <- matrix(NA, n, d)
-    for (i in 1:d) {
-      y_inv <- x@gfun$inverse[[i]](x@gfun$pars[[i]], y[, i])
-      aux[, i] <- phcdf(y_inv, in_vect, x@pars$S[[i]], lower.tail)
+  
+  if(is.vector(alpha)){
+    p <- length(x@pars$alpha)
+    
+    for (j in 1:p) {
+      in_vect <- rep(0, p)
+      in_vect[j] <- 1
+      aux <- matrix(NA, n, d)
+      for (i in 1:d) {
+        y_inv <- x@gfun$inverse[[i]](gfun.pars[[i]], y[, i])
+        aux[, i] <- phcdf(y_inv, in_vect, S[[i]], lower.tail)
+      }
+      res <- res + alpha[j] * apply(aux, 1, prod)
     }
-    res <- res + alpha[j] * apply(aux, 1, prod)
+  }else if(is.matrix(alpha)){
+    p<-ncol(alpha)
+    inter_res <- matrix(0, n, p)
+    aux <- array(NA, c(n, d, p))
+    
+    for (j in 1:p) {
+      in_vect <- rep(0, p)
+      in_vect[j] <- 1
+      
+      for (i in 1:d) {
+        y_inv <- x@gfun$inverse[[i]](gfun.pars[[i]], y[, i])
+        y_int <- x@gfun$intensity[[i]](gfun.pars[[i]], y[, i])
+        for (m in 1:n) {
+          aux[m, i, j] <- phcdf(y_inv[m], in_vect, S[[i]], lower.tail)
+        }
+      }
+    }
+    
+    for (m in 1:n) {
+      for (j in 1:p) {
+        inter_res[m, j] <- alpha[m, j] * prod(aux[m, , j])
+      }
+    }
+    res <- rowSums(inter_res)
   }
+  
   return(res)
 })

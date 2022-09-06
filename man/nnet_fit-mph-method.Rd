@@ -2,7 +2,7 @@
 % Please edit documentation in R/3b.miph.nnet.R
 \name{nnet_fit,mph-method}
 \alias{nnet_fit,mph-method}
-\title{Fit Method for mph Class, using nueral network}
+\title{Fit Method for mph/miph Class, using mixture-of-experts regression}
 \usage{
 \S4method{nnet_fit}{mph}(
   x,
@@ -21,26 +21,36 @@
 \arguments{
 \item{x}{An object of class \linkS4class{mph}.}
 
-\item{formula}{a regression formula}
+\item{formula}{a regression formula.}
 
 \item{y}{A matrix of observations.}
 
 \item{data}{A data frame.}
 
-\item{alpha_mat}{Matrix with initial distribution vectors for each row of observations}
+\item{alpha_mat}{Matrix with initial distribution vectors for each row of observations.}
 
-\item{delta}{Matrix with right-censoring indicators. (1 uncensored, 0 right censored)}
+\item{delta}{Matrix with right-censoring indicators (1 uncensored, 0 right censored).}
 
 \item{stepsEM}{Number of EM steps to be performed.}
 
 \item{r}{Sub-sampling parameter, defaults to 1.}
 
-\item{maxit}{Maximum number of iterations when optimizing g function.}
+\item{maxit}{Maximum number of iterations when optimizing the g function (inhomogeneous likelihood).}
 
 \item{reltol}{Relative tolerance when optimizing g function.}
 
-\item{rand_init}{Random initiation in the R-step.}
+\item{rand_init}{Random initiation in the R-step of the EM algorithm.}
 }
 \description{
-Fit Method for mph Class, using nueral network
+Fit Method for mph/miph Class, using mixture-of-experts regression
+}
+\examples{
+x<-mph(structure=c("general","general"), dimension=3, variables=2)
+n<-1000
+responses<-cbind(rexp(n),rgamma(n,2,3))
+
+covariate<-data.frame(age=sample(18:65,n,replace = T)/100,income=runif(n,0,0.99)) 
+f<-responses~age+income #regression formula
+fit<-nnet_fit(x=x,formula=f, y=responses, data=covariate, stepsEM=100 )
+
 }

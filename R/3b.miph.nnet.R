@@ -1,19 +1,29 @@
-#' Fit Method for mph Class, using nueral network
+#' Fit Method for mph/miph Class, using mixture-of-experts regression
 #'
 #' @param x An object of class \linkS4class{mph}.
-#' @param formula a regression formula
+#' @param formula a regression formula.
 #' @param y A matrix of observations.
 #' @param data A data frame.
-#' @param alpha_mat Matrix with initial distribution vectors for each row of observations
-#' @param delta Matrix with right-censoring indicators. (1 uncensored, 0 right censored)
+#' @param alpha_mat Matrix with initial distribution vectors for each row of observations.
+#' @param delta Matrix with right-censoring indicators (1 uncensored, 0 right censored).
 #' @param stepsEM Number of EM steps to be performed.
 #' @param r Sub-sampling parameter, defaults to 1.
-#' @param maxit Maximum number of iterations when optimizing g function.
+#' @param maxit Maximum number of iterations when optimizing the g function (inhomogeneous likelihood).
 #' @param reltol Relative tolerance when optimizing g function.
-#' @param rand_init Random initiation in the R-step.
+#' @param rand_init Random initiation in the R-step of the EM algorithm.
 #'
 #' @export
 #'
+#' @examples 
+#' x<-mph(structure=c("general","general"), dimension=3, variables=2)
+#' n<-1000
+#' responses<-cbind(rexp(n),rgamma(n,2,3))
+#' 
+#' covariate<-data.frame(age=sample(18:65,n,replace = T)/100,income=runif(n,0,0.99)) 
+#' f<-responses~age+income #regression formula
+#' fit<-nnet_fit(x=x,formula=f, y=responses, data=covariate, stepsEM=100 )
+#' 
+
 setMethod(
   "nnet_fit", c(x = "mph", y = "ANY"),
   function(x,
@@ -270,57 +280,58 @@ nnet_miph_LL <- function(x,
                          gfun_pars) {
   x@gfun$pars <- gfun_pars
 
-  alpha_mat <- x@pars$alpha
-  S <- x@pars$S
-  p <- ncol(alpha_mat)
-  d <- length(S)
-
-  if (is.matrix(obs)) {
-    n <- nrow(obs)
-  }
-  if (is.vector(obs)) {
-    n <- 1
-    obs <- t(obs)
-  }
-
-  if (length(delta) == 0) {
-    delta <- matrix(1, nrow = n, ncol = d)
-  }
-  if (is.vector(delta)) {
-    delta <- as.matrix(t(delta))
-  }
-
-  inter_res <- matrix(0, n, p)
-  res <- numeric(n)
-
-
-  aux <- array(NA, c(n, d, p))
-  for (j in 1:p) {
-    in_vect <- rep(0, p)
-    in_vect[j] <- 1
-
-    for (i in 1:d) {
-      y_inv <- x@gfun$inverse[[i]](x@gfun$pars[[i]], obs[, i])
-      y_int <- x@gfun$intensity[[i]](x@gfun$pars[[i]], obs[, i])
-      for (m in 1:n) {
-        if (delta[m, i] == 1) {
-          aux[m, i, j] <- phdensity(y_inv[m], in_vect, S[[i]]) * y_int[m]
-        } else {
-          aux[m, i, j] <- phcdf(y_inv[m], in_vect, S[[i]], lower_tail = F)
-        }
-      }
-    }
-  }
-
-  for (m in 1:n) {
-    for (j in 1:p) {
-      inter_res[m, j] <- alpha_mat[m, j] * prod(aux[m, , j])
-    }
-  }
-
-  for (m in 1:n) {
-    res[m] <- sum(inter_res[m, ])
-  }
+  # alpha_mat <- x@pars$alpha
+  # S <- x@pars$S
+  # p <- ncol(alpha_mat)
+  # d <- length(S)
+  # 
+  # if (is.matrix(obs)) {
+  #   n <- nrow(obs)
+  # }
+  # if (is.vector(obs)) {
+  #   n <- 1
+  #   obs <- t(obs)
+  # }
+  # 
+  # if (length(delta) == 0) {
+  #   delta <- matrix(1, nrow = n, ncol = d)
+  # }
+  # if (is.vector(delta)) {
+  #   delta <- as.matrix(t(delta))
+  # }
+  # 
+  # inter_res <- matrix(0, n, p)
+  # res <- numeric(n)
+  # 
+  # 
+  # aux <- array(NA, c(n, d, p))
+  # for (j in 1:p) {
+  #   in_vect <- rep(0, p)
+  #   in_vect[j] <- 1
+  # 
+  #   for (i in 1:d) {
+  #     y_inv <- x@gfun$inverse[[i]](x@gfun$pars[[i]], obs[, i])
+  #     y_int <- x@gfun$intensity[[i]](x@gfun$pars[[i]], obs[, i])
+  #     for (m in 1:n) {
+  #       if (delta[m, i] == 1) {
+  #         aux[m, i, j] <- phdensity(y_inv[m], in_vect, S[[i]]) * y_int[m]
+  #       } else {
+  #         aux[m, i, j] <- phcdf(y_inv[m], in_vect, S[[i]], lower_tail = F)
+  #       }
+  #     }
+  #   }
+  # }
+  # 
+  # for (m in 1:n) {
+  #   for (j in 1:p) {
+  #     inter_res[m, j] <- alpha_mat[m, j] * prod(aux[m, , j])
+  #   }
+  # }
+  # 
+  # for (m in 1:n) {
+  #   res[m] <- sum(inter_res[m, ])
+  # }
+  res <- dens(x,y=obs,delta=delta)
 
   ll <- sum(log(res))
 
