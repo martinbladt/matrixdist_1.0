@@ -23,7 +23,9 @@ Depends: R (>= 3.1.0)
 License: GPL-3
 Imports: 
     Rcpp,
-    methods
+    methods,
+    nnet,
+    reshape2
 LinkingTo: Rcpp, RcppArmadillo
 SystemRequirements: C++11
 Encoding: UTF-8
