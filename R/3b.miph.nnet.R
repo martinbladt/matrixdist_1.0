@@ -3,11 +3,11 @@
 #' @param x An object of class \linkS4class{mph}.
 #' @param formula a regression formula.
 #' @param y A matrix of observations.
-#' @param data A data frame.
+#' @param data A data frame of covariates (they need to be scaled for the regression). 
 #' @param alpha_mat Matrix with initial distribution vectors for each row of observations.
 #' @param delta Matrix with right-censoring indicators (1 uncensored, 0 right censored).
 #' @param stepsEM Number of EM steps to be performed.
-#' @param r Sub-sampling parameter, defaults to 1. (Not supported for this distribution)
+#' @param r Sub-sampling parameter, defaults to 1 (Not supported for this method).
 #' @param maxit Maximum number of iterations when optimizing the g function (inhomogeneous likelihood).
 #' @param reltol Relative tolerance when optimizing g function.
 #' @param rand_init Random initiation in the R-step of the EM algorithm.
@@ -131,7 +131,8 @@ setMethod(
       x@pars$S <- S_fit # C++
 
       x@fit <- list(
-        logLik = nnet_mph_LL(x, y, delta),
+        #logLik = nnet_mph_LL(x, y, delta),
+        loglik = sum(log(dens(x,y,delta))),
         nobs = nrow(y),
         nnet = multinom_model
       )
@@ -220,60 +221,7 @@ setMethod(
     return(x)
   }
 )
-# homogeneous
-nnet_mph_LL <- function(x,
-                        obs,
-                        delta) {
-  # alpha_mat <- x@pars$alpha
-  # S <- x@pars$S
-  # p <- ncol(alpha_mat)
-  # d <- length(S)
-  # 
-  # if (is.matrix(obs)) {
-  #   n <- nrow(obs)
-  # }
-  # if (is.vector(obs)) {
-  #   n <- 1
-  #   obs <- t(obs)
-  # }
-  # 
-  # if (length(delta) == 0) {
-  #   delta <- matrix(1, nrow = n, ncol = d)
-  # }
-  # if (is.vector(delta)) {
-  #   delta <- as.matrix(t(delta))
-  # }
-  # inter_res <- matrix(NA, n, p)
-  # res <- numeric(n)
-  # 
-  # 
-  # for (j in 1:p) {
-  #   in_vect <- rep(0, p)
-  #   in_vect[j] <- 1
-  #   aux <- matrix(NA, n, d)
-  #   for (i in 1:d) {
-  #     for (m in 1:n) {
-  #       if (delta[m, i] == 1) {
-  #         aux[m, i] <- phdensity(obs[m, i], in_vect, S[[i]])
-  #       } else {
-  #         aux[m, i] <- phcdf(obs[m, i], in_vect, S[[i]], lower_tail = F)
-  #       }
-  #     }
-  #   }
-  # }
-  # 
-  # for (m in 1:n) {
-  #   for (j in 1:p) {
-  #     inter_res[m, j] <- alpha_mat[m, j] * prod(aux[m, ])
-  #   }
-  #   res[m] <- sum(inter_res[m, ])
-  # }
-  res <- dens(x,obs,delta)
 
-  ll <- sum(log(res))
-
-  return(ll)
-}
 # multivariate loglikelihood to be optimized
 nnet_miph_LL <- function(x,
                          obs,

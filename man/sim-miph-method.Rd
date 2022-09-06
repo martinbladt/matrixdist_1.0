@@ -13,7 +13,8 @@
 }
 \value{
 A realization of independent and identically distributed inhomogeneous
- multivariate phase-type variables.
+ multivariate phase-type variables. If x is a M-o-E miph an array of dimension c(n,d,m) is returned, 
+ with d the number of marginals and m the number of initial distribution vectors.
 }
 \description{
 Simulation Method for inhomogeneous multivariate phase-type distributions

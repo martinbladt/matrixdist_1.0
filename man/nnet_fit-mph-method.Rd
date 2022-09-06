@@ -25,7 +25,7 @@
 
 \item{y}{A matrix of observations.}
 
-\item{data}{A data frame.}
+\item{data}{A data frame of covariates (they need to be scaled for the regression).}
 
 \item{alpha_mat}{Matrix with initial distribution vectors for each row of observations.}
 
@@ -33,7 +33,7 @@
 
 \item{stepsEM}{Number of EM steps to be performed.}
 
-\item{r}{Sub-sampling parameter, defaults to 1.}
+\item{r}{Sub-sampling parameter, defaults to 1 (Not supported for this method).}
 
 \item{maxit}{Maximum number of iterations when optimizing the g function (inhomogeneous likelihood).}
 
