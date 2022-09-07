@@ -232,7 +232,7 @@ void EMstep_PADE(double h, arma::vec & alpha,  arma::mat & S, const Rcpp::Numeri
 //' 
 // [[Rcpp::export]]
 Rcpp::List EMstep_MoE_PADE(arma::mat & alpha,  arma::mat & S, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight) {
-  long p{S.n_rows}; 
+  unsigned p{S.n_rows}; 
   
   arma::mat Bmatrix(obs.size(), p);
   arma::mat Bmatrix_cens;
