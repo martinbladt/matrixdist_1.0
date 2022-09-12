@@ -11,7 +11,7 @@ Authors@R: c(person("Martin", "Bladt", email = "martinbladt@gmail.com", role = c
               )
 Maintainer: Martin Bladt <martinbladt@gmail.com>
 Description: Tools for phase-type distributions including the following variants:
-    continuous, discrete, multivariate, inhomogeneous, right-censored, and regression. 
+    continuous, discrete, multivariate, in-homogeneous, right-censored, and regression. 
     Methods for functional evaluation, simulation and estimation using the 
     expectation-maximization (EM) algorithm are provided for all models.
     The methods of this package are based on the following references.
@@ -24,7 +24,7 @@ Description: Tools for phase-type distributions including the following variants
     Bladt, M. (2022) <doi:10.1017/asb.2021.40>,
     Bladt, M. (2022). <arXiv:2110.05179>,
     Albrecher, H., Bladt, M., & Mueller, A. (2022) <arXiv:2207.01279>.
-Depends: R (>= 4.1.2)
+Depends: R (>= 4.1.0)
 License: GPL-3
 Imports: 
     Rcpp,
