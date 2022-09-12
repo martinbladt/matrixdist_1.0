@@ -271,12 +271,10 @@ setMethod("cdf", c(x = "mph"), function(x,
 #'
 #' @examples 
 #' x<-mph(structure=c("general","coxian"), dimension=3)
-#' z<-miph(mph=x, gfun=c("pareto","pareto"), gfun_pars=list(2,2))
-#' n<-1000
-#' data<-cbind(rexp(n,0.5),rexp(n,2))
-#' data<-exp(data)
+#' n<-100
+#' data<-sim(x,n)
 #' 
-#' fit<-fit(x=x,y=data, stepsEM=100)
+#' fit<-fit(x=x,y=data, stepsEM=20)
 #' 
 setMethod(
   "fit", c(x = "mph", y = "ANY"),

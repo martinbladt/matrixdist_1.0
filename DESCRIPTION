@@ -24,7 +24,7 @@ Description: Tools for phase-type distributions including the following variants
     Bladt, M. (2022) <doi:10.1017/asb.2021.40>,
     Bladt, M. (2022). <arXiv:2110.05179>,
     Albrecher, H., Bladt, M., & Mueller, A. (2022) <arXiv:2207.01279>.
-Depends: R (>= 4.1.0)
+Depends: R (>= 4.2.0)
 License: GPL-3
 Imports: 
     Rcpp,
