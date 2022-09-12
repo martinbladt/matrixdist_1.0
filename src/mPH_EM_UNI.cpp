@@ -99,7 +99,8 @@ void EM_step_mPH_rc(arma::vec & alpha, Rcpp::List & S_list, const arma::mat y, c
   }
   
   //////////////
-  double a_kij [n][p][d][p];
+  std::vector<std::vector<std::vector<std::vector<double>>>> a_kij(n,std::vector<std::vector<std::vector<double>>>(p, std::vector<std::vector<double>>(d, std::vector<double>(p))));
+  //double a_kij [n][p][d][p];
   for (int k{0}; k < p; ++k) {
     for (int j{0}; j < p; ++j) {
       for (int i{0}; i < d; ++i) {
@@ -204,7 +205,8 @@ void EM_step_mPH_rc(arma::vec & alpha, Rcpp::List & S_list, const arma::mat y, c
   }
   
   //////////////
-  double b_skij[n][p][p][d][p];
+  std::vector<std::vector<std::vector<std::vector<std::vector<double>>>>> b_skij(n,std::vector<std::vector<std::vector<std::vector<double>>>>(p, std::vector<std::vector<std::vector<double>>>(p, std::vector<std::vector<double>>(d, std::vector<double>(p)))));
+  //double b_skij[n][p][p][d][p];
   for (int s{0}; s < p; ++s) {
     for (int k{0}; k < p; ++k) {
       for (int j{0}; j < p; ++j) {
@@ -222,7 +224,8 @@ void EM_step_mPH_rc(arma::vec & alpha, Rcpp::List & S_list, const arma::mat y, c
   }
   
   //////////////
-  double b_ski[n][p][p][d];
+  std::vector<std::vector<std::vector<std::vector<double>>>> b_ski(n,std::vector<std::vector<std::vector<double>>>(p, std::vector<std::vector<double>>(p, std::vector<double>(d))));
+  //double b_ski[n][p][p][d];
   for (int s{0}; s < p; ++s) {
     for (int k{0}; k < p; ++k) {
       for (int i{0}; i < d; ++i) {
