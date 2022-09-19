@@ -29,7 +29,7 @@
 
 \item{inhom}{A list with the inhomogeneity functions.}
 
-\item{alpha_vecs}{<atrix of initial probabilities.s}
+\item{alpha_vecs}{Matrix of initial probabilities.s}
 
 \item{weight}{Vector of weights.}
 

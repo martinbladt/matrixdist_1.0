@@ -144,8 +144,72 @@ setMethod("coef", c(object = "bivph"), function(object) {
 #' moment(obj, c(1, 1))
 setMethod("moment", c(x = "bivph"), function(x, k = c(1, 1)) {
   ee <- rep(1, nrow(x@pars$S22))
-  return(factorial(k[1]) * factorial(k[2]) * x@pars$alpha %*% matrix_power(k[1] + 1,  base::solve(-x@pars$S11))  %*% x@pars$S12 %*% matrix_power(k[2],  base::solve(-x@pars$S22))  %*% ee)
+  return(factorial(k[1]) * factorial(k[2]) * x@pars$alpha %*% matrix_power(k[1] + 1, base::solve(-x@pars$S11)) %*% x@pars$S12 %*% matrix_power(k[2], base::solve(-x@pars$S22)) %*% ee)
 })
 
 
+#' Fit Method for bivph Class
+#'
+#' @param x An object of class \linkS4class{bivph}.
+#' @param y A matrix with the data.
+#' @param weight Vector of weights.
+#' @param stepsEM Number of EM steps to be performed.
+#' @param every Number of iterations between likelihood display updates.
+#'
+#' @return An object of class \linkS4class{bivph}.
+#'
+#' @export
+#'
+#' @examples
+#' obj <- bivph(dimensions = c(3, 3))
+#' data <- sim(obj, n = 100)
+#' fit(obj, data, stepsEM = 100, every = 50)
+setMethod(
+  "fit", c(x = "bivph"),
+  function(x,
+           y,
+           weight = numeric(0),
+           stepsEM = 1000,
+           every = 10) {
+    if (!all(y > 0)) {
+      stop("data should be positive")
+    }
+    if (!all(weight >= 0)) {
+      stop("weights should be non-negative")
+    }
+    if (length(weight) == 0) {
+      weight <- rep(1, length(y[, 1]))
+    }
 
+    bivph_par <- x@pars
+    alpha_fit <- clone_vector(bivph_par$alpha)
+    S11_fit <- clone_matrix(bivph_par$S11)
+    S12_fit <- clone_matrix(bivph_par$S12)
+    S22_fit <- clone_matrix(bivph_par$S22)
+
+    options(digits.secs = 4)
+    cat(format(Sys.time(), format = "%H:%M:%OS"), ": EM started", sep = "")
+    cat("\n", sep = "")
+
+
+    for (k in 1:stepsEM) {
+      EMstep_bivph(alpha_fit, S11_fit, S12_fit, S22_fit, y, weight)
+      if (k %% every == 0) {
+        cat("\r", "iteration:", k,
+          ", logLik:", logLikelihoodbivPH(alpha_fit, S11_fit, S12_fit, S22_fit, y, weight),
+          sep = " "
+        )
+      }
+    }
+
+    x@pars$alpha <- alpha_fit
+    x@pars$S11 <- S11_fit
+    x@pars$S12 <- S12_fit
+    x@pars$S22 <- S22_fit
+
+    cat("\n", format(Sys.time(), format = "%H:%M:%OS"), ": EM finalized", sep = "")
+    cat("\n", sep = "")
+
+    return(x)
+  }
+)

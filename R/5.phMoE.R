@@ -4,7 +4,7 @@
 #' @param formula A regression formula.
 #' @param data A data frame.
 #' @param inhom A list with the inhomogeneity functions.
-#' @param alpha_vecs <atrix of initial probabilities.s
+#' @param alpha_vecs Matrix of initial probabilities.s
 #' @param weight Vector of weights.
 #' @param delta Right-censoring indicator.
 #' @param stepsEM Number of EM steps to be performed.

@@ -492,6 +492,38 @@ void EMstep_bivph(arma::vec & alpha, arma::mat & S11, arma::mat & S12, arma::mat
 // Loglikelihoods
 ////////////////////////////////////////////
 
+//' Loglikelihood for Bivariate PH
+//' 
+//' @param alpha Vector of initial probabilities.
+//' @param S11 Sub-intensity matrix.
+//' @param S12 Matrix.
+//' @param S22 Sub-intensity matrix.
+//' @param obs The observations.
+//' @param weight The weights of the observations.
+//' 
+// [[Rcpp::export]]
+double logLikelihoodbivPH(arma::vec alpha, arma::mat S11, arma::mat S12, arma::mat S22, const Rcpp::NumericMatrix & obs, const Rcpp::NumericVector & weight) {
+  arma::mat e;
+  e.ones(S22.n_cols, 1);
+  arma::mat exit_vect = (S22 * (-1)) * e;
+  
+  arma::mat aux_mat(1,1);
+  
+  double density{0.0};
+  
+  double logLh{0.0};
+  
+  // Non censored data
+  for (int k{0}; k < obs.nrow(); ++k) {
+    aux_mat = alpha.t() * matrix_exponential(S11 * obs(k,0)) * S12 * matrix_exponential(S22 * obs(k,1)) * exit_vect;
+    density = aux_mat(0,0);
+    logLh += weight[k] * std::log(density);
+  }
+  
+  return logLh;
+}
+
+
 //' Loglikelihood for PH-MoE
 //' 
 //' @param alpha1 Initial probabilities for non-censored data.

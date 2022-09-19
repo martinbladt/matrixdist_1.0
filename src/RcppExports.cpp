@@ -359,6 +359,22 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// logLikelihoodbivPH
+double logLikelihoodbivPH(arma::vec alpha, arma::mat S11, arma::mat S12, arma::mat S22, const Rcpp::NumericMatrix& obs, const Rcpp::NumericVector& weight);
+RcppExport SEXP _matrixdist_logLikelihoodbivPH(SEXP alphaSEXP, SEXP S11SEXP, SEXP S12SEXP, SEXP S22SEXP, SEXP obsSEXP, SEXP weightSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type S11(S11SEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type S12(S12SEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type S22(S22SEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericMatrix& >::type obs(obsSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type weight(weightSEXP);
+    rcpp_result_gen = Rcpp::wrap(logLikelihoodbivPH(alpha, S11, S12, S22, obs, weight));
+    return rcpp_result_gen;
+END_RCPP
+}
 // logLikelihoodPH_MoE
 double logLikelihoodPH_MoE(arma::mat& alpha1, arma::mat& alpha2, arma::mat& S, const Rcpp::NumericVector& obs, const Rcpp::NumericVector& weight, const Rcpp::NumericVector& rcens, const Rcpp::NumericVector& rcweight);
 RcppExport SEXP _matrixdist_logLikelihoodPH_MoE(SEXP alpha1SEXP, SEXP alpha2SEXP, SEXP SSEXP, SEXP obsSEXP, SEXP weightSEXP, SEXP rcensSEXP, SEXP rcweightSEXP) {
@@ -1910,6 +1926,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_EMstep_PADE", (DL_FUNC) &_matrixdist_EMstep_PADE, 7},
     {"_matrixdist_EMstep_MoE_PADE", (DL_FUNC) &_matrixdist_EMstep_MoE_PADE, 6},
     {"_matrixdist_EMstep_bivph", (DL_FUNC) &_matrixdist_EMstep_bivph, 6},
+    {"_matrixdist_logLikelihoodbivPH", (DL_FUNC) &_matrixdist_logLikelihoodbivPH, 6},
     {"_matrixdist_logLikelihoodPH_MoE", (DL_FUNC) &_matrixdist_logLikelihoodPH_MoE, 7},
     {"_matrixdist_logLikelihoodPH_PADE", (DL_FUNC) &_matrixdist_logLikelihoodPH_PADE, 7},
     {"_matrixdist_logLikelihoodMweibull_PADE", (DL_FUNC) &_matrixdist_logLikelihoodMweibull_PADE, 8},

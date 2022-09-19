@@ -328,6 +328,19 @@ EMstep_bivph <- function(alpha, S11, S12, S22, obs, weight) {
     invisible(.Call(`_matrixdist_EMstep_bivph`, alpha, S11, S12, S22, obs, weight))
 }
 
+#' Loglikelihood for Bivariate PH
+#' 
+#' @param alpha Vector of initial probabilities.
+#' @param S11 Sub-intensity matrix.
+#' @param S12 Matrix.
+#' @param S22 Sub-intensity matrix.
+#' @param obs The observations.
+#' @param weight The weights of the observations.
+#' 
+logLikelihoodbivPH <- function(alpha, S11, S12, S22, obs, weight) {
+    .Call(`_matrixdist_logLikelihoodbivPH`, alpha, S11, S12, S22, obs, weight)
+}
+
 #' Loglikelihood for PH-MoE
 #' 
 #' @param alpha1 Initial probabilities for non-censored data.
