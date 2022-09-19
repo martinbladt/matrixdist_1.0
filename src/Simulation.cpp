@@ -260,38 +260,6 @@ Rcpp::NumericVector rmatrixgev(int n, arma::vec alpha, arma::mat S, double mu, d
 }
 
 
-//' Simulate discrete phase-type
-//'
-//' Generates a sample of size \code{n} from a discrete phase-type distribution with
-//' parameters \code{alpha} and \code{S}.
-//' 
-//' @param n Sample size.
-//' @param alpha Vector of initial probabilities.
-//' @param S Sub-transition matrix.
-//' @return Simulated sample.
-//'
-// [[Rcpp::export]]
-Rcpp::NumericVector rdphasetype(int n, arma::vec alpha, arma::mat S) {
-  Rcpp::NumericVector sample(n);
-  
-  arma::mat cum_trans = cumulate_matrix(S);
-  arma::vec cum_alpha = cumulate_vector(alpha);
-  
-  unsigned p{alpha.size()};
-  long state{0};
-  for (int i{0}; i < n; ++i) {
-    double time{0.0};
-    state = initial_state(cum_alpha, Rcpp::runif(1)[0]);
-    while (state != p) {
-      time += 1;
-      state = new_state(state, cum_trans, Rcpp::runif(1)[0]);
-    }
-    sample[i] = time;
-  }
-  return sample;
-}
-
-
 //' Simulate a MPH* random vector
 //'
 //' Generates a sample of size \code{n} from a MPH* distribution with parameters
@@ -326,4 +294,71 @@ Rcpp::NumericMatrix rMPHstar(int n, arma::vec alpha, arma::mat S, arma::mat R) {
     }
   }
   return (sample);
+}
+
+
+//' Simulate discrete phase-type
+//'
+//' Generates a sample of size \code{n} from a discrete phase-type distribution with
+//' parameters \code{alpha} and \code{S}.
+//' 
+//' @param n Sample size.
+//' @param alpha Vector of initial probabilities.
+//' @param S Sub-transition matrix.
+//' @return Simulated sample.
+//'
+// [[Rcpp::export]]
+Rcpp::NumericVector rdphasetype(int n, arma::vec alpha, arma::mat S) {
+  Rcpp::NumericVector sample(n);
+  
+  arma::mat cum_trans = cumulate_matrix(S);
+  arma::vec cum_alpha = cumulate_vector(alpha);
+  
+  unsigned p{alpha.size()};
+  long state{0};
+  for (int i{0}; i < n; ++i) {
+    double time{0.0};
+    state = initial_state(cum_alpha, Rcpp::runif(1)[0]);
+    while (state != p) {
+      time += 1;
+      state = new_state(state, cum_trans, Rcpp::runif(1)[0]);
+    }
+    sample[i] = time;
+  }
+  return sample;
+}
+
+
+//' Simulate MDPH*
+//'
+//' Generates a sample of size \code{n} from a MDPH* distribution with
+//' parameters \code{alpha}, \code{S}, and \code{R}.
+//' 
+//' @param n Sample size.
+//' @param alpha Vector of initial probabilities.
+//' @param S Sub-transition matrix.
+//' @param R Reward matrix.
+//' @return Simulated sample.
+//'
+// [[Rcpp::export]]
+Rcpp::NumericMatrix rMDPHstar(int n, arma::vec alpha, arma::mat S, arma::mat R) {
+  unsigned dim{R.n_cols};
+  
+  Rcpp::NumericMatrix sample(n, dim);
+  
+  arma::mat cum_trans = cumulate_matrix(S);
+  arma::vec cum_alpha = cumulate_vector(alpha);
+  
+  unsigned p{alpha.size()};
+  long state{0};
+  for (int i{0}; i < n; ++i) {
+    state = initial_state(cum_alpha, Rcpp::runif(1)[0]);
+    while (state != p) {
+      for (int j{0}; j < dim; ++j) {
+        sample(i,j) += R(state, j);
+      }
+      state = new_state(state, cum_trans, Rcpp::runif(1)[0]);
+    }
+  }
+  return sample;
 }

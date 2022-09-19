@@ -1048,6 +1048,21 @@ rmatrixgev <- function(n, alpha, S, mu, sigma, xi = 0) {
     .Call(`_matrixdist_rmatrixgev`, n, alpha, S, mu, sigma, xi)
 }
 
+#' Simulate a MPH* random vector
+#'
+#' Generates a sample of size \code{n} from a MPH* distribution with parameters
+#'  \code{alpha}, \code{S} and \code{R}.
+#'
+#' @param n Sample size.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity matrix.
+#' @param R Reward matrix.
+#' @return The simulated sample.
+#' 
+rMPHstar <- function(n, alpha, S, R) {
+    .Call(`_matrixdist_rMPHstar`, n, alpha, S, R)
+}
+
 #' Simulate discrete phase-type
 #'
 #' Generates a sample of size \code{n} from a discrete phase-type distribution with
@@ -1062,19 +1077,19 @@ rdphasetype <- function(n, alpha, S) {
     .Call(`_matrixdist_rdphasetype`, n, alpha, S)
 }
 
-#' Simulate a MPH* random vector
+#' Simulate MDPH*
 #'
-#' Generates a sample of size \code{n} from a MPH* distribution with parameters
-#'  \code{alpha}, \code{S} and \code{R}.
-#'
-#' @param n Sample size.
-#' @param alpha Initial probabilities.
-#' @param S Sub-intensity matrix.
-#' @param R Reward matrix.
-#' @return The simulated sample.
+#' Generates a sample of size \code{n} from a MDPH* distribution with
+#' parameters \code{alpha}, \code{S}, and \code{R}.
 #' 
-rMPHstar <- function(n, alpha, S, R) {
-    .Call(`_matrixdist_rMPHstar`, n, alpha, S, R)
+#' @param n Sample size.
+#' @param alpha Vector of initial probabilities.
+#' @param S Sub-transition matrix.
+#' @param R Reward matrix.
+#' @return Simulated sample.
+#'
+rMDPHstar <- function(n, alpha, S, R) {
+    .Call(`_matrixdist_rMDPHstar`, n, alpha, S, R)
 }
 
 #' Find how many states have positive reward
@@ -1513,6 +1528,32 @@ mgevcdf <- function(x, alpha, S, beta, lower_tail = TRUE) {
     .Call(`_matrixdist_mgevcdf`, x, alpha, S, beta, lower_tail)
 }
 
+#' Bivariate phase-type joint density of the feed forward type
+#'
+#' @param x Matrix of values.
+#' @param alpha Vector of initial probabilities.
+#' @param S11 Sub-intensity matrix.
+#' @param S12 Matrix.
+#' @param S22 Sub-intensity matrix.
+#' @return Joint density at \code{x}.
+#' 
+bivph_density <- function(x, alpha, S11, S12, S22) {
+    .Call(`_matrixdist_bivph_density`, x, alpha, S11, S12, S22)
+}
+
+#' Bivariate phase-type joint tail of the feed forward type
+#'
+#' @param x Matrix of values.
+#' @param alpha Vector of initial probabilities.
+#' @param S11 Sub-intensity matrix.
+#' @param S12 Matrix.
+#' @param S22 Sub-intensity matrix.
+#' @return Joint tail at \code{x}.
+#' 
+bivph_tail <- function(x, alpha, S11, S12, S22) {
+    .Call(`_matrixdist_bivph_tail`, x, alpha, S11, S12, S22)
+}
+
 #' Discrete phase-type density
 #' 
 #' Computes the density of discrete phase-type distribution with parameters
@@ -1542,30 +1583,30 @@ dphcdf <- function(x, alpha, S, lower_tail = TRUE) {
     .Call(`_matrixdist_dphcdf`, x, alpha, S, lower_tail)
 }
 
-#' Bivariate phase-type joint density of the feed forward type
+#' Bivariate discrete phase-type joint density of the feed forward type
 #'
 #' @param x Matrix of values.
 #' @param alpha Vector of initial probabilities.
-#' @param S11 Sub-intensity matrix.
+#' @param S11 Sub-transition matrix.
 #' @param S12 Matrix.
-#' @param S22 Sub-intensity matrix.
+#' @param S22 Sub-transition matrix.
 #' @return Joint density at \code{x}.
 #' 
-bivph_density <- function(x, alpha, S11, S12, S22) {
-    .Call(`_matrixdist_bivph_density`, x, alpha, S11, S12, S22)
+bivdph_density <- function(x, alpha, S11, S12, S22) {
+    .Call(`_matrixdist_bivdph_density`, x, alpha, S11, S12, S22)
 }
 
-#' Bivariate phase-type joint tail of the feed forward type
+#' Bivariate discrete phase-type joint tail of the feed forward type
 #'
 #' @param x Matrix of values.
 #' @param alpha Vector of initial probabilities.
-#' @param S11 Sub-intensity matrix.
+#' @param S11 Sub-transition matrix.
 #' @param S12 Matrix.
-#' @param S22 Sub-intensity matrix.
+#' @param S22 Sub-transition matrix.
 #' @return Joint tail at \code{x}.
 #' 
-bivph_tail <- function(x, alpha, S11, S12, S22) {
-    .Call(`_matrixdist_bivph_tail`, x, alpha, S11, S12, S22)
+bivdph_tail <- function(x, alpha, S11, S12, S22) {
+    .Call(`_matrixdist_bivdph_tail`, x, alpha, S11, S12, S22)
 }
 
 #' EM for discrete phase-type

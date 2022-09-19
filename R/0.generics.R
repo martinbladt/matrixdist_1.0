@@ -232,3 +232,17 @@ setGeneric("TVR", function(x, ...) {
 setGeneric("MoE", function(x, y, ...) {
   standardGeneric("MoE")
 })
+
+#' New generic for the marginals of multivariate matrix distributions
+#'
+#' Methods are available for objects of multivariate classes.
+#'
+#' @param x An object of the model class.
+#' @param ... Further parameters to be passed on.
+#'
+#' @return Marginal of the matrix distribution.
+#'
+#'
+setGeneric("marginal", function(x, ...) {
+  standardGeneric("marginal")
+})

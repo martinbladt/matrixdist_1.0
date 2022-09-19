@@ -536,6 +536,63 @@ Rcpp::NumericVector mgevcdf(Rcpp::NumericVector x, arma::vec alpha, arma::mat S,
 }
 
 
+//' Bivariate phase-type joint density of the feed forward type
+//'
+//' @param x Matrix of values.
+//' @param alpha Vector of initial probabilities.
+//' @param S11 Sub-intensity matrix.
+//' @param S12 Matrix.
+//' @param S22 Sub-intensity matrix.
+//' @return Joint density at \code{x}.
+//' 
+// [[Rcpp::export]]
+Rcpp::NumericVector bivph_density(Rcpp::NumericMatrix x, arma::vec alpha, arma::mat S11, arma::mat S12, arma::mat S22) {
+  long n{x.nrow()};
+  
+  Rcpp::NumericVector density(n);
+  
+  arma::mat e;
+  e.ones(S22.n_cols, 1);
+  arma::mat exit_vect = (S22 * (-1)) * e;
+  
+  arma::mat aux_mat(1,1);
+  
+  for (int k{0}; k < n; ++k) {
+    aux_mat = alpha.t() * matrix_exponential(S11 * x(k,0)) * S12 * matrix_exponential(S22 * x(k,1)) * exit_vect;
+    density[k] = aux_mat(0,0);
+  }
+  return density;
+}
+
+
+//' Bivariate phase-type joint tail of the feed forward type
+//'
+//' @param x Matrix of values.
+//' @param alpha Vector of initial probabilities.
+//' @param S11 Sub-intensity matrix.
+//' @param S12 Matrix.
+//' @param S22 Sub-intensity matrix.
+//' @return Joint tail at \code{x}.
+//' 
+// [[Rcpp::export]]
+Rcpp::NumericVector bivph_tail(Rcpp::NumericMatrix x, arma::vec alpha, arma::mat S11, arma::mat S12, arma::mat S22) {
+  long n{x.nrow()};
+  
+  Rcpp::NumericVector tail(n);
+  
+  arma::mat e;
+  e.ones(S22.n_cols, 1);
+  
+  arma::mat aux_mat(1,1);
+  
+  for (int k{0}; k < n; ++k) {
+    aux_mat = alpha.t() * inv(S11 * (-1)) * matrix_exponential(S11 * x(k,0)) * S12 * matrix_exponential(S22 * x(k,1)) * e;
+    tail[k] = aux_mat(0,0);
+  }
+  return tail;
+}
+
+
 //' Discrete phase-type density
 //' 
 //' Computes the density of discrete phase-type distribution with parameters
@@ -605,46 +662,52 @@ Rcpp::NumericVector dphcdf(Rcpp::NumericVector x, arma::vec alpha, arma::mat S, 
 }
 
 
-//' Bivariate phase-type joint density of the feed forward type
+//' Bivariate discrete phase-type joint density of the feed forward type
 //'
 //' @param x Matrix of values.
 //' @param alpha Vector of initial probabilities.
-//' @param S11 Sub-intensity matrix.
+//' @param S11 Sub-transition matrix.
 //' @param S12 Matrix.
-//' @param S22 Sub-intensity matrix.
+//' @param S22 Sub-transition matrix.
 //' @return Joint density at \code{x}.
 //' 
 // [[Rcpp::export]]
-Rcpp::NumericVector bivph_density(Rcpp::NumericMatrix x, arma::vec alpha, arma::mat S11, arma::mat S12, arma::mat S22) {
+Rcpp::NumericVector bivdph_density(Rcpp::NumericMatrix x, arma::vec alpha, arma::mat S11, arma::mat S12, arma::mat S22) {
   long n{x.nrow()};
   
   Rcpp::NumericVector density(n);
   
   arma::mat e;
   e.ones(S22.n_cols, 1);
-  arma::mat exit_vect = (S22 * (-1)) * e;
+  arma::mat exit_vect = e - (S22 * e);
+  
+  double max_val1{max(x.column(0))};
+  double max_val2{max(x.column(1))};
+  
+  std::vector<arma::mat> vect1 = vector_of_powers(S11, max_val1);
+  std::vector<arma::mat> vect2 = vector_of_powers(S22, max_val2);
   
   arma::mat aux_mat(1,1);
   
   for (int k{0}; k < n; ++k) {
-    aux_mat = alpha.t() * matrix_exponential(S11 * x(k,0)) * S12 * matrix_exponential(S22 * x(k,1)) * exit_vect;
+    aux_mat =  alpha.t() * vect1[x(k, 0) - 1] * S12 * vect2[x(k, 1) - 1] * exit_vect;
     density[k] = aux_mat(0,0);
   }
   return density;
 }
 
 
-//' Bivariate phase-type joint tail of the feed forward type
+//' Bivariate discrete phase-type joint tail of the feed forward type
 //'
 //' @param x Matrix of values.
 //' @param alpha Vector of initial probabilities.
-//' @param S11 Sub-intensity matrix.
+//' @param S11 Sub-transition matrix.
 //' @param S12 Matrix.
-//' @param S22 Sub-intensity matrix.
+//' @param S22 Sub-transition matrix.
 //' @return Joint tail at \code{x}.
 //' 
 // [[Rcpp::export]]
-Rcpp::NumericVector bivph_tail(Rcpp::NumericMatrix x, arma::vec alpha, arma::mat S11, arma::mat S12, arma::mat S22) {
+Rcpp::NumericVector bivdph_tail(Rcpp::NumericMatrix x, arma::vec alpha, arma::mat S11, arma::mat S12, arma::mat S22) {
   long n{x.nrow()};
   
   Rcpp::NumericVector tail(n);
@@ -652,10 +715,16 @@ Rcpp::NumericVector bivph_tail(Rcpp::NumericMatrix x, arma::vec alpha, arma::mat
   arma::mat e;
   e.ones(S22.n_cols, 1);
   
+  double max_val1{max(x.column(1))};
+  double max_val2{max(x.column(2))};
+  
+  std::vector<arma::mat> vect1 = vector_of_powers(S11, max_val1);
+  std::vector<arma::mat> vect2 = vector_of_powers(S22, max_val2);
+  
   arma::mat aux_mat(1,1);
   
   for (int k{0}; k < n; ++k) {
-    aux_mat = alpha.t() * inv(S11 * (-1)) * matrix_exponential(S11 * x(k,0)) * S12 * matrix_exponential(S22 * x(k,1)) * e;
+    aux_mat =  alpha.t() * vect1[x(k, 0)] * S12 * vect2[x(k, 1)] * e;
     tail[k] = aux_mat(0,0);
   }
   return tail;

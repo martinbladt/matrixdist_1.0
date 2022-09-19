@@ -213,3 +213,24 @@ setMethod(
     return(x)
   }
 )
+
+
+#' Marginal method for bivph class
+#'
+#' @param x An object of class \linkS4class{bivph}.
+#' @param mar Indicator of which marginal.
+#' @return An object of the of class \linkS4class{ph}.
+#' @export
+#'
+#' @examples
+#' obj <- bivph(dimensions = c(3, 3))
+#' marginal(obj, 1)
+setMethod("marginal", c(x = "bivph"), function(x, mar = 1) {
+  if (mar == 1) {
+    x0 <- ph(alpha = x@pars$alpha, S = x@pars$S11)
+  } else {
+    alpha0 <- x@pars$alpha %*% base::solve(-x@pars$S11) %*% x@pars$S12
+    x0 <- ph(alpha = alpha0, S = x@pars$S22)
+  }
+  return(x0)
+})

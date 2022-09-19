@@ -1,0 +1,168 @@
+#' Bivariate discrete phase-type distributions
+#'
+#' Class of objects for bivariate discrete phase-type distributions.
+#'
+#' @slot name Name of the discrete phase-type distribution.
+#' @slot pars A list comprising of the parameters.
+#' @slot fit A list containing estimation information.
+#'
+#' @return Class object.
+#' @export
+#'
+setClass("bivdph",
+  slots = list(
+    name = "character",
+    pars = "list",
+    fit = "list"
+  ),
+  prototype = list(
+    name = NA_character_,
+    pars = list(),
+    fit = list()
+  )
+)
+
+
+#' Constructor function for bivariate discrete phase-type distributions
+#'
+#' @param alpha A probability vector.
+#' @param S11 A sub-transition matrix.
+#' @param S12 A matrix.
+#' @param S22 A sub-transition matrix.
+#' @param dimensions The dimensions of the bivariate discrete phase-type (if no parameters are provided).
+#'
+#' @return An object of class \linkS4class{bivdph}.
+#' @export
+#'
+#' @examples
+#' bivdph(dimensions = c(3, 3))
+#' S11 <- matrix(c(0.1, .5, .5, 0.1), 2, 2)
+#' S12 <- matrix(c(.2, .3, .2, .1), 2, 2)
+#' S22 <- matrix(c(0.2, 0, 0.1, 0.1), 2, 2)
+#' bivdph(alpha = c(.5, .5), S11, S12, S22)
+bivdph <- function(alpha = NULL, S11 = NULL, S12 = NULL, S22 = NULL, dimensions = c(3, 3)) {
+  if (any(is.null(alpha)) & any(is.null(S11))) {
+    alpha <- stats::runif(dimensions[1])
+    alpha <- alpha / sum(alpha)
+    aux_m <- matrix(stats::runif(dimensions[1] * (dimensions[1] + dimensions[2])), nrow = dimensions[1])
+    aux_m <- aux_m / rowSums(aux_m)
+    S11 <- aux_m[, 1:dimensions[1]]
+    S12 <- aux_m[, -(1:dimensions[1])]
+    aux_m <- matrix(stats::runif(dimensions[2] * (dimensions[2] + 1)), nrow = dimensions[2])
+    aux_m <- aux_m / rowSums(aux_m)
+    S22 <- aux_m[, 1:dimensions[2]]
+    name <- "random"
+  } else {
+    if (dim(S11)[1] != dim(S11)[2]) {
+      stop("matrix S11 should be square")
+    } else if (dim(S22)[1] != dim(S22)[2]) {
+      stop("matrix S22 should be square")
+    } else if (dim(S11)[1] != dim(S12)[1]) {
+      stop("incompatible dimensions of S11 and S12")
+    } else if (dim(S22)[1] != dim(S12)[2]) {
+      stop("incompatible dimensions of S12 and S22")
+    } else if (length(alpha) != dim(S11)[1]) {
+      stop("incompatible dimensions of alpha and S11")
+    }
+    name <- "custom"
+  }
+  methods::new("bivdph",
+    name = paste(name, " bivdph(", length(alpha), ")", sep = ""),
+    pars = list(alpha = alpha, S11 = S11, S12 = S12, S22 = S22)
+  )
+}
+
+
+#' Show method for bivariate discrete phase-type distributions
+#'
+#' @param object An object of class \linkS4class{bivdph}.
+#' @importFrom methods show
+#' @export
+#'
+setMethod("show", "bivdph", function(object) {
+  cat("object class: ", methods::is(object)[[1]], "\n", sep = "")
+  cat("name: ", object@name, "\n", sep = "")
+  cat("parameters: ", "\n", sep = "")
+  methods::show(object@pars)
+})
+
+
+#' Density method for bivariate discrete phase-type distributions
+#'
+#' @param x An object of class \linkS4class{bivdph}.
+#' @param y A matrix of locations.
+#'
+#' @return A vector containing the joint density evaluations at the given locations.
+#' @export
+#'
+#' @examples
+#' obj <- bivdph(dimensions = c(3, 3))
+#' dens(obj, matrix(c(0.5, 1), ncol = 2))
+setMethod("dens", c(x = "bivdph"), function(x, y) {
+  dens <- bivdph_density(y, x@pars$alpha, x@pars$S11, x@pars$S12, x@pars$S22)
+  return(dens)
+})
+
+
+#' Coef method for bivdph class
+#'
+#' @param object An object of class \linkS4class{bivdph}.
+#'
+#' @return Parameters of bivariate discrete phase-type model.
+#' @export
+#'
+#' @examples
+#' obj <- bivdph(dimensions = c(3, 3))
+#' coef(obj)
+setMethod("coef", c(object = "bivdph"), function(object) {
+  object@pars
+})
+
+
+#' Simulation method for bivariate discrete phase-type distributions
+#'
+#' @param x An object of class \linkS4class{bivdph}.
+#' @param n An integer of length of realization.
+#'
+#' @return A realization of independent and identically distributed bivariate
+#'  discrete phase-type vector.
+#' @export
+#'
+#' @examples
+#' obj <- bivdph(dimensions = c(3, 3))
+#' sim(obj, n = 100)
+setMethod("sim", c(x = "bivdph"), function(x, n = 1000) {
+  p1_aux <- dim(x@pars$S11)[1]
+  p2_aux <- dim(x@pars$S22)[1]
+  alpha_aux <- c(x@pars$alpha, rep(0, p2_aux))
+  S_aux <- merge_matrices(x@pars$S11, x@pars$S12, x@pars$S22)
+  R_aux <- matrix(c(c(rep(1, p1_aux), rep(0, p2_aux)), c(rep(0, p1_aux), rep(1, p2_aux))), ncol = 2)
+  exit_vec <- 1 - rowSums(S_aux)
+  trans_mat <- cbind(S_aux, exit_vec)
+  aux_vec <- rep(0, p1_aux + p2_aux + 1)
+  aux_vec[p1_aux + p2_aux + 1] <- 1
+  trans_mat <- rbind(trans_mat, aux_vec)
+  U <- rMDPHstar(n, alpha_aux, trans_mat, R_aux)
+  return(U)
+})
+
+
+#' Marginal method for bivdph class
+#'
+#' @param x An object of class \linkS4class{bivdph}.
+#' @param mar Indicator of which marginal.
+#' @return An object of the of class \linkS4class{dph}.
+#' @export
+#'
+#' @examples
+#' obj <- bivdph(dimensions = c(3, 3))
+#' marginal(obj, 1)
+setMethod("marginal", c(x = "bivdph"), function(x, mar = 1) {
+  if (mar == 1) {
+    x0 <- dph(alpha = x@pars$alpha, S = x@pars$S11)
+  } else {
+    alpha0 <- x@pars$alpha %*% base::solve(diag(ncol(x@pars$S12)) - x@pars$S11) %*% x@pars$S12
+    x0 <- dph(alpha = alpha0, S = x@pars$S22)
+  }
+  return(x0)
+})
