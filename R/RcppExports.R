@@ -1631,6 +1631,19 @@ EMstep_dph_MoE <- function(alpha, S, obs, weight) {
     .Call(`_matrixdist_EMstep_dph_MoE`, alpha, S, obs, weight)
 }
 
+#' EM for discrete bivariate phase-type
+#' 
+#' @param alpha Initial probabilities.
+#' @param S11 Sub-transition matrix.
+#' @param S12 Matrix.
+#' @param S22 Sub-transition matrix.
+#' @param obs The observations.
+#' @param weight The weights for the observations.
+#' 
+EMstep_bivdph <- function(alpha, S11, S12, S22, obs, weight) {
+    invisible(.Call(`_matrixdist_EMstep_bivdph`, alpha, S11, S12, S22, obs, weight))
+}
+
 #' Loglikelihood for discrete phase-type
 #' 
 #' @param alpha Initial probabilities.
@@ -1651,6 +1664,19 @@ logLikelihoodDPH <- function(alpha, S, obs, weight) {
 #' 
 logLikelihoodDPH_MoE <- function(alpha, S, obs, weight) {
     .Call(`_matrixdist_logLikelihoodDPH_MoE`, alpha, S, obs, weight)
+}
+
+#' Loglikelihood for bivariate discrete phase-type
+#' 
+#' @param alpha Initial probabilities.
+#' @param S11 Sub-transition matrix.
+#' @param S12 Matrix.
+#' @param S22 Sub-transition matrix.
+#' @param obs The observations.
+#' @param weight The weights of the observations.
+#' 
+logLikelihoodbivDPH <- function(alpha, S11, S12, S22, obs, weight) {
+    .Call(`_matrixdist_logLikelihoodbivDPH`, alpha, S11, S12, S22, obs, weight)
 }
 
 #' EM step for the mPH class with right-censoring, for different marginal 

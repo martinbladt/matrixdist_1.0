@@ -166,3 +166,70 @@ setMethod("marginal", c(x = "bivdph"), function(x, mar = 1) {
   }
   return(x0)
 })
+
+
+#' Fit Method for bivdph Class
+#'
+#' @param x An object of class \linkS4class{bivdph}.
+#' @param y A matrix with the data.
+#' @param weight Vector of weights.
+#' @param stepsEM Number of EM steps to be performed.
+#' @param every Number of iterations between likelihood display updates.
+#'
+#' @return An object of class \linkS4class{bivdph}.
+#'
+#' @export
+#'
+#' @examples
+#' obj <- bivdph(dimensions = c(3, 3))
+#' data <- sim(obj, n = 100)
+#' fit(obj, data, stepsEM = 100, every = 50)
+setMethod(
+  "fit", c(x = "bivdph"),
+  function(x,
+           y,
+           weight = numeric(0),
+           stepsEM = 1000,
+           every = 10) {
+    if (!all(y > 0)) {
+      stop("data should be positive")
+    }
+    if (!all(weight >= 0)) {
+      stop("weights should be non-negative")
+    }
+    if (length(weight) == 0) {
+      weight <- rep(1, length(y[, 1]))
+    }
+    
+    bivdph_par <- x@pars
+    alpha_fit <- clone_vector(bivdph_par$alpha)
+    S11_fit <- clone_matrix(bivdph_par$S11)
+    S12_fit <- clone_matrix(bivdph_par$S12)
+    S22_fit <- clone_matrix(bivdph_par$S22)
+    
+    options(digits.secs = 4)
+    cat(format(Sys.time(), format = "%H:%M:%OS"), ": EM started", sep = "")
+    cat("\n", sep = "")
+    
+    
+    for (k in 1:stepsEM) {
+      EMstep_bivdph(alpha_fit, S11_fit, S12_fit, S22_fit, y, weight)
+      if (k %% every == 0) {
+        cat("\r", "iteration:", k,
+            ", logLik:", logLikelihoodbivDPH(alpha_fit, S11_fit, S12_fit, S22_fit, y, weight),
+            sep = " "
+        )
+      }
+    }
+    
+    x@pars$alpha <- alpha_fit
+    x@pars$S11 <- S11_fit
+    x@pars$S12 <- S12_fit
+    x@pars$S22 <- S22_fit
+    
+    cat("\n", format(Sys.time(), format = "%H:%M:%OS"), ": EM finalized", sep = "")
+    cat("\n", sep = "")
+    
+    return(x)
+  }
+)
