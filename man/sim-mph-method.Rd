@@ -15,7 +15,7 @@
 the number of marginals to simulate from, all from the first matrix.}
 }
 \value{
-A realization of a phase-type data.
+A realization of a multivariate phase-type distribution.
 }
 \description{
 Simulation Method for multivariate phase-type distributions
