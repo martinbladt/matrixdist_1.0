@@ -3,7 +3,7 @@
 #' @param x An object of class \linkS4class{mph}.
 #' @param formula a regression formula.
 #' @param y A matrix of observations.
-#' @param data A data frame of covariates (they need to be scaled for the regression). 
+#' @param data A data frame of covariates (they need to be scaled for the regression).
 #' @param alpha_mat Matrix with initial distribution vectors for each row of observations.
 #' @param delta Matrix with right-censoring indicators (1 uncensored, 0 right censored).
 #' @param stepsEM Number of EM steps to be performed.
@@ -13,22 +13,21 @@
 #' @param rand_init Random initiation in the R-step of the EM algorithm.
 #'
 #' @export
-#' 
+#'
 #' @importFrom reshape2 melt
 #' @importFrom methods is
 #' @importFrom stats model.frame predict optim
 #' @importFrom nnet multinom
-#' 
-#' @examples 
-#' x<-mph(structure=c("general","general"), dimension=3, variables=2)
-#' n<-100
-#' responses<-cbind(rexp(n),rgamma(n,2,3))
-#' 
-#' covariate<-data.frame(age=sample(18:65,n,replace = TRUE)/100,income=runif(n,0,0.99)) 
-#' f<-responses~age+income #regression formula
-#' fit<-nnet_fit(x=x,formula=f, y=responses, data=covariate, stepsEM=20)
-#' 
-
+#'
+#' @examples
+#' x <- mph(structure = c("general", "general"), dimension = 3, variables = 2)
+#' n <- 100
+#' responses <- cbind(rexp(n), rgamma(n, 2, 3))
+#'
+#' covariate <- data.frame(age = sample(18:65, n, replace = TRUE) / 100, income = runif(n, 0, 0.99))
+#' f <- responses~age + income # regression formula
+#' fit <- nnet_fit(x = x, formula = f, y = responses, data = covariate, stepsEM = 20)
+#'
 setMethod(
   "nnet_fit", c(x = "mph", y = "ANY"),
   function(x,
@@ -136,8 +135,8 @@ setMethod(
       x@pars$S <- S_fit # C++
 
       x@fit <- list(
-        #logLik = nnet_mph_LL(x, y, delta),
-        loglik = sum(log(dens(x,y,delta))),
+        # logLik = nnet_mph_LL(x, y, delta),
+        loglik = sum(log(dens(x, y, delta))),
         nobs = nrow(y),
         nnet = multinom_model
       )
@@ -233,7 +232,7 @@ nnet_miph_LL <- function(x,
                          delta,
                          gfun_pars) {
   x@gfun$pars <- gfun_pars
-  res <- dens(x,y=obs,delta=delta)
+  res <- dens(x, y = obs, delta = delta)
 
   ll <- sum(log(res))
 

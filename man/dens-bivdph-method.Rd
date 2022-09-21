@@ -19,5 +19,5 @@ Density method for bivariate discrete phase-type distributions
 }
 \examples{
 obj <- bivdph(dimensions = c(3, 3))
-dens(obj, matrix(c(0.5, 1), ncol = 2))
+dens(obj, matrix(c(1, 2), ncol = 2))
 }

@@ -171,16 +171,16 @@ setMethod("show", "miph", function(object) {
 #' @param n An integer of length of realization.
 #'
 #' @return A realization of independent and identically distributed inhomogeneous
-#'  multivariate phase-type variables. If x is a M-o-E miph an array of dimension c(n,d,m) is returned, 
-#'  with d the number of marginals and m the number of initial distribution vectors.  
+#'  multivariate phase-type variables. If x is a M-o-E miph an array of dimension c(n,d,m) is returned,
+#'  with d the number of marginals and m the number of initial distribution vectors.
 #' @export
 #'
 setMethod("sim", c(x = "miph"), function(x, n = 1000) {
   name <- x@gfun$name
   pars <- x@gfun$pars
   scale <- x@scale
-  
-  if(is.vector(x@pars$alpha)){
+
+  if (is.vector(x@pars$alpha)) {
     U <- numeric(0)
     for (i in 1:length(name)) {
       if (name[i] %in% c("pareto", "weibull", "lognormal", "loglogistic", "gompertz")) {
@@ -190,14 +190,13 @@ setMethod("sim", c(x = "miph"), function(x, n = 1000) {
         U <- cbind(U, scale * rmatrixgev(n, x@pars$alpha, x@pars$S[[i]], pars[[i]][1], pars[[i]][2], pars[[i]][3]))
       }
     }
-  }else if(is.matrix(x@pars$alpha)){
-    
-    U <- array(NA,dim=c(n,length(name),nrow(x@pars$alpha)))
+  } else if (is.matrix(x@pars$alpha)) {
+    U <- array(NA, dim = c(n, length(name), nrow(x@pars$alpha)))
     xx <- x
-    for(m in 1:nrow(x@pars$alpha)){
+    for (m in 1:nrow(x@pars$alpha)) {
       U2 <- numeric(0)
-      xx@pars$alpha <- x@pars$alpha[m,]
-      
+      xx@pars$alpha <- x@pars$alpha[m, ]
+
       for (i in 1:length(name)) {
         if (name[i] %in% c("pareto", "weibull", "lognormal", "loglogistic", "gompertz")) {
           U2 <- cbind(U2, scale * riph(n, name[i], xx@pars$alpha, x@pars$S[[i]], pars[[i]]))
@@ -206,7 +205,7 @@ setMethod("sim", c(x = "miph"), function(x, n = 1000) {
           U2 <- cbind(U2, scale * rmatrixgev(n, xx@pars$alpha, x@pars$S[[i]], pars[[i]][1], pars[[i]][2], pars[[i]][3]))
         }
       }
-      U[,,m]<-U2  
+      U[, , m] <- U2
     }
   }
   return(U)
@@ -222,12 +221,11 @@ setMethod("sim", c(x = "miph"), function(x, n = 1000) {
 #' @export
 #'
 setMethod("dens", c(x = "miph"), function(x, y, delta = NULL) {
-  
   alpha <- x@pars$alpha
   S <- x@pars$S
   gfun.pars <- x@gfun$pars
   d <- length(x@pars$S)
-  
+
   if (is.matrix(y)) {
     n <- nrow(y)
   }
@@ -235,19 +233,19 @@ setMethod("dens", c(x = "miph"), function(x, y, delta = NULL) {
     n <- 1
     y <- t(y)
   }
-  
+
   if (length(delta) == 0) {
     delta <- matrix(1, nrow = n, ncol = d)
   }
   if (is.vector(delta)) {
     delta <- as.matrix(t(delta))
   }
-  
+
   res <- numeric(n)
-  
-  if(is.vector(alpha)){ # if x regular miph
+
+  if (is.vector(alpha)) { # if x regular miph
     p <- length(x@pars$alpha)
-    
+
     for (j in 1:p) {
       in_vect <- rep(0, p)
       in_vect[j] <- 1
@@ -265,15 +263,15 @@ setMethod("dens", c(x = "miph"), function(x, y, delta = NULL) {
       }
       res <- res + alpha[j] * apply(aux, 1, prod)
     }
-  }else if(is.matrix(alpha)){ #if x is a mixture-of-expert miph
-    p<-ncol(alpha)
+  } else if (is.matrix(alpha)) { # if x is a mixture-of-expert miph
+    p <- ncol(alpha)
     inter_res <- matrix(0, n, p)
     aux <- array(NA, c(n, d, p))
-    
+
     for (j in 1:p) {
       in_vect <- rep(0, p)
       in_vect[j] <- 1
-      
+
       for (i in 1:d) {
         y_inv <- x@gfun$inverse[[i]](gfun.pars[[i]], y[, i])
         y_int <- x@gfun$intensity[[i]](gfun.pars[[i]], y[, i])
@@ -282,11 +280,11 @@ setMethod("dens", c(x = "miph"), function(x, y, delta = NULL) {
             aux[m, i, j] <- phdensity(y_inv[m], in_vect, S[[i]]) * y_int[m]
           } else {
             aux[m, i, j] <- phcdf(y_inv[m], in_vect, S[[i]], lower_tail = F)
-          }        
+          }
         }
       }
     }
-    
+
     for (m in 1:n) {
       for (j in 1:p) {
         inter_res[m, j] <- alpha[m, j] * prod(aux[m, , j])
@@ -294,7 +292,7 @@ setMethod("dens", c(x = "miph"), function(x, y, delta = NULL) {
     }
     res <- rowSums(inter_res)
   }
-  
+
   return(res)
 })
 
@@ -312,7 +310,7 @@ setMethod("cdf", c(x = "miph"), function(x, y, lower.tail = TRUE) {
   S <- x@pars$S
   gfun.pars <- x@gfun$pars
   d <- length(x@pars$S)
-  
+
   if (is.matrix(y)) {
     n <- nrow(y)
   }
@@ -320,12 +318,12 @@ setMethod("cdf", c(x = "miph"), function(x, y, lower.tail = TRUE) {
     n <- 1
     y <- t(y)
   }
-  
+
   res <- numeric(n)
-  
-  if(is.vector(alpha)){
+
+  if (is.vector(alpha)) {
     p <- length(x@pars$alpha)
-    
+
     for (j in 1:p) {
       in_vect <- rep(0, p)
       in_vect[j] <- 1
@@ -336,15 +334,15 @@ setMethod("cdf", c(x = "miph"), function(x, y, lower.tail = TRUE) {
       }
       res <- res + alpha[j] * apply(aux, 1, prod)
     }
-  }else if(is.matrix(alpha)){
-    p<-ncol(alpha)
+  } else if (is.matrix(alpha)) {
+    p <- ncol(alpha)
     inter_res <- matrix(0, n, p)
     aux <- array(NA, c(n, d, p))
-    
+
     for (j in 1:p) {
       in_vect <- rep(0, p)
       in_vect[j] <- 1
-      
+
       for (i in 1:d) {
         y_inv <- x@gfun$inverse[[i]](gfun.pars[[i]], y[, i])
         y_int <- x@gfun$intensity[[i]](gfun.pars[[i]], y[, i])
@@ -353,7 +351,7 @@ setMethod("cdf", c(x = "miph"), function(x, y, lower.tail = TRUE) {
         }
       }
     }
-    
+
     for (m in 1:n) {
       for (j in 1:p) {
         inter_res[m, j] <- alpha[m, j] * prod(aux[m, , j])
@@ -361,6 +359,6 @@ setMethod("cdf", c(x = "miph"), function(x, y, lower.tail = TRUE) {
     }
     res <- rowSums(inter_res)
   }
-  
+
   return(res)
 })

@@ -10,11 +10,11 @@
 #' @export
 #'
 setClass("mdph",
-         slots = list(
-           name = "character",
-           pars = "list",
-           fit = "list"
-         )
+  slots = list(
+    name = "character",
+    pars = "list",
+    fit = "list"
+  )
 )
 
 #' Constructor Function for multivariate discrete phase-type distributions
@@ -52,8 +52,8 @@ mdph <- function(alpha = NULL, S = NULL, structure = NULL, dimension = 3, variab
     name <- "custom"
   }
   methods::new("mdph",
-               name = paste(name, " mdph(", length(alpha), ")", sep = " "),
-               pars = list(alpha = alpha, S = S)
+    name = paste(name, " mdph(", length(alpha), ")", sep = " "),
+    pars = list(alpha = alpha, S = S)
   )
 }
 
@@ -99,13 +99,12 @@ setMethod("coef", c(object = "mdph"), function(object) {
 #' obj <- mdph(structure = c("general", "general"))
 #' sim(obj, 100)
 setMethod("sim", c(x = "mdph"), function(x, n = 1000, equal_marginals = 0) {
-  
-  if(is.vector(x@pars$alpha)) p <- length(x@pars$alpha)
-  if(is.matrix(x@pars$alpha)) p <- ncol(x@pars$alpha)
-  
+  if (is.vector(x@pars$alpha)) p <- length(x@pars$alpha)
+  if (is.matrix(x@pars$alpha)) p <- ncol(x@pars$alpha)
+
   if (equal_marginals == 0) {
     d <- length(x@pars$S)
-    
+
     trans_mat <- list()
     for (j in 1:d) {
       exit_vec <- 1 - rowSums(x@pars$S[[j]])
@@ -114,7 +113,7 @@ setMethod("sim", c(x = "mdph"), function(x, n = 1000, equal_marginals = 0) {
       aux_vec[p + 1] <- 1
       trans_mat[[j]] <- rbind(t_mat, aux_vec)
     }
-    
+
     states <- 1:p
     result <- matrix(NA, n, d)
     for (i in 1:n) {
@@ -127,13 +126,13 @@ setMethod("sim", c(x = "mdph"), function(x, n = 1000, equal_marginals = 0) {
     }
   } else {
     d <- equal_marginals
-    
+
     exit_vec <- 1 - rowSums(x@pars$S[[1]])
     trans_mat <- cbind(x@pars$S[[1]], exit_vec)
     aux_vec <- rep(0, p + 1)
     aux_vec[p + 1] <- 1
     trans_mat <- rbind(trans_mat, aux_vec)
-    
+
     states <- 1:p
     result <- matrix(NA, n, d)
     for (i in 1:n) {
@@ -178,3 +177,66 @@ setMethod("dens", c(x = "mdph"), function(x, y) {
   dens <- mdphdensity(y, x@pars$alpha, x@pars$S)
   return(dens)
 })
+
+
+#' Fit Method for mdph Class
+#'
+#' @param x An object of class \linkS4class{mdph}.
+#' @param y A matrix with the data.
+#' @param weight Vector of weights.
+#' @param stepsEM Number of EM steps to be performed.
+#' @param every Number of iterations between likelihood display updates.
+#'
+#' @return An object of class \linkS4class{mdph}.
+#'
+#' @export
+#'
+#' @examples
+#' obj <- mdph(structure = c("general", "general"))
+#' data <- sim(obj, n = 100)
+#' fit(obj, data, stepsEM = 100, every = 50)
+setMethod(
+  "fit", c(x = "mdph"),
+  function(x,
+           y,
+           weight = numeric(0),
+           stepsEM = 1000,
+           every = 10) {
+    if (!all(y > 0)) {
+      stop("data should be positive")
+    }
+    if (!all(weight >= 0)) {
+      stop("weights should be non-negative")
+    }
+    if (length(weight) == 0) {
+      weight <- rep(1, length(y[, 1]))
+    }
+
+    mdph_par <- x@pars
+    alpha_fit <- clone_vector(mdph_par$alpha)
+    # S_fit <- clone_matrix(mdph_par$S)
+
+    options(digits.secs = 4)
+    cat(format(Sys.time(), format = "%H:%M:%OS"), ": EM started", sep = "")
+    cat("\n", sep = "")
+
+
+    for (k in 1:stepsEM) {
+      # EMstep_bivdph(alpha_fit, S11_fit, S12_fit, S22_fit, y, weight)
+      # if (k %% every == 0) {
+      #   cat("\r", "iteration:", k,
+      #       ", logLik:", logLikelihoodbivDPH(alpha_fit, S11_fit, S12_fit, S22_fit, y, weight),
+      #       sep = " "
+      #   )
+      # }
+    }
+
+    x@pars$alpha <- alpha_fit
+    # x@pars$S <- S_fit
+
+    cat("\n", format(Sys.time(), format = "%H:%M:%OS"), ": EM finalized", sep = "")
+    cat("\n", sep = "")
+
+    return(x)
+  }
+)

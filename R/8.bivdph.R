@@ -200,36 +200,36 @@ setMethod(
     if (length(weight) == 0) {
       weight <- rep(1, length(y[, 1]))
     }
-    
+
     bivdph_par <- x@pars
     alpha_fit <- clone_vector(bivdph_par$alpha)
     S11_fit <- clone_matrix(bivdph_par$S11)
     S12_fit <- clone_matrix(bivdph_par$S12)
     S22_fit <- clone_matrix(bivdph_par$S22)
-    
+
     options(digits.secs = 4)
     cat(format(Sys.time(), format = "%H:%M:%OS"), ": EM started", sep = "")
     cat("\n", sep = "")
-    
-    
+
+
     for (k in 1:stepsEM) {
       EMstep_bivdph(alpha_fit, S11_fit, S12_fit, S22_fit, y, weight)
       if (k %% every == 0) {
         cat("\r", "iteration:", k,
-            ", logLik:", logLikelihoodbivDPH(alpha_fit, S11_fit, S12_fit, S22_fit, y, weight),
-            sep = " "
+          ", logLik:", logLikelihoodbivDPH(alpha_fit, S11_fit, S12_fit, S22_fit, y, weight),
+          sep = " "
         )
       }
     }
-    
+
     x@pars$alpha <- alpha_fit
     x@pars$S11 <- S11_fit
     x@pars$S12 <- S12_fit
     x@pars$S22 <- S22_fit
-    
+
     cat("\n", format(Sys.time(), format = "%H:%M:%OS"), ": EM finalized", sep = "")
     cat("\n", sep = "")
-    
+
     return(x)
   }
 )

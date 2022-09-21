@@ -184,7 +184,7 @@ setMethod(
 #' @param x An object of class \linkS4class{dph}.
 #' @param n An integer of length of realization.
 #'
-#' @return A realization of independent and identically distributed discrete 
+#' @return A realization of independent and identically distributed discrete
 #'  phase-type variables.
 #' @export
 #'

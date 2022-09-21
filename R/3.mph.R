@@ -74,14 +74,13 @@ setMethod("show", "mph", function(object) {
 #' @param equal_marginals Non-negative integer. If positive, it specifies
 #' the number of marginals to simulate from, all from the first matrix.
 #'
-#' @return A realization of a multivariate phase-type distribution. 
+#' @return A realization of a multivariate phase-type distribution.
 #' @export
 #'
 setMethod("sim", c(x = "mph"), function(x, n = 1000, equal_marginals = 0) {
-  
-  if(is.vector(x@pars$alpha)) p <- length(x@pars$alpha)
-  if(is.matrix(x@pars$alpha)) p <- ncol(x@pars$alpha)
-  
+  if (is.vector(x@pars$alpha)) p <- length(x@pars$alpha)
+  if (is.matrix(x@pars$alpha)) p <- ncol(x@pars$alpha)
+
   if (equal_marginals == 0) {
     d <- length(x@pars$S)
     states <- 1:p
@@ -123,7 +122,7 @@ setMethod("dens", c(x = "mph"), function(x, y, delta = NULL) {
   alpha <- x@pars$alpha
   S <- x@pars$S
   d <- length(x@pars$S)
-  
+
   if (is.matrix(y)) {
     n <- nrow(y)
   }
@@ -131,19 +130,19 @@ setMethod("dens", c(x = "mph"), function(x, y, delta = NULL) {
     n <- 1
     y <- t(y)
   }
-  
+
   if (length(delta) == 0) {
     delta <- matrix(1, nrow = n, ncol = d)
   }
   if (is.vector(delta)) {
     delta <- as.matrix(t(delta))
   }
-  
+
   res <- numeric(n)
-  
-  if(is.vector(alpha)){
+
+  if (is.vector(alpha)) {
     p <- length(x@pars$alpha)
-    
+
     for (j in 1:p) {
       in_vect <- rep(0, p)
       in_vect[j] <- 1
@@ -151,34 +150,34 @@ setMethod("dens", c(x = "mph"), function(x, y, delta = NULL) {
       for (i in 1:d) {
         for (m in 1:n) {
           if (delta[m, i] == 1) {
-            aux[m, i] <- phdensity(y[m,i], in_vect, S[[i]])
+            aux[m, i] <- phdensity(y[m, i], in_vect, S[[i]])
           } else {
-            aux[m, i] <- phcdf(y[m,i], in_vect, S[[i]], lower_tail = F)
+            aux[m, i] <- phcdf(y[m, i], in_vect, S[[i]], lower_tail = F)
           }
         }
       }
       res <- res + alpha[j] * apply(aux, 1, prod)
     }
-  }else if(is.matrix(alpha)){
-    p<-ncol(alpha)
+  } else if (is.matrix(alpha)) {
+    p <- ncol(alpha)
     inter_res <- matrix(0, n, p)
     aux <- array(NA, c(n, d, p))
-    
+
     for (j in 1:p) {
       in_vect <- rep(0, p)
       in_vect[j] <- 1
-      
+
       for (i in 1:d) {
         for (m in 1:n) {
           if (delta[m, i] == 1) {
-            aux[m, i, j] <- phdensity(y[m,i], in_vect, S[[i]])
+            aux[m, i, j] <- phdensity(y[m, i], in_vect, S[[i]])
           } else {
-            aux[m, i, j] <- phcdf(y[m,i], in_vect, S[[i]], lower_tail = F)
-          }        
+            aux[m, i, j] <- phcdf(y[m, i], in_vect, S[[i]], lower_tail = F)
+          }
         }
       }
     }
-    
+
     for (m in 1:n) {
       for (j in 1:p) {
         inter_res[m, j] <- alpha[m, j] * prod(aux[m, , j])
@@ -186,7 +185,7 @@ setMethod("dens", c(x = "mph"), function(x, y, delta = NULL) {
     }
     res <- rowSums(inter_res)
   }
-  
+
   return(res)
 })
 
@@ -194,7 +193,7 @@ setMethod("dens", c(x = "mph"), function(x, y, delta = NULL) {
 #'
 #' @param x An object of class \linkS4class{mph}.
 #' @param y A matrix of observations.
-#' @param lower.tail Logical parameter specifying whether lower tail (cdf) or 
+#' @param lower.tail Logical parameter specifying whether lower tail (cdf) or
 #'  upper tail is computed.
 #'
 #' @return A list containing the locations and corresponding CDF evaluations.
@@ -206,7 +205,7 @@ setMethod("cdf", c(x = "mph"), function(x,
   alpha <- x@pars$alpha
   S <- x@pars$S
   d <- length(x@pars$S)
-  
+
   if (is.matrix(y)) {
     n <- nrow(y)
   }
@@ -214,12 +213,12 @@ setMethod("cdf", c(x = "mph"), function(x,
     n <- 1
     y <- t(y)
   }
-  
+
   res <- numeric(n)
-  
-  if(is.vector(alpha)){
+
+  if (is.vector(alpha)) {
     p <- length(x@pars$alpha)
-    
+
     for (j in 1:p) {
       in_vect <- rep(0, p)
       in_vect[j] <- 1
@@ -229,22 +228,22 @@ setMethod("cdf", c(x = "mph"), function(x,
       }
       res <- res + alpha[j] * apply(aux, 1, prod)
     }
-  }else if(is.matrix(alpha)){
-    p<-ncol(alpha)
+  } else if (is.matrix(alpha)) {
+    p <- ncol(alpha)
     inter_res <- matrix(0, n, p)
     aux <- array(NA, c(n, d, p))
-    
+
     for (j in 1:p) {
       in_vect <- rep(0, p)
       in_vect[j] <- 1
-      
+
       for (i in 1:d) {
         for (m in 1:n) {
-          aux[m, i, j] <- phcdf(y[m,i], in_vect, S[[i]], lower_tail = F)
+          aux[m, i, j] <- phcdf(y[m, i], in_vect, S[[i]], lower_tail = F)
         }
       }
     }
-    
+
     for (m in 1:n) {
       for (j in 1:p) {
         inter_res[m, j] <- alpha[m, j] * prod(aux[m, , j])
@@ -252,7 +251,7 @@ setMethod("cdf", c(x = "mph"), function(x,
     }
     res <- rowSums(inter_res)
   }
-  
+
   return(res)
 })
 
@@ -269,11 +268,11 @@ setMethod("cdf", c(x = "mph"), function(x,
 #'
 #' @export
 #'
-#' @examples 
+#' @examples
 #' x <- mph(structure = c("general", "coxian"), dimension = 3)
 #' data <- sim(x, 100)
 #' fit(x = x, y = data, stepsEM = 20)
-#' 
+#'
 setMethod(
   "fit", c(x = "mph", y = "ANY"),
   function(x, y,
@@ -384,11 +383,11 @@ setMethod(
         }
 
         aux <- fnn(alpha_fit, S_fit, trans, delta)
-        
-        
+
+
         alpha_fit <- aux$alpha
         S_fit <- aux$S
-        
+
         x@pars$alpha <- alpha_fit
         x@pars$S <- S_fit
 
@@ -443,7 +442,7 @@ miph_LL <- function(x,
                     delta,
                     gfun_pars) {
   x@gfun$pars <- gfun_pars
-  res <- dens(x=x,y=obs,delta=delta)
+  res <- dens(x = x, y = obs, delta = delta)
 
   ll <- sum(log(res))
 
