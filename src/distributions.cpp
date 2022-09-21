@@ -715,8 +715,8 @@ Rcpp::NumericVector bivdph_tail(Rcpp::NumericMatrix x, arma::vec alpha, arma::ma
   arma::mat e;
   e.ones(S22.n_cols, 1);
   
-  double max_val1{max(x.column(1))};
-  double max_val2{max(x.column(2))};
+  double max_val1{max(x.column(0))};
+  double max_val2{max(x.column(1))};
   
   std::vector<arma::mat> vect1 = vector_of_powers(S11, max_val1);
   std::vector<arma::mat> vect2 = vector_of_powers(S22, max_val2);
@@ -730,3 +730,53 @@ Rcpp::NumericVector bivdph_tail(Rcpp::NumericMatrix x, arma::vec alpha, arma::ma
   return tail;
 }
 
+
+//' Multivariate discrete phase-type density
+//' 
+//' Computes the density of multivariate discrete phase-type distribution with 
+//' parameters \code{alpha} and \code{S} at \code{x}.
+//' 
+//' @param x Matrix of positive integer values.
+//' @param alpha Initial probabilities.
+//' @param S_list List of marginal sub-transition matrices.
+//' @return The density at \code{x}.
+//' 
+// [[Rcpp::export]]
+arma::vec mdphdensity(Rcpp::NumericMatrix x, arma::vec alpha, Rcpp::List & S_list) {
+  unsigned p{alpha.size()};
+  long n{x.nrow()};
+  long d{x.ncol()};
+  
+  arma::vec density(n);
+  arma::mat aux_den(n, d);
+  
+  arma::mat e;
+  e.ones(p, 1);
+  
+  std::vector<std::vector<arma::mat>> vect;
+  std::vector<arma::mat> exit_vect; 
+  
+  for (int j{0}; j < d; ++j){
+    double max_val{max(x.column(j))};
+    arma::mat S = S_list[j];
+    vect.push_back(vector_of_powers(S, max_val));
+    exit_vect.push_back(e - (S * e));
+  }
+  
+  
+  arma::mat aux_mat(1,1);
+  
+  for (int i{0}; i < p; ++i){
+    arma::mat in_vect(1, p);
+    in_vect(0, i) = 1;
+    for (int j{0}; j < d; ++j){
+      for (int k{0}; k < n; ++k){
+        aux_mat = in_vect * vect[j][x(k, j) - 1] * exit_vect[j];
+        aux_den(k,j) = aux_mat(0,0);
+      }
+    }
+    density = density + alpha[i] * arma::prod(aux_den, 1);
+  }
+  
+  return density;
+}

@@ -97,7 +97,7 @@ setMethod("show", "bivdph", function(object) {
 #'
 #' @examples
 #' obj <- bivdph(dimensions = c(3, 3))
-#' dens(obj, matrix(c(0.5, 1), ncol = 2))
+#' dens(obj, matrix(c(1, 2), ncol = 2))
 setMethod("dens", c(x = "bivdph"), function(x, y) {
   dens <- bivdph_density(y, x@pars$alpha, x@pars$S11, x@pars$S12, x@pars$S22)
   return(dens)

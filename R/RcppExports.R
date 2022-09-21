@@ -1609,6 +1609,20 @@ bivdph_tail <- function(x, alpha, S11, S12, S22) {
     .Call(`_matrixdist_bivdph_tail`, x, alpha, S11, S12, S22)
 }
 
+#' Multivariate discrete phase-type density
+#' 
+#' Computes the density of multivariate discrete phase-type distribution with 
+#' parameters \code{alpha} and \code{S} at \code{x}.
+#' 
+#' @param x Matrix of positive integer values.
+#' @param alpha Initial probabilities.
+#' @param S_list List of marginal sub-transition matrices.
+#' @return The density at \code{x}.
+#' 
+mdphdensity <- function(x, alpha, S_list) {
+    .Call(`_matrixdist_mdphdensity`, x, alpha, S_list)
+}
+
 #' EM for discrete phase-type
 #' 
 #' @param alpha Initial probabilities.

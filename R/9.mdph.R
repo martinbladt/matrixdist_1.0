@@ -95,6 +95,9 @@ setMethod("coef", c(object = "mdph"), function(object) {
 #' @return A realization of a multivariate discrete phase-type distribution.
 #' @export
 #'
+#' @examples
+#' obj <- mdph(structure = c("general", "general"))
+#' sim(obj, 100)
 setMethod("sim", c(x = "mdph"), function(x, n = 1000, equal_marginals = 0) {
   
   if(is.vector(x@pars$alpha)) p <- length(x@pars$alpha)
@@ -160,3 +163,18 @@ setMethod("marginal", c(x = "mdph"), function(x, mar = 1) {
   return(x0)
 })
 
+#' Density method for multivariate discrete phase-type distributions
+#'
+#' @param x An object of class \linkS4class{mdph}.
+#' @param y A matrix of locations.
+#'
+#' @return A vector containing the joint density evaluations at the given locations.
+#' @export
+#'
+#' @examples
+#' obj <- mdph(structure = c("general", "general"))
+#' dens(obj, matrix(c(1, 1), ncol = 2))
+setMethod("dens", c(x = "mdph"), function(x, y) {
+  dens <- mdphdensity(y, x@pars$alpha, x@pars$S)
+  return(dens)
+})

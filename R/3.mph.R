@@ -74,7 +74,7 @@ setMethod("show", "mph", function(object) {
 #' @param equal_marginals Non-negative integer. If positive, it specifies
 #' the number of marginals to simulate from, all from the first matrix.
 #'
-#' @return A realization of a phase-type data.
+#' @return A realization of a multivariate phase-type distribution. 
 #' @export
 #'
 setMethod("sim", c(x = "mph"), function(x, n = 1000, equal_marginals = 0) {
@@ -270,11 +270,9 @@ setMethod("cdf", c(x = "mph"), function(x,
 #' @export
 #'
 #' @examples 
-#' x<-mph(structure=c("general","coxian"), dimension=3)
-#' n<-100
-#' data<-sim(x,n)
-#' 
-#' fit<-fit(x=x,y=data, stepsEM=20)
+#' x <- mph(structure = c("general", "coxian"), dimension = 3)
+#' data <- sim(x, 100)
+#' fit(x = x, y = data, stepsEM = 20)
 #' 
 setMethod(
   "fit", c(x = "mph", y = "ANY"),

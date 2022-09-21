@@ -20,3 +20,7 @@ A realization of a multivariate discrete phase-type distribution.
 \description{
 Simulation Method for multivariate discrete phase-type distributions
 }
+\examples{
+obj <- mdph(structure = c("general", "general"))
+sim(obj, 100)
+}
