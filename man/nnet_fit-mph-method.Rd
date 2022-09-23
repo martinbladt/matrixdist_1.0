@@ -45,12 +45,12 @@
 Fit Method for mph/miph Class, using mixture-of-experts regression
 }
 \examples{
-x<-mph(structure=c("general","general"), dimension=3, variables=2)
-n<-100
-responses<-cbind(rexp(n),rgamma(n,2,3))
+x <- mph(structure = c("general", "general"), dimension = 3, variables = 2)
+n <- 100
+responses <- cbind(rexp(n), rgamma(n, 2, 3))
 
-covariate<-data.frame(age=sample(18:65,n,replace = TRUE)/100,income=runif(n,0,0.99)) 
-f<-responses~age+income #regression formula
-fit<-nnet_fit(x=x,formula=f, y=responses, data=covariate, stepsEM=20)
+covariate <- data.frame(age = sample(18:65, n, replace = TRUE) / 100, income = runif(n, 0, 0.99))
+f <- responses~age + income # regression formula
+fit <- nnet_fit(x = x, formula = f, y = responses, data = covariate, stepsEM = 20)
 
 }

@@ -214,25 +214,27 @@ setMethod(
 
     mdph_par <- x@pars
     alpha_fit <- clone_vector(mdph_par$alpha)
-    # S_fit <- clone_matrix(mdph_par$S)
+    S_fit <- list()
+    for (j in 1:length(y[1, ])) {
+      S_fit[[j]] <- clone_matrix(mdph_par$S[[j]])
+    }
 
     options(digits.secs = 4)
     cat(format(Sys.time(), format = "%H:%M:%OS"), ": EM started", sep = "")
     cat("\n", sep = "")
 
-
     for (k in 1:stepsEM) {
-      # EMstep_bivdph(alpha_fit, S11_fit, S12_fit, S22_fit, y, weight)
-      # if (k %% every == 0) {
-      #   cat("\r", "iteration:", k,
-      #       ", logLik:", logLikelihoodbivDPH(alpha_fit, S11_fit, S12_fit, S22_fit, y, weight),
-      #       sep = " "
-      #   )
-      # }
+      EMstep_mdph(alpha_fit, S_fit, y, weight)
+      if (k %% every == 0) {
+        cat("\r", "iteration:", k,
+          ", logLik:", mdph_LL(alpha_fit, S_fit, y),
+          sep = " "
+        )
+      }
     }
 
     x@pars$alpha <- alpha_fit
-    # x@pars$S <- S_fit
+    x@pars$S <- S_fit
 
     cat("\n", format(Sys.time(), format = "%H:%M:%OS"), ": EM finalized", sep = "")
     cat("\n", sep = "")
@@ -240,3 +242,16 @@ setMethod(
     return(x)
   }
 )
+
+
+
+
+mdph_LL <- function(alpha,
+                    S,
+                    obs) {
+  res <- mdphdensity(obs, alpha, S)
+
+  ll <- sum(log(res))
+
+  return(ll)
+}

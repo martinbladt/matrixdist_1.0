@@ -11,7 +11,7 @@
 
 \item{y}{A matrix of observations.}
 
-\item{lower.tail}{Logical parameter specifying whether lower tail (cdf) or 
+\item{lower.tail}{Logical parameter specifying whether lower tail (cdf) or
 upper tail is computed.}
 }
 \value{

@@ -1658,6 +1658,17 @@ EMstep_bivdph <- function(alpha, S11, S12, S22, obs, weight) {
     invisible(.Call(`_matrixdist_EMstep_bivdph`, alpha, S11, S12, S22, obs, weight))
 }
 
+#' EM for multivariate discrete phase-type
+#' 
+#' @param alpha Initial probabilities.
+#' @param S_list List of marginal sub-transition matrices.
+#' @param obs The observations.
+#' @param weight The weights for the observations.
+#' 
+EMstep_mdph <- function(alpha, S_list, obs, weight) {
+    invisible(.Call(`_matrixdist_EMstep_mdph`, alpha, S_list, obs, weight))
+}
+
 #' Loglikelihood for discrete phase-type
 #' 
 #' @param alpha Initial probabilities.

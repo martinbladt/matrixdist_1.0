@@ -1740,6 +1740,19 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// EMstep_mdph
+void EMstep_mdph(arma::vec& alpha, Rcpp::List& S_list, const Rcpp::NumericMatrix& obs, const Rcpp::NumericVector& weight);
+RcppExport SEXP _matrixdist_EMstep_mdph(SEXP alphaSEXP, SEXP S_listSEXP, SEXP obsSEXP, SEXP weightSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec& >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List& >::type S_list(S_listSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericMatrix& >::type obs(obsSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type weight(weightSEXP);
+    EMstep_mdph(alpha, S_list, obs, weight);
+    return R_NilValue;
+END_RCPP
+}
 // logLikelihoodDPH
 double logLikelihoodDPH(arma::vec& alpha, arma::mat& S, const Rcpp::NumericVector& obs, const Rcpp::NumericVector& weight);
 RcppExport SEXP _matrixdist_logLikelihoodDPH(SEXP alphaSEXP, SEXP SSEXP, SEXP obsSEXP, SEXP weightSEXP) {
@@ -2107,6 +2120,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_EMstep_dph", (DL_FUNC) &_matrixdist_EMstep_dph, 4},
     {"_matrixdist_EMstep_dph_MoE", (DL_FUNC) &_matrixdist_EMstep_dph_MoE, 4},
     {"_matrixdist_EMstep_bivdph", (DL_FUNC) &_matrixdist_EMstep_bivdph, 6},
+    {"_matrixdist_EMstep_mdph", (DL_FUNC) &_matrixdist_EMstep_mdph, 4},
     {"_matrixdist_logLikelihoodDPH", (DL_FUNC) &_matrixdist_logLikelihoodDPH, 4},
     {"_matrixdist_logLikelihoodDPH_MoE", (DL_FUNC) &_matrixdist_logLikelihoodDPH_MoE, 4},
     {"_matrixdist_logLikelihoodbivDPH", (DL_FUNC) &_matrixdist_logLikelihoodbivDPH, 6},

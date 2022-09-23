@@ -12,7 +12,7 @@
 \item{n}{An integer of length of realization.}
 }
 \value{
-A realization of independent and identically distributed discrete 
+A realization of independent and identically distributed discrete
  phase-type variables.
 }
 \description{
