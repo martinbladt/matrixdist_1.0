@@ -294,11 +294,13 @@ void EMstep_mdph(arma::vec & alpha, Rcpp::List & S_list, const Rcpp::NumericMatr
   arma::cube Nmean = arma::zeros(p,p + 1, d);
   
   arma::mat aux_mat(1,1);
-  arma::mat aux_mat2(p,p);
-  arma::mat aux_mat3(1,p);
-  arma::mat aux_den(p, d);
   
-  arma::mat cmatrix(p,p);
+  arma::mat aux_den(p, d);
+  arma::mat aux_den_copy(p,d);
+  
+  arma::mat aux_subtrans(p,p);
+  arma::mat aux_subtrans2(p,1);
+  arma::colvec aux_prod(p);
   
   double sum_weights{0.0};
   double density{0.0};
@@ -317,23 +319,36 @@ void EMstep_mdph(arma::vec & alpha, Rcpp::List & S_list, const Rcpp::NumericMatr
     aux_mat = alpha.t() * arma::prod(aux_den, 1);
     density = aux_mat(0,0);
     for (int i{0}; i < p; ++i) {
+      arma::mat in_vect(1, p);
+      in_vect(0, i) = 1;
       Bmean(i, 0) += alpha[i] * arma::prod(aux_den.row(i)) * weight[k] / density;
       for (int j{0}; j < d; ++j) {
-        arma::mat in_vect(1, p);
-        in_vect(0, j) = 1;
+        
+        aux_den_copy = aux_den;
+        aux_den_copy.shed_col(j);
+        aux_prod = arma::prod(aux_den_copy, 1);
+        aux_subtrans = vect[j][obs(k, j) - 1];
+        
+        double factor{0.0};
+        for (int s{0}; s < p; ++s) {
+          factor += alpha[s] * aux_prod[s] * aux_subtrans(s, i);
+        }
+        
+        Nmean(i,p,j) += exit_vect[j](i,0) * factor * weight[k] / density;
+        
         arma::mat S = S_list[j];
-        aux_mat2 = aux_den;
-        aux_mat2.shed_col(j);
-        aux_mat = alpha.t() * arma::prod(aux_mat2, 1);
-        aux_mat3 = aux_mat * in_vect * vect[j][obs(k, j) - 1];
-        Nmean(i,p,j) += exit_vect[j](i,0) * aux_mat3(0, i) * weight[k] / density;
+        
         if (obs(k, j) > 1) {
-          cmatrix = cmatrix * 0;
-          for (int m{0}; m <= obs(k, j) - 2; ++m) {
-            cmatrix = cmatrix + vect[j][obs(k, j) - m - 2] * exit_vect[j] * in_vect * vect[j][m];
-          }
           for (int l{0}; l < p; ++l) {
-            Nmean(i,l,j) += S(i,l) * aux_mat(0, 0) * cmatrix(l,i) * weight[k] / density;
+            double factor{0.0};
+            for (int m{0}; m <= obs(k, j) - 2; ++m) {
+              aux_subtrans = vect[j][m];
+              aux_subtrans2 = vect[j][obs(k, j) - m - 2] * exit_vect[j];
+              for (int s{0}; s < p; ++s) {
+                factor += alpha[s] * aux_prod[s] * aux_subtrans(s, i) * aux_subtrans2(l, 0);
+              }
+            }
+            Nmean(i,l,j) += S(i,l) * factor * weight[k] / density;
           }
         }
       }
