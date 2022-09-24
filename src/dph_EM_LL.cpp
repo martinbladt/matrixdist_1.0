@@ -482,6 +482,118 @@ void EMstep_mdph(arma::vec & alpha, Rcpp::List & S_list, const Rcpp::NumericMatr
 }
 
 
+//' EM for multivariate discrete phase-type MoE
+//' 
+//' @param alpha Initial probabilities.
+//' @param S_list List of marginal sub-transition matrices.
+//' @param obs The observations.
+//' @param weight The weights for the observations.
+//' 
+// [[Rcpp::export]]
+arma::mat EMstep_mdph_MoE(arma::mat & alpha, Rcpp::List & S_list, const Rcpp::NumericMatrix & obs, const Rcpp::NumericVector & weight) {
+  unsigned p{alpha.n_cols};
+  long n{obs.nrow()};
+  long d{obs.ncol()};
+  
+  arma::mat e;
+  e.ones(p, 1);
+  
+  std::vector<std::vector<arma::mat>> vect;
+  std::vector<arma::mat> exit_vect; 
+  
+  for (int j{0}; j < d; ++j){
+    double max_val{max(obs.column(j))};
+    arma::mat S = S_list[j];
+    vect.push_back(vector_of_powers(S, max_val));
+    exit_vect.push_back(e - (S * e));
+  }
+  
+  arma::mat Bmatrix(obs.nrow(), p);
+  arma::cube Nmean = arma::zeros(p,p + 1, d);
+  
+  arma::mat aux_mat(1,1);
+  
+  arma::mat aux_den(p, d);
+  arma::mat aux_den_copy(p,d);
+  
+  arma::mat aux_subtrans(p,p);
+  arma::mat aux_subtrans2(p,1);
+  arma::colvec aux_prod(p);
+  
+  double density{0.0};
+  
+  // E-step
+  for (int k{0}; k < n; ++k) {
+    arma::rowvec alpha_aux = alpha.row(k);
+    for (int i{0}; i < p; ++i) {
+      arma::mat in_vect(1, p);
+      in_vect(0, i) = 1;
+      for (int j{0}; j < d; ++j) {
+        aux_mat = in_vect * vect[j][obs(k, j) - 1] * exit_vect[j];
+        aux_den(i,j) = aux_mat(0,0);
+      }
+    }
+    aux_mat = alpha_aux * arma::prod(aux_den, 1);
+    density = aux_mat(0,0);
+    for (int i{0}; i < p; ++i) {
+      arma::mat in_vect(1, p);
+      in_vect(0, i) = 1;
+      Bmatrix(k,i) += alpha_aux[i] * arma::prod(aux_den.row(i)) * weight[k] / density;
+      for (int j{0}; j < d; ++j) {
+        
+        aux_den_copy = aux_den;
+        aux_den_copy.shed_col(j);
+        aux_prod = arma::prod(aux_den_copy, 1);
+        aux_subtrans = vect[j][obs(k, j) - 1];
+        
+        double factor{0.0};
+        for (int s{0}; s < p; ++s) {
+          factor += alpha_aux[s] * aux_prod[s] * aux_subtrans(s, i);
+        }
+        
+        Nmean(i,p,j) += exit_vect[j](i,0) * factor * weight[k] / density;
+        
+        arma::mat S = S_list[j];
+        
+        if (obs(k, j) > 1) {
+          for (int l{0}; l < p; ++l) {
+            double factor{0.0};
+            for (int m{0}; m <= obs(k, j) - 2; ++m) {
+              aux_subtrans = vect[j][m];
+              aux_subtrans2 = vect[j][obs(k, j) - m - 2] * exit_vect[j];
+              for (int s{0}; s < p; ++s) {
+                factor += alpha_aux[s] * aux_prod[s] * aux_subtrans(s, i) * aux_subtrans2(l, 0);
+              }
+            }
+            Nmean(i,l,j) += S(i,l) * factor * weight[k] / density;
+          }
+        }
+      }
+    }
+  }
+  
+  arma::mat Ncum(p, d);
+  for (int j{0}; j < d; ++j) {
+    Ncum.col(j) = arma::sum(Nmean.slice(j), 1);
+  }
+  
+  // M-step
+  arma::cube S_fit(p,p,d);
+  for (int i{0}; i < p; ++i) {
+    for (int j{0}; j < d; ++j) {
+      for (int l{0}; l < p; ++l) {
+        S_fit(i,l,j) = Nmean(i,l,j) / Ncum(i, j);
+      }
+    }
+  }
+  
+  for (int j{0}; j < d; ++j) {
+    S_list[j] = S_fit.slice(j);
+  }
+  return(Bmatrix);
+}
+
+
 //' Loglikelihood for discrete phase-type
 //' 
 //' @param alpha Initial probabilities.
@@ -684,7 +796,7 @@ double logLikelihoodmDPH(arma::vec & alpha, Rcpp::List & S_list, const Rcpp::Num
 //' 
 // [[Rcpp::export]]
 double logLikelihoodmDPH_MoE(arma::mat & alpha, Rcpp::List & S_list, const Rcpp::NumericMatrix & obs, const Rcpp::NumericVector & weight) {
-  unsigned p{alpha.size()};
+  unsigned p{alpha.n_cols};
   long n{obs.nrow()};
   long d{obs.ncol()};
   
