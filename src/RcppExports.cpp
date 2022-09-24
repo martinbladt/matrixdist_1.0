@@ -1740,6 +1740,22 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// EMstep_bivdph_MoE
+arma::mat EMstep_bivdph_MoE(arma::mat& alpha, arma::mat& S11, arma::mat& S12, arma::mat& S22, const Rcpp::NumericMatrix& obs, const Rcpp::NumericVector& weight);
+RcppExport SEXP _matrixdist_EMstep_bivdph_MoE(SEXP alphaSEXP, SEXP S11SEXP, SEXP S12SEXP, SEXP S22SEXP, SEXP obsSEXP, SEXP weightSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat& >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type S11(S11SEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type S12(S12SEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type S22(S22SEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericMatrix& >::type obs(obsSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type weight(weightSEXP);
+    rcpp_result_gen = Rcpp::wrap(EMstep_bivdph_MoE(alpha, S11, S12, S22, obs, weight));
+    return rcpp_result_gen;
+END_RCPP
+}
 // EMstep_mdph
 void EMstep_mdph(arma::vec& alpha, Rcpp::List& S_list, const Rcpp::NumericMatrix& obs, const Rcpp::NumericVector& weight);
 RcppExport SEXP _matrixdist_EMstep_mdph(SEXP alphaSEXP, SEXP S_listSEXP, SEXP obsSEXP, SEXP weightSEXP) {
@@ -1794,6 +1810,50 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const Rcpp::NumericMatrix& >::type obs(obsSEXP);
     Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type weight(weightSEXP);
     rcpp_result_gen = Rcpp::wrap(logLikelihoodbivDPH(alpha, S11, S12, S22, obs, weight));
+    return rcpp_result_gen;
+END_RCPP
+}
+// logLikelihoodbivDPH_MoE
+double logLikelihoodbivDPH_MoE(arma::mat& alpha, arma::mat S11, arma::mat S12, arma::mat S22, const Rcpp::NumericMatrix& obs, const Rcpp::NumericVector& weight);
+RcppExport SEXP _matrixdist_logLikelihoodbivDPH_MoE(SEXP alphaSEXP, SEXP S11SEXP, SEXP S12SEXP, SEXP S22SEXP, SEXP obsSEXP, SEXP weightSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat& >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type S11(S11SEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type S12(S12SEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type S22(S22SEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericMatrix& >::type obs(obsSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type weight(weightSEXP);
+    rcpp_result_gen = Rcpp::wrap(logLikelihoodbivDPH_MoE(alpha, S11, S12, S22, obs, weight));
+    return rcpp_result_gen;
+END_RCPP
+}
+// logLikelihoodmDPH
+double logLikelihoodmDPH(arma::vec& alpha, Rcpp::List& S_list, const Rcpp::NumericMatrix& obs, const Rcpp::NumericVector& weight);
+RcppExport SEXP _matrixdist_logLikelihoodmDPH(SEXP alphaSEXP, SEXP S_listSEXP, SEXP obsSEXP, SEXP weightSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec& >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List& >::type S_list(S_listSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericMatrix& >::type obs(obsSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type weight(weightSEXP);
+    rcpp_result_gen = Rcpp::wrap(logLikelihoodmDPH(alpha, S_list, obs, weight));
+    return rcpp_result_gen;
+END_RCPP
+}
+// logLikelihoodmDPH_MoE
+double logLikelihoodmDPH_MoE(arma::mat& alpha, Rcpp::List& S_list, const Rcpp::NumericMatrix& obs, const Rcpp::NumericVector& weight);
+RcppExport SEXP _matrixdist_logLikelihoodmDPH_MoE(SEXP alphaSEXP, SEXP S_listSEXP, SEXP obsSEXP, SEXP weightSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat& >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List& >::type S_list(S_listSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericMatrix& >::type obs(obsSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type weight(weightSEXP);
+    rcpp_result_gen = Rcpp::wrap(logLikelihoodmDPH_MoE(alpha, S_list, obs, weight));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -2120,10 +2180,14 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_EMstep_dph", (DL_FUNC) &_matrixdist_EMstep_dph, 4},
     {"_matrixdist_EMstep_dph_MoE", (DL_FUNC) &_matrixdist_EMstep_dph_MoE, 4},
     {"_matrixdist_EMstep_bivdph", (DL_FUNC) &_matrixdist_EMstep_bivdph, 6},
+    {"_matrixdist_EMstep_bivdph_MoE", (DL_FUNC) &_matrixdist_EMstep_bivdph_MoE, 6},
     {"_matrixdist_EMstep_mdph", (DL_FUNC) &_matrixdist_EMstep_mdph, 4},
     {"_matrixdist_logLikelihoodDPH", (DL_FUNC) &_matrixdist_logLikelihoodDPH, 4},
     {"_matrixdist_logLikelihoodDPH_MoE", (DL_FUNC) &_matrixdist_logLikelihoodDPH_MoE, 4},
     {"_matrixdist_logLikelihoodbivDPH", (DL_FUNC) &_matrixdist_logLikelihoodbivDPH, 6},
+    {"_matrixdist_logLikelihoodbivDPH_MoE", (DL_FUNC) &_matrixdist_logLikelihoodbivDPH_MoE, 6},
+    {"_matrixdist_logLikelihoodmDPH", (DL_FUNC) &_matrixdist_logLikelihoodmDPH, 4},
+    {"_matrixdist_logLikelihoodmDPH_MoE", (DL_FUNC) &_matrixdist_logLikelihoodmDPH_MoE, 4},
     {"_matrixdist_EM_step_mPH_rc", (DL_FUNC) &_matrixdist_EM_step_mPH_rc, 5},
     {"_matrixdist_inf_norm", (DL_FUNC) &_matrixdist_inf_norm, 1},
     {"_matrixdist_matrix_vanloan", (DL_FUNC) &_matrixdist_matrix_vanloan, 3},

@@ -1658,6 +1658,19 @@ EMstep_bivdph <- function(alpha, S11, S12, S22, obs, weight) {
     invisible(.Call(`_matrixdist_EMstep_bivdph`, alpha, S11, S12, S22, obs, weight))
 }
 
+#' EM for discrete bivariate phase-type MoE
+#' 
+#' @param alpha Initial probabilities.
+#' @param S11 Sub-transition matrix.
+#' @param S12 Matrix.
+#' @param S22 Sub-transition matrix.
+#' @param obs The observations.
+#' @param weight The weights for the observations.
+#' 
+EMstep_bivdph_MoE <- function(alpha, S11, S12, S22, obs, weight) {
+    .Call(`_matrixdist_EMstep_bivdph_MoE`, alpha, S11, S12, S22, obs, weight)
+}
+
 #' EM for multivariate discrete phase-type
 #' 
 #' @param alpha Initial probabilities.
@@ -1702,6 +1715,41 @@ logLikelihoodDPH_MoE <- function(alpha, S, obs, weight) {
 #' 
 logLikelihoodbivDPH <- function(alpha, S11, S12, S22, obs, weight) {
     .Call(`_matrixdist_logLikelihoodbivDPH`, alpha, S11, S12, S22, obs, weight)
+}
+
+#' Loglikelihood for bivariate discrete phase-type MoE
+#' 
+#' @param alpha Initial probabilities.
+#' @param S11 Sub-transition matrix.
+#' @param S12 Matrix.
+#' @param S22 Sub-transition matrix.
+#' @param obs The observations.
+#' @param weight The weights of the observations.
+#' 
+logLikelihoodbivDPH_MoE <- function(alpha, S11, S12, S22, obs, weight) {
+    .Call(`_matrixdist_logLikelihoodbivDPH_MoE`, alpha, S11, S12, S22, obs, weight)
+}
+
+#' Loglikelihood for multivariate discrete phase-type
+#' 
+#' @param alpha Initial probabilities.
+#' @param S_list List of marginal sub-transition matrices.
+#' @param obs The observations.
+#' @param weight The weights of the observations.
+#' 
+logLikelihoodmDPH <- function(alpha, S_list, obs, weight) {
+    .Call(`_matrixdist_logLikelihoodmDPH`, alpha, S_list, obs, weight)
+}
+
+#' Loglikelihood for multivariate discrete phase-type MoE
+#' 
+#' @param alpha Initial probabilities.
+#' @param S_list List of marginal sub-transition matrices.
+#' @param obs The observations.
+#' @param weight The weights of the observations.
+#' 
+logLikelihoodmDPH_MoE <- function(alpha, S_list, obs, weight) {
+    .Call(`_matrixdist_logLikelihoodmDPH_MoE`, alpha, S_list, obs, weight)
 }
 
 #' EM step for the mPH class with right-censoring, for different marginal 

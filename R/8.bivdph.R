@@ -233,3 +233,70 @@ setMethod(
     return(x)
   }
 )
+
+
+#' MoE Method for bivdph Class
+#'
+#' @param x An object of class \linkS4class{bivdph}.
+#' @param formula A regression formula.
+#' @param data A data frame.
+#' @param alpha_vecs Matrix of initial probabilities.s
+#' @param weight Vector of weights.
+#' @param stepsEM Number of EM steps to be performed.
+#' @param every Number of iterations between likelihood display updates.
+#' @param rand_init Random initiation in the R-step.
+#'
+#' @return An object of class \linkS4class{sph}.
+#'
+#' @importFrom methods is new
+#' @importFrom stats optim
+#' @importFrom utils tail
+#'
+#' @export
+#'
+setMethod(
+  "MoE", c(x = "bivdph"),
+  function(x,
+           formula,
+           data,
+           alpha_vecs = NULL,
+           weight = numeric(0),
+           stepsEM = 1000,
+           every = 10,
+           rand_init = TRUE) {
+    p <- length(x@pars$alpha)
+    frame <- stats::model.frame(formula, data = data)
+    n <- nrow(frame)
+    d <- ncol(frame) - 1
+    if (is.null(alpha_vecs)) alpha_vecs <- matrix(x@pars$alpha, ncol = p, nrow = n, byrow = TRUE)
+    if (length(weight) == 0) weight <- rep(1, n)
+    S11_fit <- clone_matrix(x@pars$S11)
+    S12_fit <- clone_matrix(x@pars$S12)
+    S22_fit <- clone_matrix(x@pars$S22)
+    c <- c()
+    for (i in 1:p) c <- c(c, rep(i, n)) # classes for the B matrix observations
+    extended_x <- matrix(t(as.matrix(frame[, -1])), nrow = n * p, ncol = d, byrow = TRUE) # extended form of covariates
+    dm <- data.frame(Class = c, extended_x)
+    names(dm)[-1] <- names(frame)[-1]
+    ndm <- data.frame(dm[dm$Class == 1, -1])
+    names(ndm) <- names(dm)[-1]
+    for (k in 1:stepsEM) {
+      B_matrix <- EMstep_bivdph_MoE(alpha_vecs, S11_fit, S12_fit, S22_fit, frame[, 1], weight)
+      wt <- reshape2::melt(B_matrix)[, 3]
+      wt[wt < 1e-22] <- wt[wt < 1e-22] + 1e-22
+      if (k == 1 | rand_init == TRUE) {
+        multinom_model <- nnet::multinom(Class ~ ., data = dm, weights = wt, trace = F)
+      } else {
+        multinom_model <- nnet::multinom(Class ~ ., data = dm, weights = wt, trace = F, Wts = multinom_model$wts)
+      }
+      alpha_vecs <- stats::predict(multinom_model, type = "probs", newdata = ndm)
+      if (k %% every == 0) {
+        ll <- logLikelihoodbivDPH_MoE(alpha_vecs, S11_fit, S12_fit, S22_fit, frame[, 1], weight)
+        cat("\r", "iteration:", k, ", logLik:", ll, sep = " ")
+      }
+    }
+    cat("\n", sep = "")
+    return(list(alpha = alpha_vecs, S11 = S11_fit, S12 = S11_fit, S12 = S11_fit, mm = multinom_model))
+  }
+)
+

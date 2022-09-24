@@ -68,8 +68,6 @@ setMethod(
     }
 
 
-
-
     alpha_fit <- x@pars$alpha
     p <- length(alpha_fit)
     frame <- stats::model.frame(formula, data = data)

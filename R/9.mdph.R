@@ -178,7 +178,6 @@ setMethod("dens", c(x = "mdph"), function(x, y) {
   return(dens)
 })
 
-
 #' Fit Method for mdph Class
 #'
 #' @param x An object of class \linkS4class{mdph}.
@@ -227,7 +226,7 @@ setMethod(
       EMstep_mdph(alpha_fit, S_fit, y, weight)
       if (k %% every == 0) {
         cat("\r", "iteration:", k,
-          ", logLik:", mdph_LL(alpha_fit, S_fit, y),
+          ", logLik:", logLikelihoodmDPH(alpha_fit, S_fit, y, weight),
           sep = " "
         )
       }
@@ -243,15 +242,3 @@ setMethod(
   }
 )
 
-
-
-
-mdph_LL <- function(alpha,
-                    S,
-                    obs) {
-  res <- mdphdensity(obs, alpha, S)
-
-  ll <- sum(log(res))
-
-  return(ll)
-}
