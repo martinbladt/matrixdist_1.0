@@ -1293,6 +1293,19 @@ transf_via_rew <- function(R, Qtilda, alpha, S) {
     .Call(`_matrixdist_transf_via_rew`, R, Qtilda, alpha, S)
 }
 
+#' Performs TVR
+#'
+#' @param alpha Initial distribution vector.
+#' @param S Sub-intensity matrix.
+#' @param R Reward vector.
+#'
+#' @return A list of PH parameters.
+#' @export
+#'
+tvr_fn <- function(alpha, S, R) {
+    .Call(`_matrixdist_tvr_fn`, alpha, S, R)
+}
+
 #' Product of two matrices
 #' 
 #' @param A1 A matrix.

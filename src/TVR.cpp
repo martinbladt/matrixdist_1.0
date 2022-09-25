@@ -1,5 +1,6 @@
 #include <RcppArmadillo.h>
 #include "TVR.h"
+#include "Simulation.h"
 
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::plugins("cpp11")]]
@@ -480,3 +481,88 @@ Rcpp::List transf_via_rew(arma::mat R,arma::mat Qtilda, arma::vec alpha, arma::m
   
   return Marginal;
 }
+
+
+//' Performs TVR
+//'
+//' @param alpha Initial distribution vector.
+//' @param S Sub-intensity matrix.
+//' @param R Reward vector.
+//'
+//' @return A list of PH parameters.
+//' @export
+//'
+// [[Rcpp::export]]
+Rcpp::List tvr_fn(arma::vec alpha, arma::mat S, arma::vec R) {
+  unsigned p{S.n_rows};
+  
+  unsigned n0{0};
+  std::vector<int> delete_rows; 
+  std::vector<int> keep_rows;
+  
+  for (int j{0}; j < p; ++j) {
+    if (R[j] == 0) {
+      delete_rows.push_back(j);
+      ++n0;
+    }
+    else {
+      keep_rows.push_back(j);
+    }
+  }
+  
+  arma::mat Q_aux = embedded_mc(S);
+  
+  unsigned np{p - n0};
+  
+  arma::mat Qpp(np,np);
+  arma::mat Qp0(np,n0);
+  arma::mat Q0p(n0,np);
+  arma::mat Q00(n0,n0);
+  
+  arma::rowvec alpha0(n0);
+  arma::rowvec alphap(np);
+  
+  for (int i{0}; i < np; i++) {
+    for (int j = 0; j < np; j++) {
+      Qpp(i,j) = Q_aux(keep_rows[i],keep_rows[j]);
+    }
+    for (int j{0}; j < n0; j++) {
+      Qp0(i,j) = Q_aux(keep_rows[i],delete_rows[j]);
+    }
+    alphap[i] = alpha[keep_rows[i]];
+  }
+  for (int i{0}; i < n0; i++) {
+    for (int j{0}; j < np; j++) {
+      Q0p(i,j) = Q_aux(delete_rows[i],keep_rows[j]);
+    }
+    for (int j{0}; j < n0; j++){
+      Q00(i,j) = Q_aux(delete_rows[i],delete_rows[j]);
+    }
+    alpha0[i] = alpha[delete_rows[i]];
+  }
+  
+  arma::rowvec alpha_trans = alphap + alpha0 * inv(arma::eye(n0,n0) - Q00) * Q0p;
+  arma::mat P_trans = Qpp + Qp0 * inv(arma::eye(n0,n0) - Q00) * Q0p;
+  
+  arma::mat e;
+  e.ones(np, 1);
+  arma::mat exit_vect = e - (P_trans * e) ;
+  
+  arma::vec row_sum(np);
+  arma::mat S_trans(np,np);
+  
+  for (int i{0}; i < np; i++) {
+    for (int j = 0; j < np; j++) {
+      if (i != j) {
+        S_trans(i,j) = - S(keep_rows[i],keep_rows[i]) * P_trans(i,j) / R[keep_rows[i]];
+        row_sum[i] += S_trans(i,j);
+      }
+    }
+    S_trans(i,i) = - row_sum[i] + S(keep_rows[i],keep_rows[i]) * exit_vect[i] / R[keep_rows[i]];
+  }
+  
+  Rcpp::List x = Rcpp::List::create(Rcpp::Named("alpha") = alpha_trans, Rcpp::_["S"] = S_trans);
+  return (x);
+}
+
+
