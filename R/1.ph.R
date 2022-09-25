@@ -540,3 +540,20 @@ setMethod("LRT", c(x = "ph", y = "ph"), function(x, y) {
   degrees <- abs(attributes(logLik(y))$df - attributes(logLik(x))$df)
   return(c(LR = LR, p.val = pchisq(LR, df = degrees, lower.tail = FALSE)))
 })
+
+#' TVR Method for ph Class
+#'
+#' @param x An object of class \linkS4class{ph}.
+#' @param rew A vector of reward.
+#'
+#' @return An object of the of class \linkS4class{ph}.
+#' @export
+#'
+#' @examples
+#' obj <- ph(structure = "general")
+#' TVR(obj, c(1, 2, 3))
+setMethod("TVR", c(x = "ph"), function(x, rew) {
+  mar_par <- tvr_fn(x@pars$alpha, x@pars$S, rew)
+  x0 <- ph(alpha = mar_par[[1]], S = mar_par[[2]])
+  return(x0)
+})
