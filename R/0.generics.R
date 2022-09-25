@@ -128,21 +128,6 @@ setGeneric("fit", function(x, y, ...) {
   standardGeneric("fit")
 })
 
-#' New Generic for Estimating Matrix Distributions with neural networks
-#'
-#' Methods are available for objects of class \linkS4class{ph}.
-#'
-#' @param x An object of the model class.
-#' @param y A Matrix of data.
-#' @param ... Further parameters to be passed on.
-#'
-#' @return An object of the fitted model class.
-#'
-#'
-setGeneric("nnet_fit", function(x, y, ...) {
-  standardGeneric("nnet_fit")
-})
-
 #' New Generic for Regression with Matrix Distributions
 #'
 #' Methods are available for objects of class \linkS4class{ph}.

@@ -23,13 +23,12 @@
 #' x <- mph(structure = c("general", "general"), dimension = 3, variables = 2)
 #' n <- 100
 #' responses <- cbind(rexp(n), rgamma(n, 2, 3))
-#'
 #' covariate <- data.frame(age = sample(18:65, n, replace = TRUE) / 100, income = runif(n, 0, 0.99))
 #' f <- responses~age + income # regression formula
-#' fit <- nnet_fit(x = x, formula = f, y = responses, data = covariate, stepsEM = 20)
+#' MoE(x = x, formula = f, y = responses, data = covariate, stepsEM = 20)
 #'
 setMethod(
-  "nnet_fit", c(x = "mph", y = "ANY"),
+  "MoE", c(x = "mph", y = "ANY"),
   function(x,
            formula,
            y,
@@ -66,7 +65,6 @@ setMethod(
     if (length(delta) == 0) {
       delta <- matrix(1, nrow(y), ncol(y))
     }
-
 
     alpha_fit <- x@pars$alpha
     p <- length(alpha_fit)
@@ -122,7 +120,6 @@ setMethod(
         }
         alpha_mat <- stats::predict(multinom_model, type = "probs", newdata = ndm) # these are the new estimates for initial distribution vectors
 
-
         S_fit <- aux$S
         cat("\r", "iteration:", k,
           ", logLik:", aux$logLik,
@@ -176,11 +173,8 @@ setMethod(
         }
         alpha_mat <- stats::predict(multinom_model, type = "probs", newdata = ndm) # these are the new estimates for initial distribution vectors
 
-
         x@pars$alpha <- alpha_mat
         x@pars$S <- S_fit
-
-
 
         opt <- suppressWarnings(
           stats::optim(
