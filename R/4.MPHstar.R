@@ -1,4 +1,3 @@
-
 #' Multivariate Phase Type distributions obtained by transformation via rewards
 #'
 #' Class of objects for multivariate phase type distributions.
@@ -110,7 +109,7 @@ setMethod("sim", c(x = "MPHstar"), function(x, n = 1000) {
 #' obj <- MPHstar(structure = "general")
 #' marginal(obj, 1)
 setMethod("marginal", c(x = "MPHstar"), function(x, mar = 1) {
-  mar_par <- tvr_fn(x@pars$alpha, x@pars$S, x@pars$R[, mar])
+  mar_par <- tvr_ph(x@pars$alpha, x@pars$S, x@pars$R[, mar])
   x0 <- ph(alpha = mar_par[[1]], S = mar_par[[2]])
   return(x0)
 })

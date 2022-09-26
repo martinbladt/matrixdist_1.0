@@ -1301,8 +1301,8 @@ transf_via_rew <- function(R, Qtilda, alpha, S) {
 #'
 #' @return A list of PH parameters.
 #'
-tvr_fn <- function(alpha, S, R) {
-    .Call(`_matrixdist_tvr_fn`, alpha, S, R)
+tvr_ph <- function(alpha, S, R) {
+    .Call(`_matrixdist_tvr_ph`, alpha, S, R)
 }
 
 #' Product of two matrices

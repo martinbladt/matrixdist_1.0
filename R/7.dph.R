@@ -125,6 +125,32 @@ setMethod(
   }
 )
 
+#' Mixture Method for phase-type distributions
+#'
+#' @param x1 An object of class \linkS4class{dph}.
+#' @param x2 An object of class \linkS4class{dph}.
+#' @param prob Probability for first object.
+#'
+#' @return An object of class \linkS4class{dph}.
+#' @export
+#'
+#' @examples
+#' dph1 <- dph(structure = "general", dimension = 3)
+#' dph2 <- dph(structure = "general", dimension = 5)
+#' dph_mix <- mixture(dph1, dph2, 0.5)
+#' dph_mix
+setMethod(
+  "mixture", signature(x1 = "dph", x2 = "dph"),
+  function(x1, x2, prob) {
+    n1 <- length(x1@pars$alpha)
+    n2 <- length(x2@pars$alpha)
+    alpha <- c(prob * x1@pars$alpha, (1 - prob) * x2@pars$alpha)
+    S1 <- rbind(x1@pars$S, matrix(0, n2, n1))
+    S2 <- rbind(matrix(0, n1, n2), x2@pars$S)
+    return(ph(alpha = alpha, S = cbind(S1, S2)))
+  }
+)
+
 #' Show Method for discrete phase-type distributions
 #'
 #' @param object An object of class \linkS4class{dph}.

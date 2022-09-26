@@ -2,8 +2,7 @@
 % Please edit documentation in R/0.generics.R
 \name{TVR}
 \alias{TVR}
-\title{New Generic for the transformation via rewards of a multivariate phase-type 
- distribution}
+\title{New Generic for the transformation via rewards of a phase-type distribution}
 \usage{
 TVR(x, ...)
 }
@@ -13,8 +12,8 @@ TVR(x, ...)
 \item{...}{Further parameters to be passed on.}
 }
 \value{
-A realization from the mph distribution.
+An object of the model class.
 }
 \description{
-Methods are available for objects of class \linkS4class{MPHstar}
+Methods are available for objects of class \linkS4class{ph}
 }

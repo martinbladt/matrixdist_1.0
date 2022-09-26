@@ -492,7 +492,7 @@ Rcpp::List transf_via_rew(arma::mat R,arma::mat Qtilda, arma::vec alpha, arma::m
 //' @return A list of PH parameters.
 //'
 // [[Rcpp::export]]
-Rcpp::List tvr_fn(arma::vec alpha, arma::mat S, arma::vec R) {
+Rcpp::List tvr_ph(arma::vec alpha, arma::mat S, arma::vec R) {
   unsigned p{S.n_rows};
   
   unsigned n0{0};

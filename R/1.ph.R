@@ -137,6 +137,32 @@ setMethod(
   }
 )
 
+#' Mixture Method for phase-type distributions
+#'
+#' @param x1 An object of class \linkS4class{ph}.
+#' @param x2 An object of class \linkS4class{ph}.
+#' @param prob Probability for first object.
+#'
+#' @return An object of class \linkS4class{ph}.
+#' @export
+#'
+#' @examples
+#' ph1 <- ph(structure = "general", dimension = 3)
+#' ph2 <- ph(structure = "gcoxian", dimension = 5)
+#' ph_mix <- mixture(ph1, ph2, 0.5)
+#' ph_mix
+setMethod(
+  "mixture", signature(x1 = "ph", x2 = "ph"),
+  function(x1, x2, prob) {
+    n1 <- length(x1@pars$alpha)
+    n2 <- length(x2@pars$alpha)
+    alpha <- c(prob * x1@pars$alpha, (1 - prob) * x2@pars$alpha)
+    S1 <- rbind(x1@pars$S, matrix(0, n2, n1))
+    S2 <- rbind(matrix(0, n1, n2), x2@pars$S)
+    return(ph(alpha = alpha, S = cbind(S1, S2)))
+  }
+)
+
 #' Moment Method for phase-type distributions
 #'
 #' @param x An object of class \linkS4class{ph}.
@@ -167,6 +193,28 @@ setMethod(
       prod <- prod %*% m
     }
     return(factorial(k) * sum(x@pars$alpha %*% prod))
+  }
+)
+
+#' Mean Method for phase-type distributions
+#'
+#' @param x An object of class \linkS4class{ph}.
+#'
+#' @return The raw first moment of the \linkS4class{ph} (or undelying \linkS4class{ph}) object.
+#' @export
+#'
+#' @examples
+#' set.seed(123)
+#' ph1 <- ph(structure = "general", dimension = 3)
+#' mean(ph1)
+setMethod(
+  "mean", signature(x = "ph"),
+  function(x) {
+    if (methods::is(x, "iph")) {
+      warning("moment of undelying ph structure is provided for iph objects")
+    }
+    m <- solve(-x@pars$S)
+    return(sum(x@pars$alpha %*% m))
   }
 )
 
@@ -556,7 +604,7 @@ setMethod("TVR", c(x = "ph"), function(x, rew) {
   if (length(x@pars$alpha) != length(rew)) {
     stop("vector of rewards of wrong dimension")
   } else {
-    mar_par <- tvr_fn(x@pars$alpha, x@pars$S, rew)
+    mar_par <- tvr_ph(x@pars$alpha, x@pars$S, rew)
     x0 <- ph(alpha = mar_par[[1]], S = mar_par[[2]])
   }
   return(x0)

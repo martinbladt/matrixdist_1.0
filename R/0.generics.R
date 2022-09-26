@@ -57,6 +57,21 @@ setGeneric("maximum", function(x1, x2, ...) {
   standardGeneric("maximum")
 })
 
+#' New Generic for Mixture of two Matrix Distributions
+#'
+#' Methods are available for objects of classes \linkS4class{ph} and \linkS4class{dph}.
+#'
+#' @param x1 An object of the model class.
+#' @param x2 An object of the model class.
+#' @param ... Further parameters to be passed on.
+#'
+#' @return An object of the model class.
+#'
+#'
+setGeneric("mixture", function(x1, x2, ...) {
+  standardGeneric("mixture")
+})
+
 #' New Generic for the Density of Matrix Distributions
 #'
 #' Methods are available for objects of class \linkS4class{ph}.
@@ -187,15 +202,14 @@ setGeneric("Fisher", function(x, ...) {
   standardGeneric("Fisher")
 })
 
-#' New Generic for the transformation via rewards of a multivariate phase-type 
-#'  distribution
+#' New Generic for the transformation via rewards of a phase-type distribution
 #'
-#' Methods are available for objects of class \linkS4class{MPHstar}
+#' Methods are available for objects of class \linkS4class{ph}
 #'
 #' @param x An object of the model class.
 #' @param ... Further parameters to be passed on.
 #'
-#' @return A realization from the mph distribution.
+#' @return An object of the model class.
 #'
 #'
 setGeneric("TVR", function(x, ...) {

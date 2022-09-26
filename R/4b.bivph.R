@@ -147,7 +147,6 @@ setMethod("moment", c(x = "bivph"), function(x, k = c(1, 1)) {
   return(factorial(k[1]) * factorial(k[2]) * x@pars$alpha %*% matrix_power(k[1] + 1, base::solve(-x@pars$S11)) %*% x@pars$S12 %*% matrix_power(k[2], base::solve(-x@pars$S22)) %*% ee)
 })
 
-
 #' Fit Method for bivph Class
 #'
 #' @param x An object of class \linkS4class{bivph}.
@@ -213,7 +212,6 @@ setMethod(
     return(x)
   }
 )
-
 
 #' Marginal method for bivph class
 #'
