@@ -9,7 +9,7 @@
 \arguments{
 \item{x}{An object of class \linkS4class{ph}.}
 
-\item{rew}{A vector of reward.}
+\item{rew}{A vector of rewards.}
 }
 \value{
 An object of the of class \linkS4class{ph}.

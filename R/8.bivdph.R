@@ -22,14 +22,14 @@ setClass("bivdph",
   )
 )
 
-
 #' Constructor function for bivariate discrete phase-type distributions
 #'
 #' @param alpha A probability vector.
 #' @param S11 A sub-transition matrix.
 #' @param S12 A matrix.
 #' @param S22 A sub-transition matrix.
-#' @param dimensions The dimensions of the bivariate discrete phase-type (if no parameters are provided).
+#' @param dimensions The dimensions of the bivariate discrete phase-type 
+#'  (if no parameters are provided).
 #'
 #' @return An object of class \linkS4class{bivdph}.
 #' @export
@@ -72,7 +72,6 @@ bivdph <- function(alpha = NULL, S11 = NULL, S12 = NULL, S22 = NULL, dimensions 
   )
 }
 
-
 #' Show method for bivariate discrete phase-type distributions
 #'
 #' @param object An object of class \linkS4class{bivdph}.
@@ -85,7 +84,6 @@ setMethod("show", "bivdph", function(object) {
   cat("parameters: ", "\n", sep = "")
   methods::show(object@pars)
 })
-
 
 #' Density method for bivariate discrete phase-type distributions
 #'
@@ -103,7 +101,6 @@ setMethod("dens", c(x = "bivdph"), function(x, y) {
   return(dens)
 })
 
-
 #' Coef method for bivdph class
 #'
 #' @param object An object of class \linkS4class{bivdph}.
@@ -117,7 +114,6 @@ setMethod("dens", c(x = "bivdph"), function(x, y) {
 setMethod("coef", c(object = "bivdph"), function(object) {
   object@pars
 })
-
 
 #' Simulation method for bivariate discrete phase-type distributions
 #'
@@ -146,7 +142,6 @@ setMethod("sim", c(x = "bivdph"), function(x, n = 1000) {
   return(U)
 })
 
-
 #' Marginal method for bivdph class
 #'
 #' @param x An object of class \linkS4class{bivdph}.
@@ -166,7 +161,6 @@ setMethod("marginal", c(x = "bivdph"), function(x, mar = 1) {
   }
   return(x0)
 })
-
 
 #' Fit Method for bivdph Class
 #'
@@ -211,7 +205,6 @@ setMethod(
     cat(format(Sys.time(), format = "%H:%M:%OS"), ": EM started", sep = "")
     cat("\n", sep = "")
 
-
     for (k in 1:stepsEM) {
       EMstep_bivdph(alpha_fit, S11_fit, S12_fit, S22_fit, y, weight)
       if (k %% every == 0) {
@@ -234,7 +227,6 @@ setMethod(
   }
 )
 
-
 #' MoE Method for bivdph Class
 #'
 #' @param x An object of class \linkS4class{bivdph}.
@@ -248,10 +240,6 @@ setMethod(
 #' @param rand_init Random initiation in the R-step.
 #'
 #' @return An object of class \linkS4class{sph}.
-#'
-#' @importFrom methods is new
-#' @importFrom stats optim
-#' @importFrom utils tail
 #'
 #' @export
 #'
@@ -276,8 +264,8 @@ setMethod(
     S12_fit <- clone_matrix(x@pars$S12)
     S22_fit <- clone_matrix(x@pars$S22)
     c <- c()
-    for (i in 1:p) c <- c(c, rep(i, n)) # classes for the B matrix observations
-    extended_x <- matrix(t(as.matrix(frame[, -1])), nrow = n * p, ncol = d, byrow = TRUE) # extended form of covariates
+    for (i in 1:p) c <- c(c, rep(i, n))
+    extended_x <- matrix(t(as.matrix(frame[, -1])), nrow = n * p, ncol = d, byrow = TRUE)
     dm <- data.frame(Class = c, extended_x)
     names(dm)[-1] <- names(frame)[-1]
     ndm <- data.frame(dm[dm$Class == 1, -1])

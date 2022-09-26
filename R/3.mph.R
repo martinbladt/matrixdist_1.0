@@ -86,7 +86,7 @@ setMethod("sim", c(x = "mph"), function(x, n = 1000, equal_marginals = 0) {
     states <- 1:p
     result <- matrix(NA, n, d)
     for (i in 1:n) {
-      state <- sample(states, 1)
+      state <- sample(states, 1, prob = x@pars$alpha)
       in_vect <- rep(0, p)
       in_vect[state] <- 1
       for (j in 1:d) {
@@ -98,7 +98,7 @@ setMethod("sim", c(x = "mph"), function(x, n = 1000, equal_marginals = 0) {
     states <- 1:p
     result <- matrix(NA, n, d)
     for (i in 1:n) {
-      state <- sample(states, 1)
+      state <- sample(states, 1, prob = x@pars$alpha)
       in_vect <- rep(0, p)
       in_vect[state] <- 1
       for (j in 1:d) {

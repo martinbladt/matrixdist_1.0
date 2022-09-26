@@ -15,7 +15,8 @@ bivdph(alpha = NULL, S11 = NULL, S12 = NULL, S22 = NULL, dimensions = c(3, 3))
 
 \item{S22}{A sub-transition matrix.}
 
-\item{dimensions}{The dimensions of the bivariate discrete phase-type (if no parameters are provided).}
+\item{dimensions}{The dimensions of the bivariate discrete phase-type 
+(if no parameters are provided).}
 }
 \value{
 An object of class \linkS4class{bivdph}.

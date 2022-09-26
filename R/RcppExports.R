@@ -1300,7 +1300,6 @@ transf_via_rew <- function(R, Qtilda, alpha, S) {
 #' @param R Reward vector.
 #'
 #' @return A list of PH parameters.
-#' @export
 #'
 tvr_fn <- function(alpha, S, R) {
     .Call(`_matrixdist_tvr_fn`, alpha, S, R)

@@ -1,4 +1,4 @@
-#' Dicrete Phase Type distributions
+#' Discrete Phase Type distributions
 #'
 #' Class of objects for discrete phase-type distributions.
 #'
@@ -244,26 +244,22 @@ setMethod("cdf", c(x = "dph"), function(x,
   return(cdf)
 })
 
-#' Fit Method for ph Class
+#' Fit Method for dph Class
 #'
-#' @param x An object of class \linkS4class{ph}.
+#' @param x An object of class \linkS4class{dph}.
 #' @param y Vector or data.
 #' @param weight Vector of weights.
 #' @param stepsEM Number of EM steps to be performed.
 #' @param every Number of iterations between likelihood display updates.
 #'
-#' @return An object of class \linkS4class{ph}.
-#'
-#' @importFrom grDevices dev.off
-#' @importFrom graphics hist legend lines
-#' @importFrom utils head
+#' @return An object of class \linkS4class{dph}.
 #'
 #' @export
 #'
 #' @examples
 #' obj <- dph(structure = "general", dimension = 2)
 #' data <- sim(obj, n = 100)
-#' fit(obj, data, stepsEM = 1000, every = 200)
+#' fit(obj, data, stepsEM = 100, every = 20)
 setMethod(
   "fit", c(x = "dph", y = "ANY"),
   function(x,
@@ -326,10 +322,6 @@ setMethod(
 #'
 #' @return An object of class \linkS4class{sph}.
 #'
-#' @importFrom methods is new
-#' @importFrom stats optim
-#' @importFrom utils tail
-#'
 #' @export
 #'
 setMethod(
@@ -350,8 +342,8 @@ setMethod(
     if (length(weight) == 0) weight <- rep(1, n)
     S_fit <- clone_matrix(x@pars$S)
     c <- c()
-    for (i in 1:p) c <- c(c, rep(i, n)) # classes for the B matrix observations
-    extended_x <- matrix(t(as.matrix(frame[, -1])), nrow = n * p, ncol = d, byrow = TRUE) # extended form of covariates
+    for (i in 1:p) c <- c(c, rep(i, n))
+    extended_x <- matrix(t(as.matrix(frame[, -1])), nrow = n * p, ncol = d, byrow = TRUE)
     dm <- data.frame(Class = c, extended_x)
     names(dm)[-1] <- names(frame)[-1]
     ndm <- data.frame(dm[dm$Class == 1, -1])

@@ -254,7 +254,6 @@ setMethod("cdf", c(x = "iph"), function(x,
   return(cdf)
 })
 
-
 #' Coef Method for iph Class
 #'
 #' @param object An object of class \linkS4class{iph}.

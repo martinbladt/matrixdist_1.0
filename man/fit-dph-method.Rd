@@ -2,12 +2,12 @@
 % Please edit documentation in R/7.dph.R
 \name{fit,dph-method}
 \alias{fit,dph-method}
-\title{Fit Method for ph Class}
+\title{Fit Method for dph Class}
 \usage{
 \S4method{fit}{dph}(x, y, weight = numeric(0), stepsEM = 1000, every = 100)
 }
 \arguments{
-\item{x}{An object of class \linkS4class{ph}.}
+\item{x}{An object of class \linkS4class{dph}.}
 
 \item{y}{Vector or data.}
 
@@ -18,13 +18,13 @@
 \item{every}{Number of iterations between likelihood display updates.}
 }
 \value{
-An object of class \linkS4class{ph}.
+An object of class \linkS4class{dph}.
 }
 \description{
-Fit Method for ph Class
+Fit Method for dph Class
 }
 \examples{
 obj <- dph(structure = "general", dimension = 2)
 data <- sim(obj, n = 100)
-fit(obj, data, stepsEM = 1000, every = 200)
+fit(obj, data, stepsEM = 100, every = 20)
 }

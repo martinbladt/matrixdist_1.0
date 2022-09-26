@@ -305,7 +305,7 @@ setMethod("quan", c(x = "ph"), function(x,
 #' @examples
 #' obj <- iph(ph(structure = "general", dimension = 2), gfun = "weibull", gfun_pars = 2)
 #' data <- sim(obj, n = 100)
-#' fit(obj, data, stepsEM = 1000, every = 200)
+#' fit(obj, data, stepsEM = 100, every = 20)
 setMethod(
   "fit", c(x = "ph", y = "ANY"),
   function(x,
@@ -544,7 +544,7 @@ setMethod("LRT", c(x = "ph", y = "ph"), function(x, y) {
 #' TVR Method for ph Class
 #'
 #' @param x An object of class \linkS4class{ph}.
-#' @param rew A vector of reward.
+#' @param rew A vector of rewards.
 #'
 #' @return An object of the of class \linkS4class{ph}.
 #' @export
@@ -553,7 +553,11 @@ setMethod("LRT", c(x = "ph", y = "ph"), function(x, y) {
 #' obj <- ph(structure = "general")
 #' TVR(obj, c(1, 2, 3))
 setMethod("TVR", c(x = "ph"), function(x, rew) {
-  mar_par <- tvr_fn(x@pars$alpha, x@pars$S, rew)
-  x0 <- ph(alpha = mar_par[[1]], S = mar_par[[2]])
+  if (length(x@pars$alpha) != length(rew)) {
+    stop("vector of rewards of wrong dimension")
+  } else {
+    mar_par <- tvr_fn(x@pars$alpha, x@pars$S, rew)
+    x0 <- ph(alpha = mar_par[[1]], S = mar_par[[2]])
+  }
   return(x0)
 })

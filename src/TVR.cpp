@@ -490,7 +490,6 @@ Rcpp::List transf_via_rew(arma::mat R,arma::mat Qtilda, arma::vec alpha, arma::m
 //' @param R Reward vector.
 //'
 //' @return A list of PH parameters.
-//' @export
 //'
 // [[Rcpp::export]]
 Rcpp::List tvr_fn(arma::vec alpha, arma::mat S, arma::vec R) {

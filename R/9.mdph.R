@@ -99,8 +99,7 @@ setMethod("coef", c(object = "mdph"), function(object) {
 #' obj <- mdph(structure = c("general", "general"))
 #' sim(obj, 100)
 setMethod("sim", c(x = "mdph"), function(x, n = 1000, equal_marginals = 0) {
-  if (is.vector(x@pars$alpha)) p <- length(x@pars$alpha)
-  if (is.matrix(x@pars$alpha)) p <- ncol(x@pars$alpha)
+  p <- length(x@pars$alpha)
 
   if (equal_marginals == 0) {
     d <- length(x@pars$S)
@@ -117,7 +116,7 @@ setMethod("sim", c(x = "mdph"), function(x, n = 1000, equal_marginals = 0) {
     states <- 1:p
     result <- matrix(NA, n, d)
     for (i in 1:n) {
-      state <- sample(states, 1)
+      state <- sample(states, 1, prob = x@pars$alpha)
       in_vect <- rep(0, p)
       in_vect[state] <- 1
       for (j in 1:d) {
@@ -136,7 +135,7 @@ setMethod("sim", c(x = "mdph"), function(x, n = 1000, equal_marginals = 0) {
     states <- 1:p
     result <- matrix(NA, n, d)
     for (i in 1:n) {
-      state <- sample(states, 1)
+      state <- sample(states, 1, prob = x@pars$alpha)
       in_vect <- rep(0, p)
       in_vect[state] <- 1
       for (j in 1:d) {
@@ -256,10 +255,6 @@ setMethod(
 #'
 #' @return An object of class \linkS4class{sph}.
 #'
-#' @importFrom methods is new
-#' @importFrom stats optim
-#' @importFrom utils tail
-#'
 #' @export
 #'
 setMethod(
@@ -286,8 +281,8 @@ setMethod(
     }
     
     c <- c()
-    for (i in 1:p) c <- c(c, rep(i, n)) # classes for the B matrix observations
-    extended_x <- matrix(t(as.matrix(frame[, -1])), nrow = n * p, ncol = d, byrow = TRUE) # extended form of covariates
+    for (i in 1:p) c <- c(c, rep(i, n)) 
+    extended_x <- matrix(t(as.matrix(frame[, -1])), nrow = n * p, ncol = d, byrow = TRUE)
     dm <- data.frame(Class = c, extended_x)
     names(dm)[-1] <- names(frame)[-1]
     ndm <- data.frame(dm[dm$Class == 1, -1])

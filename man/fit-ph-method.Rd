@@ -56,5 +56,5 @@ Fit Method for ph Class
 \examples{
 obj <- iph(ph(structure = "general", dimension = 2), gfun = "weibull", gfun_pars = 2)
 data <- sim(obj, n = 100)
-fit(obj, data, stepsEM = 1000, every = 200)
+fit(obj, data, stepsEM = 100, every = 20)
 }
