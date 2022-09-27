@@ -246,6 +246,30 @@ setMethod(
   }
 )
 
+#' Pgf Method for discrete phase-type distributions
+#'
+#' @param x An object of class \linkS4class{dph}.
+#' @param z A vector of real values.
+#'
+#' @return The probability generating of the \linkS4class{dph} object at the 
+#'  given locations.
+#' @export
+#'
+#' @examples
+#' set.seed(123)
+#' dph1 <- dph(structure = "general", dimension = 3)
+#' pgf(dph1, 0.5)
+setMethod(
+  "pgf", signature(x = "dph"),
+  function(x, z) {
+    if (any(abs(z) > 1)) {
+      stop("z should between -1 and 1")
+    }
+    l <- dph_pgf(z, x@pars$alpha, x@pars$S)
+    return(l)
+  }
+)
+
 #' Simulation Method for phase-type distributions
 #'
 #' @param x An object of class \linkS4class{dph}.

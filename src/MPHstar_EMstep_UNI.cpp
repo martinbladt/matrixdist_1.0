@@ -299,8 +299,9 @@ void MPHstar_EMstep_UNI(double h, double Rtol, arma::vec & alpha, arma::mat & S,
     if (pj == 0) {
       continue;
     } else if(pj == 1) {
-      arma::mat alphaj = arma::conv_to<arma::mat>::from(new_pi(rew, Qtilda, alpha)); // initial distribution vector of mth marginal
-      arma::mat Sj = new_subint_mat(rew, Qtilda, S); // sub-intensity matrix of mth marginal
+      Rcpp::List L = tvr_ph(alpha, S, rew);
+      arma::mat alphaj = L[0];
+      arma::mat Sj = L[1];
       
       for (int i{0}; i < rew.size(); ++i) {
         if (rew(i) > 0) {
@@ -308,8 +309,9 @@ void MPHstar_EMstep_UNI(double h, double Rtol, arma::vec & alpha, arma::mat & S,
         }
       }
     } else {
-      arma::vec alphaj = new_pi(rew, Qtilda, alpha); // initial distribution vector of mth marginal
-      arma::mat Sj = new_subint_mat(rew, Qtilda, S); // sub-intensity matrix of mth marginal
+      Rcpp::List L = tvr_ph(alpha, S, rew);
+      arma::vec alphaj = L[0];
+      arma::mat Sj = L[1];
       
       arma::mat un_marg = mph_obs[m + 1];
 
@@ -353,7 +355,6 @@ void MPHstar_EMstep_UNI(double h, double Rtol, arma::vec & alpha, arma::mat & S,
         R(i,j)=0;
       } else {
         R(i,j) = Zmeanj(i,j) / ZmeanTot(i,0);
-        //R(i,j)=Zmeanj(i,j)/Zmean(i,0);
       }
     }
   }

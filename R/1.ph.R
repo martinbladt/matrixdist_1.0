@@ -243,7 +243,7 @@ setMethod(
 #' @param x An object of class \linkS4class{ph}.
 #' @param r A vector of real values.
 #'
-#' @return The Laplace tranform of the \linkS4class{ph}
+#' @return The Laplace transform of the \linkS4class{ph}
 #'  (or undelying \linkS4class{ph}) object at the given locations.
 #' @export
 #'

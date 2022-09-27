@@ -1667,6 +1667,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// dph_pgf
+Rcpp::NumericVector dph_pgf(Rcpp::NumericVector z, arma::vec alpha, arma::mat S);
+RcppExport SEXP _matrixdist_dph_pgf(SEXP zSEXP, SEXP alphaSEXP, SEXP SSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type z(zSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type S(SSEXP);
+    rcpp_result_gen = Rcpp::wrap(dph_pgf(z, alpha, S));
+    return rcpp_result_gen;
+END_RCPP
+}
 // bivph_laplace
 Rcpp::NumericVector bivph_laplace(Rcpp::NumericMatrix r, arma::vec alpha, arma::mat S11, arma::mat S12, arma::mat S22);
 RcppExport SEXP _matrixdist_bivph_laplace(SEXP rSEXP, SEXP alphaSEXP, SEXP S11SEXP, SEXP S12SEXP, SEXP S22SEXP) {
@@ -1901,17 +1914,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// n_null
-int n_null(arma::vec R);
-RcppExport SEXP _matrixdist_n_null(SEXP RSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::vec >::type R(RSEXP);
-    rcpp_result_gen = Rcpp::wrap(n_null(R));
-    return rcpp_result_gen;
-END_RCPP
-}
 // plus_states
 arma::vec plus_states(arma::vec R);
 RcppExport SEXP _matrixdist_plus_states(SEXP RSEXP) {
@@ -1920,190 +1922,6 @@ BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< arma::vec >::type R(RSEXP);
     rcpp_result_gen = Rcpp::wrap(plus_states(R));
-    return rcpp_result_gen;
-END_RCPP
-}
-// null_states
-arma::vec null_states(arma::vec R);
-RcppExport SEXP _matrixdist_null_states(SEXP RSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::vec >::type R(RSEXP);
-    rcpp_result_gen = Rcpp::wrap(null_states(R));
-    return rcpp_result_gen;
-END_RCPP
-}
-// Q_pos_pos
-arma::mat Q_pos_pos(arma::vec R, arma::mat Qtilda);
-RcppExport SEXP _matrixdist_Q_pos_pos(SEXP RSEXP, SEXP QtildaSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::vec >::type R(RSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type Qtilda(QtildaSEXP);
-    rcpp_result_gen = Rcpp::wrap(Q_pos_pos(R, Qtilda));
-    return rcpp_result_gen;
-END_RCPP
-}
-// Q_null_null
-arma::mat Q_null_null(arma::vec R, arma::mat Qtilda);
-RcppExport SEXP _matrixdist_Q_null_null(SEXP RSEXP, SEXP QtildaSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::vec >::type R(RSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type Qtilda(QtildaSEXP);
-    rcpp_result_gen = Rcpp::wrap(Q_null_null(R, Qtilda));
-    return rcpp_result_gen;
-END_RCPP
-}
-// Q_pos_null
-arma::mat Q_pos_null(arma::vec R, arma::mat Qtilda);
-RcppExport SEXP _matrixdist_Q_pos_null(SEXP RSEXP, SEXP QtildaSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::vec >::type R(RSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type Qtilda(QtildaSEXP);
-    rcpp_result_gen = Rcpp::wrap(Q_pos_null(R, Qtilda));
-    return rcpp_result_gen;
-END_RCPP
-}
-// Q_null_pos
-arma::mat Q_null_pos(arma::vec R, arma::mat Qtilda);
-RcppExport SEXP _matrixdist_Q_null_pos(SEXP RSEXP, SEXP QtildaSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::vec >::type R(RSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type Qtilda(QtildaSEXP);
-    rcpp_result_gen = Rcpp::wrap(Q_null_pos(R, Qtilda));
-    return rcpp_result_gen;
-END_RCPP
-}
-// q_pos
-arma::vec q_pos(arma::vec R, arma::mat Qtilda);
-RcppExport SEXP _matrixdist_q_pos(SEXP RSEXP, SEXP QtildaSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::vec >::type R(RSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type Qtilda(QtildaSEXP);
-    rcpp_result_gen = Rcpp::wrap(q_pos(R, Qtilda));
-    return rcpp_result_gen;
-END_RCPP
-}
-// q_null
-arma::vec q_null(arma::vec R, arma::mat Qtilda);
-RcppExport SEXP _matrixdist_q_null(SEXP RSEXP, SEXP QtildaSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::vec >::type R(RSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type Qtilda(QtildaSEXP);
-    rcpp_result_gen = Rcpp::wrap(q_null(R, Qtilda));
-    return rcpp_result_gen;
-END_RCPP
-}
-// new_trans_mat
-arma::mat new_trans_mat(arma::vec R, arma::mat Qtilda);
-RcppExport SEXP _matrixdist_new_trans_mat(SEXP RSEXP, SEXP QtildaSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::vec >::type R(RSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type Qtilda(QtildaSEXP);
-    rcpp_result_gen = Rcpp::wrap(new_trans_mat(R, Qtilda));
-    return rcpp_result_gen;
-END_RCPP
-}
-// new_trans_exit
-arma::vec new_trans_exit(arma::vec R, arma::mat Qtilda);
-RcppExport SEXP _matrixdist_new_trans_exit(SEXP RSEXP, SEXP QtildaSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::vec >::type R(RSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type Qtilda(QtildaSEXP);
-    rcpp_result_gen = Rcpp::wrap(new_trans_exit(R, Qtilda));
-    return rcpp_result_gen;
-END_RCPP
-}
-// pi_pos
-arma::rowvec pi_pos(arma::vec R, arma::vec alpha);
-RcppExport SEXP _matrixdist_pi_pos(SEXP RSEXP, SEXP alphaSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::vec >::type R(RSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type alpha(alphaSEXP);
-    rcpp_result_gen = Rcpp::wrap(pi_pos(R, alpha));
-    return rcpp_result_gen;
-END_RCPP
-}
-// pi_null
-arma::rowvec pi_null(arma::vec R, arma::vec alpha);
-RcppExport SEXP _matrixdist_pi_null(SEXP RSEXP, SEXP alphaSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::vec >::type R(RSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type alpha(alphaSEXP);
-    rcpp_result_gen = Rcpp::wrap(pi_null(R, alpha));
-    return rcpp_result_gen;
-END_RCPP
-}
-// new_pi
-arma::vec new_pi(arma::vec R, arma::mat Qtilda, arma::vec alpha);
-RcppExport SEXP _matrixdist_new_pi(SEXP RSEXP, SEXP QtildaSEXP, SEXP alphaSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::vec >::type R(RSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type Qtilda(QtildaSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type alpha(alphaSEXP);
-    rcpp_result_gen = Rcpp::wrap(new_pi(R, Qtilda, alpha));
-    return rcpp_result_gen;
-END_RCPP
-}
-// new_exit_vec
-arma::vec new_exit_vec(arma::vec R, arma::mat Qtilda, arma::mat S);
-RcppExport SEXP _matrixdist_new_exit_vec(SEXP RSEXP, SEXP QtildaSEXP, SEXP SSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::vec >::type R(RSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type Qtilda(QtildaSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type S(SSEXP);
-    rcpp_result_gen = Rcpp::wrap(new_exit_vec(R, Qtilda, S));
-    return rcpp_result_gen;
-END_RCPP
-}
-// new_subint_mat
-arma::mat new_subint_mat(arma::vec R, arma::mat Qtilda, arma::mat S);
-RcppExport SEXP _matrixdist_new_subint_mat(SEXP RSEXP, SEXP QtildaSEXP, SEXP SSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::vec >::type R(RSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type Qtilda(QtildaSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type S(SSEXP);
-    rcpp_result_gen = Rcpp::wrap(new_subint_mat(R, Qtilda, S));
-    return rcpp_result_gen;
-END_RCPP
-}
-// transf_via_rew
-Rcpp::List transf_via_rew(arma::mat R, arma::mat Qtilda, arma::vec alpha, arma::mat S);
-RcppExport SEXP _matrixdist_transf_via_rew(SEXP RSEXP, SEXP QtildaSEXP, SEXP alphaSEXP, SEXP SSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::mat >::type R(RSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type Qtilda(QtildaSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type alpha(alphaSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type S(SSEXP);
-    rcpp_result_gen = Rcpp::wrap(transf_via_rew(R, Qtilda, alpha, S));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -2241,6 +2059,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_logLikelihoodmDPH", (DL_FUNC) &_matrixdist_logLikelihoodmDPH, 4},
     {"_matrixdist_logLikelihoodmDPH_MoE", (DL_FUNC) &_matrixdist_logLikelihoodmDPH_MoE, 4},
     {"_matrixdist_ph_laplace", (DL_FUNC) &_matrixdist_ph_laplace, 3},
+    {"_matrixdist_dph_pgf", (DL_FUNC) &_matrixdist_dph_pgf, 3},
     {"_matrixdist_bivph_laplace", (DL_FUNC) &_matrixdist_bivph_laplace, 5},
     {"_matrixdist_EM_step_mPH_rc", (DL_FUNC) &_matrixdist_EM_step_mPH_rc, 5},
     {"_matrixdist_inf_norm", (DL_FUNC) &_matrixdist_inf_norm, 1},
@@ -2260,23 +2079,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_random_structure_bivph", (DL_FUNC) &_matrixdist_random_structure_bivph, 3},
     {"_matrixdist_merge_matrices", (DL_FUNC) &_matrixdist_merge_matrices, 3},
     {"_matrixdist_n_pos", (DL_FUNC) &_matrixdist_n_pos, 1},
-    {"_matrixdist_n_null", (DL_FUNC) &_matrixdist_n_null, 1},
     {"_matrixdist_plus_states", (DL_FUNC) &_matrixdist_plus_states, 1},
-    {"_matrixdist_null_states", (DL_FUNC) &_matrixdist_null_states, 1},
-    {"_matrixdist_Q_pos_pos", (DL_FUNC) &_matrixdist_Q_pos_pos, 2},
-    {"_matrixdist_Q_null_null", (DL_FUNC) &_matrixdist_Q_null_null, 2},
-    {"_matrixdist_Q_pos_null", (DL_FUNC) &_matrixdist_Q_pos_null, 2},
-    {"_matrixdist_Q_null_pos", (DL_FUNC) &_matrixdist_Q_null_pos, 2},
-    {"_matrixdist_q_pos", (DL_FUNC) &_matrixdist_q_pos, 2},
-    {"_matrixdist_q_null", (DL_FUNC) &_matrixdist_q_null, 2},
-    {"_matrixdist_new_trans_mat", (DL_FUNC) &_matrixdist_new_trans_mat, 2},
-    {"_matrixdist_new_trans_exit", (DL_FUNC) &_matrixdist_new_trans_exit, 2},
-    {"_matrixdist_pi_pos", (DL_FUNC) &_matrixdist_pi_pos, 2},
-    {"_matrixdist_pi_null", (DL_FUNC) &_matrixdist_pi_null, 2},
-    {"_matrixdist_new_pi", (DL_FUNC) &_matrixdist_new_pi, 3},
-    {"_matrixdist_new_exit_vec", (DL_FUNC) &_matrixdist_new_exit_vec, 3},
-    {"_matrixdist_new_subint_mat", (DL_FUNC) &_matrixdist_new_subint_mat, 3},
-    {"_matrixdist_transf_via_rew", (DL_FUNC) &_matrixdist_transf_via_rew, 4},
     {"_matrixdist_tvr_ph", (DL_FUNC) &_matrixdist_tvr_ph, 3},
     {"_matrixdist_linear_combination", (DL_FUNC) &_matrixdist_linear_combination, 4},
     {NULL, NULL, 0}

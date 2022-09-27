@@ -1576,6 +1576,20 @@ ph_laplace <- function(r, alpha, S) {
     .Call(`_matrixdist_ph_laplace`, r, alpha, S)
 }
 
+#' Pgf of a discrete phase-type distribution
+#'
+#' Computes the pgf at \code{z} of a discrete phase-type distribution with
+#'  parameters \code{alpha} and \code{S}.
+#'
+#' @param z Vector of real values.
+#' @param alpha Vector of initial probabilities.
+#' @param S Sub-transition matrix.
+#' @return Laplace transform at \code{r}.
+#' 
+dph_pgf <- function(z, alpha, S) {
+    .Call(`_matrixdist_dph_pgf`, z, alpha, S)
+}
+
 #' Bivariate phase-type joint Laplace
 #'
 #' @param r Matrix of values.
@@ -1793,16 +1807,6 @@ n_pos <- function(R) {
     .Call(`_matrixdist_n_pos`, R)
 }
 
-#' Find how many states have null reward
-#'
-#' @param R reward vector
-#'
-#' @return The number of states with null rewards
-#'
-n_null <- function(R) {
-    .Call(`_matrixdist_n_null`, R)
-}
-
 #' Find which states have positive reward
 #'
 #' @param R reward vector
@@ -1811,177 +1815,6 @@ n_null <- function(R) {
 #'
 plus_states <- function(R) {
     .Call(`_matrixdist_plus_states`, R)
-}
-
-#' Find which states have null reward
-#'
-#' @param R reward vector
-#'
-#' @return A vector with the states (number) that are associated with null rewards
-#'
-null_states <- function(R) {
-    .Call(`_matrixdist_null_states`, R)
-}
-
-#' Obtain Q++
-#'
-#' @param R reward vector
-#' @param Qtilda transition-matrix of the Embedded MC
-#'
-#' @return The matrix Q++ where we have transition probabilities from/to states associated with positive rewards
-#'
-Q_pos_pos <- function(R, Qtilda) {
-    .Call(`_matrixdist_Q_pos_pos`, R, Qtilda)
-}
-
-#' Obtain Q00
-#'
-#' @param R reward vector
-#' @param Qtilda transition-matrix of the Embedded MC
-#'
-#' @return the matrix Q00 where we have transition probabilities from/to states associated with null rewards
-#'
-Q_null_null <- function(R, Qtilda) {
-    .Call(`_matrixdist_Q_null_null`, R, Qtilda)
-}
-
-#' Obtain Qtilda+0
-#'
-#'
-#' @param R reward vector
-#' @param Qtilda transition-matrix of the Embedded MC
-#'
-#' @return the matrix Qtilda+0 where we have transition probabilities from states associated with positive rewards to ones associated with null rewards
-#'
-Q_pos_null <- function(R, Qtilda) {
-    .Call(`_matrixdist_Q_pos_null`, R, Qtilda)
-}
-
-#' Obtain Q0+
-#'
-#'
-#' @param R reward vector
-#' @param Qtilda transition-matrix of the Embedded MC
-#'
-#' @return the matrix Q0+ where we have transition probabilities from states associated with null rewards  to ones associated with positive rewards
-#'
-Q_null_pos <- function(R, Qtilda) {
-    .Call(`_matrixdist_Q_null_pos`, R, Qtilda)
-}
-
-#' Obtain q+
-#'
-#' @param R reward vector
-#' @param Qtilda transition-matrix of the Embedded MC
-#'
-#' @return Creates the vector with transition probabilities from states associated with positive rewards to the absorption state
-#'
-q_pos <- function(R, Qtilda) {
-    .Call(`_matrixdist_q_pos`, R, Qtilda)
-}
-
-#' Obtain q0
-#'
-#' @param R reward vector
-#' @param Qtilda transition-matrix of the Embedded MC
-#'
-#' @return Creates the vector with transition probabilities from states associated with null rewards to the absorption state
-#'
-q_null <- function(R, Qtilda) {
-    .Call(`_matrixdist_q_null`, R, Qtilda)
-}
-
-#' Obtain new sub-transition matrix for the new embedded MC
-#'
-#' @param R reward vector
-#' @param Qtilda transition-matrix of the Embedded MC
-#'
-#' @return The sub-transition matrix of the new embedded Markov Chain
-#'
-new_trans_mat <- function(R, Qtilda) {
-    .Call(`_matrixdist_new_trans_mat`, R, Qtilda)
-}
-
-#' Obtain new sub-transition exit vector for the new embedded MC
-#'
-#' @param R reward vector
-#' @param Qtilda transition-matrix of the Embedded MC
-#'
-#' @return The exit rates for the new embedded Markov Chain
-#'
-new_trans_exit <- function(R, Qtilda) {
-    .Call(`_matrixdist_new_trans_exit`, R, Qtilda)
-}
-
-#' Get pi+
-#'
-#' @param R reward vector
-#' @param alpha initial distribution vector of the original MJP
-#'
-#' @return The initial distribution vector for states associated with positive rewards
-#'
-pi_pos <- function(R, alpha) {
-    .Call(`_matrixdist_pi_pos`, R, alpha)
-}
-
-#' Get pi0
-#'
-#' @param R reward vector
-#' @param alpha initial distribution vector of the original MJP
-#'
-#' @return The initial distribution vector for states associated with null rewards
-#'
-pi_null <- function(R, alpha) {
-    .Call(`_matrixdist_pi_null`, R, alpha)
-}
-
-#' Obtain new sub-transition matrix for the new embedded MC
-#'
-#' @param R reward vector
-#' @param Qtilda transition-matrix of the Embedded MC
-#' @param alpha the original initial distribution vector
-#'
-#'@return The initial distribution vector for the new Markov Jump Process
-#'
-new_pi <- function(R, Qtilda, alpha) {
-    .Call(`_matrixdist_new_pi`, R, Qtilda, alpha)
-}
-
-#' Obtain new exit rate vector for the new embedded MC
-#'
-#' @param R reward vector
-#' @param Qtilda transition-matrix of the Embedded MC
-#' @param S original sub-intensity matrix
-#'
-#' @return The exit rate vector for the new Markov Jump Process
-#'
-new_exit_vec <- function(R, Qtilda, S) {
-    .Call(`_matrixdist_new_exit_vec`, R, Qtilda, S)
-}
-
-#' Obtain new sub-intensity matrix for the new MJP
-#'
-#' @param R reward vector
-#' @param Qtilda transition-matrix of the Embedded MC
-#' @param S original sub-intensity matrix
-#'
-#' @return The sub-intensity matrix for the new Markov Jump Process
-#'
-new_subint_mat <- function(R, Qtilda, S) {
-    .Call(`_matrixdist_new_subint_mat`, R, Qtilda, S)
-}
-
-#' Performs the TVR
-#'
-#' @param R reward vector
-#' @param Qtilda transition-matrix of the Embedded MC
-#' @param alpha initial distribution vector
-#' @param S original sub-intensity matrix
-#'
-#' @return A list of transformed PH distributions
-#'
-transf_via_rew <- function(R, Qtilda, alpha, S) {
-    .Call(`_matrixdist_transf_via_rew`, R, Qtilda, alpha, S)
 }
 
 #' Performs TVR for phase-type distributions
