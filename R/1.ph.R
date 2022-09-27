@@ -179,10 +179,10 @@ setMethod(
   "moment", signature(x = "ph"),
   function(x, k = 1) {
     if (k <= 0) {
-      return("k should be positive")
+      stop("k should be positive")
     }
     if ((k %% 1) != 0) {
-      return("k should be an integer")
+      stop("k should be an integer")
     }
     if (methods::is(x, "iph")) {
       warning("moment of undelying ph structure is provided for iph objects")
@@ -235,6 +235,31 @@ setMethod(
     m <- solve(-x@pars$S)
     m2 <- matrix_power(2, m)
     return(2 * sum(x@pars$alpha %*% m2) - (sum(x@pars$alpha %*% m))^2)
+  }
+)
+
+#' Laplace Method for phase-type distributions
+#'
+#' @param x An object of class \linkS4class{ph}.
+#' @param r A vector of real values.
+#'
+#' @return The Laplace tranform of the \linkS4class{ph}
+#'  (or undelying \linkS4class{ph}) object at the given locations.
+#' @export
+#'
+#' @examples
+#' set.seed(123)
+#' ph1 <- ph(structure = "general", dimension = 3)
+#' laplace(ph1, 3)
+setMethod(
+  "laplace", signature(x = "ph"),
+  function(x, r) {
+    lim <- max(Re(eigen(x@pars$S)$values))
+    if (any(r <= lim)) {
+      stop("s should be above the largest real eigenvalue")
+    }
+    l <- ph_laplace(r, x@pars$alpha, x@pars$S)
+    return(l)
   }
 )
 

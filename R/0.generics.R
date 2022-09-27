@@ -20,6 +20,17 @@ setGeneric("sim", function(x, ...) standardGeneric("sim"))
 #'
 setGeneric("moment", function(x, ...) standardGeneric("moment"))
 
+#' New Generic for Laplace transform of Matrix Distributions
+#'
+#' Methods are available for objects of class \linkS4class{ph}.
+#'
+#' @param x An object of the model class.
+#' @param ... Further parameters to be passed on.
+#'
+#' @return Laplace transform of the matrix distribution.
+#'
+setGeneric("laplace", function(x, ...) standardGeneric("laplace"))
+
 #' New Generic for Minimum of two Matrix Distributions
 #'
 #' Methods are available for objects of class \linkS4class{ph}.
