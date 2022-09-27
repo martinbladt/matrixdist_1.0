@@ -31,6 +31,17 @@ setGeneric("moment", function(x, ...) standardGeneric("moment"))
 #'
 setGeneric("laplace", function(x, ...) standardGeneric("laplace"))
 
+#' New Generic for mgf of Matrix Distributions
+#'
+#' Methods are available for objects of class \linkS4class{ph}.
+#'
+#' @param x An object of the model class.
+#' @param ... Further parameters to be passed on.
+#'
+#' @return Mgf transform of the matrix distribution.
+#'
+setGeneric("mgf", function(x, ...) standardGeneric("mgf"))
+
 #' New Generic for Minimum of two Matrix Distributions
 #'
 #' Methods are available for objects of class \linkS4class{ph}.

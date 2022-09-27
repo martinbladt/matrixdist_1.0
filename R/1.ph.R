@@ -256,9 +256,34 @@ setMethod(
   function(x, r) {
     lim <- max(Re(eigen(x@pars$S)$values))
     if (any(r <= lim)) {
-      stop("s should be above the largest real eigenvalue")
+      stop("r should be above the largest real eigenvalue of S")
     }
     l <- ph_laplace(r, x@pars$alpha, x@pars$S)
+    return(l)
+  }
+)
+
+#' Mgf Method for phase-type distributions
+#'
+#' @param x An object of class \linkS4class{ph}.
+#' @param r A vector of real values.
+#'
+#' @return The mgf of the \linkS4class{ph} (or undelying \linkS4class{ph}) object
+#'  at the given locations.
+#' @export
+#'
+#' @examples
+#' set.seed(123)
+#' ph1 <- ph(structure = "general", dimension = 3)
+#' mgf(ph1, 0.4)
+setMethod(
+  "mgf", signature(x = "ph"),
+  function(x, r) {
+    lim <- -max(Re(eigen(x@pars$S)$values))
+    if (any(r > lim)) {
+      stop("r should be below the negative largest real eigenvalue of S")
+    }
+    l <- ph_laplace(-r, x@pars$alpha, x@pars$S)
     return(l)
   }
 )

@@ -12,7 +12,7 @@
 \item{r}{A vector of real values.}
 }
 \value{
-The Laplace tranform of the \linkS4class{ph} 
+The Laplace tranform of the \linkS4class{ph}
  (or undelying \linkS4class{ph}) object at the given locations.
 }
 \description{
