@@ -205,6 +205,47 @@ setMethod(
   }
 )
 
+#' Mean Method for discrete phase-type distributions
+#'
+#' @param x An object of class \linkS4class{dph}.
+#'
+#' @return The raw first moment of the \linkS4class{dph} object.
+#' @export
+#'
+#' @examples
+#' set.seed(123)
+#' dph1 <- dph(structure = "general", dimension = 3)
+#' mean(dph1)
+setMethod(
+  "mean", signature(x = "dph"),
+  function(x) {
+    m <- solve(diag(nrow(x@pars$S)) - x@pars$S)
+    return(sum(x@pars$alpha %*% m))
+  }
+)
+
+#' Var Method for discrete phase-type distributions
+#'
+#' @param x An object of class \linkS4class{dph}.
+#'
+#' @return The variance of the \linkS4class{dph} object.
+#' @export
+#'
+#' @examples
+#' set.seed(123)
+#' dph1 <- dph(structure = "general", dimension = 3)
+#' var(dph1)
+setMethod(
+  "var", signature(x = "dph"),
+  function(x) {
+    m <- solve(diag(nrow(x@pars$S)) - x@pars$S)
+    fm <- sum(x@pars$alpha %*% m)
+    m2 <- matrix_power(2, m)
+    sm <- 2 * sum(x@pars$alpha %*% x@pars$S %*% m2)
+    return(sm + fm - fm^2)
+  }
+)
+
 #' Simulation Method for phase-type distributions
 #'
 #' @param x An object of class \linkS4class{dph}.

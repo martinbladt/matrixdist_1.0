@@ -232,3 +232,34 @@ setMethod("marginal", c(x = "bivph"), function(x, mar = 1) {
   }
   return(x0)
 })
+
+#' Linear Combination method for bivariate phase-type distributions
+#'
+#' @param x An object of class \linkS4class{bivph}.
+#' @param w A vector with non-negative entries.
+#'
+#' @return An object of class \linkS4class{ph}.
+#' @export
+#'
+#' @examples
+#' obj <- bivph(dimensions = c(3, 3))
+#' linCom(obj, c(1, 0))
+setMethod("linCom", c(x = "bivph"), function(x, w = c(1, 1)) {
+  if (length(w) != 2) {
+    stop("vector of wrong dimension")
+  }
+  if (any(w < 0)) {
+    stop("vector with negative entries")
+  }
+  if (all(w == 0)) {
+    stop("vector with all entries zero")
+  }
+  p1_aux <- dim(x@pars$S11)[1]
+  p2_aux <- dim(x@pars$S22)[1]
+  alpha_aux <- c(x@pars$alpha, rep(0, p2_aux))
+  S_aux <- merge_matrices(x@pars$S11, x@pars$S12, x@pars$S22)
+  R_aux <- matrix(c(c(rep(1, p1_aux), rep(0, p2_aux)), c(rep(0, p1_aux), rep(1, p2_aux))), ncol = 2)
+  L <- linear_combination(w, alpha_aux, S_aux, R_aux)
+  x0 <- ph(alpha = L$alpha, S = L$S)
+  return(x0)
+})

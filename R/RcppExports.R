@@ -1293,16 +1293,29 @@ transf_via_rew <- function(R, Qtilda, alpha, S) {
     .Call(`_matrixdist_transf_via_rew`, R, Qtilda, alpha, S)
 }
 
-#' Performs TVR
+#' Performs TVR for phase-type distributions
 #'
 #' @param alpha Initial distribution vector.
 #' @param S Sub-intensity matrix.
 #' @param R Reward vector.
 #'
-#' @return A list of PH parameters.
+#' @return A list of phase-type parameters.
 #'
 tvr_ph <- function(alpha, S, R) {
     .Call(`_matrixdist_tvr_ph`, alpha, S, R)
+}
+
+#' Computes PH parameters of a linear combination of vector from MPHstar
+#'
+#' @param w Vector with weights.
+#' @param alpha Initial distribution vector.
+#' @param S Sub-intensity matrix.
+#' @param R Reward matrix.
+#'
+#' @return A list of PH parameters.
+#' 
+linear_combination <- function(w, alpha, S, R) {
+    .Call(`_matrixdist_linear_combination`, w, alpha, S, R)
 }
 
 #' Product of two matrices

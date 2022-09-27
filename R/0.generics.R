@@ -7,10 +7,7 @@
 #'
 #' @return A realization from the matrix distribution.
 #'
-#'
-setGeneric("sim", function(x, ...) {
-  standardGeneric("sim")
-})
+setGeneric("sim", function(x, ...) standardGeneric("sim"))
 
 #' New Generic for Moment of Matrix Distributions
 #'
@@ -21,11 +18,7 @@ setGeneric("sim", function(x, ...) {
 #'
 #' @return Moment of the matrix distribution.
 #'
-#'
-setGeneric("moment", function(x, ...) {
-  standardGeneric("moment")
-})
-
+setGeneric("moment", function(x, ...) standardGeneric("moment"))
 
 #' New Generic for Minimum of two Matrix Distributions
 #'
@@ -37,10 +30,7 @@ setGeneric("moment", function(x, ...) {
 #'
 #' @return An object of the model class.
 #'
-#'
-setGeneric("minimum", function(x1, x2, ...) {
-  standardGeneric("minimum")
-})
+setGeneric("minimum", function(x1, x2, ...) standardGeneric("minimum"))
 
 #' New Generic for Maximum of two Matrix Distributions
 #'
@@ -52,10 +42,7 @@ setGeneric("minimum", function(x1, x2, ...) {
 #'
 #' @return An object of the model class.
 #'
-#'
-setGeneric("maximum", function(x1, x2, ...) {
-  standardGeneric("maximum")
-})
+setGeneric("maximum", function(x1, x2, ...) standardGeneric("maximum"))
 
 #' New Generic for Mixture of two Matrix Distributions
 #'
@@ -67,10 +54,7 @@ setGeneric("maximum", function(x1, x2, ...) {
 #'
 #' @return An object of the model class.
 #'
-#'
-setGeneric("mixture", function(x1, x2, ...) {
-  standardGeneric("mixture")
-})
+setGeneric("mixture", function(x1, x2, ...) standardGeneric("mixture"))
 
 #' New Generic for the Density of Matrix Distributions
 #'
@@ -81,10 +65,7 @@ setGeneric("mixture", function(x1, x2, ...) {
 #'
 #' @return Density from the matrix distribution.
 #'
-#'
-setGeneric("dens", function(x, ...) {
-  standardGeneric("dens")
-})
+setGeneric("dens", function(x, ...) standardGeneric("dens"))
 
 #' New Generic for the Hazard rate of Matrix Distributions
 #'
@@ -95,10 +76,7 @@ setGeneric("dens", function(x, ...) {
 #'
 #' @return Hazard rate from the matrix distribution.
 #'
-#'
-setGeneric("haz", function(x, ...) {
-  standardGeneric("haz")
-})
+setGeneric("haz", function(x, ...) standardGeneric("haz"))
 
 #' New Generic for the Distribution of Matrix Distributions
 #'
@@ -109,10 +87,7 @@ setGeneric("haz", function(x, ...) {
 #'
 #' @return CDF from the matrix distribution.
 #'
-#'
-setGeneric("cdf", function(x, ...) {
-  standardGeneric("cdf")
-})
+setGeneric("cdf", function(x, ...) standardGeneric("cdf"))
 
 #' New Generic for the Quantile of Matrix Distributions
 #'
@@ -123,10 +98,7 @@ setGeneric("cdf", function(x, ...) {
 #'
 #' @return Quantile from the matrix distribution.
 #'
-#'
-setGeneric("quan", function(x, ...) {
-  standardGeneric("quan")
-})
+setGeneric("quan", function(x, ...) standardGeneric("quan"))
 
 #' New Generic for Estimating Matrix Distributions
 #'
@@ -138,10 +110,7 @@ setGeneric("quan", function(x, ...) {
 #'
 #' @return An object of the fitted model class.
 #'
-#'
-setGeneric("fit", function(x, y, ...) {
-  standardGeneric("fit")
-})
+setGeneric("fit", function(x, y, ...) standardGeneric("fit"))
 
 #' New Generic for Regression with Matrix Distributions
 #'
@@ -154,10 +123,7 @@ setGeneric("fit", function(x, y, ...) {
 #' @return An object of the fitted model class.
 #' @export
 #'
-#'
-setGeneric("reg", function(x, y, ...) {
-  standardGeneric("reg")
-})
+setGeneric("reg", function(x, y, ...) standardGeneric("reg"))
 
 #' New Generic for Evaluating Survival Matrix Distributions
 #'
@@ -169,9 +135,7 @@ setGeneric("reg", function(x, y, ...) {
 #'
 #' @export
 #'
-setGeneric("evaluate", function(x, subject, ...) {
-  standardGeneric("evaluate")
-})
+setGeneric("evaluate", function(x, subject, ...) standardGeneric("evaluate"))
 
 #' New Generic for doing a likelihood ratio test between two Matrix Distribution
 #'  models
@@ -184,10 +148,7 @@ setGeneric("evaluate", function(x, subject, ...) {
 #' @return A likelihood ratio test result.
 #' @export
 #'
-#'
-setGeneric("LRT", function(x, y, ...) {
-  standardGeneric("LRT")
-})
+setGeneric("LRT", function(x, y, ...) standardGeneric("LRT"))
 
 #' New Generic for obtaining the Fisher Information of Survival Matrix Distributions
 #'
@@ -198,9 +159,7 @@ setGeneric("LRT", function(x, y, ...) {
 #'
 #' @export
 #'
-setGeneric("Fisher", function(x, ...) {
-  standardGeneric("Fisher")
-})
+setGeneric("Fisher", function(x, ...) standardGeneric("Fisher"))
 
 #' New Generic for the transformation via rewards of a phase-type distribution
 #'
@@ -211,10 +170,7 @@ setGeneric("Fisher", function(x, ...) {
 #'
 #' @return An object of the model class.
 #'
-#'
-setGeneric("TVR", function(x, ...) {
-  standardGeneric("TVR")
-})
+setGeneric("TVR", function(x, ...) standardGeneric("TVR"))
 
 #' New Generic for Regression with Matrix Distributions
 #'
@@ -227,10 +183,7 @@ setGeneric("TVR", function(x, ...) {
 #' @return An object of the fitted model class.
 #' @export
 #'
-#'
-setGeneric("MoE", function(x, y, ...) {
-  standardGeneric("MoE")
-})
+setGeneric("MoE", function(x, y, ...) standardGeneric("MoE"))
 
 #' New generic for the marginals of multivariate matrix distributions
 #'
@@ -241,7 +194,19 @@ setGeneric("MoE", function(x, y, ...) {
 #'
 #' @return Marginal of the matrix distribution.
 #'
+setGeneric("marginal", function(x, ...) standardGeneric("marginal"))
+
+#' New generic for linear combinations of multivariate matrix distributions
 #'
-setGeneric("marginal", function(x, ...) {
-  standardGeneric("marginal")
-})
+#' Methods are available for objects of multivariate classes.
+#'
+#' @param x An object of the model class.
+#' @param ... Further parameters to be passed on.
+#'
+#' @return Marginal of the matrix distribution.
+#'
+setGeneric("linCom", function(x, ...) standardGeneric("linCom"))
+
+setGeneric("mean")
+
+setGeneric("var")

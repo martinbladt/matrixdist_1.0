@@ -483,13 +483,13 @@ Rcpp::List transf_via_rew(arma::mat R,arma::mat Qtilda, arma::vec alpha, arma::m
 }
 
 
-//' Performs TVR
+//' Performs TVR for phase-type distributions
 //'
 //' @param alpha Initial distribution vector.
 //' @param S Sub-intensity matrix.
 //' @param R Reward vector.
 //'
-//' @return A list of PH parameters.
+//' @return A list of phase-type parameters.
 //'
 // [[Rcpp::export]]
 Rcpp::List tvr_ph(arma::vec alpha, arma::mat S, arma::vec R) {
@@ -565,3 +565,82 @@ Rcpp::List tvr_ph(arma::vec alpha, arma::mat S, arma::vec R) {
 }
 
 
+//' Computes PH parameters of a linear combination of vector from MPHstar
+//'
+//' @param w Vector with weights.
+//' @param alpha Initial distribution vector.
+//' @param S Sub-intensity matrix.
+//' @param R Reward matrix.
+//'
+//' @return A list of PH parameters.
+//' 
+// [[Rcpp::export]]
+Rcpp::List linear_combination(arma::vec w, arma::vec alpha, arma::mat S, arma::mat R) {
+  unsigned p{S.n_rows};
+  
+  unsigned n0{0};
+  std::vector<int> delete_rows; 
+  std::vector<int> keep_rows;
+  
+  arma::mat Rw_m = R * w;
+  arma::vec Rw = Rw_m.col(0);
+  
+  for (int j{0}; j < p; ++j) {
+    if (Rw[j] == 0) {
+      delete_rows.push_back(j);
+      ++n0;
+    }
+    else {
+      keep_rows.push_back(j);
+    }
+  }
+  
+  unsigned np{p - n0};
+  
+  arma::rowvec alpha_trans(np);
+  arma::mat S_trans(np,np);
+  
+  if (n0 == 0) {
+    S_trans = diagmat(Rw) * S;
+    alpha_trans = alpha.t();
+  } else {
+    arma::mat Spp(np,np);
+    arma::mat Sp0(np,n0);
+    arma::mat S0p(n0,np);
+    arma::mat S00(n0,n0);
+    
+    arma::rowvec alpha0(n0);
+    arma::rowvec alphap(np);
+    
+    for (int i{0}; i < np; i++) {
+      for (int j = 0; j < np; j++) {
+        Spp(i,j) = S(keep_rows[i],keep_rows[j]);
+      }
+      for (int j{0}; j < n0; j++) {
+        Sp0(i,j) = S(keep_rows[i],delete_rows[j]);
+      }
+      alphap[i] = alpha[keep_rows[i]];
+    }
+    for (int i{0}; i < n0; i++) {
+      for (int j{0}; j < np; j++) {
+        S0p(i,j) = S(delete_rows[i],keep_rows[j]);
+      }
+      for (int j{0}; j < n0; j++){
+        S00(i,j) = S(delete_rows[i],delete_rows[j]);
+      }
+      alpha0[i] = alpha[delete_rows[i]];
+    }
+    
+    alpha_trans = alphap + alpha0 * inv(S00 * (-1)) * S0p;
+    arma::mat S_aux = Spp + Sp0 * inv(S00 * (-1)) * S0p;
+    
+    arma::mat diagonal(np, np);
+    for (int i{0}; i < np; ++i) {
+      diagonal(i,i) = 1.0 / Rw[keep_rows[i]];
+    }
+    S_trans = diagonal * S_aux;
+  }
+  
+  Rcpp::List x = Rcpp::List::create(Rcpp::Named("alpha") = alpha_trans, Rcpp::_["S"] = S_trans);
+  return (x);
+}

@@ -114,6 +114,32 @@ setMethod("marginal", c(x = "MPHstar"), function(x, mar = 1) {
   return(x0)
 })
 
+#' Linear Combination method for MPHstar class
+#'
+#' @param x An object of class \linkS4class{MPHstar}.
+#' @param w A vector with non-negative entries.
+#'
+#' @return An object of class \linkS4class{ph}.
+#' @export
+#'
+#' @examples
+#' obj <- MPHstar(structure = "general")
+#' linCom(obj, c(1, 0))
+setMethod("linCom", c(x = "MPHstar"), function(x, w) {
+  if (length(w) != ncol(x@pars$R)) {
+    stop("vector of wrong dimension")
+  }
+  if (any(w < 0)) {
+    stop("vector with negative entries")
+  }
+  if (all(w == 0)) {
+    stop("vector with all entries zero")
+  }
+  L <- linear_combination(w, x@pars$alpha, x@pars$S, x@pars$R)
+  x0 <- ph(alpha = L$alpha, S = L$S)
+  return(x0)
+})
+
 #' Find weight of observations
 #'
 #' @param x A vector of observations from which we want to know their weights.

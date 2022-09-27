@@ -188,10 +188,7 @@ setMethod(
       warning("moment of undelying ph structure is provided for iph objects")
     }
     m <- solve(-x@pars$S)
-    prod <- diag(nrow(m))
-    for (i in 1:k) {
-      prod <- prod %*% m
-    }
+    prod <- matrix_power(k, m)
     return(factorial(k) * sum(x@pars$alpha %*% prod))
   }
 )
@@ -215,6 +212,29 @@ setMethod(
     }
     m <- solve(-x@pars$S)
     return(sum(x@pars$alpha %*% m))
+  }
+)
+
+#' Var Method for phase-type distributions
+#'
+#' @param x An object of class \linkS4class{ph}.
+#'
+#' @return The variance of the \linkS4class{ph} (or undelying \linkS4class{ph}) object.
+#' @export
+#'
+#' @examples
+#' set.seed(123)
+#' ph1 <- ph(structure = "general", dimension = 3)
+#' var(ph1)
+setMethod(
+  "var", signature(x = "ph"),
+  function(x) {
+    if (methods::is(x, "iph")) {
+      warning("variance of undelying ph structure is provided for iph objects")
+    }
+    m <- solve(-x@pars$S)
+    m2 <- matrix_power(2, m)
+    return(2 * sum(x@pars$alpha %*% m2) - (sum(x@pars$alpha %*% m))^2)
   }
 )
 

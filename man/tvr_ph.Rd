@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{tvr_ph}
 \alias{tvr_ph}
-\title{Performs TVR}
+\title{Performs TVR for phase-type distributions}
 \usage{
 tvr_ph(alpha, S, R)
 }
@@ -14,8 +14,8 @@ tvr_ph(alpha, S, R)
 \item{R}{Reward vector.}
 }
 \value{
-A list of PH parameters.
+A list of phase-type parameters.
 }
 \description{
-Performs TVR
+Performs TVR for phase-type distributions
 }
