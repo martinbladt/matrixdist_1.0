@@ -1829,6 +1829,18 @@ tvr_ph <- function(alpha, S, R) {
     .Call(`_matrixdist_tvr_ph`, alpha, S, R)
 }
 
+#' Performs TVR for discrete phase-type distributions
+#'
+#' @param alpha Initial distribution vector.
+#' @param S Sub-intensity matrix.
+#' @param R Reward vector.
+#'
+#' @return A list of PH parameters.
+#' 
+tvr_dph <- function(alpha, S, R) {
+    .Call(`_matrixdist_tvr_dph`, alpha, S, R)
+}
+
 #' Computes PH parameters of a linear combination of vector from MPHstar
 #'
 #' @param w Vector with weights.

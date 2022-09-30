@@ -335,6 +335,61 @@ setMethod("cdf", c(x = "dph"), function(x,
   return(cdf)
 })
 
+#' TVR Method for dph Class
+#'
+#' @param x An object of class \linkS4class{dph}.
+#' @param rew A vector of rewards.
+#'
+#' @return An object of the of class \linkS4class{dph}.
+#' @export
+#'
+#' @examples
+#' obj <- dph(structure = "general")
+#' TVR(obj, c(1, 0, 1))
+setMethod("TVR", c(x = "dph"), function(x, rew) {
+  if (length(x@pars$alpha) != length(rew)) {
+    stop("vector of rewards of wrong dimension")
+  } 
+  if (any((rew %% 1) != 0) | any(rew < 0)) {
+    stop("vector of rewards must contain only non-negative integeras")
+  }
+  alpha_copy <- x@pars$alpha
+  S_copy <- x@pars$S
+  
+  mat_sizes <- rew + (rew == 0)
+  
+  rew_tilde <- NULL
+  alpha_tilde <- NULL
+  S_tilde <- NULL
+  for (i in 1:length(rew)) {
+    S_row <- NULL
+    for (j in 1:length(rew)) {
+      mat_aux <- matrix(0, nrow = mat_sizes[i], ncol = mat_sizes[j])
+      if (i == j) {
+        mat_aux[-mat_sizes[i], -1] <- diag(1, mat_sizes[i] - 1)
+      }
+      mat_aux[mat_sizes[i], 1] <- S_copy[i, j]
+      S_row <- cbind(S_row, mat_aux)
+    }
+    S_tilde <- rbind(S_tilde, S_row)
+    
+    alpha_aux <- rep(0, mat_sizes[i])
+    alpha_aux[1] <- alpha_copy[i]
+    alpha_tilde <- c(alpha_tilde, alpha_aux)
+    
+    if(rew[i] != 0) {
+      rew_tilde <- c(rew_tilde, rep(1, rew[i]))
+    } else {
+      rew_tilde <- c(rew_tilde, 0)
+    }
+  }
+  
+  mar_par <- tvr_dph(alpha_tilde, S_tilde, rew_tilde)
+  x0 <- dph(alpha = mar_par[[1]], S = mar_par[[2]])
+  return(x0)
+})
+
+
 #' Fit Method for dph Class
 #'
 #' @param x An object of class \linkS4class{dph}.

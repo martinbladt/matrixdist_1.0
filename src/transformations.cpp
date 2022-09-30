@@ -129,6 +129,72 @@ Rcpp::List tvr_ph(arma::vec alpha, arma::mat S, arma::vec R) {
 }
 
 
+//' Performs TVR for discrete phase-type distributions
+//'
+//' @param alpha Initial distribution vector.
+//' @param S Sub-intensity matrix.
+//' @param R Reward vector.
+//'
+//' @return A list of PH parameters.
+//' 
+// [[Rcpp::export]]
+Rcpp::List tvr_dph(arma::vec alpha, arma::mat S, arma::vec R) {
+  unsigned p{S.n_rows};
+  
+  unsigned n0{0};
+  std::vector<int> delete_rows; 
+  std::vector<int> keep_rows;
+  
+  for (int j{0}; j < p; ++j) {
+    if (R[j] == 0) {
+      delete_rows.push_back(j);
+      ++n0;
+    }
+    else {
+      keep_rows.push_back(j);
+    }
+  }
+  
+  unsigned np{p - n0};
+  
+  arma::rowvec alpha_trans(np);
+  arma::mat S_trans(np,np);
+  
+  arma::mat Spp(np,np);
+  arma::mat Sp0(np,n0);
+  arma::mat S0p(n0,np);
+  arma::mat S00(n0,n0);
+    
+  arma::rowvec alpha0(n0);
+  arma::rowvec alphap(np);
+    
+  for (int i{0}; i < np; i++) {
+    for (int j = 0; j < np; j++) {
+      Spp(i,j) = S(keep_rows[i],keep_rows[j]);
+    }
+    for (int j{0}; j < n0; j++) {
+      Sp0(i,j) = S(keep_rows[i],delete_rows[j]);
+    }
+    alphap[i] = alpha[keep_rows[i]];
+  }
+  for (int i{0}; i < n0; i++) {
+    for (int j{0}; j < np; j++) {
+      S0p(i,j) = S(delete_rows[i],keep_rows[j]);
+    }
+    for (int j{0}; j < n0; j++){
+      S00(i,j) = S(delete_rows[i],delete_rows[j]);
+    }
+    alpha0[i] = alpha[delete_rows[i]];
+  }
+  
+  alpha_trans = alphap + alpha0 * inv(arma::eye(n0,n0) - S00) * S0p;
+  S_trans = Spp + Sp0 * inv(arma::eye(n0,n0) - S00) * S0p;
+  
+  Rcpp::List x = Rcpp::List::create(Rcpp::Named("alpha") = alpha_trans, Rcpp::_["S"] = S_trans);
+  return (x);
+}
+
+
 //' Computes PH parameters of a linear combination of vector from MPHstar
 //'
 //' @param w Vector with weights.

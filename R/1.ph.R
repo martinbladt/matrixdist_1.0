@@ -673,9 +673,11 @@ setMethod("LRT", c(x = "ph", y = "ph"), function(x, y) {
 setMethod("TVR", c(x = "ph"), function(x, rew) {
   if (length(x@pars$alpha) != length(rew)) {
     stop("vector of rewards of wrong dimension")
-  } else {
-    mar_par <- tvr_ph(x@pars$alpha, x@pars$S, rew)
-    x0 <- ph(alpha = mar_par[[1]], S = mar_par[[2]])
+  } 
+  if (any(rew < 0)) {
+    stop("vector of rewards with negative entries")
   }
+  mar_par <- tvr_ph(x@pars$alpha, x@pars$S, rew)
+  x0 <- ph(alpha = mar_par[[1]], S = mar_par[[2]])
   return(x0)
 })

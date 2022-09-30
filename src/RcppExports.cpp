@@ -1938,6 +1938,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// tvr_dph
+Rcpp::List tvr_dph(arma::vec alpha, arma::mat S, arma::vec R);
+RcppExport SEXP _matrixdist_tvr_dph(SEXP alphaSEXP, SEXP SSEXP, SEXP RSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type S(SSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type R(RSEXP);
+    rcpp_result_gen = Rcpp::wrap(tvr_dph(alpha, S, R));
+    return rcpp_result_gen;
+END_RCPP
+}
 // linear_combination
 Rcpp::List linear_combination(arma::vec w, arma::vec alpha, arma::mat S, arma::mat R);
 RcppExport SEXP _matrixdist_linear_combination(SEXP wSEXP, SEXP alphaSEXP, SEXP SSEXP, SEXP RSEXP) {
@@ -2081,6 +2094,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_n_pos", (DL_FUNC) &_matrixdist_n_pos, 1},
     {"_matrixdist_plus_states", (DL_FUNC) &_matrixdist_plus_states, 1},
     {"_matrixdist_tvr_ph", (DL_FUNC) &_matrixdist_tvr_ph, 3},
+    {"_matrixdist_tvr_dph", (DL_FUNC) &_matrixdist_tvr_dph, 3},
     {"_matrixdist_linear_combination", (DL_FUNC) &_matrixdist_linear_combination, 4},
     {NULL, NULL, 0}
 };
