@@ -25,7 +25,7 @@ setClass("miph",
 #' @param structure A vector of valid ph structures.
 #' @param dimension The dimension of the ph structure (if provided).
 #' @param variables Number of marginals.
-#' @param gfun Vector of inhomogeneity transform.
+#' @param gfun Vector of inhomogeneity transforms.
 #' @param gfun_pars List of parameters for the inhomogeneity functions.
 #' @param scale Scale.
 #'

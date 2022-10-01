@@ -89,6 +89,18 @@ setGeneric("maximum", function(x1, x2, ...) standardGeneric("maximum"))
 #'
 setGeneric("mixture", function(x1, x2, ...) standardGeneric("mixture"))
 
+#' New Generic for N-fold convolution of two Matrix Distributions
+#'
+#' Methods are available for objects of classes \linkS4class{ph} and \linkS4class{dph}.
+#'
+#' @param x1 An object of the class \linkS4class{dph}.
+#' @param x2 An object of the model class.
+#' @param ... Further parameters to be passed on.
+#'
+#' @return An object of the model class.
+#'
+setGeneric("Nfold", function(x1, x2, ...) standardGeneric("Nfold"))
+
 #' New Generic for the Density of Matrix Distributions
 #'
 #' Methods are available for objects of class \linkS4class{ph}.

@@ -12,7 +12,7 @@
 \item{z}{A vector of real values.}
 }
 \value{
-The probability generating of the \linkS4class{dph} object at the 
+The probability generating of the \linkS4class{dph} object at the
  given locations.
 }
 \description{

@@ -19,7 +19,7 @@ miph(
 \arguments{
 \item{mph}{An object of class \linkS4class{mph}.}
 
-\item{gfun}{Vector of inhomogeneity transform.}
+\item{gfun}{Vector of inhomogeneity transforms.}
 
 \item{gfun_pars}{List of parameters for the inhomogeneity functions.}
 
