@@ -297,6 +297,71 @@ Rcpp::NumericMatrix rMPHstar(int n, arma::vec alpha, arma::mat S, arma::mat R) {
 }
 
 
+//' Simulate a MIPH* random vector
+//'
+//' Generates a sample of size \code{n} from a MIPH* distribution with parameters
+//'  \code{alpha}, \code{S} and \code{R}.
+//'
+//' @param n Sample size.
+//' @param alpha Initial probabilities.
+//' @param S Sub-intensity matrix.
+//' @param R Reward matrix.
+//' @param gfun Vector with transformations names.
+//' @param gfun_par List with transformations parameters.
+//' @return The simulated sample.
+//' 
+// [[Rcpp::export]]
+Rcpp::NumericMatrix rMIPHstar(int n, arma::vec alpha, arma::mat S, arma::mat R, Rcpp::StringVector gfun, Rcpp::List gfun_par) {
+  unsigned dim{R.n_cols};
+  
+  Rcpp::NumericMatrix sample(n, dim);
+  
+  arma::mat cum_embedded_mc = cumulate_matrix(embedded_mc(S));
+  arma::vec cum_alpha = cumulate_vector(alpha);
+  
+  unsigned p{alpha.size()};
+  long state{0};
+  double time{0.0};
+  for (int i = 0; i < n; ++i) {
+    state = initial_state(cum_alpha, Rcpp::runif(1)[0]);
+    while (state != p) {
+      time = log(1.0 - Rcpp::runif(1)[0]) / S(state,state);
+      for (int j{0}; j < dim; ++j) {
+        sample(i,j) += R(state, j) * time;
+      }
+      state = new_state(state, cum_embedded_mc, Rcpp::runif(1)[0]);
+    }
+    for (int j{0}; j < dim; ++j) {
+      arma::vec beta = gfun_par[j];
+      if (gfun[j] == "pareto") {
+        sample(i,j) = beta[0] * (exp(sample(i,j)) - 1);
+      }
+      else if (gfun[j] == "weibull") {
+        sample(i,j) = pow(sample(i,j), 1.0 / beta[0]);
+      }
+      else if (gfun[j] == "lognormal") {
+        sample(i,j) =  exp(pow(sample(i,j), 1.0 / beta[0])) - 1;
+      }
+      else if (gfun[j] == "loglogistic") {
+        sample(i,j) = beta[0] * pow(exp(sample(i,j)) - 1, 1 / beta[1]);
+      }
+      else if (gfun[j] == "gompertz") {
+        sample(i,j) = log(beta[0] * sample(i,j) + 1) / beta[0];
+      }
+      else if (gfun[j] == "gev") {
+        if (beta[2] == 0) {
+          sample(i,j) = beta[0] - beta[1] * log(sample(i,j));
+        }
+        else {
+          sample(i,j) = beta[0] + beta[1]  * (pow(sample(i,j), - beta[2]) - 1) / beta[2];
+        }
+      }
+    }
+  }
+  return (sample);
+}
+
+
 //' Simulate discrete phase-type
 //'
 //' Generates a sample of size \code{n} from a discrete phase-type distribution with

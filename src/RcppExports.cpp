@@ -1130,6 +1130,22 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// rMIPHstar
+Rcpp::NumericMatrix rMIPHstar(int n, arma::vec alpha, arma::mat S, arma::mat R, Rcpp::StringVector gfun, Rcpp::List gfun_par);
+RcppExport SEXP _matrixdist_rMIPHstar(SEXP nSEXP, SEXP alphaSEXP, SEXP SSEXP, SEXP RSEXP, SEXP gfunSEXP, SEXP gfun_parSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type S(SSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type R(RSEXP);
+    Rcpp::traits::input_parameter< Rcpp::StringVector >::type gfun(gfunSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type gfun_par(gfun_parSEXP);
+    rcpp_result_gen = Rcpp::wrap(rMIPHstar(n, alpha, S, R, gfun, gfun_par));
+    return rcpp_result_gen;
+END_RCPP
+}
 // rdphasetype
 Rcpp::NumericVector rdphasetype(int n, arma::vec alpha, arma::mat S);
 RcppExport SEXP _matrixdist_rdphasetype(SEXP nSEXP, SEXP alphaSEXP, SEXP SSEXP) {
@@ -2034,6 +2050,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_riph", (DL_FUNC) &_matrixdist_riph, 5},
     {"_matrixdist_rmatrixgev", (DL_FUNC) &_matrixdist_rmatrixgev, 6},
     {"_matrixdist_rMPHstar", (DL_FUNC) &_matrixdist_rMPHstar, 4},
+    {"_matrixdist_rMIPHstar", (DL_FUNC) &_matrixdist_rMIPHstar, 6},
     {"_matrixdist_rdphasetype", (DL_FUNC) &_matrixdist_rdphasetype, 3},
     {"_matrixdist_rMDPHstar", (DL_FUNC) &_matrixdist_rMDPHstar, 4},
     {"_matrixdist_matrix_product", (DL_FUNC) &_matrixdist_matrix_product, 2},

@@ -1,10 +1,10 @@
 #' Multivariate Inhomogeneous Phase Type distributions
 #'
-#' Class of objects for multivariate phase-type distributions.
+#' Class of objects for multivariate inhomogeneous phase-type distributions.
 #'
 #' @slot name Name of the phase type distribution.
 #' @slot gfun A list comprising of the parameters.
-#' @slot scale SCale.
+#' @slot scale Scale.
 #'
 #' @return Class object.
 #' @export
@@ -17,7 +17,7 @@ setClass("miph",
   )
 )
 
-#' Constructor Function for inhomogeneous multivariate phase-type distributions
+#' Constructor Function for multivariate inhomogeneous phase-type distributions
 #'
 #' @param mph An object of class \linkS4class{mph}.
 #' @param alpha A probability vector.
@@ -209,6 +209,24 @@ setMethod("sim", c(x = "miph"), function(x, n = 1000) {
     }
   }
   return(U)
+})
+
+#' Marginal method for multivariate inhomogeneous phase-type distributions
+#'
+#' @param x An object of class \linkS4class{miph}.
+#' @param mar Indicator of which marginal.
+#' @return An object of the of class \linkS4class{iph}.
+#' @export
+#'
+#' @examples
+#' under_mph <- mph(structure = c("general", "general"))
+#' obj <- miph(under_mph, gfun = c("weibull", "pareto"), gfun_pars = list(c(2), c(3)))
+#' marginal(obj, 1)
+setMethod("marginal", c(x = "miph"), function(x, mar = 1) {
+  S <- x@pars$S
+  par <- x@gfun$pars
+  x0 <- iph(ph(alpha = x@pars$alpha, S = S[[mar]]), gfun = x@gfun$name[mar], gfun_pars = par[[mar]])
+  return(x0)
 })
 
 #' Density Method for multivariate inhomogeneous phase-type distributions

@@ -109,6 +109,22 @@ setMethod("sim", c(x = "mph"), function(x, n = 1000, equal_marginals = 0) {
   return(result)
 })
 
+#' Marginal method for multivariate phase-type distributions
+#'
+#' @param x An object of class \linkS4class{mph}.
+#' @param mar Indicator of which marginal.
+#' @return An object of the of class \linkS4class{ph}.
+#' @export
+#'
+#' @examples
+#' obj <- mph(structure = c("general", "general"))
+#' marginal(obj, 1)
+setMethod("marginal", c(x = "mph"), function(x, mar = 1) {
+  S <- x@pars$S
+  x0 <- ph(alpha = x@pars$alpha, S = S[[mar]])
+  return(x0)
+})
+
 #' Density Method for multivariate phase-type distributions
 #'
 #' @param x An object of class \linkS4class{mph}.
