@@ -4,7 +4,15 @@
 \alias{fit,bivph-method}
 \title{Fit Method for bivph Class}
 \usage{
-\S4method{fit}{bivph}(x, y, weight = numeric(0), stepsEM = 1000, every = 10)
+\S4method{fit}{bivph}(
+  x,
+  y,
+  weight = numeric(0),
+  stepsEM = 1000,
+  maxit = 100,
+  reltol = 1e-08,
+  every = 10
+)
 }
 \arguments{
 \item{x}{An object of class \linkS4class{bivph}.}
@@ -14,6 +22,10 @@
 \item{weight}{Vector of weights.}
 
 \item{stepsEM}{Number of EM steps to be performed.}
+
+\item{maxit}{Maximum number of iterations when optimizing g functions.}
+
+\item{reltol}{Relative tolerance when optimizing g functions.}
 
 \item{every}{Number of iterations between likelihood display updates.}
 }

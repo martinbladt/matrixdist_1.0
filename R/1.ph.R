@@ -254,6 +254,9 @@ setMethod(
 setMethod(
   "laplace", signature(x = "ph"),
   function(x, r) {
+    if (methods::is(x, "iph")) {
+      warning("Laplace transform of undelying ph structure is provided for iph objects")
+    }
     lim <- max(Re(eigen(x@pars$S)$values))
     if (any(r <= lim)) {
       stop("r should be above the largest real eigenvalue of S")
@@ -279,6 +282,9 @@ setMethod(
 setMethod(
   "mgf", signature(x = "ph"),
   function(x, r) {
+    if (methods::is(x, "iph")) {
+      warning("mgf of undelying ph structure is provided for iph objects")
+    }
     lim <- -max(Re(eigen(x@pars$S)$values))
     if (any(r > lim)) {
       stop("r should be below the negative largest real eigenvalue of S")

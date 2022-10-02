@@ -209,3 +209,42 @@ setMethod("marginal", c(x = "biviph"), function(x, mar = 1) {
   return(x0)
 })
 
+#' Density method for bivariate inhomogeneous phase-type distributions
+#'
+#' @param x An object of class \linkS4class{biviph}.
+#' @param y A matrix of locations.
+#'
+#' @return A vector containing the joint density evaluations at the given locations.
+#' @export
+#'
+#' @examples
+#' under_bivph <- bivph(dimensions = c(3, 3))
+#' obj <- biviph(under_bivph, gfun = c("weibull", "pareto"), gfun_pars = list(c(2), c(3)))
+#' dens(obj, matrix(c(0.5, 1), ncol = 2))
+setMethod("dens", c(x = "biviph"), function(x, y) {
+  gfun.pars <- x@gfun$pars
+  y1_inv <- x@gfun$inverse[[1]](gfun.pars[[1]], y[, 1])
+  y1_int <- x@gfun$intensity[[1]](gfun.pars[[1]], y[, 1])
+  y2_inv <- x@gfun$inverse[[2]](gfun.pars[[2]], y[, 2])
+  y2_int <- x@gfun$intensity[[2]](gfun.pars[[2]], y[, 2])
+  dens <- bivph_density(cbind(y1_inv, y2_inv), x@pars$alpha, x@pars$S11, x@pars$S12, x@pars$S22) * y1_int * y2_int
+  return(unname(dens))
+})
+
+#' Coef method for biviph class
+#'
+#' @param object An object of class \linkS4class{biviph}.
+#'
+#' @return Parameters of bivariate inhomogeneous phase-type model.
+#' @export
+#'
+#' @examples
+#' under_bivph <- bivph(dimensions = c(3, 3))
+#' obj <- biviph(under_bivph, gfun = c("weibull", "pareto"), gfun_pars = list(c(2), c(3)))
+#' coef(obj)
+setMethod("coef", c(object = "biviph"), function(object) {
+  L <- object@pars
+  L$gfun <- object@gfun$name
+  L$gpars <- object@gfun$pars
+  L
+})
