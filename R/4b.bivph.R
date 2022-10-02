@@ -152,8 +152,132 @@ setMethod("moment", c(x = "bivph"), function(x, k = c(1, 1)) {
   if (any((k %% 1) != 0)) {
     stop("k should be an integer")
   }
+  if (methods::is(x, "biviph")) {
+    warning("moment of undelying bivph structure is provided for biviph objects")
+  }
   ee <- rep(1, nrow(x@pars$S22))
   return(factorial(k[1]) * factorial(k[2]) * x@pars$alpha %*% matrix_power(k[1] + 1, base::solve(-x@pars$S11)) %*% x@pars$S12 %*% matrix_power(k[2], base::solve(-x@pars$S22)) %*% ee)
+})
+
+#' Mean Method for bivph class
+#'
+#' @param x An object of class \linkS4class{bivph}.
+#'
+#' @return The mean of the bivariate phase-type distribution.
+#' @export
+#'
+#' @examples
+#' obj <- bivph(dimensions = c(3, 3))
+#' mean(obj)
+setMethod("mean", c(x = "bivph"), function(x) {
+  if (methods::is(x, "biviph")) {
+    warning("mean of undelying bivph structure is provided for biviph objects")
+  }
+  suppressWarnings(c(moment(x, c(1, 0)), moment(x, c(0, 1))))
+})
+
+#' Var Method for bivph class
+#'
+#' @param x An object of class \linkS4class{bivph}.
+#'
+#' @return The covariance matrix of the bivariate phase-type distribution.
+#' @export
+#'
+#' @examples
+#' obj <- bivph(dimensions = c(3, 3))
+#' var(obj)
+setMethod("var", c(x = "bivph"), function(x) {
+  if (methods::is(x, "biviph")) {
+    warning("covariance matrix of undelying bivph structure is provided for biviph objects")
+  }
+  re <- matrix(0, 2, 2)
+  re[1, 1] <- suppressWarnings(moment(x, c(2, 0)) - moment(x, c(1, 0))^2)
+  re[1, 2] <- suppressWarnings(moment(x, c(1, 1)) - moment(x, c(1, 0)) * moment(x, c(0, 1)))
+  re[2, 1] <- re[1, 2]
+  re[2, 2] <- suppressWarnings(moment(x, c(0, 2)) - moment(x, c(0, 1))^2)
+  return(re)
+})
+
+#' Cor Method for bivph class
+#'
+#' @param x An object of class \linkS4class{bivph}.
+#'
+#' @return The correlation matrix of the bivariate phase-type distribution.
+#' @export
+#'
+#' @examples
+#' obj <- bivph(dimensions = c(3, 3))
+#' cor(obj)
+setMethod("cor", c(x = "bivph"), function(x) {
+  if (methods::is(x, "biviph")) {
+    warning("correlation matrix of undelying bivph structure is provided for biviph objects")
+  }
+  suppressWarnings(stats::cov2cor(var(x)))
+})
+
+#' Laplace Method for bivph class
+#'
+#' @param x An object of class \linkS4class{mph}.
+#' @param r A matrix of real values.
+#'
+#' @return A vector containing the corresponding Laplace transform evaluations.
+#' @export
+#'
+#' @examples
+#' obj <- bivph(dimensions = c(3, 3))
+#' laplace(obj, matrix(c(0.5, 1), ncol = 2))
+setMethod("laplace", c(x = "bivph"), function(x, r) {
+  if (methods::is(x, "biviph")) {
+    warning("Laplace transform of undelying bivph structure is provided for biviph objects")
+  }
+
+  if (is.vector(r)) {
+    n <- 1
+    r <- t(r)
+  }
+
+  lim1 <- max(Re(eigen(x@pars$S11)$values))
+  lim2 <- max(Re(eigen(x@pars$S22)$values))
+  if (any(r[, 1] <= lim1) | any(r[, 2] <= lim2)) {
+    stop("r should be above the largest real eigenvalue of S")
+  }
+
+  res <- bivph_laplace(r, x@pars$alpha, x@pars$S11, x@pars$S12, x@pars$S22)
+
+  return(res)
+})
+
+#' Mgf Method for bivph class
+#'
+#' @param x An object of class \linkS4class{mph}.
+#' @param r A matrix of real values.
+#'
+#' @return A vector containing the corresponding mgf evaluations.
+#' @export
+#'
+#' @examples
+#' set.seed(123)
+#' obj <- bivph(dimensions = c(3, 3))
+#' mgf(obj, matrix(c(0.5, 0.1), ncol = 2))
+setMethod("mgf", c(x = "bivph"), function(x, r) {
+  if (methods::is(x, "biviph")) {
+    warning("mgf of undelying bivph structure is provided for biviph objects")
+  }
+
+  if (is.vector(r)) {
+    n <- 1
+    r <- t(r)
+  }
+
+  lim1 <- -max(Re(eigen(x@pars$S11)$values))
+  lim2 <- -max(Re(eigen(x@pars$S22)$values))
+  if (any(r[, 1] > lim1) | any(r[, 2] > lim2)) {
+    stop("r should be below the negative largest real eigenvalue of S")
+  }
+
+  res <- bivph_laplace(-r, x@pars$alpha, x@pars$S11, x@pars$S12, x@pars$S22)
+
+  return(res)
 })
 
 #' Marginal method for bivph class

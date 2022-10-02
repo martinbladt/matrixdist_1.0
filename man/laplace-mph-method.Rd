@@ -18,6 +18,7 @@ A vector containing the corresponding Laplace transform evaluations.
 Laplace Method for multivariate phase-type distributions
 }
 \examples{
+set.seed(123)
 obj <- mph(structure = c("general", "general"))
 laplace(obj, matrix(c(0.5, 1), ncol = 2))
 }

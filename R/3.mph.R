@@ -294,6 +294,7 @@ setMethod("cdf", c(x = "mph"), function(x,
 #' @export
 #'
 #' @examples
+#' set.seed(123)
 #' obj <- mph(structure = c("general", "general"))
 #' laplace(obj, matrix(c(0.5, 1), ncol = 2))
 setMethod("laplace", c(x = "mph"), function(x, r) {
@@ -338,6 +339,39 @@ setMethod("laplace", c(x = "mph"), function(x, r) {
   return(res)
 })
 
+#' Mgf Method for multivariate phase-type distributions
+#'
+#' @param x An object of class \linkS4class{mph}.
+#' @param r A matrix of real values.
+#'
+#' @return A vector containing the corresponding mgf evaluations.
+#' @export
+#'
+#' @examples
+#' set.seed(124)
+#' obj <- mph(structure = c("general", "general"))
+#' mgf(obj, matrix(c(0.5, 0.3), ncol = 2))
+setMethod("mgf", c(x = "mph"), function(x, r) {
+  if (methods::is(x, "miph")) {
+    warning("mgf of undelying mph structure is provided for miph objects")
+  }
+  S <- x@pars$S
+  d <- length(x@pars$S)
+
+  if (is.vector(r)) {
+    r <- t(r)
+  }
+
+  for (i in 1:d) {
+    lim <- -max(Re(eigen(S[[i]])$values))
+    if (any(r[, i] > lim)) {
+      stop("r should be below the negative largest real eigenvalue of S")
+    }
+  }
+
+  return(laplace(x, -r))
+})
+
 #' Moment Method for multivariate phase-type distributions
 #'
 #' @param x An object of class \linkS4class{mph}.
@@ -350,14 +384,14 @@ setMethod("laplace", c(x = "mph"), function(x, r) {
 #' obj <- mph(structure = c("general", "general"))
 #' moment(obj, c(2, 1))
 setMethod("moment", c(x = "mph"), function(x, k) {
-  if (methods::is(x, "miph")) {
-    warning("moment of undelying mph structure is provided for miph objects")
-  }
   if (all(k == 0) | any(k < 0)) {
     stop("k should be non-negative and not zero")
   }
   if (any((k %% 1) != 0)) {
     stop("k should be an integer")
+  }
+  if (methods::is(x, "miph")) {
+    warning("moment of undelying mph structure is provided for miph objects")
   }
   alpha <- x@pars$alpha
   S <- x@pars$S
@@ -390,12 +424,15 @@ setMethod("moment", c(x = "mph"), function(x, k) {
 #' obj <- mph(structure = c("general", "general"))
 #' mean(obj)
 setMethod("mean", c(x = "mph"), function(x) {
+  if (methods::is(x, "miph")) {
+    warning("mean of undelying mph structure is provided for miph objects")
+  }
   d <- length(x@pars$S)
   res <- rep(0, d)
   for (i in 1:d) {
     mom_vect <- rep(0, d)
     mom_vect[i] <- 1
-    res[i] <- moment(x, mom_vect)
+    res[i] <- suppressWarnings(moment(x, mom_vect))
   }
 
   return(res)
@@ -412,6 +449,9 @@ setMethod("mean", c(x = "mph"), function(x) {
 #' obj <- mph(structure = c("general", "general"))
 #' var(obj)
 setMethod("var", c(x = "mph"), function(x) {
+  if (methods::is(x, "miph")) {
+    warning("covariance matrix of undelying mph structure is provided for miph objects")
+  }
   d <- length(x@pars$S)
   res <- matrix(0, d, d)
   for (i in 1:d) {
@@ -420,10 +460,10 @@ setMethod("var", c(x = "mph"), function(x) {
     for (j in i:d) {
       mom_vect2 <- rep(0, d)
       mom_vect2[j] <- 1
-      res[i, j] <- moment(x, mom_vect1 + mom_vect2) - moment(x, mom_vect1) * moment(x, mom_vect2)
+      res[i, j] <- suppressWarnings(moment(x, mom_vect1 + mom_vect2) - moment(x, mom_vect1) * moment(x, mom_vect2))
     }
   }
-  res[lower.tri(res)] = t(res)[lower.tri(res)]
+  res[lower.tri(res)] <- t(res)[lower.tri(res)]
   return(res)
 })
 
@@ -438,7 +478,10 @@ setMethod("var", c(x = "mph"), function(x) {
 #' obj <- mph(structure = c("general", "general"))
 #' cor(obj)
 setMethod("cor", c(x = "mph"), function(x) {
-  stats::cov2cor(var(x))
+  if (methods::is(x, "miph")) {
+    warning("correlation matrix of undelying mph structure is provided for miph objects")
+  }
+  suppressWarnings(stats::cov2cor(var(x)))
 })
 
 #' Fit Method for mph Class
