@@ -36,8 +36,7 @@
 Fit Method for mph Class
 }
 \examples{
-x <- mph(structure = c("general", "coxian"), dimension = 3)
-data <- sim(x, 100)
-fit(x = x, y = data, stepsEM = 20)
-
+obj <- mph(structure = c("general", "coxian"))
+data <- sim(obj, 100)
+fit(x = obj, y = data, stepsEM = 20)
 }

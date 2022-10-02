@@ -19,3 +19,7 @@ A list containing the locations and corresponding density evaluations.
 \description{
 Density Method for multivariate phase-type distributions
 }
+\examples{
+obj <- mph(structure = c("general", "general"))
+dens(obj, matrix(c(0.5, 1), ncol = 2))
+}

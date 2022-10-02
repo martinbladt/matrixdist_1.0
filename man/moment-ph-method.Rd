@@ -19,6 +19,6 @@ Moment Method for phase-type distributions
 }
 \examples{
 set.seed(123)
-ph1 <- ph(structure = "general", dimension = 3)
-moment(ph1, 2)
+obj <- ph(structure = "general", dimension = 3)
+moment(obj, 2)
 }

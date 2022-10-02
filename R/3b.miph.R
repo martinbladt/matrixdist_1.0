@@ -32,6 +32,9 @@ setClass("miph",
 #' @return An object of class \linkS4class{iph}.
 #' @export
 #'
+#' @examples 
+#' under_mph <- mph(structure = c("gcoxian", "general"), dimension = 4)
+#' miph(under_mph, gfun = c("weibull", "pareto"), gfun_pars = list(c(2), c(3)))
 miph <- function(mph = NULL, # object of class mPH
                  gfun = NULL, # vector of gfun for each marginal
                  gfun_pars = NULL, # List of gfun parameters for each marginal
@@ -175,6 +178,10 @@ setMethod("show", "miph", function(object) {
 #'  with d the number of marginals and m the number of initial distribution vectors.
 #' @export
 #'
+#' @examples
+#' under_mph <- mph(structure = c("general", "general"))
+#' obj <- miph(under_mph, gfun = c("weibull", "pareto"), gfun_pars = list(c(2), c(3)))
+#' sim(obj, 100)
 setMethod("sim", c(x = "miph"), function(x, n = 1000) {
   name <- x@gfun$name
   pars <- x@gfun$pars
@@ -223,6 +230,9 @@ setMethod("sim", c(x = "miph"), function(x, n = 1000) {
 #' obj <- miph(under_mph, gfun = c("weibull", "pareto"), gfun_pars = list(c(2), c(3)))
 #' marginal(obj, 1)
 setMethod("marginal", c(x = "miph"), function(x, mar = 1) {
+  if (!(mar %in% 1:length(x@pars$S))) {
+    stop("maringal provided not available")
+  }
   S <- x@pars$S
   par <- x@gfun$pars
   x0 <- iph(ph(alpha = x@pars$alpha, S = S[[mar]]), gfun = x@gfun$name[mar], gfun_pars = par[[mar]])
@@ -238,6 +248,10 @@ setMethod("marginal", c(x = "miph"), function(x, mar = 1) {
 #' @return A list containing the locations and corresponding density evaluations.
 #' @export
 #'
+#' @examples
+#' under_mph <- mph(structure = c("general", "general"))
+#' obj <- miph(under_mph, gfun = c("weibull", "pareto"), gfun_pars = list(c(2), c(3)))
+#' dens(obj, c(1, 2))
 setMethod("dens", c(x = "miph"), function(x, y, delta = NULL) {
   alpha <- x@pars$alpha
   S <- x@pars$S
@@ -323,6 +337,10 @@ setMethod("dens", c(x = "miph"), function(x, y, delta = NULL) {
 #' @return A list containing the locations and corresponding CDF evaluations.
 #' @export
 #'
+#' @examples
+#' under_mph <- mph(structure = c("general", "general"))
+#' obj <- miph(under_mph, gfun = c("weibull", "pareto"), gfun_pars = list(c(2), c(3)))
+#' cdf(obj, c(1, 2))
 setMethod("cdf", c(x = "miph"), function(x, y, lower.tail = TRUE) {
   alpha <- x@pars$alpha
   S <- x@pars$S

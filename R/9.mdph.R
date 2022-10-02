@@ -157,6 +157,9 @@ setMethod("sim", c(x = "mdph"), function(x, n = 1000, equal_marginals = 0) {
 #' obj <- mdph(structure = c("general", "general"))
 #' marginal(obj, 1)
 setMethod("marginal", c(x = "mdph"), function(x, mar = 1) {
+  if (!(mar %in% 1:length(x@pars$S))) {
+    stop("maringal provided not available")
+  }
   x0 <- dph(alpha = x@pars$alpha, S = x@pars$S[[mar]])
   return(x0)
 })
@@ -173,6 +176,9 @@ setMethod("marginal", c(x = "mdph"), function(x, mar = 1) {
 #' obj <- mdph(structure = c("general", "general"))
 #' dens(obj, matrix(c(1, 1), ncol = 2))
 setMethod("dens", c(x = "mdph"), function(x, y) {
+  if (is.vector(y)) {
+    y <- t(y)
+  }
   dens <- mdphdensity(y, x@pars$alpha, x@pars$S)
   return(dens)
 })

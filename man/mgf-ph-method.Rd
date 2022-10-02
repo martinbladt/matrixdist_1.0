@@ -20,6 +20,6 @@ Mgf Method for phase-type distributions
 }
 \examples{
 set.seed(123)
-ph1 <- ph(structure = "general", dimension = 3)
-mgf(ph1, 0.4)
+obj <- ph(structure = "general", dimension = 3)
+mgf(obj, 0.4)
 }

@@ -17,3 +17,7 @@ A matrix of sample data for each marginal.
 \description{
 Simulation Method for multivariate phase type distributions
 }
+\examples{
+obj <- MPHstar(structure = "general")
+sim(obj, 100)
+}

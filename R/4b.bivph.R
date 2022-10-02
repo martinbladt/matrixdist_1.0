@@ -92,6 +92,9 @@ setMethod("show", "bivph", function(object) {
 #' obj <- bivph(dimensions = c(3, 3))
 #' dens(obj, matrix(c(0.5, 1), ncol = 2))
 setMethod("dens", c(x = "bivph"), function(x, y) {
+  if (is.vector(y)) {
+    y <- t(y)
+  }
   dens <- bivph_density(y, x@pars$alpha, x@pars$S11, x@pars$S12, x@pars$S22)
   return(dens)
 })
@@ -143,6 +146,12 @@ setMethod("coef", c(object = "bivph"), function(object) {
 #' obj <- bivph(dimensions = c(3, 3))
 #' moment(obj, c(1, 1))
 setMethod("moment", c(x = "bivph"), function(x, k = c(1, 1)) {
+  if (all(k == 0) | any(k < 0)) {
+    stop("k should be non-negative and not zero")
+  }
+  if (any((k %% 1) != 0)) {
+    stop("k should be an integer")
+  }
   ee <- rep(1, nrow(x@pars$S22))
   return(factorial(k[1]) * factorial(k[2]) * x@pars$alpha %*% matrix_power(k[1] + 1, base::solve(-x@pars$S11)) %*% x@pars$S12 %*% matrix_power(k[2], base::solve(-x@pars$S22)) %*% ee)
 })
@@ -158,6 +167,9 @@ setMethod("moment", c(x = "bivph"), function(x, k = c(1, 1)) {
 #' obj <- bivph(dimensions = c(3, 3))
 #' marginal(obj, 1)
 setMethod("marginal", c(x = "bivph"), function(x, mar = 1) {
+  if (!(mar %in% 1:2)) {
+    stop("maringal provided not available")
+  }
   if (mar == 1) {
     x0 <- ph(alpha = x@pars$alpha, S = x@pars$S11)
   } else {

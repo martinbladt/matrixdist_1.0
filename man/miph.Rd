@@ -41,3 +41,7 @@ An object of class \linkS4class{iph}.
 \description{
 Constructor Function for multivariate inhomogeneous phase-type distributions
 }
+\examples{
+under_mph <- mph(structure = c("gcoxian", "general"), dimension = 4)
+miph(under_mph, gfun = c("weibull", "pareto"), gfun_pars = list(c(2), c(3)))
+}

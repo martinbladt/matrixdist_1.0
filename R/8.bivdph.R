@@ -97,6 +97,9 @@ setMethod("show", "bivdph", function(object) {
 #' obj <- bivdph(dimensions = c(3, 3))
 #' dens(obj, matrix(c(1, 2), ncol = 2))
 setMethod("dens", c(x = "bivdph"), function(x, y) {
+  if (is.vector(y)) {
+    y <- t(y)
+  }
   dens <- bivdph_density(y, x@pars$alpha, x@pars$S11, x@pars$S12, x@pars$S22)
   return(dens)
 })
@@ -153,6 +156,9 @@ setMethod("sim", c(x = "bivdph"), function(x, n = 1000) {
 #' obj <- bivdph(dimensions = c(3, 3))
 #' marginal(obj, 1)
 setMethod("marginal", c(x = "bivdph"), function(x, mar = 1) {
+  if (!(mar %in% 1:2)) {
+    stop("maringal provided not available")
+  }
   if (mar == 1) {
     x0 <- dph(alpha = x@pars$alpha, S = x@pars$S11)
   } else {

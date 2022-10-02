@@ -19,3 +19,8 @@ A realization of independent and identically distributed inhomogeneous
 \description{
 Simulation Method for inhomogeneous multivariate phase-type distributions
 }
+\examples{
+under_mph <- mph(structure = c("general", "general"))
+obj <- miph(under_mph, gfun = c("weibull", "pareto"), gfun_pars = list(c(2), c(3)))
+sim(obj, 100)
+}

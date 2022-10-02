@@ -32,3 +32,6 @@ An object of class \linkS4class{MPHstar}.
 \description{
 Constructor Function for multivariate phase type distributions (MPH* class)
 }
+\examples{
+MPHstar(structure = "general", dimension = 4, variables = 3)
+}

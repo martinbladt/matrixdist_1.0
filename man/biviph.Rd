@@ -41,5 +41,4 @@ Constructor Function for bivariate inhomogeneous phase-type distributions
 \examples{
 under_bivph <- bivph(dimensions = c(3, 3))
 biviph(under_bivph, gfun = c("weibull", "pareto"), gfun_pars = list(c(2), c(3)))
-
 }

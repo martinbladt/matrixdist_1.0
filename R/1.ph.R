@@ -173,8 +173,8 @@ setMethod(
 #'
 #' @examples
 #' set.seed(123)
-#' ph1 <- ph(structure = "general", dimension = 3)
-#' moment(ph1, 2)
+#' obj <- ph(structure = "general", dimension = 3)
+#' moment(obj, 2)
 setMethod(
   "moment", signature(x = "ph"),
   function(x, k = 1) {
@@ -187,8 +187,7 @@ setMethod(
     if (methods::is(x, "iph")) {
       warning("moment of undelying ph structure is provided for iph objects")
     }
-    m <- solve(-x@pars$S)
-    prod <- matrix_power(k, m)
+    prod <- matrix_power(k, solve(-x@pars$S))
     return(factorial(k) * sum(x@pars$alpha %*% prod))
   }
 )
@@ -202,8 +201,8 @@ setMethod(
 #'
 #' @examples
 #' set.seed(123)
-#' ph1 <- ph(structure = "general", dimension = 3)
-#' mean(ph1)
+#' obj <- ph(structure = "general", dimension = 3)
+#' mean(obj)
 setMethod(
   "mean", signature(x = "ph"),
   function(x) {
@@ -224,8 +223,8 @@ setMethod(
 #'
 #' @examples
 #' set.seed(123)
-#' ph1 <- ph(structure = "general", dimension = 3)
-#' var(ph1)
+#' obj <- ph(structure = "general", dimension = 3)
+#' var(obj)
 setMethod(
   "var", signature(x = "ph"),
   function(x) {
@@ -249,8 +248,8 @@ setMethod(
 #'
 #' @examples
 #' set.seed(123)
-#' ph1 <- ph(structure = "general", dimension = 3)
-#' laplace(ph1, 3)
+#' obj <- ph(structure = "general", dimension = 3)
+#' laplace(obj, 3)
 setMethod(
   "laplace", signature(x = "ph"),
   function(x, r) {
@@ -277,8 +276,8 @@ setMethod(
 #'
 #' @examples
 #' set.seed(123)
-#' ph1 <- ph(structure = "general", dimension = 3)
-#' mgf(ph1, 0.4)
+#' obj <- ph(structure = "general", dimension = 3)
+#' mgf(obj, 0.4)
 setMethod(
   "mgf", signature(x = "ph"),
   function(x, r) {

@@ -28,6 +28,8 @@ setClass("mph",
 #' @return An object of class \linkS4class{mph}.
 #' @export
 #'
+#' @examples
+#' mph(structure = c("gcoxian", "general"), dimension = 5)
 mph <- function(alpha = NULL, S = NULL, structure = NULL, dimension = 3, variables = NULL) {
   if (any(is.null(alpha)) & any(is.null(S)) & is.null(structure)) {
     stop("input a vector and matrix, or a structure")
@@ -77,6 +79,9 @@ setMethod("show", "mph", function(object) {
 #' @return A realization of a multivariate phase-type distribution.
 #' @export
 #'
+#' @examples
+#' obj <- mph(structure = c("general", "general"))
+#' sim(obj, 100)
 setMethod("sim", c(x = "mph"), function(x, n = 1000, equal_marginals = 0) {
   if (is.vector(x@pars$alpha)) p <- length(x@pars$alpha)
   if (is.matrix(x@pars$alpha)) p <- ncol(x@pars$alpha)
@@ -120,6 +125,9 @@ setMethod("sim", c(x = "mph"), function(x, n = 1000, equal_marginals = 0) {
 #' obj <- mph(structure = c("general", "general"))
 #' marginal(obj, 1)
 setMethod("marginal", c(x = "mph"), function(x, mar = 1) {
+  if (!(mar %in% 1:length(x@pars$S))) {
+    stop("maringal provided not available")
+  }
   S <- x@pars$S
   x0 <- ph(alpha = x@pars$alpha, S = S[[mar]])
   return(x0)
@@ -134,6 +142,9 @@ setMethod("marginal", c(x = "mph"), function(x, mar = 1) {
 #' @return A list containing the locations and corresponding density evaluations.
 #' @export
 #'
+#' @examples
+#' obj <- mph(structure = c("general", "general"))
+#' dens(obj, matrix(c(0.5, 1), ncol = 2))
 setMethod("dens", c(x = "mph"), function(x, y, delta = NULL) {
   alpha <- x@pars$alpha
   S <- x@pars$S
@@ -215,6 +226,9 @@ setMethod("dens", c(x = "mph"), function(x, y, delta = NULL) {
 #' @return A list containing the locations and corresponding CDF evaluations.
 #' @export
 #'
+#' @examples
+#' obj <- mph(structure = c("general", "general"))
+#' cdf(obj, matrix(c(0.5, 1), ncol = 2))
 setMethod("cdf", c(x = "mph"), function(x,
                                         y,
                                         lower.tail = TRUE) {
@@ -271,6 +285,162 @@ setMethod("cdf", c(x = "mph"), function(x,
   return(res)
 })
 
+#' Laplace Method for multivariate phase-type distributions
+#'
+#' @param x An object of class \linkS4class{mph}.
+#' @param r A matrix of real values.
+#'
+#' @return A vector containing the corresponding Laplace transform evaluations.
+#' @export
+#'
+#' @examples
+#' obj <- mph(structure = c("general", "general"))
+#' laplace(obj, matrix(c(0.5, 1), ncol = 2))
+setMethod("laplace", c(x = "mph"), function(x, r) {
+  if (methods::is(x, "miph")) {
+    warning("Laplace transform of undelying mph structure is provided for miph objects")
+  }
+  alpha <- x@pars$alpha
+  S <- x@pars$S
+  d <- length(x@pars$S)
+
+  if (is.matrix(r)) {
+    n <- nrow(r)
+  }
+  if (is.vector(r)) {
+    n <- 1
+    r <- t(r)
+  }
+
+  for (i in 1:d) {
+    lim <- max(Re(eigen(S[[i]])$values))
+    if (any(r[, i] <= lim)) {
+      stop("r should be above the largest real eigenvalue of S")
+    }
+  }
+
+  res <- numeric(n)
+
+  p <- length(x@pars$alpha)
+
+  for (j in 1:p) {
+    in_vect <- rep(0, p)
+    in_vect[j] <- 1
+    aux <- matrix(NA, n, d)
+    for (i in 1:d) {
+      for (m in 1:n) {
+        aux[m, i] <- ph_laplace(r[m, i], in_vect, S[[i]])
+      }
+    }
+    res <- res + alpha[j] * apply(aux, 1, prod)
+  }
+
+  return(res)
+})
+
+#' Moment Method for multivariate phase-type distributions
+#'
+#' @param x An object of class \linkS4class{mph}.
+#' @param k A vector of non-negative integer values.
+#'
+#' @return The corresponding joint moment evaluation.
+#' @export
+#'
+#' @examples
+#' obj <- mph(structure = c("general", "general"))
+#' moment(obj, c(2, 1))
+setMethod("moment", c(x = "mph"), function(x, k) {
+  if (methods::is(x, "miph")) {
+    warning("moment of undelying mph structure is provided for miph objects")
+  }
+  if (all(k == 0) | any(k < 0)) {
+    stop("k should be non-negative and not zero")
+  }
+  if (any((k %% 1) != 0)) {
+    stop("k should be an integer")
+  }
+  alpha <- x@pars$alpha
+  S <- x@pars$S
+  d <- length(x@pars$S)
+
+  p <- length(x@pars$alpha)
+  res <- 0
+
+  for (j in 1:p) {
+    in_vect <- rep(0, p)
+    in_vect[j] <- 1
+    aux <- rep(0, d)
+    for (i in 1:d) {
+      aux[i] <- factorial(k[i]) * sum(in_vect %*% matrix_power(k[i], solve(-S[[i]])))
+    }
+    res <- res + alpha[j] * prod(aux)
+  }
+
+  return(res)
+})
+
+#' Mean Method for multivariate phase-type distributions
+#'
+#' @param x An object of class \linkS4class{mph}.
+#'
+#' @return The mean of the multivariate phase-type distribution.
+#' @export
+#'
+#' @examples
+#' obj <- mph(structure = c("general", "general"))
+#' mean(obj)
+setMethod("mean", c(x = "mph"), function(x) {
+  d <- length(x@pars$S)
+  res <- rep(0, d)
+  for (i in 1:d) {
+    mom_vect <- rep(0, d)
+    mom_vect[i] <- 1
+    res[i] <- moment(x, mom_vect)
+  }
+
+  return(res)
+})
+
+#' Var Method for multivariate phase-type distributions
+#'
+#' @param x An object of class \linkS4class{mph}.
+#'
+#' @return The covariance matrix of the multivariate phase-type distribution.
+#' @export
+#'
+#' @examples
+#' obj <- mph(structure = c("general", "general"))
+#' var(obj)
+setMethod("var", c(x = "mph"), function(x) {
+  d <- length(x@pars$S)
+  res <- matrix(0, d, d)
+  for (i in 1:d) {
+    mom_vect1 <- rep(0, d)
+    mom_vect1[i] <- 1
+    for (j in i:d) {
+      mom_vect2 <- rep(0, d)
+      mom_vect2[j] <- 1
+      res[i, j] <- moment(x, mom_vect1 + mom_vect2) - moment(x, mom_vect1) * moment(x, mom_vect2)
+    }
+  }
+  res[lower.tri(res)] = t(res)[lower.tri(res)]
+  return(res)
+})
+
+#' Cor Method for multivariate phase-type distributions
+#'
+#' @param x An object of class \linkS4class{mph}.
+#'
+#' @return The correlation matrix of the multivariate phase-type distribution.
+#' @export
+#'
+#' @examples
+#' obj <- mph(structure = c("general", "general"))
+#' cor(obj)
+setMethod("cor", c(x = "mph"), function(x) {
+  stats::cov2cor(var(x))
+})
+
 #' Fit Method for mph Class
 #'
 #' @param x An object of class \linkS4class{mph}.
@@ -285,10 +455,9 @@ setMethod("cdf", c(x = "mph"), function(x,
 #' @export
 #'
 #' @examples
-#' x <- mph(structure = c("general", "coxian"), dimension = 3)
-#' data <- sim(x, 100)
-#' fit(x = x, y = data, stepsEM = 20)
-#'
+#' obj <- mph(structure = c("general", "coxian"))
+#' data <- sim(obj, 100)
+#' fit(x = obj, y = data, stepsEM = 20)
 setMethod(
   "fit", c(x = "mph", y = "ANY"),
   function(x, y,

@@ -255,3 +255,5 @@ setGeneric("linCom", function(x, ...) standardGeneric("linCom"))
 setGeneric("mean")
 
 setGeneric("var")
+
+setGeneric("cor")

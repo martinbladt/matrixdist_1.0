@@ -33,7 +33,6 @@ setClass("biviph",
 #' @examples
 #' under_bivph <- bivph(dimensions = c(3, 3))
 #' biviph(under_bivph, gfun = c("weibull", "pareto"), gfun_pars = list(c(2), c(3)))
-#' 
 biviph <- function(bivph = NULL,
                    gfun = NULL,
                    gfun_pars = NULL,
@@ -200,6 +199,9 @@ setMethod("sim", c(x = "biviph"), function(x, n = 1000) {
 #' obj <- biviph(under_bivph, gfun = c("weibull", "pareto"), gfun_pars = list(c(2), c(3)))
 #' marginal(obj, 1)
 setMethod("marginal", c(x = "biviph"), function(x, mar = 1) {
+  if (!(mar %in% 1:2)) {
+    stop("maringal provided not available")
+  }
   if (mar == 1) {
     x0 <- iph(ph(alpha = x@pars$alpha, S = x@pars$S11), gfun = x@gfun$name[mar], gfun_pars = x@gfun$pars[[mar]])
   } else {
@@ -222,6 +224,9 @@ setMethod("marginal", c(x = "biviph"), function(x, mar = 1) {
 #' obj <- biviph(under_bivph, gfun = c("weibull", "pareto"), gfun_pars = list(c(2), c(3)))
 #' dens(obj, matrix(c(0.5, 1), ncol = 2))
 setMethod("dens", c(x = "biviph"), function(x, y) {
+  if (is.vector(y)) {
+    y <- t(y)
+  }
   gfun.pars <- x@gfun$pars
   y1_inv <- x@gfun$inverse[[1]](gfun.pars[[1]], y[, 1])
   y1_int <- x@gfun$intensity[[1]](gfun.pars[[1]], y[, 1])

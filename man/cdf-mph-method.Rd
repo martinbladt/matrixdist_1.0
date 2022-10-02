@@ -20,3 +20,7 @@ A list containing the locations and corresponding CDF evaluations.
 \description{
 Distribution Method for multivariate phase-type distributions
 }
+\examples{
+obj <- mph(structure = c("general", "general"))
+cdf(obj, matrix(c(0.5, 1), ncol = 2))
+}

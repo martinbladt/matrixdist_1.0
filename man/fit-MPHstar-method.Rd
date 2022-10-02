@@ -44,3 +44,9 @@ An object of class \linkS4class{MPHstar}.
 \description{
 Fit Method for mph Class
 }
+\examples{
+set.seed(123)
+obj <- MPHstar(structure = "general")
+data <- sim(obj, 100)
+fit(obj, data, stepsEM = 20)
+}

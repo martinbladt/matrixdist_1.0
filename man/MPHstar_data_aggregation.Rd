@@ -12,7 +12,8 @@ MPHstar_data_aggregation(y, w = numeric(0))
 \item{w}{A matrix of weights, each column corresponds to a marginal.}
 }
 \value{
-For summed and marginal observations we have a list with matrices of unique observations and their associated weights, separated by uncensored and right-censored data.
+For summed and marginal observations we have a list with matrices of
+ unique observations and their associated weights, separated by uncensored and right-censored data.
 }
 \description{
 Prepare data for the MPHstar_EMstep_UNI

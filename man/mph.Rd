@@ -23,3 +23,6 @@ An object of class \linkS4class{mph}.
 \description{
 Constructor Function for multivariate phase-type distributions
 }
+\examples{
+mph(structure = c("gcoxian", "general"), dimension = 5)
+}

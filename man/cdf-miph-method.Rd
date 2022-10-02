@@ -19,3 +19,8 @@ A list containing the locations and corresponding CDF evaluations.
 \description{
 Distribution Method for multivariate inhomogeneous phase-type distributions
 }
+\examples{
+under_mph <- mph(structure = c("general", "general"))
+obj <- miph(under_mph, gfun = c("weibull", "pareto"), gfun_pars = list(c(2), c(3)))
+cdf(obj, c(1, 2))
+}

@@ -20,3 +20,7 @@ A realization of a multivariate phase-type distribution.
 \description{
 Simulation Method for multivariate phase-type distributions
 }
+\examples{
+obj <- mph(structure = c("general", "general"))
+sim(obj, 100)
+}
