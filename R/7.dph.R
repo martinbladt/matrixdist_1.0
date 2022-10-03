@@ -221,8 +221,8 @@ setMethod("coef", c(object = "dph"), function(object) {
 #'
 #' @examples
 #' set.seed(123)
-#' dph1 <- dph(structure = "general", dimension = 3)
-#' moment(dph1, 2)
+#' obj <- dph(structure = "general", dimension = 3)
+#' moment(obj, 2)
 setMethod(
   "moment", signature(x = "dph"),
   function(x, k = 1) {
@@ -247,8 +247,8 @@ setMethod(
 #'
 #' @examples
 #' set.seed(123)
-#' dph1 <- dph(structure = "general", dimension = 3)
-#' mean(dph1)
+#' obj <- dph(structure = "general", dimension = 3)
+#' mean(obj)
 setMethod(
   "mean", signature(x = "dph"),
   function(x) {
@@ -266,8 +266,8 @@ setMethod(
 #'
 #' @examples
 #' set.seed(123)
-#' dph1 <- dph(structure = "general", dimension = 3)
-#' var(dph1)
+#' obj <- dph(structure = "general", dimension = 3)
+#' var(obj)
 setMethod(
   "var", signature(x = "dph"),
   function(x) {
@@ -290,8 +290,8 @@ setMethod(
 #'
 #' @examples
 #' set.seed(123)
-#' dph1 <- dph(structure = "general", dimension = 3)
-#' pgf(dph1, 0.5)
+#' obj <- dph(structure = "general", dimension = 3)
+#' pgf(obj, 0.5)
 setMethod(
   "pgf", signature(x = "dph"),
   function(x, z) {

@@ -17,6 +17,6 @@ Var Method for discrete phase-type distributions
 }
 \examples{
 set.seed(123)
-dph1 <- dph(structure = "general", dimension = 3)
-var(dph1)
+obj <- dph(structure = "general", dimension = 3)
+var(obj)
 }

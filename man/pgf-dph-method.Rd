@@ -20,6 +20,6 @@ Pgf Method for discrete phase-type distributions
 }
 \examples{
 set.seed(123)
-dph1 <- dph(structure = "general", dimension = 3)
-pgf(dph1, 0.5)
+obj <- dph(structure = "general", dimension = 3)
+pgf(obj, 0.5)
 }

@@ -19,6 +19,6 @@ Moment Method for discrete phase-type distributions
 }
 \examples{
 set.seed(123)
-dph1 <- dph(structure = "general", dimension = 3)
-moment(dph1, 2)
+obj <- dph(structure = "general", dimension = 3)
+moment(obj, 2)
 }

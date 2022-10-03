@@ -28,7 +28,7 @@ setClass("bivdph",
 #' @param S11 A sub-transition matrix.
 #' @param S12 A matrix.
 #' @param S22 A sub-transition matrix.
-#' @param dimensions The dimensions of the bivariate discrete phase-type 
+#' @param dimensions The dimensions of the bivariate discrete phase-type
 #'  (if no parameters are provided).
 #'
 #' @return An object of class \linkS4class{bivdph}.
@@ -118,6 +118,129 @@ setMethod("coef", c(object = "bivdph"), function(object) {
   object@pars
 })
 
+#' Marginal method for bivdph class
+#'
+#' @param x An object of class \linkS4class{bivdph}.
+#' @param mar Indicator of which marginal.
+#' @return An object of the of class \linkS4class{dph}.
+#' @export
+#'
+#' @examples
+#' obj <- bivdph(dimensions = c(3, 3))
+#' marginal(obj, 1)
+setMethod("marginal", c(x = "bivdph"), function(x, mar = 1) {
+  if (!(mar %in% 1:2)) {
+    stop("maringal provided not available")
+  }
+  if (mar == 1) {
+    x0 <- dph(alpha = x@pars$alpha, S = x@pars$S11)
+  } else {
+    alpha0 <- x@pars$alpha %*% base::solve(diag(ncol(x@pars$S12)) - x@pars$S11) %*% x@pars$S12
+    x0 <- dph(alpha = alpha0, S = x@pars$S22)
+  }
+  return(x0)
+})
+
+#' Moment method for bivdph class
+#'
+#' @param x An object of class \linkS4class{bivdph}.
+#' @param k A vector with the location.
+#' @return An real value.
+#' @export
+#'
+#' @examples
+#' obj <- bivdph(dimensions = c(3, 3))
+#' moment(obj, c(1, 1))
+setMethod("moment", c(x = "bivdph"), function(x, k = c(1, 1)) {
+  if (any(k <= 0)) {
+    stop("k should have positive entries")
+  }
+  if (any((k %% 1) != 0)) {
+    stop("k should be an integer")
+  }
+  m11 <- matrix_power(k[1] - 1, x@pars$S11)
+  m12 <- matrix_power(k[1] + 1, solve(diag(nrow(x@pars$S11)) - x@pars$S11))
+  m21 <- matrix_power(k[2] - 1, x@pars$S22)
+  m22 <- matrix_power(k[2], solve(diag(nrow(x@pars$S22)) - x@pars$S22))
+  ee <- rep(1, nrow(x@pars$S22))
+  return(factorial(k[1]) * factorial(k[2]) * x@pars$alpha %*% m11 %*% m12 %*% x@pars$S12 %*% m21 %*% m22 %*% ee)
+})
+
+#' Mean Method for bivdph class
+#'
+#' @param x An object of class \linkS4class{bivdph}.
+#'
+#' @return The mean of the bivariate discrete phase-type distribution.
+#' @export
+#'
+#' @examples
+#' obj <- bivdph(dimensions = c(3, 3))
+#' mean(obj)
+setMethod("mean", c(x = "bivdph"), function(x) {
+  c(mean(marginal(x, 1)), mean(marginal(x, 2)))
+})
+
+#' Var Method for bivdph class
+#'
+#' @param x An object of class \linkS4class{bivdph}.
+#'
+#' @return The covariance matrix of the bivariate discrete phase-type distribution.
+#' @export
+#'
+#' @examples
+#' obj <- bivdph(dimensions = c(3, 3))
+#' var(obj)
+setMethod("var", c(x = "bivdph"), function(x) {
+  mar1 <- marginal(x, 1)
+  mar2 <- marginal(x, 2)
+  re <- matrix(0, 2, 2)
+  re[1, 1] <- var(mar1)
+  re[1, 2] <- moment(x, c(1, 1)) - mean(mar1) * mean(mar2)
+  re[2, 1] <- re[1, 2]
+  re[2, 2] <- var(mar2)
+  return(re)
+})
+
+#' Cor Method for bivdph class
+#'
+#' @param x An object of class \linkS4class{bivdph}.
+#'
+#' @return The correlation matrix of the bivariate discrete phase-type distribution.
+#' @export
+#'
+#' @examples
+#' obj <- bivdph(dimensions = c(3, 3))
+#' cor(obj)
+setMethod("cor", c(x = "bivdph"), function(x) {
+  stats::cov2cor(var(x))
+})
+
+#' Pgf Method for bivariate discrete phase-type distributions
+#'
+#' @param x An object of class \linkS4class{bivdph}.
+#' @param z A vector of real values.
+#'
+#' @return The joint pdf of the \linkS4class{dph} object at the
+#'  given location.
+#' @export
+#'
+#' @examples
+#' obj <- bivdph(dimensions = c(3, 3))
+#' pgf(obj, c(0.5,0.2))
+setMethod(
+  "pgf", signature(x = "bivdph"),
+  function(x, z) {
+    if (any(abs(z) > 1)) {
+      stop("z should between -1 and 1")
+    }
+    m1 <- solve(diag(nrow(x@pars$S11)) - z[1] * x@pars$S11)
+    m2 <- solve(diag(nrow(x@pars$S22)) - z[2] * x@pars$S22)
+    ee <- rep(1, nrow(x@pars$S22))
+    t2 <- ee - x@pars$S22 %*% ee
+    return(z[1] * z[2] * x@pars$alpha %*% m1 %*% x@pars$S12 %*% m2 %*% t2)
+  }
+)
+
 #' Simulation method for bivariate discrete phase-type distributions
 #'
 #' @param x An object of class \linkS4class{bivdph}.
@@ -143,29 +266,6 @@ setMethod("sim", c(x = "bivdph"), function(x, n = 1000) {
   trans_mat <- rbind(trans_mat, aux_vec)
   U <- rMDPHstar(n, alpha_aux, trans_mat, R_aux)
   return(U)
-})
-
-#' Marginal method for bivdph class
-#'
-#' @param x An object of class \linkS4class{bivdph}.
-#' @param mar Indicator of which marginal.
-#' @return An object of the of class \linkS4class{dph}.
-#' @export
-#'
-#' @examples
-#' obj <- bivdph(dimensions = c(3, 3))
-#' marginal(obj, 1)
-setMethod("marginal", c(x = "bivdph"), function(x, mar = 1) {
-  if (!(mar %in% 1:2)) {
-    stop("maringal provided not available")
-  }
-  if (mar == 1) {
-    x0 <- dph(alpha = x@pars$alpha, S = x@pars$S11)
-  } else {
-    alpha0 <- x@pars$alpha %*% base::solve(diag(ncol(x@pars$S12)) - x@pars$S11) %*% x@pars$S12
-    x0 <- dph(alpha = alpha0, S = x@pars$S22)
-  }
-  return(x0)
 })
 
 #' Fit Method for bivdph Class
@@ -295,4 +395,3 @@ setMethod(
     return(list(alpha = alpha_vecs, S11 = S11_fit, S12 = S11_fit, S12 = S11_fit, mm = multinom_model))
   }
 )
-
