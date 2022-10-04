@@ -148,6 +148,72 @@ setMethod("linCom", c(x = "MPHstar"), function(x, w) {
   return(x0)
 })
 
+#' Mean Method for MPHstar class
+#'
+#' @param x An object of class \linkS4class{MPHstar}.
+#'
+#' @return The mean of MPHstar distribution.
+#' @export
+#'
+#' @examples
+#' obj <- MPHstar(structure = "general")
+#' mean(obj)
+setMethod("mean", c(x = "MPHstar"), function(x) {
+  d <- ncol(x@pars$R)
+  res <- rep(0, d)
+  for (i in 1:d) {
+    res[i] <- mean(marginal(x, i))
+  }
+  return(res)
+})
+
+#' Var Method for MPHstar class
+#'
+#' @param x An object of class \linkS4class{MPHstar}.
+#'
+#' @return The covariance matrix of the MPHstar distribution.
+#' @export
+#'
+#' @examples
+#' obj <- MPHstar(structure = "general")
+#' var(obj)
+setMethod("var", c(x = "MPHstar"), function(x) {
+  alpha <- x@pars$alpha
+  U <- solve(-x@pars$S)
+  R <- x@pars$R
+  d <- ncol(R)
+  
+  res <- matrix(0, d, d)
+  for (i in 1:d) {
+    mar1 <- marginal(x, i)
+    for (j in i:d) {
+      if (j == i) {
+        res[i, j] <- var(mar1)
+      } else {
+        mar2 <- marginal(x, j)
+        cross <- alpha %*% U %*% diag(R[, i]) %*% U %*% R[, j] + alpha %*% U %*% diag(R[, j]) %*% U %*% R[, i]
+        res[i, j] <- cross - mean(mar1) * mean(mar2)
+      }
+    }
+  }
+  res[lower.tri(res)] <- t(res)[lower.tri(res)]
+  return(res)
+})
+
+#' Cor Method for MPHstar class
+#'
+#' @param x An object of class \linkS4class{MPHstar}.
+#'
+#' @return The correlation matrix of the MPHstar distribution.
+#' @export
+#'
+#' @examples
+#' obj <- MPHstar(structure = "general")
+#' cor(obj)
+setMethod("cor", c(x = "MPHstar"), function(x) {
+  stats::cov2cor(var(x))
+})
+
 #' Find weight of observations
 #'
 #' @param x A vector of observations from which we want to know their weights.

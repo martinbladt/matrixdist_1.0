@@ -9,7 +9,7 @@
 \arguments{
 \item{x}{An object of class \linkS4class{mdph}.}
 
-\item{r}{A matrix of real values.}
+\item{z}{A matrix of real values.}
 }
 \value{
 A vector containing the corresponding pgf evaluations.

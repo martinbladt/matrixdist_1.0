@@ -290,7 +290,7 @@ setMethod("cor", c(x = "mdph"), function(x) {
 #' Pgf Method for multivariate discrete phase-type distributions
 #'
 #' @param x An object of class \linkS4class{mdph}.
-#' @param r A matrix of real values.
+#' @param z A matrix of real values.
 #'
 #' @return A vector containing the corresponding pgf evaluations.
 #' @export
