@@ -20,5 +20,5 @@ Pgf Method for bivariate discrete phase-type distributions
 }
 \examples{
 obj <- bivdph(dimensions = c(3, 3))
-pgf(obj, c(0.5,0.2))
+pgf(obj, c(0.5, 0.2))
 }

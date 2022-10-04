@@ -226,7 +226,7 @@ setMethod("cor", c(x = "bivdph"), function(x) {
 #'
 #' @examples
 #' obj <- bivdph(dimensions = c(3, 3))
-#' pgf(obj, c(0.5,0.2))
+#' pgf(obj, c(0.5, 0.2))
 setMethod(
   "pgf", signature(x = "bivdph"),
   function(x, z) {
