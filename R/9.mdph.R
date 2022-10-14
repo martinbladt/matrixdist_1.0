@@ -259,10 +259,13 @@ setMethod("var", c(x = "mdph"), function(x) {
           in_vect <- rep(0, p)
           in_vect[s] <- 1
           aux <- rep(0, 2)
-          for (l in c(i, j)) {
-            m1 <- solve(diag(p) - S[[l]])
-            aux[l] <- sum(in_vect %*% m1)
-          }
+          
+          m1 <- solve(diag(p) - S[[i]])
+          aux[1] <- sum(in_vect %*% m1)
+          
+          m1 <- solve(diag(p) - S[[j]])
+          aux[2] <- sum(in_vect %*% m1)
+          
           cross <- cross + alpha[s] * prod(aux)
         }
         res[i, j] <- cross - mean(mar1) * mean(mar2)
