@@ -18,7 +18,7 @@ double inf_norm(arma::mat A) {
   for (int i{0}; i < A.n_rows; ++i) {
     double row_sum{0.0};
     for (int j{0}; j < A.n_cols; ++j) {
-      row_sum += abs(A(i,j));
+      row_sum += fabs(A(i,j));
     }
     value = std::max(value, row_sum);
   }
