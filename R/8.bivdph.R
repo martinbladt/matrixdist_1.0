@@ -135,7 +135,7 @@ setMethod("marginal", c(x = "bivdph"), function(x, mar = 1) {
   if (mar == 1) {
     x0 <- dph(alpha = x@pars$alpha, S = x@pars$S11)
   } else {
-    alpha0 <- x@pars$alpha %*% base::solve(diag(ncol(x@pars$S12)) - x@pars$S11) %*% x@pars$S12
+    alpha0 <- x@pars$alpha %*% base::solve(diag(ncol(x@pars$S11)) - x@pars$S11) %*% x@pars$S12
     x0 <- dph(alpha = alpha0, S = x@pars$S22)
   }
   return(x0)
@@ -392,6 +392,6 @@ setMethod(
       }
     }
     cat("\n", sep = "")
-    return(list(alpha = alpha_vecs, S11 = S11_fit, S12 = S11_fit, S12 = S11_fit, mm = multinom_model))
+    return(list(alpha = alpha_vecs, S11 = S11_fit, S12 = S12_fit, S22 = S22_fit, mm = multinom_model))
   }
 )
