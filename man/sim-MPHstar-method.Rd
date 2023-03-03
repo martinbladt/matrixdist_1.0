@@ -2,7 +2,7 @@
 % Please edit documentation in R/4.MPHstar.R
 \name{sim,MPHstar-method}
 \alias{sim,MPHstar-method}
-\title{Simulation Method for multivariate phase type distributions}
+\title{Simulation method for multivariate phase-type distributions}
 \usage{
 \S4method{sim}{MPHstar}(x, n = 1000)
 }
@@ -15,7 +15,7 @@
 A matrix of sample data for each marginal.
 }
 \description{
-Simulation Method for multivariate phase type distributions
+Simulation method for multivariate phase-type distributions
 }
 \examples{
 obj <- MPHstar(structure = "general")

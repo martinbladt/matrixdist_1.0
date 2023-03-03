@@ -2,8 +2,8 @@
 % Please edit documentation in R/RcppExports.R
 \name{EM_step_mPH_rc}
 \alias{EM_step_mPH_rc}
-\title{EM step for the mPH class with right-censoring, for different marginal 
- sub-intensity matrices}
+\title{EM step for the mPH class with right-censoring, for different marginal
+sub-intensity matrices}
 \usage{
 EM_step_mPH_rc(alpha, S_list, y, delta, h)
 }
@@ -19,6 +19,6 @@ EM_step_mPH_rc(alpha, S_list, y, delta, h)
 \item{h}{Tolerance of uniformization.}
 }
 \description{
-EM step for the mPH class with right-censoring, for different marginal 
- sub-intensity matrices
+EM step for the mPH class with right-censoring, for different marginal
+sub-intensity matrices
 }

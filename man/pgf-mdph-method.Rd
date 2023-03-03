@@ -2,7 +2,7 @@
 % Please edit documentation in R/9.mdph.R
 \name{pgf,mdph-method}
 \alias{pgf,mdph-method}
-\title{Pgf Method for multivariate discrete phase-type distributions}
+\title{Pgf method for multivariate discrete phase-type distributions}
 \usage{
 \S4method{pgf}{mdph}(x, z)
 }
@@ -15,7 +15,7 @@
 A vector containing the corresponding pgf evaluations.
 }
 \description{
-Pgf Method for multivariate discrete phase-type distributions
+Pgf method for multivariate discrete phase-type distributions
 }
 \examples{
 obj <- mdph(structure = c("general", "general"))

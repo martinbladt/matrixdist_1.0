@@ -2,7 +2,7 @@
 % Please edit documentation in R/3.mph.R
 \name{fit,mph-method}
 \alias{fit,mph-method}
-\title{Fit Method for mph Class}
+\title{Fit method for mph Class}
 \usage{
 \S4method{fit}{mph}(
   x,
@@ -20,11 +20,11 @@
 
 \item{y}{Matrix of data.}
 
-\item{delta}{Matrix with right-censoring indicators. (1 uncensored, 0 right censored)}
+\item{delta}{Matrix with right-censoring indicators (1 uncensored, 0 right censored).}
 
 \item{stepsEM}{Number of EM steps to be performed.}
 
-\item{equal_marginals}{Logical. If TRUE, all marginals are fitted to be equal.}
+\item{equal_marginals}{Logical. If \code{TRUE}, all marginals are fitted to be equal.}
 
 \item{r}{Sub-sampling parameter, defaults to 1.}
 
@@ -33,7 +33,7 @@
 \item{reltol}{Relative tolerance when optimizing g function.}
 }
 \description{
-Fit Method for mph Class
+Fit method for mph Class
 }
 \examples{
 obj <- mph(structure = c("general", "coxian"))

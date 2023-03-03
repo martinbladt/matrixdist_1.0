@@ -2,7 +2,7 @@
 % Please edit documentation in R/4.MPHstar.R
 \name{mean,MPHstar-method}
 \alias{mean,MPHstar-method}
-\title{Mean Method for MPHstar class}
+\title{Mean method for MPHstar class}
 \usage{
 \S4method{mean}{MPHstar}(x)
 }
@@ -13,7 +13,7 @@
 The mean of MPHstar distribution.
 }
 \description{
-Mean Method for MPHstar class
+Mean method for MPHstar class
 }
 \examples{
 obj <- MPHstar(structure = "general")

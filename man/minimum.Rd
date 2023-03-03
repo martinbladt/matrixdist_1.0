@@ -2,7 +2,7 @@
 % Please edit documentation in R/0.generics.R
 \name{minimum}
 \alias{minimum}
-\title{New Generic for Minimum of two Matrix Distributions}
+\title{New generic for minimum of two matrix distributions}
 \usage{
 minimum(x1, x2, ...)
 }

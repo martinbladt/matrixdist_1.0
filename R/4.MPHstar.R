@@ -1,4 +1,4 @@
-#' Multivariate Phase Type distributions obtained by transformation via rewards
+#' Multivariate phase-type distributions obtained by transformation via rewards
 #'
 #' Class of objects for multivariate phase type distributions.
 #'
@@ -14,7 +14,7 @@ setClass("MPHstar",
   )
 )
 
-#' Constructor Function for multivariate phase type distributions (MPH* class)
+#' Constructor function for multivariate phase-type distributions (MPH* class)
 #'
 #' @param alpha A probability vector.
 #' @param S A sub-intensity matrix.
@@ -74,7 +74,7 @@ MPHstar <- function(alpha = NULL,
   )
 }
 
-#' Show Method for multivariate phase type distributions
+#' Show method for multivariate phase-type distributions
 #'
 #' @param object An object of class \linkS4class{MPHstar}.
 #' @export
@@ -87,7 +87,7 @@ setMethod("show", "MPHstar", function(object) {
   cat("number of marginal distributions: ", dim(object@pars$R)[2], "\n", sep = "")
 })
 
-#' Simulation Method for multivariate phase type distributions
+#' Simulation method for multivariate phase-type distributions
 #'
 #' @param x An object of class \linkS4class{MPHstar}.
 #' @param n Desired sample size for each marginal.
@@ -99,8 +99,7 @@ setMethod("show", "MPHstar", function(object) {
 #' obj <- MPHstar(structure = "general")
 #' sim(obj, 100)
 setMethod("sim", c(x = "MPHstar"), function(x, n = 1000) {
-  U <- rMPHstar(n, x@pars$alpha, x@pars$S, x@pars$R)
-  return(U)
+  rMPHstar(n, x@pars$alpha, x@pars$S, x@pars$R)
 })
 
 #' Marginal method for MPHstar class
@@ -118,11 +117,10 @@ setMethod("marginal", c(x = "MPHstar"), function(x, mar = 1) {
     stop("maringal provided not available")
   }
   mar_par <- tvr_ph(x@pars$alpha, x@pars$S, x@pars$R[, mar])
-  x0 <- ph(alpha = mar_par[[1]], S = mar_par[[2]])
-  return(x0)
+  ph(alpha = mar_par[[1]], S = mar_par[[2]])
 })
 
-#' Linear Combination method for MPHstar class
+#' Linear combination method for MPHstar class
 #'
 #' @param x An object of class \linkS4class{MPHstar}.
 #' @param w A vector with non-negative entries.
@@ -144,11 +142,10 @@ setMethod("linCom", c(x = "MPHstar"), function(x, w) {
     stop("vector with all entries zero")
   }
   L <- linear_combination(w, x@pars$alpha, x@pars$S, x@pars$R)
-  x0 <- ph(alpha = L$alpha, S = L$S)
-  return(x0)
+  ph(alpha = L$alpha, S = L$S)
 })
 
-#' Mean Method for MPHstar class
+#' Mean method for MPHstar class
 #'
 #' @param x An object of class \linkS4class{MPHstar}.
 #'
@@ -164,10 +161,10 @@ setMethod("mean", c(x = "MPHstar"), function(x) {
   for (i in 1:d) {
     res[i] <- mean(marginal(x, i))
   }
-  return(res)
+  res
 })
 
-#' Var Method for MPHstar class
+#' Var method for MPHstar class
 #'
 #' @param x An object of class \linkS4class{MPHstar}.
 #'
@@ -182,7 +179,7 @@ setMethod("var", c(x = "MPHstar"), function(x) {
   U <- solve(-x@pars$S)
   R <- x@pars$R
   d <- ncol(R)
-  
+
   res <- matrix(0, d, d)
   for (i in 1:d) {
     mar1 <- marginal(x, i)
@@ -197,10 +194,10 @@ setMethod("var", c(x = "MPHstar"), function(x) {
     }
   }
   res[lower.tri(res)] <- t(res)[lower.tri(res)]
-  return(res)
+  res
 })
 
-#' Cor Method for MPHstar class
+#' Cor method for MPHstar class
 #'
 #' @param x An object of class \linkS4class{MPHstar}.
 #'
@@ -218,7 +215,7 @@ setMethod("cor", c(x = "MPHstar"), function(x) {
 #'
 #' @param x A vector of observations from which we want to know their weights.
 #'
-#' @return A matrix with unique observations as fisrt column and associated weights for second column.
+#' @return A matrix with unique observations as first column and associated weights for second column.
 #' @export
 #'
 find_weight <- function(x) {
@@ -230,8 +227,7 @@ find_weight <- function(x) {
       cum_weight <- c(cum_weight, length(which(x == i)))
     }
   }
-
-  return(cbind(unique, cum_weight, deparse.level = 0))
+  cbind(unique, cum_weight, deparse.level = 0)
 }
 
 #' Prepare data for the MPHstar_EMstep_UNI
@@ -245,15 +241,12 @@ find_weight <- function(x) {
 #'
 MPHstar_data_aggregation <- function(y, w = numeric(0)) {
   mat <- list()
-
   sumData <- rowSums(y)
-
   mat[[1]] <- find_weight(sumData)
 
   for (i in 1:ncol(y)) {
     m <- 1 + i
     m_y <- y[, i]
-
     if (length(w) == 0) {
       mat[[m]] <- find_weight(m_y)
     }
@@ -263,11 +256,10 @@ MPHstar_data_aggregation <- function(y, w = numeric(0)) {
       mat[[m]] <- cbind(m_y, m_w)
     }
   }
-
-  return(mat)
+  mat
 }
 
-#' Fit Method for mph Class
+#' Fit method for mph class
 #'
 #' @param x An object of class \linkS4class{MPHstar}.
 #' @param y A matrix of marginal data.
@@ -388,6 +380,6 @@ setMethod(
     cat("\n", format(Sys.time(), format = "%H:%M:%OS"), ": EM finalized", sep = "")
     cat("\n", sep = "")
 
-    return(x)
+    x
   }
 )

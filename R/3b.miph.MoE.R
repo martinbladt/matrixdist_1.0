@@ -1,4 +1,4 @@
-#' Fit Method for mph/miph Class, using mixture-of-experts regression
+#' Fit method for mph/miph class, using mixture-of-experts regression
 #'
 #' @param x An object of class \linkS4class{mph}.
 #' @param formula a regression formula.
@@ -7,7 +7,7 @@
 #' @param alpha_mat Matrix with initial distribution vectors for each row of observations.
 #' @param delta Matrix with right-censoring indicators (1 uncensored, 0 right censored).
 #' @param stepsEM Number of EM steps to be performed.
-#' @param r Sub-sampling parameter, defaults to 1 (Not supported for this method).
+#' @param r Sub-sampling parameter, defaults to 1 (not supported for this method).
 #' @param maxit Maximum number of iterations when optimizing the g function (inhomogeneous likelihood).
 #' @param reltol Relative tolerance when optimizing g function.
 #' @param rand_init Random initiation in the R-step of the EM algorithm.
@@ -214,7 +214,7 @@ setMethod(
     cat("\n", format(Sys.time(), format = "%H:%M:%OS"), ": EM finalized", sep = "")
     cat("\n", sep = "")
 
-    return(x)
+    x
   }
 )
 
@@ -226,9 +226,7 @@ nnet_miph_LL <- function(x,
   x@gfun$pars <- gfun_pars
   res <- dens(x, y = obs, delta = delta)
 
-  ll <- sum(log(res))
-
-  return(ll)
+  sum(log(res))
 }
 
 nnet_EM_step_mph <- function(alpha_mat, S_list, y, delta) {
@@ -417,5 +415,5 @@ nnet_EM_step_mph <- function(alpha_mat, S_list, y, delta) {
   for (i in 1:d) {
     ll[[i]] <- S[, , i]
   }
-  return(list(Bmatrix = EB_k, S = ll, logLik = sum(log(a))))
+  list(Bmatrix = EB_k, S = ll, logLik = sum(log(a)))
 }

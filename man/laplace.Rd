@@ -2,7 +2,7 @@
 % Please edit documentation in R/0.generics.R
 \name{laplace}
 \alias{laplace}
-\title{New Generic for Laplace transform of Matrix Distributions}
+\title{New generic for Laplace transform of matrix distributions}
 \usage{
 laplace(x, ...)
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/1.ph.R
 \name{var,ph-method}
 \alias{var,ph-method}
-\title{Var Method for phase-type distributions}
+\title{Var method for phase-type distributions}
 \usage{
 \S4method{var}{ph}(x)
 }
@@ -10,10 +10,10 @@
 \item{x}{An object of class \linkS4class{ph}.}
 }
 \value{
-The variance of the \linkS4class{ph} (or undelying \linkS4class{ph}) object.
+The variance of the \linkS4class{ph} (or underlying \linkS4class{ph}) object.
 }
 \description{
-Var Method for phase-type distributions
+Var method for phase-type distributions
 }
 \examples{
 set.seed(123)

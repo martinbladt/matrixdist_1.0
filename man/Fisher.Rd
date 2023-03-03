@@ -2,7 +2,7 @@
 % Please edit documentation in R/0.generics.R
 \name{Fisher}
 \alias{Fisher}
-\title{New Generic for obtaining the Fisher Information of Survival Matrix Distributions}
+\title{New generic for obtaining the Fisher information of survival matrix distributions}
 \usage{
 Fisher(x, ...)
 }

@@ -14,5 +14,5 @@ The step length for \code{S}.
 }
 \description{
 Computes the default step length for a matrix \code{S} to be employed in the
- RK method.
+RK method.
 }

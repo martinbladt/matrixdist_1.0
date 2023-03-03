@@ -23,6 +23,6 @@ rmatrixgev(n, alpha, S, mu, sigma, xi = 0)
 The simulated sample.
 }
 \description{
-Generates a sample of size \code{n} from an inhomogeneous phase-type 
+Generates a sample of size \code{n} from an inhomogeneous phase-type
 distribution with parameters \code{alpha}, \code{S} and \code{beta}.
 }

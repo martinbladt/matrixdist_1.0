@@ -18,5 +18,5 @@ Next state of the Markov jump process.
 }
 \description{
 Given a transition matrix \code{Q}, a uniform value \code{u}, and a previous
- state \code{k}, it returns the new state of a Markov jump process.
+state \code{k}, it returns the new state of a Markov jump process.
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/0.generics.R
 \name{cdf}
 \alias{cdf}
-\title{New Generic for the Distribution of Matrix Distributions}
+\title{New generic for the distribution of matrix distributions}
 \usage{
 cdf(x, ...)
 }

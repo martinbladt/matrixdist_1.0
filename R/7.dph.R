@@ -1,4 +1,4 @@
-#' Discrete Phase Type distributions
+#' Discrete phase-type distributions
 #'
 #' Class of objects for discrete phase-type distributions.
 #'
@@ -17,11 +17,12 @@ setClass("dph",
   )
 )
 
-#' Constructor Function for discrete phase-type distributions
+#' Constructor function for discrete phase-type distributions
 #'
 #' @param alpha A probability vector.
 #' @param S A sub-transition matrix.
-#' @param structure A valid dph structure ("general", "coxian", "hyperexponential", "gcoxian", "gerlang").
+#' @param structure A valid dph structure: `"general"`, `"coxian"`,
+#'  `"hyperexponential"`, "gcoxian", or `"gerlang"`.
 #' @param dimension The dimension of the dph structure (if structure is provided).
 #'
 #' @return An object of class \linkS4class{dph}.
@@ -56,7 +57,7 @@ dph <- function(alpha = NULL, S = NULL, structure = NULL, dimension = 3) {
   )
 }
 
-#' Sum Method for discrete phase-type distributions
+#' Sum method for discrete phase-type distributions
 #'
 #' @param e1 An object of class \linkS4class{dph}.
 #' @param e2 An object of class \linkS4class{dph}.
@@ -73,11 +74,11 @@ setMethod(
   "+", signature(e1 = "dph", e2 = "dph"),
   function(e1, e2) {
     L <- sum_dph(e1@pars$alpha, e1@pars$S, e2@pars$alpha, e2@pars$S)
-    return(dph(alpha = L$alpha, S = L$S))
+    dph(alpha = L$alpha, S = L$S)
   }
 )
 
-#' Minimum Method for discrete phase-type distributions
+#' Minimum method for discrete phase-type distributions
 #'
 #' @param x1 An object of class \linkS4class{dph}.
 #' @param x2 An object of class \linkS4class{dph}.
@@ -95,11 +96,11 @@ setMethod(
   function(x1, x2) {
     alpha <- kronecker(x1@pars$alpha, x2@pars$alpha)
     S <- kronecker(x1@pars$S, x2@pars$S)
-    return(dph(alpha = alpha, S = S))
+    dph(alpha = alpha, S = S)
   }
 )
 
-#' Maximum Method for discrete phase-type distributions
+#' Maximum method for discrete phase-type distributions
 #'
 #' @param x1 An object of class \linkS4class{dph}.
 #' @param x2 An object of class \linkS4class{dph}.
@@ -121,11 +122,11 @@ setMethod(
     S1 <- rbind(kronecker(x1@pars$S, x2@pars$S), matrix(0, n1 + n2, n1 * n2))
     S2 <- rbind(kronecker(x1@pars$S, 1 - rowSums(x2@pars$S)), x1@pars$S, matrix(0, n2, n1))
     S3 <- rbind(kronecker(1 - rowSums(x1@pars$S), x2@pars$S), matrix(0, n1, n2), x2@pars$S)
-    return(dph(alpha = alpha, S = cbind(S1, S2, S3)))
+    dph(alpha = alpha, S = cbind(S1, S2, S3))
   }
 )
 
-#' Mixture Method for phase-type distributions
+#' Mixture method for phase-type distributions
 #'
 #' @param x1 An object of class \linkS4class{dph}.
 #' @param x2 An object of class \linkS4class{dph}.
@@ -147,11 +148,11 @@ setMethod(
     alpha <- c(prob * x1@pars$alpha, (1 - prob) * x2@pars$alpha)
     S1 <- rbind(x1@pars$S, matrix(0, n2, n1))
     S2 <- rbind(matrix(0, n1, n2), x2@pars$S)
-    return(ph(alpha = alpha, S = cbind(S1, S2)))
+    ph(alpha = alpha, S = cbind(S1, S2))
   }
 )
 
-#' Nfold Method for phase-type distributions
+#' Nfold method for phase-type distributions
 #'
 #' @param x1 An object of class \linkS4class{ph}.
 #' @param x2 An object of class \linkS4class{dph}.
@@ -184,7 +185,7 @@ setMethod(
   }
 )
 
-#' Show Method for discrete phase-type distributions
+#' Show method for discrete phase-type distributions
 #'
 #' @param object An object of class \linkS4class{dph}.
 #' @importFrom methods show
@@ -197,7 +198,7 @@ setMethod("show", "dph", function(object) {
   methods::show(object@pars)
 })
 
-#' Coef Method for dph Class
+#' Coef method for dph Class
 #'
 #' @param object An object of class \linkS4class{dph}.
 #'
@@ -211,7 +212,7 @@ setMethod("coef", c(object = "dph"), function(object) {
   object@pars
 })
 
-#' Moment Method for discrete phase-type distributions
+#' Moment method for discrete phase-type distributions
 #'
 #' @param x An object of class \linkS4class{dph}.
 #' @param k A positive integer (moment order).
@@ -234,11 +235,11 @@ setMethod(
     }
     m1 <- matrix_power(k - 1, x@pars$S)
     m2 <- matrix_power(k, solve(diag(nrow(x@pars$S)) - x@pars$S))
-    return(factorial(k) * sum(x@pars$alpha %*% m1 %*% m2))
+    factorial(k) * sum(x@pars$alpha %*% m1 %*% m2)
   }
 )
 
-#' Mean Method for discrete phase-type distributions
+#' Mean method for discrete phase-type distributions
 #'
 #' @param x An object of class \linkS4class{dph}.
 #'
@@ -253,11 +254,11 @@ setMethod(
   "mean", signature(x = "dph"),
   function(x) {
     m <- solve(diag(nrow(x@pars$S)) - x@pars$S)
-    return(sum(x@pars$alpha %*% m))
+    sum(x@pars$alpha %*% m)
   }
 )
 
-#' Var Method for discrete phase-type distributions
+#' Var method for discrete phase-type distributions
 #'
 #' @param x An object of class \linkS4class{dph}.
 #'
@@ -275,7 +276,7 @@ setMethod(
     fm <- sum(x@pars$alpha %*% m)
     m2 <- matrix_power(2, m)
     sm <- 2 * sum(x@pars$alpha %*% x@pars$S %*% m2)
-    return(sm + fm - fm^2)
+    sm + fm - fm^2
   }
 )
 
@@ -298,12 +299,11 @@ setMethod(
     if (any(abs(z) > 1)) {
       stop("z should between -1 and 1")
     }
-    l <- dph_pgf(z, x@pars$alpha, x@pars$S)
-    return(l)
+    dph_pgf(z, x@pars$alpha, x@pars$S)
   }
 )
 
-#' Simulation Method for phase-type distributions
+#' Simulation method for phase-type distributions
 #'
 #' @param x An object of class \linkS4class{dph}.
 #' @param n An integer of length of realization.
@@ -322,11 +322,10 @@ setMethod("sim", c(x = "dph"), function(x, n = 1000) {
   aux_vec <- rep(0, d + 1)
   aux_vec[d + 1] <- 1
   trans_mat <- rbind(trans_mat, aux_vec)
-  U <- rdphasetype(n, x@pars$alpha, trans_mat)
-  return(U)
+  rdphasetype(n, x@pars$alpha, trans_mat)
 })
 
-#' Density Method for discrete phase-type distributions
+#' Density method for discrete phase-type distributions
 #'
 #' @param x An object of class \linkS4class{dph}.
 #' @param y A vector of locations.
@@ -342,14 +341,14 @@ setMethod("dens", c(x = "dph"), function(x, y) {
   dens <- y
   dens[!y_inf] <- dphdensity(y, x@pars$alpha, x@pars$S)
   dens[y_inf] <- 0
-  return(dens)
+  dens
 })
 
-#' Distribution Method for discrete phase-type distributions
+#' Distribution method for discrete phase-type distributions
 #'
 #' @param x An object of class \linkS4class{dph}.
 #' @param q A vector of locations.
-#' @param lower.tail Logical parameter specifying whether lower tail (cdf) or
+#' @param lower.tail Logical parameter specifying whether lower tail (CDF) or
 #' upper tail is computed.
 #'
 #' @return A vector containing the CDF evaluations at the given locations.
@@ -365,7 +364,7 @@ setMethod("cdf", c(x = "dph"), function(x,
   cdf <- q
   cdf[!q_inf] <- dphcdf(q[!q_inf], x@pars$alpha, x@pars$S, lower.tail)
   cdf[q_inf] <- as.numeric(1 * lower.tail)
-  return(cdf)
+  cdf
 })
 
 #' TVR Method for dph Class
@@ -418,12 +417,11 @@ setMethod("TVR", c(x = "dph"), function(x, rew) {
   }
 
   mar_par <- tvr_dph(alpha_tilde, S_tilde, rew_tilde)
-  x0 <- dph(alpha = mar_par[[1]], S = mar_par[[2]])
-  return(x0)
+  dph(alpha = mar_par[[1]], S = mar_par[[2]])
 })
 
 
-#' Fit Method for dph Class
+#' Fit method for dph class
 #'
 #' @param x An object of class \linkS4class{dph}.
 #' @param y Vector or data.
@@ -484,16 +482,16 @@ setMethod(
     cat("\n", format(Sys.time(), format = "%H:%M:%OS"), ": EM finalized", sep = "")
     cat("\n", sep = "")
 
-    return(x)
+    x
   }
 )
 
-#' MoE Method for dph Class
+#' MoE method for dph Class
 #'
 #' @param x An object of class \linkS4class{dph}.
 #' @param formula A regression formula.
 #' @param data A data frame.
-#' @param alpha_vecs Matrix of initial probabilities.s
+#' @param alpha_vecs Matrix of initial probabilities.
 #' @param weight Vector of weights.
 #' @param stepsEM Number of EM steps to be performed.
 #' @param every Number of iterations between likelihood display updates.
@@ -543,6 +541,6 @@ setMethod(
       }
     }
     cat("\n", sep = "")
-    return(list(alpha = alpha_vecs, S = S_fit, mm = multinom_model))
+    list(alpha = alpha_vecs, S = S_fit, mm = multinom_model)
   }
 )

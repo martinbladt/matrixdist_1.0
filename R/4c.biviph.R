@@ -1,4 +1,4 @@
-#' Bivariate Inhomogeneous Phase Type distributions
+#' Bivariate inhomogeneous phase-type distributions
 #'
 #' Class of objects for bivariate inhomogeneous phase-type distributions.
 #'
@@ -16,7 +16,7 @@ setClass("biviph",
 )
 
 
-#' Constructor Function for bivariate inhomogeneous phase-type distributions
+#' Constructor function for bivariate inhomogeneous phase-type distributions
 #'
 #' @param bivph An object of class \linkS4class{bivph}.
 #' @param alpha A probability vector.
@@ -148,7 +148,7 @@ biviph <- function(bivph = NULL,
   )
 }
 
-#' Show Method for bivariate inhomogeneous phase-type distributions
+#' Show method for bivariate inhomogeneous phase-type distributions
 #'
 #' @param object An object of class \linkS4class{biviph}.
 #' @importFrom methods show
@@ -183,8 +183,7 @@ setMethod("sim", c(x = "biviph"), function(x, n = 1000) {
   alpha_aux <- c(x@pars$alpha, rep(0, p2_aux))
   S_aux <- merge_matrices(x@pars$S11, x@pars$S12, x@pars$S22)
   R_aux <- matrix(c(c(rep(1, p1_aux), rep(0, p2_aux)), c(rep(0, p1_aux), rep(1, p2_aux))), ncol = 2)
-  U <- rMIPHstar(n, alpha_aux, S_aux, R_aux, x@gfun$name, x@gfun$pars)
-  return(U)
+  rMIPHstar(n, alpha_aux, S_aux, R_aux, x@gfun$name, x@gfun$pars)
 })
 
 #' Marginal method for biviph class
@@ -208,7 +207,7 @@ setMethod("marginal", c(x = "biviph"), function(x, mar = 1) {
     alpha0 <- x@pars$alpha %*% base::solve(-x@pars$S11) %*% x@pars$S12
     x0 <- iph(ph(alpha = alpha0, S = x@pars$S22), gfun = x@gfun$name[mar], gfun_pars = x@gfun$pars[[mar]])
   }
-  return(x0)
+  x0
 })
 
 #' Density method for bivariate inhomogeneous phase-type distributions
@@ -233,7 +232,7 @@ setMethod("dens", c(x = "biviph"), function(x, y) {
   y2_inv <- x@gfun$inverse[[2]](gfun.pars[[2]], y[, 2])
   y2_int <- x@gfun$intensity[[2]](gfun.pars[[2]], y[, 2])
   dens <- bivph_density(cbind(y1_inv, y2_inv), x@pars$alpha, x@pars$S11, x@pars$S12, x@pars$S22) * y1_int * y2_int
-  return(unname(dens))
+  unname(dens)
 })
 
 #' Coef method for biviph class

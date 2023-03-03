@@ -2,7 +2,7 @@
 % Please edit documentation in R/1.ph.R
 \name{logLik,ph-method}
 \alias{logLik,ph-method}
-\title{logLik Method for ph Class}
+\title{Loglikelihood method for ph class}
 \usage{
 \S4method{logLik}{ph}(object)
 }
@@ -13,7 +13,7 @@
 An object of class logLik.
 }
 \description{
-logLik Method for ph Class
+Loglikelihood method for ph class
 }
 \examples{
 obj <- iph(ph(structure = "general", dimension = 2), gfun = "weibull", gfun_pars = 2)

@@ -2,7 +2,7 @@
 % Please edit documentation in R/8.bivdph.R
 \name{mean,bivdph-method}
 \alias{mean,bivdph-method}
-\title{Mean Method for bivdph class}
+\title{Mean method for bivdph class}
 \usage{
 \S4method{mean}{bivdph}(x)
 }
@@ -13,7 +13,7 @@
 The mean of the bivariate discrete phase-type distribution.
 }
 \description{
-Mean Method for bivdph class
+Mean method for bivdph class
 }
 \examples{
 obj <- bivdph(dimensions = c(3, 3))

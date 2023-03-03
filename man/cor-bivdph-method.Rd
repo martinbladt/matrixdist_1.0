@@ -2,7 +2,7 @@
 % Please edit documentation in R/8.bivdph.R
 \name{cor,bivdph-method}
 \alias{cor,bivdph-method}
-\title{Cor Method for bivdph class}
+\title{Cor method for bivdph class}
 \usage{
 \S4method{cor}{bivdph}(x)
 }
@@ -13,7 +13,7 @@
 The correlation matrix of the bivariate discrete phase-type distribution.
 }
 \description{
-Cor Method for bivdph class
+Cor method for bivdph class
 }
 \examples{
 obj <- bivdph(dimensions = c(3, 3))

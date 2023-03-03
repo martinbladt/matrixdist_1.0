@@ -2,7 +2,7 @@
 % Please edit documentation in R/7.dph.R
 \name{minimum,dph,dph-method}
 \alias{minimum,dph,dph-method}
-\title{Minimum Method for discrete phase-type distributions}
+\title{Minimum method for discrete phase-type distributions}
 \usage{
 \S4method{minimum}{dph,dph}(x1, x2)
 }
@@ -15,7 +15,7 @@
 An object of class \linkS4class{dph}.
 }
 \description{
-Minimum Method for discrete phase-type distributions
+Minimum method for discrete phase-type distributions
 }
 \examples{
 dph1 <- dph(structure = "general", dimension = 3)

@@ -2,7 +2,7 @@
 % Please edit documentation in R/1.ph.R
 \name{ph}
 \alias{ph}
-\title{Constructor Function for phase-type distributions}
+\title{Constructor function for phase-type distributions}
 \usage{
 ph(alpha = NULL, S = NULL, structure = NULL, dimension = 3)
 }
@@ -11,7 +11,8 @@ ph(alpha = NULL, S = NULL, structure = NULL, dimension = 3)
 
 \item{S}{A sub-intensity matrix.}
 
-\item{structure}{A valid ph structure ("general", "coxian", "hyperexponential", "gcoxian", "gerlang").}
+\item{structure}{A valid ph structure: \code{"general"}, \code{"coxian"},
+\code{"hyperexponential"}, \code{"gcoxian"}, or \code{"gerlang"}.}
 
 \item{dimension}{The dimension of the ph structure (if structure is provided).}
 }
@@ -19,7 +20,7 @@ ph(alpha = NULL, S = NULL, structure = NULL, dimension = 3)
 An object of class \linkS4class{ph}.
 }
 \description{
-Constructor Function for phase-type distributions
+Constructor function for phase-type distributions
 }
 \examples{
 ph(structure = "gcoxian", dimension = 5)

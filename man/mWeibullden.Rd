@@ -20,5 +20,5 @@ The density at \code{x}.
 }
 \description{
 Computes the density of a matrix-Weibull distribution with parameters
- \code{alpha}, \code{S} and \code{beta} at \code{x}.
+\code{alpha}, \code{S} and \code{beta} at \code{x}.
 }

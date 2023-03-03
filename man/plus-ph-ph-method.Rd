@@ -2,7 +2,7 @@
 % Please edit documentation in R/1.ph.R
 \name{+,ph,ph-method}
 \alias{+,ph,ph-method}
-\title{Sum Method for phase-type distributions}
+\title{Sum method for phase-type distributions}
 \usage{
 \S4method{+}{ph,ph}(e1, e2)
 }
@@ -15,7 +15,7 @@
 An object of class \linkS4class{ph}.
 }
 \description{
-Sum Method for phase-type distributions
+Sum method for phase-type distributions
 }
 \examples{
 ph1 <- ph(structure = "general", dimension = 3)

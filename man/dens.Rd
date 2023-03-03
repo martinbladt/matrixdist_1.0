@@ -2,7 +2,7 @@
 % Please edit documentation in R/0.generics.R
 \name{dens}
 \alias{dens}
-\title{New Generic for the Density of Matrix Distributions}
+\title{New generic for the density of matrix distributions}
 \usage{
 dens(x, ...)
 }

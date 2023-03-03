@@ -1,4 +1,4 @@
-#' Inhomogeneous Phase Type distributions
+#' Inhomogeneous phase-type distributions
 #'
 #' Class of objects for inhomogeneous phase-type distributions.
 #'
@@ -17,7 +17,7 @@ setClass("iph",
   )
 )
 
-#' Constructor Function for inhomogeneous phase-type distributions
+#' Constructor function for inhomogeneous phase-type distributions
 #'
 #' @param ph An object of class \linkS4class{ph}.
 #' @param alpha A probability vector.
@@ -117,7 +117,7 @@ iph <- function(ph = NULL, gfun = NULL, gfun_pars = NULL, alpha = NULL, S = NULL
   )
 }
 
-#' Minimum Method for inhomogeneous phase-type distributions
+#' Minimum method for inhomogeneous phase-type distributions
 #'
 #' @param x1 An object of class \linkS4class{iph}.
 #' @param x2 An object of class \linkS4class{iph}.
@@ -138,11 +138,11 @@ setMethod(
     }
     ph1 <- ph(alpha = x1@pars$alpha, S = x1@pars$S)
     ph2 <- ph(alpha = x2@pars$alpha, S = x2@pars$S)
-    return(iph(ph = minimum(ph1, ph2), gfun = x1@gfun$name, gfun_pars = x1@gfun$pars))
+    iph(ph = minimum(ph1, ph2), gfun = x1@gfun$name, gfun_pars = x1@gfun$pars)
   }
 )
 
-#' Maximum Method for inhomogeneous phase-type distributions
+#' Maximum method for inhomogeneous phase-type distributions
 #'
 #' @param x1 An object of class \linkS4class{iph}.
 #' @param x2 An object of class \linkS4class{iph}.
@@ -163,11 +163,11 @@ setMethod(
     }
     ph1 <- ph(alpha = x1@pars$alpha, S = x1@pars$S)
     ph2 <- ph(alpha = x2@pars$alpha, S = x2@pars$S)
-    return(iph(ph = maximum(ph1, ph2), gfun = x1@gfun$name, gfun_pars = x1@gfun$pars))
+    iph(ph = maximum(ph1, ph2), gfun = x1@gfun$name, gfun_pars = x1@gfun$pars)
   }
 )
 
-#' Show Method for inhomogeneous phase-type distributions
+#' Show method for inhomogeneous phase-type distributions
 #'
 #' @param object An object of class \linkS4class{iph}.
 #' @importFrom methods show
@@ -183,7 +183,7 @@ setMethod("show", "iph", function(object) {
   methods::show(object@gfun$pars)
 })
 
-#' Simulation Method for inhomogeneous phase-type distributions
+#' Simulation method for inhomogeneous phase-type distributions
 #'
 #' @param x An object of class \linkS4class{iph}.
 #' @param n An integer of length of realization.
@@ -205,10 +205,10 @@ setMethod("sim", c(x = "iph"), function(x, n = 1000) {
   if (name %in% c("gev")) {
     U <- scale * rmatrixgev(n, x@pars$alpha, x@pars$S, pars[1], pars[2], pars[3])
   }
-  return(U)
+  U
 })
 
-#' Density Method for inhomogeneous phase-type distributions
+#' Density method for inhomogeneous phase-type distributions
 #'
 #' @param x An object of class \linkS4class{iph}.
 #' @param y A vector of locations.
@@ -226,14 +226,14 @@ setMethod("dens", c(x = "iph"), function(x, y) {
   dens <- y
   dens[!y_inf] <- fn(y / scale, x@pars$alpha, x@pars$S, x@gfun$pars) / scale
   dens[y_inf] <- 0
-  return(dens)
+  dens
 })
 
-#' Distribution Method for inhomogeneous phase-type distributions
+#' Distribution method for inhomogeneous phase-type distributions
 #'
 #' @param x An object of class \linkS4class{iph}.
 #' @param q A vector of locations.
-#' @param lower.tail Logical parameter specifying whether lower tail (cdf) or
+#' @param lower.tail Logical parameter specifying whether lower tail (CDF) or
 #' upper tail is computed.
 #'
 #' @return A vector containing the CDF evaluations at the given locations.
@@ -251,10 +251,10 @@ setMethod("cdf", c(x = "iph"), function(x,
   cdf <- q
   cdf[!q_inf] <- fn(q[!q_inf] / scale, x@pars$alpha, x@pars$S, x@gfun$pars, lower.tail)
   cdf[q_inf] <- as.numeric(1 * lower.tail)
-  return(cdf)
+  cdf
 })
 
-#' Coef Method for iph Class
+#' Coef method for iph class
 #'
 #' @param object An object of class \linkS4class{iph}.
 #'

@@ -13,7 +13,7 @@
 }
 \value{
 The probability generating of the \linkS4class{dph} object at the
- given locations.
+given locations.
 }
 \description{
 Pgf Method for discrete phase-type distributions

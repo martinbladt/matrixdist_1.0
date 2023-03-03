@@ -2,7 +2,7 @@
 % Please edit documentation in R/4.MPHstar.R
 \name{MPHstar}
 \alias{MPHstar}
-\title{Constructor Function for multivariate phase type distributions (MPH* class)}
+\title{Constructor function for multivariate phase-type distributions (MPH* class)}
 \usage{
 MPHstar(
   alpha = NULL,
@@ -30,7 +30,7 @@ MPHstar(
 An object of class \linkS4class{MPHstar}.
 }
 \description{
-Constructor Function for multivariate phase type distributions (MPH* class)
+Constructor function for multivariate phase-type distributions (MPH* class)
 }
 \examples{
 MPHstar(structure = "general", dimension = 4, variables = 3)

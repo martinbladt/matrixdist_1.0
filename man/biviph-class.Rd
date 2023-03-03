@@ -3,7 +3,7 @@
 \docType{class}
 \name{biviph-class}
 \alias{biviph-class}
-\title{Bivariate Inhomogeneous Phase Type distributions}
+\title{Bivariate inhomogeneous phase-type distributions}
 \value{
 Class object.
 }

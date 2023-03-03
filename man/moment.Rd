@@ -2,7 +2,7 @@
 % Please edit documentation in R/0.generics.R
 \name{moment}
 \alias{moment}
-\title{New Generic for Moment of Matrix Distributions}
+\title{New generic for moments of matrix distributions}
 \usage{
 moment(x, ...)
 }

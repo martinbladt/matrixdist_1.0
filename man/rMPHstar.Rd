@@ -20,5 +20,5 @@ The simulated sample.
 }
 \description{
 Generates a sample of size \code{n} from a MPH* distribution with parameters
- \code{alpha}, \code{S} and \code{R}.
+\code{alpha}, \code{S} and \code{R}.
 }

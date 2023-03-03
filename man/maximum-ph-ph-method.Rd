@@ -2,7 +2,7 @@
 % Please edit documentation in R/1.ph.R
 \name{maximum,ph,ph-method}
 \alias{maximum,ph,ph-method}
-\title{Maximum Method for phase-type distributions}
+\title{Maximum method for phase-type distributions}
 \usage{
 \S4method{maximum}{ph,ph}(x1, x2)
 }
@@ -15,7 +15,7 @@
 An object of class \linkS4class{ph}.
 }
 \description{
-Maximum Method for phase-type distributions
+Maximum method for phase-type distributions
 }
 \examples{
 ph1 <- ph(structure = "general", dimension = 3)

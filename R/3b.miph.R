@@ -1,4 +1,4 @@
-#' Multivariate Inhomogeneous Phase Type distributions
+#' Multivariate inhomogeneous phase-type distributions
 #'
 #' Class of objects for multivariate inhomogeneous phase-type distributions.
 #'
@@ -17,7 +17,7 @@ setClass("miph",
   )
 )
 
-#' Constructor Function for multivariate inhomogeneous phase-type distributions
+#' Constructor function for multivariate inhomogeneous phase-type distributions
 #'
 #' @param mph An object of class \linkS4class{mph}.
 #' @param alpha A probability vector.
@@ -152,7 +152,7 @@ miph <- function(mph = NULL, # object of class mPH
   )
 }
 
-#' Show Method for multivariate inhomogeneous phase-type distributions
+#' Show method for multivariate inhomogeneous phase-type distributions
 #'
 #' @param object An object of class \linkS4class{miph}.
 #' @importFrom methods show
@@ -168,7 +168,7 @@ setMethod("show", "miph", function(object) {
   methods::show(object@gfun$pars)
 })
 
-#' Simulation Method for inhomogeneous multivariate phase-type distributions
+#' Simulation method for inhomogeneous multivariate phase-type distributions
 #'
 #' @param x An object of class \linkS4class{miph}.
 #' @param n An integer of length of realization.
@@ -215,7 +215,7 @@ setMethod("sim", c(x = "miph"), function(x, n = 1000) {
       U[, , m] <- U2
     }
   }
-  return(U)
+  U
 })
 
 #' Marginal method for multivariate inhomogeneous phase-type distributions
@@ -235,11 +235,10 @@ setMethod("marginal", c(x = "miph"), function(x, mar = 1) {
   }
   S <- x@pars$S
   par <- x@gfun$pars
-  x0 <- iph(ph(alpha = x@pars$alpha, S = S[[mar]]), gfun = x@gfun$name[mar], gfun_pars = par[[mar]])
-  return(x0)
+  iph(ph(alpha = x@pars$alpha, S = S[[mar]]), gfun = x@gfun$name[mar], gfun_pars = par[[mar]])
 })
 
-#' Density Method for multivariate inhomogeneous phase-type distributions
+#' Density method for multivariate inhomogeneous phase-type distributions
 #'
 #' @param x An object of class \linkS4class{miph}.
 #' @param delta Matrix with right-censoring indicators (1 uncensored, 0 right censored).
@@ -325,14 +324,15 @@ setMethod("dens", c(x = "miph"), function(x, y, delta = NULL) {
     res <- rowSums(inter_res)
   }
 
-  return(res)
+ res
 })
 
-#' Distribution Method for multivariate inhomogeneous phase-type distributions
+#' Distribution method for multivariate inhomogeneous phase-type distributions
 #'
 #' @param x An object of class \linkS4class{miph}.
 #' @param y A matrix of observations.
-#' @param lower.tail Logical parameter specifying whether lower tail (cdf) or upper tail is computed.
+#' @param lower.tail Logical parameter specifying whether lower tail (CDF) or
+#'  upper tail is computed.
 #'
 #' @return A list containing the locations and corresponding CDF evaluations.
 #' @export
@@ -395,6 +395,5 @@ setMethod("cdf", c(x = "miph"), function(x, y, lower.tail = TRUE) {
     }
     res <- rowSums(inter_res)
   }
-
-  return(res)
+  res
 })

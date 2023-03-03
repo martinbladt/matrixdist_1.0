@@ -2,7 +2,7 @@
 % Please edit documentation in R/4.MPHstar.R
 \name{show,MPHstar-method}
 \alias{show,MPHstar-method}
-\title{Show Method for multivariate phase type distributions}
+\title{Show method for multivariate phase-type distributions}
 \usage{
 \S4method{show}{MPHstar}(object)
 }
@@ -10,5 +10,5 @@
 \item{object}{An object of class \linkS4class{MPHstar}.}
 }
 \description{
-Show Method for multivariate phase type distributions
+Show method for multivariate phase-type distributions
 }

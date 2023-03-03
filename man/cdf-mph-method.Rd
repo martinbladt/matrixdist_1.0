@@ -2,7 +2,7 @@
 % Please edit documentation in R/3.mph.R
 \name{cdf,mph-method}
 \alias{cdf,mph-method}
-\title{Distribution Method for multivariate phase-type distributions}
+\title{Distribution method for multivariate phase-type distributions}
 \usage{
 \S4method{cdf}{mph}(x, y, lower.tail = TRUE)
 }
@@ -11,14 +11,14 @@
 
 \item{y}{A matrix of observations.}
 
-\item{lower.tail}{Logical parameter specifying whether lower tail (cdf) or
+\item{lower.tail}{Logical parameter specifying whether lower tail (CDF) or
 upper tail is computed.}
 }
 \value{
 A list containing the locations and corresponding CDF evaluations.
 }
 \description{
-Distribution Method for multivariate phase-type distributions
+Distribution method for multivariate phase-type distributions
 }
 \examples{
 obj <- mph(structure = c("general", "general"))

@@ -2,7 +2,7 @@
 % Please edit documentation in R/3.mph.R
 \name{moment,mph-method}
 \alias{moment,mph-method}
-\title{Moment Method for multivariate phase-type distributions}
+\title{Moment method for multivariate phase-type distributions}
 \usage{
 \S4method{moment}{mph}(x, k)
 }
@@ -15,7 +15,7 @@
 The corresponding joint moment evaluation.
 }
 \description{
-Moment Method for multivariate phase-type distributions
+Moment method for multivariate phase-type distributions
 }
 \examples{
 obj <- mph(structure = c("general", "general"))

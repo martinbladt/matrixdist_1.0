@@ -3,7 +3,7 @@
 \docType{class}
 \name{MPHstar-class}
 \alias{MPHstar-class}
-\title{Multivariate Phase Type distributions obtained by transformation via rewards}
+\title{Multivariate phase-type distributions obtained by transformation via rewards}
 \description{
 Class of objects for multivariate phase type distributions.
 }

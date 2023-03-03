@@ -15,6 +15,6 @@ random_reward(p, d)
 A random reward matrix.
 }
 \description{
-Generates a random reward matrix for a multivariate phase-type distribution 
+Generates a random reward matrix for a multivariate phase-type distribution
 with p states and d marginals.
 }

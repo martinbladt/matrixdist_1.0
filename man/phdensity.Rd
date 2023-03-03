@@ -18,5 +18,5 @@ The density at \code{x}.
 }
 \description{
 Computes the density of a phase-type distribution with parameters
- \code{alpha} and \code{S} at \code{x}.
+\code{alpha} and \code{S} at \code{x}.
 }

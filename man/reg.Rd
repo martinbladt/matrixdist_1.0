@@ -2,7 +2,7 @@
 % Please edit documentation in R/0.generics.R
 \name{reg}
 \alias{reg}
-\title{New Generic for Regression with Matrix Distributions}
+\title{New generic for regression with matrix distributions}
 \usage{
 reg(x, y, ...)
 }

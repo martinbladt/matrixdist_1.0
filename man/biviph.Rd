@@ -2,7 +2,7 @@
 % Please edit documentation in R/4c.biviph.R
 \name{biviph}
 \alias{biviph}
-\title{Constructor Function for bivariate inhomogeneous phase-type distributions}
+\title{Constructor function for bivariate inhomogeneous phase-type distributions}
 \usage{
 biviph(
   bivph = NULL,
@@ -36,7 +36,7 @@ biviph(
 An object of class \linkS4class{biviph}.
 }
 \description{
-Constructor Function for bivariate inhomogeneous phase-type distributions
+Constructor function for bivariate inhomogeneous phase-type distributions
 }
 \examples{
 under_bivph <- bivph(dimensions = c(3, 3))

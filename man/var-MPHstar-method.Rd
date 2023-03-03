@@ -2,7 +2,7 @@
 % Please edit documentation in R/4.MPHstar.R
 \name{var,MPHstar-method}
 \alias{var,MPHstar-method}
-\title{Var Method for MPHstar class}
+\title{Var method for MPHstar class}
 \usage{
 \S4method{var}{MPHstar}(x)
 }
@@ -13,7 +13,7 @@
 The covariance matrix of the MPHstar distribution.
 }
 \description{
-Var Method for MPHstar class
+Var method for MPHstar class
 }
 \examples{
 obj <- MPHstar(structure = "general")

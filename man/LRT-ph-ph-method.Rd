@@ -2,7 +2,7 @@
 % Please edit documentation in R/1.ph.R
 \name{LRT,ph,ph-method}
 \alias{LRT,ph,ph-method}
-\title{LRT Method for ph Class}
+\title{LRT method for ph class}
 \usage{
 \S4method{LRT}{ph,ph}(x, y)
 }
@@ -13,5 +13,5 @@
 LRT between the models.
 }
 \description{
-LRT Method for ph Class
+LRT method for ph class
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/7.dph.R
 \name{moment,dph-method}
 \alias{moment,dph-method}
-\title{Moment Method for discrete phase-type distributions}
+\title{Moment method for discrete phase-type distributions}
 \usage{
 \S4method{moment}{dph}(x, k = 1)
 }
@@ -15,7 +15,7 @@
 The factional moment of the \linkS4class{dph} object.
 }
 \description{
-Moment Method for discrete phase-type distributions
+Moment method for discrete phase-type distributions
 }
 \examples{
 set.seed(123)

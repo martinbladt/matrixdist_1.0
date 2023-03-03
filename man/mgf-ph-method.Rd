@@ -2,7 +2,7 @@
 % Please edit documentation in R/1.ph.R
 \name{mgf,ph-method}
 \alias{mgf,ph-method}
-\title{Mgf Method for phase-type distributions}
+\title{Mgf method for phase-type distributions}
 \usage{
 \S4method{mgf}{ph}(x, r)
 }
@@ -12,11 +12,11 @@
 \item{r}{A vector of real values.}
 }
 \value{
-The mgf of the \linkS4class{ph} (or undelying \linkS4class{ph}) object
- at the given locations.
+The mgf of the \linkS4class{ph} (or underlying \linkS4class{ph}) object
+at the given locations.
 }
 \description{
-Mgf Method for phase-type distributions
+Mgf method for phase-type distributions
 }
 \examples{
 set.seed(123)

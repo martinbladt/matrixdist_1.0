@@ -2,7 +2,7 @@
 % Please edit documentation in R/3.mph.R
 \name{cor,mph-method}
 \alias{cor,mph-method}
-\title{Cor Method for multivariate phase-type distributions}
+\title{Cor method for multivariate phase-type distributions}
 \usage{
 \S4method{cor}{mph}(x)
 }
@@ -13,7 +13,7 @@
 The correlation matrix of the multivariate phase-type distribution.
 }
 \description{
-Cor Method for multivariate phase-type distributions
+Cor method for multivariate phase-type distributions
 }
 \examples{
 obj <- mph(structure = c("general", "general"))

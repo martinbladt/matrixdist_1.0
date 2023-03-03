@@ -3,7 +3,7 @@
 \docType{class}
 \name{mph-class}
 \alias{mph-class}
-\title{Multivariate Phase Type distributions}
+\title{Multivariate phase-type distributions}
 \value{
 Class object.
 }

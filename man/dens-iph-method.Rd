@@ -2,7 +2,7 @@
 % Please edit documentation in R/2.iph.R
 \name{dens,iph-method}
 \alias{dens,iph-method}
-\title{Density Method for inhomogeneous phase-type distributions}
+\title{Density method for inhomogeneous phase-type distributions}
 \usage{
 \S4method{dens}{iph}(x, y)
 }
@@ -15,7 +15,7 @@
 A vector containing the density evaluations at the given locations.
 }
 \description{
-Density Method for inhomogeneous phase-type distributions
+Density method for inhomogeneous phase-type distributions
 }
 \examples{
 obj <- iph(ph(structure = "general"), gfun = "weibull", gfun_pars = 2)

@@ -2,7 +2,7 @@
 % Please edit documentation in R/1.ph.R
 \name{TVR,ph-method}
 \alias{TVR,ph-method}
-\title{TVR Method for ph Class}
+\title{TVR method for ph class}
 \usage{
 \S4method{TVR}{ph}(x, rew)
 }
@@ -15,7 +15,7 @@
 An object of the of class \linkS4class{ph}.
 }
 \description{
-TVR Method for ph Class
+TVR method for ph class
 }
 \examples{
 obj <- ph(structure = "general")

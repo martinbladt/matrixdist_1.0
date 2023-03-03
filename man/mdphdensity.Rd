@@ -17,6 +17,6 @@ mdphdensity(x, alpha, S_list)
 The density at \code{x}.
 }
 \description{
-Computes the density of multivariate discrete phase-type distribution with 
+Computes the density of multivariate discrete phase-type distribution with
 parameters \code{alpha} and \code{S} at \code{x}.
 }

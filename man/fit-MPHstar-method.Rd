@@ -2,7 +2,7 @@
 % Please edit documentation in R/4.MPHstar.R
 \name{fit,MPHstar-method}
 \alias{fit,MPHstar-method}
-\title{Fit Method for mph Class}
+\title{Fit method for mph class}
 \usage{
 \S4method{fit}{MPHstar}(
   x,
@@ -42,7 +42,7 @@
 An object of class \linkS4class{MPHstar}.
 }
 \description{
-Fit Method for mph Class
+Fit method for mph class
 }
 \examples{
 set.seed(123)

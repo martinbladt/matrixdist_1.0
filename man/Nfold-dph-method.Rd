@@ -2,7 +2,7 @@
 % Please edit documentation in R/7.dph.R
 \name{Nfold,dph-method}
 \alias{Nfold,dph-method}
-\title{Nfold Method for phase-type distributions}
+\title{Nfold method for phase-type distributions}
 \usage{
 \S4method{Nfold}{dph}(x1, x2)
 }
@@ -15,7 +15,7 @@
 An object of class \linkS4class{ph}.
 }
 \description{
-Nfold Method for phase-type distributions
+Nfold method for phase-type distributions
 }
 \examples{
 dph1 <- dph(structure = "general", dimension = 3)

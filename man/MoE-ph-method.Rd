@@ -2,7 +2,7 @@
 % Please edit documentation in R/5.phMoE.R
 \name{MoE,ph-method}
 \alias{MoE,ph-method}
-\title{MoE Method for ph Class}
+\title{MoE method for ph Class}
 \usage{
 \S4method{MoE}{ph}(
   x,
@@ -37,7 +37,7 @@
 
 \item{stepsEM}{Number of EM steps to be performed.}
 
-\item{optim_method}{Method to use in gradient optimization}
+\item{optim_method}{Method to use in gradient optimization.}
 
 \item{maxit}{Maximum number of iterations when optimizing g function.}
 
@@ -51,5 +51,5 @@
 An object of class \linkS4class{sph}.
 }
 \description{
-MoE Method for ph Class
+MoE method for ph Class
 }

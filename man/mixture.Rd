@@ -2,7 +2,7 @@
 % Please edit documentation in R/0.generics.R
 \name{mixture}
 \alias{mixture}
-\title{New Generic for Mixture of two Matrix Distributions}
+\title{New generic for mixture of two matrix distributions}
 \usage{
 mixture(x1, x2, ...)
 }

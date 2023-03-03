@@ -10,7 +10,7 @@ find_weight(x)
 \item{x}{A vector of observations from which we want to know their weights.}
 }
 \value{
-A matrix with unique observations as fisrt column and associated weights for second column.
+A matrix with unique observations as first column and associated weights for second column.
 }
 \description{
 Find weight of observations

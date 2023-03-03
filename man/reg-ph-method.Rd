@@ -2,7 +2,7 @@
 % Please edit documentation in R/2b.iph_regression.R
 \name{reg,ph-method}
 \alias{reg,ph-method}
-\title{Regression Method for ph Class}
+\title{Regression method for ph Class}
 \usage{
 \S4method{reg}{ph}(
   x,
@@ -39,9 +39,9 @@
 
 \item{stepsEM}{Number of EM steps to be performed.}
 
-\item{methods}{Methods to use for matrix exponential calculation: RM, UNI or PADE.}
+\item{methods}{Methods to use for matrix exponential calculation: \code{RM}, \code{UNI}, or \code{PADE}.}
 
-\item{rkstep}{Runge-Kutta step size (optional)}
+\item{rkstep}{Runge-Kutta step size (optional).}
 
 \item{uni_epsilon}{Epsilon parameter for uniformization method.}
 
@@ -57,5 +57,5 @@
 An object of class \linkS4class{sph}.
 }
 \description{
-Regression Method for ph Class
+Regression method for ph Class
 }

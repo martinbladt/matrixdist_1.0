@@ -2,7 +2,7 @@
 % Please edit documentation in R/7.dph.R
 \name{sim,dph-method}
 \alias{sim,dph-method}
-\title{Simulation Method for phase-type distributions}
+\title{Simulation method for phase-type distributions}
 \usage{
 \S4method{sim}{dph}(x, n = 1000)
 }
@@ -13,10 +13,10 @@
 }
 \value{
 A realization of independent and identically distributed discrete
- phase-type variables.
+phase-type variables.
 }
 \description{
-Simulation Method for phase-type distributions
+Simulation method for phase-type distributions
 }
 \examples{
 obj <- dph(structure = "general")

@@ -2,7 +2,7 @@
 % Please edit documentation in R/3b.miph.MoE.R
 \name{MoE,mph-method}
 \alias{MoE,mph-method}
-\title{Fit Method for mph/miph Class, using mixture-of-experts regression}
+\title{Fit method for mph/miph class, using mixture-of-experts regression}
 \usage{
 \S4method{MoE}{mph}(
   x,
@@ -33,7 +33,7 @@
 
 \item{stepsEM}{Number of EM steps to be performed.}
 
-\item{r}{Sub-sampling parameter, defaults to 1 (Not supported for this method).}
+\item{r}{Sub-sampling parameter, defaults to 1 (not supported for this method).}
 
 \item{maxit}{Maximum number of iterations when optimizing the g function (inhomogeneous likelihood).}
 
@@ -42,7 +42,7 @@
 \item{rand_init}{Random initiation in the R-step of the EM algorithm.}
 }
 \description{
-Fit Method for mph/miph Class, using mixture-of-experts regression
+Fit method for mph/miph class, using mixture-of-experts regression
 }
 \examples{
 x <- mph(structure = c("general", "general"), dimension = 3, variables = 2)

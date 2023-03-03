@@ -2,7 +2,7 @@
 % Please edit documentation in R/1.ph.R
 \name{coef,ph-method}
 \alias{coef,ph-method}
-\title{Coef Method for ph Class}
+\title{Coef method for ph class}
 \usage{
 \S4method{coef}{ph}(object)
 }
@@ -13,7 +13,7 @@
 Parameters of ph model.
 }
 \description{
-Coef Method for ph Class
+Coef method for ph class
 }
 \examples{
 obj <- ph(structure = "general")

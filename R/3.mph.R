@@ -1,4 +1,4 @@
-#' Multivariate Phase Type distributions
+#' Multivariate phase-type distributions
 #'
 #' Class of objects for multivariate phase-type distributions.
 #'
@@ -17,7 +17,7 @@ setClass("mph",
   )
 )
 
-#' Constructor Function for multivariate phase-type distributions
+#' Constructor function for multivariate phase-type distributions
 #'
 #' @param alpha A probability vector.
 #' @param S A list of sub-intensity matrices.
@@ -55,7 +55,7 @@ mph <- function(alpha = NULL, S = NULL, structure = NULL, dimension = 3, variabl
   )
 }
 
-#' Show Method for multivariate phase-type distributions
+#' Show method for multivariate phase-type distributions
 #'
 #' @param object An object of class \linkS4class{mph}.
 #' @importFrom methods show
@@ -69,7 +69,7 @@ setMethod("show", "mph", function(object) {
   cat("number of variables: ", length(object@pars$S), "\n", sep = "")
 })
 
-#' Simulation Method for multivariate phase-type distributions
+#' Simulation method for multivariate phase-type distributions
 #'
 #' @param x An object of class \linkS4class{mph}.
 #' @param n Length of realization.
@@ -111,7 +111,7 @@ setMethod("sim", c(x = "mph"), function(x, n = 1000, equal_marginals = 0) {
       }
     }
   }
-  return(result)
+  result
 })
 
 #' Marginal method for multivariate phase-type distributions
@@ -129,11 +129,10 @@ setMethod("marginal", c(x = "mph"), function(x, mar = 1) {
     stop("maringal provided not available")
   }
   S <- x@pars$S
-  x0 <- ph(alpha = x@pars$alpha, S = S[[mar]])
-  return(x0)
+  ph(alpha = x@pars$alpha, S = S[[mar]])
 })
 
-#' Density Method for multivariate phase-type distributions
+#' Density method for multivariate phase-type distributions
 #'
 #' @param x An object of class \linkS4class{mph}.
 #' @param delta Matrix with right-censoring indicators (1 uncensored, 0 right censored).
@@ -213,14 +212,14 @@ setMethod("dens", c(x = "mph"), function(x, y, delta = NULL) {
     res <- rowSums(inter_res)
   }
 
-  return(res)
+  res
 })
 
-#' Distribution Method for multivariate phase-type distributions
+#' Distribution method for multivariate phase-type distributions
 #'
 #' @param x An object of class \linkS4class{mph}.
 #' @param y A matrix of observations.
-#' @param lower.tail Logical parameter specifying whether lower tail (cdf) or
+#' @param lower.tail Logical parameter specifying whether lower tail (CDF) or
 #'  upper tail is computed.
 #'
 #' @return A list containing the locations and corresponding CDF evaluations.
@@ -282,10 +281,10 @@ setMethod("cdf", c(x = "mph"), function(x,
     res <- rowSums(inter_res)
   }
 
-  return(res)
+  res
 })
 
-#' Laplace Method for multivariate phase-type distributions
+#' Laplace method for multivariate phase-type distributions
 #'
 #' @param x An object of class \linkS4class{mph}.
 #' @param r A matrix of real values.
@@ -336,10 +335,10 @@ setMethod("laplace", c(x = "mph"), function(x, r) {
     res <- res + alpha[j] * apply(aux, 1, prod)
   }
 
-  return(res)
+  res
 })
 
-#' Mgf Method for multivariate phase-type distributions
+#' Mgf method for multivariate phase-type distributions
 #'
 #' @param x An object of class \linkS4class{mph}.
 #' @param r A matrix of real values.
@@ -369,10 +368,10 @@ setMethod("mgf", c(x = "mph"), function(x, r) {
     }
   }
 
-  return(laplace(x, -r))
+  laplace(x, -r)
 })
 
-#' Moment Method for multivariate phase-type distributions
+#' Moment method for multivariate phase-type distributions
 #'
 #' @param x An object of class \linkS4class{mph}.
 #' @param k A vector of non-negative integer values.
@@ -410,10 +409,10 @@ setMethod("moment", c(x = "mph"), function(x, k) {
     res <- res + alpha[j] * prod(aux)
   }
 
-  return(res)
+  res
 })
 
-#' Mean Method for multivariate phase-type distributions
+#' Mean method for multivariate phase-type distributions
 #'
 #' @param x An object of class \linkS4class{mph}.
 #'
@@ -435,10 +434,10 @@ setMethod("mean", c(x = "mph"), function(x) {
     res[i] <- suppressWarnings(moment(x, mom_vect))
   }
 
-  return(res)
+  res
 })
 
-#' Var Method for multivariate phase-type distributions
+#' Var method for multivariate phase-type distributions
 #'
 #' @param x An object of class \linkS4class{mph}.
 #'
@@ -464,10 +463,10 @@ setMethod("var", c(x = "mph"), function(x) {
     }
   }
   res[lower.tri(res)] <- t(res)[lower.tri(res)]
-  return(res)
+  res
 })
 
-#' Cor Method for multivariate phase-type distributions
+#' Cor method for multivariate phase-type distributions
 #'
 #' @param x An object of class \linkS4class{mph}.
 #'
@@ -484,13 +483,13 @@ setMethod("cor", c(x = "mph"), function(x) {
   suppressWarnings(stats::cov2cor(var(x)))
 })
 
-#' Fit Method for mph Class
+#' Fit method for mph Class
 #'
 #' @param x An object of class \linkS4class{mph}.
 #' @param y Matrix of data.
-#' @param delta Matrix with right-censoring indicators. (1 uncensored, 0 right censored)
+#' @param delta Matrix with right-censoring indicators (1 uncensored, 0 right censored).
 #' @param stepsEM Number of EM steps to be performed.
-#' @param equal_marginals Logical. If TRUE, all marginals are fitted to be equal.
+#' @param equal_marginals Logical. If `TRUE`, all marginals are fitted to be equal.
 #' @param r Sub-sampling parameter, defaults to 1.
 #' @param maxit Maximum number of iterations when optimizing g function.
 #' @param reltol Relative tolerance when optimizing g function.
@@ -660,7 +659,7 @@ setMethod(
     cat("\n", format(Sys.time(), format = "%H:%M:%OS"), ": EM finalized", sep = "")
     cat("\n", sep = "")
 
-    return(x)
+    x
   }
 )
 
@@ -672,9 +671,7 @@ miph_LL <- function(x,
   x@gfun$pars <- gfun_pars
   res <- dens(x = x, y = obs, delta = delta)
 
-  ll <- sum(log(res))
-
-  return(ll)
+  sum(log(res))
 }
 
 # EM step for mPH class
@@ -857,7 +854,7 @@ EM_step_mph <- function(alpha, S_list, y, delta) {
   for (i in 1:d) {
     ll[[i]] <- S[, , i]
   }
-  return(list(alpha = alpha, S = ll, logLik = sum(log(a))))
+  list(alpha = alpha, S = ll, logLik = sum(log(a)))
 }
 
 EM_step_mph_0 <- function(alpha, S, y, delta) {
@@ -1031,5 +1028,5 @@ EM_step_mph_0 <- function(alpha, S, y, delta) {
   for (k in 1:p) {
     S[k, k] <- -sum(S[k, -k]) - s[k]
   }
-  return(list(alpha = alpha, S = S, logLik = sum(log(a))))
+  list(alpha = alpha, S = S, logLik = sum(log(a)))
 }

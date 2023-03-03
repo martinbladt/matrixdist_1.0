@@ -2,7 +2,7 @@
 % Please edit documentation in R/9.mdph.R
 \name{MoE,mdph-method}
 \alias{MoE,mdph-method}
-\title{MoE Method for mdph Class}
+\title{MoE method for mdph Class}
 \usage{
 \S4method{MoE}{mdph}(
   x,
@@ -39,5 +39,5 @@
 An object of class \linkS4class{sph}.
 }
 \description{
-MoE Method for mdph Class
+MoE method for mdph Class
 }

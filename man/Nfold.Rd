@@ -2,7 +2,7 @@
 % Please edit documentation in R/0.generics.R
 \name{Nfold}
 \alias{Nfold}
-\title{New Generic for N-fold convolution of two Matrix Distributions}
+\title{New generic for N-fold convolution of two matrix distributions}
 \usage{
 Nfold(x1, x2, ...)
 }

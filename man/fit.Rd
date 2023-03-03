@@ -2,7 +2,7 @@
 % Please edit documentation in R/0.generics.R
 \name{fit}
 \alias{fit}
-\title{New Generic for Estimating Matrix Distributions}
+\title{New generic for estimating matrix distributions}
 \usage{
 fit(x, y, ...)
 }

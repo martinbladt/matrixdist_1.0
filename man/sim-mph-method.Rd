@@ -2,7 +2,7 @@
 % Please edit documentation in R/3.mph.R
 \name{sim,mph-method}
 \alias{sim,mph-method}
-\title{Simulation Method for multivariate phase-type distributions}
+\title{Simulation method for multivariate phase-type distributions}
 \usage{
 \S4method{sim}{mph}(x, n = 1000, equal_marginals = 0)
 }
@@ -18,7 +18,7 @@ the number of marginals to simulate from, all from the first matrix.}
 A realization of a multivariate phase-type distribution.
 }
 \description{
-Simulation Method for multivariate phase-type distributions
+Simulation method for multivariate phase-type distributions
 }
 \examples{
 obj <- mph(structure = c("general", "general"))

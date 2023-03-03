@@ -2,8 +2,8 @@
 % Please edit documentation in R/RcppExports.R
 \name{sum_ph}
 \alias{sum_ph}
-\title{Computes the initial distribution and sub-intensity of the sum of two 
- phase-type distributed random variables.}
+\title{Computes the initial distribution and sub-intensity of the sum of two
+phase-type distributed random variables.}
 \usage{
 sum_ph(alpha1, S1, alpha2, S2)
 }
@@ -17,6 +17,6 @@ sum_ph(alpha1, S1, alpha2, S2)
 \item{S2}{Sub-intensity matrix.}
 }
 \description{
-Computes the initial distribution and sub-intensity of the sum of two 
- phase-type distributed random variables.
+Computes the initial distribution and sub-intensity of the sum of two
+phase-type distributed random variables.
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/7.dph.R
 \name{fit,dph-method}
 \alias{fit,dph-method}
-\title{Fit Method for dph Class}
+\title{Fit method for dph class}
 \usage{
 \S4method{fit}{dph}(x, y, weight = numeric(0), stepsEM = 1000, every = 100)
 }
@@ -21,7 +21,7 @@
 An object of class \linkS4class{dph}.
 }
 \description{
-Fit Method for dph Class
+Fit method for dph class
 }
 \examples{
 obj <- dph(structure = "general", dimension = 2)

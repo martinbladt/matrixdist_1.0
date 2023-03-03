@@ -2,7 +2,7 @@
 % Please edit documentation in R/3.mph.R
 \name{show,mph-method}
 \alias{show,mph-method}
-\title{Show Method for multivariate phase-type distributions}
+\title{Show method for multivariate phase-type distributions}
 \usage{
 \S4method{show}{mph}(object)
 }
@@ -10,5 +10,5 @@
 \item{object}{An object of class \linkS4class{mph}.}
 }
 \description{
-Show Method for multivariate phase-type distributions
+Show method for multivariate phase-type distributions
 }

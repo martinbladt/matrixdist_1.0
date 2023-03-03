@@ -1,4 +1,4 @@
-#' New Generic for Simulating Matrix Distributions
+#' New generic for simulating matrix distributions
 #'
 #' Methods are available for objects of class \linkS4class{ph}.
 #'
@@ -9,7 +9,7 @@
 #'
 setGeneric("sim", function(x, ...) standardGeneric("sim"))
 
-#' New Generic for Moment of Matrix Distributions
+#' New generic for moments of matrix distributions
 #'
 #' Methods are available for objects of class \linkS4class{ph}.
 #'
@@ -20,7 +20,7 @@ setGeneric("sim", function(x, ...) standardGeneric("sim"))
 #'
 setGeneric("moment", function(x, ...) standardGeneric("moment"))
 
-#' New Generic for Laplace transform of Matrix Distributions
+#' New generic for Laplace transform of matrix distributions
 #'
 #' Methods are available for objects of class \linkS4class{ph}.
 #'
@@ -31,29 +31,29 @@ setGeneric("moment", function(x, ...) standardGeneric("moment"))
 #'
 setGeneric("laplace", function(x, ...) standardGeneric("laplace"))
 
-#' New Generic for mgf of Matrix Distributions
+#' New generic for mgf of matrix distributions
 #'
 #' Methods are available for objects of class \linkS4class{ph}.
 #'
 #' @param x An object of the model class.
 #' @param ... Further parameters to be passed on.
 #'
-#' @return Mgf transform of the matrix distribution.
+#' @return Mgf of the matrix distribution.
 #'
 setGeneric("mgf", function(x, ...) standardGeneric("mgf"))
 
-#' New Generic for pgf of Matrix Distributions
+#' New generic for pgf of matrix distributions
 #'
 #' Methods are available for objects of class \linkS4class{dph}.
 #'
 #' @param x An object of the model class.
 #' @param ... Further parameters to be passed on.
 #'
-#' @return Pgf transform of the matrix distribution.
+#' @return Pgf of the matrix distribution.
 #'
 setGeneric("pgf", function(x, ...) standardGeneric("pgf"))
 
-#' New Generic for Minimum of two Matrix Distributions
+#' New generic for minimum of two matrix distributions
 #'
 #' Methods are available for objects of class \linkS4class{ph}.
 #'
@@ -65,7 +65,7 @@ setGeneric("pgf", function(x, ...) standardGeneric("pgf"))
 #'
 setGeneric("minimum", function(x1, x2, ...) standardGeneric("minimum"))
 
-#' New Generic for Maximum of two Matrix Distributions
+#' New generic for maximum of two matrix distributions
 #'
 #' Methods are available for objects of class \linkS4class{ph}.
 #'
@@ -77,7 +77,7 @@ setGeneric("minimum", function(x1, x2, ...) standardGeneric("minimum"))
 #'
 setGeneric("maximum", function(x1, x2, ...) standardGeneric("maximum"))
 
-#' New Generic for Mixture of two Matrix Distributions
+#' New generic for mixture of two matrix distributions
 #'
 #' Methods are available for objects of classes \linkS4class{ph} and \linkS4class{dph}.
 #'
@@ -89,7 +89,7 @@ setGeneric("maximum", function(x1, x2, ...) standardGeneric("maximum"))
 #'
 setGeneric("mixture", function(x1, x2, ...) standardGeneric("mixture"))
 
-#' New Generic for N-fold convolution of two Matrix Distributions
+#' New generic for N-fold convolution of two matrix distributions
 #'
 #' Methods are available for objects of classes \linkS4class{ph} and \linkS4class{dph}.
 #'
@@ -101,7 +101,7 @@ setGeneric("mixture", function(x1, x2, ...) standardGeneric("mixture"))
 #'
 setGeneric("Nfold", function(x1, x2, ...) standardGeneric("Nfold"))
 
-#' New Generic for the Density of Matrix Distributions
+#' New generic for the density of matrix distributions
 #'
 #' Methods are available for objects of class \linkS4class{ph}.
 #'
@@ -112,7 +112,7 @@ setGeneric("Nfold", function(x1, x2, ...) standardGeneric("Nfold"))
 #'
 setGeneric("dens", function(x, ...) standardGeneric("dens"))
 
-#' New Generic for the Hazard rate of Matrix Distributions
+#' New generic for the hazard rate of matrix distributions
 #'
 #' Methods are available for objects of class \linkS4class{ph}.
 #'
@@ -123,7 +123,7 @@ setGeneric("dens", function(x, ...) standardGeneric("dens"))
 #'
 setGeneric("haz", function(x, ...) standardGeneric("haz"))
 
-#' New Generic for the Distribution of Matrix Distributions
+#' New generic for the distribution of matrix distributions
 #'
 #' Methods are available for objects of class \linkS4class{ph}.
 #'
@@ -134,7 +134,7 @@ setGeneric("haz", function(x, ...) standardGeneric("haz"))
 #'
 setGeneric("cdf", function(x, ...) standardGeneric("cdf"))
 
-#' New Generic for the Quantile of Matrix Distributions
+#' New generic for the quantile of matrix distributions
 #'
 #' Methods are available for objects of class \linkS4class{ph}.
 #'
@@ -145,7 +145,7 @@ setGeneric("cdf", function(x, ...) standardGeneric("cdf"))
 #'
 setGeneric("quan", function(x, ...) standardGeneric("quan"))
 
-#' New Generic for Estimating Matrix Distributions
+#' New generic for estimating matrix distributions
 #'
 #' Methods are available for objects of class \linkS4class{ph}.
 #'
@@ -157,7 +157,7 @@ setGeneric("quan", function(x, ...) standardGeneric("quan"))
 #'
 setGeneric("fit", function(x, y, ...) standardGeneric("fit"))
 
-#' New Generic for Regression with Matrix Distributions
+#' New generic for regression with matrix distributions
 #'
 #' Methods are available for objects of class \linkS4class{ph}.
 #'
@@ -170,7 +170,7 @@ setGeneric("fit", function(x, y, ...) standardGeneric("fit"))
 #'
 setGeneric("reg", function(x, y, ...) standardGeneric("reg"))
 
-#' New Generic for Evaluating Survival Matrix Distributions
+#' New generic for evaluating survival matrix distributions
 #'
 #' Methods are available for objects of class \linkS4class{sph}.
 #'
@@ -182,8 +182,7 @@ setGeneric("reg", function(x, y, ...) standardGeneric("reg"))
 #'
 setGeneric("evaluate", function(x, subject, ...) standardGeneric("evaluate"))
 
-#' New Generic for doing a likelihood ratio test between two Matrix Distribution
-#'  models
+#' New generic for likelihood ratio test between two matrix distribution models
 #'
 #' Methods are available for objects of class \linkS4class{ph}.
 #'
@@ -195,7 +194,7 @@ setGeneric("evaluate", function(x, subject, ...) standardGeneric("evaluate"))
 #'
 setGeneric("LRT", function(x, y, ...) standardGeneric("LRT"))
 
-#' New Generic for obtaining the Fisher Information of Survival Matrix Distributions
+#' New generic for obtaining the Fisher information of survival matrix distributions
 #'
 #' Methods are available for objects of class \linkS4class{sph}.
 #'
@@ -206,7 +205,7 @@ setGeneric("LRT", function(x, y, ...) standardGeneric("LRT"))
 #'
 setGeneric("Fisher", function(x, ...) standardGeneric("Fisher"))
 
-#' New Generic for the transformation via rewards of a phase-type distribution
+#' New generic for transformation via rewards of a matrix distribution
 #'
 #' Methods are available for objects of class \linkS4class{ph}
 #'
@@ -217,7 +216,7 @@ setGeneric("Fisher", function(x, ...) standardGeneric("Fisher"))
 #'
 setGeneric("TVR", function(x, ...) standardGeneric("TVR"))
 
-#' New Generic for Regression with Matrix Distributions
+#' New generic for mixture-of-experts regression with matrix distributions
 #'
 #' Methods are available for objects of class \linkS4class{ph}
 #'

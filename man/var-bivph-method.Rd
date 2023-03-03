@@ -2,7 +2,7 @@
 % Please edit documentation in R/4b.bivph.R
 \name{var,bivph-method}
 \alias{var,bivph-method}
-\title{Var Method for bivph class}
+\title{Var method for bivph class}
 \usage{
 \S4method{var}{bivph}(x)
 }
@@ -13,7 +13,7 @@
 The covariance matrix of the bivariate phase-type distribution.
 }
 \description{
-Var Method for bivph class
+Var method for bivph class
 }
 \examples{
 obj <- bivph(dimensions = c(3, 3))

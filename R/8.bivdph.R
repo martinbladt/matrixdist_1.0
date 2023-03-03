@@ -100,8 +100,7 @@ setMethod("dens", c(x = "bivdph"), function(x, y) {
   if (is.vector(y)) {
     y <- t(y)
   }
-  dens <- bivdph_density(y, x@pars$alpha, x@pars$S11, x@pars$S12, x@pars$S22)
-  return(dens)
+  bivdph_density(y, x@pars$alpha, x@pars$S11, x@pars$S12, x@pars$S22)
 })
 
 #' Coef method for bivdph class
@@ -138,7 +137,7 @@ setMethod("marginal", c(x = "bivdph"), function(x, mar = 1) {
     alpha0 <- x@pars$alpha %*% base::solve(diag(ncol(x@pars$S11)) - x@pars$S11) %*% x@pars$S12
     x0 <- dph(alpha = alpha0, S = x@pars$S22)
   }
-  return(x0)
+  x0
 })
 
 #' Moment method for bivdph class
@@ -163,10 +162,10 @@ setMethod("moment", c(x = "bivdph"), function(x, k = c(1, 1)) {
   m21 <- matrix_power(k[2] - 1, x@pars$S22)
   m22 <- matrix_power(k[2], solve(diag(nrow(x@pars$S22)) - x@pars$S22))
   ee <- rep(1, nrow(x@pars$S22))
-  return(factorial(k[1]) * factorial(k[2]) * x@pars$alpha %*% m11 %*% m12 %*% x@pars$S12 %*% m21 %*% m22 %*% ee)
+  factorial(k[1]) * factorial(k[2]) * x@pars$alpha %*% m11 %*% m12 %*% x@pars$S12 %*% m21 %*% m22 %*% ee
 })
 
-#' Mean Method for bivdph class
+#' Mean method for bivdph class
 #'
 #' @param x An object of class \linkS4class{bivdph}.
 #'
@@ -180,7 +179,7 @@ setMethod("mean", c(x = "bivdph"), function(x) {
   c(mean(marginal(x, 1)), mean(marginal(x, 2)))
 })
 
-#' Var Method for bivdph class
+#' Var method for bivdph class
 #'
 #' @param x An object of class \linkS4class{bivdph}.
 #'
@@ -198,10 +197,10 @@ setMethod("var", c(x = "bivdph"), function(x) {
   re[1, 2] <- moment(x, c(1, 1)) - mean(mar1) * mean(mar2)
   re[2, 1] <- re[1, 2]
   re[2, 2] <- var(mar2)
-  return(re)
+  re
 })
 
-#' Cor Method for bivdph class
+#' Cor method for bivdph class
 #'
 #' @param x An object of class \linkS4class{bivdph}.
 #'
@@ -215,7 +214,7 @@ setMethod("cor", c(x = "bivdph"), function(x) {
   stats::cov2cor(var(x))
 })
 
-#' Pgf Method for bivariate discrete phase-type distributions
+#' Pgf method for bivariate discrete phase-type distributions
 #'
 #' @param x An object of class \linkS4class{bivdph}.
 #' @param z A vector of real values.
@@ -237,7 +236,7 @@ setMethod(
     m2 <- solve(diag(nrow(x@pars$S22)) - z[2] * x@pars$S22)
     ee <- rep(1, nrow(x@pars$S22))
     t2 <- ee - x@pars$S22 %*% ee
-    return(z[1] * z[2] * x@pars$alpha %*% m1 %*% x@pars$S12 %*% m2 %*% t2)
+    z[1] * z[2] * x@pars$alpha %*% m1 %*% x@pars$S12 %*% m2 %*% t2
   }
 )
 
@@ -264,11 +263,10 @@ setMethod("sim", c(x = "bivdph"), function(x, n = 1000) {
   aux_vec <- rep(0, p1_aux + p2_aux + 1)
   aux_vec[p1_aux + p2_aux + 1] <- 1
   trans_mat <- rbind(trans_mat, aux_vec)
-  U <- rMDPHstar(n, alpha_aux, trans_mat, R_aux)
-  return(U)
+  rMDPHstar(n, alpha_aux, trans_mat, R_aux)
 })
 
-#' Fit Method for bivdph Class
+#' Fit method for bivdph Class
 #'
 #' @param x An object of class \linkS4class{bivdph}.
 #' @param y A matrix with the data.
@@ -329,11 +327,11 @@ setMethod(
     cat("\n", format(Sys.time(), format = "%H:%M:%OS"), ": EM finalized", sep = "")
     cat("\n", sep = "")
 
-    return(x)
+    x
   }
 )
 
-#' MoE Method for bivdph Class
+#' MoE method for bivdph Class
 #'
 #' @param x An object of class \linkS4class{bivdph}.
 #' @param formula A regression formula.
@@ -392,6 +390,6 @@ setMethod(
       }
     }
     cat("\n", sep = "")
-    return(list(alpha = alpha_vecs, S11 = S11_fit, S12 = S12_fit, S22 = S22_fit, mm = multinom_model))
+    list(alpha = alpha_vecs, S11 = S11_fit, S12 = S12_fit, S22 = S22_fit, mm = multinom_model)
   }
 )

@@ -2,7 +2,7 @@
 % Please edit documentation in R/2.iph.R
 \name{iph}
 \alias{iph}
-\title{Constructor Function for inhomogeneous phase-type distributions}
+\title{Constructor function for inhomogeneous phase-type distributions}
 \usage{
 iph(
   ph = NULL,
@@ -36,7 +36,7 @@ iph(
 An object of class \linkS4class{iph}.
 }
 \description{
-Constructor Function for inhomogeneous phase-type distributions
+Constructor function for inhomogeneous phase-type distributions
 }
 \examples{
 iph(ph(structure = "coxian", dimension = 4), gfun = "pareto", gfun_pars = 3)

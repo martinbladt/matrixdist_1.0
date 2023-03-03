@@ -2,7 +2,7 @@
 % Please edit documentation in R/1.ph.R
 \name{fit,ph-method}
 \alias{fit,ph-method}
-\title{Fit Method for ph Class}
+\title{Fit method for ph class}
 \usage{
 \S4method{fit}{ph}(
   x,
@@ -27,7 +27,7 @@
 
 \item{weight}{Vector of weights.}
 
-\item{rcen}{Vector of right-censored observations}
+\item{rcen}{Vector of right-censored observations.}
 
 \item{rcenweight}{Vector of weights for right-censored observations.}
 
@@ -51,7 +51,7 @@
 An object of class \linkS4class{ph}.
 }
 \description{
-Fit Method for ph Class
+Fit method for ph class
 }
 \examples{
 obj <- iph(ph(structure = "general", dimension = 2), gfun = "weibull", gfun_pars = 2)

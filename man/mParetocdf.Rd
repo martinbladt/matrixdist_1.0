@@ -22,5 +22,5 @@ The cdf (tail) at \code{x}.
 }
 \description{
 Computes the cdf (tail) of a matrix-Pareto distribution with parameters
- \code{alpha}, \code{S} and \code{beta} at \code{x}.
+\code{alpha}, \code{S} and \code{beta} at \code{x}.
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/7.dph.R
 \name{coef,dph-method}
 \alias{coef,dph-method}
-\title{Coef Method for dph Class}
+\title{Coef method for dph Class}
 \usage{
 \S4method{coef}{dph}(object)
 }
@@ -13,7 +13,7 @@
 Parameters of dph model.
 }
 \description{
-Coef Method for dph Class
+Coef method for dph Class
 }
 \examples{
 obj <- dph(structure = "general", dim = 3)

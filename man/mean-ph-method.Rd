@@ -2,7 +2,7 @@
 % Please edit documentation in R/1.ph.R
 \name{mean,ph-method}
 \alias{mean,ph-method}
-\title{Mean Method for phase-type distributions}
+\title{Mean method for phase-type distributions}
 \usage{
 \S4method{mean}{ph}(x)
 }
@@ -10,10 +10,10 @@
 \item{x}{An object of class \linkS4class{ph}.}
 }
 \value{
-The raw first moment of the \linkS4class{ph} (or undelying \linkS4class{ph}) object.
+The raw first moment of the \linkS4class{ph} (or underlying \linkS4class{ph}) object.
 }
 \description{
-Mean Method for phase-type distributions
+Mean method for phase-type distributions
 }
 \examples{
 set.seed(123)

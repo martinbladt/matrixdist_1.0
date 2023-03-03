@@ -2,7 +2,7 @@
 % Please edit documentation in R/1.ph.R
 \name{moment,ph-method}
 \alias{moment,ph-method}
-\title{Moment Method for phase-type distributions}
+\title{Moment method for phase-type distributions}
 \usage{
 \S4method{moment}{ph}(x, k = 1)
 }
@@ -12,10 +12,10 @@
 \item{k}{A positive integer (moment order).}
 }
 \value{
-The raw moment of the \linkS4class{ph} (or undelying \linkS4class{ph}) object.
+The raw moment of the \linkS4class{ph} (or underlying \linkS4class{ph}) object.
 }
 \description{
-Moment Method for phase-type distributions
+Moment method for phase-type distributions
 }
 \examples{
 set.seed(123)

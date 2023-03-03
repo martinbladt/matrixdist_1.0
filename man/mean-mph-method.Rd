@@ -2,7 +2,7 @@
 % Please edit documentation in R/3.mph.R
 \name{mean,mph-method}
 \alias{mean,mph-method}
-\title{Mean Method for multivariate phase-type distributions}
+\title{Mean method for multivariate phase-type distributions}
 \usage{
 \S4method{mean}{mph}(x)
 }
@@ -13,7 +13,7 @@
 The mean of the multivariate phase-type distribution.
 }
 \description{
-Mean Method for multivariate phase-type distributions
+Mean method for multivariate phase-type distributions
 }
 \examples{
 obj <- mph(structure = c("general", "general"))

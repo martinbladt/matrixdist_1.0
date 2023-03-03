@@ -2,7 +2,7 @@
 % Please edit documentation in R/0.generics.R
 \name{pgf}
 \alias{pgf}
-\title{New Generic for pgf of Matrix Distributions}
+\title{New generic for pgf of matrix distributions}
 \usage{
 pgf(x, ...)
 }
@@ -12,7 +12,7 @@ pgf(x, ...)
 \item{...}{Further parameters to be passed on.}
 }
 \value{
-Pgf transform of the matrix distribution.
+Pgf of the matrix distribution.
 }
 \description{
 Methods are available for objects of class \linkS4class{dph}.

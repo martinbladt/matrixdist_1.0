@@ -2,7 +2,7 @@
 % Please edit documentation in R/2.iph.R
 \name{maximum,iph,iph-method}
 \alias{maximum,iph,iph-method}
-\title{Maximum Method for inhomogeneous phase-type distributions}
+\title{Maximum method for inhomogeneous phase-type distributions}
 \usage{
 \S4method{maximum}{iph,iph}(x1, x2)
 }
@@ -15,7 +15,7 @@
 An object of class \linkS4class{iph}.
 }
 \description{
-Maximum Method for inhomogeneous phase-type distributions
+Maximum method for inhomogeneous phase-type distributions
 }
 \examples{
 iph1 <- iph(ph(structure = "general", dimension = 3), gfun = "weibull", gfun_pars = 2)

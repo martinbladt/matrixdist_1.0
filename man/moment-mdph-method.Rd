@@ -2,7 +2,7 @@
 % Please edit documentation in R/9.mdph.R
 \name{moment,mdph-method}
 \alias{moment,mdph-method}
-\title{Moment Method for multivariate discrete phase-type distributions}
+\title{Moment method for multivariate discrete phase-type distributions}
 \usage{
 \S4method{moment}{mdph}(x, k)
 }
@@ -15,7 +15,7 @@
 The corresponding joint factorial moment evaluation.
 }
 \description{
-Moment Method for multivariate discrete phase-type distributions
+Moment method for multivariate discrete phase-type distributions
 }
 \examples{
 obj <- mdph(structure = c("general", "general"))

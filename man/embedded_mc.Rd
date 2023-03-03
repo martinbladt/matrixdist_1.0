@@ -14,5 +14,5 @@ The embedded Markov chain.
 }
 \description{
 Returns the transition probabilities of the embedded Markov chain determined
- the sub-intensity matrix.
+the sub-intensity matrix.
 }

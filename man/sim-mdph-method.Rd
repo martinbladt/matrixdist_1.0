@@ -2,7 +2,7 @@
 % Please edit documentation in R/9.mdph.R
 \name{sim,mdph-method}
 \alias{sim,mdph-method}
-\title{Simulation Method for multivariate discrete phase-type distributions}
+\title{Simulation method for multivariate discrete phase-type distributions}
 \usage{
 \S4method{sim}{mdph}(x, n = 1000, equal_marginals = 0)
 }
@@ -18,7 +18,7 @@ the number of marginals to simulate from, all from the first matrix.}
 A realization of a multivariate discrete phase-type distribution.
 }
 \description{
-Simulation Method for multivariate discrete phase-type distributions
+Simulation method for multivariate discrete phase-type distributions
 }
 \examples{
 obj <- mdph(structure = c("general", "general"))

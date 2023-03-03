@@ -3,7 +3,7 @@
 \docType{class}
 \name{sph-class}
 \alias{sph-class}
-\title{Survival Analysis for Phase Type distributions}
+\title{Survival analysis for phase-type distributions}
 \value{
 Class object
 }

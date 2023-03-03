@@ -2,7 +2,7 @@
 % Please edit documentation in R/4b.bivph.R
 \name{laplace,bivph-method}
 \alias{laplace,bivph-method}
-\title{Laplace Method for bivph class}
+\title{Laplace method for bivph class}
 \usage{
 \S4method{laplace}{bivph}(x, r)
 }
@@ -15,7 +15,7 @@
 A vector containing the corresponding Laplace transform evaluations.
 }
 \description{
-Laplace Method for bivph class
+Laplace method for bivph class
 }
 \examples{
 obj <- bivph(dimensions = c(3, 3))

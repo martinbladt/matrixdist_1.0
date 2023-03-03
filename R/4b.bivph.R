@@ -95,8 +95,7 @@ setMethod("dens", c(x = "bivph"), function(x, y) {
   if (is.vector(y)) {
     y <- t(y)
   }
-  dens <- bivph_density(y, x@pars$alpha, x@pars$S11, x@pars$S12, x@pars$S22)
-  return(dens)
+  bivph_density(y, x@pars$alpha, x@pars$S11, x@pars$S12, x@pars$S22)
 })
 
 #' Simulation method for bivariate phase-type distributions
@@ -117,8 +116,7 @@ setMethod("sim", c(x = "bivph"), function(x, n = 1000) {
   alpha_aux <- c(x@pars$alpha, rep(0, p2_aux))
   S_aux <- merge_matrices(x@pars$S11, x@pars$S12, x@pars$S22)
   R_aux <- matrix(c(c(rep(1, p1_aux), rep(0, p2_aux)), c(rep(0, p1_aux), rep(1, p2_aux))), ncol = 2)
-  U <- rMPHstar(n, alpha_aux, S_aux, R_aux)
-  return(U)
+  rMPHstar(n, alpha_aux, S_aux, R_aux)
 })
 
 #' Coef method for bivph class
@@ -176,7 +174,7 @@ setMethod("mean", c(x = "bivph"), function(x) {
   suppressWarnings(c(moment(x, c(1, 0)), moment(x, c(0, 1))))
 })
 
-#' Var Method for bivph class
+#' Var method for bivph class
 #'
 #' @param x An object of class \linkS4class{bivph}.
 #'
@@ -195,10 +193,10 @@ setMethod("var", c(x = "bivph"), function(x) {
   re[1, 2] <- suppressWarnings(moment(x, c(1, 1)) - moment(x, c(1, 0)) * moment(x, c(0, 1)))
   re[2, 1] <- re[1, 2]
   re[2, 2] <- suppressWarnings(moment(x, c(0, 2)) - moment(x, c(0, 1))^2)
-  return(re)
+  re
 })
 
-#' Cor Method for bivph class
+#' Cor method for bivph class
 #'
 #' @param x An object of class \linkS4class{bivph}.
 #'
@@ -215,7 +213,7 @@ setMethod("cor", c(x = "bivph"), function(x) {
   suppressWarnings(stats::cov2cor(var(x)))
 })
 
-#' Laplace Method for bivph class
+#' Laplace method for bivph class
 #'
 #' @param x An object of class \linkS4class{mph}.
 #' @param r A matrix of real values.
@@ -242,12 +240,10 @@ setMethod("laplace", c(x = "bivph"), function(x, r) {
     stop("r should be above the largest real eigenvalue of S")
   }
 
-  res <- bivph_laplace(r, x@pars$alpha, x@pars$S11, x@pars$S12, x@pars$S22)
-
-  return(res)
+  bivph_laplace(r, x@pars$alpha, x@pars$S11, x@pars$S12, x@pars$S22)
 })
 
-#' Mgf Method for bivph class
+#' Mgf method for bivph class
 #'
 #' @param x An object of class \linkS4class{mph}.
 #' @param r A matrix of real values.
@@ -275,9 +271,7 @@ setMethod("mgf", c(x = "bivph"), function(x, r) {
     stop("r should be below the negative largest real eigenvalue of S")
   }
 
-  res <- bivph_laplace(-r, x@pars$alpha, x@pars$S11, x@pars$S12, x@pars$S22)
-
-  return(res)
+  bivph_laplace(-r, x@pars$alpha, x@pars$S11, x@pars$S12, x@pars$S22)
 })
 
 #' Marginal method for bivph class
@@ -300,10 +294,10 @@ setMethod("marginal", c(x = "bivph"), function(x, mar = 1) {
     alpha0 <- x@pars$alpha %*% base::solve(-x@pars$S11) %*% x@pars$S12
     x0 <- ph(alpha = alpha0, S = x@pars$S22)
   }
-  return(x0)
+  x0
 })
 
-#' Linear Combination method for bivariate phase-type distributions
+#' Linear combination method for bivariate phase-type distributions
 #'
 #' @param x An object of class \linkS4class{bivph}.
 #' @param w A vector with non-negative entries.
@@ -333,11 +327,10 @@ setMethod("linCom", c(x = "bivph"), function(x, w = c(1, 1)) {
   S_aux <- merge_matrices(x@pars$S11, x@pars$S12, x@pars$S22)
   R_aux <- matrix(c(c(rep(1, p1_aux), rep(0, p2_aux)), c(rep(0, p1_aux), rep(1, p2_aux))), ncol = 2)
   L <- linear_combination(w, alpha_aux, S_aux, R_aux)
-  x0 <- ph(alpha = L$alpha, S = L$S)
-  return(x0)
+  ph(alpha = L$alpha, S = L$S)
 })
 
-#' Fit Method for bivph Class
+#' Fit method for bivph Class
 #'
 #' @param x An object of class \linkS4class{bivph}.
 #' @param y A matrix with the data.
@@ -453,7 +446,7 @@ setMethod(
     cat("\n", format(Sys.time(), format = "%H:%M:%OS"), ": EM finalized", sep = "")
     cat("\n", sep = "")
 
-    return(x)
+    x
   }
 )
 
@@ -463,8 +456,5 @@ biviph_LL <- function(x,
                       gfun_pars) {
   x@gfun$pars <- gfun_pars
   res <- dens(x = x, y = obs)
-
-  ll <- sum(log(res))
-
-  return(ll)
+  sum(log(res))
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/0.generics.R
 \name{MoE}
 \alias{MoE}
-\title{New Generic for Regression with Matrix Distributions}
+\title{New generic for mixture-of-experts regression with matrix distributions}
 \usage{
 MoE(x, y, ...)
 }

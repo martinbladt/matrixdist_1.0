@@ -2,7 +2,7 @@
 % Please edit documentation in R/2.iph.R
 \name{sim,iph-method}
 \alias{sim,iph-method}
-\title{Simulation Method for inhomogeneous phase-type distributions}
+\title{Simulation method for inhomogeneous phase-type distributions}
 \usage{
 \S4method{sim}{iph}(x, n = 1000)
 }
@@ -13,10 +13,10 @@
 }
 \value{
 A realization of independent and identically distributed inhomogeneous
- phase-type variables.
+phase-type variables.
 }
 \description{
-Simulation Method for inhomogeneous phase-type distributions
+Simulation method for inhomogeneous phase-type distributions
 }
 \examples{
 obj <- iph(ph(structure = "general"), gfun = "lognormal", gfun_pars = 2)

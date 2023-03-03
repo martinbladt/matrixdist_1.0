@@ -15,7 +15,7 @@ random_structure_bivph(p1, p2, scale_factor = 1)
 }
 \value{
 Random parameters  \code{alpha}, \code{S11}, \code{S12}, and \code{S22}
- of a bivariate phase-type.
+of a bivariate phase-type.
 }
 \description{
 Generates random parameters \code{alpha}, \code{S11}, \code{S12}, and \code{S22}

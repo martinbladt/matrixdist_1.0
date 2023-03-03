@@ -2,7 +2,7 @@
 % Please edit documentation in R/3.mph.R
 \name{dens,mph-method}
 \alias{dens,mph-method}
-\title{Density Method for multivariate phase-type distributions}
+\title{Density method for multivariate phase-type distributions}
 \usage{
 \S4method{dens}{mph}(x, y, delta = NULL)
 }
@@ -17,7 +17,7 @@
 A list containing the locations and corresponding density evaluations.
 }
 \description{
-Density Method for multivariate phase-type distributions
+Density method for multivariate phase-type distributions
 }
 \examples{
 obj <- mph(structure = c("general", "general"))

@@ -2,7 +2,7 @@
 % Please edit documentation in R/3b.miph.R
 \name{cdf,miph-method}
 \alias{cdf,miph-method}
-\title{Distribution Method for multivariate inhomogeneous phase-type distributions}
+\title{Distribution method for multivariate inhomogeneous phase-type distributions}
 \usage{
 \S4method{cdf}{miph}(x, y, lower.tail = TRUE)
 }
@@ -11,13 +11,14 @@
 
 \item{y}{A matrix of observations.}
 
-\item{lower.tail}{Logical parameter specifying whether lower tail (cdf) or upper tail is computed.}
+\item{lower.tail}{Logical parameter specifying whether lower tail (CDF) or
+upper tail is computed.}
 }
 \value{
 A list containing the locations and corresponding CDF evaluations.
 }
 \description{
-Distribution Method for multivariate inhomogeneous phase-type distributions
+Distribution method for multivariate inhomogeneous phase-type distributions
 }
 \examples{
 under_mph <- mph(structure = c("general", "general"))

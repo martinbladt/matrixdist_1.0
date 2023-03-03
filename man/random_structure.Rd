@@ -18,6 +18,6 @@ random_structure(p, structure = "general", scale_factor = 1)
 Random parameters \code{alpha} and \code{S} of a phase-type.
 }
 \description{
-Generates random parameters \code{alpha} and \code{S} of a phase-type 
- distribution of dimension \code{p} with chosen structure.
+Generates random parameters \code{alpha} and \code{S} of a phase-type
+distribution of dimension \code{p} with chosen structure.
 }

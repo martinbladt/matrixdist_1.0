@@ -1,4 +1,4 @@
-#' Survival Analysis for Phase Type distributions
+#' Survival analysis for phase-type distributions
 #'
 #' Class of objects for inhomogeneous phase-type distributions
 #'
@@ -16,9 +16,9 @@ setClass("sph",
   )
 )
 
-#' Constructor Function for Survival phase-type objects
+#' Constructor function for survival phase-type objects
 #'
-#' @param x An object of class \linkS4class{ph}
+#' @param x An object of class \linkS4class{ph}.
 #' @param coefs Coefficients of the survival regression object.
 #' @param type Type of survival object.
 #'
@@ -48,7 +48,7 @@ sph <- function(x = NULL, coefs = list(B = numeric(0), C = numeric(0)), type = "
   )
 }
 
-#' Show Method for survival phase-type objects
+#' Show method for survival phase-type objects
 #'
 #' @param object An object of class \linkS4class{sph}.
 #' @export
@@ -65,7 +65,7 @@ setMethod("show", "sph", function(object) {
   print(object@coefs)
 })
 
-#' Coef Method for sph Class
+#' Coef method for sph Class
 #'
 #' @param object An object of class \linkS4class{sph}.
 #'
@@ -78,7 +78,7 @@ setMethod("coef", c(object = "sph"), function(object) {
   append(L, object@coefs)
 })
 
-#' Evaluation Method for sph Class
+#' Evaluation method for sph Class
 #'
 #' @param x An object of class \linkS4class{sph}.
 #' @param subject Covariates of a single subject.
@@ -124,10 +124,10 @@ setMethod("evaluate", c(x = "sph"), function(x, subject) {
       )
     }
   }
-  return(z)
+  z
 })
 
-#' Fisher Information Method for sph Class
+#' Fisher information method for sph class
 #'
 #' @param x An object of class \linkS4class{sph}.
 #' @param y Independent variate.
@@ -148,8 +148,9 @@ setMethod("Fisher", c(x = "sph"), function(x, y, X, w = numeric(0)) {
     v <- unlist(log_lik_derivative(x, z = y[j], Z = X[j, ]))
     result <- result + w[j] * outer(v, v)
   }
-  return(result)
+  result
 })
+
 log_lik_derivative <- function(x, z, Z) {
   p <- length(Z) + 1
   result <- numeric(p)
@@ -170,5 +171,5 @@ log_lik_derivative <- function(x, z, Z) {
     a2 <- Z[i - 1] * gf * exp(sum(Z * B)) * a
     result[i] <- Z[i - 1] + a2 / b
   }
-  return(result)
+  result
 }

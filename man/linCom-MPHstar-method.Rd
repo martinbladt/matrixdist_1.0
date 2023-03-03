@@ -2,7 +2,7 @@
 % Please edit documentation in R/4.MPHstar.R
 \name{linCom,MPHstar-method}
 \alias{linCom,MPHstar-method}
-\title{Linear Combination method for MPHstar class}
+\title{Linear combination method for MPHstar class}
 \usage{
 \S4method{linCom}{MPHstar}(x, w)
 }
@@ -15,7 +15,7 @@
 An object of class \linkS4class{ph}.
 }
 \description{
-Linear Combination method for MPHstar class
+Linear combination method for MPHstar class
 }
 \examples{
 obj <- MPHstar(structure = "general")

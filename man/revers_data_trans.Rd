@@ -2,8 +2,8 @@
 % Please edit documentation in R/RcppExports.R
 \name{revers_data_trans}
 \alias{revers_data_trans}
-\title{Applies the inverse of the GEV transformation but giving back the resulting 
- vector in reverse order}
+\title{Applies the inverse of the GEV transformation but giving back the resulting
+vector in reverse order}
 \usage{
 revers_data_trans(obs, weights, beta)
 }

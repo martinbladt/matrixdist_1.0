@@ -2,7 +2,7 @@
 % Please edit documentation in R/9.mdph.R
 \name{fit,mdph-method}
 \alias{fit,mdph-method}
-\title{Fit Method for mdph Class}
+\title{Fit method for mdph Class}
 \usage{
 \S4method{fit}{mdph}(x, y, weight = numeric(0), stepsEM = 1000, every = 10)
 }
@@ -21,7 +21,7 @@
 An object of class \linkS4class{mdph}.
 }
 \description{
-Fit Method for mdph Class
+Fit method for mdph Class
 }
 \examples{
 obj <- mdph(structure = c("general", "general"))

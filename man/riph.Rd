@@ -21,6 +21,6 @@ riph(n, dist_type, alpha, S, beta)
 The simulated sample.
 }
 \description{
-Generates a sample of size \code{n} from an inhomogeneous phase-type 
+Generates a sample of size \code{n} from an inhomogeneous phase-type
 distribution with parameters \code{alpha}, \code{S} and \code{beta}.
 }

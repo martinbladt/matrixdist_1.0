@@ -2,7 +2,7 @@
 % Please edit documentation in R/1.ph.R
 \name{show,ph-method}
 \alias{show,ph-method}
-\title{Show Method for phase-type distributions}
+\title{Show method for phase-type distributions}
 \usage{
 \S4method{show}{ph}(object)
 }
@@ -10,5 +10,5 @@
 \item{object}{An object of class \linkS4class{ph}.}
 }
 \description{
-Show Method for phase-type distributions
+Show method for phase-type distributions
 }

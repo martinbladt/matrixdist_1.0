@@ -16,6 +16,6 @@ Initial state of the Markov jump process.
 }
 \description{
 Given the accumulated values of the initial probabilities \code{alpha} and a
- uniform value \code{u}, it returns the initial state of a Markov jump process.
+uniform value \code{u}, it returns the initial state of a Markov jump process.
 This corresponds to the states satisfying cum_alpha_(k-1) < u < cum_alpha_(k).
 }

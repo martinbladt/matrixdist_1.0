@@ -2,7 +2,7 @@
 % Please edit documentation in R/7.dph.R
 \name{MoE,dph-method}
 \alias{MoE,dph-method}
-\title{MoE Method for dph Class}
+\title{MoE method for dph Class}
 \usage{
 \S4method{MoE}{dph}(
   x,
@@ -22,7 +22,7 @@
 
 \item{data}{A data frame.}
 
-\item{alpha_vecs}{Matrix of initial probabilities.s}
+\item{alpha_vecs}{Matrix of initial probabilities.}
 
 \item{weight}{Vector of weights.}
 
@@ -36,5 +36,5 @@
 An object of class \linkS4class{sph}.
 }
 \description{
-MoE Method for dph Class
+MoE method for dph Class
 }

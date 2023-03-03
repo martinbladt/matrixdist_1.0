@@ -2,7 +2,7 @@
 % Please edit documentation in R/0.generics.R
 \name{TVR}
 \alias{TVR}
-\title{New Generic for the transformation via rewards of a phase-type distribution}
+\title{New generic for transformation via rewards of a matrix distribution}
 \usage{
 TVR(x, ...)
 }

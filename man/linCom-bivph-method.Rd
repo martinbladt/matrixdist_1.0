@@ -2,7 +2,7 @@
 % Please edit documentation in R/4b.bivph.R
 \name{linCom,bivph-method}
 \alias{linCom,bivph-method}
-\title{Linear Combination method for bivariate phase-type distributions}
+\title{Linear combination method for bivariate phase-type distributions}
 \usage{
 \S4method{linCom}{bivph}(x, w = c(1, 1))
 }
@@ -15,7 +15,7 @@
 An object of class \linkS4class{ph}.
 }
 \description{
-Linear Combination method for bivariate phase-type distributions
+Linear combination method for bivariate phase-type distributions
 }
 \examples{
 obj <- bivph(dimensions = c(3, 3))

@@ -2,7 +2,7 @@
 % Please edit documentation in R/7.dph.R
 \name{mean,dph-method}
 \alias{mean,dph-method}
-\title{Mean Method for discrete phase-type distributions}
+\title{Mean method for discrete phase-type distributions}
 \usage{
 \S4method{mean}{dph}(x)
 }
@@ -13,7 +13,7 @@
 The raw first moment of the \linkS4class{dph} object.
 }
 \description{
-Mean Method for discrete phase-type distributions
+Mean method for discrete phase-type distributions
 }
 \examples{
 set.seed(123)

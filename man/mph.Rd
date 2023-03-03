@@ -2,7 +2,7 @@
 % Please edit documentation in R/3.mph.R
 \name{mph}
 \alias{mph}
-\title{Constructor Function for multivariate phase-type distributions}
+\title{Constructor function for multivariate phase-type distributions}
 \usage{
 mph(alpha = NULL, S = NULL, structure = NULL, dimension = 3, variables = NULL)
 }
@@ -21,7 +21,7 @@ mph(alpha = NULL, S = NULL, structure = NULL, dimension = 3, variables = NULL)
 An object of class \linkS4class{mph}.
 }
 \description{
-Constructor Function for multivariate phase-type distributions
+Constructor function for multivariate phase-type distributions
 }
 \examples{
 mph(structure = c("gcoxian", "general"), dimension = 5)

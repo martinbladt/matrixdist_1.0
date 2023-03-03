@@ -2,7 +2,7 @@
 % Please edit documentation in R/0.generics.R
 \name{maximum}
 \alias{maximum}
-\title{New Generic for Maximum of two Matrix Distributions}
+\title{New generic for maximum of two matrix distributions}
 \usage{
 maximum(x1, x2, ...)
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/3.mph.R
 \name{mgf,mph-method}
 \alias{mgf,mph-method}
-\title{Mgf Method for multivariate phase-type distributions}
+\title{Mgf method for multivariate phase-type distributions}
 \usage{
 \S4method{mgf}{mph}(x, r)
 }
@@ -15,7 +15,7 @@
 A vector containing the corresponding mgf evaluations.
 }
 \description{
-Mgf Method for multivariate phase-type distributions
+Mgf method for multivariate phase-type distributions
 }
 \examples{
 set.seed(124)

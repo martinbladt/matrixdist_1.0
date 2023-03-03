@@ -2,7 +2,7 @@
 % Please edit documentation in R/6.sph.R
 \name{evaluate,sph-method}
 \alias{evaluate,sph-method}
-\title{Evaluation Method for sph Class}
+\title{Evaluation method for sph Class}
 \usage{
 \S4method{evaluate}{sph}(x, subject)
 }
@@ -15,5 +15,5 @@
 A \linkS4class{ph} model.
 }
 \description{
-Evaluation Method for sph Class
+Evaluation method for sph Class
 }

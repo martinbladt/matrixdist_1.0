@@ -3,7 +3,7 @@
 \docType{class}
 \name{dph-class}
 \alias{dph-class}
-\title{Discrete Phase Type distributions}
+\title{Discrete phase-type distributions}
 \value{
 Class object.
 }

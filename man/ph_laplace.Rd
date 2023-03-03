@@ -18,5 +18,5 @@ Laplace transform at \code{r}.
 }
 \description{
 Computes the Laplace transform at \code{r} of a phase-type distribution with
- parameters \code{alpha} and \code{S}.
+parameters \code{alpha} and \code{S}.
 }

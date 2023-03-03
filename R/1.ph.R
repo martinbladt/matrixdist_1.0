@@ -1,4 +1,4 @@
-#' Phase Type distributions
+#' Phase-type distributions
 #'
 #' Class of objects for phase-type distributions.
 #'
@@ -22,11 +22,12 @@ setClass("ph",
   )
 )
 
-#' Constructor Function for phase-type distributions
+#' Constructor function for phase-type distributions
 #'
 #' @param alpha A probability vector.
 #' @param S A sub-intensity matrix.
-#' @param structure A valid ph structure ("general", "coxian", "hyperexponential", "gcoxian", "gerlang").
+#' @param structure A valid ph structure: `"general"`, `"coxian"`,
+#' `"hyperexponential"`, `"gcoxian"`, or `"gerlang"`.
 #' @param dimension The dimension of the ph structure (if structure is provided).
 #'
 #' @return An object of class \linkS4class{ph}.
@@ -59,7 +60,7 @@ ph <- function(alpha = NULL, S = NULL, structure = NULL, dimension = 3) {
   )
 }
 
-#' Sum Method for phase-type distributions
+#' Sum method for phase-type distributions
 #'
 #' @param e1 An object of class \linkS4class{ph}.
 #' @param e2 An object of class \linkS4class{ph}.
@@ -79,7 +80,7 @@ setMethod(
       stop("objects to be added should be ph")
     }
     L <- sum_ph(e1@pars$alpha, e1@pars$S, e2@pars$alpha, e2@pars$S)
-    return(ph(alpha = L$alpha, S = L$S))
+    ph(alpha = L$alpha, S = L$S)
   }
 )
 
@@ -89,7 +90,7 @@ kronecker_sum <- function(A, B) {
   kronecker(A, diag(m)) + kronecker(diag(n), B)
 }
 
-#' Minimum Method for phase-type distributions
+#' Minimum method for phase-type distributions
 #'
 #' @param x1 An object of class \linkS4class{ph}.
 #' @param x2 An object of class \linkS4class{ph}.
@@ -107,11 +108,11 @@ setMethod(
   function(x1, x2) {
     alpha <- kronecker(x1@pars$alpha, x2@pars$alpha)
     S <- kronecker_sum(x1@pars$S, x2@pars$S)
-    return(ph(alpha = alpha, S = S))
+    ph(alpha = alpha, S = S)
   }
 )
 
-#' Maximum Method for phase-type distributions
+#' Maximum method for phase-type distributions
 #'
 #' @param x1 An object of class \linkS4class{ph}.
 #' @param x2 An object of class \linkS4class{ph}.
@@ -133,11 +134,11 @@ setMethod(
     S1 <- rbind(kronecker_sum(x1@pars$S, x2@pars$S), matrix(0, n1 + n2, n1 * n2))
     S2 <- rbind(kronecker(diag(n1), -rowSums(x2@pars$S)), x1@pars$S, matrix(0, n2, n1))
     S3 <- rbind(kronecker(-rowSums(x1@pars$S), diag(n2)), matrix(0, n1, n2), x2@pars$S)
-    return(ph(alpha = alpha, S = cbind(S1, S2, S3)))
+    ph(alpha = alpha, S = cbind(S1, S2, S3))
   }
 )
 
-#' Mixture Method for phase-type distributions
+#' Mixture method for phase-type distributions
 #'
 #' @param x1 An object of class \linkS4class{ph}.
 #' @param x2 An object of class \linkS4class{ph}.
@@ -159,16 +160,16 @@ setMethod(
     alpha <- c(prob * x1@pars$alpha, (1 - prob) * x2@pars$alpha)
     S1 <- rbind(x1@pars$S, matrix(0, n2, n1))
     S2 <- rbind(matrix(0, n1, n2), x2@pars$S)
-    return(ph(alpha = alpha, S = cbind(S1, S2)))
+    ph(alpha = alpha, S = cbind(S1, S2))
   }
 )
 
-#' Moment Method for phase-type distributions
+#' Moment method for phase-type distributions
 #'
 #' @param x An object of class \linkS4class{ph}.
 #' @param k A positive integer (moment order).
 #'
-#' @return The raw moment of the \linkS4class{ph} (or undelying \linkS4class{ph}) object.
+#' @return The raw moment of the \linkS4class{ph} (or underlying \linkS4class{ph}) object.
 #' @export
 #'
 #' @examples
@@ -188,15 +189,15 @@ setMethod(
       warning("moment of undelying ph structure is provided for iph objects")
     }
     prod <- matrix_power(k, solve(-x@pars$S))
-    return(factorial(k) * sum(x@pars$alpha %*% prod))
+    factorial(k) * sum(x@pars$alpha %*% prod)
   }
 )
 
-#' Mean Method for phase-type distributions
+#' Mean method for phase-type distributions
 #'
 #' @param x An object of class \linkS4class{ph}.
 #'
-#' @return The raw first moment of the \linkS4class{ph} (or undelying \linkS4class{ph}) object.
+#' @return The raw first moment of the \linkS4class{ph} (or underlying \linkS4class{ph}) object.
 #' @export
 #'
 #' @examples
@@ -210,15 +211,15 @@ setMethod(
       warning("moment of undelying ph structure is provided for iph objects")
     }
     m <- solve(-x@pars$S)
-    return(sum(x@pars$alpha %*% m))
+    sum(x@pars$alpha %*% m)
   }
 )
 
-#' Var Method for phase-type distributions
+#' Var method for phase-type distributions
 #'
 #' @param x An object of class \linkS4class{ph}.
 #'
-#' @return The variance of the \linkS4class{ph} (or undelying \linkS4class{ph}) object.
+#' @return The variance of the \linkS4class{ph} (or underlying \linkS4class{ph}) object.
 #' @export
 #'
 #' @examples
@@ -233,17 +234,17 @@ setMethod(
     }
     m <- solve(-x@pars$S)
     m2 <- matrix_power(2, m)
-    return(2 * sum(x@pars$alpha %*% m2) - (sum(x@pars$alpha %*% m))^2)
+    2 * sum(x@pars$alpha %*% m2) - (sum(x@pars$alpha %*% m))^2
   }
 )
 
-#' Laplace Method for phase-type distributions
+#' Laplace method for phase-type distributions
 #'
 #' @param x An object of class \linkS4class{ph}.
 #' @param r A vector of real values.
 #'
 #' @return The Laplace transform of the \linkS4class{ph}
-#'  (or undelying \linkS4class{ph}) object at the given locations.
+#'  (or underlying \linkS4class{ph}) object at the given locations.
 #' @export
 #'
 #' @examples
@@ -260,17 +261,16 @@ setMethod(
     if (any(r <= lim)) {
       stop("r should be above the largest real eigenvalue of S")
     }
-    l <- ph_laplace(r, x@pars$alpha, x@pars$S)
-    return(l)
+    ph_laplace(r, x@pars$alpha, x@pars$S)
   }
 )
 
-#' Mgf Method for phase-type distributions
+#' Mgf method for phase-type distributions
 #'
 #' @param x An object of class \linkS4class{ph}.
 #' @param r A vector of real values.
 #'
-#' @return The mgf of the \linkS4class{ph} (or undelying \linkS4class{ph}) object
+#' @return The mgf of the \linkS4class{ph} (or underlying \linkS4class{ph}) object
 #'  at the given locations.
 #' @export
 #'
@@ -288,12 +288,11 @@ setMethod(
     if (any(r > lim)) {
       stop("r should be below the negative largest real eigenvalue of S")
     }
-    l <- ph_laplace(-r, x@pars$alpha, x@pars$S)
-    return(l)
+    ph_laplace(-r, x@pars$alpha, x@pars$S)
   }
 )
 
-#' Show Method for phase-type distributions
+#' Show method for phase-type distributions
 #'
 #' @param object An object of class \linkS4class{ph}.
 #' @importFrom methods show
@@ -306,7 +305,7 @@ setMethod("show", "ph", function(object) {
   methods::show(object@pars)
 })
 
-#' Simulation Method for phase-type distributions
+#' Simulation method for phase-type distributions
 #'
 #' @param x An object of class \linkS4class{ph}.
 #' @param n An integer of length of realization.
@@ -318,11 +317,10 @@ setMethod("show", "ph", function(object) {
 #' obj <- ph(structure = "general")
 #' sim(obj, n = 100)
 setMethod("sim", c(x = "ph"), function(x, n = 1000) {
-  U <- rphasetype(n, x@pars$alpha, x@pars$S)
-  return(U)
+  rphasetype(n, x@pars$alpha, x@pars$S)
 })
 
-#' Density Method for phase-type distributions
+#' Density method for phase-type distributions
 #'
 #' @param x An object of class \linkS4class{ph}.
 #' @param y A vector of locations.
@@ -338,14 +336,14 @@ setMethod("dens", c(x = "ph"), function(x, y) {
   dens <- y
   dens[!y_inf] <- phdensity(y, x@pars$alpha, x@pars$S)
   dens[y_inf] <- 0
-  return(dens)
+  dens
 })
 
-#' Distribution Method for phase-type distributions
+#' Distribution method for phase-type distributions
 #'
 #' @param x An object of class \linkS4class{ph}.
 #' @param q A vector of locations.
-#' @param lower.tail Logical parameter specifying whether lower tail (cdf) or
+#' @param lower.tail Logical parameter specifying whether lower tail (CDF) or
 #' upper tail is computed.
 #'
 #' @return A vector containing the CDF evaluations at the given locations.
@@ -361,10 +359,10 @@ setMethod("cdf", c(x = "ph"), function(x,
   cdf <- q
   cdf[!q_inf] <- phcdf(q[!q_inf], x@pars$alpha, x@pars$S, lower.tail)
   cdf[q_inf] <- as.numeric(1 * lower.tail)
-  return(cdf)
+  cdf
 })
 
-#' Hazard rate Method for phase-type distributions
+#' Hazard rate method for phase-type distributions
 #'
 #' @param x An object of class \linkS4class{ph}.
 #' @param y A vector of locations.
@@ -378,10 +376,10 @@ setMethod("cdf", c(x = "ph"), function(x,
 setMethod("haz", c(x = "ph"), function(x, y) {
   d <- dens(x, y)
   s <- cdf(x, y, lower.tail = FALSE)
-  return(d / s)
+  d / s
 })
 
-#' Quantile Method for phase-type distributions
+#' Quantile method for phase-type distributions
 #'
 #' @param x An object of class \linkS4class{ph}.
 #' @param p A vector of probabilities.
@@ -398,15 +396,15 @@ setMethod("quan", c(x = "ph"), function(x,
   for (i in seq_along(p)) {
     quan[i] <- stats::uniroot(f = function(q) p[i] - cdf(x, 1 / (1 - q) - 1), interval = c(0, 1))$root
   }
-  return(1 / (1 - quan) - 1)
+  1 / (1 - quan) - 1
 })
 
-#' Fit Method for ph Class
+#' Fit method for ph class
 #'
 #' @param x An object of class \linkS4class{ph}.
 #' @param y Vector or data.
 #' @param weight Vector of weights.
-#' @param rcen Vector of right-censored observations
+#' @param rcen Vector of right-censored observations.
 #' @param rcenweight Vector of weights for right-censored observations.
 #' @param stepsEM Number of EM steps to be performed.
 #' @param methods Methods to use for matrix exponential calculation: RM, UNI or PADE.
@@ -600,7 +598,7 @@ setMethod(
     cat("\n", format(Sys.time(), format = "%H:%M:%OS"), ": EM finalized", sep = "")
     cat("\n", sep = "")
 
-    return(x)
+    x
   }
 )
 
@@ -613,10 +611,10 @@ data_aggregation <- function(y, w) {
     by = list(un_obs = mat$obs),
     FUN = sum
   )
-  return(list(un_obs = agg$un_obs, weights = agg$x))
+  list(un_obs = agg$un_obs, weights = agg$x)
 }
 
-#' logLik Method for ph Class
+#' Loglikelihood method for ph class
 #'
 #' @param object An object of class \linkS4class{ph}.
 #'
@@ -636,7 +634,7 @@ setMethod("logLik", "ph", function(object) {
   ll
 })
 
-#' Coef Method for ph Class
+#' Coef method for ph class
 #'
 #' @param object An object of class \linkS4class{ph}.
 #'
@@ -650,7 +648,7 @@ setMethod("coef", c(object = "ph"), function(object) {
   object@pars
 })
 
-#' LRT Method for ph Class
+#' LRT method for ph class
 #'
 #' @param x,y Objects of class \linkS4class{ph}.
 #'
@@ -661,10 +659,10 @@ setMethod("coef", c(object = "ph"), function(object) {
 setMethod("LRT", c(x = "ph", y = "ph"), function(x, y) {
   LR <- 2 * abs(logLik(y) - logLik(x))
   degrees <- abs(attributes(logLik(y))$df - attributes(logLik(x))$df)
-  return(c(LR = LR, p.val = pchisq(LR, df = degrees, lower.tail = FALSE)))
+  c(LR = LR, p.val = pchisq(LR, df = degrees, lower.tail = FALSE))
 })
 
-#' TVR Method for ph Class
+#' TVR method for ph class
 #'
 #' @param x An object of class \linkS4class{ph}.
 #' @param rew A vector of rewards.
@@ -678,11 +676,10 @@ setMethod("LRT", c(x = "ph", y = "ph"), function(x, y) {
 setMethod("TVR", c(x = "ph"), function(x, rew) {
   if (length(x@pars$alpha) != length(rew)) {
     stop("vector of rewards of wrong dimension")
-  } 
+  }
   if (any(rew < 0)) {
     stop("vector of rewards with negative entries")
   }
   mar_par <- tvr_ph(x@pars$alpha, x@pars$S, rew)
-  x0 <- ph(alpha = mar_par[[1]], S = mar_par[[2]])
-  return(x0)
+  ph(alpha = mar_par[[1]], S = mar_par[[2]])
 })

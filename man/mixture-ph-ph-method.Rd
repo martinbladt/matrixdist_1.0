@@ -2,7 +2,7 @@
 % Please edit documentation in R/1.ph.R
 \name{mixture,ph,ph-method}
 \alias{mixture,ph,ph-method}
-\title{Mixture Method for phase-type distributions}
+\title{Mixture method for phase-type distributions}
 \usage{
 \S4method{mixture}{ph,ph}(x1, x2, prob)
 }
@@ -17,7 +17,7 @@
 An object of class \linkS4class{ph}.
 }
 \description{
-Mixture Method for phase-type distributions
+Mixture method for phase-type distributions
 }
 \examples{
 ph1 <- ph(structure = "general", dimension = 3)

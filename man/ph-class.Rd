@@ -3,7 +3,7 @@
 \docType{class}
 \name{ph-class}
 \alias{ph-class}
-\title{Phase Type distributions}
+\title{Phase-type distributions}
 \value{
 Class object.
 }

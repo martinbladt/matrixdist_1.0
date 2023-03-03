@@ -1,4 +1,4 @@
-#' Regression Method for ph Class
+#' Regression method for ph Class
 #'
 #' @param x An object of class \linkS4class{ph}.
 #' @param y Vector or data.
@@ -8,8 +8,8 @@
 #' @param rcen Vector of right-censored observations.
 #' @param rcenweight Vector of weights for right-censored observations.
 #' @param stepsEM Number of EM steps to be performed.
-#' @param methods Methods to use for matrix exponential calculation: RM, UNI or PADE.
-#' @param rkstep Runge-Kutta step size (optional)
+#' @param methods Methods to use for matrix exponential calculation: `RM`, `UNI`, or `PADE`.
+#' @param rkstep Runge-Kutta step size (optional).
 #' @param uni_epsilon Epsilon parameter for uniformization method.
 #' @param optim_method Method to use in gradient optimization.
 #' @param maxit Maximum number of iterations when optimizing g function.
@@ -172,6 +172,6 @@ setMethod(
     s <- sph(x, type = "reg")
     s@gfun$pars <- par_g
     s@coefs$B <- B_fit
-    return(s)
+    s
   }
 )

@@ -2,7 +2,7 @@
 % Please edit documentation in R/3.mph.R
 \name{laplace,mph-method}
 \alias{laplace,mph-method}
-\title{Laplace Method for multivariate phase-type distributions}
+\title{Laplace method for multivariate phase-type distributions}
 \usage{
 \S4method{laplace}{mph}(x, r)
 }
@@ -15,7 +15,7 @@
 A vector containing the corresponding Laplace transform evaluations.
 }
 \description{
-Laplace Method for multivariate phase-type distributions
+Laplace method for multivariate phase-type distributions
 }
 \examples{
 set.seed(123)

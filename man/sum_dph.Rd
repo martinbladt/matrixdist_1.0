@@ -2,8 +2,8 @@
 % Please edit documentation in R/RcppExports.R
 \name{sum_dph}
 \alias{sum_dph}
-\title{Computes the initial distribution and sub-intensity of the sum of two 
- discrete phase-type distributed random variables}
+\title{Computes the initial distribution and sub-intensity of the sum of two
+discrete phase-type distributed random variables}
 \usage{
 sum_dph(alpha1, S1, alpha2, S2)
 }
@@ -17,6 +17,6 @@ sum_dph(alpha1, S1, alpha2, S2)
 \item{S2}{Sub-transition matrix.}
 }
 \description{
-Computes the initial distribution and sub-intensity of the sum of two 
- discrete phase-type distributed random variables
+Computes the initial distribution and sub-intensity of the sum of two
+discrete phase-type distributed random variables
 }

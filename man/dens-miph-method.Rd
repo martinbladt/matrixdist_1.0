@@ -2,7 +2,7 @@
 % Please edit documentation in R/3b.miph.R
 \name{dens,miph-method}
 \alias{dens,miph-method}
-\title{Density Method for multivariate inhomogeneous phase-type distributions}
+\title{Density method for multivariate inhomogeneous phase-type distributions}
 \usage{
 \S4method{dens}{miph}(x, y, delta = NULL)
 }
@@ -17,7 +17,7 @@
 A list containing the locations and corresponding density evaluations.
 }
 \description{
-Density Method for multivariate inhomogeneous phase-type distributions
+Density method for multivariate inhomogeneous phase-type distributions
 }
 \examples{
 under_mph <- mph(structure = c("general", "general"))

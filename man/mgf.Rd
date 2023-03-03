@@ -2,7 +2,7 @@
 % Please edit documentation in R/0.generics.R
 \name{mgf}
 \alias{mgf}
-\title{New Generic for mgf of Matrix Distributions}
+\title{New generic for mgf of matrix distributions}
 \usage{
 mgf(x, ...)
 }
@@ -12,7 +12,7 @@ mgf(x, ...)
 \item{...}{Further parameters to be passed on.}
 }
 \value{
-Mgf transform of the matrix distribution.
+Mgf of the matrix distribution.
 }
 \description{
 Methods are available for objects of class \linkS4class{ph}.

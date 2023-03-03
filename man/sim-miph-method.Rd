@@ -2,7 +2,7 @@
 % Please edit documentation in R/3b.miph.R
 \name{sim,miph-method}
 \alias{sim,miph-method}
-\title{Simulation Method for inhomogeneous multivariate phase-type distributions}
+\title{Simulation method for inhomogeneous multivariate phase-type distributions}
 \usage{
 \S4method{sim}{miph}(x, n = 1000)
 }
@@ -13,11 +13,11 @@
 }
 \value{
 A realization of independent and identically distributed inhomogeneous
- multivariate phase-type variables. If x is a MoE miph an array of dimension c(n,d,m) is returned,
- with d the number of marginals and m the number of initial distribution vectors.
+multivariate phase-type variables. If x is a MoE miph an array of dimension c(n,d,m) is returned,
+with d the number of marginals and m the number of initial distribution vectors.
 }
 \description{
-Simulation Method for inhomogeneous multivariate phase-type distributions
+Simulation method for inhomogeneous multivariate phase-type distributions
 }
 \examples{
 under_mph <- mph(structure = c("general", "general"))

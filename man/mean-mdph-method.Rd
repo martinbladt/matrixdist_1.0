@@ -2,7 +2,7 @@
 % Please edit documentation in R/9.mdph.R
 \name{mean,mdph-method}
 \alias{mean,mdph-method}
-\title{Mean Method for multivariate discrete phase-type distributions}
+\title{Mean method for multivariate discrete phase-type distributions}
 \usage{
 \S4method{mean}{mdph}(x)
 }
@@ -13,7 +13,7 @@
 The mean of the multivariate discrete phase-type distribution.
 }
 \description{
-Mean Method for multivariate discrete phase-type distributions
+Mean method for multivariate discrete phase-type distributions
 }
 \examples{
 obj <- mdph(structure = c("general", "general"))

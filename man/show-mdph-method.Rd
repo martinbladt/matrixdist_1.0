@@ -2,7 +2,7 @@
 % Please edit documentation in R/9.mdph.R
 \name{show,mdph-method}
 \alias{show,mdph-method}
-\title{Show Method for multivariate discrete phase-type distributions}
+\title{Show method for multivariate discrete phase-type distributions}
 \usage{
 \S4method{show}{mdph}(object)
 }
@@ -10,5 +10,5 @@
 \item{object}{An object of class \linkS4class{mdph}.}
 }
 \description{
-Show Method for multivariate discrete phase-type distributions
+Show method for multivariate discrete phase-type distributions
 }

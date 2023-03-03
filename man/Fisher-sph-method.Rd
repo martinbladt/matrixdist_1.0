@@ -2,7 +2,7 @@
 % Please edit documentation in R/6.sph.R
 \name{Fisher,sph-method}
 \alias{Fisher,sph-method}
-\title{Fisher Information Method for sph Class}
+\title{Fisher information method for sph class}
 \usage{
 \S4method{Fisher}{sph}(x, y, X, w = numeric(0))
 }
@@ -19,5 +19,5 @@
 A matrix.
 }
 \description{
-Fisher Information Method for sph Class
+Fisher information method for sph class
 }

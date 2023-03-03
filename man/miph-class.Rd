@@ -3,7 +3,7 @@
 \docType{class}
 \name{miph-class}
 \alias{miph-class}
-\title{Multivariate Inhomogeneous Phase Type distributions}
+\title{Multivariate inhomogeneous phase-type distributions}
 \value{
 Class object.
 }

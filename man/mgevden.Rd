@@ -20,6 +20,6 @@ The density at \code{x}.
 }
 \description{
 Computes the density of a matrix-GEV distribution with parameters
- \code{alpha}, \code{S} and \code{beta} at \code{x}.
+\code{alpha}, \code{S} and \code{beta} at \code{x}.
 Does not allow for atoms in zero.
 }

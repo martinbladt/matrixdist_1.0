@@ -2,7 +2,7 @@
 % Please edit documentation in R/7.dph.R
 \name{var,dph-method}
 \alias{var,dph-method}
-\title{Var Method for discrete phase-type distributions}
+\title{Var method for discrete phase-type distributions}
 \usage{
 \S4method{var}{dph}(x)
 }
@@ -13,7 +13,7 @@
 The variance of the \linkS4class{dph} object.
 }
 \description{
-Var Method for discrete phase-type distributions
+Var method for discrete phase-type distributions
 }
 \examples{
 set.seed(123)

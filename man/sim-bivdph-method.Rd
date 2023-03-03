@@ -13,7 +13,7 @@
 }
 \value{
 A realization of independent and identically distributed bivariate
- discrete phase-type vector.
+discrete phase-type vector.
 }
 \description{
 Simulation method for bivariate discrete phase-type distributions

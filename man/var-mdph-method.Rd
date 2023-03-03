@@ -2,7 +2,7 @@
 % Please edit documentation in R/9.mdph.R
 \name{var,mdph-method}
 \alias{var,mdph-method}
-\title{Var Method for multivariate discrete phase-type distributions}
+\title{Var method for multivariate discrete phase-type distributions}
 \usage{
 \S4method{var}{mdph}(x)
 }
@@ -13,7 +13,7 @@
 The covariance matrix of the multivariate discrete phase-type distribution.
 }
 \description{
-Var Method for multivariate discrete phase-type distributions
+Var method for multivariate discrete phase-type distributions
 }
 \examples{
 obj <- mdph(structure = c("general", "general"))

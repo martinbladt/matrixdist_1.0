@@ -2,7 +2,7 @@
 % Please edit documentation in R/6.sph.R
 \name{coef,sph-method}
 \alias{coef,sph-method}
-\title{Coef Method for sph Class}
+\title{Coef method for sph Class}
 \usage{
 \S4method{coef}{sph}(object)
 }
@@ -13,5 +13,5 @@
 Parameters of sph model.
 }
 \description{
-Coef Method for sph Class
+Coef method for sph Class
 }

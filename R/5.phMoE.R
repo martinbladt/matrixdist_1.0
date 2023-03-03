@@ -1,4 +1,4 @@
-#' MoE Method for ph Class
+#' MoE method for ph Class
 #'
 #' @param x An object of class \linkS4class{ph}.
 #' @param formula A regression formula.
@@ -8,7 +8,7 @@
 #' @param weight Vector of weights.
 #' @param delta Right-censoring indicator.
 #' @param stepsEM Number of EM steps to be performed.
-#' @param optim_method Method to use in gradient optimization
+#' @param optim_method Method to use in gradient optimization.
 #' @param maxit Maximum number of iterations when optimizing g function.
 #' @param reltol Relative tolerance when optimizing g function.
 #' @param every Number of iterations between likelihood display updates.
@@ -120,6 +120,6 @@ setMethod(
     }
     if (inh) inhom$theta <- theta
     cat("\n", sep = "")
-    return(list(alpha = alpha_vecs, S = S_fit, mm = multinom_model, inhom = inhom))
+    list(alpha = alpha_vecs, S = S_fit, mm = multinom_model, inhom = inhom)
   }
 )

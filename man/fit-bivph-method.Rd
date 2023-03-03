@@ -2,7 +2,7 @@
 % Please edit documentation in R/4b.bivph.R
 \name{fit,bivph-method}
 \alias{fit,bivph-method}
-\title{Fit Method for bivph Class}
+\title{Fit method for bivph Class}
 \usage{
 \S4method{fit}{bivph}(
   x,
@@ -33,7 +33,7 @@
 An object of class \linkS4class{bivph}.
 }
 \description{
-Fit Method for bivph Class
+Fit method for bivph Class
 }
 \examples{
 obj <- bivph(dimensions = c(3, 3))

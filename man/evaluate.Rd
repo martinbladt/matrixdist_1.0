@@ -2,7 +2,7 @@
 % Please edit documentation in R/0.generics.R
 \name{evaluate}
 \alias{evaluate}
-\title{New Generic for Evaluating Survival Matrix Distributions}
+\title{New generic for evaluating survival matrix distributions}
 \usage{
 evaluate(x, subject, ...)
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/7.dph.R
 \name{show,dph-method}
 \alias{show,dph-method}
-\title{Show Method for discrete phase-type distributions}
+\title{Show method for discrete phase-type distributions}
 \usage{
 \S4method{show}{dph}(object)
 }
@@ -10,5 +10,5 @@
 \item{object}{An object of class \linkS4class{dph}.}
 }
 \description{
-Show Method for discrete phase-type distributions
+Show method for discrete phase-type distributions
 }

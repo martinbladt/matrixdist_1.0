@@ -2,7 +2,7 @@
 % Please edit documentation in R/7.dph.R
 \name{dph}
 \alias{dph}
-\title{Constructor Function for discrete phase-type distributions}
+\title{Constructor function for discrete phase-type distributions}
 \usage{
 dph(alpha = NULL, S = NULL, structure = NULL, dimension = 3)
 }
@@ -11,7 +11,8 @@ dph(alpha = NULL, S = NULL, structure = NULL, dimension = 3)
 
 \item{S}{A sub-transition matrix.}
 
-\item{structure}{A valid dph structure ("general", "coxian", "hyperexponential", "gcoxian", "gerlang").}
+\item{structure}{A valid dph structure: \code{"general"}, \code{"coxian"},
+\code{"hyperexponential"}, "gcoxian", or \code{"gerlang"}.}
 
 \item{dimension}{The dimension of the dph structure (if structure is provided).}
 }
@@ -19,7 +20,7 @@ dph(alpha = NULL, S = NULL, structure = NULL, dimension = 3)
 An object of class \linkS4class{dph}.
 }
 \description{
-Constructor Function for discrete phase-type distributions
+Constructor function for discrete phase-type distributions
 }
 \examples{
 dph(structure = "general", dim = 5)

@@ -2,7 +2,7 @@
 % Please edit documentation in R/8.bivdph.R
 \name{MoE,bivdph-method}
 \alias{MoE,bivdph-method}
-\title{MoE Method for bivdph Class}
+\title{MoE method for bivdph Class}
 \usage{
 \S4method{MoE}{bivdph}(
   x,
@@ -39,5 +39,5 @@
 An object of class \linkS4class{sph}.
 }
 \description{
-MoE Method for bivdph Class
+MoE method for bivdph Class
 }

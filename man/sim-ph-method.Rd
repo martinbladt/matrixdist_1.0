@@ -2,7 +2,7 @@
 % Please edit documentation in R/1.ph.R
 \name{sim,ph-method}
 \alias{sim,ph-method}
-\title{Simulation Method for phase-type distributions}
+\title{Simulation method for phase-type distributions}
 \usage{
 \S4method{sim}{ph}(x, n = 1000)
 }
@@ -15,7 +15,7 @@
 A realization of independent and identically distributed phase-type variables.
 }
 \description{
-Simulation Method for phase-type distributions
+Simulation method for phase-type distributions
 }
 \examples{
 obj <- ph(structure = "general")

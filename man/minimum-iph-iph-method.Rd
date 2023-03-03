@@ -2,7 +2,7 @@
 % Please edit documentation in R/2.iph.R
 \name{minimum,iph,iph-method}
 \alias{minimum,iph,iph-method}
-\title{Minimum Method for inhomogeneous phase-type distributions}
+\title{Minimum method for inhomogeneous phase-type distributions}
 \usage{
 \S4method{minimum}{iph,iph}(x1, x2)
 }
@@ -15,7 +15,7 @@
 An object of class \linkS4class{iph}.
 }
 \description{
-Minimum Method for inhomogeneous phase-type distributions
+Minimum method for inhomogeneous phase-type distributions
 }
 \examples{
 iph1 <- iph(ph(structure = "general", dimension = 3), gfun = "weibull", gfun_pars = 2)

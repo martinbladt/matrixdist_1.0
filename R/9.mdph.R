@@ -1,8 +1,8 @@
-#' Multivariate Discrete Phase Type distributions
+#' Multivariate discrete phase-type distributions
 #'
 #' Class of objects for multivariate discrete phase-type distributions.
 #'
-#' @slot name Name of the discrete phase type distribution.
+#' @slot name Name of the discrete phase-type distribution.
 #' @slot pars A list comprising of the parameters.
 #' @slot fit A list containing estimation information.
 #'
@@ -17,7 +17,7 @@ setClass("mdph",
   )
 )
 
-#' Constructor Function for multivariate discrete phase-type distributions
+#' Constructor function for multivariate discrete phase-type distributions
 #'
 #' @param alpha A probability vector.
 #' @param S A list of sub-transition matrices.
@@ -57,7 +57,7 @@ mdph <- function(alpha = NULL, S = NULL, structure = NULL, dimension = 3, variab
   )
 }
 
-#' Show Method for multivariate discrete phase-type distributions
+#' Show method for multivariate discrete phase-type distributions
 #'
 #' @param object An object of class \linkS4class{mdph}.
 #' @importFrom methods show
@@ -85,7 +85,7 @@ setMethod("coef", c(object = "mdph"), function(object) {
   object@pars
 })
 
-#' Simulation Method for multivariate discrete phase-type distributions
+#' Simulation method for multivariate discrete phase-type distributions
 #'
 #' @param x An object of class \linkS4class{mdph}.
 #' @param n Length of realization.
@@ -143,7 +143,7 @@ setMethod("sim", c(x = "mdph"), function(x, n = 1000, equal_marginals = 0) {
       }
     }
   }
-  return(result)
+  result
 })
 
 #' Marginal method for mdph class
@@ -160,11 +160,10 @@ setMethod("marginal", c(x = "mdph"), function(x, mar = 1) {
   if (!(mar %in% 1:length(x@pars$S))) {
     stop("maringal provided not available")
   }
-  x0 <- dph(alpha = x@pars$alpha, S = x@pars$S[[mar]])
-  return(x0)
+  dph(alpha = x@pars$alpha, S = x@pars$S[[mar]])
 })
 
-#' Moment Method for multivariate discrete phase-type distributions
+#' Moment method for multivariate discrete phase-type distributions
 #'
 #' @param x An object of class \linkS4class{mdph}.
 #' @param k A vector of positive integer values.
@@ -192,7 +191,6 @@ setMethod("moment", c(x = "mdph"), function(x, k) {
   alpha <- x@pars$alpha
   S <- x@pars$S
 
-
   p <- length(x@pars$alpha)
   res <- 0
 
@@ -208,10 +206,10 @@ setMethod("moment", c(x = "mdph"), function(x, k) {
     res <- res + alpha[j] * prod(aux)
   }
 
-  return(res)
+  res
 })
 
-#' Mean Method for multivariate discrete phase-type distributions
+#' Mean method for multivariate discrete phase-type distributions
 #'
 #' @param x An object of class \linkS4class{mdph}.
 #'
@@ -227,10 +225,10 @@ setMethod("mean", c(x = "mdph"), function(x) {
   for (i in 1:d) {
     res[i] <- mean(marginal(x, i))
   }
-  return(res)
+  res
 })
 
-#' Var Method for multivariate discrete phase-type distributions
+#' Var method for multivariate discrete phase-type distributions
 #'
 #' @param x An object of class \linkS4class{mdph}.
 #'
@@ -259,13 +257,13 @@ setMethod("var", c(x = "mdph"), function(x) {
           in_vect <- rep(0, p)
           in_vect[s] <- 1
           aux <- rep(0, 2)
-          
+
           m1 <- solve(diag(p) - S[[i]])
           aux[1] <- sum(in_vect %*% m1)
-          
+
           m1 <- solve(diag(p) - S[[j]])
           aux[2] <- sum(in_vect %*% m1)
-          
+
           cross <- cross + alpha[s] * prod(aux)
         }
         res[i, j] <- cross - mean(mar1) * mean(mar2)
@@ -273,10 +271,10 @@ setMethod("var", c(x = "mdph"), function(x) {
     }
   }
   res[lower.tri(res)] <- t(res)[lower.tri(res)]
-  return(res)
+  res
 })
 
-#' Cor Method for multivariate discrete phase-type distributions
+#' Cor method for multivariate discrete phase-type distributions
 #'
 #' @param x An object of class \linkS4class{mdph}.
 #'
@@ -290,7 +288,7 @@ setMethod("cor", c(x = "mdph"), function(x) {
   stats::cov2cor(var(x))
 })
 
-#' Pgf Method for multivariate discrete phase-type distributions
+#' Pgf method for multivariate discrete phase-type distributions
 #'
 #' @param x An object of class \linkS4class{mdph}.
 #' @param z A matrix of real values.
@@ -334,7 +332,7 @@ setMethod("pgf", c(x = "mdph"), function(x, z) {
     res <- res + alpha[j] * apply(aux, 1, prod)
   }
 
-  return(res)
+  res
 })
 
 #' Density method for multivariate discrete phase-type distributions
@@ -352,11 +350,10 @@ setMethod("dens", c(x = "mdph"), function(x, y) {
   if (is.vector(y)) {
     y <- t(y)
   }
-  dens <- mdphdensity(y, x@pars$alpha, x@pars$S)
-  return(dens)
+  mdphdensity(y, x@pars$alpha, x@pars$S)
 })
 
-#' Fit Method for mdph Class
+#' Fit method for mdph Class
 #'
 #' @param x An object of class \linkS4class{mdph}.
 #' @param y A matrix with the data.
@@ -416,11 +413,11 @@ setMethod(
     cat("\n", format(Sys.time(), format = "%H:%M:%OS"), ": EM finalized", sep = "")
     cat("\n", sep = "")
 
-    return(x)
+    x
   }
 )
 
-#' MoE Method for mdph Class
+#' MoE method for mdph Class
 #'
 #' @param x An object of class \linkS4class{mdph}.
 #' @param formula A regression formula.
@@ -482,6 +479,6 @@ setMethod(
       }
     }
     cat("\n", sep = "")
-    return(list(alpha = alpha_vecs, S = S_fit, mm = multinom_model))
+    list(alpha = alpha_vecs, S = S_fit, mm = multinom_model)
   }
 )

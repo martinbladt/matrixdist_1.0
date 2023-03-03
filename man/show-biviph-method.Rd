@@ -2,7 +2,7 @@
 % Please edit documentation in R/4c.biviph.R
 \name{show,biviph-method}
 \alias{show,biviph-method}
-\title{Show Method for bivariate inhomogeneous phase-type distributions}
+\title{Show method for bivariate inhomogeneous phase-type distributions}
 \usage{
 \S4method{show}{biviph}(object)
 }
@@ -10,5 +10,5 @@
 \item{object}{An object of class \linkS4class{biviph}.}
 }
 \description{
-Show Method for bivariate inhomogeneous phase-type distributions
+Show method for bivariate inhomogeneous phase-type distributions
 }

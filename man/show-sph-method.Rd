@@ -2,7 +2,7 @@
 % Please edit documentation in R/6.sph.R
 \name{show,sph-method}
 \alias{show,sph-method}
-\title{Show Method for survival phase-type objects}
+\title{Show method for survival phase-type objects}
 \usage{
 \S4method{show}{sph}(object)
 }
@@ -10,5 +10,5 @@
 \item{object}{An object of class \linkS4class{sph}.}
 }
 \description{
-Show Method for survival phase-type objects
+Show method for survival phase-type objects
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/4.MPHstar.R
 \name{cor,MPHstar-method}
 \alias{cor,MPHstar-method}
-\title{Cor Method for MPHstar class}
+\title{Cor method for MPHstar class}
 \usage{
 \S4method{cor}{MPHstar}(x)
 }
@@ -13,7 +13,7 @@
 The correlation matrix of the MPHstar distribution.
 }
 \description{
-Cor Method for MPHstar class
+Cor method for MPHstar class
 }
 \examples{
 obj <- MPHstar(structure = "general")

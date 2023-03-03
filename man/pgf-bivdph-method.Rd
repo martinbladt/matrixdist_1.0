@@ -2,7 +2,7 @@
 % Please edit documentation in R/8.bivdph.R
 \name{pgf,bivdph-method}
 \alias{pgf,bivdph-method}
-\title{Pgf Method for bivariate discrete phase-type distributions}
+\title{Pgf method for bivariate discrete phase-type distributions}
 \usage{
 \S4method{pgf}{bivdph}(x, z)
 }
@@ -13,10 +13,10 @@
 }
 \value{
 The joint pdf of the \linkS4class{dph} object at the
- given location.
+given location.
 }
 \description{
-Pgf Method for bivariate discrete phase-type distributions
+Pgf method for bivariate discrete phase-type distributions
 }
 \examples{
 obj <- bivdph(dimensions = c(3, 3))

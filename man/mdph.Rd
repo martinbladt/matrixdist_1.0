@@ -2,7 +2,7 @@
 % Please edit documentation in R/9.mdph.R
 \name{mdph}
 \alias{mdph}
-\title{Constructor Function for multivariate discrete phase-type distributions}
+\title{Constructor function for multivariate discrete phase-type distributions}
 \usage{
 mdph(alpha = NULL, S = NULL, structure = NULL, dimension = 3, variables = NULL)
 }
@@ -21,5 +21,5 @@ mdph(alpha = NULL, S = NULL, structure = NULL, dimension = 3, variables = NULL)
 An object of class \linkS4class{mdph}.
 }
 \description{
-Constructor Function for multivariate discrete phase-type distributions
+Constructor function for multivariate discrete phase-type distributions
 }

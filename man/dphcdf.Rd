@@ -19,6 +19,6 @@ dphcdf(x, alpha, S, lower_tail = TRUE)
 The cdf (tail) at \code{x}.
 }
 \description{
-Computes the cdf (tail) of a discrete phase-type distribution with parameters 
- \code{alpha} and \code{S} at \code{x}.
+Computes the cdf (tail) of a discrete phase-type distribution with parameters
+\code{alpha} and \code{S} at \code{x}.
 }

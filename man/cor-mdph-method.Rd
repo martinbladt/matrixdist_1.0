@@ -2,7 +2,7 @@
 % Please edit documentation in R/9.mdph.R
 \name{cor,mdph-method}
 \alias{cor,mdph-method}
-\title{Cor Method for multivariate discrete phase-type distributions}
+\title{Cor method for multivariate discrete phase-type distributions}
 \usage{
 \S4method{cor}{mdph}(x)
 }
@@ -13,7 +13,7 @@
 The correlation matrix of the multivariate discrete phase-type distribution.
 }
 \description{
-Cor Method for multivariate discrete phase-type distributions
+Cor method for multivariate discrete phase-type distributions
 }
 \examples{
 obj <- mdph(structure = c("general", "general"))

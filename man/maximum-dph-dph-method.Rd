@@ -2,7 +2,7 @@
 % Please edit documentation in R/7.dph.R
 \name{maximum,dph,dph-method}
 \alias{maximum,dph,dph-method}
-\title{Maximum Method for discrete phase-type distributions}
+\title{Maximum method for discrete phase-type distributions}
 \usage{
 \S4method{maximum}{dph,dph}(x1, x2)
 }
@@ -15,7 +15,7 @@
 An object of class \linkS4class{dph}.
 }
 \description{
-Maximum Method for discrete phase-type distributions
+Maximum method for discrete phase-type distributions
 }
 \examples{
 dph1 <- dph(structure = "general", dimension = 3)

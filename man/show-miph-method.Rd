@@ -2,7 +2,7 @@
 % Please edit documentation in R/3b.miph.R
 \name{show,miph-method}
 \alias{show,miph-method}
-\title{Show Method for multivariate inhomogeneous phase-type distributions}
+\title{Show method for multivariate inhomogeneous phase-type distributions}
 \usage{
 \S4method{show}{miph}(object)
 }
@@ -10,5 +10,5 @@
 \item{object}{An object of class \linkS4class{miph}.}
 }
 \description{
-Show Method for multivariate inhomogeneous phase-type distributions
+Show method for multivariate inhomogeneous phase-type distributions
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/7.dph.R
 \name{dens,dph-method}
 \alias{dens,dph-method}
-\title{Density Method for discrete phase-type distributions}
+\title{Density method for discrete phase-type distributions}
 \usage{
 \S4method{dens}{dph}(x, y)
 }
@@ -15,7 +15,7 @@
 A vector containing the density evaluations at the given locations.
 }
 \description{
-Density Method for discrete phase-type distributions
+Density method for discrete phase-type distributions
 }
 \examples{
 obj <- dph(structure = "general")

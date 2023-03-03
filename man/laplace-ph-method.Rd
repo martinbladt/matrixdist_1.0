@@ -2,7 +2,7 @@
 % Please edit documentation in R/1.ph.R
 \name{laplace,ph-method}
 \alias{laplace,ph-method}
-\title{Laplace Method for phase-type distributions}
+\title{Laplace method for phase-type distributions}
 \usage{
 \S4method{laplace}{ph}(x, r)
 }
@@ -13,10 +13,10 @@
 }
 \value{
 The Laplace transform of the \linkS4class{ph}
- (or undelying \linkS4class{ph}) object at the given locations.
+(or underlying \linkS4class{ph}) object at the given locations.
 }
 \description{
-Laplace Method for phase-type distributions
+Laplace method for phase-type distributions
 }
 \examples{
 set.seed(123)

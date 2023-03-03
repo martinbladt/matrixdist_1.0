@@ -2,7 +2,7 @@
 % Please edit documentation in R/2.iph.R
 \name{coef,iph-method}
 \alias{coef,iph-method}
-\title{Coef Method for iph Class}
+\title{Coef method for iph class}
 \usage{
 \S4method{coef}{iph}(object)
 }
@@ -13,7 +13,7 @@
 Parameters of iph model.
 }
 \description{
-Coef Method for iph Class
+Coef method for iph class
 }
 \examples{
 obj <- iph(ph(structure = "general", dimension = 2), gfun = "lognormal", gfun_pars = 2)

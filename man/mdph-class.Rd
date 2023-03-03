@@ -3,7 +3,7 @@
 \docType{class}
 \name{mdph-class}
 \alias{mdph-class}
-\title{Multivariate Discrete Phase Type distributions}
+\title{Multivariate discrete phase-type distributions}
 \value{
 Class object.
 }
@@ -13,7 +13,7 @@ Class of objects for multivariate discrete phase-type distributions.
 \section{Slots}{
 
 \describe{
-\item{\code{name}}{Name of the discrete phase type distribution.}
+\item{\code{name}}{Name of the discrete phase-type distribution.}
 
 \item{\code{pars}}{A list comprising of the parameters.}
 

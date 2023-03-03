@@ -3,7 +3,7 @@
 \docType{class}
 \name{iph-class}
 \alias{iph-class}
-\title{Inhomogeneous Phase Type distributions}
+\title{Inhomogeneous phase-type distributions}
 \value{
 Class object.
 }

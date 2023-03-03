@@ -2,7 +2,7 @@
 % Please edit documentation in R/4b.bivph.R
 \name{mgf,bivph-method}
 \alias{mgf,bivph-method}
-\title{Mgf Method for bivph class}
+\title{Mgf method for bivph class}
 \usage{
 \S4method{mgf}{bivph}(x, r)
 }
@@ -15,7 +15,7 @@
 A vector containing the corresponding mgf evaluations.
 }
 \description{
-Mgf Method for bivph class
+Mgf method for bivph class
 }
 \examples{
 set.seed(123)

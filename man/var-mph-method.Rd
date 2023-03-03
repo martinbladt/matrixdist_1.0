@@ -2,7 +2,7 @@
 % Please edit documentation in R/3.mph.R
 \name{var,mph-method}
 \alias{var,mph-method}
-\title{Var Method for multivariate phase-type distributions}
+\title{Var method for multivariate phase-type distributions}
 \usage{
 \S4method{var}{mph}(x)
 }
@@ -13,7 +13,7 @@
 The covariance matrix of the multivariate phase-type distribution.
 }
 \description{
-Var Method for multivariate phase-type distributions
+Var method for multivariate phase-type distributions
 }
 \examples{
 obj <- mph(structure = c("general", "general"))

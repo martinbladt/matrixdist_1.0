@@ -2,7 +2,7 @@
 % Please edit documentation in R/7.dph.R
 \name{+,dph,dph-method}
 \alias{+,dph,dph-method}
-\title{Sum Method for discrete phase-type distributions}
+\title{Sum method for discrete phase-type distributions}
 \usage{
 \S4method{+}{dph,dph}(e1, e2)
 }
@@ -15,7 +15,7 @@
 An object of class \linkS4class{dph}.
 }
 \description{
-Sum Method for discrete phase-type distributions
+Sum method for discrete phase-type distributions
 }
 \examples{
 dph1 <- dph(structure = "general", dimension = 3)
