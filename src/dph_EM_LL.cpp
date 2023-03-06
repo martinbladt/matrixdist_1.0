@@ -159,7 +159,6 @@ arma::mat EMstep_dph_MoE(arma::mat & alpha,  arma::mat & S, const Rcpp::NumericV
 }
 
 
-
 //' EM for discrete bivariate phase-type
 //' 
 //' @param alpha Initial probabilities.
@@ -263,6 +262,7 @@ void EMstep_bivdph(arma::vec & alpha, arma::mat & S11, arma::mat & S12, arma::ma
   }
 }
 
+
 //' EM for discrete bivariate phase-type MoE
 //' 
 //' @param alpha Initial probabilities.
@@ -365,8 +365,6 @@ arma::mat EMstep_bivdph_MoE(arma::mat & alpha, arma::mat & S11, arma::mat & S12,
   }
   return(Bmatrix);
 }
-
-
 
 
 //' EM for multivariate discrete phase-type
