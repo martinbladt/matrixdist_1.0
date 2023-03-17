@@ -2,7 +2,7 @@ Package: matrixdist
 Type: Package
 Title: Statistics for Matrix Distributions
 Version: 1.1.7
-Date: 2022-10-15
+Date: 2023-03-16
 Authors@R: c(person("Martin", "Bladt", email = "martinbladt@gmail.com", role = c("aut", "cre")),
               person("Jorge", "Yslas", email = "jorge.yslas1@gmail.com",
               role = "aut"),
@@ -35,7 +35,7 @@ Imports:
     nnet,
     reshape2
 LinkingTo: Rcpp, RcppArmadillo
-SystemRequirements: C++11
+SystemRequirements: C++
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
