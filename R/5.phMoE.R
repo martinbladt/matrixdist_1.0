@@ -103,9 +103,24 @@ setMethod(
           cat("\r", "iteration:", k, ", logLik:", -opt$value, sep = " ")
         }
       } else {
-        B_matrix <- EMstep_MoE_PADE(alpha_vecs, S_fit, frame[delta == 1, 1], weight[delta == 1], frame[delta == 0, 1], weight[delta == 0])[[1]]
+        B_matrix_aux <- EMstep_MoE_PADE(rbind(alpha_vecs[delta == 1, ], alpha_vecs[delta == 0, ]), S_fit, frame[delta == 1, 1], weight[delta == 1], frame[delta == 0, 1], weight[delta == 0])
+        B_matrix <- B_matrix_aux[[1]]
         wt <- reshape2::melt(B_matrix)[, 3]
         wt[wt < 1e-22] <- wt[wt < 1e-22] + 1e-22
+        
+        B_matrix_cens <- B_matrix_aux[[2]]
+        wt_cens <- numeric(0)
+        if (nrow(B_matrix_cens) > 0) {
+          wt_cens <- reshape2::melt(B_matrix_cens)[, 3]
+          wt_cens[wt_cens < 1e-22] <- wt_cens[wt_cens < 1e-22] + 1e-22
+        }
+        wt_aux <- rep(0, length(wt) + length(wt_cens))
+        wt_aux[delta == 1] <- wt 
+        if (length(wt_cens) > 0) {
+          wt_aux[delta == 0] <- wt_cens
+        }
+        
+        wt <- wt_aux
         if (k == 1 | rand_init == TRUE) {
           multinom_model <- nnet::multinom(Class ~ ., data = dm, weights = wt, trace = F)
         } else {
