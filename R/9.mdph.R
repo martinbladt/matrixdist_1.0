@@ -428,6 +428,7 @@ setMethod(
 #' @param stepsEM Number of EM steps to be performed.
 #' @param every Number of iterations between likelihood display updates.
 #' @param rand_init Random initiation in the R-step.
+#' @param maxWts Maximal number of weights in the nnet function.
 #'
 #' @return An object of class \linkS4class{sph}.
 #'
@@ -443,7 +444,8 @@ setMethod(
            weight = numeric(0),
            stepsEM = 1000,
            every = 10,
-           rand_init = TRUE) {
+           rand_init = TRUE,
+           maxWts = 1000) {
     p <- length(x@pars$alpha)
     frame <- stats::model.frame(formula, data = data)
     n <- nrow(frame)
@@ -468,9 +470,9 @@ setMethod(
       wt <- reshape2::melt(B_matrix)[, 3]
       wt[wt < 1e-22] <- wt[wt < 1e-22] + 1e-22
       if (k == 1 | rand_init == TRUE) {
-        multinom_model <- nnet::multinom(Class ~ ., data = dm, weights = wt, trace = F)
+        multinom_model <- nnet::multinom(Class ~ ., data = dm, weights = wt, trace = F, MaxNWts = maxWts)
       } else {
-        multinom_model <- nnet::multinom(Class ~ ., data = dm, weights = wt, trace = F, Wts = multinom_model$wts)
+        multinom_model <- nnet::multinom(Class ~ ., data = dm, weights = wt, trace = F, Wts = multinom_model$wts, MaxNWts = maxWts)
       }
       alpha_vecs <- stats::predict(multinom_model, type = "probs", newdata = ndm)
       if (k %% every == 0) {
