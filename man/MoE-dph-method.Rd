@@ -12,7 +12,8 @@
   weight = numeric(0),
   stepsEM = 1000,
   every = 10,
-  rand_init = TRUE
+  rand_init = TRUE,
+  maxWts = 1000
 )
 }
 \arguments{
@@ -31,6 +32,8 @@
 \item{every}{Number of iterations between likelihood display updates.}
 
 \item{rand_init}{Random initiation in the R-step.}
+
+\item{maxWts}{Maximal number of weights in the nnet function.}
 }
 \value{
 An object of class \linkS4class{sph}.

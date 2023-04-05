@@ -48,17 +48,31 @@ setMethod(
         reltol = reltol
       )
     }
-    inh <- !is.null(inhom)
+    # inh <- !is.null(inhom)
+    # if (inh) {
+    #   g_inv <- inhom$g_inv
+    #   lambda <- inhom$lambda
+    #   theta <- inhom$theta
+    #   mLL <- function(theta, g_inv, lambda, alpha1, alpha2, S, y, w, yc, wc) {
+    #     return(-logLikelihoodPH_MoE(alpha1, alpha2, S, g_inv(theta, y), w, g_inv(theta, yc), wc) -
+    #       sum(w * log(lambda(theta, y))))
+    #   }
+    # }
+    
+    #Alaric suggestion
+    inh <- methods::is(x,"iph")
     if (inh) {
-      g_inv <- inhom$g_inv
-      lambda <- inhom$lambda
-      theta <- inhom$theta
+      g_inv <- x@gfun$inverse
+      lambda <- x@gfun$intensity
+      theta <- x@gfun$pars
       mLL <- function(theta, g_inv, lambda, alpha1, alpha2, S, y, w, yc, wc) {
-        return(-logLikelihoodPH_MoE(alpha1, alpha2, S, g_inv(y, theta), w, g_inv(yc, theta), wc) -
-          sum(w * log(lambda(y, theta))))
+        return(-logLikelihoodPH_MoE(alpha1, alpha2, S, g_inv(theta, y), w, g_inv(theta, yc), wc) -
+                 sum(w * log(lambda(theta, y))))
       }
     }
     p <- length(x@pars$alpha)
+    if(p<=2)stop("The smallest ph dimension supported by multinomial regressions is 3")
+    
     frame <- stats::model.frame(formula, data = data)
     n <- nrow(frame)
     d <- ncol(frame) - 1
@@ -148,7 +162,11 @@ setMethod(
         }
       }
     }
-    if (inh) inhom$theta <- theta
+    # if (inh) inhom$theta <- theta
+    if(inh){
+      inhom <- x@gfun
+      inhom$pars <- theta
+    }
     cat("\n", sep = "")
     list(alpha = alpha_vecs, S = S_fit, mm = multinom_model, inhom = inhom)
   }
