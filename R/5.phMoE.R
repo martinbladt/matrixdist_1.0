@@ -89,7 +89,7 @@ setMethod(
     names(ndm) <- names(dm)[-1]
     for (k in 1:stepsEM) {
       if (inh) {
-        B_matrix_aux <- EMstep_MoE_PADE(rbind(alpha_vecs[delta == 1, ], alpha_vecs[delta == 0, ]), S_fit, g_inv(x = frame[delta == 1, 1], theta = theta), weight[delta == 1], g_inv(x = frame[delta == 0, 1], theta = theta), weight[delta == 0])
+        B_matrix_aux <- EMstep_MoE_PADE(rbind(alpha_vecs[delta == 1, ], alpha_vecs[delta == 0, ]), S_fit, g_inv(beta = theta, t= frame[delta == 1, 1] ), weight[delta == 1], g_inv(beta = theta, t = frame[delta == 0, 1]), weight[delta == 0])
         B_matrix <- B_matrix_aux[[1]]
         wt <- reshape2::melt(B_matrix)[, 3]
         wt[wt < 1e-22] <- wt[wt < 1e-22] + 1e-22
