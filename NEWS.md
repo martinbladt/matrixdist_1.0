@@ -1,3 +1,3 @@
-# matrixdist 1.1.7
+# matrixdist 1.1.8
 
 * Added a `NEWS.md` file to track changes to the package.
