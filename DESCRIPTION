@@ -1,8 +1,8 @@
 Package: matrixdist
 Type: Package
 Title: Statistics for Matrix Distributions
-Version: 1.1.7
-Date: 2023-03-31
+Version: 1.1.8
+Date: 2023-04-06
 Authors@R: c(person("Martin", "Bladt", email = "martinbladt@gmail.com", role = c("aut", "cre")),
               person("Jorge", "Yslas", email = "jorge.yslas1@gmail.com",
               role = "aut"),
