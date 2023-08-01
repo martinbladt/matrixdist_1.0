@@ -22,6 +22,13 @@
 #'
 #' @export
 #'
+#' @examples
+#' x <- iph(ph(structure = "general"), gfun = "weibull")
+#' n <- 100
+#' responses <- rweibull(n, 2, 3)
+#' covariate <- data.frame(age = sample(18:65, n, replace = TRUE) / 100, income = runif(n, 0, 0.99))
+#' f <- responses ~ age + income # regression formula
+#' MoE(x = x, formula = f, y = responses, data = covariate, stepsEM = 20)
 setMethod(
   "MoE", c(x = "ph"),
   function(x,
@@ -60,18 +67,18 @@ setMethod(
     # }
     
     #Alaric suggestion
-    inh <- methods::is(x,"iph")
+    inh <- methods::is(x, "iph")
     if (inh) {
       g_inv <- x@gfun$inverse
       lambda <- x@gfun$intensity
       theta <- x@gfun$pars
       mLL <- function(theta, g_inv, lambda, alpha1, alpha2, S, y, w, yc, wc) {
         return(-logLikelihoodPH_MoE(alpha1, alpha2, S, g_inv(theta, y), w, g_inv(theta, yc), wc) -
-                 sum(w * log(lambda(theta, y))))
+         sum(w * log(lambda(theta, y))))
       }
     }
     p <- length(x@pars$alpha)
-    if(p<=2)stop("The smallest ph dimension supported by multinomial regressions is 3")
+    if (p <= 2) stop("The smallest ph dimension supported by multinomial regressions is 3")
     
     frame <- stats::model.frame(formula, data = data)
     n <- nrow(frame)

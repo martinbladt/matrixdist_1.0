@@ -24,6 +24,12 @@
 #'
 #' @export
 #'
+#' @examples
+#' set.seed(1)
+#' obj <- iph(ph(structure = "general", dimension = 2), gfun = "weibull", gfun_pars = 2)
+#' data <- sim(obj, n = 100)
+#' X <- runif(100)
+#' reg(x = obj, y = data, X = X, stepsEM = 10)
 setMethod(
   "reg", c(x = "ph", y = "ANY"),
   function(x,

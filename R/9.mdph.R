@@ -28,6 +28,8 @@ setClass("mdph",
 #' @return An object of class \linkS4class{mdph}.
 #' @export
 #'
+#' @examples
+#' mdph(structure = c("general", "general"), dimension = 5)
 mdph <- function(alpha = NULL, S = NULL, structure = NULL, dimension = 3, variables = NULL) {
   if (any(is.null(alpha)) & any(is.null(S)) & is.null(structure)) {
     stop("input a vector and matrix, or a structure")
@@ -434,6 +436,13 @@ setMethod(
 #'
 #' @export
 #'
+#' @examples
+#' x <- mdph(structure = c("general", "general"))
+#' n <- 100
+#' responses <- cbind(rpois(n, 3) + 1, rbinom(n, 5, 0.5))
+#' covariates <- data.frame(age = sample(18:65, n, replace = TRUE) / 100, income = runif(n, 0, 0.99))
+#' f <- responses ~ age + income
+#' MoE(x = x, formula = f, y = responses, data = covariates, stepsEM = 20)
 setMethod(
   "MoE", c(x = "mdph"),
   function(x,

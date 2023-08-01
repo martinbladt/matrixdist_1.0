@@ -502,6 +502,13 @@ setMethod(
 #'
 #' @export
 #'
+#' @examples
+#' x <- dph(structure = "general")
+#' n <- 100
+#' responses <- rpois(n, 3) + 1
+#' covariate <- data.frame(age = sample(18:65, n, replace = TRUE) / 100, income = runif(n, 0, 0.99))
+#' f <- responses ~ age + income # regression formula
+#' MoE(x = x, formula = f, y = responses, data = covariate, stepsEM = 20)
 setMethod(
   "MoE", c(x = "dph"),
   function(x,

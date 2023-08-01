@@ -607,11 +607,15 @@ data_aggregation <- function(y, w) {
   observations <- cbind(y, w)
   mat <- data.frame(observations)
   names(mat) <- c("obs", "weight")
-  agg <- stats::aggregate(mat$weight,
-    by = list(un_obs = mat$obs),
-    FUN = sum
-  )
-  list(un_obs = agg$un_obs, weights = agg$x)
+  if (length(y) == 0) {
+    return(list(un_obs = numeric(0), weights = numeric(0)))
+  } else {
+    agg <- stats::aggregate(mat$weight,
+      by = list(un_obs = mat$obs),
+      FUN = sum
+    )
+    return(list(un_obs = agg$un_obs, weights = agg$x))
+  }
 }
 
 #' Loglikelihood method for ph class

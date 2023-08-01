@@ -53,3 +53,11 @@ An object of class \linkS4class{sph}.
 \description{
 MoE method for ph Class
 }
+\examples{
+x <- iph(ph(structure = "general"), gfun = "weibull")
+n <- 100
+responses <- rweibull(n, 2, 3)
+covariate <- data.frame(age = sample(18:65, n, replace = TRUE) / 100, income = runif(n, 0, 0.99))
+f <- responses ~ age + income # regression formula
+MoE(x = x, formula = f, y = responses, data = covariate, stepsEM = 20)
+}
