@@ -1439,6 +1439,37 @@ mdphdensity <- function(x, alpha, S_list) {
     .Call(`_matrixdist_mdphdensity`, x, alpha, S_list)
 }
 
+#' Bivariate phase-type joint density of the common shock type
+#'
+#' @param x Matrix of values.
+#' @param alpha Vector of initial probabilities.
+#' @param S Sub-intensity matrix.
+#' @param P Matrix.
+#' @param Q1 Sub-intensity matrix.
+#' @param Q2 Sub-intensity matrix.
+#' @return Joint density at \code{x}.
+#' @export
+#' 
+csph_density <- function(x, alpha, S, P, Q1, Q2) {
+    .Call(`_matrixdist_csph_density`, x, alpha, S, P, Q1, Q2)
+}
+
+#' Bivariate phase-type joint density of the common shock type
+#'
+#' @param x Matrix of values.
+#' @param alpha Vector of initial probabilities.
+#' @param S Sub-intensity matrix.
+#' @param P Matrix.
+#' @param Q1 Sub-intensity matrix.
+#' @param Q2 Sub-intensity matrix.
+#' @param h step size.
+#' @return Joint density at \code{x}.
+#' @export
+#' 
+csph_densityrk <- function(x, alpha, S, P, Q1, Q2, h) {
+    .Call(`_matrixdist_csph_densityrk`, x, alpha, S, P, Q1, Q2, h)
+}
+
 #' EM for discrete phase-type
 #' 
 #' @param alpha Initial probabilities.
