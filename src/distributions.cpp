@@ -938,3 +938,63 @@ Rcpp::NumericVector csph_densityrk(Rcpp::NumericMatrix x, arma::vec alpha, arma:
    return density;
  }
 
+
+
+//' Bivariate phase-type joint density of the common shock type
+//'
+//' @param x Matrix of values.
+//' @param alpha Vector of initial probabilities.
+//' @param S Sub-intensity matrix.
+//' @param P Matrix.
+//' @param Q1 Sub-intensity matrix.
+//' @param Q2 Sub-intensity matrix.
+//' @return Joint density at \code{x}.
+//' @export
+//' 
+// [[Rcpp::export]]
+Rcpp::NumericVector csph_density_test(Rcpp::NumericVector x, arma::vec alpha, arma::mat S, arma::mat P, arma::mat Q1, arma::mat Q2) {
+   unsigned p1{S.n_rows};
+   unsigned p2{Q1.n_rows};
+   
+   double m{0};
+   
+   Rcpp::NumericVector density(1);
+   
+   arma::mat e1;
+   e1.ones(Q1.n_cols, 1);
+   arma::mat exit_vect1 = (Q1 * (-1)) * e1;
+   
+   arma::mat e2;
+   e2.ones(Q2.n_cols, 1);
+   arma::mat exit_vect2 = (Q2 * (-1)) * e2;
+   
+   arma::mat exit_vect_prod = kron(exit_vect1, exit_vect2);
+   arma::mat Q1pQ2 = kron_sum(Q1, Q2);
+   
+   arma::mat cmatrix(p2 * p2, p1);
+   
+   arma::mat aux_mat(1,1);
+   
+     m = std::min(x[0], x[1]);
+     arma::mat B1 = matrix_exponential(Q1 * (x[0] - m));
+     arma::mat B2 = matrix_exponential(Q2 * (x[1] - m));
+     arma::mat B1tB2 = kron(B1, B2);
+     arma::mat b_prod_alpha = B1tB2 * exit_vect_prod * alpha.t();
+     
+     for (int i{0}; i < p2; ++i) {
+       arma::mat ei = arma::zeros(1,p2);
+       ei[i] = 1;
+       arma::mat eitei = kron(ei, ei);
+       arma::mat J = matrix_exponential(matrix_vanloan(Q1pQ2, S, b_prod_alpha) * m);
+       for (int l{0}; l < p2 * p2; ++l) {
+         for (int j{0}; j < p1; ++j) {
+           cmatrix(l,j) = J(l,j + p2 * p2);
+         }
+       }
+       aux_mat = eitei * cmatrix * P * ei.t();
+       density[0] += aux_mat(0,0);
+     }
+     
+   return density;
+ }
+
