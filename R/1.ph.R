@@ -10,16 +10,16 @@
 #' @export
 #'
 setClass("ph",
-  slots = list(
-    name = "character",
-    pars = "list",
-    fit = "list"
-  ),
-  prototype = list(
-    name = NA_character_,
-    pars = list(),
-    fit = list()
-  )
+         slots = list(
+           name = "character",
+           pars = "list",
+           fit = "list"
+         ),
+         prototype = list(
+           name = NA_character_,
+           pars = list(),
+           fit = list()
+         )
 )
 
 #' Constructor function for phase-type distributions
@@ -55,8 +55,8 @@ ph <- function(alpha = NULL, S = NULL, structure = NULL, dimension = 3) {
     name <- "custom"
   }
   methods::new("ph",
-    name = paste(name, " ph(", length(alpha), ")", sep = ""),
-    pars = list(alpha = alpha, S = S)
+               name = paste(name, " ph(", length(alpha), ")", sep = ""),
+               pars = list(alpha = alpha, S = S)
   )
 }
 
@@ -404,7 +404,7 @@ setMethod("quan", c(x = "ph"), function(x,
 #' @param x An object of class \linkS4class{ph}.
 #' @param y Vector or data.
 #' @param weight Vector of weights.
-#' @param rcen Vector of right-censored observations.
+#' @param rcen Vector of right-censored observations. If a matrix is passed as argument, then observations are considered interval-censored
 #' @param rcenweight Vector of weights for right-censored observations.
 #' @param stepsEM Number of EM steps to be performed.
 #' @param methods Methods to use for matrix exponential calculation: RM, UNI or PADE.
@@ -442,7 +442,12 @@ setMethod(
            reltol = 1e-8,
            every = 100,
            r = 1) {
-    EMstep <- eval(parse(text = paste("EMstep_", methods[1], sep = "")))
+    rightCensored <- is.vector(rcen)
+    if(rightCensored){
+      EMstep <- eval(parse(text = paste("EMstep_", methods[1], sep = "")))
+    }else if(is.matrix(rcen)){
+      EMstep <- eval(parse(text = "EMstep_UNI_intervalCensoring"))
+    }
     if (!all(c(y, rcen) > 0)) {
       stop("data should be positive")
     }
@@ -458,61 +463,78 @@ setMethod(
       inv_g <- x@gfun$inverse
     }
     LL <- if (is_iph) {
-      eval(parse(text = paste("logLikelihoodM", x@gfun$name, "_", methods[2], sep = "")))
+      if(rightCensored){
+        eval(parse(text = paste("logLikelihoodM", x@gfun$name, "_", methods[2], sep = "")))
+      }else{
+        eval(parse(text = paste("logLikelihoodM", x@gfun$name, "_UNI_intervalCensoring", sep = "")))
+      }
     } else {
-      eval(parse(text = paste("logLikelihoodPH_", methods[2], sep = "")))
+      if(rightCensored){
+        eval(parse(text = paste("logLikelihoodPH_", methods[2], sep = "")))
+      }else{
+        eval(parse(text = "logLikelihoodPH_UNI_intervalCensoring"))
+      }
     }
+    
     A <- data_aggregation(y, weight)
     y <- A$un_obs
     weight <- A$weights
-    if (length(rcen) > 0) {
+    if ( (rightCensored) && (length(rcen) > 0)) {
       B <- data_aggregation(rcen, rcenweight)
       rcen <- B$un_obs
       rcenweight <- B$weights
+    } else if((is.matrix(rcen)) && (nrow(rcen)>0)){
+      B1 <- data_aggregation(rcen[,1], rcenweight)
+      B2 <- data_aggregation(rcen[,2], rcenweight)
+      rcen <- cbind(B1$un_obs, B2$un_obs)
+      rcenweight <- B1$weights
     }
-
+    
     ph_par <- x@pars
     alpha_fit <- clone_vector(ph_par$alpha)
     S_fit <- clone_matrix(ph_par$S)
-
+    
     if (r < 1) {
       y_full <- y
       weight_full <- weight
       rcen_full <- rcen
       rcenweight_full <- rcenweight
     }
-
+    
     options(digits.secs = 4)
     cat(format(Sys.time(), format = "%H:%M:%OS"), ": EM started", sep = "")
     cat("\n", sep = "")
-
+    
     if (!is_iph) {
       for (k in 1:stepsEM) {
         if (r < 1) {
           indices <- sample(1:length(y_full), size = floor(r * length(y_full)))
           y <- y_full[indices]
           weight <- weight_full[indices]
-          if (length(rcen_full) > 0) {
+          if ((rightCensored) && (length(rcen_full) > 0)) {
             rcen <- rcen_full[indices]
+            rcenweight <- rcenweight_full[indices]
+          } else if(is.matrix(rcen)){
+            rcen <- rcen_full[indices,]
             rcenweight <- rcenweight_full[indices]
           }
         }
-
+        
         epsilon1 <- switch(which(methods[1] == c("RK", "UNI", "PADE")),
-          if (!is.na(rkstep)) rkstep else default_step_length(S_fit),
-          if (!is.na(uni_epsilon)) uni_epsilon else 1e-4,
-          0
+                           if (!is.na(rkstep)) rkstep else default_step_length(S_fit),
+                           if (!is.na(uni_epsilon)) uni_epsilon else 1e-4,
+                           0
         )
         epsilon2 <- switch(which(methods[2] == c("RK", "UNI", "PADE")),
-          if (!is.na(rkstep)) rkstep else default_step_length(S_fit),
-          if (!is.na(uni_epsilon)) uni_epsilon else 1e-4,
-          0
+                           if (!is.na(rkstep)) rkstep else default_step_length(S_fit),
+                           if (!is.na(uni_epsilon)) uni_epsilon else 1e-4,
+                           0
         )
         EMstep(epsilon1, alpha_fit, S_fit, y, weight, rcen, rcenweight)
         if (k %% every == 0) {
           cat("\r", "iteration:", k,
-            ", logLik:", LL(epsilon2, alpha_fit, S_fit, y, weight, rcen, rcenweight),
-            sep = " "
+              ", logLik:", LL(epsilon2, alpha_fit, S_fit, y, weight, rcen, rcenweight),
+              sep = " "
           )
         }
       }
@@ -531,12 +553,15 @@ setMethod(
           indices <- sample(1:length(y_full), size = floor(r * length(y_full)))
           y <- y_full[indices]
           weight <- weight_full[indices]
-          if (length(rcen_full) > 0) {
+          if ((rightCensored) && (length(rcen_full) > 0)) {
             rcen <- rcen_full[indices]
+            rcenweight <- rcenweight_full[indices]
+          }else if(is.matrix(rcen)){
+            rcen <- rcen_full[indices,]
             rcenweight <- rcenweight_full[indices]
           }
         }
-
+        
         if (x@gfun$name != "gev") {
           trans <- inv_g(par_g, y)
           trans_cens <- inv_g(par_g, rcen)
@@ -549,14 +574,14 @@ setMethod(
           trans_rcenweight <- tc$weight
         }
         epsilon1 <- switch(which(methods[1] == c("RK", "UNI", "PADE")),
-          if (!is.na(rkstep)) rkstep else default_step_length(S_fit),
-          if (!is.na(uni_epsilon)) uni_epsilon else 1e-4,
-          0
+                           if (!is.na(rkstep)) rkstep else default_step_length(S_fit),
+                           if (!is.na(uni_epsilon)) uni_epsilon else 1e-4,
+                           0
         )
         epsilon2 <- switch(which(methods[2] == c("RK", "UNI", "PADE")),
-          if (!is.na(rkstep)) rkstep else default_step_length(S_fit),
-          if (!is.na(uni_epsilon)) uni_epsilon else 1e-4,
-          0
+                           if (!is.na(rkstep)) rkstep else default_step_length(S_fit),
+                           if (!is.na(uni_epsilon)) uni_epsilon else 1e-4,
+                           0
         )
         EMstep(epsilon1, alpha_fit, S_fit, trans, trans_weight, trans_cens, trans_rcenweight)
         opt <- suppressWarnings(
@@ -581,8 +606,8 @@ setMethod(
         par_g <- opt$par
         if (k %% every == 0) {
           cat("\r", "iteration:", k,
-            ", logLik:", opt$value,
-            sep = " "
+              ", logLik:", opt$value,
+              sep = " "
           )
         }
       }
@@ -594,10 +619,10 @@ setMethod(
       )
       x <- iph(x, gfun = x@gfun$name, gfun_pars = par_g)
     }
-
+    
     cat("\n", format(Sys.time(), format = "%H:%M:%OS"), ": EM finalized", sep = "")
     cat("\n", sep = "")
-
+    
     x
   }
 )
@@ -608,8 +633,8 @@ data_aggregation <- function(y, w) {
   mat <- data.frame(observations)
   names(mat) <- c("obs", "weight")
   agg <- stats::aggregate(mat$weight,
-    by = list(un_obs = mat$obs),
-    FUN = sum
+                          by = list(un_obs = mat$obs),
+                          FUN = sum
   )
   list(un_obs = agg$un_obs, weights = agg$x)
 }
