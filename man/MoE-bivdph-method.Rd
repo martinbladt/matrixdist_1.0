@@ -41,3 +41,11 @@ An object of class \linkS4class{sph}.
 \description{
 MoE method for bivdph Class
 }
+\examples{
+x <- bivdph(dimensions = c(3, 3))
+n <- 100
+responses <- cbind(rpois(n, 3) + 1, rbinom(n, 5, 0.5))
+covariates <- data.frame(age = sample(18:65, n, replace = TRUE) / 100, income = runif(n, 0, 0.99))
+f <- responses ~ age + income
+MoE(x = x, formula = f, y = responses, data = covariates, stepsEM = 20)
+}

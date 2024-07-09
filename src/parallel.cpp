@@ -23,7 +23,7 @@ arma::mat kron_sum2(arma::mat A, arma::mat B) {
 
 
 //' Bivariate phase-type joint density of the common shock type
- //'
+//'
  //' @param x Matrix of values.
  //' @param alpha Vector of initial probabilities.
  //' @param S Sub-intensity matrix.

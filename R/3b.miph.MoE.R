@@ -20,13 +20,13 @@
 #' @importFrom nnet multinom
 #'
 #' @examples
-#' x <- mph(structure = c("general", "general"), dimension = 3, variables = 2)
+#' under_mph <- mph(structure = c("general", "general"), dimension = 3) 
+#' x <-  miph(under_mph, gfun = c("weibull", "weibull"), gfun_pars = list(c(2), c(3)))
 #' n <- 100
-#' responses <- cbind(rexp(n), rgamma(n, 2, 3))
-#' covariate <- data.frame(age = sample(18:65, n, replace = TRUE) / 100, income = runif(n, 0, 0.99))
-#' f <- responses~age + income # regression formula
-#' MoE(x = x, formula = f, y = responses, data = covariate, stepsEM = 20)
-#'
+#' responses <- cbind(rexp(n), rweibull(n, 2, 3))
+#' covariates <- data.frame(age = sample(18:65, n, replace = TRUE) / 100, income = runif(n, 0, 0.99))
+#' f <- responses ~ age + income
+#' MoE(x = x, formula = f, y = responses, data = covariates, stepsEM = 20)
 setMethod(
   "MoE", c(x = "mph", y = "ANY"),
   function(x,

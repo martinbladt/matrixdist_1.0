@@ -22,6 +22,13 @@
 #'
 #' @export
 #'
+#' @examples
+#' x <- iph(ph(structure = "general"), gfun = "weibull")
+#' n <- 100
+#' responses <- rweibull(n, 2, 3)
+#' covariate <- data.frame(age = sample(18:65, n, replace = TRUE) / 100, income = runif(n, 0, 0.99))
+#' f <- responses ~ age + income # regression formula
+#' MoE(x = x, formula = f, y = responses, data = covariate, stepsEM = 20)
 setMethod(
   "MoE", c(x = "ph"),
   function(x,
@@ -60,18 +67,18 @@ setMethod(
     # }
     
     #Alaric suggestion
-    inh <- methods::is(x,"iph")
+    inh <- methods::is(x, "iph")
     if (inh) {
       g_inv <- x@gfun$inverse
       lambda <- x@gfun$intensity
       theta <- x@gfun$pars
       mLL <- function(theta, g_inv, lambda, alpha1, alpha2, S, y, w, yc, wc) {
         return(-logLikelihoodPH_MoE(alpha1, alpha2, S, g_inv(theta, y), w, g_inv(theta, yc), wc) -
-                 sum(w * log(lambda(theta, y))))
+         sum(w * log(lambda(theta, y))))
       }
     }
     p <- length(x@pars$alpha)
-    if(p<=2)stop("The smallest ph dimension supported by multinomial regressions is 3")
+    if (p <= 2) stop("The smallest ph dimension supported by multinomial regressions is 3")
     
     frame <- stats::model.frame(formula, data = data)
     n <- nrow(frame)
@@ -89,7 +96,7 @@ setMethod(
     names(ndm) <- names(dm)[-1]
     for (k in 1:stepsEM) {
       if (inh) {
-        B_matrix_aux <- EMstep_MoE_PADE(rbind(alpha_vecs[delta == 1, ], alpha_vecs[delta == 0, ]), S_fit, g_inv(x = frame[delta == 1, 1], theta = theta), weight[delta == 1], g_inv(x = frame[delta == 0, 1], theta = theta), weight[delta == 0])
+        B_matrix_aux <- EMstep_MoE_PADE(rbind(alpha_vecs[delta == 1, ], alpha_vecs[delta == 0, ]), S_fit, g_inv(beta = theta, t= frame[delta == 1, 1] ), weight[delta == 1], g_inv(beta = theta, t = frame[delta == 0, 1]), weight[delta == 0])
         B_matrix <- B_matrix_aux[[1]]
         wt <- reshape2::melt(B_matrix)[, 3]
         wt[wt < 1e-22] <- wt[wt < 1e-22] + 1e-22

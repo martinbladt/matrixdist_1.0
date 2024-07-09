@@ -23,3 +23,6 @@ An object of class \linkS4class{mdph}.
 \description{
 Constructor function for multivariate discrete phase-type distributions
 }
+\examples{
+mdph(structure = c("general", "general"), dimension = 5)
+}

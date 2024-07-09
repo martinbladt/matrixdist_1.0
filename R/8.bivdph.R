@@ -347,6 +347,13 @@ setMethod(
 #'
 #' @export
 #'
+#' @examples
+#' x <- bivdph(dimensions = c(3, 3))
+#' n <- 100
+#' responses <- cbind(rpois(n, 3) + 1, rbinom(n, 5, 0.5))
+#' covariates <- data.frame(age = sample(18:65, n, replace = TRUE) / 100, income = runif(n, 0, 0.99))
+#' f <- responses ~ age + income
+#' MoE(x = x, formula = f, y = responses, data = covariates, stepsEM = 20)
 setMethod(
   "MoE", c(x = "bivdph"),
   function(x,
