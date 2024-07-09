@@ -2,9 +2,9 @@
 # include "m_exp.h"
 
 #ifdef _OPENMP
-  #include <omp.h>
+#include <omp.h>
 #else
-  #define omp_get_thread_num() 0
+#define omp_get_thread_num() 0
 #endif
 
 
@@ -24,17 +24,17 @@ arma::mat kron_sum2(arma::mat A, arma::mat B) {
 
 //' Bivariate phase-type joint density of the common shock type
 //'
-//' @param x Matrix of values.
-//' @param alpha Vector of initial probabilities.
-//' @param S Sub-intensity matrix.
-//' @param P Matrix.
-//' @param Q1 Sub-intensity matrix.
-//' @param Q2 Sub-intensity matrix.
-//' @return Joint density at \code{x}.
-//' @export
-//' 
-// [[Rcpp::export]]
-Rcpp::NumericVector csph_density_par(Rcpp::NumericMatrix x, arma::vec alpha, arma::mat S, arma::mat P, arma::mat Q1, arma::mat Q2) {
+ //' @param x Matrix of values.
+ //' @param alpha Vector of initial probabilities.
+ //' @param S Sub-intensity matrix.
+ //' @param P Matrix.
+ //' @param Q1 Sub-intensity matrix.
+ //' @param Q2 Sub-intensity matrix.
+ //' @return Joint density at \code{x}.
+ //' @export
+ //' 
+ // [[Rcpp::export]]
+ Rcpp::NumericVector csph_density_par(Rcpp::NumericMatrix x, arma::vec alpha, arma::mat S, arma::mat P, arma::mat Q1, arma::mat Q2) {
    unsigned p1{S.n_rows};
    unsigned p2{Q1.n_rows};
    long n{x.nrow()};
@@ -57,33 +57,33 @@ Rcpp::NumericVector csph_density_par(Rcpp::NumericMatrix x, arma::vec alpha, arm
    
    arma::mat aux_mat(1,1);
    
-  #pragma omp parallel
-  {
-  #pragma omp for
-   for (int k{0}; k < n; ++k) {
-     double m = std::min(x(k,0), x(k,1));
-     arma::mat B1 = matrix_exponential(Q1 * (x(k,0) - m));
-     arma::mat B2 = matrix_exponential(Q2 * (x(k,1) - m));
-     arma::mat B1tB2 = kron(B1, B2);
-     arma::mat b_prod_alpha = B1tB2 * exit_vect_prod * alpha.t();
-     arma::mat cmatrix(p2 * p2, p1);
-     
-     for (int i{0}; i < p2; ++i) {
-       arma::mat ei = arma::zeros(1,p2);
-       ei[i] = 1;
-       arma::mat eitei = kron(ei, ei);
-       arma::mat J = matrix_exponential(matrix_vanloan(Q1pQ2, S, b_prod_alpha) * m);
-       for (int l{0}; l < p2 * p2; ++l) {
-         for (int j{0}; j < p1; ++j) {
-           cmatrix(l,j) = J(l,j + p2 * p2);
-         }
-       }
-       aux_mat = eitei * cmatrix * P * ei.t();
-       density[k] += aux_mat(0,0);
-     }
-     
-   }
-   
+#pragma omp parallel
+{
+#pragma omp for
+  for (int k = 0; k < n; ++k) {
+    double m = std::min(x(k,0), x(k,1));
+    arma::mat B1 = matrix_exponential(Q1 * (x(k,0) - m));
+    arma::mat B2 = matrix_exponential(Q2 * (x(k,1) - m));
+    arma::mat B1tB2 = kron(B1, B2);
+    arma::mat b_prod_alpha = B1tB2 * exit_vect_prod * alpha.t();
+    arma::mat cmatrix(p2 * p2, p1);
+    
+    for (int i{0}; i < p2; ++i) {
+      arma::mat ei = arma::zeros(1,p2);
+      ei[i] = 1;
+      arma::mat eitei = kron(ei, ei);
+      arma::mat J = matrix_exponential(matrix_vanloan(Q1pQ2, S, b_prod_alpha) * m);
+      for (int l{0}; l < p2 * p2; ++l) {
+        for (int j{0}; j < p1; ++j) {
+          cmatrix(l,j) = J(l,j + p2 * p2);
+        }
+      }
+      aux_mat = eitei * cmatrix * P * ei.t();
+      density[k] += aux_mat(0,0);
+    }
+    
   }
-   return density;
+  
+}
+return density;
  }

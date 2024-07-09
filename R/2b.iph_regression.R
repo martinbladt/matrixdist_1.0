@@ -68,7 +68,15 @@ setMethod(
       stop("input covariate matrix X, or use fit method instead")
     }
     is_iph <- is(x, "iph")
-    EMstep <- eval(parse(text = paste("EMstep_", methods[1], sep = "")))
+    rightCensored <- is.vector(rcen)
+    
+    # Distinguish functions for Right censoring and Interval censoring
+    if(rightCensored){
+      EMstep <- eval(parse(text = paste("EMstep_", methods[1], sep = "")))
+    }else if(is.matrix(rcen)){
+      EMstep <- eval(parse(text = "EMstep_UNI_intervalCensoring"))
+    }
+    
     if (!all(c(y, rcen) > 0)) {
       stop("data should be positive")
     }
@@ -78,11 +86,15 @@ setMethod(
     if (!is_iph) {
       par_g <- numeric(0)
       inv_g <- function(par, x) x
-      LL_base <- eval(parse(text = paste("logLikelihoodPH_", methods[2], "s", sep = "")))
+      if(rightCensored){
+        LL_base <- eval(parse(text = paste("logLikelihoodPH_", methods[2], "s", sep = "")))
+      }else{
+        LL_base <- eval(parse(text = "logLikelihoodPH_UNIs_intervalCensoring"))
+      }
       LL <- function(h, alpha, S, theta, obs, weight, rcens, rcweight, X) {
         ex <- exp(X %*% theta)
         scale1 <- ex[1:length(obs)]
-        scale2 <- tail(ex, length(rcens))
+        scale2 <-  if(rightCensored){tail(ex, length(rcens))}else{tail(ex, nrow(rcens))}
         return(LL_base(h, alpha, S, obs, weight, rcens, rcweight, scale1, scale2))
       }
     } else if (is_iph) {
@@ -92,7 +104,11 @@ setMethod(
       }
       par_g <- x@gfun$pars
       inv_g <- x@gfun$inverse
-      LL_base <- eval(parse(text = paste("logLikelihoodM", x@gfun$name, "_", methods[2], "s", sep = "")))
+      if(rightCensored){
+        LL_base <- eval(parse(text = paste("logLikelihoodM", x@gfun$name, "_", methods[2], "s", sep = "")))
+      }else{
+        LL_base <- eval(parse(text = paste("logLikelihoodM", x@gfun$name, "_UNIs_intervalCensoring", sep = "")))
+      }
       LL <- function(h, alpha, S, theta, obs, weight, rcens, rcweight, X) {
         beta <- theta[1]
         B <- theta[2:length(theta)]
@@ -101,19 +117,19 @@ setMethod(
         }
         ex <- exp(X %*% B)
         scale1 <- ex[1:length(obs)]
-        scale2 <- tail(ex, length(rcens))
+        scale2 <-  if(rightCensored){tail(ex, length(rcens))}else{tail(ex, nrow(rcens))}
         return(LL_base(h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2))
       }
     }
-
+    
     p <- dim(X)[2]
     n1 <- length(y)
-    n2 <- length(rcen)
+    n2 <- if(rightCensored){ length(rcen)}else{nrow(rcen)}
     ng <- length(par_g)
-
+    
     if (length(weight) == 0) weight <- rep(1, n1)
     if (length(rcenweight) == 0) rcenweight <- rep(1, n2)
-
+    
     ph_par <- x@pars
     alpha_fit <- clone_vector(ph_par$alpha)
     S_fit <- clone_matrix(ph_par$S)
@@ -122,30 +138,44 @@ setMethod(
     } else {
       B_fit <- B0
     }
-
+    
+    rcenk <- rcen
+    rcenweightk <- rcenweight
     for (k in 1:stepsEM) {
       prop <- exp(X %*% B_fit)
-
+      
       trans <- prop[1:n1] * inv_g(par_g, y)
       trans_cens <- prop[(n1 + 1):(n1 + n2)] * inv_g(par_g, rcen)
-
+      
       A <- data_aggregation(trans, weight)
-      B <- data_aggregation(trans_cens, rcenweight)
-
+      if( (rightCensored) && (length(rcen)>0)){
+        B <- data_aggregation(trans_cens, rcenweight)
+        
+        rcenk <- B$un_obs
+        rcenweightk <- B$weights
+      }else if( (is.matrix(rcen)) && (nrow(rcen)>0)){
+        B1 <- data_aggregation(trans_cens[,1], rcenweight)
+        B2 <- data_aggregation(trans_cens[,2], rcenweight)
+        
+        rcenk <- cbind(B1$un_obs, B2$un_obs)
+        rcenweightk <- B1$weights
+      }
+      
       epsilon1 <- switch(which(methods[1] == c("RK", "UNI", "PADE")),
-        if (!is.na(rkstep)) rkstep else default_step_length(S_fit),
-        if (!is.na(uni_epsilon)) uni_epsilon else 1e-4,
-        0
+                         if (!is.na(rkstep)) rkstep else default_step_length(S_fit),
+                         if (!is.na(uni_epsilon)) uni_epsilon else 1e-4,
+                         0
       )
       epsilon2 <- switch(which(methods[2] == c("RK", "UNI", "PADE")),
-        if (!is.na(rkstep)) rkstep else default_step_length(S_fit),
-        if (!is.na(uni_epsilon)) uni_epsilon else 1e-4,
-        0
+                         if (!is.na(rkstep)) rkstep else default_step_length(S_fit),
+                         if (!is.na(uni_epsilon)) uni_epsilon else 1e-4,
+                         0
       )
-      EMstep(epsilon1, alpha_fit, S_fit, A$un_obs, A$weights, B$un_obs, B$weights)
+      EMstep(epsilon1, alpha_fit, S_fit, A$un_obs, A$weights, rcenk, rcenweightk)
       theta <- c(par_g, B_fit)
       opt <- suppressWarnings(optim(
-        par = theta, fn = LL,
+        par = theta,
+        fn = LL,
         h = epsilon2,
         alpha = alpha_fit,
         S = S_fit,
@@ -162,8 +192,8 @@ setMethod(
       B_fit <- tail(opt$par, p)
       if (k %% every == 0) {
         cat("\r", "iteration:", k,
-          ", logLik:", opt$value,
-          sep = " "
+            ", logLik:", opt$value,
+            sep = " "
         )
       }
     }
@@ -181,3 +211,15 @@ setMethod(
     s
   }
 )
+
+data_aggregation <- function(y, w) {
+  if (length(w) == 0) w <- rep(1, length(y))
+  observations <- cbind(y, w)
+  mat <- data.frame(observations)
+  names(mat) <- c("obs", "weight")
+  agg <- stats::aggregate(mat$weight,
+                          by = list(un_obs = mat$obs),
+                          FUN = sum
+  )
+  list(un_obs = agg$un_obs, weights = agg$x)
+}

@@ -27,7 +27,7 @@
 
 \item{weight}{Vector of weights.}
 
-\item{rcen}{Vector of right-censored observations.}
+\item{rcen}{Vector of right-censored observations. If a matrix is passed as argument, then observations are considered interval-censored}
 
 \item{rcenweight}{Vector of weights for right-censored observations.}
 

@@ -883,6 +883,104 @@ expm_terms <- function(h, S, obs) {
     .Call(`_matrixdist_expm_terms`, h, S, obs)
 }
 
+#' EM for phase-type using uniformization for matrix exponential
+NULL
+
+#' Loglikelihood of phase-type using uniformization
+NULL
+
+#' Loglikelihood of matrix-Weibull using uniformization
+NULL
+
+#' Loglikelihood of matrix-Pareto using uniformization
+NULL
+
+#' Loglikelihood of matrix-lognormal using uniformization
+NULL
+
+#' Loglikelihood of matrix-loglogistic using uniformization
+NULL
+
+#' Loglikelihood of matrix-Gompertz using uniformization
+NULL
+
+#' Loglikelihood of matrix-GEV using uniformization
+NULL
+
+#' Loglikelihood of PI with phase-type using uniformization
+NULL
+
+#' Loglikelihood of PI with matrix-Weibull using uniformization
+NULL
+
+#' Loglikelihood of PI with matrix-Pareto using uniformization
+NULL
+
+#' Loglikelihood of PI with matrix-lognormal using uniformization
+NULL
+
+#' Loglikelihood of PI with matrix-loglogistic using uniformization
+NULL
+
+#' Loglikelihood of PI with matrix-Gompertz using Uniformization
+NULL
+
+EMstep_UNI_intervalCensoring <- function(h, alpha, S, obs, weight, rcens, rcweight) {
+    invisible(.Call(`_matrixdist_EMstep_UNI_intervalCensoring`, h, alpha, S, obs, weight, rcens, rcweight))
+}
+
+logLikelihoodPH_UNI_intervalCensoring <- function(h, alpha, S, obs, weight, rcens, rcweight) {
+    .Call(`_matrixdist_logLikelihoodPH_UNI_intervalCensoring`, h, alpha, S, obs, weight, rcens, rcweight)
+}
+
+logLikelihoodMweibull_UNI_intervalCensoring <- function(h, alpha, S, beta, obs, weight, rcens, rcweight) {
+    .Call(`_matrixdist_logLikelihoodMweibull_UNI_intervalCensoring`, h, alpha, S, beta, obs, weight, rcens, rcweight)
+}
+
+logLikelihoodMpareto_UNI_intervalCensoring <- function(h, alpha, S, beta, obs, weight, rcens, rcweight) {
+    .Call(`_matrixdist_logLikelihoodMpareto_UNI_intervalCensoring`, h, alpha, S, beta, obs, weight, rcens, rcweight)
+}
+
+logLikelihoodMlognormal_UNI_intervalCensoring <- function(h, alpha, S, beta, obs, weight, rcens, rcweight) {
+    .Call(`_matrixdist_logLikelihoodMlognormal_UNI_intervalCensoring`, h, alpha, S, beta, obs, weight, rcens, rcweight)
+}
+
+logLikelihoodMloglogistic_UNI_intervalCensoring <- function(h, alpha, S, beta, obs, weight, rcens, rcweight) {
+    .Call(`_matrixdist_logLikelihoodMloglogistic_UNI_intervalCensoring`, h, alpha, S, beta, obs, weight, rcens, rcweight)
+}
+
+logLikelihoodMgompertz_UNI_intervalCensoring <- function(h, alpha, S, beta, obs, weight, rcens, rcweight) {
+    .Call(`_matrixdist_logLikelihoodMgompertz_UNI_intervalCensoring`, h, alpha, S, beta, obs, weight, rcens, rcweight)
+}
+
+logLikelihoodMgev_UNI_intervalCensoring <- function(h, alpha, S, beta, obs, weight, rcens, rcweight) {
+    .Call(`_matrixdist_logLikelihoodMgev_UNI_intervalCensoring`, h, alpha, S, beta, obs, weight, rcens, rcweight)
+}
+
+logLikelihoodPH_UNIs_intervalCensoring <- function(h, alpha, S, obs, weight, rcens, rcweight, scale1, scale2) {
+    .Call(`_matrixdist_logLikelihoodPH_UNIs_intervalCensoring`, h, alpha, S, obs, weight, rcens, rcweight, scale1, scale2)
+}
+
+logLikelihoodMweibull_UNIs_intervalCensoring <- function(h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2) {
+    .Call(`_matrixdist_logLikelihoodMweibull_UNIs_intervalCensoring`, h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2)
+}
+
+logLikelihoodMpareto_UNIs_intervalCensoring <- function(h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2) {
+    .Call(`_matrixdist_logLikelihoodMpareto_UNIs_intervalCensoring`, h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2)
+}
+
+logLikelihoodMlognormal_UNIs_intervalCensoring <- function(h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2) {
+    .Call(`_matrixdist_logLikelihoodMlognormal_UNIs_intervalCensoring`, h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2)
+}
+
+logLikelihoodMloglogistic_UNIs_intervalCensoring <- function(h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2) {
+    .Call(`_matrixdist_logLikelihoodMloglogistic_UNIs_intervalCensoring`, h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2)
+}
+
+logLikelihoodMgompertz_UNIs_intervalCensoring <- function(h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2) {
+    .Call(`_matrixdist_logLikelihoodMgompertz_UNIs_intervalCensoring`, h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2)
+}
+
 #' Random reward matrix
 #'
 #' Generates a random reward matrix for a multivariate phase-type distribution 
