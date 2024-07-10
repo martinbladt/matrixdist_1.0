@@ -479,7 +479,8 @@ setMethod(
     A <- data_aggregation(y, weight)
     y <- A$un_obs
     weight <- A$weights
-    if ( (nrow(rcen)>0) || (length(rcen)>0)) {
+    
+    if (length(rcen)>0) {
       B <- data_aggregation(rcen, rcenweight)
       rcen <- B$un_obs
       rcenweight <- B$weights

@@ -148,7 +148,7 @@ setMethod(
       trans_cens <- prop[(n1 + 1):(n1 + n2)] * inv_g(par_g, rcen)
       
       A <- data_aggregation(trans, weight)
-      if ( (nrow(rcen)>0) || (length(rcen)>0)) {
+      if (length(rcen)>0) {
         B <- data_aggregation(rcen, rcenweight)
         rcenk <- B$un_obs
         rcenweightk <- B$weights
