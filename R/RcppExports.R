@@ -1919,15 +1919,8 @@ sum_dph <- function(alpha1, S1, alpha2, S2) {
 
 #' Bivariate phase-type joint density of the common shock type
 #'
-#' @param x Matrix of values.
-#' @param alpha Vector of initial probabilities.
-#' @param S Sub-intensity matrix.
-#' @param P Matrix.
-#' @param Q1 Sub-intensity matrix.
-#' @param Q2 Sub-intensity matrix.
-#' @return Joint density at \code{x}.
-#' @export
-#' 
+NULL
+
 csph_density_par <- function(x, alpha, S, P, Q1, Q2) {
     .Call(`_matrixdist_csph_density_par`, x, alpha, S, P, Q1, Q2)
 }

@@ -366,7 +366,7 @@
      densityu = aux_matu(0,0);
      
      double probInt = densityl-densityu;
-     double lowLim = 1/100000;
+     double lowLim = 1e-5;
      if(probInt<lowLim){
        probInt = lowLim;
      }
@@ -459,7 +459,7 @@
      densityu = aux_matu(0,0);
      
      double probInt = densityl- densityu;
-     double lowLim = 1/100000;
+     double lowLim = 1e-5;
      if(probInt<lowLim){
        probInt = lowLim;
      }
@@ -551,7 +551,7 @@
      densityl = aux_matl(0,0);
      densityu = aux_matu(0,0);
      double probInt = densityl- densityu;
-     double lowLim = 1/100000;
+     double lowLim = 1e-5;
      if(probInt<lowLim){
        probInt = lowLim;
      }
@@ -643,7 +643,7 @@
      densityu = aux_matu(0,0);
      
      double probInt = densityl- densityu;
-     double lowLim = 1/100000;
+     double lowLim = 1e-5;
      if(probInt<lowLim){
        probInt = lowLim;
      }
@@ -736,7 +736,7 @@
      densityu = aux_matu(0,0);
      
      double probInt = densityl- densityu;
-     double lowLim = 1/100000;
+     double lowLim = 1e-5;
      if(probInt<lowLim){
        probInt = lowLim;
      }
@@ -793,7 +793,7 @@
    double densityu{0.0};
    
    double logLh{0.0};
-   double lowLim = 1/100000;
+   double lowLim = 1e-5;
    
    // Non censored data
    for (int k{0}; k < obs.size(); ++k) {
@@ -813,7 +813,7 @@
      }
      aux_mat = alpha.t() * expm * exit_vect;
      density = aux_mat(0,0);
-     if(density < lowLim){ density = 1/100000;}
+     if(density < lowLim){ density = 1e-5;}
      logLh += weight[k] * (std::log(density) + obs[k] * beta);
    }
    // Interval censored data
@@ -888,7 +888,7 @@
    double densityu{0.0};
    
    double logLh{0.0};
-   double lowLim = 1/100000;
+   double lowLim = 1e-5;
    if (beta[2] == 0) {
      // Non censored data
      for (int k{0}; k < obs.size(); ++k) {
@@ -925,7 +925,7 @@
        densityu = aux_matu(0,0);
        
        double probInt = densityl- densityu;
-       double lowLim = 1/100000;
+       double lowLim = 1e-5;
        if(probInt<lowLim){
          probInt = lowLim;
        }
@@ -968,7 +968,7 @@
        densityu = aux_matu(0,0);
        
        double probInt = densityl- densityu;
-       double lowLim = 1/100000;
+       double lowLim = 1e-5;
        if(probInt<lowLim){
          probInt = lowLim;
        }
@@ -1064,7 +1064,7 @@
      densityu = aux_matu(0,0);
      
      double probInt = densityl- densityu;
-     double lowLim = 1/100000;
+     double lowLim = 1e-5;
      if(probInt<lowLim){
        probInt = lowLim;
      }
@@ -1159,7 +1159,7 @@
      densityu = aux_matu(0,0);
      
      double probInt = densityl- densityu;
-     double lowLim = 1/100000;
+     double lowLim = 1e-5;
      if(probInt<lowLim){
        probInt = lowLim;
      }
@@ -1254,7 +1254,7 @@
      densityu = aux_matu(0,0);
      
      double probInt = densityl- densityu;
-     double lowLim = 1/100000;
+     double lowLim = 1e-5;
      if(probInt<lowLim){
        probInt = lowLim;
      }
@@ -1350,7 +1350,7 @@
      densityu = aux_matu(0,0);
      
      double probInt = densityl- densityu;
-     double lowLim = 1/100000;
+     double lowLim = 1e-5;
      if(probInt<lowLim){
        probInt = lowLim;
      }
@@ -1445,7 +1445,7 @@
      densityu = aux_matu(0,0);
      
      double probInt = densityl- densityu;
-     double lowLim = 1/100000;
+     double lowLim = 1e-5;
      if(probInt<lowLim){
        probInt = lowLim;
      }
@@ -1504,7 +1504,7 @@
    double densityu{0.0};
    
    double logLh{0.0};
-   double lowLim = 1/100000;
+   double lowLim = 1e-5;
    
    // Non censored data
    for (int k{0}; k < obs.size(); ++k) {
@@ -1524,7 +1524,7 @@
      }
      aux_mat = alpha.t() * expm * exit_vect;
      density = aux_mat(0,0);
-     if(density < lowLim){ density = 1/100000;}
+     if(density < lowLim){ density = 1e-5;}
      logLh += weight[k] * (std::log(density) + std::log(scale1[k]) + obs[k] * beta);
    }
    // Interval censored data
@@ -1544,7 +1544,7 @@
      double probInt = densityl- densityu;
      
      if(probInt<lowLim){
-       probInt = 1/100000;
+       probInt = 1e-5;
      }
      logLh += rcweight[k] * std::log(probInt);
    }
