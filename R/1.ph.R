@@ -479,15 +479,11 @@ setMethod(
     A <- data_aggregation(y, weight)
     y <- A$un_obs
     weight <- A$weights
-    if ( (rightCensored) && (length(rcen) > 0)) {
+    
+    if (length(rcen)>0) {
       B <- data_aggregation(rcen, rcenweight)
       rcen <- B$un_obs
       rcenweight <- B$weights
-    } else if((is.matrix(rcen)) && (nrow(rcen)>0)){
-      B1 <- data_aggregation(rcen[,1], rcenweight)
-      B2 <- data_aggregation(rcen[,2], rcenweight)
-      rcen <- cbind(B1$un_obs, B2$un_obs)
-      rcenweight <- B1$weights
     }
     
     ph_par <- x@pars
@@ -627,15 +623,34 @@ setMethod(
   }
 )
 
+#' Aggregate data to improve computation speed
+#' 
+#' @param y Observations. Either a vector or a matrix.
+#' @param w Respective weights of observations
+#' 
+#' @return Returns a named list with unique observations and associated weights. If y is a vector then the unique observations are given, otherwise the unique rows are returned.
+#' 
 data_aggregation <- function(y, w) {
-  if (length(w) == 0) w <- rep(1, length(y))
+  if ((length(w) == 0) && (is.vector(y))) w <- rep(1, length(y))
+  if ((length(w) == 0) && (is.matrix(y))) w <- rep(1, nrow(y))
+  
   observations <- cbind(y, w)
   mat <- data.frame(observations)
-  names(mat) <- c("obs", "weight")
-  agg <- stats::aggregate(mat$weight,
-                          by = list(un_obs = mat$obs),
-                          FUN = sum
-  )
+  
+  if(is.vector(y)){
+    names(mat) <- c("obs", "weight")
+    agg <- stats::aggregate(mat$weight,
+                            by = list(un_obs = mat$obs),
+                            FUN = sum)
+  }else if(is.matrix(y)){
+    names(mat) <- c("lower", "upper", "weight")
+    agg <- stats::aggregate(mat$weight,
+                            by = list(lower = mat$lower, upper = mat$upper),
+                            FUN = sum)
+    
+    agg$un_obs <- as.matrix(agg[, c("lower", "upper")])
+  }
+  
   list(un_obs = agg$un_obs, weights = agg$x)
 }
 
