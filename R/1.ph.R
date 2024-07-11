@@ -441,7 +441,21 @@ setMethod(
            maxit = 100,
            reltol = 1e-8,
            every = 100,
+           optim_method = "BFGS",
            r = 1) {
+    control <- if (optim_method == "BFGS") {
+      list(
+        maxit = maxit,
+        factr = reltol,
+        fnscale = -1
+      )
+    } else {
+      list(
+        maxit = maxit,
+        reltol = reltol,
+        fnscale = -1
+      )
+    }
     rightCensored <- is.vector(rcen)
     if(rightCensored){
       EMstep <- eval(parse(text = paste("EMstep_", methods[1], sep = "")))
@@ -489,6 +503,7 @@ setMethod(
     ph_par <- x@pars
     alpha_fit <- clone_vector(ph_par$alpha)
     S_fit <- clone_matrix(ph_par$S)
+    track <- numeric(stepsEM)
     
     if (r < 1) {
       y_full <- y
@@ -527,6 +542,7 @@ setMethod(
                            0
         )
         EMstep(epsilon1, alpha_fit, S_fit, y, weight, rcen, rcenweight)
+        track[k] <- LL(epsilon2, alpha_fit, S_fit, y, weight, rcen, rcenweight)
         if (k %% every == 0) {
           cat("\r", "iteration:", k,
               ", logLik:", LL(epsilon2, alpha_fit, S_fit, y, weight, rcen, rcenweight),
@@ -544,6 +560,7 @@ setMethod(
     if (is_iph) {
       trans_weight <- weight
       trans_rcenweight <- rcenweight
+      
       for (k in 1:stepsEM) {
         if (r < 1) {
           indices <- sample(1:length(y_full), size = floor(r * length(y_full)))
@@ -591,15 +608,14 @@ setMethod(
             weight = weight,
             rcens = rcen,
             rcweight = rcenweight,
-            hessian = FALSE,
-            control = list(
-              maxit = maxit,
-              reltol = reltol,
-              fnscale = -1
-            )
+            hessian = (k == stepsEM),
+            method = optim_method,
+            control = control
           )
         )
-        par_g <- opt$par
+        track[k] <- opt$value
+          par_g <- opt$par
+        
         if (k %% every == 0) {
           cat("\r", "iteration:", k,
               ", logLik:", opt$value,
@@ -611,7 +627,8 @@ setMethod(
       x@pars$S <- S_fit
       x@fit <- list(
         logLik = opt$value,
-        nobs = sum(A$weights)
+        nobs = sum(A$weights),
+        logLikHist = track
       )
       x <- iph(x, gfun = x@gfun$name, gfun_pars = par_g)
     }

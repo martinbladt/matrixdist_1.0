@@ -925,7 +925,6 @@
        densityu = aux_matu(0,0);
        
        double probInt = densityl- densityu;
-       double lowLim = 1e-5;
        if(probInt<lowLim){
          probInt = lowLim;
        }
@@ -968,7 +967,6 @@
        densityu = aux_matu(0,0);
        
        double probInt = densityl- densityu;
-       double lowLim = 1e-5;
        if(probInt<lowLim){
          probInt = lowLim;
        }
