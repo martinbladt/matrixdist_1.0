@@ -141,6 +141,12 @@ setMethod(
     
     rcenk <- rcen
     rcenweightk <- rcenweight
+    track <- numeric(stepsEM)
+    
+    options(digits.secs = 4)
+    cat(format(Sys.time(), format = "%H:%M:%OS"), ": EM started", sep = "")
+    cat("\n", sep = "")
+    
     for (k in 1:stepsEM) {
       prop <- exp(X %*% B_fit)
       
@@ -181,8 +187,11 @@ setMethod(
         method = optim_method,
         control = control
       ))
+      
+      track[k] <- opt$value
       par_g <- head(opt$par, ng)
       B_fit <- tail(opt$par, p)
+      
       if (k %% every == 0) {
         cat("\r", "iteration:", k,
             ", logLik:", opt$value,
@@ -196,11 +205,16 @@ setMethod(
     x@fit <- list(
       logLik = opt$value,
       nobs = sum(A$weights),
-      hessian = opt$hessian
+      hessian = opt$hessian,
+      logLikHist = track
     )
     s <- sph(x, type = "reg")
     s@gfun$pars <- par_g
     s@coefs$B <- B_fit
+    
+    cat("\n", format(Sys.time(), format = "%H:%M:%OS"), ": EM finalized", sep = "")
+    cat("\n", sep = "")
+    
     s
   }
 )
