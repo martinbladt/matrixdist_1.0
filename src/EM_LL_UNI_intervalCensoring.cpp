@@ -357,8 +357,31 @@
      double xl{rcens(k,0)};
      double xu{rcens(k,1)};
      
-     expml = matrix_exponential(S*xl);
-     expmu = matrix_exponential(S*xu);
+     if (xl * a <= 1.0) {
+       expml = m_exp_sum(xl, m, aux_vectl, a);
+     }
+     else {
+       int n{};
+       n = std::log(a * xl) / std::log(2.0);
+       ++n;
+       
+       expml = m_exp_sum(xl / pow(2.0, n), m, aux_vectl, a);
+       
+       pow2_matrix(n, expml);
+     }
+     
+     if (xu * a <= 1.0) {
+       expmu = m_exp_sum(xu, m, aux_vectu, a);
+     }
+     else {
+       int n{};
+       n = std::log(a * xu) / std::log(2.0);
+       ++n;
+       
+       expmu = m_exp_sum(xu / pow(2.0, n), m, aux_vectu, a);
+       
+       pow2_matrix(n, expmu);
+     }
      
      aux_matl = alpha.t() * expml * e;
      aux_matu = alpha.t() * expmu * e;
@@ -450,8 +473,31 @@
      double xl{pow(rcens(k,0), beta)};
      double xu{pow(rcens(k,1), beta)};
      
-     expml = matrix_exponential(S*xl);
-     expmu = matrix_exponential(S*xu);
+     if (xl * a <= 1.0) {
+       expml = m_exp_sum(xl, m, aux_vectl, a);
+     }
+     else {
+       int n{};
+       n = std::log(a * xl) / std::log(2.0);
+       ++n;
+       
+       expml = m_exp_sum(xl / pow(2.0, n), m, aux_vectl, a);
+       
+       pow2_matrix(n, expml);
+     }
+     
+     if (xu * a <= 1.0) {
+       expmu = m_exp_sum(xu, m, aux_vectu, a);
+     }
+     else {
+       int n{};
+       n = std::log(a * xu) / std::log(2.0);
+       ++n;
+       
+       expmu = m_exp_sum(xu / pow(2.0, n), m, aux_vectu, a);
+       
+       pow2_matrix(n, expmu);
+     }
      
      aux_matl = alpha.t() * expml * e;
      aux_matu = alpha.t() * expmu * e;
@@ -543,13 +589,37 @@
      double xl{std::log(rcens(k,0) / beta + 1)};
      double xu{std::log(rcens(k,1) / beta + 1)};
      
-     expml = matrix_exponential(S*xl);
-     expmu = matrix_exponential(S*xu);
+     if (xl * a <= 1.0) {
+       expml = m_exp_sum(xl, m, aux_vectl, a);
+     }
+     else {
+       int n{};
+       n = std::log(a * xl) / std::log(2.0);
+       ++n;
+       
+       expml = m_exp_sum(xl / pow(2.0, n), m, aux_vectl, a);
+       
+       pow2_matrix(n, expml);
+     }
+     
+     if (xu * a <= 1.0) {
+       expmu = m_exp_sum(xu, m, aux_vectu, a);
+     }
+     else {
+       int n{};
+       n = std::log(a * xu) / std::log(2.0);
+       ++n;
+       
+       expmu = m_exp_sum(xu / pow(2.0, n), m, aux_vectu, a);
+       
+       pow2_matrix(n, expmu);
+     }
      
      aux_matl = alpha.t() * expml * e;
      aux_matu = alpha.t() * expmu * e;
      densityl = aux_matl(0,0);
      densityu = aux_matu(0,0);
+     
      double probInt = densityl- densityu;
      double lowLim = 1e-5;
      if(probInt<lowLim){
@@ -634,8 +704,31 @@
      double xl{pow(std::log(rcens(k,0) + 1), beta)};
      double xu{pow(std::log(rcens(k,1) + 1), beta)};
      
-     expml = matrix_exponential(S*xl);
-     expmu = matrix_exponential(S*xu);
+     if (xl * a <= 1.0) {
+       expml = m_exp_sum(xl, m, aux_vectl, a);
+     }
+     else {
+       int n{};
+       n = std::log(a * xl) / std::log(2.0);
+       ++n;
+       
+       expml = m_exp_sum(xl / pow(2.0, n), m, aux_vectl, a);
+       
+       pow2_matrix(n, expml);
+     }
+     
+     if (xu * a <= 1.0) {
+       expmu = m_exp_sum(xu, m, aux_vectu, a);
+     }
+     else {
+       int n{};
+       n = std::log(a * xu) / std::log(2.0);
+       ++n;
+       
+       expmu = m_exp_sum(xu / pow(2.0, n), m, aux_vectu, a);
+       
+       pow2_matrix(n, expmu);
+     }
      
      aux_matl = alpha.t() * expml * e;
      aux_matu = alpha.t() * expmu * e;
@@ -727,8 +820,31 @@
      double xl{std::log(pow(rcens(k,0) / beta[0], beta[1]) + 1)};
      double xu{std::log(pow(rcens(k,1) / beta[0], beta[1]) + 1)};
      
-     expml = matrix_exponential(S*xl);
-     expmu = matrix_exponential(S*xu);
+     if (xl * a <= 1.0) {
+       expml = m_exp_sum(xl, m, aux_vectl, a);
+     }
+     else {
+       int n{};
+       n = std::log(a * xl) / std::log(2.0);
+       ++n;
+       
+       expml = m_exp_sum(xl / pow(2.0, n), m, aux_vectl, a);
+       
+       pow2_matrix(n, expml);
+     }
+     
+     if (xu * a <= 1.0) {
+       expmu = m_exp_sum(xu, m, aux_vectu, a);
+     }
+     else {
+       int n{};
+       n = std::log(a * xu) / std::log(2.0);
+       ++n;
+       
+       expmu = m_exp_sum(xu / pow(2.0, n), m, aux_vectu, a);
+       
+       pow2_matrix(n, expmu);
+     }
      
      aux_matl = alpha.t() * expml * e;
      aux_matu = alpha.t() * expmu * e;
@@ -822,8 +938,31 @@
      double xl{(exp(rcens(k,0) * beta) - 1) / beta};
      double xu{(exp(rcens(k,1) * beta) - 1) / beta};
      
-     expml = matrix_exponential(S*xl);
-     expmu = matrix_exponential(S*xu);
+     if (xl * a <= 1.0) {
+       expml = m_exp_sum(xl, m, aux_vectl, a);
+     }
+     else {
+       int n{};
+       n = std::log(a * xl) / std::log(2.0);
+       ++n;
+       
+       expml = m_exp_sum(xl / pow(2.0, n), m, aux_vectl, a);
+       
+       pow2_matrix(n, expml);
+     }
+     
+     if (xu * a <= 1.0) {
+       expmu = m_exp_sum(xu, m, aux_vectu, a);
+     }
+     else {
+       int n{};
+       n = std::log(a * xu) / std::log(2.0);
+       ++n;
+       
+       expmu = m_exp_sum(xu / pow(2.0, n), m, aux_vectu, a);
+       
+       pow2_matrix(n, expmu);
+     }
      
      aux_matl = alpha.t() * expml * e;
      aux_matu = alpha.t() * expmu * e;
@@ -916,8 +1055,31 @@
        double xl{exp(-(rcens(k,0) - beta[0]) / beta[1])};
        double xu{exp(-(rcens(k,1) - beta[0]) / beta[1])};
        
-       expml = matrix_exponential(S*xl);
-       expmu = matrix_exponential(S*xu);
+       if (xl * a <= 1.0) {
+         expml = m_exp_sum(xl, m, aux_vectl, a);
+       }
+       else {
+         int n{};
+         n = std::log(a * xl) / std::log(2.0);
+         ++n;
+         
+         expml = m_exp_sum(xl / pow(2.0, n), m, aux_vectl, a);
+         
+         pow2_matrix(n, expml);
+       }
+       
+       if (xu * a <= 1.0) {
+         expmu = m_exp_sum(xu, m, aux_vectu, a);
+       }
+       else {
+         int n{};
+         n = std::log(a * xu) / std::log(2.0);
+         ++n;
+         
+         expmu = m_exp_sum(xu / pow(2.0, n), m, aux_vectu, a);
+         
+         pow2_matrix(n, expmu);
+       }
        
        aux_matl = alpha.t() * expml * e;
        aux_matu = alpha.t() * expmu * e;
@@ -958,8 +1120,31 @@
        double xl{pow(1 + (beta[2] / beta[1]) * (rcens(k,0) - beta[0]) , - 1 / beta[2])};
        double xu{pow(1 + (beta[2] / beta[1]) * (rcens(k,1) - beta[0]) , - 1 / beta[2])};
        
-       expml = matrix_exponential(S*xl);
-       expmu = matrix_exponential(S*xu);
+       if (xl * a <= 1.0) {
+         expml = m_exp_sum(xl, m, aux_vectl, a);
+       }
+       else {
+         int n{};
+         n = std::log(a * xl) / std::log(2.0);
+         ++n;
+         
+         expml = m_exp_sum(xl / pow(2.0, n), m, aux_vectl, a);
+         
+         pow2_matrix(n, expml);
+       }
+       
+       if (xu * a <= 1.0) {
+         expmu = m_exp_sum(xu, m, aux_vectu, a);
+       }
+       else {
+         int n{};
+         n = std::log(a * xu) / std::log(2.0);
+         ++n;
+         
+         expmu = m_exp_sum(xu / pow(2.0, n), m, aux_vectu, a);
+         
+         pow2_matrix(n, expmu);
+       }
        
        aux_matl = alpha.t() * expml * e;
        aux_matu = alpha.t() * expmu * e;
@@ -1053,8 +1238,31 @@
      double xl{scale2[k] * rcens(k,0)};
      double xu{scale2[k] * rcens(k,1)};
      
-     expml = matrix_exponential(S*xl);
-     expmu = matrix_exponential(S*xu);
+     if (xl * a <= 1.0) {
+       expml = m_exp_sum(xl, m, aux_vectl, a);
+     }
+     else {
+       int n{};
+       n = std::log(a * xl) / std::log(2.0);
+       ++n;
+       
+       expml = m_exp_sum(xl / pow(2.0, n), m, aux_vectl, a);
+       
+       pow2_matrix(n, expml);
+     }
+     
+     if (xu * a <= 1.0) {
+       expmu = m_exp_sum(xu, m, aux_vectu, a);
+     }
+     else {
+       int n{};
+       n = std::log(a * xu) / std::log(2.0);
+       ++n;
+       
+       expmu = m_exp_sum(xu / pow(2.0, n), m, aux_vectu, a);
+       
+       pow2_matrix(n, expmu);
+     }
      
      aux_matl = alpha.t() * expml * e;
      aux_matu = alpha.t() * expmu * e;
@@ -1148,8 +1356,31 @@
      double xl{scale2[k] * pow(rcens(k,0), beta)};
      double xu{scale2[k] * pow(rcens(k,1), beta)};
      
-     expml = matrix_exponential(S*xl);
-     expmu = matrix_exponential(S*xu);
+     if (xl * a <= 1.0) {
+       expml = m_exp_sum(xl, m, aux_vectl, a);
+     }
+     else {
+       int n{};
+       n = std::log(a * xl) / std::log(2.0);
+       ++n;
+       
+       expml = m_exp_sum(xl / pow(2.0, n), m, aux_vectl, a);
+       
+       pow2_matrix(n, expml);
+     }
+     
+     if (xu * a <= 1.0) {
+       expmu = m_exp_sum(xu, m, aux_vectu, a);
+     }
+     else {
+       int n{};
+       n = std::log(a * xu) / std::log(2.0);
+       ++n;
+       
+       expmu = m_exp_sum(xu / pow(2.0, n), m, aux_vectu, a);
+       
+       pow2_matrix(n, expmu);
+     }
      
      aux_matl = alpha.t() * expml * e;
      aux_matu = alpha.t() * expmu * e;
@@ -1243,8 +1474,31 @@
      double xl{scale2[k] * std::log(rcens(k,0) / beta + 1)};
      double xu{scale2[k] * std::log(rcens(k,1) / beta + 1)};
      
-     expml = matrix_exponential(S*xl);
-     expmu = matrix_exponential(S*xu);
+     if (xl * a <= 1.0) {
+       expml = m_exp_sum(xl, m, aux_vectl, a);
+     }
+     else {
+       int n{};
+       n = std::log(a * xl) / std::log(2.0);
+       ++n;
+       
+       expml = m_exp_sum(xl / pow(2.0, n), m, aux_vectl, a);
+       
+       pow2_matrix(n, expml);
+     }
+     
+     if (xu * a <= 1.0) {
+       expmu = m_exp_sum(xu, m, aux_vectu, a);
+     }
+     else {
+       int n{};
+       n = std::log(a * xu) / std::log(2.0);
+       ++n;
+       
+       expmu = m_exp_sum(xu / pow(2.0, n), m, aux_vectu, a);
+       
+       pow2_matrix(n, expmu);
+     }
      
      aux_matl = alpha.t() * expml * e;
      aux_matu = alpha.t() * expmu * e;
@@ -1339,8 +1593,31 @@
      double xl{scale2[k] * pow(std::log(rcens(k,0) + 1), beta)};
      double xu{scale2[k] * pow(std::log(rcens(k,1) + 1), beta)};
      
-     expml = matrix_exponential(S*xl);
-     expmu = matrix_exponential(S*xu);
+     if (xl * a <= 1.0) {
+       expml = m_exp_sum(xl, m, aux_vectl, a);
+     }
+     else {
+       int n{};
+       n = std::log(a * xl) / std::log(2.0);
+       ++n;
+       
+       expml = m_exp_sum(xl / pow(2.0, n), m, aux_vectl, a);
+       
+       pow2_matrix(n, expml);
+     }
+     
+     if (xu * a <= 1.0) {
+       expmu = m_exp_sum(xu, m, aux_vectu, a);
+     }
+     else {
+       int n{};
+       n = std::log(a * xu) / std::log(2.0);
+       ++n;
+       
+       expmu = m_exp_sum(xu / pow(2.0, n), m, aux_vectu, a);
+       
+       pow2_matrix(n, expmu);
+     }
      
      aux_matl = alpha.t() * expml * e;
      aux_matu = alpha.t() * expmu * e;
@@ -1434,8 +1711,31 @@
      double xl{scale2[k] * std::log(pow(rcens(k,0) / beta[0], beta[1]) + 1)};
      double xu{scale2[k] * std::log(pow(rcens(k,1) / beta[0], beta[1]) + 1)};
      
-     expml = matrix_exponential(S*xl);
-     expmu = matrix_exponential(S*xu);
+     if (xl * a <= 1.0) {
+       expml = m_exp_sum(xl, m, aux_vectl, a);
+     }
+     else {
+       int n{};
+       n = std::log(a * xl) / std::log(2.0);
+       ++n;
+       
+       expml = m_exp_sum(xl / pow(2.0, n), m, aux_vectl, a);
+       
+       pow2_matrix(n, expml);
+     }
+     
+     if (xu * a <= 1.0) {
+       expmu = m_exp_sum(xu, m, aux_vectu, a);
+     }
+     else {
+       int n{};
+       n = std::log(a * xu) / std::log(2.0);
+       ++n;
+       
+       expmu = m_exp_sum(xu / pow(2.0, n), m, aux_vectu, a);
+       
+       pow2_matrix(n, expmu);
+     }
      
      aux_matl = alpha.t() * expml * e;
      aux_matu = alpha.t() * expmu * e;
@@ -1531,8 +1831,32 @@
      double xl{scale2[k] * (exp(rcens(k,0) * beta) - 1) / beta};
      double xu{scale2[k] * (exp(rcens(k,1) * beta) - 1) / beta};
      
-     expml = matrix_exponential(S*xl);
-     expmu = matrix_exponential(S*xu);
+     
+     if (xl * a <= 1.0) {
+       expml = m_exp_sum(xl, m, aux_vectl, a);
+     }
+     else {
+       int n{};
+       n = std::log(a * xl) / std::log(2.0);
+       ++n;
+       
+       expml = m_exp_sum(xl / pow(2.0, n), m, aux_vectl, a);
+       
+       pow2_matrix(n, expml);
+     }
+     
+     if (xu * a <= 1.0) {
+       expmu = m_exp_sum(xu, m, aux_vectu, a);
+     }
+     else {
+       int n{};
+       n = std::log(a * xu) / std::log(2.0);
+       ++n;
+       
+       expmu = m_exp_sum(xu / pow(2.0, n), m, aux_vectu, a);
+       
+       pow2_matrix(n, expmu);
+     }
      
      aux_matl = alpha.t() * expml * e;
      aux_matu = alpha.t() * expmu * e;
@@ -1544,6 +1868,7 @@
      if(probInt<lowLim){
        probInt = 1e-5;
      }
+     
      logLh += rcweight[k] * std::log(probInt);
    }
    
