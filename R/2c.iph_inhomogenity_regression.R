@@ -31,7 +31,7 @@
 #' X <- runif(100)
 #' reg(x = obj, y = data, X = X, stepsEM = 10)
 setMethod(
-  "reg", c(x = "ph", y = "ANY"),
+  "reg2", c(x = "ph", y = "ANY"),
   function(x,
            y,
            weight = numeric(0),
@@ -39,6 +39,9 @@ setMethod(
            rcenweight = numeric(0),
            X = numeric(0),
            B0 = numeric(0),
+           inhomReg = F,
+           X2 = numeric(0),
+           B1 = numeric(0),
            stepsEM = 1000,
            methods = c("RK", "UNI"),
            rkstep = NA,
@@ -46,7 +49,7 @@ setMethod(
            optim_method = "BFGS",
            maxit = 50,
            reltol = 1e-8,
-           every = 10) {
+           every = 10){
     control <- if (optim_method == "BFGS") {
       list(
         maxit = maxit,
@@ -91,8 +94,10 @@ setMethod(
       }else{
         LL_base <- eval(parse(text = "logLikelihoodPH_UNIs_intervalCensoring"))
       }
-      LL <- function(h, alpha, S, theta, obs, weight, rcens, rcweight, X) {
+      LL <- function(h, alpha, S, theta, gamma, obs, weight, rcens, rcweight, X, X2) {
+        
         ex <- exp(X %*% theta)
+        
         scale1 <- ex[1:length(obs)]
         scale2 <-  if(rightCensored){tail(ex, length(rcens))}else{tail(ex, nrow(rcens))}
         return(LL_base(h, alpha, S, obs, weight, rcens, rcweight, scale1, scale2))
@@ -109,20 +114,27 @@ setMethod(
       }else{
         LL_base <- eval(parse(text = paste("logLikelihoodM", x@gfun$name, "_UNIs_intervalCensoring", sep = "")))
       }
-      LL <- function(h, alpha, S, theta, obs, weight, rcens, rcweight, X) {
-        beta <- theta[1]
-        B <- theta[2:length(theta)]
-        if (beta < 0) {
+      LL <- function(h, alpha, S, theta, obs, weight, rcens, rcweight, X, X2) {
+        B <- head(theta, ncol(X)) # coefficient for proportionality term
+        gamma <- tail(theta, ncol(X2)) # coefficients for the inhomogeneity term
+        
+        ex <- exp(X %*% B)
+        beta <- 1/(1+exp(-(X2 %*% gamma)))
+        
+        if (any(beta < 0)) {
           return(NA)
         }
-        ex <- exp(X %*% B)
+        
         scale1 <- ex[1:length(obs)]
         scale2 <-  if(rightCensored){tail(ex, length(rcens))}else{tail(ex, nrow(rcens))}
         return(LL_base(h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2))
       }
     }
     
-    p <- dim(X)[2]
+    p0 <- dim(X)[2]
+    p1 <- dim(X2)[2]
+    p <- p0 + p1
+    
     n1 <- length(y)
     n2 <- if(rightCensored){ length(rcen)}else{nrow(rcen)}
     ng <- length(par_g)
@@ -148,14 +160,15 @@ setMethod(
     cat("\n", sep = "")
     
     for (k in 1:stepsEM) {
-      prop <- exp(X %*% B_fit)
+      prop <- exp(X %*% head(B_fit, p0))
+      beta_k <- 1/(1+exp(-(X2 %*% tail(B_fit, p1))))
       
-      trans <- prop[1:n1] * inv_g(par_g, y)
-      trans_cens <- prop[(n1 + 1):(n1 + n2)] * inv_g(par_g, rcen)
+      trans <- prop[1:n1] * inv_g(beta_k, y)
+      trans_cens <- prop[(n1 + 1):(n1 + n2)] * inv_g(beta_k, rcen)
       
       A <- data_aggregation(trans, weight)
       if (length(rcen)>0) {
-        Bcens <- data_aggregation(trans_cens, rcenweight)
+        Bcens <- data_aggregation(rcen, rcenweight)
         rcenk <- Bcens$un_obs
         rcenweightk <- Bcens$weights
       }
@@ -171,7 +184,7 @@ setMethod(
                          0
       )
       EMstep(epsilon1, alpha_fit, S_fit, A$un_obs, A$weights, rcenk, rcenweightk)
-      theta <- c(par_g, B_fit)
+      theta <- B_fit
       opt <- suppressWarnings(optim(
         par = theta,
         fn = LL,
@@ -183,14 +196,14 @@ setMethod(
         rcens = rcen,
         rcweight = rcenweight,
         X = X,
+        X2 = X2,
         hessian = (k == stepsEM),
         method = optim_method,
         control = control
       ))
       
       track[k] <- opt$value
-      par_g <- head(opt$par, ng)
-      B_fit <- tail(opt$par, p)
+      B_fit <- opt$par
       
       if (k %% every == 0) {
         cat("\r", "iteration:", k,
@@ -199,6 +212,7 @@ setMethod(
         )
       }
     }
+    
     cat("\n", sep = "")
     x@pars$alpha <- alpha_fit
     x@pars$S <- S_fit
@@ -216,8 +230,7 @@ setMethod(
     cat("\n", sep = "")
     
     s
-  }
-)
+  })
 
 #' Aggregate data to improve computation speed
 #' 
@@ -249,4 +262,3 @@ data_aggregation <- function(y, w) {
   
   list(un_obs = agg$un_obs, weights = agg$x)
 }
-
