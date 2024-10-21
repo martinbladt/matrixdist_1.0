@@ -31,7 +31,7 @@
 #' X <- runif(100)
 #' reg(x = obj, y = data, X = X, stepsEM = 10)
 setMethod(
-  "reg2", c(x = "ph", y = "ANY"),
+  "inhomogeneity_reg", c(x = "ph", y = "ANY"),
   function(x,
            y,
            weight = numeric(0),

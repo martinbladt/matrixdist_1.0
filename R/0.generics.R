@@ -170,6 +170,19 @@ setGeneric("fit", function(x, y, ...) standardGeneric("fit"))
 #'
 setGeneric("reg", function(x, y, ...) standardGeneric("reg"))
 
+#' New generic for regression with matrix distributions, when the inhomogeneity parameter is also regressed
+#'
+#' Methods are available for objects of class \linkS4class{ph}.
+#'
+#' @param x An object of the model class.
+#' @param y A vector of data.
+#' @param ... Further parameters to be passed on.
+#'
+#' @return An object of the fitted model class.
+#' @export
+#'
+setGeneric("inhomogeneity_reg", function(x, y, ...) standardGeneric("reg"))
+
 #' New generic for evaluating survival matrix distributions
 #'
 #' Methods are available for objects of class \linkS4class{sph}.
