@@ -11,10 +11,10 @@
   rcen = numeric(0),
   rcenweight = numeric(0),
   X = numeric(0),
-  B0 = numeric(0),
-  inhomReg = F,
   X2 = numeric(0),
-  B1 = numeric(0),
+  prop_f = NULL,
+  inhom_f = NULL,
+  B0 = numeric(0),
   stepsEM = 1000,
   methods = c("RK", "UNI"),
   rkstep = NA,
@@ -37,6 +37,12 @@
 \item{rcenweight}{Vector of weights for right-censored observations.}
 
 \item{X}{Model matrix (no intercept needed).}
+
+\item{X2}{Model matrix for the inhomogeneity parameter (no intercept needed).}
+
+\item{prop_f}{Regression function for the intensity function.}
+
+\item{inhom_f}{Regression function for the intensity function.}
 
 \item{B0}{Initial regression coefficients (optional).}
 
