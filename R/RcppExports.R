@@ -883,6 +883,160 @@ expm_terms <- function(h, S, obs) {
     .Call(`_matrixdist_expm_terms`, h, S, obs)
 }
 
+#' Loglikelihood of matrix-Weibull using uniformization
+NULL
+
+#' Loglikelihood of matrix-Pareto using uniformization
+NULL
+
+#' Loglikelihood of matrix-lognormal using uniformization
+NULL
+
+#' Loglikelihood of matrix-loglogistic using uniformization
+NULL
+
+#' Loglikelihood of matrix-Gompertz using uniformization
+NULL
+
+#' Loglikelihood of matrix-GEV using uniformization
+NULL
+
+#' Loglikelihood of PI with matrix-Weibull using uniformization
+NULL
+
+#' Loglikelihood of PI with matrix-Pareto using uniformization
+NULL
+
+#' Loglikelihood of PI with matrix-lognormal using uniformization
+NULL
+
+#' Loglikelihood of PI with matrix-loglogistic using uniformization
+NULL
+
+#' Loglikelihood of PI with matrix-Gompertz using Uniformization
+NULL
+
+#' Loglikelihood of matrix-Weibull using uniformization
+NULL
+
+#' Loglikelihood of matrix-Pareto using uniformization
+NULL
+
+#' Loglikelihood of matrix-lognormal using uniformization
+NULL
+
+#' Loglikelihood of matrix-loglogistic using uniformization
+NULL
+
+#' Loglikelihood of matrix-Gompertz using uniformization
+NULL
+
+#' Loglikelihood of matrix-GEV using uniformization
+NULL
+
+#' Loglikelihood of PI with matrix-Weibull using uniformization
+NULL
+
+#' Loglikelihood of PI with matrix-Pareto using uniformization
+NULL
+
+#' Loglikelihood of PI with matrix-lognormal using uniformization
+NULL
+
+#' Loglikelihood of PI with matrix-loglogistic using uniformization
+NULL
+
+#' Loglikelihood of PI with matrix-Gompertz using Uniformization
+NULL
+
+logLikelihoodMweibull_UNI_inhom <- function(h, alpha, S, beta, obs, weight, rcens, rcweight) {
+    .Call(`_matrixdist_logLikelihoodMweibull_UNI_inhom`, h, alpha, S, beta, obs, weight, rcens, rcweight)
+}
+
+logLikelihoodMpareto_UNI_inhom <- function(h, alpha, S, beta, obs, weight, rcens, rcweight) {
+    .Call(`_matrixdist_logLikelihoodMpareto_UNI_inhom`, h, alpha, S, beta, obs, weight, rcens, rcweight)
+}
+
+logLikelihoodMlognormal_UNI_inhom <- function(h, alpha, S, beta, obs, weight, rcens, rcweight) {
+    .Call(`_matrixdist_logLikelihoodMlognormal_UNI_inhom`, h, alpha, S, beta, obs, weight, rcens, rcweight)
+}
+
+logLikelihoodMloglogistic_UNI_inhom <- function(h, alpha, S, beta, obs, weight, rcens, rcweight) {
+    .Call(`_matrixdist_logLikelihoodMloglogistic_UNI_inhom`, h, alpha, S, beta, obs, weight, rcens, rcweight)
+}
+
+logLikelihoodMgompertz_UNI_inhom <- function(h, alpha, S, beta, obs, weight, rcens, rcweight) {
+    .Call(`_matrixdist_logLikelihoodMgompertz_UNI_inhom`, h, alpha, S, beta, obs, weight, rcens, rcweight)
+}
+
+logLikelihoodMgev_UNI_inhom <- function(h, alpha, S, beta, obs, weight, rcens, rcweight) {
+    .Call(`_matrixdist_logLikelihoodMgev_UNI_inhom`, h, alpha, S, beta, obs, weight, rcens, rcweight)
+}
+
+logLikelihoodMweibull_UNIs_inhom <- function(h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2) {
+    .Call(`_matrixdist_logLikelihoodMweibull_UNIs_inhom`, h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2)
+}
+
+logLikelihoodMpareto_UNIs_inhom <- function(h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2) {
+    .Call(`_matrixdist_logLikelihoodMpareto_UNIs_inhom`, h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2)
+}
+
+logLikelihoodMlognormal_UNIs_inhom <- function(h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2) {
+    .Call(`_matrixdist_logLikelihoodMlognormal_UNIs_inhom`, h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2)
+}
+
+logLikelihoodMloglogistic_UNIs_inhom <- function(h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2) {
+    .Call(`_matrixdist_logLikelihoodMloglogistic_UNIs_inhom`, h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2)
+}
+
+logLikelihoodMgompertz_UNIs_inhom <- function(h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2) {
+    .Call(`_matrixdist_logLikelihoodMgompertz_UNIs_inhom`, h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2)
+}
+
+logLikelihoodMweibull_UNI_inhom_intCens <- function(h, alpha, S, beta, obs, weight, rcens, rcweight) {
+    .Call(`_matrixdist_logLikelihoodMweibull_UNI_inhom_intCens`, h, alpha, S, beta, obs, weight, rcens, rcweight)
+}
+
+logLikelihoodMpareto_UNI_inhom_intCens <- function(h, alpha, S, beta, obs, weight, rcens, rcweight) {
+    .Call(`_matrixdist_logLikelihoodMpareto_UNI_inhom_intCens`, h, alpha, S, beta, obs, weight, rcens, rcweight)
+}
+
+logLikelihoodMlognormal_UNI_inhom_intCens <- function(h, alpha, S, beta, obs, weight, rcens, rcweight) {
+    .Call(`_matrixdist_logLikelihoodMlognormal_UNI_inhom_intCens`, h, alpha, S, beta, obs, weight, rcens, rcweight)
+}
+
+logLikelihoodMloglogistic_UNI_inhom_intCens <- function(h, alpha, S, beta, obs, weight, rcens, rcweight) {
+    .Call(`_matrixdist_logLikelihoodMloglogistic_UNI_inhom_intCens`, h, alpha, S, beta, obs, weight, rcens, rcweight)
+}
+
+logLikelihoodMgompertz_UNI_inhom_intCens <- function(h, alpha, S, beta, obs, weight, rcens, rcweight) {
+    .Call(`_matrixdist_logLikelihoodMgompertz_UNI_inhom_intCens`, h, alpha, S, beta, obs, weight, rcens, rcweight)
+}
+
+logLikelihoodMgev_UNI_inhom_intCens <- function(h, alpha, S, beta, obs, weight, rcens, rcweight) {
+    .Call(`_matrixdist_logLikelihoodMgev_UNI_inhom_intCens`, h, alpha, S, beta, obs, weight, rcens, rcweight)
+}
+
+logLikelihoodMweibull_UNIs_inhom_intCens <- function(h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2) {
+    .Call(`_matrixdist_logLikelihoodMweibull_UNIs_inhom_intCens`, h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2)
+}
+
+logLikelihoodMpareto_UNIs_inhom_intCens <- function(h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2) {
+    .Call(`_matrixdist_logLikelihoodMpareto_UNIs_inhom_intCens`, h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2)
+}
+
+logLikelihoodMlognormal_UNIs_inhom_intCens <- function(h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2) {
+    .Call(`_matrixdist_logLikelihoodMlognormal_UNIs_inhom_intCens`, h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2)
+}
+
+logLikelihoodMloglogistic_UNIs_inhom_intCens <- function(h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2) {
+    .Call(`_matrixdist_logLikelihoodMloglogistic_UNIs_inhom_intCens`, h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2)
+}
+
+logLikelihoodMgompertz_UNIs_inhom_intCens <- function(h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2) {
+    .Call(`_matrixdist_logLikelihoodMgompertz_UNIs_inhom_intCens`, h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2)
+}
+
 #' EM for phase-type using uniformization for matrix exponential
 NULL
 

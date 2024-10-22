@@ -4,6 +4,9 @@
 #' @param y Vector or data.
 #' @param X Model matrix (no intercept needed).
 #' @param B0 Initial regression coefficients (optional).
+#' @param X2 Model matrix for the inhomogeneity parameter (no intercept needed).
+#' @param prop_f Regression function for the intensity function.
+#' @param inhom_f Regression function for the intensity function.
 #' @param weight Vector of weights.
 #' @param rcen Vector of right-censored observations.
 #' @param rcenweight Vector of weights for right-censored observations.
@@ -38,10 +41,10 @@ setMethod(
            rcen = numeric(0),
            rcenweight = numeric(0),
            X = numeric(0),
-           B0 = numeric(0),
-           inhomReg = F,
            X2 = numeric(0),
-           B1 = numeric(0),
+           prop_f = NULL,
+           inhom_f = NULL,
+           B0 = numeric(0),
            stepsEM = 1000,
            methods = c("RK", "UNI"),
            rkstep = NA,
@@ -64,6 +67,7 @@ setMethod(
       )
     }
     X <- as.matrix(X)
+    X2 <- cbind(1,as.matrix(X2))
     if (methods[2] == "RK") {
       stop("For second method, select UNI or PADE (ordering avoided)")
     }
@@ -80,6 +84,15 @@ setMethod(
       EMstep <- eval(parse(text = "EMstep_UNI_intervalCensoring"))
     }
     
+    # Base proportionality and intensity functions
+    if(is.null(prop_f)){
+      prop_f <- function(theta = NULL, data = X){rep(1, nrow(data))}
+    }
+    
+    if(is.null(inhom_f)){
+      inhom_f <- function(phx = x, theta = NULL, data = X2){rep(phx@gfun$pars, nrow(data))}
+    }
+    
     if (!all(c(y, rcen) > 0)) {
       stop("data should be positive")
     }
@@ -94,9 +107,10 @@ setMethod(
       }else{
         LL_base <- eval(parse(text = "logLikelihoodPH_UNIs_intervalCensoring"))
       }
-      LL <- function(h, alpha, S, theta, gamma, obs, weight, rcens, rcweight, X, X2) {
-        
-        ex <- exp(X %*% theta)
+      LL <- function(h, alpha, S, theta, obs, weight, rcens, rcweight, X, X2) {
+        B <- head(theta, ncol(X)) 
+        ex <- prop_f(theta = B, data = X)
+      
         
         scale1 <- ex[1:length(obs)]
         scale2 <-  if(rightCensored){tail(ex, length(rcens))}else{tail(ex, nrow(rcens))}
@@ -109,17 +123,20 @@ setMethod(
       }
       par_g <- x@gfun$pars
       inv_g <- x@gfun$inverse
+      
       if(rightCensored){
-        LL_base <- eval(parse(text = paste("logLikelihoodM", x@gfun$name, "_", methods[2], "s", sep = "")))
+        LL_base <- eval(parse(text = paste("logLikelihoodM", x@gfun$name, "_", methods[2], "s_inhom", sep = "")))
       }else{
-        LL_base <- eval(parse(text = paste("logLikelihoodM", x@gfun$name, "_UNIs_intervalCensoring", sep = "")))
+        LL_base <- eval(parse(text = paste("logLikelihoodM", x@gfun$name, "_UNIs_inhom_intCens", sep = "")))
       }
+      
       LL <- function(h, alpha, S, theta, obs, weight, rcens, rcweight, X, X2) {
-        B <- head(theta, ncol(X)) # coefficient for proportionality term
-        gamma <- tail(theta, ncol(X2)) # coefficients for the inhomogeneity term
+        
+        B <- head(theta, ncol(X)) 
+        gamma <- tail(theta, ncol(X2)) 
         
         ex <- exp(X %*% B)
-        beta <- 1/(1+exp(-(X2 %*% gamma)))
+        beta <- inhom_f(theta = gamma, data = X2)
         
         if (any(beta < 0)) {
           return(NA)
@@ -160,11 +177,12 @@ setMethod(
     cat("\n", sep = "")
     
     for (k in 1:stepsEM) {
-      prop <- exp(X %*% head(B_fit, p0))
-      beta_k <- 1/(1+exp(-(X2 %*% tail(B_fit, p1))))
+      prop <- prop_f(theta = head(B_fit, p0), data = X)
       
-      trans <- prop[1:n1] * inv_g(beta_k, y)
-      trans_cens <- prop[(n1 + 1):(n1 + n2)] * inv_g(beta_k, rcen)
+      beta_k <- inhom_f(theta = tail(B_fit, p1), data = X2)
+      
+      trans <- prop[1:n1] * inv_g(beta_k[1:n1], y)
+      trans_cens <- prop[(n1 + 1):(n1 + n2)] * inv_g(beta_k[(n1 + 1):(n1 + n2)], rcen)
       
       A <- data_aggregation(trans, weight)
       if (length(rcen)>0) {
@@ -223,8 +241,16 @@ setMethod(
       logLikHist = track
     )
     s <- sph(x, type = "reg")
-    s@gfun$pars <- par_g
-    s@coefs$B <- B_fit
+    
+    s@gfun$pars <- inhom_f(theta = tail(B_fit, p1), data = X2)
+    s@gfun$prop <- prop_f(theta = head(B_fit, p0), data = X)
+    
+    s@gfun$regression_intensity <- function(t, beta = s@gfun$pars, prop = s@gfun$prop){
+      s@gfun$intensity(beta, t)*prop
+      }
+    
+    s@coefs$B_prop <- head(B_fit, p0)
+    s@coefs$B_inhom <- tail(B_fit, p1)
     
     cat("\n", format(Sys.time(), format = "%H:%M:%OS"), ": EM finalized", sep = "")
     cat("\n", sep = "")

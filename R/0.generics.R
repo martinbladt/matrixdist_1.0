@@ -181,7 +181,7 @@ setGeneric("reg", function(x, y, ...) standardGeneric("reg"))
 #' @return An object of the fitted model class.
 #' @export
 #'
-setGeneric("inhomogeneity_reg", function(x, y, ...) standardGeneric("reg"))
+setGeneric("inhomogeneity_reg", function(x, y, ...) standardGeneric("inhomogeneity_reg"))
 
 #' New generic for evaluating survival matrix distributions
 #'
