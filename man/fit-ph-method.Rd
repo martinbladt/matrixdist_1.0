@@ -17,6 +17,7 @@
   maxit = 100,
   reltol = 1e-08,
   every = 100,
+  optim_method = "BFGS",
   r = 1
 )
 }
