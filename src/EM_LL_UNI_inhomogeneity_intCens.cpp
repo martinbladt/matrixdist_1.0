@@ -59,7 +59,7 @@
        pow2_matrix(n, expm);
      }
      aux_mat = alpha.t() * expm * exit_vect;
-     density = aux_mat(0,0);
+     density =  aux_mat(0,0);
      logLh += weight[k] * (std::log(density) + std::log(beta[k]) + (beta[k] - 1) * std::log(obs[k]));
    }
    // Right censored data

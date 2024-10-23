@@ -68,12 +68,14 @@ setMethod(
     }
     X <- as.matrix(X)
     X2 <- cbind(1,as.matrix(X2))
+    
     if (methods[2] == "RK") {
       stop("For second method, select UNI or PADE (ordering avoided)")
     }
     if (any(dim(X) == 0)) {
       stop("input covariate matrix X, or use fit method instead")
     }
+    
     is_iph <- is(x, "iph")
     rightCensored <- is.vector(rcen)
     
@@ -111,7 +113,6 @@ setMethod(
         B <- head(theta, ncol(X)) 
         ex <- prop_f(theta = B, data = X)
       
-        
         scale1 <- ex[1:length(obs)]
         scale2 <-  if(rightCensored){tail(ex, length(rcens))}else{tail(ex, nrow(rcens))}
         return(LL_base(h, alpha, S, obs, weight, rcens, rcweight, scale1, scale2))
@@ -135,7 +136,7 @@ setMethod(
         B <- head(theta, ncol(X)) 
         gamma <- tail(theta, ncol(X2)) 
         
-        ex <- exp(X %*% B)
+        ex <- prop_f(theta = B, data = X) 
         beta <- inhom_f(theta = gamma, data = X2)
         
         if (any(beta < 0)) {
