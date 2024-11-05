@@ -155,9 +155,9 @@ setMethod(
       
       A <- data_aggregation(trans, weight)
       if (length(rcen)>0) {
-        B <- data_aggregation(rcen, rcenweight)
-        rcenk <- B$un_obs
-        rcenweightk <- B$weights
+        Bcens <- data_aggregation(trans_cens, rcenweight)
+        rcenk <- Bcens$un_obs
+        rcenweightk <- Bcens$weights
       }
       
       epsilon1 <- switch(which(methods[1] == c("RK", "UNI", "PADE")),

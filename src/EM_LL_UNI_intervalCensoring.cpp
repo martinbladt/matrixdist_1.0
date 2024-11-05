@@ -929,6 +929,7 @@
      }
      aux_mat = alpha.t() * expm * exit_vect;
      density = aux_mat(0,0);
+     
      if(density < lowLim){ density = 1e-5;}
      logLh += weight[k] * (std::log(density) + obs[k] * beta);
    }

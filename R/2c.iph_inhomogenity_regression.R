@@ -85,8 +85,7 @@ setMethod(
     }else if(is.matrix(rcen)){
       EMstep <- eval(parse(text = "EMstep_UNI_intervalCensoring"))
     }
-    
-    # Base proportionality and intensity functions
+      # Base proportionality and intensity functions
     if(is.null(prop_f)){
       prop_f <- function(theta = NULL, data = X){rep(1, nrow(data))}
     }
@@ -94,7 +93,7 @@ setMethod(
     if(is.null(inhom_f)){
       inhom_f <- function(phx = x, theta = NULL, data = X2){rep(phx@gfun$pars, nrow(data))}
     }
-    
+
     if (!all(c(y, rcen) > 0)) {
       stop("data should be positive")
     }
@@ -112,7 +111,7 @@ setMethod(
       LL <- function(h, alpha, S, theta, obs, weight, rcens, rcweight, X, X2) {
         B <- head(theta, ncol(X)) 
         ex <- prop_f(theta = B, data = X)
-      
+
         scale1 <- ex[1:length(obs)]
         scale2 <-  if(rightCensored){tail(ex, length(rcens))}else{tail(ex, nrow(rcens))}
         return(LL_base(h, alpha, S, obs, weight, rcens, rcweight, scale1, scale2))
