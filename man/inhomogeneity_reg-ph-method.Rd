@@ -11,7 +11,7 @@
   rcen = numeric(0),
   rcenweight = numeric(0),
   X = numeric(0),
-  X2 = numeric(0),
+  X2 = NULL,
   prop_f = NULL,
   inhom_f = NULL,
   B0 = numeric(0),
@@ -22,6 +22,8 @@
   optim_method = "BFGS",
   maxit = 50,
   reltol = 1e-08,
+  break_tol = 1e-08,
+  break_n = stepsEM,
   every = 10
 )
 }
@@ -73,5 +75,5 @@ set.seed(1)
 obj <- iph(ph(structure = "general", dimension = 2), gfun = "weibull", gfun_pars = 2)
 data <- sim(obj, n = 100)
 X <- runif(100)
-reg(x = obj, y = data, X = X, stepsEM = 10)
+inhomogeneity_reg(x = obj, y = data, X = X, stepsEM = 10)
 }

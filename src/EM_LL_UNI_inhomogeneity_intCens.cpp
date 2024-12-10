@@ -5,7 +5,7 @@
 
 // RIGHT CENSORED 
 
-//' Loglikelihood of matrix-Weibull using uniformization
+//' Loglikelihood of matrix-Weibull using uniformization, when the intensity function is regressed on covariate informatino
  //' 
  //' Loglikelihood for a sample.
  //' 
@@ -59,7 +59,7 @@
        pow2_matrix(n, expm);
      }
      aux_mat = alpha.t() * expm * exit_vect;
-     density = aux_mat(0,0);
+     density =  aux_mat(0,0);
      logLh += weight[k] * (std::log(density) + std::log(beta[k]) + (beta[k] - 1) * std::log(obs[k]));
    }
    // Right censored data
@@ -87,7 +87,7 @@
  }
 
 
-//' Loglikelihood of matrix-Pareto using uniformization
+//' Loglikelihood of matrix-Pareto using uniformization, when the intensity function is regressed on covariate informatino
  //' 
  //' Loglikelihood for a sample.
  //' 
@@ -169,7 +169,7 @@
  }
 
 
-//' Loglikelihood of matrix-lognormal using uniformization
+//' Loglikelihood of matrix-lognormal using uniformization, when the intensity function is regressed on covariate informatino
  //' 
  //' Loglikelihood for a sample.
  //' 
@@ -251,7 +251,7 @@
  }
 
 
-//' Loglikelihood of matrix-loglogistic using uniformization
+//' Loglikelihood of matrix-loglogistic using uniformization, when the intensity function is regressed on covariate informatino
  //' 
  //' Loglikelihood for a sample.
  //' 
@@ -333,7 +333,7 @@
  }
 
 
-//' Loglikelihood of matrix-Gompertz using uniformization
+//' Loglikelihood of matrix-Gompertz using uniformization, when the intensity function is regressed on covariate informatino
  //' 
  //' Loglikelihood for a sample.
  //' 
@@ -415,7 +415,7 @@
  }
 
 
-//' Loglikelihood of matrix-GEV using uniformization
+//' Loglikelihood of matrix-GEV using uniformization, when the intensity function is regressed on covariate informatino
  //' 
  //' Loglikelihood for a sample.
  //' 
@@ -544,7 +544,7 @@
 // Scaled versions of loglikelihoods (for regression)  //
 /////////////////////////////////////////////////////////
 
-//' Loglikelihood of PI with matrix-Weibull using uniformization
+//' Loglikelihood of PI with matrix-Weibull using uniformization, when the intensity function is regressed on covariate informatino
  //' 
  //' Loglikelihood for a sample.
  //' 
@@ -628,7 +628,7 @@
  }
 
 
-//' Loglikelihood of PI with matrix-Pareto using uniformization
+//' Loglikelihood of PI with matrix-Pareto using uniformization, when the intensity function is regressed on covariate informatino
  //' 
  //' Loglikelihood for a sample.
  //' 
@@ -712,7 +712,7 @@
  }
 
 
-//' Loglikelihood of PI with matrix-lognormal using uniformization
+//' Loglikelihood of PI with matrix-lognormal using uniformization, when the intensity function is regressed on covariate informatino
  //' 
  //' Loglikelihood for a sample.
  //' 
@@ -796,7 +796,7 @@
  }
 
 
-//' Loglikelihood of PI with matrix-loglogistic using uniformization
+//' Loglikelihood of PI with matrix-loglogistic using uniformization, when the intensity function is regressed on covariate informatino
  //' 
  //' Loglikelihood for a sample.
  //' 
@@ -880,7 +880,7 @@
  }
 
 
-//' Loglikelihood of PI with matrix-Gompertz using Uniformization
+//' Loglikelihood of PI with matrix-Gompertz using uniformization, when the intensity function is regressed on covariate informatino
  //' 
  //' Loglikelihood for a sample.
  //' 
@@ -969,7 +969,7 @@
 // Log-likelihoods
 ////////////////////////////////////////////
 
-//' Loglikelihood of matrix-Weibull using uniformization
+//' Loglikelihood of matrix-Weibull using uniformization, when the intensity function is regressed on covariate informatino
  //' 
  //' Loglikelihood for a sample.
  //' 
@@ -1085,7 +1085,7 @@
  }
 
 
-//' Loglikelihood of matrix-Pareto using uniformization
+//' Loglikelihood of matrix-Pareto using uniformization, when the intensity function is regressed on covariate informatino
  //' 
  //' Loglikelihood for a sample.
  //' 
@@ -1200,7 +1200,7 @@
  }
 
 
-//' Loglikelihood of matrix-lognormal using uniformization
+//' Loglikelihood of matrix-lognormal using uniformization, when the intensity function is regressed on covariate informatino
  //' 
  //' Loglikelihood for a sample.
  //' 
@@ -1316,7 +1316,7 @@
  }
 
 
-//' Loglikelihood of matrix-loglogistic using uniformization
+//' Loglikelihood of matrix-loglogistic using uniformization, when the intensity function is regressed on covariate informatino
  //' 
  //' Loglikelihood for a sample.
  //' 
@@ -1432,7 +1432,7 @@
  }
 
 
-//' Loglikelihood of matrix-Gompertz using uniformization
+//' Loglikelihood of matrix-Gompertz using uniformization, when the intensity function is regressed on covariate informatino
  //' 
  //' Loglikelihood for a sample.
  //' 
@@ -1550,7 +1550,7 @@
  }
 
 
-//' Loglikelihood of matrix-GEV using uniformization
+//' Loglikelihood of matrix-GEV using uniformization, when the intensity function is regressed on covariate informatino
  //' 
  //' Loglikelihood for a sample.
  //' 
@@ -1735,7 +1735,7 @@
 // Scaled versions of loglikelihoods (for regression)  //
 /////////////////////////////////////////////////////////
 
-//' Loglikelihood of PI with matrix-Weibull using uniformization
+//' Loglikelihood of PI with matrix-Weibull using uniformization, when the intensity function is regressed on covariate informatino
  //' 
  //' Loglikelihood for a sample.
  //' 
@@ -1853,7 +1853,7 @@
  }
 
 
-//' Loglikelihood of PI with matrix-Pareto using uniformization
+//' Loglikelihood of PI with matrix-Pareto using uniformization, when the intensity function is regressed on covariate informatino
  //' 
  //' Loglikelihood for a sample.
  //' 
@@ -1972,7 +1972,7 @@
  }
 
 
-//' Loglikelihood of PI with matrix-lognormal using uniformization
+//' Loglikelihood of PI with matrix-lognormal using uniformization, when the intensity function is regressed on covariate informatino
  //' 
  //' Loglikelihood for a sample.
  //' 
@@ -2090,7 +2090,7 @@
  }
 
 
-//' Loglikelihood of PI with matrix-loglogistic using uniformization
+//' Loglikelihood of PI with matrix-loglogistic using uniformization, when the intensity function is regressed on covariate informatino
  //' 
  //' Loglikelihood for a sample.
  //' 
@@ -2208,7 +2208,7 @@
  }
 
 
-//' Loglikelihood of PI with matrix-Gompertz using Uniformization
+//' Loglikelihood of PI with matrix-Gompertz using uniformization, when the intensity function is regressed on covariate informatino
  //' 
  //' Loglikelihood for a sample.
  //' 
