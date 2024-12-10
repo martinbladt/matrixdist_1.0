@@ -883,70 +883,77 @@ expm_terms <- function(h, S, obs) {
     .Call(`_matrixdist_expm_terms`, h, S, obs)
 }
 
-#' Loglikelihood of matrix-Weibull using uniformization
+#' Loglikelihood of PI using uniformization, with customizable observation transformation.
 NULL
 
-#' Loglikelihood of matrix-Pareto using uniformization
+logLikelihood_UNIs_PI <- function(h, alpha, S, beta1, beta2, obs, weight, rcens, rcweight, scale1, scale2, gfun_name) {
+    .Call(`_matrixdist_logLikelihood_UNIs_PI`, h, alpha, S, beta1, beta2, obs, weight, rcens, rcweight, scale1, scale2, gfun_name)
+}
+
+#' Loglikelihood of matrix-Weibull using uniformization, when the intensity function is regressed on covariate informatino
 NULL
 
-#' Loglikelihood of matrix-lognormal using uniformization
+#' Loglikelihood of matrix-Pareto using uniformization, when the intensity function is regressed on covariate informatino
 NULL
 
-#' Loglikelihood of matrix-loglogistic using uniformization
+#' Loglikelihood of matrix-lognormal using uniformization, when the intensity function is regressed on covariate informatino
 NULL
 
-#' Loglikelihood of matrix-Gompertz using uniformization
+#' Loglikelihood of matrix-loglogistic using uniformization, when the intensity function is regressed on covariate informatino
 NULL
 
-#' Loglikelihood of matrix-GEV using uniformization
+#' Loglikelihood of matrix-Gompertz using uniformization, when the intensity function is regressed on covariate informatino
 NULL
 
-#' Loglikelihood of PI with matrix-Weibull using uniformization
+#' Loglikelihood of matrix-GEV using uniformization, when the intensity function is regressed on covariate informatino
 NULL
 
-#' Loglikelihood of PI with matrix-Pareto using uniformization
+#' Loglikelihood of PI with matrix-Weibull using uniformization, when the intensity function is regressed on covariate informatino
 NULL
 
-#' Loglikelihood of PI with matrix-lognormal using uniformization
+#' Loglikelihood of PI with matrix-Pareto using uniformization, when the intensity function is regressed on covariate informatino
 NULL
 
-#' Loglikelihood of PI with matrix-loglogistic using uniformization
+#' Loglikelihood of PI with matrix-lognormal using uniformization, when the intensity function is regressed on covariate informatino
 NULL
 
-#' Loglikelihood of PI with matrix-Gompertz using Uniformization
+#' Loglikelihood of PI with matrix-loglogistic using uniformization, when the intensity function is regressed on covariate informatino
 NULL
 
-#' Loglikelihood of matrix-Weibull using uniformization
+#' Loglikelihood of PI with matrix-Gompertz using uniformization, when the intensity function is regressed on covariate informatino
 NULL
 
-#' Loglikelihood of matrix-Pareto using uniformization
+#' Loglikelihood of matrix-Weibull using uniformization, when the intensity function is regressed on covariate informatino
 NULL
 
-#' Loglikelihood of matrix-lognormal using uniformization
+#' Loglikelihood of matrix-Pareto using uniformization, when the intensity function is regressed on covariate informatino
 NULL
 
-#' Loglikelihood of matrix-loglogistic using uniformization
+#' Loglikelihood of matrix-lognormal using uniformization, when the intensity function is regressed on covariate informatino
 NULL
 
-#' Loglikelihood of matrix-Gompertz using uniformization
+#' Loglikelihood of matrix-loglogistic using uniformization, when the intensity function is regressed on covariate informatino
 NULL
 
-#' Loglikelihood of matrix-GEV using uniformization
+#' Loglikelihood of matrix-Gompertz using uniformization, when the intensity function is regressed on covariate informatino
 NULL
 
-#' Loglikelihood of PI with matrix-Weibull using uniformization
+#' Loglikelihood of matrix-GEV using uniformization, when the intensity function is regressed on covariate informatino
 NULL
 
-#' Loglikelihood of PI with matrix-Pareto using uniformization
+#' Loglikelihood of PI with matrix-Weibull using uniformization, when the intensity function is regressed on covariate informatino
 NULL
 
-#' Loglikelihood of PI with matrix-lognormal using uniformization
+#' Loglikelihood of PI with matrix-Pareto using uniformization, when the intensity function is regressed on covariate informatino
 NULL
 
-#' Loglikelihood of PI with matrix-loglogistic using uniformization
+#' Loglikelihood of PI with matrix-lognormal using uniformization, when the intensity function is regressed on covariate informatino
 NULL
 
-#' Loglikelihood of PI with matrix-Gompertz using Uniformization
+#' Loglikelihood of PI with matrix-loglogistic using uniformization, when the intensity function is regressed on covariate informatino
+NULL
+
+#' Loglikelihood of PI with matrix-Gompertz using uniformization, when the intensity function is regressed on covariate informatino
 NULL
 
 logLikelihoodMweibull_UNI_inhom <- function(h, alpha, S, beta, obs, weight, rcens, rcweight) {

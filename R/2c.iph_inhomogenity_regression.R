@@ -32,7 +32,7 @@
 #' obj <- iph(ph(structure = "general", dimension = 2), gfun = "weibull", gfun_pars = 2)
 #' data <- sim(obj, n = 100)
 #' X <- runif(100)
-#' reg(x = obj, y = data, X = X, stepsEM = 10)
+#' inhomogeneity_reg(x = obj, y = data, X = X, stepsEM = 10)
 setMethod(
   "inhomogeneity_reg", c(x = "ph", y = "ANY"),
   function(x,
@@ -41,7 +41,7 @@ setMethod(
            rcen = numeric(0),
            rcenweight = numeric(0),
            X = numeric(0),
-           X2 = numeric(0),
+           X2 = NULL,
            prop_f = NULL,
            inhom_f = NULL,
            B0 = numeric(0),
@@ -52,6 +52,8 @@ setMethod(
            optim_method = "BFGS",
            maxit = 50,
            reltol = 1e-8,
+           break_tol = 1e-8,
+           break_n = stepsEM,
            every = 10){
     control <- if (optim_method == "BFGS") {
       list(
@@ -66,8 +68,10 @@ setMethod(
         fnscale = -1
       )
     }
+    # use same covariates for both proportionality term and intensity parameter
+    if(is.null(X2)){X2 <- X}
     X <- as.matrix(X)
-    X2 <- cbind(1,as.matrix(X2))
+    X2 <- as.matrix(X2)
     
     if (methods[2] == "RK") {
       stop("For second method, select UNI or PADE (ordering avoided)")
@@ -85,15 +89,12 @@ setMethod(
     }else if(is.matrix(rcen)){
       EMstep <- eval(parse(text = "EMstep_UNI_intervalCensoring"))
     }
-      # Base proportionality and intensity functions
+    
+    # Base proportionality and intensity functions
     if(is.null(prop_f)){
       prop_f <- function(theta = NULL, data = X){rep(1, nrow(data))}
     }
     
-    if(is.null(inhom_f)){
-      inhom_f <- function(phx = x, theta = NULL, data = X2){rep(phx@gfun$pars, nrow(data))}
-    }
-
     if (!all(c(y, rcen) > 0)) {
       stop("data should be positive")
     }
@@ -111,12 +112,17 @@ setMethod(
       LL <- function(h, alpha, S, theta, obs, weight, rcens, rcweight, X, X2) {
         B <- head(theta, ncol(X)) 
         ex <- prop_f(theta = B, data = X)
-
+        
         scale1 <- ex[1:length(obs)]
         scale2 <-  if(rightCensored){tail(ex, length(rcens))}else{tail(ex, nrow(rcens))}
         return(LL_base(h, alpha, S, obs, weight, rcens, rcweight, scale1, scale2))
       }
     } else if (is_iph) {
+      
+      if(is.null(inhom_f)){
+        inhom_f <- function(phx = x, theta = NULL, data = X2){rep(phx@gfun$pars, nrow(data))}
+      }
+      
       name <- x@gfun$name
       if (name %in% c("loglogistic", "gev")) {
         stop("not yet available for multi-parameter transforms")
@@ -124,13 +130,9 @@ setMethod(
       par_g <- x@gfun$pars
       inv_g <- x@gfun$inverse
       
-      if(rightCensored){
-        LL_base <- eval(parse(text = paste("logLikelihoodM", x@gfun$name, "_", methods[2], "s_inhom", sep = "")))
-      }else{
-        LL_base <- eval(parse(text = paste("logLikelihoodM", x@gfun$name, "_UNIs_inhom_intCens", sep = "")))
-      }
+      LL_base <- eval(parse(text = "logLikelihood_UNIs_PI"))
       
-      LL <- function(h, alpha, S, theta, obs, weight, rcens, rcweight, X, X2) {
+      LL <- function(h, alpha, S, theta, obs, weight, rcens, rcweight, X, X2, gfun_name) {
         
         B <- head(theta, ncol(X)) 
         gamma <- tail(theta, ncol(X2)) 
@@ -144,7 +146,11 @@ setMethod(
         
         scale1 <- ex[1:length(obs)]
         scale2 <-  if(rightCensored){tail(ex, length(rcens))}else{tail(ex, nrow(rcens))}
-        return(LL_base(h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2))
+        
+        beta1 <- head(beta,length(obs)) 
+        beta2 <- if(rightCensored){tail(beta, length(rcens))}else{tail(beta, nrow(rcens))}
+        
+        return(LL_base(h, alpha, S, beta1, beta2, obs, weight, rcens, rcweight, scale1, scale2, gfun_name))
       }
     }
     
@@ -177,10 +183,11 @@ setMethod(
     cat("\n", sep = "")
     
     for (k in 1:stepsEM) {
+      # proportionality and inhomogeneity terms
       prop <- prop_f(theta = head(B_fit, p0), data = X)
-      
       beta_k <- inhom_f(theta = tail(B_fit, p1), data = X2)
       
+      # transformed observations
       trans <- prop[1:n1] * inv_g(beta_k[1:n1], y)
       trans_cens <- prop[(n1 + 1):(n1 + n2)] * inv_g(beta_k[(n1 + 1):(n1 + n2)], rcen)
       
@@ -215,11 +222,12 @@ setMethod(
         rcweight = rcenweight,
         X = X,
         X2 = X2,
+        gfun_name = name,
         hessian = (k == stepsEM),
         method = optim_method,
         control = control
       ))
-      
+
       track[k] <- opt$value
       B_fit <- opt$par
       
@@ -228,6 +236,12 @@ setMethod(
             ", logLik:", opt$value,
             sep = " "
         )
+      }
+      
+      # stop the algorithm if it is stuck somewhere
+      if(k > break_n){
+        b_diff <- track[k]-track[k-1]
+        if(b_diff < break_tol){break}
       }
     }
     
@@ -247,7 +261,7 @@ setMethod(
     
     s@gfun$regression_intensity <- function(t, beta = s@gfun$pars, prop = s@gfun$prop){
       s@gfun$intensity(beta, t)*prop
-      }
+    }
     
     s@coefs$B_prop <- head(B_fit, p0)
     s@coefs$B_inhom <- tail(B_fit, p1)
