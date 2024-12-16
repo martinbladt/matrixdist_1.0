@@ -53,6 +53,8 @@ setMethod(
            maxit = 50,
            reltol = 1e-8,
            break_tol = 1e-8,
+           save_tmp = F,
+           assign_lab = "reg_tmp",
            break_n = stepsEM,
            every = 10){
     control <- if (optim_method == "BFGS") {
@@ -79,6 +81,7 @@ setMethod(
     if (any(dim(X) == 0)) {
       stop("input covariate matrix X, or use fit method instead")
     }
+    if(save_tmp){ x_tmp <- x}
     
     is_iph <- is(x, "iph")
     rightCensored <- is.vector(rcen)
@@ -227,9 +230,30 @@ setMethod(
         method = optim_method,
         control = control
       ))
-
+      
       track[k] <- opt$value
       B_fit <- opt$par
+      
+      if(save_tmp){
+        x_tmp@pars$alpha <- alpha_fit
+        x_tmp@pars$S <- S_fit
+        x_tmp@fit <- list(
+          logLik = opt$value,
+          nobs = sum(A$weights),
+          hessian = opt$hessian,
+          logLikHist = track
+        )
+        s_tmp <- sph(x_tmp, type = "reg")
+        
+        s_tmp@gfun$pars <- inhom_f(theta = tail(B_fit, p1), data = X2)
+        s_tmp@gfun$prop <- prop_f(theta = head(B_fit, p0), data = X)
+        
+        s_tmp@coefs$B_prop <- head(B_fit, p0)
+        s_tmp@coefs$B_inhom <- tail(B_fit, p1)
+        
+        # assign last iteration to global environment
+        assign(assign_lab, s_tmp, envir = .GlobalEnv)
+      }
       
       if (k %% every == 0) {
         cat("\r", "iteration:", k,
