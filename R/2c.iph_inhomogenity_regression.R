@@ -169,8 +169,8 @@ setMethod(
     if (length(rcenweight) == 0) rcenweight <- rep(1, n2)
     
     ph_par <- x@pars
-    alpha_fit <- clone_vector(ph_par$alpha)
-    S_fit <- clone_matrix(ph_par$S)
+    alpha_fit <- alpha_save <- clone_vector(ph_par$alpha)
+    S_fit <- S_save <- clone_matrix(ph_par$S)
     if (length(B0) == 0) {
       B_fit <- rep(0, p)
     } else {
@@ -211,8 +211,33 @@ setMethod(
                          if (!is.na(uni_epsilon)) uni_epsilon else 1e-4,
                          0
       )
-      EMstep(epsilon1, alpha_fit, S_fit, A$un_obs, A$weights, rcenk, rcenweightk)
+      
       theta <- B_fit
+      
+      # saves the representation of the previous iteration
+      if(save_tmp){
+        x_tmp@pars$alpha <- alpha_save
+        x_tmp@pars$S <- S_save
+        x_tmp@fit <- list(
+          logLik = LL(h = epsilon2, alpha = alpha_save, S = S_save, theta = theta, obs = y, weight = weight, rcens = rcen, rcweight = rcenweight, X = X, X2 = X2, gfun_name = name),
+          nobs = sum(A$weights),
+          logLikHist = track
+        )
+        s_tmp <- sph(x_tmp, type = "reg")
+        
+        s_tmp@gfun$pars <- inhom_f(theta = tail(theta, p1), data = X2)
+        s_tmp@gfun$prop <- prop_f(theta = head(theta, p0), data = X)
+        
+        s_tmp@coefs$B_prop <- head(theta, p0)
+        s_tmp@coefs$B_inhom <- tail(theta, p1)
+        
+        # assign last iteration to global environment
+        assign(assign_lab, s_tmp, envir = .GlobalEnv)
+      }
+      
+      # EM step
+      EMstep(epsilon1, alpha_fit, S_fit, A$un_obs, A$weights, rcenk, rcenweightk)
+      # Optimisation step
       opt <- suppressWarnings(optim(
         par = theta,
         fn = LL,
@@ -233,27 +258,6 @@ setMethod(
       
       track[k] <- opt$value
       B_fit <- opt$par
-      
-      if(save_tmp){
-        x_tmp@pars$alpha <- alpha_fit
-        x_tmp@pars$S <- S_fit
-        x_tmp@fit <- list(
-          logLik = opt$value,
-          nobs = sum(A$weights),
-          hessian = opt$hessian,
-          logLikHist = track
-        )
-        s_tmp <- sph(x_tmp, type = "reg")
-        
-        s_tmp@gfun$pars <- inhom_f(theta = tail(B_fit, p1), data = X2)
-        s_tmp@gfun$prop <- prop_f(theta = head(B_fit, p0), data = X)
-        
-        s_tmp@coefs$B_prop <- head(B_fit, p0)
-        s_tmp@coefs$B_inhom <- tail(B_fit, p1)
-        
-        # assign last iteration to global environment
-        assign(assign_lab, s_tmp, envir = .GlobalEnv)
-      }
       
       if (k %% every == 0) {
         cat("\r", "iteration:", k,
