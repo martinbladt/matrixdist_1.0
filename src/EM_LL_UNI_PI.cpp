@@ -49,7 +49,6 @@ using namespace Rcpp;
      Rcpp::stop("beta1 must be either a NumericVector or NumericMatrix");
    }
    
-   
    // Cast beta1 into the appropriate type
    NumericVector beta1_vec;
    NumericMatrix beta1_mat;
