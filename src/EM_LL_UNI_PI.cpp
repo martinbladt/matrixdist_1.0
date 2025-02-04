@@ -130,7 +130,7 @@ using namespace Rcpp;
        pow2_matrix(n, expm);
      }
      aux_mat = alpha.t() * expm * exit_vect;
-     double density = aux_mat(0, 0);
+     density = aux_mat(0, 0);
      
      // Determine the logarithm of the density function
      if (gfun_name == "weibull") {
@@ -198,26 +198,27 @@ using namespace Rcpp;
      vector_of_matrices(aux_vectu, S, a, m);
      
      for (int k{0}; k < rcens_mat.nrow(); ++k) {
-       double xl, xu;
+       double xl;
+       double xu;
        if (gfun_name == "weibull") {
-         double xl{pow(rcens_mat(k,0), beta2_vec[k])};
-         double xu{pow(rcens_mat(k,1), beta2_vec[k])};
+         xl = pow(rcens_mat(k,0), beta2_vec[k]);
+         xu = pow(rcens_mat(k,1), beta2_vec[k]);
          
        } else if (gfun_name == "pareto") {
-         double xl{std::log(rcens_mat(k,0) / beta2_vec[k] + 1)};
-         double xu{std::log(rcens_mat(k,1) / beta2_vec[k] + 1)};
+         xl = std::log(rcens_mat(k,0) / beta2_vec[k] + 1);
+         xu = std::log(rcens_mat(k,1) / beta2_vec[k] + 1);
          
        } else if (gfun_name == "lognormal") {
-         double xl{pow(std::log(rcens_mat(k,0) + 1), beta2_vec[k])};
-         double xu{pow(std::log(rcens_mat(k,1) + 1), beta2_vec[k])};
+         xl = pow(std::log(rcens_mat(k,0) + 1), beta2_vec[k]);
+         xu = pow(std::log(rcens_mat(k,1) + 1), beta2_vec[k]);
          
        } else if (gfun_name == "loglogistic") {
-         double xl{std::log(pow(rcens_mat(k,0) / beta2_mat(k,0), beta2_mat(k,1)) + 1)};
-         double xu{std::log(pow(rcens_mat(k,1) / beta2_mat(k,0), beta2_mat(k,1)) + 1)};
+         xl = std::log(pow(rcens_mat(k,0) / beta2_mat(k,0), beta2_mat(k,1)) + 1);
+         xu = std::log(pow(rcens_mat(k,1) / beta2_mat(k,0), beta2_mat(k,1)) + 1);
          
        } else if (gfun_name == "gompertz") {
-         double xl{(exp(rcens_mat(k,0) * beta2_vec[k]) - 1) / beta2_vec[k]};
-         double xu{(exp(rcens_mat(k,1) * beta2_vec[k]) - 1) / beta2_vec[k]};
+         xl = (exp(rcens_mat(k,0) * beta2_vec[k]) - 1) / beta2_vec[k];
+         xu = (exp(rcens_mat(k,1) * beta2_vec[k]) - 1) / beta2_vec[k];
          
        }
        
