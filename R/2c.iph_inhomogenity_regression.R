@@ -4,6 +4,7 @@
 #' @param y Vector or data.
 #' @param X Model matrix (no intercept needed).
 #' @param B0 Initial regression coefficients (optional).
+#' @param lasso Lasso penalty smoothness parameter (optional).
 #' @param X2 Model matrix for the inhomogeneity parameter (no intercept needed).
 #' @param prop_f Regression function for the intensity function.
 #' @param inhom_f Regression function for the intensity function.
@@ -45,6 +46,7 @@ setMethod(
            prop_f = NULL,
            inhom_f = NULL,
            B0 = numeric(0),
+           lasso = 0,
            stepsEM = 1000,
            methods = c("RK", "UNI"),
            rkstep = NA,
@@ -153,7 +155,7 @@ setMethod(
         beta1 <- head(beta,length(obs)) 
         beta2 <- if(rightCensored){tail(beta, length(rcens))}else{tail(beta, nrow(rcens))}
         
-        return(LL_base(h, alpha, S, beta1, beta2, obs, weight, rcens, rcweight, scale1, scale2, gfun_name))
+        return(LL_base(h, alpha, S, beta1, beta2, obs, weight, rcens, rcweight, scale1, scale2, gfun_name)-lasso*sum(abs(theta)))
       }
     }
     
