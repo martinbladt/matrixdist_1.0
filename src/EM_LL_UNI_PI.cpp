@@ -23,7 +23,8 @@ using namespace Rcpp;
  //' @param gfun_name Name of the transformation function to be applied to observations (e.g., "scale", "log", "sqrt").
  //' 
  // [[Rcpp::export]]
- double logLikelihood_UNIs_PI(double h, arma::vec & alpha,
+ double logLikelihood_UNIs_PI(double h,
+                              arma::vec & alpha,
                               arma::mat & S,
                               SEXP beta1,
                               SEXP beta2,
