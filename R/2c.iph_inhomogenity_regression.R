@@ -42,7 +42,9 @@ setMethod(
            rcen = numeric(0),
            rcenweight = numeric(0),
            X = numeric(0),
+           intercept_X = F,
            X2 = NULL,
+           intercept_X2 = F,
            prop_f = NULL,
            inhom_f = NULL,
            B0 = numeric(0),
@@ -76,6 +78,13 @@ setMethod(
     if(is.null(X2)){X2 <- X}
     X <- as.matrix(X)
     X2 <- as.matrix(X2)
+    
+    if (intercept_X) {
+      X <- cbind(1, X)
+    }
+    if (intercept_X2) {
+      X2 <- cbind(1, X2)
+    }
     
     if (methods[2] == "RK") {
       stop("For second method, select UNI or PADE (ordering avoided)")
@@ -139,6 +148,7 @@ setMethod(
       
       LL <- function(h, alpha, S, theta, obs, weight, rcens, rcweight, X, X2, gfun_name) {
         
+        
         B <- head(theta, ncol(X)) 
         gamma <- tail(theta, ncol(X2)) 
         
@@ -155,7 +165,18 @@ setMethod(
         beta1 <- head(beta,length(obs)) 
         beta2 <- if(rightCensored){tail(beta, length(rcens))}else{tail(beta, nrow(rcens))}
         
-        return(LL_base(h, alpha, S, beta1, beta2, obs, weight, rcens, rcweight, scale1, scale2, gfun_name)-lasso*sum(abs(theta)))
+        if(intercept_X & intercept_X2){
+          shrink <- sum(abs(theta[-c(1,ncol(X)+1)]))
+        }else if(intercept_X & intercept_X2 == FALSE){
+          shrink <- sum(abs(theta[-1]))
+        }else if(intercept_X == FALSE & intercept_X2){
+          shrink <- sum(abs(theta[-c(ncol(X)+1)]))
+        }else{
+          shrink <- sum(abs(theta))
+        }
+        
+        
+        return(LL_base(h, alpha, S, beta1, beta2, obs, weight, rcens, rcweight, scale1, scale2, gfun_name)-lasso*shrink)
       }
     }
     
