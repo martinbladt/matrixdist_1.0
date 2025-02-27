@@ -11,10 +11,16 @@
   rcen = numeric(0),
   rcenweight = numeric(0),
   X = numeric(0),
+  intercept_X = F,
   X2 = NULL,
+  intercept_X2 = F,
   prop_f = NULL,
   inhom_f = NULL,
   B0 = numeric(0),
+  lasso_X = 0,
+  lasso_X2 = 0,
+  lasso_X_alpha = 1,
+  lasso_X2_alpha = 1,
   stepsEM = 1000,
   methods = c("RK", "UNI"),
   rkstep = NA,
@@ -23,6 +29,8 @@
   maxit = 50,
   reltol = 1e-08,
   break_tol = 1e-08,
+  save_tmp = F,
+  assign_lab = "reg_tmp",
   break_n = stepsEM,
   every = 10
 )
@@ -40,13 +48,25 @@
 
 \item{X}{Model matrix (no intercept needed).}
 
+\item{intercept_X}{Logical value indicating if an intercept should be included in the model matrix X.}
+
 \item{X2}{Model matrix for the inhomogeneity parameter (no intercept needed).}
+
+\item{intercept_X2}{Logical value indicating if an intercept should be included in the model matrix X2.}
 
 \item{prop_f}{Regression function for the intensity function.}
 
 \item{inhom_f}{Regression function for the intensity function.}
 
 \item{B0}{Initial regression coefficients (optional).}
+
+\item{lasso_X}{Lasso penalty smoothness parameter for coefficients linked with X (optional).}
+
+\item{lasso_X2}{Lasso penalty smoothness parameter for coefficients linked with X2 (optional).}
+
+\item{lasso_X_alpha}{Lasso order for coefficients linked with X (optional).}
+
+\item{lasso_X2_alpha}{Lasso order for coefficients linked with X2 (optional).}
 
 \item{stepsEM}{Number of EM steps to be performed.}
 
@@ -61,6 +81,14 @@
 \item{maxit}{Maximum number of iterations when optimizing g function.}
 
 \item{reltol}{Relative tolerance when optimizing g function.}
+
+\item{break_tol}{Tolerance to stop the algorithm if the likelihood regresses.}
+
+\item{save_tmp}{Logical value indicating if the last iteration should be saved.}
+
+\item{assign_lab}{Label to assign the last iteration to the global environment.}
+
+\item{break_n}{Number of iterations to wait before stopping the algorithm if the likelihood decreases.}
 
 \item{every}{Number of iterations between likelihood display updates.}
 }

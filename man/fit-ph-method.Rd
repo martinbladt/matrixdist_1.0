@@ -46,6 +46,8 @@
 
 \item{every}{Number of iterations between likelihood display updates.}
 
+\item{optim_method}{Optimization method for optim function.}
+
 \item{r}{Sub-sampling proportion for stochastic EM, defaults to 1.}
 }
 \value{

@@ -410,6 +410,7 @@ setMethod("quan", c(x = "ph"), function(x,
 #' @param methods Methods to use for matrix exponential calculation: RM, UNI or PADE.
 #' @param rkstep Runge-Kutta step size (optional).
 #' @param uni_epsilon Epsilon parameter for uniformization method.
+#' @param optim_method Optimization method for optim function.
 #' @param maxit Maximum number of iterations when optimizing g function.
 #' @param reltol Relative tolerance when optimizing g function.
 #' @param every Number of iterations between likelihood display updates.

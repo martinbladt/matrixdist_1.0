@@ -883,261 +883,663 @@ expm_terms <- function(h, S, obs) {
     .Call(`_matrixdist_expm_terms`, h, S, obs)
 }
 
-#' Loglikelihood of PI using uniformization, with customizable observation transformation.
-NULL
-
+#' Loglikelihood of PI using uniformization, with customizable observation transformation, automatically handling right-censored or interval-censored data based on the structure of `rcens`.
+#'
+#' Loglikelihood for a sample.
+#'
+#' @param h Positive parameter.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity matrix.
+#' @param beta1 Parameter of transformation (uncensored observations).
+#' @param beta2 Parameter of transformation (censored observations).
+#' @param obs The observations.
+#' @param weight Weights of the observations.
+#' @param rcens Censored observations (either numeric vector for right censoring or matrix for interval censoring).
+#' @param rcweight Weights of the censored observations.
+#' @param scale1 Scale for observations.
+#' @param scale2 Scale for censored observations.
+#' @param gfun_name Name of the transformation function to be applied to observations (e.g., "scale", "log", "sqrt").
+#' 
+#' @return The loglikelihood of censored the sample.
 logLikelihood_UNIs_PI <- function(h, alpha, S, beta1, beta2, obs, weight, rcens, rcweight, scale1, scale2, gfun_name) {
     .Call(`_matrixdist_logLikelihood_UNIs_PI`, h, alpha, S, beta1, beta2, obs, weight, rcens, rcweight, scale1, scale2, gfun_name)
 }
 
 #' Loglikelihood of matrix-Weibull using uniformization, when the intensity function is regressed on covariate informatino
-NULL
-
-#' Loglikelihood of matrix-Pareto using uniformization, when the intensity function is regressed on covariate informatino
-NULL
-
-#' Loglikelihood of matrix-lognormal using uniformization, when the intensity function is regressed on covariate informatino
-NULL
-
-#' Loglikelihood of matrix-loglogistic using uniformization, when the intensity function is regressed on covariate informatino
-NULL
-
-#' Loglikelihood of matrix-Gompertz using uniformization, when the intensity function is regressed on covariate informatino
-NULL
-
-#' Loglikelihood of matrix-GEV using uniformization, when the intensity function is regressed on covariate informatino
-NULL
-
-#' Loglikelihood of PI with matrix-Weibull using uniformization, when the intensity function is regressed on covariate informatino
-NULL
-
-#' Loglikelihood of PI with matrix-Pareto using uniformization, when the intensity function is regressed on covariate informatino
-NULL
-
-#' Loglikelihood of PI with matrix-lognormal using uniformization, when the intensity function is regressed on covariate informatino
-NULL
-
-#' Loglikelihood of PI with matrix-loglogistic using uniformization, when the intensity function is regressed on covariate informatino
-NULL
-
-#' Loglikelihood of PI with matrix-Gompertz using uniformization, when the intensity function is regressed on covariate informatino
-NULL
-
-#' Loglikelihood of matrix-Weibull using uniformization, when the intensity function is regressed on covariate informatino
-NULL
-
-#' Loglikelihood of matrix-Pareto using uniformization, when the intensity function is regressed on covariate informatino
-NULL
-
-#' Loglikelihood of matrix-lognormal using uniformization, when the intensity function is regressed on covariate informatino
-NULL
-
-#' Loglikelihood of matrix-loglogistic using uniformization, when the intensity function is regressed on covariate informatino
-NULL
-
-#' Loglikelihood of matrix-Gompertz using uniformization, when the intensity function is regressed on covariate informatino
-NULL
-
-#' Loglikelihood of matrix-GEV using uniformization, when the intensity function is regressed on covariate informatino
-NULL
-
-#' Loglikelihood of PI with matrix-Weibull using uniformization, when the intensity function is regressed on covariate informatino
-NULL
-
-#' Loglikelihood of PI with matrix-Pareto using uniformization, when the intensity function is regressed on covariate informatino
-NULL
-
-#' Loglikelihood of PI with matrix-lognormal using uniformization, when the intensity function is regressed on covariate informatino
-NULL
-
-#' Loglikelihood of PI with matrix-loglogistic using uniformization, when the intensity function is regressed on covariate informatino
-NULL
-
-#' Loglikelihood of PI with matrix-Gompertz using uniformization, when the intensity function is regressed on covariate informatino
-NULL
-
+#' 
+#' Loglikelihood for a sample.
+#' 
+#' @param h Positive parameter.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity matrix.
+#' @param beta Parameter of transformation.
+#' @param obs The observations.
+#' @param weight Weights of the observations.
+#' @param rcens censored observations.
+#' @param rcweight Weights of the censored observations.
+#' 
 logLikelihoodMweibull_UNI_inhom <- function(h, alpha, S, beta, obs, weight, rcens, rcweight) {
     .Call(`_matrixdist_logLikelihoodMweibull_UNI_inhom`, h, alpha, S, beta, obs, weight, rcens, rcweight)
 }
 
+#' Loglikelihood of matrix-Pareto using uniformization, when the intensity function is regressed on covariate informatino
+#' 
+#' Loglikelihood for a sample.
+#' 
+#' @param h Positive parameter.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity matrix.
+#' @param beta Parameter of transformation.
+#' @param obs The observations.
+#' @param weight Weights of the observations.
+#' @param rcens censored observations.
+#' @param rcweight Weights of the censored observations.
+#' 
 logLikelihoodMpareto_UNI_inhom <- function(h, alpha, S, beta, obs, weight, rcens, rcweight) {
     .Call(`_matrixdist_logLikelihoodMpareto_UNI_inhom`, h, alpha, S, beta, obs, weight, rcens, rcweight)
 }
 
+#' Loglikelihood of matrix-lognormal using uniformization, when the intensity function is regressed on covariate informatino
+#' 
+#' Loglikelihood for a sample.
+#' 
+#' @param h Positive parameter.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity matrix.
+#' @param beta Parameter of transformation.
+#' @param obs The observations.
+#' @param weight Weights of the observations.
+#' @param rcens censored observations.
+#' @param rcweight Weights of the censored observations.
+#' 
 logLikelihoodMlognormal_UNI_inhom <- function(h, alpha, S, beta, obs, weight, rcens, rcweight) {
     .Call(`_matrixdist_logLikelihoodMlognormal_UNI_inhom`, h, alpha, S, beta, obs, weight, rcens, rcweight)
 }
 
+#' Loglikelihood of matrix-loglogistic using uniformization, when the intensity function is regressed on covariate informatino
+#' 
+#' Loglikelihood for a sample.
+#' 
+#' @param h Positive parameter.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity matrix.
+#' @param beta Parameter of transformation.
+#' @param obs The observations.
+#' @param weight Weights of the observations.
+#' @param rcens censored observations.
+#' @param rcweight Weights of the censored observations.
+#' 
 logLikelihoodMloglogistic_UNI_inhom <- function(h, alpha, S, beta, obs, weight, rcens, rcweight) {
     .Call(`_matrixdist_logLikelihoodMloglogistic_UNI_inhom`, h, alpha, S, beta, obs, weight, rcens, rcweight)
 }
 
+#' Loglikelihood of matrix-Gompertz using uniformization, when the intensity function is regressed on covariate informatino
+#' 
+#' Loglikelihood for a sample.
+#' 
+#' @param h Positive parameter.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity matrix.
+#' @param beta Parameter of transformation.
+#' @param obs The observations.
+#' @param weight Weights of the observations.
+#' @param rcens censored observations.
+#' @param rcweight Weights of the censored observations.
+#' 
 logLikelihoodMgompertz_UNI_inhom <- function(h, alpha, S, beta, obs, weight, rcens, rcweight) {
     .Call(`_matrixdist_logLikelihoodMgompertz_UNI_inhom`, h, alpha, S, beta, obs, weight, rcens, rcweight)
 }
 
+#' Loglikelihood of matrix-GEV using uniformization, when the intensity function is regressed on covariate informatino
+#' 
+#' Loglikelihood for a sample.
+#' 
+#' @param h Positive parameter.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity matrix.
+#' @param beta Parameter of transformation.
+#' @param obs The observations.
+#' @param weight Weights of the observations.
+#' @param rcens censored observations.
+#' @param rcweight Weights of the censored observations.
+#' 
 logLikelihoodMgev_UNI_inhom <- function(h, alpha, S, beta, obs, weight, rcens, rcweight) {
     .Call(`_matrixdist_logLikelihoodMgev_UNI_inhom`, h, alpha, S, beta, obs, weight, rcens, rcweight)
 }
 
+#' Loglikelihood of PI with matrix-Weibull using uniformization, when the intensity function is regressed on covariate informatino
+#' 
+#' Loglikelihood for a sample.
+#' 
+#' @param h Positive parameter.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity matrix.
+#' @param beta Parameter of transformation.
+#' @param obs The observations.
+#' @param weight Weights of the observations.
+#' @param rcens Censored observations.
+#' @param rcweight Weights of the censored observations.
+#' @param scale1 Scale for observations.
+#' @param scale2 Scale for censored observations.
+#' 
 logLikelihoodMweibull_UNIs_inhom <- function(h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2) {
     .Call(`_matrixdist_logLikelihoodMweibull_UNIs_inhom`, h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2)
 }
 
+#' Loglikelihood of PI with matrix-Pareto using uniformization, when the intensity function is regressed on covariate informatino
+#' 
+#' Loglikelihood for a sample.
+#' 
+#' @param h Positive parameter.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity matrix.
+#' @param beta Parameter of transformation.
+#' @param obs The observations.
+#' @param weight Weights of the observations.
+#' @param rcens Censored observations.
+#' @param rcweight Weights of the censored observations.
+#' @param scale1 Scale for observations.
+#' @param scale2 Scale for censored observations.
+#' 
 logLikelihoodMpareto_UNIs_inhom <- function(h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2) {
     .Call(`_matrixdist_logLikelihoodMpareto_UNIs_inhom`, h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2)
 }
 
+#' Loglikelihood of PI with matrix-lognormal using uniformization, when the intensity function is regressed on covariate informatino
+#' 
+#' Loglikelihood for a sample.
+#' 
+#' @param h Positive parameter.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity matrix.
+#' @param beta Parameter of transformation.
+#' @param obs The observations.
+#' @param weight Weights of the observations.
+#' @param rcens Censored observations.
+#' @param rcweight Weights of the censored observations.
+#' @param scale1 Scale for observations.
+#' @param scale2 Scale for censored observations.
+#' 
 logLikelihoodMlognormal_UNIs_inhom <- function(h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2) {
     .Call(`_matrixdist_logLikelihoodMlognormal_UNIs_inhom`, h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2)
 }
 
+#' Loglikelihood of PI with matrix-loglogistic using uniformization, when the intensity function is regressed on covariate informatino
+#' 
+#' Loglikelihood for a sample.
+#' 
+#' @param h Positive parameter.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity matrix.
+#' @param beta Parameter of transformation.
+#' @param obs The observations.
+#' @param weight Weights of the observations.
+#' @param rcens Censored observations.
+#' @param rcweight Weights of the censored observations.
+#' @param scale1 Scale for observations.
+#' @param scale2 Scale for censored observations.
+#' 
 logLikelihoodMloglogistic_UNIs_inhom <- function(h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2) {
     .Call(`_matrixdist_logLikelihoodMloglogistic_UNIs_inhom`, h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2)
 }
 
+#' Loglikelihood of PI with matrix-Gompertz using uniformization, when the intensity function is regressed on covariate informatino
+#' 
+#' Loglikelihood for a sample.
+#' 
+#' @param h Positive parameter.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity matrix.
+#' @param beta Parameter of transformation.
+#' @param obs The observations.
+#' @param weight Weights of the observations.
+#' @param rcens Censored observations.
+#' @param rcweight Weights of the censored observations.
+#' @param scale1 Scale for observations.
+#' @param scale2 Scale for censored observations.
+#' 
 logLikelihoodMgompertz_UNIs_inhom <- function(h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2) {
     .Call(`_matrixdist_logLikelihoodMgompertz_UNIs_inhom`, h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2)
 }
 
+#' Loglikelihood of matrix-Weibull using uniformization, when the intensity function is regressed on covariate informatino
+#' 
+#' Loglikelihood for a sample.
+#' 
+#' @param h Positive parameter.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity matrix.
+#' @param beta Parameter of transformation.
+#' @param obs The observations.
+#' @param weight Weights of the observations.
+#' @param rcens Interval censored observations.
+#' @param rcweight Weights of the censored observations.
+#' 
 logLikelihoodMweibull_UNI_inhom_intCens <- function(h, alpha, S, beta, obs, weight, rcens, rcweight) {
     .Call(`_matrixdist_logLikelihoodMweibull_UNI_inhom_intCens`, h, alpha, S, beta, obs, weight, rcens, rcweight)
 }
 
+#' Loglikelihood of matrix-Pareto using uniformization, when the intensity function is regressed on covariate informatino
+#' 
+#' Loglikelihood for a sample.
+#' 
+#' @param h Positive parameter.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity matrix.
+#' @param beta Parameter of transformation.
+#' @param obs The observations.
+#' @param weight Weights of the observations.
+#' @param rcens Interval censored observations.
+#' @param rcweight Weights of the censored observations.
+#' 
 logLikelihoodMpareto_UNI_inhom_intCens <- function(h, alpha, S, beta, obs, weight, rcens, rcweight) {
     .Call(`_matrixdist_logLikelihoodMpareto_UNI_inhom_intCens`, h, alpha, S, beta, obs, weight, rcens, rcweight)
 }
 
+#' Loglikelihood of matrix-lognormal using uniformization, when the intensity function is regressed on covariate informatino
+#' 
+#' Loglikelihood for a sample.
+#' 
+#' @param h Positive parameter.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity matrix.
+#' @param beta Parameter of transformation.
+#' @param obs The observations.
+#' @param weight Weights of the observations.
+#' @param rcens Interval censored observations.
+#' @param rcweight Weights of the censored observations.
+#' 
 logLikelihoodMlognormal_UNI_inhom_intCens <- function(h, alpha, S, beta, obs, weight, rcens, rcweight) {
     .Call(`_matrixdist_logLikelihoodMlognormal_UNI_inhom_intCens`, h, alpha, S, beta, obs, weight, rcens, rcweight)
 }
 
+#' Loglikelihood of matrix-loglogistic using uniformization, when the intensity function is regressed on covariate informatino
+#' 
+#' Loglikelihood for a sample.
+#' 
+#' @param h Positive parameter.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity matrix.
+#' @param beta Parameter of transformation.
+#' @param obs The observations.
+#' @param weight Weights of the observations.
+#' @param rcens Interval censored observations.
+#' @param rcweight Weights of the censored observations.
+#' 
 logLikelihoodMloglogistic_UNI_inhom_intCens <- function(h, alpha, S, beta, obs, weight, rcens, rcweight) {
     .Call(`_matrixdist_logLikelihoodMloglogistic_UNI_inhom_intCens`, h, alpha, S, beta, obs, weight, rcens, rcweight)
 }
 
+#' Loglikelihood of matrix-Gompertz using uniformization, when the intensity function is regressed on covariate informatino
+#' 
+#' Loglikelihood for a sample.
+#' 
+#' @param h Positive parameter.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity matrix.
+#' @param beta Parameter of transformation.
+#' @param obs The observations.
+#' @param weight Weights of the observations.
+#' @param rcens Interval censored observations.
+#' @param rcweight Weights of the censored observations.
+#' 
 logLikelihoodMgompertz_UNI_inhom_intCens <- function(h, alpha, S, beta, obs, weight, rcens, rcweight) {
     .Call(`_matrixdist_logLikelihoodMgompertz_UNI_inhom_intCens`, h, alpha, S, beta, obs, weight, rcens, rcweight)
 }
 
+#' Loglikelihood of matrix-GEV using uniformization, when the intensity function is regressed on covariate informatino
+#' 
+#' Loglikelihood for a sample.
+#' 
+#' @param h Positive parameter.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity matrix.
+#' @param beta Parameter of transformation.
+#' @param obs The observations.
+#' @param weight Weights of the observations.
+#' @param rcens Interval censored observations.
+#' @param rcweight Weights of the censored observations.
+#' 
 logLikelihoodMgev_UNI_inhom_intCens <- function(h, alpha, S, beta, obs, weight, rcens, rcweight) {
     .Call(`_matrixdist_logLikelihoodMgev_UNI_inhom_intCens`, h, alpha, S, beta, obs, weight, rcens, rcweight)
 }
 
+#' Loglikelihood of PI with matrix-Weibull using uniformization, when the intensity function is regressed on covariate informatino
+#' 
+#' Loglikelihood for a sample.
+#' 
+#' @param h Positive parameter.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity matrix.
+#' @param beta Parameter of transformation.
+#' @param obs The observations.
+#' @param weight Weights of the observations.
+#' @param rcens Interval censored observations.
+#' @param rcweight Weights of the censored observations.
+#' @param scale1 Scale for observations.
+#' @param scale2 Scale for censored observations.
+#' 
 logLikelihoodMweibull_UNIs_inhom_intCens <- function(h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2) {
     .Call(`_matrixdist_logLikelihoodMweibull_UNIs_inhom_intCens`, h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2)
 }
 
+#' Loglikelihood of PI with matrix-Pareto using uniformization, when the intensity function is regressed on covariate informatino
+#' 
+#' Loglikelihood for a sample.
+#' 
+#' @param h Positive parameter.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity matrix.
+#' @param beta Parameter of transformation.
+#' @param obs The observations.
+#' @param weight Weights of the observations.
+#' @param rcens Interval censored observations.
+#' @param rcweight Weights of the censored observations.
+#' @param scale1 Scale for observations.
+#' @param scale2 Scale for censored observations.
+#' 
 logLikelihoodMpareto_UNIs_inhom_intCens <- function(h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2) {
     .Call(`_matrixdist_logLikelihoodMpareto_UNIs_inhom_intCens`, h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2)
 }
 
+#' Loglikelihood of PI with matrix-lognormal using uniformization, when the intensity function is regressed on covariate informatino
+#' 
+#' Loglikelihood for a sample.
+#' 
+#' @param h Positive parameter.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity matrix.
+#' @param beta Parameter of transformation.
+#' @param obs The observations.
+#' @param weight Weights of the observations.
+#' @param rcens Interval censored observations.
+#' @param rcweight Weights of the censored observations.
+#' @param scale1 Scale for observations.
+#' @param scale2 Scale for censored observations.
+#' 
 logLikelihoodMlognormal_UNIs_inhom_intCens <- function(h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2) {
     .Call(`_matrixdist_logLikelihoodMlognormal_UNIs_inhom_intCens`, h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2)
 }
 
+#' Loglikelihood of PI with matrix-loglogistic using uniformization, when the intensity function is regressed on covariate informatino
+#' 
+#' Loglikelihood for a sample.
+#' 
+#' @param h Positive parameter.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity matrix.
+#' @param beta Parameter of transformation.
+#' @param obs The observations.
+#' @param weight Weights of the observations.
+#' @param rcens Interval censored observations.
+#' @param rcweight Weights of the censored observations.
+#' @param scale1 Scale for observations.
+#' @param scale2 Scale for censored observations.
+#' 
 logLikelihoodMloglogistic_UNIs_inhom_intCens <- function(h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2) {
     .Call(`_matrixdist_logLikelihoodMloglogistic_UNIs_inhom_intCens`, h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2)
 }
 
+#' Loglikelihood of PI with matrix-Gompertz using uniformization, when the intensity function is regressed on covariate informatino
+#' 
+#' Loglikelihood for a sample.
+#' 
+#' @param h Positive parameter.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity matrix.
+#' @param beta Parameter of transformation.
+#' @param obs The observations.
+#' @param weight Weights of the observations.
+#' @param rcens Interval censored observations.
+#' @param rcweight Weights of the censored observations.
+#' @param scale1 Scale for observations.
+#' @param scale2 Scale for censored observations.
+#' 
 logLikelihoodMgompertz_UNIs_inhom_intCens <- function(h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2) {
     .Call(`_matrixdist_logLikelihoodMgompertz_UNIs_inhom_intCens`, h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2)
 }
 
 #' EM for phase-type using uniformization for matrix exponential
-NULL
-
-#' Loglikelihood of phase-type using uniformization
-NULL
-
-#' Loglikelihood of matrix-Weibull using uniformization
-NULL
-
-#' Loglikelihood of matrix-Pareto using uniformization
-NULL
-
-#' Loglikelihood of matrix-lognormal using uniformization
-NULL
-
-#' Loglikelihood of matrix-loglogistic using uniformization
-NULL
-
-#' Loglikelihood of matrix-Gompertz using uniformization
-NULL
-
-#' Loglikelihood of matrix-GEV using uniformization
-NULL
-
-#' Loglikelihood of PI with phase-type using uniformization
-NULL
-
-#' Loglikelihood of PI with matrix-Weibull using uniformization
-NULL
-
-#' Loglikelihood of PI with matrix-Pareto using uniformization
-NULL
-
-#' Loglikelihood of PI with matrix-lognormal using uniformization
-NULL
-
-#' Loglikelihood of PI with matrix-loglogistic using uniformization
-NULL
-
-#' Loglikelihood of PI with matrix-Gompertz using Uniformization
-NULL
-
+#' 
+#' @param h Positive parameter.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity matrix.
+#' @param obs The observations.
+#' @param weight The weights for the observations.
+#' @param rcens Matrix of censored observations' bounds. Each row corresponds to a given observation.
+#' @param rcweight The weights for the censored observations.
+#' 
 EMstep_UNI_intervalCensoring <- function(h, alpha, S, obs, weight, rcens, rcweight) {
     invisible(.Call(`_matrixdist_EMstep_UNI_intervalCensoring`, h, alpha, S, obs, weight, rcens, rcweight))
 }
 
+#' Loglikelihood of phase-type using uniformization
+#' 
+#' Loglikelihood for a sample.
+#' 
+#' @param h Positive parameter.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity matrix.
+#' @param obs The observations.
+#' @param weight Weights of the observations.
+#' @param rcens Interval censored observations.
+#' @param rcweight Weights of the censored observations.
+#' 
 logLikelihoodPH_UNI_intervalCensoring <- function(h, alpha, S, obs, weight, rcens, rcweight) {
     .Call(`_matrixdist_logLikelihoodPH_UNI_intervalCensoring`, h, alpha, S, obs, weight, rcens, rcweight)
 }
 
+#' Loglikelihood of matrix-Weibull using uniformization
+#' 
+#' Loglikelihood for a sample.
+#' 
+#' @param h Positive parameter.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity matrix.
+#' @param beta Parameter of transformation.
+#' @param obs The observations.
+#' @param weight Weights of the observations.
+#' @param rcens Interval censored observations.
+#' @param rcweight Weights of the censored observations.
+#' 
 logLikelihoodMweibull_UNI_intervalCensoring <- function(h, alpha, S, beta, obs, weight, rcens, rcweight) {
     .Call(`_matrixdist_logLikelihoodMweibull_UNI_intervalCensoring`, h, alpha, S, beta, obs, weight, rcens, rcweight)
 }
 
+#' Loglikelihood of matrix-Pareto using uniformization
+#' 
+#' Loglikelihood for a sample.
+#' 
+#' @param h Positive parameter.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity matrix.
+#' @param beta Parameter of transformation.
+#' @param obs The observations.
+#' @param weight Weights of the observations.
+#' @param rcens Interval censored observations.
+#' @param rcweight Weights of the censored observations.
+#' 
 logLikelihoodMpareto_UNI_intervalCensoring <- function(h, alpha, S, beta, obs, weight, rcens, rcweight) {
     .Call(`_matrixdist_logLikelihoodMpareto_UNI_intervalCensoring`, h, alpha, S, beta, obs, weight, rcens, rcweight)
 }
 
+#' Loglikelihood of matrix-lognormal using uniformization
+#' 
+#' Loglikelihood for a sample.
+#' 
+#' @param h Positive parameter.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity matrix.
+#' @param beta Parameter of transformation.
+#' @param obs The observations.
+#' @param weight Weights of the observations.
+#' @param rcens Interval censored observations.
+#' @param rcweight Weights of the censored observations.
+#' 
 logLikelihoodMlognormal_UNI_intervalCensoring <- function(h, alpha, S, beta, obs, weight, rcens, rcweight) {
     .Call(`_matrixdist_logLikelihoodMlognormal_UNI_intervalCensoring`, h, alpha, S, beta, obs, weight, rcens, rcweight)
 }
 
+#' Loglikelihood of matrix-loglogistic using uniformization
+#' 
+#' Loglikelihood for a sample.
+#' 
+#' @param h Positive parameter.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity matrix.
+#' @param beta Parameter of transformation.
+#' @param obs The observations.
+#' @param weight Weights of the observations.
+#' @param rcens Interval censored observations.
+#' @param rcweight Weights of the censored observations.
+#' 
 logLikelihoodMloglogistic_UNI_intervalCensoring <- function(h, alpha, S, beta, obs, weight, rcens, rcweight) {
     .Call(`_matrixdist_logLikelihoodMloglogistic_UNI_intervalCensoring`, h, alpha, S, beta, obs, weight, rcens, rcweight)
 }
 
+#' Loglikelihood of matrix-Gompertz using uniformization
+#' 
+#' Loglikelihood for a sample.
+#' 
+#' @param h Positive parameter.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity matrix.
+#' @param beta Parameter of transformation.
+#' @param obs The observations.
+#' @param weight Weights of the observations.
+#' @param rcens Interval censored observations.
+#' @param rcweight Weights of the censored observations.
+#' 
 logLikelihoodMgompertz_UNI_intervalCensoring <- function(h, alpha, S, beta, obs, weight, rcens, rcweight) {
     .Call(`_matrixdist_logLikelihoodMgompertz_UNI_intervalCensoring`, h, alpha, S, beta, obs, weight, rcens, rcweight)
 }
 
+#' Loglikelihood of matrix-GEV using uniformization
+#' 
+#' Loglikelihood for a sample.
+#' 
+#' @param h Positive parameter.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity matrix.
+#' @param beta Parameter of transformation.
+#' @param obs The observations.
+#' @param weight Weights of the observations.
+#' @param rcens Interval censored observations.
+#' @param rcweight Weights of the censored observations.
+#' 
 logLikelihoodMgev_UNI_intervalCensoring <- function(h, alpha, S, beta, obs, weight, rcens, rcweight) {
     .Call(`_matrixdist_logLikelihoodMgev_UNI_intervalCensoring`, h, alpha, S, beta, obs, weight, rcens, rcweight)
 }
 
+#' Loglikelihood of PI with phase-type using uniformization
+#' 
+#' Loglikelihood for a sample.
+#' 
+#' @param h Positive parameter.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity matrix.
+#' @param obs The observations.
+#' @param weight Weights of the observations.
+#' @param rcens Interval censored observations.
+#' @param rcweight Weights of the censored observations.
+#' @param scale1 Scale for observations.
+#' @param scale2 Scale for censored observations.
+#' 
 logLikelihoodPH_UNIs_intervalCensoring <- function(h, alpha, S, obs, weight, rcens, rcweight, scale1, scale2) {
     .Call(`_matrixdist_logLikelihoodPH_UNIs_intervalCensoring`, h, alpha, S, obs, weight, rcens, rcweight, scale1, scale2)
 }
 
+#' Loglikelihood of PI with matrix-Weibull using uniformization
+#' 
+#' Loglikelihood for a sample.
+#' 
+#' @param h Positive parameter.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity matrix.
+#' @param beta Parameter of transformation.
+#' @param obs The observations.
+#' @param weight Weights of the observations.
+#' @param rcens Interval censored observations.
+#' @param rcweight Weights of the censored observations.
+#' @param scale1 Scale for observations.
+#' @param scale2 Scale for censored observations.
+#' 
 logLikelihoodMweibull_UNIs_intervalCensoring <- function(h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2) {
     .Call(`_matrixdist_logLikelihoodMweibull_UNIs_intervalCensoring`, h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2)
 }
 
+#' Loglikelihood of PI with matrix-Pareto using uniformization
+#' 
+#' Loglikelihood for a sample.
+#' 
+#' @param h Positive parameter.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity matrix.
+#' @param beta Parameter of transformation.
+#' @param obs The observations.
+#' @param weight Weights of the observations.
+#' @param rcens Interval censored observations.
+#' @param rcweight Weights of the censored observations.
+#' @param scale1 Scale for observations.
+#' @param scale2 Scale for censored observations.
+#' 
 logLikelihoodMpareto_UNIs_intervalCensoring <- function(h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2) {
     .Call(`_matrixdist_logLikelihoodMpareto_UNIs_intervalCensoring`, h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2)
 }
 
+#' Loglikelihood of PI with matrix-lognormal using uniformization
+#' 
+#' Loglikelihood for a sample.
+#' 
+#' @param h Positive parameter.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity matrix.
+#' @param beta Parameter of transformation.
+#' @param obs The observations.
+#' @param weight Weights of the observations.
+#' @param rcens Interval censored observations.
+#' @param rcweight Weights of the censored observations.
+#' @param scale1 Scale for observations.
+#' @param scale2 Scale for censored observations.
+#' 
 logLikelihoodMlognormal_UNIs_intervalCensoring <- function(h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2) {
     .Call(`_matrixdist_logLikelihoodMlognormal_UNIs_intervalCensoring`, h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2)
 }
 
+#' Loglikelihood of PI with matrix-loglogistic using uniformization
+#' 
+#' Loglikelihood for a sample.
+#' 
+#' @param h Positive parameter.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity matrix.
+#' @param beta Parameter of transformation.
+#' @param obs The observations.
+#' @param weight Weights of the observations.
+#' @param rcens Interval censored observations.
+#' @param rcweight Weights of the censored observations.
+#' @param scale1 Scale for observations.
+#' @param scale2 Scale for censored observations.
+#' 
 logLikelihoodMloglogistic_UNIs_intervalCensoring <- function(h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2) {
     .Call(`_matrixdist_logLikelihoodMloglogistic_UNIs_intervalCensoring`, h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2)
 }
 
+#' Loglikelihood of PI with matrix-Gompertz using Uniformization
+#' 
+#' Loglikelihood for a sample.
+#' 
+#' @param h Positive parameter.
+#' @param alpha Initial probabilities.
+#' @param S Sub-intensity matrix.
+#' @param beta Parameter of transformation.
+#' @param obs The observations.
+#' @param weight Weights of the observations.
+#' @param rcens Interval censored observations.
+#' @param rcweight Weights of the censored observations.
+#' @param scale1 Scale for observations.
+#' @param scale2 Scale for censored observations.
+#' 
 logLikelihoodMgompertz_UNIs_intervalCensoring <- function(h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2) {
     .Call(`_matrixdist_logLikelihoodMgompertz_UNIs_intervalCensoring`, h, alpha, S, beta, obs, weight, rcens, rcweight, scale1, scale2)
 }
@@ -2080,8 +2482,15 @@ sum_dph <- function(alpha1, S1, alpha2, S2) {
 
 #' Bivariate phase-type joint density of the common shock type
 #'
-NULL
-
+#' @param x Matrix of values.
+#' @param alpha Vector of initial probabilities.
+#' @param S Sub-intensity matrix.
+#' @param P Matrix.
+#' @param Q1 Sub-intensity matrix.
+#' @param Q2 Sub-intensity matrix.
+#' @return Joint density at \code{x}.
+#' @export
+#' 
 csph_density_par <- function(x, alpha, S, P, Q1, Q2) {
     .Call(`_matrixdist_csph_density_par`, x, alpha, S, P, Q1, Q2)
 }

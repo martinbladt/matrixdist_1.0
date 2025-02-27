@@ -24,17 +24,17 @@ arma::mat kron_sum2(arma::mat A, arma::mat B) {
 
 //' Bivariate phase-type joint density of the common shock type
 //'
- //' @param x Matrix of values.
- //' @param alpha Vector of initial probabilities.
- //' @param S Sub-intensity matrix.
- //' @param P Matrix.
- //' @param Q1 Sub-intensity matrix.
- //' @param Q2 Sub-intensity matrix.
- //' @return Joint density at \code{x}.
- //' @export
- //' 
- // [[Rcpp::export]]
- Rcpp::NumericVector csph_density_par(Rcpp::NumericMatrix x, arma::vec alpha, arma::mat S, arma::mat P, arma::mat Q1, arma::mat Q2) {
+//' @param x Matrix of values.
+//' @param alpha Vector of initial probabilities.
+//' @param S Sub-intensity matrix.
+//' @param P Matrix.
+//' @param Q1 Sub-intensity matrix.
+//' @param Q2 Sub-intensity matrix.
+//' @return Joint density at \code{x}.
+//' @export
+//' 
+// [[Rcpp::export]]
+Rcpp::NumericVector csph_density_par(Rcpp::NumericMatrix x, arma::vec alpha, arma::mat S, arma::mat P, arma::mat Q1, arma::mat Q2) {
    unsigned p1{S.n_rows};
    unsigned p2{Q1.n_rows};
    long n{x.nrow()};
@@ -86,4 +86,4 @@ arma::mat kron_sum2(arma::mat A, arma::mat B) {
   
 }
 return density;
- }
+}

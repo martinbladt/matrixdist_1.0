@@ -3,8 +3,13 @@
 #' @param x An object of class \linkS4class{ph}.
 #' @param y Vector or data.
 #' @param X Model matrix (no intercept needed).
+#' @param intercept_X Logical value indicating if an intercept should be included in the model matrix X.
+#' @param intercept_X2 Logical value indicating if an intercept should be included in the model matrix X2.
 #' @param B0 Initial regression coefficients (optional).
-#' @param lasso Lasso penalty smoothness parameter (optional).
+#' @param lasso_X Lasso penalty smoothness parameter for coefficients linked with X (optional).
+#' @param lasso_X2 Lasso penalty smoothness parameter for coefficients linked with X2 (optional).
+#' @param lasso_X_alpha Lasso order for coefficients linked with X (optional).
+#' @param lasso_X2_alpha Lasso order for coefficients linked with X2 (optional).
 #' @param X2 Model matrix for the inhomogeneity parameter (no intercept needed).
 #' @param prop_f Regression function for the intensity function.
 #' @param inhom_f Regression function for the intensity function.
@@ -19,6 +24,10 @@
 #' @param maxit Maximum number of iterations when optimizing g function.
 #' @param reltol Relative tolerance when optimizing g function.
 #' @param every Number of iterations between likelihood display updates.
+#' @param save_tmp Logical value indicating if the last iteration should be saved.
+#' @param assign_lab Label to assign the last iteration to the global environment.
+#' @param break_tol Tolerance to stop the algorithm if the likelihood regresses.
+#' @param break_n Number of iterations to wait before stopping the algorithm if the likelihood decreases.
 #'
 #' @return An object of class \linkS4class{sph}.
 #'
@@ -48,7 +57,10 @@ setMethod(
            prop_f = NULL,
            inhom_f = NULL,
            B0 = numeric(0),
-           lasso = 0,
+           lasso_X = 0,
+           lasso_X2 = 0,
+           lasso_X_alpha = 1,
+           lasso_X2_alpha = 1,
            stepsEM = 1000,
            methods = c("RK", "UNI"),
            rkstep = NA,
@@ -123,7 +135,7 @@ setMethod(
       }else{
         LL_base <- eval(parse(text = "logLikelihoodPH_UNIs_intervalCensoring"))
       }
-      LL <- function(h, alpha, S, theta, obs, weight, rcens, rcweight, X, X2) {
+      LL_ph <- function(h, alpha, S, theta, obs, weight, rcens, rcweight, X, X2) {
         B <- head(theta, ncol(X)) 
         ex <- prop_f(theta = B, data = X)
         
@@ -146,7 +158,7 @@ setMethod(
       
       LL_base <- eval(parse(text = "logLikelihood_UNIs_PI"))
       
-      LL <- function(h, alpha, S, theta, obs, weight, rcens, rcweight, X, X2, gfun_name) {
+      LL_iph <- function(h, alpha, S, theta, obs, weight, rcens, rcweight, X, X2, gfun_name) {
         
         
         B <- head(theta, ncol(X)) 
@@ -165,20 +177,31 @@ setMethod(
         beta1 <- head(beta,length(obs)) 
         beta2 <- if(rightCensored){tail(beta, length(rcens))}else{tail(beta, nrow(rcens))}
         
+        # LASSO penalty
+        shrink_X <- shrink_X2 <- 0
         if(intercept_X & intercept_X2){
-          shrink <- sum(abs(theta[-c(1,ncol(X)+1)]))
+          shrink_X <- (sum(abs(B[-1])^lasso_X_alpha))^(1/lasso_X_alpha)
+          shrink_X2 <- (sum(abs(gamma[-1])^lasso_X2_alpha))^(1/lasso_X2_alpha)
+          
         }else if(intercept_X & intercept_X2 == FALSE){
-          shrink <- sum(abs(theta[-1]))
+          shrink_X <- (sum(abs(B[-1])^lasso_X_alpha))^(1/lasso_X_alpha)
+          shrink_X2 <- (sum(abs(gamma)^lasso_X2_alpha))^(1/lasso_X2_alpha)
+          
         }else if(intercept_X == FALSE & intercept_X2){
-          shrink <- sum(abs(theta[-c(ncol(X)+1)]))
+          shrink_X <- (sum(abs(B)^lasso_X_alpha))^(1/lasso_X_alpha)
+          shrink_X2 <- (sum(abs(gamma[-1])^lasso_X2_alpha))^(1/lasso_X2_alpha)
+          
         }else{
-          shrink <- sum(abs(theta))
+          shrink_X <- (sum(abs(B)^lasso_X_alpha))^(1/lasso_X_alpha)
+          shrink_X2 <- (sum(abs(gamma)^lasso_X2_alpha))^(1/lasso_X2_alpha)
         }
+        shrink <- lasso_X*shrink_X+lasso_X2*shrink_X2
         
-        
-        return(LL_base(h, alpha, S, beta1, beta2, obs, weight, rcens, rcweight, scale1, scale2, gfun_name)-lasso*shrink)
+        return(LL_base(h, alpha, S, beta1, beta2, obs, weight, rcens, rcweight, scale1, scale2, gfun_name)-shrink)
       }
     }
+    
+    LL <- ifelse(is_iph, LL_iph, LL_ph)
     
     p0 <- dim(X)[2]
     p1 <- dim(X2)[2]
@@ -208,6 +231,7 @@ setMethod(
     cat(format(Sys.time(), format = "%H:%M:%OS"), ": EM started", sep = "")
     cat("\n", sep = "")
     
+    s <- sph(x, type = "reg")
     for (k in 1:stepsEM) {
       # proportionality and inhomogeneity terms
       prop <- prop_f(theta = head(B_fit, p0), data = X)
@@ -254,8 +278,7 @@ setMethod(
         s_tmp@coefs$B_prop <- head(theta, p0)
         s_tmp@coefs$B_inhom <- tail(theta, p1)
         
-        # assign last iteration to global environment
-        assign(assign_lab, s_tmp, envir = .GlobalEnv)
+        s@fit$tmp <- s_tmp
       }
       
       # EM step
@@ -297,16 +320,15 @@ setMethod(
     }
     
     cat("\n", sep = "")
-    x@pars$alpha <- alpha_fit
-    x@pars$S <- S_fit
-    x@fit <- list(
+    s@pars$alpha <- alpha_fit
+    s@pars$S <- S_fit
+    s@fit <- list(
       logLik = opt$value,
       nobs = sum(A$weights),
       hessian = opt$hessian,
       logLikHist = track
     )
-    s <- sph(x, type = "reg")
-    
+
     s@gfun$pars <- inhom_f(theta = tail(B_fit, p1), data = X2)
     s@gfun$prop <- prop_f(theta = head(B_fit, p0), data = X)
     
