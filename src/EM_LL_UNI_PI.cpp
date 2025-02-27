@@ -2,39 +2,39 @@
 #include "m_exp.h"
 #include <RcppArmadillo.h>
 using namespace Rcpp;
-
 // [[Rcpp::depends(RcppArmadillo)]]
 
-//' Loglikelihood of PI using uniformization, with customizable observation transformation.
- //'
- //' Loglikelihood for a sample, automatically handling right-censored or interval-censored data based on the structure of `rcens`.
- //'
- //' @param h Positive parameter.
- //' @param alpha Initial probabilities.
- //' @param S Sub-intensity matrix.
- //' @param beta1 Parameter of transformation (uncensored observations).
- //' @param beta2 Parameter of transformation (censored observations).
- //' @param obs The observations.
- //' @param weight Weights of the observations.
- //' @param rcens Censored observations (either numeric vector for right censoring or matrix for interval censoring).
- //' @param rcweight Weights of the censored observations.
- //' @param scale1 Scale for observations.
- //' @param scale2 Scale for censored observations.
- //' @param gfun_name Name of the transformation function to be applied to observations (e.g., "scale", "log", "sqrt").
- //' 
- // [[Rcpp::export]]
- double logLikelihood_UNIs_PI(double h,
-                              arma::vec & alpha,
-                              arma::mat & S,
-                              SEXP beta1,
-                              SEXP beta2,
-                              const Rcpp::NumericVector & obs,
-                              const Rcpp::NumericVector & weight,
-                              SEXP rcens, 
-                              const Rcpp::NumericVector & rcweight,
-                              const Rcpp::NumericVector & scale1,
-                              const Rcpp::NumericVector & scale2,
-                              const std::string & gfun_name) {
+//' Loglikelihood of PI using uniformization, with customizable observation transformation, automatically handling right-censored or interval-censored data based on the structure of `rcens`.
+//'
+//' Loglikelihood for a sample.
+//'
+//' @param h Positive parameter.
+//' @param alpha Initial probabilities.
+//' @param S Sub-intensity matrix.
+//' @param beta1 Parameter of transformation (uncensored observations).
+//' @param beta2 Parameter of transformation (censored observations).
+//' @param obs The observations.
+//' @param weight Weights of the observations.
+//' @param rcens Censored observations (either numeric vector for right censoring or matrix for interval censoring).
+//' @param rcweight Weights of the censored observations.
+//' @param scale1 Scale for observations.
+//' @param scale2 Scale for censored observations.
+//' @param gfun_name Name of the transformation function to be applied to observations (e.g., "scale", "log", "sqrt").
+//' 
+//' @return The loglikelihood of censored the sample.
+// [[Rcpp::export]]
+double logLikelihood_UNIs_PI(double h,
+                             arma::vec & alpha,
+                             arma::mat & S,
+                             SEXP beta1,
+                             SEXP beta2,
+                             const Rcpp::NumericVector & obs,
+                             const Rcpp::NumericVector & weight,
+                             SEXP rcens, 
+                             const Rcpp::NumericVector & rcweight,
+                             const Rcpp::NumericVector & scale1,
+                             const Rcpp::NumericVector & scale2,
+                             const std::string & gfun_name) {
    
    // Declare beta as either NumericVector or NumericMatrix depending on beta1's type
    bool is_beta1_vector = Rcpp::is<Rcpp::NumericVector>(beta1);

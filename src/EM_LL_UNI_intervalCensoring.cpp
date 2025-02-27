@@ -4,17 +4,17 @@
 // [[ Rcpp :: depends ( RcppArmadillo )]]
 
 //' EM for phase-type using uniformization for matrix exponential
- //' 
- //' @param h Positive parameter.
- //' @param alpha Initial probabilities.
- //' @param S Sub-intensity matrix.
- //' @param obs The observations.
- //' @param weight The weights for the observations.
- //' @param rcens Matrix of censored observations' bounds. Each row corresponds to a given observation.
- //' @param rcweight The weights for the censored observations.
- //' 
- // [[Rcpp::export]]
- void EMstep_UNI_intervalCensoring(double h,
+//' 
+//' @param h Positive parameter.
+//' @param alpha Initial probabilities.
+//' @param S Sub-intensity matrix.
+//' @param obs The observations.
+//' @param weight The weights for the observations.
+//' @param rcens Matrix of censored observations' bounds. Each row corresponds to a given observation.
+//' @param rcweight The weights for the censored observations.
+//' 
+// [[Rcpp::export]]
+void EMstep_UNI_intervalCensoring(double h,
                                    arma::vec & alpha,
                                    arma::mat & S,
                                    const Rcpp::NumericVector & obs,
@@ -282,26 +282,26 @@
        }
      }
    }
- }
+}
 
 ////////////////////////////////////////////
 // Log-likelihoods
 ////////////////////////////////////////////
 
 //' Loglikelihood of phase-type using uniformization
- //' 
- //' Loglikelihood for a sample.
- //' 
- //' @param h Positive parameter.
- //' @param alpha Initial probabilities.
- //' @param S Sub-intensity matrix.
- //' @param obs The observations.
- //' @param weight Weights of the observations.
- //' @param rcens Interval censored observations.
- //' @param rcweight Weights of the censored observations.
- //' 
- // [[Rcpp::export]]
- double logLikelihoodPH_UNI_intervalCensoring(double h, arma::vec & alpha, arma::mat & S, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const arma::mat & rcens, const Rcpp::NumericVector & rcweight) {
+//' 
+//' Loglikelihood for a sample.
+//' 
+//' @param h Positive parameter.
+//' @param alpha Initial probabilities.
+//' @param S Sub-intensity matrix.
+//' @param obs The observations.
+//' @param weight Weights of the observations.
+//' @param rcens Interval censored observations.
+//' @param rcweight Weights of the censored observations.
+//' 
+// [[Rcpp::export]]
+double logLikelihoodPH_UNI_intervalCensoring(double h, arma::vec & alpha, arma::mat & S, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const arma::mat & rcens, const Rcpp::NumericVector & rcweight) {
    arma::mat e;
    e.ones(S.n_cols, 1);
    arma::mat exit_vect = (S * (-1)) * e;
@@ -397,24 +397,24 @@
    }
    
    return logLh;
- }
+}
 
 
 //' Loglikelihood of matrix-Weibull using uniformization
- //' 
- //' Loglikelihood for a sample.
- //' 
- //' @param h Positive parameter.
- //' @param alpha Initial probabilities.
- //' @param S Sub-intensity matrix.
- //' @param beta Parameter of transformation.
- //' @param obs The observations.
- //' @param weight Weights of the observations.
- //' @param rcens Interval censored observations.
- //' @param rcweight Weights of the censored observations.
- //' 
- // [[Rcpp::export]]
- double logLikelihoodMweibull_UNI_intervalCensoring(double h, arma::vec & alpha, arma::mat & S, double beta , const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const arma::mat & rcens, const Rcpp::NumericVector & rcweight) {
+//' 
+//' Loglikelihood for a sample.
+//' 
+//' @param h Positive parameter.
+//' @param alpha Initial probabilities.
+//' @param S Sub-intensity matrix.
+//' @param beta Parameter of transformation.
+//' @param obs The observations.
+//' @param weight Weights of the observations.
+//' @param rcens Interval censored observations.
+//' @param rcweight Weights of the censored observations.
+//' 
+// [[Rcpp::export]]
+double logLikelihoodMweibull_UNI_intervalCensoring(double h, arma::vec & alpha, arma::mat & S, double beta , const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const arma::mat & rcens, const Rcpp::NumericVector & rcweight) {
    if(beta < 0) return NA_REAL;
    
    arma::mat e;
@@ -513,24 +513,24 @@
    }
    
    return logLh;
- }
+}
 
 
 //' Loglikelihood of matrix-Pareto using uniformization
- //' 
- //' Loglikelihood for a sample.
- //' 
- //' @param h Positive parameter.
- //' @param alpha Initial probabilities.
- //' @param S Sub-intensity matrix.
- //' @param beta Parameter of transformation.
- //' @param obs The observations.
- //' @param weight Weights of the observations.
- //' @param rcens Interval censored observations.
- //' @param rcweight Weights of the censored observations.
- //' 
- // [[Rcpp::export]]
- double logLikelihoodMpareto_UNI_intervalCensoring(double h, arma::vec & alpha, arma::mat & S, double beta , const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const arma::mat & rcens, const Rcpp::NumericVector & rcweight) {
+//' 
+//' Loglikelihood for a sample.
+//' 
+//' @param h Positive parameter.
+//' @param alpha Initial probabilities.
+//' @param S Sub-intensity matrix.
+//' @param beta Parameter of transformation.
+//' @param obs The observations.
+//' @param weight Weights of the observations.
+//' @param rcens Interval censored observations.
+//' @param rcweight Weights of the censored observations.
+//' 
+// [[Rcpp::export]]
+double logLikelihoodMpareto_UNI_intervalCensoring(double h, arma::vec & alpha, arma::mat & S, double beta , const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const arma::mat & rcens, const Rcpp::NumericVector & rcweight) {
    if(beta < 0) return NA_REAL;
    
    arma::mat e;
@@ -628,24 +628,24 @@
      logLh += rcweight[k] * std::log(probInt);
    }
    return logLh;
- }
+}
 
 
 //' Loglikelihood of matrix-lognormal using uniformization
- //' 
- //' Loglikelihood for a sample.
- //' 
- //' @param h Positive parameter.
- //' @param alpha Initial probabilities.
- //' @param S Sub-intensity matrix.
- //' @param beta Parameter of transformation.
- //' @param obs The observations.
- //' @param weight Weights of the observations.
- //' @param rcens Interval censored observations.
- //' @param rcweight Weights of the censored observations.
- //' 
- // [[Rcpp::export]]
- double logLikelihoodMlognormal_UNI_intervalCensoring(double h, arma::vec & alpha, arma::mat & S, double beta , const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const arma::mat & rcens, const Rcpp::NumericVector & rcweight) {
+//' 
+//' Loglikelihood for a sample.
+//' 
+//' @param h Positive parameter.
+//' @param alpha Initial probabilities.
+//' @param S Sub-intensity matrix.
+//' @param beta Parameter of transformation.
+//' @param obs The observations.
+//' @param weight Weights of the observations.
+//' @param rcens Interval censored observations.
+//' @param rcweight Weights of the censored observations.
+//' 
+// [[Rcpp::export]]
+double logLikelihoodMlognormal_UNI_intervalCensoring(double h, arma::vec & alpha, arma::mat & S, double beta , const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const arma::mat & rcens, const Rcpp::NumericVector & rcweight) {
    if(beta < 0) return NA_REAL;
    
    arma::mat e;
@@ -744,24 +744,24 @@
    }
    
    return logLh;
- }
+}
 
 
 //' Loglikelihood of matrix-loglogistic using uniformization
- //' 
- //' Loglikelihood for a sample.
- //' 
- //' @param h Positive parameter.
- //' @param alpha Initial probabilities.
- //' @param S Sub-intensity matrix.
- //' @param beta Parameter of transformation.
- //' @param obs The observations.
- //' @param weight Weights of the observations.
- //' @param rcens Interval censored observations.
- //' @param rcweight Weights of the censored observations.
- //' 
- // [[Rcpp::export]]
- double logLikelihoodMloglogistic_UNI_intervalCensoring(double h, arma::vec & alpha, arma::mat & S, Rcpp::NumericVector beta , const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const arma::mat & rcens, const Rcpp::NumericVector & rcweight) {
+//' 
+//' Loglikelihood for a sample.
+//' 
+//' @param h Positive parameter.
+//' @param alpha Initial probabilities.
+//' @param S Sub-intensity matrix.
+//' @param beta Parameter of transformation.
+//' @param obs The observations.
+//' @param weight Weights of the observations.
+//' @param rcens Interval censored observations.
+//' @param rcweight Weights of the censored observations.
+//' 
+// [[Rcpp::export]]
+double logLikelihoodMloglogistic_UNI_intervalCensoring(double h, arma::vec & alpha, arma::mat & S, Rcpp::NumericVector beta , const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const arma::mat & rcens, const Rcpp::NumericVector & rcweight) {
    if(beta[0] < 0 || beta[1] < 0) return NA_REAL;
    
    arma::mat e;
@@ -860,24 +860,24 @@
    }
    
    return logLh;
- }
+}
 
 
 //' Loglikelihood of matrix-Gompertz using uniformization
- //' 
- //' Loglikelihood for a sample.
- //' 
- //' @param h Positive parameter.
- //' @param alpha Initial probabilities.
- //' @param S Sub-intensity matrix.
- //' @param beta Parameter of transformation.
- //' @param obs The observations.
- //' @param weight Weights of the observations.
- //' @param rcens Interval censored observations.
- //' @param rcweight Weights of the censored observations.
- //' 
- // [[Rcpp::export]]
- double logLikelihoodMgompertz_UNI_intervalCensoring(double h, arma::vec & alpha, arma::mat & S, double beta , const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const arma::mat & rcens, const Rcpp::NumericVector & rcweight) {
+//' 
+//' Loglikelihood for a sample.
+//' 
+//' @param h Positive parameter.
+//' @param alpha Initial probabilities.
+//' @param S Sub-intensity matrix.
+//' @param beta Parameter of transformation.
+//' @param obs The observations.
+//' @param weight Weights of the observations.
+//' @param rcens Interval censored observations.
+//' @param rcweight Weights of the censored observations.
+//' 
+// [[Rcpp::export]]
+double logLikelihoodMgompertz_UNI_intervalCensoring(double h, arma::vec & alpha, arma::mat & S, double beta , const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const arma::mat & rcens, const Rcpp::NumericVector & rcweight) {
    if(beta < 0) return NA_REAL;
    
    arma::mat e;
@@ -979,24 +979,24 @@
    }
    
    return logLh;
- }
+}
 
 
 //' Loglikelihood of matrix-GEV using uniformization
- //' 
- //' Loglikelihood for a sample.
- //' 
- //' @param h Positive parameter.
- //' @param alpha Initial probabilities.
- //' @param S Sub-intensity matrix.
- //' @param beta Parameter of transformation.
- //' @param obs The observations.
- //' @param weight Weights of the observations.
- //' @param rcens Interval censored observations.
- //' @param rcweight Weights of the censored observations.
- //' 
- // [[Rcpp::export]]
- double logLikelihoodMgev_UNI_intervalCensoring(double h, arma::vec & alpha, arma::mat & S, Rcpp::NumericVector beta , const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const arma::mat & rcens, const Rcpp::NumericVector & rcweight) {
+//' 
+//' Loglikelihood for a sample.
+//' 
+//' @param h Positive parameter.
+//' @param alpha Initial probabilities.
+//' @param S Sub-intensity matrix.
+//' @param beta Parameter of transformation.
+//' @param obs The observations.
+//' @param weight Weights of the observations.
+//' @param rcens Interval censored observations.
+//' @param rcweight Weights of the censored observations.
+//' 
+// [[Rcpp::export]]
+double logLikelihoodMgev_UNI_intervalCensoring(double h, arma::vec & alpha, arma::mat & S, Rcpp::NumericVector beta , const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const arma::mat & rcens, const Rcpp::NumericVector & rcweight) {
    if(beta[1] < 0) return NA_REAL;
    
    arma::mat e;
@@ -1160,7 +1160,7 @@
      }
    }
    return logLh;
- }
+}
 
 
 /////////////////////////////////////////////////////////
@@ -1168,21 +1168,21 @@
 /////////////////////////////////////////////////////////
 
 //' Loglikelihood of PI with phase-type using uniformization
- //' 
- //' Loglikelihood for a sample.
- //' 
- //' @param h Positive parameter.
- //' @param alpha Initial probabilities.
- //' @param S Sub-intensity matrix.
- //' @param obs The observations.
- //' @param weight Weights of the observations.
- //' @param rcens Interval censored observations.
- //' @param rcweight Weights of the censored observations.
- //' @param scale1 Scale for observations.
- //' @param scale2 Scale for censored observations.
- //' 
- // [[Rcpp::export]]
- double logLikelihoodPH_UNIs_intervalCensoring(double h, arma::vec & alpha, arma::mat & S, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const arma::mat & rcens, const Rcpp::NumericVector & rcweight, const Rcpp::NumericVector & scale1, const Rcpp::NumericVector & scale2) {
+//' 
+//' Loglikelihood for a sample.
+//' 
+//' @param h Positive parameter.
+//' @param alpha Initial probabilities.
+//' @param S Sub-intensity matrix.
+//' @param obs The observations.
+//' @param weight Weights of the observations.
+//' @param rcens Interval censored observations.
+//' @param rcweight Weights of the censored observations.
+//' @param scale1 Scale for observations.
+//' @param scale2 Scale for censored observations.
+//' 
+// [[Rcpp::export]]
+double logLikelihoodPH_UNIs_intervalCensoring(double h, arma::vec & alpha, arma::mat & S, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const arma::mat & rcens, const Rcpp::NumericVector & rcweight, const Rcpp::NumericVector & scale1, const Rcpp::NumericVector & scale2) {
    arma::mat e;
    e.ones(S.n_cols, 1);
    arma::mat exit_vect = (S * (-1)) * e;
@@ -1279,26 +1279,26 @@
    }
    
    return logLh;
- }
+}
 
 
 //' Loglikelihood of PI with matrix-Weibull using uniformization
- //' 
- //' Loglikelihood for a sample.
- //' 
- //' @param h Positive parameter.
- //' @param alpha Initial probabilities.
- //' @param S Sub-intensity matrix.
- //' @param beta Parameter of transformation.
- //' @param obs The observations.
- //' @param weight Weights of the observations.
- //' @param rcens Interval censored observations.
- //' @param rcweight Weights of the censored observations.
- //' @param scale1 Scale for observations.
- //' @param scale2 Scale for censored observations.
- //' 
- // [[Rcpp::export]]
- double logLikelihoodMweibull_UNIs_intervalCensoring(double h, arma::vec & alpha, arma::mat & S, double beta , const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const arma::mat & rcens, const Rcpp::NumericVector & rcweight, const Rcpp::NumericVector & scale1, const Rcpp::NumericVector & scale2) {
+//' 
+//' Loglikelihood for a sample.
+//' 
+//' @param h Positive parameter.
+//' @param alpha Initial probabilities.
+//' @param S Sub-intensity matrix.
+//' @param beta Parameter of transformation.
+//' @param obs The observations.
+//' @param weight Weights of the observations.
+//' @param rcens Interval censored observations.
+//' @param rcweight Weights of the censored observations.
+//' @param scale1 Scale for observations.
+//' @param scale2 Scale for censored observations.
+//' 
+// [[Rcpp::export]]
+double logLikelihoodMweibull_UNIs_intervalCensoring(double h, arma::vec & alpha, arma::mat & S, double beta , const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const arma::mat & rcens, const Rcpp::NumericVector & rcweight, const Rcpp::NumericVector & scale1, const Rcpp::NumericVector & scale2) {
    if(beta < 0) return NA_REAL;
    
    arma::mat e;
@@ -1397,26 +1397,26 @@
    }
    
    return logLh;
- }
+}
 
 
 //' Loglikelihood of PI with matrix-Pareto using uniformization
- //' 
- //' Loglikelihood for a sample.
- //' 
- //' @param h Positive parameter.
- //' @param alpha Initial probabilities.
- //' @param S Sub-intensity matrix.
- //' @param beta Parameter of transformation.
- //' @param obs The observations.
- //' @param weight Weights of the observations.
- //' @param rcens Interval censored observations.
- //' @param rcweight Weights of the censored observations.
- //' @param scale1 Scale for observations.
- //' @param scale2 Scale for censored observations.
- //' 
- // [[Rcpp::export]]
- double logLikelihoodMpareto_UNIs_intervalCensoring(double h, arma::vec & alpha, arma::mat & S, double beta , const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const arma::mat & rcens, const Rcpp::NumericVector & rcweight, const Rcpp::NumericVector & scale1, const Rcpp::NumericVector & scale2) {
+//' 
+//' Loglikelihood for a sample.
+//' 
+//' @param h Positive parameter.
+//' @param alpha Initial probabilities.
+//' @param S Sub-intensity matrix.
+//' @param beta Parameter of transformation.
+//' @param obs The observations.
+//' @param weight Weights of the observations.
+//' @param rcens Interval censored observations.
+//' @param rcweight Weights of the censored observations.
+//' @param scale1 Scale for observations.
+//' @param scale2 Scale for censored observations.
+//' 
+// [[Rcpp::export]]
+double logLikelihoodMpareto_UNIs_intervalCensoring(double h, arma::vec & alpha, arma::mat & S, double beta , const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const arma::mat & rcens, const Rcpp::NumericVector & rcweight, const Rcpp::NumericVector & scale1, const Rcpp::NumericVector & scale2) {
    if(beta < 0) return NA_REAL;
    
    arma::mat e;
@@ -1516,26 +1516,26 @@
    }
    
    return logLh;
- }
+}
 
 
 //' Loglikelihood of PI with matrix-lognormal using uniformization
- //' 
- //' Loglikelihood for a sample.
- //' 
- //' @param h Positive parameter.
- //' @param alpha Initial probabilities.
- //' @param S Sub-intensity matrix.
- //' @param beta Parameter of transformation.
- //' @param obs The observations.
- //' @param weight Weights of the observations.
- //' @param rcens Interval censored observations.
- //' @param rcweight Weights of the censored observations.
- //' @param scale1 Scale for observations.
- //' @param scale2 Scale for censored observations.
- //' 
- // [[Rcpp::export]]
- double logLikelihoodMlognormal_UNIs_intervalCensoring(double h, arma::vec & alpha, arma::mat & S, double beta , const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const arma::mat & rcens, const Rcpp::NumericVector & rcweight, const Rcpp::NumericVector & scale1, const Rcpp::NumericVector & scale2) {
+//' 
+//' Loglikelihood for a sample.
+//' 
+//' @param h Positive parameter.
+//' @param alpha Initial probabilities.
+//' @param S Sub-intensity matrix.
+//' @param beta Parameter of transformation.
+//' @param obs The observations.
+//' @param weight Weights of the observations.
+//' @param rcens Interval censored observations.
+//' @param rcweight Weights of the censored observations.
+//' @param scale1 Scale for observations.
+//' @param scale2 Scale for censored observations.
+//' 
+// [[Rcpp::export]]
+double logLikelihoodMlognormal_UNIs_intervalCensoring(double h, arma::vec & alpha, arma::mat & S, double beta , const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const arma::mat & rcens, const Rcpp::NumericVector & rcweight, const Rcpp::NumericVector & scale1, const Rcpp::NumericVector & scale2) {
    if(beta < 0) return NA_REAL;
    
    arma::mat e;
@@ -1634,26 +1634,26 @@
    }
    
    return logLh;
- }
+}
 
 
 //' Loglikelihood of PI with matrix-loglogistic using uniformization
- //' 
- //' Loglikelihood for a sample.
- //' 
- //' @param h Positive parameter.
- //' @param alpha Initial probabilities.
- //' @param S Sub-intensity matrix.
- //' @param beta Parameter of transformation.
- //' @param obs The observations.
- //' @param weight Weights of the observations.
- //' @param rcens Interval censored observations.
- //' @param rcweight Weights of the censored observations.
- //' @param scale1 Scale for observations.
- //' @param scale2 Scale for censored observations.
- //' 
- // [[Rcpp::export]]
- double logLikelihoodMloglogistic_UNIs_intervalCensoring(double h, arma::vec & alpha, arma::mat & S, Rcpp::NumericVector beta , const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const arma::mat & rcens, const Rcpp::NumericVector & rcweight, const Rcpp::NumericVector & scale1, const Rcpp::NumericVector & scale2) {
+//' 
+//' Loglikelihood for a sample.
+//' 
+//' @param h Positive parameter.
+//' @param alpha Initial probabilities.
+//' @param S Sub-intensity matrix.
+//' @param beta Parameter of transformation.
+//' @param obs The observations.
+//' @param weight Weights of the observations.
+//' @param rcens Interval censored observations.
+//' @param rcweight Weights of the censored observations.
+//' @param scale1 Scale for observations.
+//' @param scale2 Scale for censored observations.
+//' 
+// [[Rcpp::export]]
+double logLikelihoodMloglogistic_UNIs_intervalCensoring(double h, arma::vec & alpha, arma::mat & S, Rcpp::NumericVector beta , const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const arma::mat & rcens, const Rcpp::NumericVector & rcweight, const Rcpp::NumericVector & scale1, const Rcpp::NumericVector & scale2) {
    if(beta[0] < 0 || beta[1] < 0) return NA_REAL;
    
    arma::mat e;
@@ -1752,26 +1752,26 @@
    }
    
    return logLh;
- }
+}
 
 
 //' Loglikelihood of PI with matrix-Gompertz using Uniformization
- //' 
- //' Loglikelihood for a sample.
- //' 
- //' @param h Positive parameter.
- //' @param alpha Initial probabilities.
- //' @param S Sub-intensity matrix.
- //' @param beta Parameter of transformation.
- //' @param obs The observations.
- //' @param weight Weights of the observations.
- //' @param rcens Interval censored observations.
- //' @param rcweight Weights of the censored observations.
- //' @param scale1 Scale for observations.
- //' @param scale2 Scale for censored observations.
- //' 
- // [[Rcpp::export]]
- double logLikelihoodMgompertz_UNIs_intervalCensoring(double h, arma::vec & alpha, arma::mat & S, double beta , const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const arma::mat & rcens, const Rcpp::NumericVector & rcweight, const Rcpp::NumericVector & scale1, const Rcpp::NumericVector & scale2) {
+//' 
+//' Loglikelihood for a sample.
+//' 
+//' @param h Positive parameter.
+//' @param alpha Initial probabilities.
+//' @param S Sub-intensity matrix.
+//' @param beta Parameter of transformation.
+//' @param obs The observations.
+//' @param weight Weights of the observations.
+//' @param rcens Interval censored observations.
+//' @param rcweight Weights of the censored observations.
+//' @param scale1 Scale for observations.
+//' @param scale2 Scale for censored observations.
+//' 
+// [[Rcpp::export]]
+double logLikelihoodMgompertz_UNIs_intervalCensoring(double h, arma::vec & alpha, arma::mat & S, double beta , const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const arma::mat & rcens, const Rcpp::NumericVector & rcweight, const Rcpp::NumericVector & scale1, const Rcpp::NumericVector & scale2) {
    if(beta < 0) return NA_REAL;
    
    arma::mat e;
@@ -1874,4 +1874,4 @@
    }
    
    return logLh;
- }
+}
