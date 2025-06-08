@@ -1770,6 +1770,39 @@ rMDPHstar <- function(n, alpha, S, R) {
     .Call(`_matrixdist_rMDPHstar`, n, alpha, S, R)
 }
 
+#' Embedded Markov chain of a sub-intensity matrix
+#' 
+#' Returns the transition probabilities of the embedded Markov chain determined
+#'  the sub-intensity matrix.
+#'  
+#' @param S A sub-intensity matrix.
+#' @return The embedded Markov chain.
+#' 
+embedded_mc_cs <- function(S, P) {
+    .Call(`_matrixdist_embedded_mc_cs`, S, P)
+}
+
+#' Simulate common-shock phase-type
+#'
+#' Generates a sample of size \code{n} from a phase-type distribution with
+#' parameters \code{alpha}, \code{S}, \code{P}, \code{Q1}, \code{Q2},
+#' \code{a1}, and \code{a2}
+#' 
+#' @param n Sample size.
+#' @param alpha Vector of initial probabilities.
+#' @param S Sub-intensity matrix.
+#' @param P Matrix.
+#' @param Q1 Sub-intensity matrix.
+#' @param Q2 Sub-intensity matrix.
+#' @param a1 Multiplicative constant for margin 1.
+#' @param a2 Multiplicative constant for margin 1.
+#' @return Simulated sample.
+#' @export
+#'
+rcsph <- function(n, alpha, S, P, Q1, Q2, a1, a2) {
+    .Call(`_matrixdist_rcsph`, n, alpha, S, P, Q1, Q2, a1, a2)
+}
+
 #' Product of two matrices
 #' 
 #' @param A1 A matrix.

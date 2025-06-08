@@ -1871,6 +1871,36 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// embedded_mc_cs
+arma::mat embedded_mc_cs(arma::mat S, arma::mat P);
+RcppExport SEXP _matrixdist_embedded_mc_cs(SEXP SSEXP, SEXP PSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type S(SSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type P(PSEXP);
+    rcpp_result_gen = Rcpp::wrap(embedded_mc_cs(S, P));
+    return rcpp_result_gen;
+END_RCPP
+}
+// rcsph
+Rcpp::NumericVector rcsph(int n, arma::vec alpha, arma::mat S, arma::mat P, arma::mat Q1, arma::mat Q2, double a1, double a2);
+RcppExport SEXP _matrixdist_rcsph(SEXP nSEXP, SEXP alphaSEXP, SEXP SSEXP, SEXP PSEXP, SEXP Q1SEXP, SEXP Q2SEXP, SEXP a1SEXP, SEXP a2SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type S(SSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type P(PSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type Q1(Q1SEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type Q2(Q2SEXP);
+    Rcpp::traits::input_parameter< double >::type a1(a1SEXP);
+    Rcpp::traits::input_parameter< double >::type a2(a2SEXP);
+    rcpp_result_gen = Rcpp::wrap(rcsph(n, alpha, S, P, Q1, Q2, a1, a2));
+    return rcpp_result_gen;
+END_RCPP
+}
 // matrix_product
 Rcpp::NumericMatrix matrix_product(Rcpp::NumericMatrix A1, Rcpp::NumericMatrix A2);
 RcppExport SEXP _matrixdist_matrix_product(SEXP A1SEXP, SEXP A2SEXP) {
@@ -2853,6 +2883,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_rMIPHstar", (DL_FUNC) &_matrixdist_rMIPHstar, 6},
     {"_matrixdist_rdphasetype", (DL_FUNC) &_matrixdist_rdphasetype, 3},
     {"_matrixdist_rMDPHstar", (DL_FUNC) &_matrixdist_rMDPHstar, 4},
+    {"_matrixdist_embedded_mc_cs", (DL_FUNC) &_matrixdist_embedded_mc_cs, 2},
+    {"_matrixdist_rcsph", (DL_FUNC) &_matrixdist_rcsph, 8},
     {"_matrixdist_matrix_product", (DL_FUNC) &_matrixdist_matrix_product, 2},
     {"_matrixdist_matrix_inverse", (DL_FUNC) &_matrixdist_matrix_inverse, 1},
     {"_matrixdist_phdensity", (DL_FUNC) &_matrixdist_phdensity, 3},

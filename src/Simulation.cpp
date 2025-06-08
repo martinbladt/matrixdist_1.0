@@ -427,3 +427,89 @@ Rcpp::NumericMatrix rMDPHstar(int n, arma::vec alpha, arma::mat S, arma::mat R) 
   }
   return sample;
 }
+
+
+//' Embedded Markov chain of a sub-intensity matrix
+//' 
+//' Returns the transition probabilities of the embedded Markov chain determined
+//'  the sub-intensity matrix.
+//'  
+//' @param S A sub-intensity matrix.
+//' @return The embedded Markov chain.
+//' 
+// [[Rcpp::export]]
+arma::mat embedded_mc_cs(arma::mat S, arma::mat P) {
+   unsigned p1{S.n_rows};
+   unsigned p2{P.n_cols};
+   arma::mat Q(p1, p1 + p2);
+   
+   for (int i{0}; i < p1; ++i) {
+     for (int j{0}; j < p1; ++j) {
+       if (j != i) {
+         Q(i,j) = -1.0 * S(i,j) / S(i,i);
+       }
+     }
+     for (int j{0}; j < p2; ++j) {
+         Q(i,j + p1) = -1.0 * P(i,j) / S(i,i);
+     }
+   }
+   
+   return (Q);
+ }
+
+//' Simulate common-shock phase-type
+//'
+//' Generates a sample of size \code{n} from a phase-type distribution with
+//' parameters \code{alpha}, \code{S}, \code{P}, \code{Q1}, \code{Q2},
+//' \code{a1}, and \code{a2}
+//' 
+//' @param n Sample size.
+//' @param alpha Vector of initial probabilities.
+//' @param S Sub-intensity matrix.
+//' @param P Matrix.
+//' @param Q1 Sub-intensity matrix.
+//' @param Q2 Sub-intensity matrix.
+//' @param a1 Multiplicative constant for margin 1.
+//' @param a2 Multiplicative constant for margin 1.
+//' @return Simulated sample.
+//' @export
+//'
+// [[Rcpp::export]]
+Rcpp::NumericVector rcsph(int n, arma::vec alpha, arma::mat S, arma::mat P, arma::mat Q1, arma::mat Q2, double a1, double a2) {
+   Rcpp::NumericMatrix sample(n, 3);
+   
+   arma::mat cum_embedded_mc0 = cumulate_matrix(embedded_mc_cs(S, P));
+   arma::mat cum_embedded_mc1 = cumulate_matrix(embedded_mc(Q1));
+   arma::mat cum_embedded_mc2 = cumulate_matrix(embedded_mc(Q2));
+   arma::vec cum_alpha = cumulate_vector(alpha);
+   
+   unsigned p1{alpha.size()};
+   unsigned p2{P.n_cols};
+   long state{0};
+   long state1{0};
+   long state2{0};
+   for (int i{0}; i < n; ++i) {
+     double time{0.0};
+     state = initial_state(cum_alpha, Rcpp::runif(1)[0]);
+     while (state < p1) {
+       time += log(1.0 - Rcpp::runif(1)[0]) / S(state,state);
+       state = new_state(state, cum_embedded_mc0, Rcpp::runif(1)[0]);
+     }
+     double time1{0.0};
+     state1 = state - p1;
+     while (state1 != p2) {
+       time1 += log(1.0 - Rcpp::runif(1)[0]) / Q1(state1,state1);
+       state1 = new_state(state1, cum_embedded_mc1, Rcpp::runif(1)[0]);
+     }
+     double time2{0.0};
+     state2 = state - p1;
+     while (state2 != p2) {
+       time2 += log(1.0 - Rcpp::runif(1)[0]) / Q2(state2,state2);
+       state2 = new_state(state2, cum_embedded_mc2, Rcpp::runif(1)[0]);
+     }
+     sample(i, 0) = a1 * time + time1;
+     sample(i, 1) = a2 * time + time2;
+     sample(i, 2) = time;
+   }
+   return sample;
+ }
