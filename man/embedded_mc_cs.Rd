@@ -9,12 +9,12 @@ embedded_mc_cs(S, P)
 \arguments{
 \item{S}{A sub-intensity matrix.}
 
-\item{P}{Matrix.}
+\item{P}{A matrix of exit rates to external states.}
 }
 \value{
 The embedded Markov chain.
 }
 \description{
 Returns the transition probabilities of the embedded Markov chain determined
-the sub-intensity matrix.
+by the sub-intensity matrix.
 }

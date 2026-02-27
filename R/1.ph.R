@@ -22,6 +22,21 @@ setClass("ph",
          )
 )
 
+.normalize_em_methods <- function(methods) {
+  if (length(methods) == 1L) {
+    methods <- rep(methods, 2L)
+  }
+  if (length(methods) != 2L) {
+    stop("methods should have length 1 or 2")
+  }
+  methods <- toupper(trimws(as.character(methods)))
+  allowed <- c("RK", "UNI", "PADE")
+  if (any(!methods %in% allowed)) {
+    stop("methods should be one of: RK, UNI, PADE")
+  }
+  methods
+}
+
 #' Constructor function for phase-type distributions
 #'
 #' @param alpha A probability vector.
@@ -43,32 +58,43 @@ setClass("ph",
 #' ph(alpha = c(.5, .5), S = matrix(c(-1, .5, .5, -1), 2, 2))
 ph <- function(alpha = NULL, S = NULL, structure = NULL, dimension = 3,
                block_sizes = NULL, probs = NULL, rates = NULL) {
-  if (any(is.null(alpha)) & any(is.null(S)) & is.null(structure)) {
+  has_structure <- !is.null(structure)
+  has_alpha <- !is.null(alpha)
+  has_S <- !is.null(S)
+  
+  if (!has_structure && (!has_alpha || !has_S)) {
     stop("input a vector and matrix, or a structure")
   }
-  if (!is.null(structure)) {
+  
+  if (has_structure) {
+    if (!is.character(structure) || length(structure) != 1L) {
+      stop("structure should be a character string of length one")
+    }
     st <- tolower(structure)
     if (st %in% c("merlang", "mixederlang", "mixed_erlang")) {
-      obj <- merlang_ph(block_sizes = block_sizes, probs = probs, rates = rates)
-      return(obj)
-    } else {
-      rs <- random_structure(dimension, structure = structure)
-      alpha <- rs[[1]]
-      S <- rs[[2]]
-      name <- structure
+      return(merlang_ph(block_sizes = block_sizes, probs = probs, rates = rates))
     }
+    rs <- random_structure(dimension, structure = st)
+    alpha <- rs[[1]]
+    S <- rs[[2]]
+    name <- st
   } else {
-    if (dim(S)[1] != dim(S)[2]) {
+    if (!is.matrix(S)) {
+      stop("S should be a matrix")
+    }
+    if (nrow(S) != ncol(S)) {
       stop("matrix S should be square")
     }
-    if (length(alpha) != dim(S)[1]) {
+    if (length(alpha) != nrow(S)) {
       stop("incompatible dimensions")
     }
     name <- "custom"
   }
-  methods::new("ph",
-               name = paste(name, " ph(", length(alpha), ")", sep = ""),
-               pars = list(alpha = alpha, S = S)
+  
+  methods::new(
+    "ph",
+    name = paste(name, " ph(", length(alpha), ")", sep = ""),
+    pars = list(alpha = alpha, S = S)
   )
 }
 
@@ -427,11 +453,22 @@ setMethod("quan", c(x = "ph"), function(x,
 #' @param reltol Relative tolerance when optimizing g function.
 #' @param every Number of iterations between likelihood display updates.
 #' @param r Sub-sampling proportion for stochastic EM, defaults to 1.
+#' @param burn Percentage of iterations (from 0 to 100) run on histogram
+#'  midpoints of `y` with bin counts as weights, before switching to the
+#'  standard fit on original data. Available only for uncensored data.
 #' @param erlang Logical flag for exact Erlang EM updates with one repeated rate.
 #'  If `NULL`, this is auto-detected from the model name.
 #' @param merlang_blocks Optional integer vector with Erlang block sizes for
 #'  exact mixture-of-Erlangs EM updates. If `NULL`, it is auto-read from object
 #'  attributes when available.
+#' @param plot_progress Logical flag. If `TRUE`, a progress plot is redrawn
+#'  during EM: histogram plus fitted density for uncensored data, or Kaplan-Meier
+#'  plus fitted survival for right-censored data.
+#' @param plot_every Positive integer. Plot refresh frequency in iterations when
+#'  `plot_progress = TRUE`. Defaults to 100.
+#' @param plot_breaks Number of histogram breaks used in progress plotting.
+#' @param plot_pause Small pause (in seconds) after each plot refresh to let
+#'  interactive devices repaint in real time.
 #'
 #' @return An object of class \linkS4class{ph}.
 #'
@@ -461,8 +498,14 @@ setMethod(
            every = 100,
            optim_method = "BFGS",
            r = 1,
+           burn = 0,
            erlang = NULL,
-           merlang_blocks = NULL) {
+           merlang_blocks = NULL,
+           plot_progress = FALSE,
+           plot_every = 100,
+           plot_breaks = 50,
+           plot_pause = 0.01) {
+    methods <- .normalize_em_methods(methods)
     control <- if (optim_method == "BFGS") {
       list(
         maxit = maxit,
@@ -477,6 +520,7 @@ setMethod(
       )
     }
     rightCensored <- is.vector(rcen)
+    has_censoring <- if (is.matrix(rcen)) nrow(rcen) > 0 else length(rcen) > 0
     if(rightCensored){
       EMstep <- eval(parse(text = paste("EMstep_", methods[1], sep = "")))
     }else if(is.matrix(rcen)){
@@ -491,10 +535,170 @@ setMethod(
     if (r < 1 && any(methods == "RK")) {
       stop("sub-sampling available for UNI and PADE methods")
     }
+    if (length(burn) != 1 || !is.finite(burn) || burn < 0 || burn > 100) {
+      stop("burn should be a number between 0 and 100")
+    }
+    if (burn > 0 && has_censoring) {
+      stop("burn is only available for uncensored data")
+    }
+    plot_enabled <- isTRUE(plot_progress)
+    use_km_plot <- rightCensored && has_censoring
+    if (plot_enabled) {
+      if (!is.vector(y) || is.matrix(y) || !is.numeric(y)) {
+        stop("plot_progress requires y to be a numeric vector")
+      }
+      if (length(plot_every) != 1 || !is.finite(plot_every) || plot_every < 1) {
+        stop("plot_every should be a positive integer")
+      }
+      if (length(plot_breaks) != 1 || !is.finite(plot_breaks) || plot_breaks < 1) {
+        stop("plot_breaks should be a positive integer")
+      }
+      if (length(plot_pause) != 1 || !is.finite(plot_pause) || plot_pause < 0) {
+        stop("plot_pause should be a non-negative number")
+      }
+      plot_every <- as.integer(plot_every)
+      plot_breaks <- as.integer(plot_breaks)
+      plot_pause <- as.numeric(plot_pause)
+      y_plot <- as.numeric(y)
+      y_plot <- y_plot[is.finite(y_plot)]
+      if (length(y_plot) < 2) {
+        stop("plot_progress requires at least two finite observations")
+      }
+      if (use_km_plot) {
+        rcen_plot <- as.numeric(rcen)
+        rcen_plot <- rcen_plot[is.finite(rcen_plot)]
+        w_plot <- if (length(weight) == 0) rep(1, length(y_plot)) else as.numeric(weight)
+        rcw_plot <- if (length(rcenweight) == 0) rep(1, length(rcen_plot)) else as.numeric(rcenweight)
+        if (length(w_plot) != length(y_plot) || length(rcw_plot) != length(rcen_plot)) {
+          stop("incompatible plotting inputs for right-censored data")
+        }
+        km_raw <- data.frame(
+          time = c(y_plot, rcen_plot),
+          weight = c(w_plot, rcw_plot),
+          event = c(rep(1, length(y_plot)), rep(0, length(rcen_plot)))
+        )
+        km_total <- stats::aggregate(weight ~ time, data = km_raw, FUN = sum)
+        km_event <- stats::aggregate(weight ~ time, data = km_raw[km_raw$event == 1, , drop = FALSE], FUN = sum)
+        event_weight <- numeric(nrow(km_total))
+        if (nrow(km_event) > 0) {
+          event_weight[match(km_event$time, km_total$time)] <- km_event$weight
+        }
+        risk <- sum(km_total$weight)
+        surv <- numeric(nrow(km_total))
+        s_now <- 1
+        for (i in seq_len(nrow(km_total))) {
+          if (risk > 0 && event_weight[i] > 0) {
+            s_now <- s_now * (1 - event_weight[i] / risk)
+          }
+          surv[i] <- s_now
+          risk <- risk - km_total$weight[i]
+        }
+        km_plot <- list(
+          time = c(0, km_total$time),
+          surv = c(1, pmax(0, pmin(1, surv)))
+        )
+        x_data <- c(y_plot, rcen_plot)
+      } else {
+        x_data <- y_plot
+      }
+      x_left <- min(x_data, na.rm = TRUE)
+      x_right <- max(x_data, na.rm = TRUE)
+      if (!is.finite(x_left) || !is.finite(x_right)) {
+        stop("plot_progress requires finite plotting range")
+      }
+      if (use_km_plot) {
+        x_left <- 0
+      }
+      if (x_right <= x_left) {
+        pad <- max(abs(x_left) * 0.05, 1e-8)
+        x_left <- x_left - pad
+        x_right <- x_right + pad
+      }
+      grid_plot <- seq(x_left, x_right, length.out = 300)
+      ll_start <- max(1L, as.integer(plot_every))
+      plot_state <- function(model_obj, iter, ll_hist) {
+        op <- graphics::par(no.readonly = TRUE)
+        on.exit(graphics::par(op), add = TRUE)
+        graphics::par(mfrow = c(1, 2))
+        if (use_km_plot) {
+          graphics::plot(
+            km_plot$time,
+            km_plot$surv,
+            type = "s",
+            col = "black",
+            xlim = c(x_left, x_right),
+            ylim = c(0, 1),
+            xlab = "",
+            ylab = "",
+            main = "",
+            xaxs = "i"
+          )
+          surv_fit <- tryCatch(
+            cdf(model_obj, grid_plot, lower.tail = FALSE),
+            error = function(e) rep(NA_real_, length(grid_plot))
+          )
+          if (all(is.finite(surv_fit))) {
+            graphics::lines(grid_plot, surv_fit, col = "red", lwd = 2)
+          }
+        } else {
+          hobj <- graphics::hist(
+            y_plot,
+            breaks = plot_breaks,
+            plot = FALSE
+          )
+          dfit <- tryCatch(
+            dens(model_obj, grid_plot),
+            error = function(e) rep(NA_real_, length(grid_plot))
+          )
+          y_top <- max(hobj$density, na.rm = TRUE)
+          if (all(is.finite(dfit))) {
+            y_top <- max(y_top, dfit, na.rm = TRUE)
+          }
+          if (!is.finite(y_top) || y_top <= 0) {
+            y_top <- 1
+          }
+          y_top <- 1.05 * y_top
+          graphics::hist(
+            y_plot,
+            probability = TRUE,
+            breaks = plot_breaks,
+            col = "grey90",
+            border = "white",
+            ylim = c(0, y_top),
+            xlab = "",
+            ylab = "",
+            main = ""
+          )
+          if (all(is.finite(dfit))) {
+            graphics::lines(grid_plot, dfit, col = "red", lwd = 2)
+          }
+        }
+        if (iter < ll_start) {
+          graphics::plot.new()
+          graphics::box()
+        } else {
+          idx <- seq.int(ll_start, iter)
+          graphics::plot(
+            idx,
+            ll_hist[idx],
+            type = "l",
+            col = "grey40",
+            lwd = 2,
+            xlab = "",
+            ylab = "",
+            main = ""
+          )
+        }
+        utils::flush.console()
+        if (plot_pause > 0) {
+          Sys.sleep(plot_pause)
+        }
+      }
+    }
     is_iph <- methods::is(x, "iph")
     merlang_fit <- .merlang_fit_blocks(x, merlang_blocks)
     erlang_fit <- if (is.null(erlang)) {
-      grepl("\\b(erlang|erland)\\b", tolower(x@name))
+      grepl("\\berlang\\b", tolower(x@name))
     } else {
       isTRUE(erlang)
     }
@@ -520,53 +724,96 @@ setMethod(
     }
     
     A <- data_aggregation(y, weight)
-    y <- A$un_obs
-    weight <- A$weights
+    y_full <- A$un_obs
+    weight_full <- A$weights
     
-    if (length(rcen)>0) {
+    if (length(rcen) > 0) {
       B <- data_aggregation(rcen, rcenweight)
-      rcen <- B$un_obs
-      rcenweight <- B$weights
+      rcen_full <- B$un_obs
+      rcenweight_full <- B$weights
+    } else {
+      rcen_full <- rcen
+      rcenweight_full <- rcenweight
+    }
+    
+    draw_subsample <- function(obs, obs_weight) {
+      if (r >= 1) {
+        return(list(obs = obs, weight = obs_weight))
+      }
+      n <- if (is.matrix(obs)) nrow(obs) else length(obs)
+      if (n == 0) {
+        return(list(obs = obs, weight = obs_weight))
+      }
+      size <- max(1L, floor(r * n))
+      idx <- sample.int(n, size = size)
+      if (is.matrix(obs)) {
+        list(obs = obs[idx, , drop = FALSE], weight = obs_weight[idx])
+      } else {
+        list(obs = obs[idx], weight = obs_weight[idx])
+      }
+    }
+    
+    burn_steps <- floor(stepsEM * burn / 100)
+    y_burn_full <- y_full
+    weight_burn_full <- weight_full
+    if (burn_steps > 0) {
+      htmp <- graphics::hist(as.numeric(y_full), plot = FALSE)
+      bin_id <- cut(
+        as.numeric(y_full),
+        breaks = htmp$breaks,
+        include.lowest = TRUE,
+        labels = FALSE
+      )
+      bin_w <- tapply(as.numeric(weight_full), bin_id, sum)
+      keep <- which(!is.na(bin_w) & bin_w > 0)
+      if (length(keep) > 0) {
+        y_burn_full <- htmp$mids[keep]
+        weight_burn_full <- as.numeric(bin_w[keep])
+      } else {
+        burn_steps <- 0
+      }
+    }
+    
+    get_iteration_data <- function(k) {
+      if (burn_steps > 0 && k <= burn_steps) {
+        y_pool <- y_burn_full
+        weight_pool <- weight_burn_full
+      } else {
+        y_pool <- y_full
+        weight_pool <- weight_full
+      }
+      obs_draw <- draw_subsample(y_pool, weight_pool)
+      if (r < 1 && length(rcen_full) > 0) {
+        rcen_draw <- draw_subsample(rcen_full, rcenweight_full)
+        rcen_obs <- rcen_draw$obs
+        rcen_w <- rcen_draw$weight
+      } else {
+        rcen_obs <- rcen_full
+        rcen_w <- rcenweight_full
+      }
+      list(y = obs_draw$obs, weight = obs_draw$weight, rcen = rcen_obs, rcenweight = rcen_w)
     }
     
     ph_par <- x@pars
     alpha_fit <- clone_vector(ph_par$alpha)
     S_fit <- clone_matrix(ph_par$S)
-    track <- numeric(stepsEM)
-    
-    if (r < 1) {
-      y_full <- y
-      weight_full <- weight
-      rcen_full <- rcen
-      rcenweight_full <- rcenweight
-    }
+    track <- rep(NA_real_, stepsEM)
+    final_ll <- NA_real_
     
     options(digits.secs = 4)
     cat(format(Sys.time(), format = "%H:%M:%OS"), ": EM started", sep = "")
     cat("\n", sep = "")
+    if (plot_enabled) {
+      plot_state(x, iter = 0, ll_hist = track)
+    }
     
     if (!is_iph) {
-      for (k in 1:stepsEM) {
-        if (r < 1) {
-          n_y <- length(y_full)
-          size_y <- max(1L, floor(r * n_y))
-          idx_y <- sample.int(n_y, size = size_y)
-          y <- y_full[idx_y]
-          weight <- weight_full[idx_y]
-          if (rightCensored && length(rcen_full) > 0) {
-            n_rc <- length(rcen_full)
-            size_rc <- max(1L, floor(r * n_rc))
-            idx_rc <- sample.int(n_rc, size = size_rc)
-            rcen <- rcen_full[idx_rc]
-            rcenweight <- rcenweight_full[idx_rc]
-          } else if (is.matrix(rcen_full) && nrow(rcen_full) > 0) {
-            n_rc <- nrow(rcen_full)
-            size_rc <- max(1L, floor(r * n_rc))
-            idx_rc <- sample.int(n_rc, size = size_rc)
-            rcen <- rcen_full[idx_rc, , drop = FALSE]
-            rcenweight <- rcenweight_full[idx_rc]
-          }
-        }
+      for (k in seq_len(stepsEM)) {
+        iter_data <- get_iteration_data(k)
+        y <- iter_data$y
+        weight <- iter_data$weight
+        rcen <- iter_data$rcen
+        rcenweight <- iter_data$rcenweight
         
         epsilon1 <- switch(which(methods[1] == c("RK", "UNI", "PADE")),
                            if (!is.na(rkstep)) rkstep else default_step_length(S_fit),
@@ -579,12 +826,16 @@ setMethod(
                            0
         )
         EMstep(epsilon1, alpha_fit, S_fit, y, weight, rcen, rcenweight, erlang_fit, merlang_fit)
-        track[k] <- LL(epsilon2, alpha_fit, S_fit, y, weight, rcen, rcenweight)
+        ll_cur <- LL(epsilon2, alpha_fit, S_fit, y, weight, rcen, rcenweight)
+        track[k] <- ll_cur
         if (k %% every == 0) {
           cat("\r", "iteration:", k,
-              ", logLik:", LL(epsilon2, alpha_fit, S_fit, y, weight, rcen, rcenweight),
+              ", logLik:", ll_cur,
               sep = " "
           )
+        }
+        if (plot_enabled && (k %% plot_every == 0)) {
+          plot_state(ph(alpha = alpha_fit, S = S_fit), iter = k, ll_hist = track)
         }
       }
       x@pars$alpha <- alpha_fit
@@ -594,36 +845,24 @@ setMethod(
         attr(S_attr, "merlang_blocks") <- as.integer(merlang_fit)
         x@pars$S <- S_attr
       }
-      x@fit <- list(
-        logLik = LL(epsilon2, alpha_fit, S_fit, y, weight, rcen, rcenweight),
-        nobs = sum(A$weights)
+      epsilon_ll <- switch(
+        which(methods[2] == c("RK", "UNI", "PADE")),
+        if (!is.na(rkstep)) rkstep else default_step_length(S_fit),
+        if (!is.na(uni_epsilon)) uni_epsilon else 1e-4,
+        0
       )
+      final_ll <- LL(epsilon_ll, alpha_fit, S_fit, y_full, weight_full, rcen_full, rcenweight_full)
+      x@fit <- list(logLik = final_ll, nobs = sum(A$weights), logLikHist = track)
     }
     if (is_iph) {
-      trans_weight <- weight
-      trans_rcenweight <- rcenweight
-      
-      for (k in 1:stepsEM) {
-        if (r < 1) {
-          n_y <- length(y_full)
-          size_y <- max(1L, floor(r * n_y))
-          idx_y <- sample.int(n_y, size = size_y)
-          y <- y_full[idx_y]
-          weight <- weight_full[idx_y]
-          if (rightCensored && length(rcen_full) > 0) {
-            n_rc <- length(rcen_full)
-            size_rc <- max(1L, floor(r * n_rc))
-            idx_rc <- sample.int(n_rc, size = size_rc)
-            rcen <- rcen_full[idx_rc]
-            rcenweight <- rcenweight_full[idx_rc]
-          } else if (is.matrix(rcen_full) && nrow(rcen_full) > 0) {
-            n_rc <- nrow(rcen_full)
-            size_rc <- max(1L, floor(r * n_rc))
-            idx_rc <- sample.int(n_rc, size = size_rc)
-            rcen <- rcen_full[idx_rc, , drop = FALSE]
-            rcenweight <- rcenweight_full[idx_rc]
-          }
-        }
+      for (k in seq_len(stepsEM)) {
+        iter_data <- get_iteration_data(k)
+        y <- iter_data$y
+        weight <- iter_data$weight
+        rcen <- iter_data$rcen
+        rcenweight <- iter_data$rcenweight
+        trans_weight <- weight
+        trans_rcenweight <- rcenweight
         
         if (x@gfun$name != "gev") {
           trans <- inv_g(par_g, y)
@@ -664,12 +903,19 @@ setMethod(
           )
         )
         track[k] <- opt$value
-          par_g <- opt$par
+        par_g <- opt$par
         
         if (k %% every == 0) {
           cat("\r", "iteration:", k,
               ", logLik:", opt$value,
               sep = " "
+          )
+        }
+        if (plot_enabled && (k %% plot_every == 0)) {
+          plot_state(
+            iph(ph(alpha = alpha_fit, S = S_fit), gfun = x@gfun$name, gfun_pars = par_g),
+            iter = k,
+            ll_hist = track
           )
         }
       }
@@ -680,12 +926,27 @@ setMethod(
         attr(S_attr, "merlang_blocks") <- as.integer(merlang_fit)
         x@pars$S <- S_attr
       }
-      x@fit <- list(
-        logLik = opt$value,
-        nobs = sum(A$weights),
-        logLikHist = track
+      epsilon_ll <- switch(
+        which(methods[2] == c("RK", "UNI", "PADE")),
+        if (!is.na(rkstep)) rkstep else default_step_length(S_fit),
+        if (!is.na(uni_epsilon)) uni_epsilon else 1e-4,
+        0
       )
+      final_ll <- LL(
+        epsilon_ll,
+        alpha_fit,
+        S_fit,
+        par_g,
+        y_full,
+        weight_full,
+        rcen_full,
+        rcenweight_full
+      )
+      x@fit <- list(logLik = final_ll, nobs = sum(A$weights), logLikHist = track)
       x <- iph(x, gfun = x@gfun$name, gfun_pars = par_g)
+    }
+    if (plot_enabled && (!is.finite(final_ll) || (stepsEM %% plot_every != 0))) {
+      plot_state(x, iter = stepsEM, ll_hist = track)
     }
     
     cat("\n", format(Sys.time(), format = "%H:%M:%OS"), ": EM finalized", sep = "")

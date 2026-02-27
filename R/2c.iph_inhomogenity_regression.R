@@ -80,6 +80,7 @@ setMethod(
            every = 10,
            erlang = NULL,
            merlang_blocks = NULL){
+    methods <- .normalize_em_methods(methods)
     control <- if (optim_method == "BFGS") {
       list(
         maxit = maxit,
@@ -136,7 +137,7 @@ setMethod(
     }
     merlang_fit <- .merlang_fit_blocks(x, merlang_blocks)
     erlang_fit <- if (is.null(erlang)) {
-      grepl("\\b(erlang|erland)\\b", tolower(x@name))
+      grepl("\\berlang\\b", tolower(x@name))
     } else {
       isTRUE(erlang)
     }

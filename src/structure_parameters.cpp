@@ -9,7 +9,7 @@ using namespace Rcpp;
 //'  
 //' @param p Dimension of the phase-type.
 //' @param structure Type of structure: "general", "hyperexponential", "gerlang",
-//'  "erlang", "coxian" or "gcoxian". "erland" is accepted as an alias of "erlang".
+//'  "erlang", "coxian" or "gcoxian".
 //' @param scale_factor A factor that multiplies the sub-intensity matrix.
 //' @return Random parameters \code{alpha} and \code{S} of a phase-type.
 //' 
@@ -18,7 +18,7 @@ List random_structure(int p, String structure = "general", double scale_factor =
   // Structure of alpha and S
   NumericVector alpha_legal(p);
   NumericMatrix S_legal(p, p);
-  bool is_erlang_structure = (structure == "erlang" || structure == "erland");
+  bool is_erlang_structure = (structure == "erlang");
   
   if (structure == "general") {
     for (int i{0}; i < p; ++i) {

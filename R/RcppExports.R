@@ -33,7 +33,7 @@ runge_kutta <- function(avector, bvector, cmatrix, dt, h, S, s) {
 #' @param merlang_blocks Optional integer vector of block sizes for exact
 #'  mixture-of-Erlangs M-step.
 #' 
-EMstep_RK <- function(h, alpha, S, obs, weight, rcens, rcweight, erlang = FALSE, merlang_blocks = integerVector(0)) {
+EMstep_RK <- function(h, alpha, S, obs, weight, rcens, rcweight, erlang = FALSE, merlang_blocks = integer(0)) {
     invisible(.Call(`_matrixdist_EMstep_RK`, h, alpha, S, obs, weight, rcens, rcweight, erlang, merlang_blocks))
 }
 
@@ -303,7 +303,7 @@ vector_of_matrices_2 <- function(vect, S, vect_size) {
 #' @param merlang_blocks Optional integer vector of block sizes for exact
 #'  mixture-of-Erlangs M-step.
 #' 
-EMstep_PADE <- function(h, alpha, S, obs, weight, rcens, rcweight, erlang = FALSE, merlang_blocks = integerVector(0)) {
+EMstep_PADE <- function(h, alpha, S, obs, weight, rcens, rcweight, erlang = FALSE, merlang_blocks = integer(0)) {
     invisible(.Call(`_matrixdist_EMstep_PADE`, h, alpha, S, obs, weight, rcens, rcweight, erlang, merlang_blocks))
 }
 
@@ -650,7 +650,7 @@ find_n <- function(h, lambda) {
 #' @param merlang_blocks Optional integer vector of block sizes for exact
 #'  mixture-of-Erlangs M-step.
 #' 
-EMstep_UNI <- function(h, alpha, S, obs, weight, rcens, rcweight, erlang = FALSE, merlang_blocks = integerVector(0)) {
+EMstep_UNI <- function(h, alpha, S, obs, weight, rcens, rcweight, erlang = FALSE, merlang_blocks = integer(0)) {
     invisible(.Call(`_matrixdist_EMstep_UNI`, h, alpha, S, obs, weight, rcens, rcweight, erlang, merlang_blocks))
 }
 
@@ -1325,7 +1325,7 @@ logLikelihoodMgompertz_UNIs_inhom_intCens <- function(h, alpha, S, beta, obs, we
 #' @param merlang_blocks Optional integer vector of block sizes for exact
 #'  mixture-of-Erlangs M-step.
 #' 
-EMstep_UNI_intervalCensoring <- function(h, alpha, S, obs, weight, rcens, rcweight, erlang = FALSE, merlang_blocks = integerVector(0)) {
+EMstep_UNI_intervalCensoring <- function(h, alpha, S, obs, weight, rcens, rcweight, erlang = FALSE, merlang_blocks = integer(0)) {
     invisible(.Call(`_matrixdist_EMstep_UNI_intervalCensoring`, h, alpha, S, obs, weight, rcens, rcweight, erlang, merlang_blocks))
 }
 
@@ -1789,9 +1789,10 @@ rMDPHstar <- function(n, alpha, S, R) {
 #' Embedded Markov chain of a sub-intensity matrix
 #' 
 #' Returns the transition probabilities of the embedded Markov chain determined
-#'  the sub-intensity matrix.
+#'  by the sub-intensity matrix.
 #'  
 #' @param S A sub-intensity matrix.
+#' @param P A matrix of exit rates to external states.
 #' @return The embedded Markov chain.
 #' 
 embedded_mc_cs <- function(S, P) {
@@ -2206,7 +2207,7 @@ csph_density_test <- function(x, alpha, S, P, Q1, Q2) {
 #' @param merlang_blocks Optional integer vector of block sizes for exact
 #'  mixture-of-Erlangs M-step.
 #' 
-EMstep_dph <- function(alpha, S, obs, weight, erlang = FALSE, merlang_blocks = integerVector(0)) {
+EMstep_dph <- function(alpha, S, obs, weight, erlang = FALSE, merlang_blocks = integer(0)) {
     invisible(.Call(`_matrixdist_EMstep_dph`, alpha, S, obs, weight, erlang, merlang_blocks))
 }
 
@@ -2555,7 +2556,7 @@ csph_density_par <- function(x, alpha, S, P, Q1, Q2) {
 #'  
 #' @param p Dimension of the phase-type.
 #' @param structure Type of structure: "general", "hyperexponential", "gerlang",
-#'  "erlang", "coxian" or "gcoxian". "erland" is accepted as an alias of "erlang".
+#'  "erlang", "coxian" or "gcoxian".
 #' @param scale_factor A factor that multiplies the sub-intensity matrix.
 #' @return Random parameters \code{alpha} and \code{S} of a phase-type.
 #' 

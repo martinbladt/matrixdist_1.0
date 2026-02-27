@@ -19,8 +19,13 @@
   every = 100,
   optim_method = "BFGS",
   r = 1,
+  burn = 0,
   erlang = NULL,
-  merlang_blocks = NULL
+  merlang_blocks = NULL,
+  plot_progress = FALSE,
+  plot_every = 100,
+  plot_breaks = 50,
+  plot_pause = 0.01
 )
 }
 \arguments{
@@ -52,12 +57,28 @@
 
 \item{r}{Sub-sampling proportion for stochastic EM, defaults to 1.}
 
+\item{burn}{Percentage of iterations (from 0 to 100) run on histogram
+midpoints of \code{y} with bin counts as weights, before switching to the
+standard fit on original data. Available only for uncensored data.}
+
 \item{erlang}{Logical flag for exact Erlang EM updates with one repeated rate.
 If \code{NULL}, this is auto-detected from the model name.}
 
 \item{merlang_blocks}{Optional integer vector with Erlang block sizes for
 exact mixture-of-Erlangs EM updates. If \code{NULL}, it is auto-read from object
 attributes when available.}
+
+\item{plot_progress}{Logical flag. If \code{TRUE}, a progress plot is redrawn
+during EM: histogram plus fitted density for uncensored data, or Kaplan-Meier
+plus fitted survival for right-censored data.}
+
+\item{plot_every}{Positive integer. Plot refresh frequency in iterations when
+\code{plot_progress = TRUE}. Defaults to 100.}
+
+\item{plot_breaks}{Number of histogram breaks used in progress plotting.}
+
+\item{plot_pause}{Small pause (in seconds) after each plot refresh to let
+interactive devices repaint in real time.}
 }
 \value{
 An object of class \linkS4class{ph}.

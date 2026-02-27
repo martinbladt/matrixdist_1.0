@@ -432,9 +432,10 @@ Rcpp::NumericMatrix rMDPHstar(int n, arma::vec alpha, arma::mat S, arma::mat R) 
 //' Embedded Markov chain of a sub-intensity matrix
 //' 
 //' Returns the transition probabilities of the embedded Markov chain determined
-//'  the sub-intensity matrix.
+//'  by the sub-intensity matrix.
 //'  
 //' @param S A sub-intensity matrix.
+//' @param P A matrix of exit rates to external states.
 //' @return The embedded Markov chain.
 //' 
 // [[Rcpp::export]]

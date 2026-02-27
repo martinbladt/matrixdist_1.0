@@ -479,7 +479,7 @@ setMethod(
     S_fit <- clone_matrix(dph_par$S)
     merlang_fit <- .merlang_fit_blocks(x, merlang_blocks)
     erlang_fit <- if (is.null(erlang)) {
-      grepl("\\b(erlang|erland)\\b", tolower(x@name))
+      grepl("\\berlang\\b", tolower(x@name))
     } else {
       isTRUE(erlang)
     }
