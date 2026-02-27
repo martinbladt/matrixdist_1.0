@@ -28,6 +28,11 @@
 #' @param assign_lab Label to assign the last iteration to the global environment.
 #' @param break_tol Tolerance to stop the algorithm if the likelihood regresses.
 #' @param break_n Number of iterations to wait before stopping the algorithm if the likelihood decreases.
+#' @param erlang Logical flag for exact Erlang EM updates with one repeated rate.
+#'  If `NULL`, this is auto-detected from the model name.
+#' @param merlang_blocks Optional integer vector with Erlang block sizes for
+#'  exact mixture-of-Erlangs EM updates. If `NULL`, it is auto-read from object
+#'  attributes when available.
 #'
 #' @return An object of class \linkS4class{sph}.
 #'
@@ -72,7 +77,9 @@ setMethod(
            save_tmp = F,
            assign_lab = "reg_tmp",
            break_n = stepsEM,
-           every = 10){
+           every = 10,
+           erlang = NULL,
+           merlang_blocks = NULL){
     control <- if (optim_method == "BFGS") {
       list(
         maxit = maxit,
@@ -126,6 +133,15 @@ setMethod(
     }
     if (!all(c(weight, rcenweight) >= 0)) {
       stop("weights should be non-negative")
+    }
+    merlang_fit <- .merlang_fit_blocks(x, merlang_blocks)
+    erlang_fit <- if (is.null(erlang)) {
+      grepl("\\b(erlang|erland)\\b", tolower(x@name))
+    } else {
+      isTRUE(erlang)
+    }
+    if (length(merlang_fit) > 0 && erlang_fit) {
+      stop("use either erlang or merlang_blocks, not both")
     }
     if (!is_iph) {
       par_g <- numeric(0)
@@ -243,7 +259,7 @@ setMethod(
       
       A <- data_aggregation(trans, weight)
       if (length(rcen)>0) {
-        Bcens <- data_aggregation(rcen, rcenweight)
+        Bcens <- data_aggregation(trans_cens, rcenweight)
         rcenk <- Bcens$un_obs
         rcenweightk <- Bcens$weights
       }
@@ -265,6 +281,11 @@ setMethod(
       if(save_tmp){
         x_tmp@pars$alpha <- alpha_save
         x_tmp@pars$S <- S_save
+        if (length(merlang_fit) > 0) {
+          S_attr <- x_tmp@pars$S
+          attr(S_attr, "merlang_blocks") <- as.integer(merlang_fit)
+          x_tmp@pars$S <- S_attr
+        }
         x_tmp@fit <- list(
           logLik = LL(h = epsilon2, alpha = alpha_save, S = S_save, theta = theta, obs = y, weight = weight, rcens = rcen, rcweight = rcenweight, X = X, X2 = X2, gfun_name = name),
           nobs = sum(A$weights),
@@ -282,7 +303,7 @@ setMethod(
       }
       
       # EM step
-      EMstep(epsilon1, alpha_fit, S_fit, A$un_obs, A$weights, rcenk, rcenweightk)
+      EMstep(epsilon1, alpha_fit, S_fit, A$un_obs, A$weights, rcenk, rcenweightk, erlang_fit, merlang_fit)
       # Optimisation step
       opt <- suppressWarnings(optim(
         par = theta,
@@ -322,6 +343,11 @@ setMethod(
     cat("\n", sep = "")
     s@pars$alpha <- alpha_fit
     s@pars$S <- S_fit
+    if (length(merlang_fit) > 0) {
+      S_attr <- s@pars$S
+      attr(S_attr, "merlang_blocks") <- as.integer(merlang_fit)
+      s@pars$S <- S_attr
+    }
     s@fit <- list(
       logLik = opt$value,
       nobs = sum(A$weights),

@@ -28,8 +28,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // EMstep_RK
-void EMstep_RK(double h, arma::vec& alpha, arma::mat& S, const Rcpp::NumericVector& obs, const Rcpp::NumericVector& weight, const Rcpp::NumericVector& rcens, const Rcpp::NumericVector& rcweight);
-RcppExport SEXP _matrixdist_EMstep_RK(SEXP hSEXP, SEXP alphaSEXP, SEXP SSEXP, SEXP obsSEXP, SEXP weightSEXP, SEXP rcensSEXP, SEXP rcweightSEXP) {
+void EMstep_RK(double h, arma::vec& alpha, arma::mat& S, const Rcpp::NumericVector& obs, const Rcpp::NumericVector& weight, const Rcpp::NumericVector& rcens, const Rcpp::NumericVector& rcweight, bool erlang, Rcpp::IntegerVector merlang_blocks);
+RcppExport SEXP _matrixdist_EMstep_RK(SEXP hSEXP, SEXP alphaSEXP, SEXP SSEXP, SEXP obsSEXP, SEXP weightSEXP, SEXP rcensSEXP, SEXP rcweightSEXP, SEXP erlangSEXP, SEXP merlang_blocksSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< double >::type h(hSEXP);
@@ -39,7 +39,9 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type weight(weightSEXP);
     Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type rcens(rcensSEXP);
     Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type rcweight(rcweightSEXP);
-    EMstep_RK(h, alpha, S, obs, weight, rcens, rcweight);
+    Rcpp::traits::input_parameter< bool >::type erlang(erlangSEXP);
+    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type merlang_blocks(merlang_blocksSEXP);
+    EMstep_RK(h, alpha, S, obs, weight, rcens, rcweight, erlang, merlang_blocks);
     return R_NilValue;
 END_RCPP
 }
@@ -313,8 +315,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // EMstep_PADE
-void EMstep_PADE(double h, arma::vec& alpha, arma::mat& S, const Rcpp::NumericVector& obs, const Rcpp::NumericVector& weight, const Rcpp::NumericVector& rcens, const Rcpp::NumericVector& rcweight);
-RcppExport SEXP _matrixdist_EMstep_PADE(SEXP hSEXP, SEXP alphaSEXP, SEXP SSEXP, SEXP obsSEXP, SEXP weightSEXP, SEXP rcensSEXP, SEXP rcweightSEXP) {
+void EMstep_PADE(double h, arma::vec& alpha, arma::mat& S, const Rcpp::NumericVector& obs, const Rcpp::NumericVector& weight, const Rcpp::NumericVector& rcens, const Rcpp::NumericVector& rcweight, bool erlang, Rcpp::IntegerVector merlang_blocks);
+RcppExport SEXP _matrixdist_EMstep_PADE(SEXP hSEXP, SEXP alphaSEXP, SEXP SSEXP, SEXP obsSEXP, SEXP weightSEXP, SEXP rcensSEXP, SEXP rcweightSEXP, SEXP erlangSEXP, SEXP merlang_blocksSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< double >::type h(hSEXP);
@@ -324,7 +326,9 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type weight(weightSEXP);
     Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type rcens(rcensSEXP);
     Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type rcweight(rcweightSEXP);
-    EMstep_PADE(h, alpha, S, obs, weight, rcens, rcweight);
+    Rcpp::traits::input_parameter< bool >::type erlang(erlangSEXP);
+    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type merlang_blocks(merlang_blocksSEXP);
+    EMstep_PADE(h, alpha, S, obs, weight, rcens, rcweight, erlang, merlang_blocks);
     return R_NilValue;
 END_RCPP
 }
@@ -687,8 +691,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // EMstep_UNI
-void EMstep_UNI(double h, arma::vec& alpha, arma::mat& S, const Rcpp::NumericVector& obs, const Rcpp::NumericVector& weight, const Rcpp::NumericVector& rcens, const Rcpp::NumericVector& rcweight);
-RcppExport SEXP _matrixdist_EMstep_UNI(SEXP hSEXP, SEXP alphaSEXP, SEXP SSEXP, SEXP obsSEXP, SEXP weightSEXP, SEXP rcensSEXP, SEXP rcweightSEXP) {
+void EMstep_UNI(double h, arma::vec& alpha, arma::mat& S, const Rcpp::NumericVector& obs, const Rcpp::NumericVector& weight, const Rcpp::NumericVector& rcens, const Rcpp::NumericVector& rcweight, bool erlang, Rcpp::IntegerVector merlang_blocks);
+RcppExport SEXP _matrixdist_EMstep_UNI(SEXP hSEXP, SEXP alphaSEXP, SEXP SSEXP, SEXP obsSEXP, SEXP weightSEXP, SEXP rcensSEXP, SEXP rcweightSEXP, SEXP erlangSEXP, SEXP merlang_blocksSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< double >::type h(hSEXP);
@@ -698,7 +702,9 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type weight(weightSEXP);
     Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type rcens(rcensSEXP);
     Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type rcweight(rcweightSEXP);
-    EMstep_UNI(h, alpha, S, obs, weight, rcens, rcweight);
+    Rcpp::traits::input_parameter< bool >::type erlang(erlangSEXP);
+    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type merlang_blocks(merlang_blocksSEXP);
+    EMstep_UNI(h, alpha, S, obs, weight, rcens, rcweight, erlang, merlang_blocks);
     return R_NilValue;
 END_RCPP
 }
@@ -1398,8 +1404,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // EMstep_UNI_intervalCensoring
-void EMstep_UNI_intervalCensoring(double h, arma::vec& alpha, arma::mat& S, const Rcpp::NumericVector& obs, const Rcpp::NumericVector& weight, const arma::mat& rcens, const Rcpp::NumericVector& rcweight);
-RcppExport SEXP _matrixdist_EMstep_UNI_intervalCensoring(SEXP hSEXP, SEXP alphaSEXP, SEXP SSEXP, SEXP obsSEXP, SEXP weightSEXP, SEXP rcensSEXP, SEXP rcweightSEXP) {
+void EMstep_UNI_intervalCensoring(double h, arma::vec& alpha, arma::mat& S, const Rcpp::NumericVector& obs, const Rcpp::NumericVector& weight, const arma::mat& rcens, const Rcpp::NumericVector& rcweight, bool erlang, Rcpp::IntegerVector merlang_blocks);
+RcppExport SEXP _matrixdist_EMstep_UNI_intervalCensoring(SEXP hSEXP, SEXP alphaSEXP, SEXP SSEXP, SEXP obsSEXP, SEXP weightSEXP, SEXP rcensSEXP, SEXP rcweightSEXP, SEXP erlangSEXP, SEXP merlang_blocksSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< double >::type h(hSEXP);
@@ -1409,7 +1415,9 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type weight(weightSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type rcens(rcensSEXP);
     Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type rcweight(rcweightSEXP);
-    EMstep_UNI_intervalCensoring(h, alpha, S, obs, weight, rcens, rcweight);
+    Rcpp::traits::input_parameter< bool >::type erlang(erlangSEXP);
+    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type merlang_blocks(merlang_blocksSEXP);
+    EMstep_UNI_intervalCensoring(h, alpha, S, obs, weight, rcens, rcweight, erlang, merlang_blocks);
     return R_NilValue;
 END_RCPP
 }
@@ -2275,15 +2283,17 @@ BEGIN_RCPP
 END_RCPP
 }
 // EMstep_dph
-void EMstep_dph(arma::vec& alpha, arma::mat& S, const Rcpp::NumericVector& obs, const Rcpp::NumericVector& weight);
-RcppExport SEXP _matrixdist_EMstep_dph(SEXP alphaSEXP, SEXP SSEXP, SEXP obsSEXP, SEXP weightSEXP) {
+void EMstep_dph(arma::vec& alpha, arma::mat& S, const Rcpp::NumericVector& obs, const Rcpp::NumericVector& weight, bool erlang, Rcpp::IntegerVector merlang_blocks);
+RcppExport SEXP _matrixdist_EMstep_dph(SEXP alphaSEXP, SEXP SSEXP, SEXP obsSEXP, SEXP weightSEXP, SEXP erlangSEXP, SEXP merlang_blocksSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< arma::vec& >::type alpha(alphaSEXP);
     Rcpp::traits::input_parameter< arma::mat& >::type S(SSEXP);
     Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type obs(obsSEXP);
     Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type weight(weightSEXP);
-    EMstep_dph(alpha, S, obs, weight);
+    Rcpp::traits::input_parameter< bool >::type erlang(erlangSEXP);
+    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type merlang_blocks(merlang_blocksSEXP);
+    EMstep_dph(alpha, S, obs, weight, erlang, merlang_blocks);
     return R_NilValue;
 END_RCPP
 }
@@ -2777,7 +2787,7 @@ END_RCPP
 
 static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_runge_kutta", (DL_FUNC) &_matrixdist_runge_kutta, 7},
-    {"_matrixdist_EMstep_RK", (DL_FUNC) &_matrixdist_EMstep_RK, 7},
+    {"_matrixdist_EMstep_RK", (DL_FUNC) &_matrixdist_EMstep_RK, 9},
     {"_matrixdist_a_rungekutta", (DL_FUNC) &_matrixdist_a_rungekutta, 4},
     {"_matrixdist_logLikelihoodPH_RK", (DL_FUNC) &_matrixdist_logLikelihoodPH_RK, 7},
     {"_matrixdist_logLikelihoodMweibull_RK", (DL_FUNC) &_matrixdist_logLikelihoodMweibull_RK, 8},
@@ -2793,7 +2803,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_logLikelihoodMloglogistic_RKs", (DL_FUNC) &_matrixdist_logLikelihoodMloglogistic_RKs, 10},
     {"_matrixdist_logLikelihoodMgompertz_RKs", (DL_FUNC) &_matrixdist_logLikelihoodMgompertz_RKs, 10},
     {"_matrixdist_vector_of_matrices_2", (DL_FUNC) &_matrixdist_vector_of_matrices_2, 3},
-    {"_matrixdist_EMstep_PADE", (DL_FUNC) &_matrixdist_EMstep_PADE, 7},
+    {"_matrixdist_EMstep_PADE", (DL_FUNC) &_matrixdist_EMstep_PADE, 9},
     {"_matrixdist_EMstep_MoE_PADE", (DL_FUNC) &_matrixdist_EMstep_MoE_PADE, 6},
     {"_matrixdist_EMstep_bivph", (DL_FUNC) &_matrixdist_EMstep_bivph, 6},
     {"_matrixdist_logLikelihoodbivPH", (DL_FUNC) &_matrixdist_logLikelihoodbivPH, 6},
@@ -2815,7 +2825,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_m_exp_sum", (DL_FUNC) &_matrixdist_m_exp_sum, 4},
     {"_matrixdist_pow2_matrix", (DL_FUNC) &_matrixdist_pow2_matrix, 2},
     {"_matrixdist_find_n", (DL_FUNC) &_matrixdist_find_n, 2},
-    {"_matrixdist_EMstep_UNI", (DL_FUNC) &_matrixdist_EMstep_UNI, 7},
+    {"_matrixdist_EMstep_UNI", (DL_FUNC) &_matrixdist_EMstep_UNI, 9},
     {"_matrixdist_logLikelihoodPH_UNI", (DL_FUNC) &_matrixdist_logLikelihoodPH_UNI, 7},
     {"_matrixdist_logLikelihoodMweibull_UNI", (DL_FUNC) &_matrixdist_logLikelihoodMweibull_UNI, 8},
     {"_matrixdist_logLikelihoodMpareto_UNI", (DL_FUNC) &_matrixdist_logLikelihoodMpareto_UNI, 8},
@@ -2853,7 +2863,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_logLikelihoodMlognormal_UNIs_inhom_intCens", (DL_FUNC) &_matrixdist_logLikelihoodMlognormal_UNIs_inhom_intCens, 10},
     {"_matrixdist_logLikelihoodMloglogistic_UNIs_inhom_intCens", (DL_FUNC) &_matrixdist_logLikelihoodMloglogistic_UNIs_inhom_intCens, 10},
     {"_matrixdist_logLikelihoodMgompertz_UNIs_inhom_intCens", (DL_FUNC) &_matrixdist_logLikelihoodMgompertz_UNIs_inhom_intCens, 10},
-    {"_matrixdist_EMstep_UNI_intervalCensoring", (DL_FUNC) &_matrixdist_EMstep_UNI_intervalCensoring, 7},
+    {"_matrixdist_EMstep_UNI_intervalCensoring", (DL_FUNC) &_matrixdist_EMstep_UNI_intervalCensoring, 9},
     {"_matrixdist_logLikelihoodPH_UNI_intervalCensoring", (DL_FUNC) &_matrixdist_logLikelihoodPH_UNI_intervalCensoring, 7},
     {"_matrixdist_logLikelihoodMweibull_UNI_intervalCensoring", (DL_FUNC) &_matrixdist_logLikelihoodMweibull_UNI_intervalCensoring, 8},
     {"_matrixdist_logLikelihoodMpareto_UNI_intervalCensoring", (DL_FUNC) &_matrixdist_logLikelihoodMpareto_UNI_intervalCensoring, 8},
@@ -2911,7 +2921,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_csph_density", (DL_FUNC) &_matrixdist_csph_density, 6},
     {"_matrixdist_csph_densityrk", (DL_FUNC) &_matrixdist_csph_densityrk, 7},
     {"_matrixdist_csph_density_test", (DL_FUNC) &_matrixdist_csph_density_test, 6},
-    {"_matrixdist_EMstep_dph", (DL_FUNC) &_matrixdist_EMstep_dph, 4},
+    {"_matrixdist_EMstep_dph", (DL_FUNC) &_matrixdist_EMstep_dph, 6},
     {"_matrixdist_EMstep_dph_MoE", (DL_FUNC) &_matrixdist_EMstep_dph_MoE, 4},
     {"_matrixdist_EMstep_bivdph", (DL_FUNC) &_matrixdist_EMstep_bivdph, 6},
     {"_matrixdist_EMstep_bivdph_MoE", (DL_FUNC) &_matrixdist_EMstep_bivdph_MoE, 6},

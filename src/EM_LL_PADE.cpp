@@ -34,9 +34,13 @@ void vector_of_matrices_2(std::vector<arma::mat> & vect, const arma::mat & S, in
 //' @param weight The weights for the observations.
 //' @param rcens Censored observations.
 //' @param rcweight The weights for the censored observations.
+//' @param erlang Logical. If \code{TRUE}, performs the exact Erlang M-step
+//'  with one repeated rate and \eqn{\alpha = (1,0,\dots,0)}.
+//' @param merlang_blocks Optional integer vector of block sizes for exact
+//'  mixture-of-Erlangs M-step.
 //' 
 // [[Rcpp::export]]
-void EMstep_PADE(double h, arma::vec & alpha,  arma::mat & S, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight) {
+void EMstep_PADE(double h, arma::vec & alpha,  arma::mat & S, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight, bool erlang = false, Rcpp::IntegerVector merlang_blocks = Rcpp::IntegerVector(0)) {
   unsigned p{S.n_rows};
   
   arma::mat e;
@@ -196,6 +200,81 @@ void EMstep_PADE(double h, arma::vec & alpha,  arma::mat & S, const Rcpp::Numeri
   }
   
   // M step
+  if (merlang_blocks.size() > 0) {
+    int offset{0};
+    double alpha_sum{0.0};
+    double total_weights{sum_weights + sum_censored};
+    alpha.zeros();
+    S.zeros();
+    for (int b{0}; b < merlang_blocks.size(); ++b) {
+      int block = merlang_blocks[b];
+      if (block <= 0 || offset + block > p) {
+        Rcpp::stop("invalid merlang_blocks");
+      }
+      int start{offset};
+      int end{offset + block - 1};
+      double num_transitions{Nmean(end, p)};
+      for (int i{start}; i < end; ++i) {
+        num_transitions += Nmean(i, i + 1);
+      }
+      double den_time{0.0};
+      for (int i{start}; i <= end; ++i) {
+        den_time += Zmean(i, 0);
+      }
+      double lambda = den_time > 0.0 ? num_transitions / den_time : 0.0;
+      if (lambda < 0.0) {
+        lambda = 0.0;
+      }
+      for (int i{start}; i <= end; ++i) {
+        S(i,i) = -lambda;
+        if (i < end) {
+          S(i, i + 1) = lambda;
+        }
+      }
+      double pi = total_weights > 0.0 ? Bmean(start, 0) / total_weights : 0.0;
+      if (pi < 0.0) {
+        pi = 0.0;
+      }
+      alpha[start] = pi;
+      alpha_sum += pi;
+      offset += block;
+    }
+    if (offset != static_cast<int>(p)) {
+      Rcpp::stop("sum(merlang_blocks) should equal model dimension");
+    }
+    if (alpha_sum > 0.0) {
+      alpha /= alpha_sum;
+    } else {
+      alpha[0] = 1.0;
+    }
+    return;
+  }
+
+  if (erlang) {
+    double num_transitions{Nmean(p - 1, p)};
+    for (int i{0}; i < p - 1; ++i) {
+      num_transitions += Nmean(i, i + 1);
+    }
+    double den_time{0.0};
+    for (int i{0}; i < p; ++i) {
+      den_time += Zmean(i, 0);
+    }
+    double lambda = den_time > 0.0 ? num_transitions / den_time : 0.0;
+    if (lambda < 0.0) {
+      lambda = 0.0;
+    }
+    alpha.zeros();
+    alpha[0] = 1.0;
+    S.zeros();
+    for (int i{0}; i < p; ++i) {
+      S(i,i) = -lambda;
+      if (i < p - 1) {
+        S(i, i + 1) = lambda;
+      }
+    }
+    return;
+  }
+
   for (int i{0}; i < p; ++i) {
     alpha[i] = Bmean(i,0) / (sum_weights + sum_censored);
     if (alpha[i] < 0) {

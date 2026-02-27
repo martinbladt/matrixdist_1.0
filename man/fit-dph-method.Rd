@@ -4,7 +4,15 @@
 \alias{fit,dph-method}
 \title{Fit method for dph class}
 \usage{
-\S4method{fit}{dph}(x, y, weight = numeric(0), stepsEM = 1000, every = 100)
+\S4method{fit}{dph}(
+  x,
+  y,
+  weight = numeric(0),
+  stepsEM = 1000,
+  every = 100,
+  erlang = NULL,
+  merlang_blocks = NULL
+)
 }
 \arguments{
 \item{x}{An object of class \linkS4class{dph}.}
@@ -16,6 +24,13 @@
 \item{stepsEM}{Number of EM steps to be performed.}
 
 \item{every}{Number of iterations between likelihood display updates.}
+
+\item{erlang}{Logical flag for exact Erlang-type EM updates with one repeated
+transition probability. If \code{NULL}, this is auto-detected from the model name.}
+
+\item{merlang_blocks}{Optional integer vector with Erlang block sizes for
+exact mixture-of-Erlangs EM updates. If \code{NULL}, it is auto-read from object
+attributes when available.}
 }
 \value{
 An object of class \linkS4class{dph}.

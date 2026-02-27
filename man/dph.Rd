@@ -4,7 +4,15 @@
 \alias{dph}
 \title{Constructor function for discrete phase-type distributions}
 \usage{
-dph(alpha = NULL, S = NULL, structure = NULL, dimension = 3)
+dph(
+  alpha = NULL,
+  S = NULL,
+  structure = NULL,
+  dimension = 3,
+  block_sizes = NULL,
+  probs = NULL,
+  q = NULL
+)
 }
 \arguments{
 \item{alpha}{A probability vector.}
@@ -12,9 +20,16 @@ dph(alpha = NULL, S = NULL, structure = NULL, dimension = 3)
 \item{S}{A sub-transition matrix.}
 
 \item{structure}{A valid dph structure: \code{"general"}, \code{"coxian"},
-\code{"hyperexponential"}, "gcoxian", or \code{"gerlang"}.}
+\code{"hyperexponential"}, \code{"gcoxian"}, \code{"gerlang"}, \code{"erlang"}, or \code{"merlang"}.}
 
 \item{dimension}{The dimension of the dph structure (if structure is provided).}
+
+\item{block_sizes}{Optional integer vector with Erlang block sizes when
+\code{structure = "merlang"} (or aliases \code{"mixederlang"}, \code{"mixed_erlang"}).}
+
+\item{probs}{Optional mixture weights used only for \code{structure = "merlang"}.}
+
+\item{q}{Optional forward probabilities used only for \code{structure = "merlang"}.}
 }
 \value{
 An object of class \linkS4class{dph}.
@@ -24,5 +39,6 @@ Constructor function for discrete phase-type distributions
 }
 \examples{
 dph(structure = "general", dim = 5)
+dph(structure = "merlang", block_sizes = c(2, 3))
 dph(alpha = c(0.5, 0.5), S = matrix(c(0.1, 0.5, 0.5, 0.2), 2, 2))
 }

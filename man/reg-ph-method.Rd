@@ -19,7 +19,9 @@
   optim_method = "BFGS",
   maxit = 50,
   reltol = 1e-08,
-  every = 10
+  every = 10,
+  erlang = NULL,
+  merlang_blocks = NULL
 )
 }
 \arguments{
@@ -52,6 +54,13 @@
 \item{reltol}{Relative tolerance when optimizing g function.}
 
 \item{every}{Number of iterations between likelihood display updates.}
+
+\item{erlang}{Logical flag for exact Erlang EM updates with one repeated rate.
+If \code{NULL}, this is auto-detected from the model name.}
+
+\item{merlang_blocks}{Optional integer vector with Erlang block sizes for
+exact mixture-of-Erlangs EM updates. If \code{NULL}, it is auto-read from object
+attributes when available.}
 }
 \value{
 An object of class \linkS4class{sph}.

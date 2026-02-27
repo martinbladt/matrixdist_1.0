@@ -28,9 +28,13 @@ runge_kutta <- function(avector, bvector, cmatrix, dt, h, S, s) {
 #' @param weight The weights for the observations.
 #' @param rcens Censored observations.
 #' @param rcweight The weights for the censored observations.
+#' @param erlang Logical. If \code{TRUE}, performs the exact Erlang M-step
+#'  with one repeated rate and \eqn{\alpha = (1,0,\dots,0)}.
+#' @param merlang_blocks Optional integer vector of block sizes for exact
+#'  mixture-of-Erlangs M-step.
 #' 
-EMstep_RK <- function(h, alpha, S, obs, weight, rcens, rcweight) {
-    invisible(.Call(`_matrixdist_EMstep_RK`, h, alpha, S, obs, weight, rcens, rcweight))
+EMstep_RK <- function(h, alpha, S, obs, weight, rcens, rcweight, erlang = FALSE, merlang_blocks = integerVector(0)) {
+    invisible(.Call(`_matrixdist_EMstep_RK`, h, alpha, S, obs, weight, rcens, rcweight, erlang, merlang_blocks))
 }
 
 #' Runge-Kutta for the calculation of the a vector in a EM step 
@@ -294,9 +298,13 @@ vector_of_matrices_2 <- function(vect, S, vect_size) {
 #' @param weight The weights for the observations.
 #' @param rcens Censored observations.
 #' @param rcweight The weights for the censored observations.
+#' @param erlang Logical. If \code{TRUE}, performs the exact Erlang M-step
+#'  with one repeated rate and \eqn{\alpha = (1,0,\dots,0)}.
+#' @param merlang_blocks Optional integer vector of block sizes for exact
+#'  mixture-of-Erlangs M-step.
 #' 
-EMstep_PADE <- function(h, alpha, S, obs, weight, rcens, rcweight) {
-    invisible(.Call(`_matrixdist_EMstep_PADE`, h, alpha, S, obs, weight, rcens, rcweight))
+EMstep_PADE <- function(h, alpha, S, obs, weight, rcens, rcweight, erlang = FALSE, merlang_blocks = integerVector(0)) {
+    invisible(.Call(`_matrixdist_EMstep_PADE`, h, alpha, S, obs, weight, rcens, rcweight, erlang, merlang_blocks))
 }
 
 #' EM for PH-MoE
@@ -637,9 +645,13 @@ find_n <- function(h, lambda) {
 #' @param weight The weights for the observations.
 #' @param rcens Censored observations.
 #' @param rcweight The weights for the censored observations.
+#' @param erlang Logical. If \code{TRUE}, performs the exact Erlang M-step
+#'  with one repeated rate and \eqn{\alpha = (1,0,\dots,0)}.
+#' @param merlang_blocks Optional integer vector of block sizes for exact
+#'  mixture-of-Erlangs M-step.
 #' 
-EMstep_UNI <- function(h, alpha, S, obs, weight, rcens, rcweight) {
-    invisible(.Call(`_matrixdist_EMstep_UNI`, h, alpha, S, obs, weight, rcens, rcweight))
+EMstep_UNI <- function(h, alpha, S, obs, weight, rcens, rcweight, erlang = FALSE, merlang_blocks = integerVector(0)) {
+    invisible(.Call(`_matrixdist_EMstep_UNI`, h, alpha, S, obs, weight, rcens, rcweight, erlang, merlang_blocks))
 }
 
 #' Loglikelihood of phase-type using uniformization
@@ -1308,9 +1320,13 @@ logLikelihoodMgompertz_UNIs_inhom_intCens <- function(h, alpha, S, beta, obs, we
 #' @param weight The weights for the observations.
 #' @param rcens Matrix of censored observations' bounds. Each row corresponds to a given observation.
 #' @param rcweight The weights for the censored observations.
+#' @param erlang Logical. If \code{TRUE}, performs the exact Erlang M-step
+#'  with one repeated rate and \eqn{\alpha = (1,0,\dots,0)}.
+#' @param merlang_blocks Optional integer vector of block sizes for exact
+#'  mixture-of-Erlangs M-step.
 #' 
-EMstep_UNI_intervalCensoring <- function(h, alpha, S, obs, weight, rcens, rcweight) {
-    invisible(.Call(`_matrixdist_EMstep_UNI_intervalCensoring`, h, alpha, S, obs, weight, rcens, rcweight))
+EMstep_UNI_intervalCensoring <- function(h, alpha, S, obs, weight, rcens, rcweight, erlang = FALSE, merlang_blocks = integerVector(0)) {
+    invisible(.Call(`_matrixdist_EMstep_UNI_intervalCensoring`, h, alpha, S, obs, weight, rcens, rcweight, erlang, merlang_blocks))
 }
 
 #' Loglikelihood of phase-type using uniformization
@@ -2185,9 +2201,13 @@ csph_density_test <- function(x, alpha, S, P, Q1, Q2) {
 #' @param S Sub-transition matrix.
 #' @param obs The observations.
 #' @param weight The weights for the observations.
+#' @param erlang Logical. If \code{TRUE}, performs the exact Erlang-type M-step
+#'  with one repeated transition probability and \eqn{\alpha = (1,0,\dots,0)}.
+#' @param merlang_blocks Optional integer vector of block sizes for exact
+#'  mixture-of-Erlangs M-step.
 #' 
-EMstep_dph <- function(alpha, S, obs, weight) {
-    invisible(.Call(`_matrixdist_EMstep_dph`, alpha, S, obs, weight))
+EMstep_dph <- function(alpha, S, obs, weight, erlang = FALSE, merlang_blocks = integerVector(0)) {
+    invisible(.Call(`_matrixdist_EMstep_dph`, alpha, S, obs, weight, erlang, merlang_blocks))
 }
 
 #' EM for discrete phase-type MoE
@@ -2535,7 +2555,7 @@ csph_density_par <- function(x, alpha, S, P, Q1, Q2) {
 #'  
 #' @param p Dimension of the phase-type.
 #' @param structure Type of structure: "general", "hyperexponential", "gerlang",
-#'  "coxian" or "gcoxian".
+#'  "erlang", "coxian" or "gcoxian". "erland" is accepted as an alias of "erlang".
 #' @param scale_factor A factor that multiplies the sub-intensity matrix.
 #' @return Random parameters \code{alpha} and \code{S} of a phase-type.
 #' 

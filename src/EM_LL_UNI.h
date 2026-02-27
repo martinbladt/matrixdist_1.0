@@ -11,7 +11,7 @@ void pow2_matrix(int n , arma::mat & A);
 
 int find_n(double h, double lambda);
     
-void EMstep_UNI(double h, arma::vec & alpha, arma::mat & S, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight);
+void EMstep_UNI(double h, arma::vec & alpha, arma::mat & S, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, const Rcpp::NumericVector & rcens, const Rcpp::NumericVector & rcweight, bool erlang = false, Rcpp::IntegerVector merlang_blocks = Rcpp::IntegerVector(0));
 
 ////////////////////////////////////////////
 // Log-likelihoods

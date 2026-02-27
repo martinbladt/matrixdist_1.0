@@ -1,0 +1,21 @@
+% Generated manually
+\name{merlang_ph}
+\alias{merlang_ph}
+\title{Mixture of Erlang (continuous) constructor}
+\usage{
+merlang_ph(block_sizes, probs = NULL, rates = NULL)
+}
+\arguments{
+\item{block_sizes}{Integer vector with Erlang orders for each component.}
+
+\item{probs}{Optional mixture weights. If omitted, random normalized weights are used.}
+
+\item{rates}{Optional positive rates for each component. If omitted, random rates are used.}
+}
+\value{
+An object of class \linkS4class{ph}.
+}
+\description{
+Builds a continuous phase-type model with block-diagonal Erlang components
+(hyper-Erlang with fixed orders).
+}

@@ -27,24 +27,36 @@ setClass("ph",
 #' @param alpha A probability vector.
 #' @param S A sub-intensity matrix.
 #' @param structure A valid ph structure: `"general"`, `"coxian"`,
-#' `"hyperexponential"`, `"gcoxian"`, or `"gerlang"`.
+#' `"hyperexponential"`, `"gcoxian"`, `"gerlang"`, `"erlang"`, or `"merlang"`.
 #' @param dimension The dimension of the ph structure (if structure is provided).
+#' @param block_sizes Optional integer vector with Erlang block sizes when
+#'  `structure = "merlang"` (or aliases `"mixederlang"`, `"mixed_erlang"`).
+#' @param probs Optional mixture weights used only for `structure = "merlang"`.
+#' @param rates Optional Erlang rates used only for `structure = "merlang"`.
 #'
 #' @return An object of class \linkS4class{ph}.
 #' @export
 #'
 #' @examples
 #' ph(structure = "gcoxian", dimension = 5)
+#' ph(structure = "merlang", block_sizes = c(2, 3))
 #' ph(alpha = c(.5, .5), S = matrix(c(-1, .5, .5, -1), 2, 2))
-ph <- function(alpha = NULL, S = NULL, structure = NULL, dimension = 3) {
+ph <- function(alpha = NULL, S = NULL, structure = NULL, dimension = 3,
+               block_sizes = NULL, probs = NULL, rates = NULL) {
   if (any(is.null(alpha)) & any(is.null(S)) & is.null(structure)) {
     stop("input a vector and matrix, or a structure")
   }
   if (!is.null(structure)) {
-    rs <- random_structure(dimension, structure = structure)
-    alpha <- rs[[1]]
-    S <- rs[[2]]
-    name <- structure
+    st <- tolower(structure)
+    if (st %in% c("merlang", "mixederlang", "mixed_erlang")) {
+      obj <- merlang_ph(block_sizes = block_sizes, probs = probs, rates = rates)
+      return(obj)
+    } else {
+      rs <- random_structure(dimension, structure = structure)
+      alpha <- rs[[1]]
+      S <- rs[[2]]
+      name <- structure
+    }
   } else {
     if (dim(S)[1] != dim(S)[2]) {
       stop("matrix S should be square")
@@ -415,6 +427,11 @@ setMethod("quan", c(x = "ph"), function(x,
 #' @param reltol Relative tolerance when optimizing g function.
 #' @param every Number of iterations between likelihood display updates.
 #' @param r Sub-sampling proportion for stochastic EM, defaults to 1.
+#' @param erlang Logical flag for exact Erlang EM updates with one repeated rate.
+#'  If `NULL`, this is auto-detected from the model name.
+#' @param merlang_blocks Optional integer vector with Erlang block sizes for
+#'  exact mixture-of-Erlangs EM updates. If `NULL`, it is auto-read from object
+#'  attributes when available.
 #'
 #' @return An object of class \linkS4class{ph}.
 #'
@@ -443,7 +460,9 @@ setMethod(
            reltol = 1e-8,
            every = 100,
            optim_method = "BFGS",
-           r = 1) {
+           r = 1,
+           erlang = NULL,
+           merlang_blocks = NULL) {
     control <- if (optim_method == "BFGS") {
       list(
         maxit = maxit,
@@ -473,6 +492,15 @@ setMethod(
       stop("sub-sampling available for UNI and PADE methods")
     }
     is_iph <- methods::is(x, "iph")
+    merlang_fit <- .merlang_fit_blocks(x, merlang_blocks)
+    erlang_fit <- if (is.null(erlang)) {
+      grepl("\\b(erlang|erland)\\b", tolower(x@name))
+    } else {
+      isTRUE(erlang)
+    }
+    if (length(merlang_fit) > 0 && erlang_fit) {
+      stop("use either erlang or merlang_blocks, not both")
+    }
     if (is_iph) {
       par_g <- x@gfun$pars
       inv_g <- x@gfun$inverse
@@ -520,15 +548,23 @@ setMethod(
     if (!is_iph) {
       for (k in 1:stepsEM) {
         if (r < 1) {
-          indices <- sample(1:length(y_full), size = floor(r * length(y_full)))
-          y <- y_full[indices]
-          weight <- weight_full[indices]
-          if ((rightCensored) && (length(rcen_full) > 0)) {
-            rcen <- rcen_full[indices]
-            rcenweight <- rcenweight_full[indices]
-          } else if(is.matrix(rcen)){
-            rcen <- rcen_full[indices,]
-            rcenweight <- rcenweight_full[indices]
+          n_y <- length(y_full)
+          size_y <- max(1L, floor(r * n_y))
+          idx_y <- sample.int(n_y, size = size_y)
+          y <- y_full[idx_y]
+          weight <- weight_full[idx_y]
+          if (rightCensored && length(rcen_full) > 0) {
+            n_rc <- length(rcen_full)
+            size_rc <- max(1L, floor(r * n_rc))
+            idx_rc <- sample.int(n_rc, size = size_rc)
+            rcen <- rcen_full[idx_rc]
+            rcenweight <- rcenweight_full[idx_rc]
+          } else if (is.matrix(rcen_full) && nrow(rcen_full) > 0) {
+            n_rc <- nrow(rcen_full)
+            size_rc <- max(1L, floor(r * n_rc))
+            idx_rc <- sample.int(n_rc, size = size_rc)
+            rcen <- rcen_full[idx_rc, , drop = FALSE]
+            rcenweight <- rcenweight_full[idx_rc]
           }
         }
         
@@ -542,7 +578,7 @@ setMethod(
                            if (!is.na(uni_epsilon)) uni_epsilon else 1e-4,
                            0
         )
-        EMstep(epsilon1, alpha_fit, S_fit, y, weight, rcen, rcenweight)
+        EMstep(epsilon1, alpha_fit, S_fit, y, weight, rcen, rcenweight, erlang_fit, merlang_fit)
         track[k] <- LL(epsilon2, alpha_fit, S_fit, y, weight, rcen, rcenweight)
         if (k %% every == 0) {
           cat("\r", "iteration:", k,
@@ -553,6 +589,11 @@ setMethod(
       }
       x@pars$alpha <- alpha_fit
       x@pars$S <- S_fit
+      if (length(merlang_fit) > 0) {
+        S_attr <- x@pars$S
+        attr(S_attr, "merlang_blocks") <- as.integer(merlang_fit)
+        x@pars$S <- S_attr
+      }
       x@fit <- list(
         logLik = LL(epsilon2, alpha_fit, S_fit, y, weight, rcen, rcenweight),
         nobs = sum(A$weights)
@@ -564,15 +605,23 @@ setMethod(
       
       for (k in 1:stepsEM) {
         if (r < 1) {
-          indices <- sample(1:length(y_full), size = floor(r * length(y_full)))
-          y <- y_full[indices]
-          weight <- weight_full[indices]
-          if ((rightCensored) && (length(rcen_full) > 0)) {
-            rcen <- rcen_full[indices]
-            rcenweight <- rcenweight_full[indices]
-          }else if(is.matrix(rcen)){
-            rcen <- rcen_full[indices,]
-            rcenweight <- rcenweight_full[indices]
+          n_y <- length(y_full)
+          size_y <- max(1L, floor(r * n_y))
+          idx_y <- sample.int(n_y, size = size_y)
+          y <- y_full[idx_y]
+          weight <- weight_full[idx_y]
+          if (rightCensored && length(rcen_full) > 0) {
+            n_rc <- length(rcen_full)
+            size_rc <- max(1L, floor(r * n_rc))
+            idx_rc <- sample.int(n_rc, size = size_rc)
+            rcen <- rcen_full[idx_rc]
+            rcenweight <- rcenweight_full[idx_rc]
+          } else if (is.matrix(rcen_full) && nrow(rcen_full) > 0) {
+            n_rc <- nrow(rcen_full)
+            size_rc <- max(1L, floor(r * n_rc))
+            idx_rc <- sample.int(n_rc, size = size_rc)
+            rcen <- rcen_full[idx_rc, , drop = FALSE]
+            rcenweight <- rcenweight_full[idx_rc]
           }
         }
         
@@ -597,7 +646,7 @@ setMethod(
                            if (!is.na(uni_epsilon)) uni_epsilon else 1e-4,
                            0
         )
-        EMstep(epsilon1, alpha_fit, S_fit, trans, trans_weight, trans_cens, trans_rcenweight)
+        EMstep(epsilon1, alpha_fit, S_fit, trans, trans_weight, trans_cens, trans_rcenweight, erlang_fit, merlang_fit)
         opt <- suppressWarnings(
           stats::optim(
             par = par_g,
@@ -626,6 +675,11 @@ setMethod(
       }
       x@pars$alpha <- alpha_fit
       x@pars$S <- S_fit
+      if (length(merlang_fit) > 0) {
+        S_attr <- x@pars$S
+        attr(S_attr, "merlang_blocks") <- as.integer(merlang_fit)
+        x@pars$S <- S_attr
+      }
       x@fit <- list(
         logLik = opt$value,
         nobs = sum(A$weights),

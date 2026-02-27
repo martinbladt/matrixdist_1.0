@@ -22,26 +22,38 @@ setClass("dph",
 #' @param alpha A probability vector.
 #' @param S A sub-transition matrix.
 #' @param structure A valid dph structure: `"general"`, `"coxian"`,
-#'  `"hyperexponential"`, "gcoxian", or `"gerlang"`.
+#'  `"hyperexponential"`, `"gcoxian"`, `"gerlang"`, `"erlang"`, or `"merlang"`.
 #' @param dimension The dimension of the dph structure (if structure is provided).
+#' @param block_sizes Optional integer vector with Erlang block sizes when
+#'  `structure = "merlang"` (or aliases `"mixederlang"`, `"mixed_erlang"`).
+#' @param probs Optional mixture weights used only for `structure = "merlang"`.
+#' @param q Optional forward probabilities used only for `structure = "merlang"`.
 #'
 #' @return An object of class \linkS4class{dph}.
 #' @export
 #'
 #' @examples
 #' dph(structure = "general", dim = 5)
+#' dph(structure = "merlang", block_sizes = c(2, 3))
 #' dph(alpha = c(0.5, 0.5), S = matrix(c(0.1, 0.5, 0.5, 0.2), 2, 2))
-dph <- function(alpha = NULL, S = NULL, structure = NULL, dimension = 3) {
+dph <- function(alpha = NULL, S = NULL, structure = NULL, dimension = 3,
+                block_sizes = NULL, probs = NULL, q = NULL) {
   if (any(is.null(alpha)) & any(is.null(S)) & is.null(structure)) {
     stop("input a vector and matrix, or a structure")
   }
   if (!is.null(structure)) {
-    rs <- random_structure(dimension, structure = structure)
-    alpha <- rs[[1]]
-    Sa <- rs[[2]]
-    a <- max_diagonal(Sa * (-1)) * (1 + stats::runif(1))
-    S <- (a * diag(dimension) + Sa) / a
-    name <- structure
+    st <- tolower(structure)
+    if (st %in% c("merlang", "mixederlang", "mixed_erlang")) {
+      obj <- merlang_dph(block_sizes = block_sizes, probs = probs, q = q)
+      return(obj)
+    } else {
+      rs <- random_structure(dimension, structure = structure)
+      alpha <- rs[[1]]
+      Sa <- rs[[2]]
+      a <- max_diagonal(Sa * (-1)) * (1 + stats::runif(1))
+      S <- (a * diag(dimension) + Sa) / a
+      name <- structure
+    }
   } else {
     if (dim(S)[1] != dim(S)[2]) {
       stop("matrix S should be square")
@@ -428,6 +440,11 @@ setMethod("TVR", c(x = "dph"), function(x, rew) {
 #' @param weight Vector of weights.
 #' @param stepsEM Number of EM steps to be performed.
 #' @param every Number of iterations between likelihood display updates.
+#' @param erlang Logical flag for exact Erlang-type EM updates with one repeated
+#'  transition probability. If `NULL`, this is auto-detected from the model name.
+#' @param merlang_blocks Optional integer vector with Erlang block sizes for
+#'  exact mixture-of-Erlangs EM updates. If `NULL`, it is auto-read from object
+#'  attributes when available.
 #'
 #' @return An object of class \linkS4class{dph}.
 #'
@@ -443,7 +460,9 @@ setMethod(
            y,
            weight = numeric(0),
            stepsEM = 1000,
-           every = 100) {
+           every = 100,
+           erlang = NULL,
+           merlang_blocks = NULL) {
     if (!all(y > 0)) {
       stop("data should be positive")
     }
@@ -458,13 +477,22 @@ setMethod(
     dph_par <- x@pars
     alpha_fit <- clone_vector(dph_par$alpha)
     S_fit <- clone_matrix(dph_par$S)
+    merlang_fit <- .merlang_fit_blocks(x, merlang_blocks)
+    erlang_fit <- if (is.null(erlang)) {
+      grepl("\\b(erlang|erland)\\b", tolower(x@name))
+    } else {
+      isTRUE(erlang)
+    }
+    if (length(merlang_fit) > 0 && erlang_fit) {
+      stop("use either erlang or merlang_blocks, not both")
+    }
 
     options(digits.secs = 4)
     cat(format(Sys.time(), format = "%H:%M:%OS"), ": EM started", sep = "")
     cat("\n", sep = "")
 
     for (k in 1:stepsEM) {
-      EMstep_dph(alpha_fit, S_fit, y, weight)
+      EMstep_dph(alpha_fit, S_fit, y, weight, erlang_fit, merlang_fit)
       if (k %% every == 0) {
         cat("\r", "iteration:", k,
           ", logLik:", logLikelihoodDPH(alpha_fit, S_fit, y, weight),
@@ -474,6 +502,11 @@ setMethod(
     }
     x@pars$alpha <- alpha_fit
     x@pars$S <- S_fit
+    if (length(merlang_fit) > 0) {
+      S_attr <- x@pars$S
+      attr(S_attr, "merlang_blocks") <- as.integer(merlang_fit)
+      x@pars$S <- S_attr
+    }
     x@fit <- list(
       logLik = logLikelihoodDPH(alpha_fit, S_fit, y, weight),
       nobs = sum(A$weights)

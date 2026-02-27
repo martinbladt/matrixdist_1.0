@@ -4,7 +4,17 @@
 \alias{EMstep_PADE}
 \title{EM for phase-type distributions using Pade approximation for matrix exponential}
 \usage{
-EMstep_PADE(h, alpha, S, obs, weight, rcens, rcweight)
+EMstep_PADE(
+  h,
+  alpha,
+  S,
+  obs,
+  weight,
+  rcens,
+  rcweight,
+  erlang = FALSE,
+  merlang_blocks = integer(0)
+)
 }
 \arguments{
 \item{h}{Nuisance parameter.}
@@ -20,6 +30,12 @@ EMstep_PADE(h, alpha, S, obs, weight, rcens, rcweight)
 \item{rcens}{Censored observations.}
 
 \item{rcweight}{The weights for the censored observations.}
+
+\item{erlang}{Logical. If \code{TRUE}, performs the exact Erlang M-step
+with one repeated rate and \eqn{\alpha = (1,0,\dots,0)}.}
+
+\item{merlang_blocks}{Optional integer vector of block sizes for exact
+mixture-of-Erlangs M-step.}
 }
 \description{
 EM for phase-type distributions using Pade approximation for matrix exponential

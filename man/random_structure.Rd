@@ -10,7 +10,7 @@ random_structure(p, structure = "general", scale_factor = 1)
 \item{p}{Dimension of the phase-type.}
 
 \item{structure}{Type of structure: "general", "hyperexponential", "gerlang",
-"coxian" or "gcoxian".}
+"erlang", "coxian" or "gcoxian". "erland" is accepted as an alias of "erlang".}
 
 \item{scale_factor}{A factor that multiplies the sub-intensity matrix.}
 }

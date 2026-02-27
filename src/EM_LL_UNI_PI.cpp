@@ -157,7 +157,7 @@ double logLikelihood_UNIs_PI(double h,
      
      // Right-censored data
      for (int k{0}; k < rcens_vec.size(); ++k) {
-       double x;
+       double x = 0.0;
        if (gfun_name == "weibull") {
          x = scale2[k] * pow(rcens_vec[k], beta2_vec[k]);
          
@@ -199,8 +199,8 @@ double logLikelihood_UNIs_PI(double h,
      vector_of_matrices(aux_vectu, S, a, m);
      
      for (int k{0}; k < rcens_mat.nrow(); ++k) {
-       double xl;
-       double xu;
+       double xl = 0.0;
+       double xu = 0.0;
        if (gfun_name == "weibull") {
          xl = pow(rcens_mat(k,0), beta2_vec[k]);
          xu = pow(rcens_mat(k,1), beta2_vec[k]);

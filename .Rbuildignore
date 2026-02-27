@@ -1,2 +1,10 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^\.DS_Store$
+^\.git$
+^\.gitignore$
+^\.\.Rcheck$
+^src/\.gitignore$
+^src/.*\.o$
+^src/.*\.so$
+^src/symbols\.rds$

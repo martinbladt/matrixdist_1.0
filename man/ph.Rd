@@ -4,7 +4,15 @@
 \alias{ph}
 \title{Constructor function for phase-type distributions}
 \usage{
-ph(alpha = NULL, S = NULL, structure = NULL, dimension = 3)
+ph(
+  alpha = NULL,
+  S = NULL,
+  structure = NULL,
+  dimension = 3,
+  block_sizes = NULL,
+  probs = NULL,
+  rates = NULL
+)
 }
 \arguments{
 \item{alpha}{A probability vector.}
@@ -12,9 +20,16 @@ ph(alpha = NULL, S = NULL, structure = NULL, dimension = 3)
 \item{S}{A sub-intensity matrix.}
 
 \item{structure}{A valid ph structure: \code{"general"}, \code{"coxian"},
-\code{"hyperexponential"}, \code{"gcoxian"}, or \code{"gerlang"}.}
+\code{"hyperexponential"}, \code{"gcoxian"}, \code{"gerlang"}, \code{"erlang"}, or \code{"merlang"}.}
 
 \item{dimension}{The dimension of the ph structure (if structure is provided).}
+
+\item{block_sizes}{Optional integer vector with Erlang block sizes when
+\code{structure = "merlang"} (or aliases \code{"mixederlang"}, \code{"mixed_erlang"}).}
+
+\item{probs}{Optional mixture weights used only for \code{structure = "merlang"}.}
+
+\item{rates}{Optional Erlang rates used only for \code{structure = "merlang"}.}
 }
 \value{
 An object of class \linkS4class{ph}.
@@ -24,5 +39,6 @@ Constructor function for phase-type distributions
 }
 \examples{
 ph(structure = "gcoxian", dimension = 5)
+ph(structure = "merlang", block_sizes = c(2, 3))
 ph(alpha = c(.5, .5), S = matrix(c(-1, .5, .5, -1), 2, 2))
 }

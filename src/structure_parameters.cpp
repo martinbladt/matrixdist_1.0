@@ -9,7 +9,7 @@ using namespace Rcpp;
 //'  
 //' @param p Dimension of the phase-type.
 //' @param structure Type of structure: "general", "hyperexponential", "gerlang",
-//'  "coxian" or "gcoxian".
+//'  "erlang", "coxian" or "gcoxian". "erland" is accepted as an alias of "erlang".
 //' @param scale_factor A factor that multiplies the sub-intensity matrix.
 //' @return Random parameters \code{alpha} and \code{S} of a phase-type.
 //' 
@@ -18,6 +18,7 @@ List random_structure(int p, String structure = "general", double scale_factor =
   // Structure of alpha and S
   NumericVector alpha_legal(p);
   NumericMatrix S_legal(p, p);
+  bool is_erlang_structure = (structure == "erlang" || structure == "erland");
   
   if (structure == "general") {
     for (int i{0}; i < p; ++i) {
@@ -39,6 +40,15 @@ List random_structure(int p, String structure = "general", double scale_factor =
       S_legal(i, i + 1) = 1;
     } 
     S_legal(p - 1, p - 1) = 1;
+  }
+  else if (is_erlang_structure) {
+    alpha_legal[0] = 1;
+    for (int i{0}; i < p; ++i) {
+      S_legal(i, i) = 1;
+      if (i < p - 1) {
+        S_legal(i, i + 1) = 1;
+      }
+    }
   }
   else if (structure == "coxian") {
     alpha_legal[0] = 1;
@@ -93,6 +103,21 @@ List random_structure(int p, String structure = "general", double scale_factor =
       S_rnd(i,i) -= runif(1)[0];
     }
   }
+
+  // Exact Erlang structure with a single repeated rate.
+  if (is_erlang_structure) {
+    double rate = runif(1)[0];
+    alpha_rnd = NumericVector(p);
+    alpha_rnd[0] = 1.0;
+    S_rnd = NumericMatrix(p, p);
+    for (int i{0}; i < p; ++i) {
+      S_rnd(i,i) = -rate;
+      if (i < p - 1) {
+        S_rnd(i, i + 1) = rate;
+      }
+    }
+  }
+
   S_rnd = S_rnd * scale_factor;
   
   List L = List::create(Named("alpha") = alpha_rnd , _["S"] = S_rnd);

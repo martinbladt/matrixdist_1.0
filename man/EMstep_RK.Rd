@@ -4,7 +4,17 @@
 \alias{EMstep_RK}
 \title{EM step for phase-type using Runge-Kutta}
 \usage{
-EMstep_RK(h, alpha, S, obs, weight, rcens, rcweight)
+EMstep_RK(
+  h,
+  alpha,
+  S,
+  obs,
+  weight,
+  rcens,
+  rcweight,
+  erlang = FALSE,
+  merlang_blocks = integer(0)
+)
 }
 \arguments{
 \item{h}{Step-length.}
@@ -20,6 +30,12 @@ EMstep_RK(h, alpha, S, obs, weight, rcens, rcweight)
 \item{rcens}{Censored observations.}
 
 \item{rcweight}{The weights for the censored observations.}
+
+\item{erlang}{Logical. If \code{TRUE}, performs the exact Erlang M-step
+with one repeated rate and \eqn{\alpha = (1,0,\dots,0)}.}
+
+\item{merlang_blocks}{Optional integer vector of block sizes for exact
+mixture-of-Erlangs M-step.}
 }
 \description{
 Computes one step of the EM algorithm by using a Runge-Kutta method of fourth order.

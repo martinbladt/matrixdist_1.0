@@ -8,9 +8,13 @@
 //' @param S Sub-transition matrix.
 //' @param obs The observations.
 //' @param weight The weights for the observations.
+//' @param erlang Logical. If \code{TRUE}, performs the exact Erlang-type M-step
+//'  with one repeated transition probability and \eqn{\alpha = (1,0,\dots,0)}.
+//' @param merlang_blocks Optional integer vector of block sizes for exact
+//'  mixture-of-Erlangs M-step.
 //' 
 // [[Rcpp::export]]
-void EMstep_dph(arma::vec & alpha, arma::mat & S, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight) {
+void EMstep_dph(arma::vec & alpha, arma::mat & S, const Rcpp::NumericVector & obs, const Rcpp::NumericVector & weight, bool erlang = false, Rcpp::IntegerVector merlang_blocks = Rcpp::IntegerVector(0)) {
   unsigned p{S.n_rows};
   
   arma::mat e;
@@ -74,6 +78,86 @@ void EMstep_dph(arma::vec & alpha, arma::mat & S, const Rcpp::NumericVector & ob
   arma::colvec Ncum = arma::sum(Nmean, 1);
   
   // M step
+  if (merlang_blocks.size() > 0) {
+    int offset{0};
+    double alpha_sum{0.0};
+    alpha.zeros();
+    S.zeros();
+    for (int b{0}; b < merlang_blocks.size(); ++b) {
+      int block = merlang_blocks[b];
+      if (block <= 0 || offset + block > p) {
+        Rcpp::stop("invalid merlang_blocks");
+      }
+      int start{offset};
+      int end{offset + block - 1};
+      double num_transitions{Nmean(end, p)};
+      for (int i{start}; i < end; ++i) {
+        num_transitions += Nmean(i, i + 1);
+      }
+      double den_transitions{0.0};
+      for (int i{start}; i <= end; ++i) {
+        den_transitions += Ncum[i];
+      }
+      double q = den_transitions > 0.0 ? num_transitions / den_transitions : 0.0;
+      if (q < 0.0) {
+        q = 0.0;
+      }
+      if (q > 1.0) {
+        q = 1.0;
+      }
+      for (int i{start}; i <= end; ++i) {
+        S(i,i) = 1.0 - q;
+        if (i < end) {
+          S(i, i + 1) = q;
+        }
+      }
+      double pi = sum_weights > 0.0 ? Bmean(start, 0) / sum_weights : 0.0;
+      if (pi < 0.0) {
+        pi = 0.0;
+      }
+      alpha[start] = pi;
+      alpha_sum += pi;
+      offset += block;
+    }
+    if (offset != static_cast<int>(p)) {
+      Rcpp::stop("sum(merlang_blocks) should equal model dimension");
+    }
+    if (alpha_sum > 0.0) {
+      alpha /= alpha_sum;
+    } else {
+      alpha[0] = 1.0;
+    }
+    return;
+  }
+
+  if (erlang) {
+    double num_transitions{Nmean(p - 1, p)};
+    for (int i{0}; i < p - 1; ++i) {
+      num_transitions += Nmean(i, i + 1);
+    }
+    double den_transitions{0.0};
+    for (int i{0}; i < p; ++i) {
+      den_transitions += Ncum[i];
+    }
+    double q = den_transitions > 0.0 ? num_transitions / den_transitions : 0.0;
+    if (q < 0.0) {
+      q = 0.0;
+    }
+    if (q > 1.0) {
+      q = 1.0;
+    }
+    alpha.zeros();
+    alpha[0] = 1.0;
+    S.zeros();
+    for (int i{0}; i < p; ++i) {
+      S(i,i) = 1.0 - q;
+      if (i < p - 1) {
+        S(i, i + 1) = q;
+      }
+    }
+    return;
+  }
+
   for (int i{0}; i < p; ++i) {
     alpha[i] = Bmean(i,0) / (sum_weights);
     for (int j{0}; j < p; ++j) {
@@ -835,4 +919,3 @@ double logLikelihoodmDPH_MoE(arma::mat & alpha, Rcpp::List & S_list, const Rcpp:
   
   return logLh;
 }
-

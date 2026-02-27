@@ -32,7 +32,9 @@
   save_tmp = F,
   assign_lab = "reg_tmp",
   break_n = stepsEM,
-  every = 10
+  every = 10,
+  erlang = NULL,
+  merlang_blocks = NULL
 )
 }
 \arguments{
@@ -91,6 +93,13 @@
 \item{break_n}{Number of iterations to wait before stopping the algorithm if the likelihood decreases.}
 
 \item{every}{Number of iterations between likelihood display updates.}
+
+\item{erlang}{Logical flag for exact Erlang EM updates with one repeated rate.
+If \code{NULL}, this is auto-detected from the model name.}
+
+\item{merlang_blocks}{Optional integer vector with Erlang block sizes for
+exact mixture-of-Erlangs EM updates. If \code{NULL}, it is auto-read from object
+attributes when available.}
 }
 \value{
 An object of class \linkS4class{sph}.

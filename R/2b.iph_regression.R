@@ -15,6 +15,11 @@
 #' @param maxit Maximum number of iterations when optimizing g function.
 #' @param reltol Relative tolerance when optimizing g function.
 #' @param every Number of iterations between likelihood display updates.
+#' @param erlang Logical flag for exact Erlang EM updates with one repeated rate.
+#'  If `NULL`, this is auto-detected from the model name.
+#' @param merlang_blocks Optional integer vector with Erlang block sizes for
+#'  exact mixture-of-Erlangs EM updates. If `NULL`, it is auto-read from object
+#'  attributes when available.
 #'
 #' @return An object of class \linkS4class{sph}.
 #'
@@ -46,7 +51,9 @@ setMethod(
            optim_method = "BFGS",
            maxit = 50,
            reltol = 1e-8,
-           every = 10) {
+           every = 10,
+           erlang = NULL,
+           merlang_blocks = NULL) {
     control <- if (optim_method == "BFGS") {
       list(
         maxit = maxit,
@@ -82,6 +89,15 @@ setMethod(
     }
     if (!all(c(weight, rcenweight) >= 0)) {
       stop("weights should be non-negative")
+    }
+    merlang_fit <- .merlang_fit_blocks(x, merlang_blocks)
+    erlang_fit <- if (is.null(erlang)) {
+      grepl("\\b(erlang|erland)\\b", tolower(x@name))
+    } else {
+      isTRUE(erlang)
+    }
+    if (length(merlang_fit) > 0 && erlang_fit) {
+      stop("use either erlang or merlang_blocks, not both")
     }
     if (!is_iph) {
       par_g <- numeric(0)
@@ -170,7 +186,7 @@ setMethod(
                          if (!is.na(uni_epsilon)) uni_epsilon else 1e-4,
                          0
       )
-      EMstep(epsilon1, alpha_fit, S_fit, A$un_obs, A$weights, rcenk, rcenweightk)
+      EMstep(epsilon1, alpha_fit, S_fit, A$un_obs, A$weights, rcenk, rcenweightk, erlang_fit, merlang_fit)
       theta <- c(par_g, B_fit)
       opt <- suppressWarnings(optim(
         par = theta,
@@ -202,6 +218,11 @@ setMethod(
     cat("\n", sep = "")
     x@pars$alpha <- alpha_fit
     x@pars$S <- S_fit
+    if (length(merlang_fit) > 0) {
+      S_attr <- x@pars$S
+      attr(S_attr, "merlang_blocks") <- as.integer(merlang_fit)
+      x@pars$S <- S_attr
+    }
     x@fit <- list(
       logLik = opt$value,
       nobs = sum(A$weights),
@@ -249,4 +270,3 @@ data_aggregation <- function(y, w) {
   
   list(un_obs = agg$un_obs, weights = agg$x)
 }
-

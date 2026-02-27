@@ -1,0 +1,20 @@
+% Generated manually
+\name{merlang_dph}
+\alias{merlang_dph}
+\title{Mixture of Erlang (discrete) constructor}
+\usage{
+merlang_dph(block_sizes, probs = NULL, q = NULL)
+}
+\arguments{
+\item{block_sizes}{Integer vector with Erlang orders for each component.}
+
+\item{probs}{Optional mixture weights. If omitted, random normalized weights are used.}
+
+\item{q}{Optional forward probabilities in (0,1) for each component. If omitted, random probabilities are used.}
+}
+\value{
+An object of class \linkS4class{dph}.
+}
+\description{
+Builds a discrete phase-type model with block-diagonal Erlang components.
+}

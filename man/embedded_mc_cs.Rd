@@ -8,6 +8,8 @@ embedded_mc_cs(S, P)
 }
 \arguments{
 \item{S}{A sub-intensity matrix.}
+
+\item{P}{Matrix.}
 }
 \value{
 The embedded Markov chain.

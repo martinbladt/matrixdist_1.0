@@ -4,7 +4,7 @@
 \alias{EMstep_dph}
 \title{EM for discrete phase-type}
 \usage{
-EMstep_dph(alpha, S, obs, weight)
+EMstep_dph(alpha, S, obs, weight, erlang = FALSE, merlang_blocks = integer(0))
 }
 \arguments{
 \item{alpha}{Initial probabilities.}
@@ -14,6 +14,12 @@ EMstep_dph(alpha, S, obs, weight)
 \item{obs}{The observations.}
 
 \item{weight}{The weights for the observations.}
+
+\item{erlang}{Logical. If \code{TRUE}, performs the exact Erlang-type M-step
+with one repeated transition probability and \eqn{\alpha = (1,0,\dots,0)}.}
+
+\item{merlang_blocks}{Optional integer vector of block sizes for exact
+mixture-of-Erlangs M-step.}
 }
 \description{
 EM for discrete phase-type

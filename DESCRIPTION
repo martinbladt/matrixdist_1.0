@@ -10,6 +10,9 @@ Authors@R: c(person("Martin", "Bladt", email = "martinbladt@gmail.com", role = c
               role = "ctb")
               )
 Maintainer: Martin Bladt <martinbladt@gmail.com>
+Author: Martin Bladt [aut, cre],
+    Jorge Yslas [aut],
+    Alaric Müller [ctb]
 URL: https://github.com/martinbladt/matrixdist_1.0
 BugReports: https://github.com/martinbladt/matrixdist_1.0/issues
 Description: Tools for phase-type distributions including the following variants:
