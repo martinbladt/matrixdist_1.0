@@ -4,6 +4,9 @@
 ^\.git$
 ^\.gitignore$
 ^\.\.Rcheck$
+^Read-and-delete-me$
+^Rplots\.pdf$
+^matrixdist_[0-9.-]+\.tar\.gz$
 ^src/\.gitignore$
 ^src/.*\.o$
 ^src/.*\.so$

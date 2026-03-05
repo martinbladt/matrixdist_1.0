@@ -4,14 +4,7 @@
 \alias{EMstep_dph}
 \title{EM for discrete phase-type}
 \usage{
-EMstep_dph(
-  alpha,
-  S,
-  obs,
-  weight,
-  erlang = FALSE,
-  merlang_blocks = integer(0)
-)
+EMstep_dph(alpha, S, obs, weight, erlang = FALSE, merlang_blocks = integer(0))
 }
 \arguments{
 \item{alpha}{Initial probabilities.}

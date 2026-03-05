@@ -33,8 +33,14 @@
 #' @export
 #'
 #' @examples
+#' \donttest{
 #' set.seed(1)
-#' truth <- ph(structure = "merlang", block_sizes = c(3, 4), probs = c(0.4, 0.6), rates = c(0.12, 0.03))
+#' truth <- ph(
+#'   structure = "merlang",
+#'   block_sizes = c(3, 4),
+#'   probs = c(0.4, 0.6),
+#'   rates = c(0.12, 0.03)
+#' )
 #' y <- sim(truth, n = 400)
 #' cands <- list(
 #'   merlang = ph(structure = "merlang", block_sizes = c(3, 4)),
@@ -42,6 +48,7 @@
 #'   general = ph(structure = "general", dimension = 7)
 #' )
 #' fm <- fit_multiple(cands, y, stepsEM = 40, plot_progress = TRUE, plot_every = 10)
+#' }
 fit_multiple <- function(models,
                          y,
                          weight = numeric(0),
